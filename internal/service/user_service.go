@@ -58,7 +58,10 @@ func (s *UserService) Register(ctx context.Context, email, password string) (*us
 		return nil, fmt.Errorf("failed to create verification token: %w", err)
 	}
 
-	req := notifiers.NewWelcomeSendRequest(email, token)
+	req, err := notifiers.NewWelcomeSendRequest(email, token)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create notifiers welcome request: %w", err)
+	}
 
 	go func() {
 		err := s.notifier.Send(context.TODO(), *req)
