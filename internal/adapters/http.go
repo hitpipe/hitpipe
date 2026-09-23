@@ -66,12 +66,12 @@ func (a *UserAPI) Login(c echo.Context) error {
 }
 
 func (a *UserAPI) VerifyEmail(c echo.Context) error {
-	token := c.QueryParam("token")
+	token := c.QueryParam("session")
 
-	//log.Info("token verification start", token)
+	//log.Info("session verification start", session)
 
 	if token == "" {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "token is empty"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "session is empty"})
 	}
 
 	err := a.userService.VerifyEmail(c.Request().Context(), token)

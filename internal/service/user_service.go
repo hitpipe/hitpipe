@@ -49,13 +49,13 @@ func (s *UserService) Register(ctx context.Context, email, password string) (*us
 
 	token, err := user.GenerateVerificationToken()
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate verification token: %w", err)
+		return nil, fmt.Errorf("failed to generate verification session: %w", err)
 	}
 
 	exp := time.Now().Add(20 * time.Minute)
 	err = s.tokenRepo.CreateToken(ctx, aggregate.User.ID, token, exp)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create verification token: %w", err)
+		return nil, fmt.Errorf("failed to create verification session: %w", err)
 	}
 
 	req, err := notifiers.NewWelcomeSendRequest(email, token)

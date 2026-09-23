@@ -43,7 +43,7 @@ func (r *VerificationTokenRepository) CreateToken(ctx context.Context, userID uu
 func (r *VerificationTokenRepository) GetUserIDByToken(ctx context.Context, token string) (uuid.UUID, error) {
 
 	row := r.pool.QueryRow(ctx, `
-		SELECT id, userid, expires_at from email_verification_tokens WHERE token=$1
+		SELECT id, userid, expires_at from email_verification_tokens WHERE session=$1
 		`, token)
 
 	var id, userID uuid.UUID
@@ -55,23 +55,23 @@ func (r *VerificationTokenRepository) GetUserIDByToken(ctx context.Context, toke
 		&expiresAt)
 
 	if err != nil {
-		return uuid.UUID{}, fmt.Errorf("scan values in token structure: %w", err)
+		return uuid.UUID{}, fmt.Errorf("scan values in session structure: %w", err)
 	}
 
 	if expiresAt.Before(time.Now()) {
-		return uuid.UUID{}, fmt.Errorf("token expired")
+		return uuid.UUID{}, fmt.Errorf("session expired")
 	}
 
 	return userID, nil
 }
 
 func (r *VerificationTokenRepository) DeleteToken(ctx context.Context, token string) error {
-	cmd, err := r.pool.Exec(ctx, `DELETE FROM email_verification_tokens WHERE token=$1`, token)
+	cmd, err := r.pool.Exec(ctx, `DELETE FROM email_verification_tokens WHERE session=$1`, token)
 	if err != nil {
 		return err
 	}
 	if cmd.RowsAffected() == 0 {
-		return fmt.Errorf("token not found")
+		return fmt.Errorf("session not found")
 	}
 	return nil
 }
