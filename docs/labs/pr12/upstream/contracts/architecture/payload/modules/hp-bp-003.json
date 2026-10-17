@@ -1,0 +1,1187 @@
+{
+  "format": "pcf.module/1",
+  "module_id": "HP-BP-003",
+  "phase": "architecture",
+  "records": {
+    "HP-BP-003": {
+      "body": {
+        "compatibility_refs": [
+          {
+            "object_id": "HP-COMPAT-ARCH-001"
+          }
+        ],
+        "formal_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-004"
+          },
+          {
+            "object_id": "HP-IF-005"
+          },
+          {
+            "object_id": "HP-IF-006"
+          },
+          {
+            "object_id": "HP-IF-007"
+          },
+          {
+            "object_id": "HP-IF-008"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-BP-003/T/001"
+          },
+          {
+            "object_id": "HP-BP-003/T/002"
+          },
+          {
+            "object_id": "HP-BP-003/T/003"
+          },
+          {
+            "object_id": "HP-BP-003/T/004"
+          },
+          {
+            "object_id": "HP-BP-003/T/005"
+          },
+          {
+            "object_id": "HP-BP-003/T/006"
+          },
+          {
+            "object_id": "HP-BP-003/T/007"
+          },
+          {
+            "object_id": "HP-BP-003/T/008"
+          },
+          {
+            "object_id": "HP-BP-003/T/009"
+          },
+          {
+            "object_id": "HP-BP-003/T/010"
+          },
+          {
+            "object_id": "HP-BP-003/T/011"
+          },
+          {
+            "object_id": "HP-BP-003/T/012"
+          }
+        ],
+        "parameter_refs": [
+          {
+            "object_id": "HP-BP-003/PARAM/TIMER_POLL"
+          },
+          {
+            "object_id": "HP-BP-003/PARAM/OUTBOX_BATCH"
+          }
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "scope": "## 1. Граница спецификации и применимость\n\nProcessing — единственный владелец business admission, operation/configuration, case state/episode/responsibility, разрешённой команды и объясняемой истории. Применимость — HP-VER-001 и четыре SINGLE-профиля/PILOT NFR. Две будущие операции/TEAM delegation/scan не включаются наличием архитектурного поля.\n\n| Сторона | Ответственность |\n| --- | --- |\n| Processing | Canonical state, atomic guards, immutable config pins, разрешённое продолжение/пауза/история |\n| Intake BP002 | Durable authenticated ingress и свежие source observations |\n| Delivery BP004 | Единственный provider effect ledger и конкретные target observations |\n| Identity BP001 | Actual principal/scope/connection epoch, owner continuity и revoke barriers |\n| Web/AI BP005 | Проверяемое proposal/view и явное намерение, не runtime business authority |\n\nAD определяет PART/DATA/IF ownership; Product Shared владеет смыслом восьми состояний, ролями и guard. BP не создаёт альтернативных продуктовых состояний.",
+        "text": "# Technical Blueprint — Processing, конфигурации и дела\n\n**ID:** HP-BP-003. **Состояние:** In Review. **Ответственный:** делегированный архитектор HitPipe; единственный владелец интеграции — Codex root. Кандидатная нормативная спецификация, не Accepted и не evidence реализации.\n\n## 1. Граница спецификации и применимость\n\nProcessing — единственный владелец business admission, operation/configuration, case state/episode/responsibility, разрешённой команды и объясняемой истории. Применимость — HP-VER-001 и четыре SINGLE-профиля/PILOT NFR. Две будущие операции/TEAM delegation/scan не включаются наличием архитектурного поля.\n\n| Сторона | Ответственность |\n| --- | --- |\n| Processing | Canonical state, atomic guards, immutable config pins, разрешённое продолжение/пауза/история |\n| Intake BP002 | Durable authenticated ingress и свежие source observations |\n| Delivery BP004 | Единственный provider effect ledger и конкретные target observations |\n| Identity BP001 | Actual principal/scope/connection epoch, owner continuity и revoke barriers |\n| Web/AI BP005 | Проверяемое proposal/view и явное намерение, не runtime business authority |\n\nAD определяет PART/DATA/IF ownership; Product Shared владеет смыслом восьми состояний, ролями и guard. BP не создаёт альтернативных продуктовых состояний.\n\n## 2. Канонические определения и формальные источники\n\nПолные storage constraints принадлежат `formal/sql/processing.sql`. Реальный context/произвольные labels/AI intent/содержательная history/outbox payload живут только в service-owned durable content files HP-BP-006; SQL хранит opaque ref/hash/byte counter/expiry и minimal safety. Необходимая constrained accepted service_label сохраняется как семантика принятого правила; это не разрешение сохранять brief/contact/AI prose в config. Файл fsync+rename+directory fsync до SQL reference commit; missing file→hold, не выдуманное значение.\n\nHTTP operation selectors/wire schemas принадлежат HP-FORMAL-001: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/*.json`, OpenAPI3.1.0; exact commit/digest/imports разрешает итоговый manifest. `formal/schemas/*.json` — generated views, не второй источник. Здесь канонична семантика транзакций, конкуренции, разрешений и обработки knowledge. Product Contract candidate/pins — exact upstream, не mutable latest. Provider responses не выступают внутренней schema. У service database нет cross-service SQL grants; ссылки на объекты других сервисов разрешаются через authenticated API, не foreign SQL joins.\n\n## 3. Точные технические обязательства\n\n### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.\n\n### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.\n\n### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.\n\n### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.\n\n### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.\n\n### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.\n\n### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.\n\n### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.\n\n### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.\n\n### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.\n\n### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.\n\n### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014.\n\n## 4. Взаимодействия, состояния и исходы\n\n| Область | Единственный нормативный локатор |\n| --- | --- |\n| Admission identity/config/route и conflict | T001/T005 |\n| Configuration draft/Prepared/explicit accepted lifecycle | T002/T003 и продуктовый RULE003 |\n| Восемь business states, close/reopen/reconsider | T004 со всеми guard RULE002 |\n| Permission/dispatch outcome/partial/unknown | T006/T011 и Delivery HP-BP-004 |\n| Timeouts/cancel/drain/restore | T007/T008/T012 |\n| Authority/security/data lifecycle | T005/T009/T010 и AD |\n\nТаблица навигационная: не авторит дополнительную модель переходов. Cross-service visible lag не разрешает новые effects на stale state; actual start проверяется barrier protocol HP-BP-001.\n\n## 5. Обеспечение качественных и продуктовых ограничений\n\n| Источник | Механизм | Проверка всей границы |\n| --- | --- | --- |\n| FR001–010/305/306,NFR007/010/012 | T002/T003 | полный user path, outbound AI и synthetic isolation, не одна schema |\n| FR101–110/201–212,RULE001–013/101 | T001/T004–T007/T009/T011 | source→case→effect→readback→recovery, включая unknown |\n| FR301–310,NFR003/005/006/009/014 | T003/T005/T007–T010/T012 | pause/revoke/restore/content lifecycle вместе, без hidden exclusions |\n| NFR002/004/008 | T001/T007/T009 | exact initial cohort, timestamps и совместная нагрузка; queue не исключает slow case |\n\n## 6. Параметризация, версии и совместимость\n\n| Адрес | Допустимый диапазон | Полномочие/фиксация | Сохранённая гарантия |\n| --- | --- | --- | --- |\n| HP-BP-003/PARAM/TIMER_POLL | 0.1–5s между выборками due durable timers | service/platform owner в versioned deployment config/evidence | исходные product deadlines не меняются |\n| HP-BP-003/PARAM/OUTBOX_BATCH | 1–100 records/claim, tenant-fair bounded concurrency | service owner, config pin | один lease не даёт разрешения повторять effect; deadline/cohort неизменны |\n\nВсе config/evaluator/wire compatibility — T012; effect freshness budget владеет BP004. Product numbers, authorization/trust/ownership и frozen context не Worker tuning. Первое издание ничего не supersede; изменение требует AD/BP/formal closure и оценки всех старых accepted config/cases. Новая publication автоматически не authorizes Development.\n\n## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета.\n\n## 8. Существенные вопросы и контроль перед приёмкой\n\nМатериальные выборы области сделаны. Будущие фактические target/account/user-study измерения остаются продуктовой validation boundary, не неизвестным required behavior. Итоговый package проверяет полный188-obligation closure HP-VER-001, formal assets и hash-bound independent review. Формальная upstream/source acceptance не подделывается; authority_ready=false/execution_authorized=false до действительной процедуры. Нарушение permission/guard → DENY; конфликт canonical sources/несовместимая config → ESCALATE+affected hold; AUTO лишь в bounded параметрах принятой AD.\n"
+      },
+      "content_role": "specification",
+      "kind": "technical_blueprint",
+      "origin_refs": [
+        "origin:HP-BP-003"
+      ],
+      "relations": [],
+      "title": "Technical Blueprint — Processing, конфигурации и дела"
+    },
+    "HP-BP-003/PARAM/OUTBOX_BATCH": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "chooser": "service owner, config pin",
+        "context": "1–100 records/claim, tenant-fair bounded concurrency",
+        "maximum": {
+          "type": "integer",
+          "value": 100
+        },
+        "minimum": {
+          "type": "integer",
+          "value": 1
+        },
+        "preserved_refs": [
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          }
+        ],
+        "text": "| HP-BP-003/PARAM/OUTBOX_BATCH | 1–100 records/claim, tenant-fair bounded concurrency | service owner, config pin | один lease не даёт разрешения повторять effect; deadline/cohort неизменны |",
+        "unit": "records",
+        "value_source": "Actual exact value/context/owner/config digest recorded in versioned deployment evidence; allowed range only.",
+        "value_type": "integer",
+        "verification": "один lease не даёт разрешения повторять effect; deadline/cohort неизменны"
+      },
+      "content_role": "obligation",
+      "kind": "technical_parameter",
+      "origin_refs": [
+        "origin:HP-BP-003/PARAM/OUTBOX_BATCH"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/PARAM/OUTBOX_BATCH"
+    },
+    "HP-BP-003/PARAM/TIMER_POLL": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "chooser": "service/platform owner в versioned deployment config/evidence",
+        "context": "0.1–5s между выборками due durable timers",
+        "maximum": {
+          "type": "decimal",
+          "value": "5"
+        },
+        "minimum": {
+          "type": "decimal",
+          "value": "0.1"
+        },
+        "preserved_refs": [
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          }
+        ],
+        "text": "| HP-BP-003/PARAM/TIMER_POLL | 0.1–5s между выборками due durable timers | service/platform owner в versioned deployment config/evidence | исходные product deadlines не меняются |",
+        "unit": "s",
+        "value_source": "Actual exact value/context/owner/config digest recorded in versioned deployment evidence; allowed range only.",
+        "value_type": "decimal",
+        "verification": "исходные product deadlines не меняются"
+      },
+      "content_role": "obligation",
+      "kind": "technical_parameter",
+      "origin_refs": [
+        "origin:HP-BP-003/PARAM/TIMER_POLL"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/PARAM/TIMER_POLL"
+    },
+    "HP-BP-003/T/001": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/001"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/001 — Admission, сторона Processing"
+    },
+    "HP-BP-003/T/002": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/002"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/002 — Draft/readiness/rehearsal"
+    },
+    "HP-BP-003/T/003": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/003"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/003 — Явное принятие/изменение"
+    },
+    "HP-BP-003/T/004": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/004"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/004 — Case reducer"
+    },
+    "HP-BP-003/T/005": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/005"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/005 — User commands/authorization"
+    },
+    "HP-BP-003/T/006": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/006"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/006 — Permission на новое создание"
+    },
+    "HP-BP-003/T/007": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/007"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/007 — Durable deadlines"
+    },
+    "HP-BP-003/T/008": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/008"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/008 — Pause/resume/archive"
+    },
+    "HP-BP-003/T/009": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/009"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/009 — History/read model/notification"
+    },
+    "HP-BP-003/T/010": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/010"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/010 — Данные/deletion"
+    },
+    "HP-BP-003/T/011": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/011"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/011 — Effect observations и binding"
+    },
+    "HP-BP-003/T/012": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-003"
+        },
+        "conformance": "rollback/migration/restore не повторяют возможное создание; NFR001/008/014.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\nПлан: AT-IN-02,AT-CONF-01–05,AT-STATE-01–06,AT-PAUSE-01–03,AT-EFFECT-01/04/05,AT-REC-01,AT-DATA-01/02. Scope proof — durable row-lock/uniqueness/outbox/inbox spike, затем полнофункциональные multi-service races, fault injection и E2E на выбранной продуктовой версии. SQL proof не подтверждает весь UI/provider/live authorization/latency. Фактический PASS допустим только из exact implementation/evidence pins; независимый source review — отдельный результат итогового пакета."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-003/T/012"
+      ],
+      "relations": [],
+      "title": "HP-BP-003/T/012 — Совместимость/восстановление"
+    },
+    "HP-SCN-ARCH-002": {
+      "body": {
+        "failure_refs": [
+          {
+            "object_id": "HP-REC-ARCH-001"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-007"
+          },
+          {
+            "object_id": "HP-ARC-013"
+          },
+          {
+            "object_id": "HP-BP-003/T/002"
+          },
+          {
+            "object_id": "HP-BP-003/T/003"
+          }
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "product_scenario_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-003"
+          }
+        ],
+        "steps": [
+          "Owner uses explicit minimized English editor or direct structured form.",
+          "Python returns bounded untrusted proposal with known/unknown, never actions.",
+          "Processing validates pack/fields/current rights and persists independent draft revision.",
+          "Pure synthetic rehearsal and readiness bind exact significant config digest.",
+          "Owner sees full specific meaning and explicitly accepts version/digest; atomically immutable config and activation.",
+          "AI outage or unsupported meaning remains visible; manual draft path works, no silent alternative activation."
+        ],
+        "text": "## 3. Точные технические обязательства\n\n### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.\n\n### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.\n\n### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.\n\n### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.\n\n### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.\n\n### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.\n\n### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.\n\n### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.\n\n### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.\n\n### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.\n\n### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.\n\n### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+      },
+      "content_role": "specification",
+      "kind": "system_scenario",
+      "origin_refs": [
+        "origin:HP-SCN-ARCH-002"
+      ],
+      "relations": [],
+      "title": "Intent to explicitly accepted operation"
+    },
+    "HP-SCN-ARCH-003": {
+      "body": {
+        "failure_refs": [
+          {
+            "object_id": "HP-REC-ARCH-001"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-005"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-011"
+          },
+          {
+            "object_id": "HP-BP-003/T/004"
+          },
+          {
+            "object_id": "HP-BP-003/T/005"
+          },
+          {
+            "object_id": "HP-BP-003/T/006"
+          },
+          {
+            "object_id": "HP-BP-003/T/007"
+          },
+          {
+            "object_id": "HP-BP-003/T/009"
+          },
+          {
+            "object_id": "HP-BP-003/T/011"
+          }
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "product_scenario_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-201"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-202"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-203"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-204"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-205"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-206"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-207"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-209"
+          }
+        ],
+        "steps": [
+          "Authorized queue shows one canonical case, effective owner, known facts, missing proof and next allowed action.",
+          "Operator supplies only permitted context; source financial facts stay immutable observations.",
+          "Recheck or manual target link performs concrete current scoped GET and full comparison.",
+          "Possible prior effect blocks another create; absence/empty search/new episode does not remove fence.",
+          "Owner may explicitly close/reopen/reconsider under exact original guards without new identity/config.",
+          "History records actual actor/time/knowledge change; concurrent commands serialize or return explicit conflict."
+        ],
+        "text": "## 3. Точные технические обязательства\n\n### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.\n\n### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.\n\n### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.\n\n### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.\n\n### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.\n\n### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.\n\n### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.\n\n### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.\n\n### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.\n\n### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.\n\n### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.\n\n### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+      },
+      "content_role": "specification",
+      "kind": "system_scenario",
+      "origin_refs": [
+        "origin:HP-SCN-ARCH-003"
+      ],
+      "relations": [],
+      "title": "Human exception continuation and conservative knowledge"
+    },
+    "HP-SCN-ARCH-004": {
+      "body": {
+        "failure_refs": [
+          {
+            "object_id": "HP-REC-ARCH-001"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-003/T/003"
+          },
+          {
+            "object_id": "HP-BP-003/T/005"
+          },
+          {
+            "object_id": "HP-BP-003/T/007"
+          },
+          {
+            "object_id": "HP-BP-003/T/008"
+          },
+          {
+            "object_id": "HP-BP-003/T/009"
+          },
+          {
+            "object_id": "HP-BP-003/T/012"
+          }
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "product_scenario_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-301"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-302"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-303"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-304"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-305"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-306"
+          }
+        ],
+        "steps": [
+          "Owner pause serializes with admission; new cases stop, old authorized episodes drain within original deadline.",
+          "Operation lifecycle/connection health/case knowledge remain distinct.",
+          "Change draft/diff/rehearsal/readiness and explicit acceptance create new selected config, never migrate old cases.",
+          "Explicit resume verifies current selected config/right/context and disposition held inputs/gaps.",
+          "Owner transfer maintains valid responsibility; SINGLE does not acquire TEAM assignment.",
+          "Archive follows Paused and explicit unresolved-case disposition, retaining unknown effect knowledge."
+        ],
+        "text": "## 3. Точные технические обязательства\n\n### HP-BP-003/T/001\n\n**Admission, сторона Processing:** для authenticated source observation в разрешённой области atomically проверить существующий case по workspace+source account+mode+Session; при наличии привязать наблюдение к прежним case/config/owner/effect knowledge. Новый case допускается только для установленного подлинного оплаченного кандидата; unpaid/ещё не установленный paid-сигнал остаётся ingress до достаточного основания, но не закрепляет вечное исключение Session. Для нового кандидата блокировать operation/route rows, проверить active admission/уникальный маршрут/временную границу и сохранить case identity, текущую принятую config, owner и initial admission timestamp ДО полной последующей финансовой проверки/эффекта. Уникальный constraint — последний race guard. Неразрешённый вход возвращается/остаётся видимым по RULE101, не теряется из-за отсутствия case. **Критерий:** concurrent events одной Session имеют один case и одну config, pause/admission имеют однозначный порядок; FR102/104,RULE001/003/004.\n\n### HP-BP-003/T/002\n\n**Draft/readiness/rehearsal:** structured draft и его revision хранятся независимо от chat. AI возвращает только предложение; Processing проверяет strict pack schema/unknowns/supported refs, не угадывает отсутствующие поля. Config review view показывает полный смысл и исключения по FR004. Репетиция выполняется pure deterministic evaluator с synthetic adapter, не имеющим production connector capability. Сохранённый digest значимых config values связывает readiness/rehearsal; изменение invalidates affected readiness. Неустановленные обязательные права/owner/route/контекст не разрешают Prepared. **Критерий:** LLM outage не теряет draft, rehearsal не меняет live, stale rehearsal не активирует новое правило; FR001–006/008/009,NFR007/010/012.\n\n### HP-BP-003/T/003\n\n**Явное принятие/изменение:** действительный owner посылает stable idempotent command с expected draft/config revision; одной TX фиксируются immutable accepted config, фактический actor/time, command result и operation activation/selected config. First activation boundary устанавливается один раз; не сдвигается update/restart/reconnect. Изменение текущей операции создаёт отдельный draft/diff, применение проходит pause→проверка/репетиция→принятие→явный resume. Прежняя accepted config может быть явно выбрана текущей, но старые cases не мигрируют. **Критерий:** повтор/потеря ACK queryable без второй активации; старый case остаётся на старой версии; FR007/305/306/310,RULE004.\n\n### HP-BP-003/T/004\n\n**Case reducer:** только Processing transaction применяет разрешённый HP-RULE-002 переход с guard и durable typed history. Observation, attempt, user decision и confirmation различны. Closed/Excluded не меняют state от одного нового GET: соответствующий owner reconsideration/reopen обязателен. Unknown/possible prior effect сохраняется при close/reopen/archive/context purge. Known existing mismatching/deleted target не даёт create replacement. **Критерий:** все transitions/negative guards Shared воспроизводимы, no hidden ninth state/false confirmed; FR106/107/110/201/204/207/210–212,RULE002/007/008/009/013.\n\n### HP-BP-003/T/005\n\n**User commands/authorization:** каждый scoped query/mutation имеет actual subject, workspace/operation/case scope и актуальную проверку BP001. Stable request ID+body digest возвращает прежнее применённое command outcome; mismatch→409. Expected revision/row lock отклоняет stale incompatible command с актуальным разрешённым view. Context patch допускает только configured business fields и provenance, не payment/source/account/config truth. Close/reopen/reconsider и operation control owner-only. Owner continuity использует действительного operation owner; удаление последнего owner запрещено, операторский revoke не оставляет case без ответственности. SINGLE не получает TEAM per-case assignment через owner transfer. **Критерий:** concurrent close/continue, чужой URL и context payment patch не обходят guard; FR202/208/210–212/308,NFR005/008.\n\n### HP-BP-003/T/006\n\n**Permission на новое создание:** Processing получает complete fresh facts BP002 и применяет HP-RULE-006/007/012 непосредственно перед выдачей bounded dispatch permission BP004. Source facts/proof привязаны к case/config/account/context и не редактируются оператором. Нужны current rights/lifecycle/context, отсутствие possible/existing effect, неистёкший episode; истёкший source proof требует нового чтения. Разрешение не означает факт отправки/успеха и не переносится за revoke/pause. **Критерий:** refund/dispute/неполный payment proof/expired proof/revoked connection удерживают создающий command; FR103/105/203/206,RULE006/008.\n\n### HP-BP-003/T/007\n\n**Durable deadlines:** episode start/deadline, automatic write counter, WaitingData since, pause accepted/deadline сохраняются и не сбрасываются техническим retry/restart. Время ожидания internal queue входит в исходный budget. Только реальное qualified manual continuation с новым достаточным основанием создаёт следующий episode; lineage/история остаются. Timer worker after recovery сначала обрабатывает истёкшие границы, затем разрешает новые effects. Unknown write к сроку остаётся Unknown с reason/owner, не трактуется неуспехом без эффекта. **Критерий:** NFR003 границы active/wait/pause соблюдаются без auto-close или бесконечного Working; FR108/203/206/303,NFR001/003/014.\n\n### HP-BP-003/T/008\n\n**Pause/resume/archive:** accepted pause TX закрывает new admissions тем же operation lock, показывает Draining и предел уже разрешённой работы. Поздний queued create без фактического dispatch admission консервативно удерживается; pause не источник нового риска. К установленному сроку каждый episode имеет подтверждение или явное незавершённое состояние. Resume проверяет выбранную accepted config/connection readiness и явное disposition held signals/gaps, сохраняет момент. Уже admitted case остаётся pinned; новый uses current selected config. Archive только после Paused и допустимого explicit решения по каждому unresolved case; не стирает unknown. **Критерий:** race pause/admission/dispatch и v1case/v2resume не дают скрытого нового action; FR302–304/306/309,RULE003/004/013.\n\n### HP-BP-003/T/009\n\n**History/read model/notification:** canonical case query возвращает source link, state, pinned config, effective owner, known/unknown facts, last confirmation boundary и следующий permissible action. Typed events хранят actual human/service principal, previous/new knowledge, causal object refs и UTC time. UI не получает отдельного итогового workflow state. Internal attention notification deduplicated по case+unchanged reason; повтор обновляет одно уведомление, не запускает effects. Content заново permission-scoped при чтении; delivery/read внешнего email не обещаются. **Критерий:** старое подтверждение не выглядит continuous health; notification unreceived не auto-close; FR107/201/209/301/310,NFR002/008/011.\n\n### HP-BP-003/T/010\n\n**Данные/deletion:** case safety identity/version/possible effect/known target/responsibility минимально отделены от90d content/history. Read/retry не продлевает TTL. Content deletion требует заново получить недостающие обязательные поля перед допустимым будущим действием, но не создаёт permission unknown retry. Workspace deletion closes execution first, coordinated purge/restore overlay HP-BP-006 охватывает outbox/inbox/exports/backups; old webhook не resurrect. **Критерий:** replay после context purge не даёт второй task, restore удалённых данных не открывает исполнение; NFR009/014.\n\n### HP-BP-003/T/011\n\n**Effect observations и binding:** consumer атомарно сохраняет Delivery observation ID/digest и каноническую интерпретацию. Task ID/HTTP success не Confirmed без полного RULE007 readback. Existing mismatching task сохраняется как known effect и never create again; empty/incomplete search не доказывает absence. Manual link проходит конкретный target read BP004, не человеческую галочку. Потерянный internal response восстанавливается query command/lineage, не новым provider write. **Критерий:** at-least-once result delivery не меняет количество effects, unknown не сброшен; FR105/106/204–207,RULE007/008,NFR001.\n\n### HP-BP-003/T/012\n\n**Совместимость/восстановление:** immutable config schema version и evaluator version фиксируются в accepted snapshot и поддерживаются пока существуют применимые cases. Неизвестная/несовместимая старая config удерживает affected case с incident; не пересчитывается под новым смыслом. Additive wire change допустимо только при preservation старых errors/guards/default semantics; destructive migration не меняет pinned identity/config/ledger. Restore с неустановленным safety state держит affected execution, возвращает собственные доступные case views и honest uncertainty, а не clean empty operation. **Критерий:** rollback/migration/restore не повторяют возможное создание; NFR001/008/014."
+      },
+      "content_role": "specification",
+      "kind": "system_scenario",
+      "origin_refs": [
+        "origin:HP-SCN-ARCH-004"
+      ],
+      "relations": [],
+      "title": "Pause, change, resume and ownership continuity"
+    }
+  }
+}

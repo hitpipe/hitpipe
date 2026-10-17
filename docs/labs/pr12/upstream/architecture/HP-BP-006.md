@@ -1,0 +1,243 @@
+# HP-BP-006 — Платформа, эксплуатация и безопасное восстановление
+
+**ID Blueprint:** HP-BP-006. **Рабочее состояние:** In Review / Candidate. **Ответственный:** автономный архитектор в делегированной области; интеграция — Codex root. Выбрана конкретная начальная deployment/recovery модель HP-VER-001. Она не утверждает уже приобретённый сервер, выполненный deploy, достигнутый uptime, восстановление или RPO в существующей установке.
+
+## 1. Граница спецификации и применимость
+
+Область — HP-PART-001–009 и их управляемые копии/процессы: отдельные Go сервисы IAM/Intake/Processing/Delivery, PythonAI, Next UX/BFF, PostgreSQL, Keycloak и edge. Blueprint определяет среду, durable storage, остановку/перезапуск, инфраструктурное fencing, доступ/ключи, наблюдаемость, retention/удаление, selective backup, restore и изменение source/config поколения.
+
+Продуктовый контекст: exact Product candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, HP-VER-001. Основные нормы — HP-NFR-001–014 в их выбранной применимости, HP-RULE-001/003/004/005/008/010/011/012/013, HP-POL-001–005. TEAM/PUBLIC capacity/maturity не объявляются достигнутыми или автоматически допускаемыми MVP deployment.
+
+Вне области: покупка инфраструктуры, управление текущим VPS/Project OS, фактическая production migration, бизнес-семантика case machine и provider payment/effect truth. Обслуживание инфраструктуры не создаёт бизнес-роль владельца всех workspace. Конечный service inventory и ownership принадлежат HP-DOC-AD-001; common HTTP/epochs/start gate — HP-BP-007.
+
+| Сторона | Ответственность |
+| --- | --- |
+| Workstream IAM/platform | Target deployment manifest, IAM roster/epochs, runtime resources, backup/deletion/restore control и техническое сопровождение |
+| Владельцы Intake/Processing/Delivery | Их локальный durable state, content/secret files, purge/restore receipts, метрики и action safety |
+| Workstream UX/AI | Same-origin/private-network границы, отсутствие shared cache business data и payload logging, пользовательская деградация |
+| Интегратор | Общие версии/схемы/generation и совместимость, сквозная release qualification |
+| Оператор среды | Именованный технический доступ, storage/network fencing и проверяемые recovery действия; без автоматических бизнес-полномочий |
+
+## 2. Канонические определения и формальные источники
+
+HP-FORMAL-001 — канонический OpenAPI3.1.0 в Git; `/formal/sql/` задаёт точные constraints и storage metadata; `/formal/stack/` — проверенный dependency/lock baseline; `/formal/verification/` — reproducible vectors и будущие qualification procedures. Они получают реальные exact Git commits/digests и import closure в manifest после записи. Здесь нет вымышленных image digests или обещания, что mutable tag является pin.
+
+**Выбранная storage модель MVP:** PostgreSQL хранит только минимальные identity/safety/configuration/epoch/queue metadata и references. Все сохраняемые короткоживущие envelopes, реальные context/free text, подробная история, AI draft text и provider readback content находятся в **service-owned durable content files**, исключённых из всех backup/snapshot/WAL-копий. Provider credentials — отдельные connector-owned encrypted secret files, тоже вне backup. Штатно raw webhook вообще не сохраняется. Это одно выбранное решение, а не два конкурирующих способа; custom Vault/KMS service и полная физическая PITR система не вводятся.
+
+Минимальная safety metadata не объявляется анонимной. Нормативная семантика классификации принадлежит HP-NFR-009; file ref не позволяет спрятать PII или business payload в SQL JSON, названии файла, outbox, diagnostic event либо backup metadata.
+
+## 3. Точные технические обязательства
+
+### HP-BP-006/T/001 — Отдельные среды и честная стартовая ёмкость
+
+**Действие:** development, staging/qualification и live имеют отдельные data volumes, secrets, IdP realms/clients, provider test/live endpoints, DNS и именованные deployment generations. Контекст test не направляется в live adapter. Данные реальных клиентов не копируются в dev для удобства.
+
+Минимальный целевой single-host development envelope — отдельные4vCPU/8GiB RAM/80GiB SSD. Для первоначального staging/live allocation выбираются8vCPU/16GiB RAM/200GiB SSD и отдельное место selective backups; это инженерная исходная allocation, **не** измеренная ёмкость и не обещание любого provider тарифа. Уменьшение возможно только после представительных capacity checks при сохранении всех NFR; расширение ресурсов не включает новый Product scope. Существующий2GB VPS, разделяемый с другими системами, не является full-stack dev/stage целью этого документа и не изменяется.
+
+**Критерий:** до live конкретный provisioned manifest, доступная память/диск/IO, реальные provider quotas и одновременная выбранная HP-NFR-004 нагрузка проверены. OOM, disk pressure и внутренняя профилактика считаются unavailable, а не исключаются из HP-NFR-014. Недостающий ресурс удерживает qualification/live, но не порождает вымышленный успешный benchmark.
+
+### HP-BP-006/T/002 — Простая исполняющая топология и изоляция
+
+**Выбор:** Edge — pluginless Caddy2.11.7, исходный официальный release и SHA фиксируются stack manifest. TLS public origin, fixed private upstreams с проверкой server CA/SAN и выделенным EDGE client cert; public routes только UI/API→BFF, /auth→IAM и signed /webhooks→Intake. Админ/API Caddy выключен либо private operator-only, не публичный dynamic routing. Host headers/forwarded authority не доверяются без designated Edge. Provider API calls не идут через Edge. Private application8443/control9443/health9444 listeners и точные caller methods заданы OAS+BP005/007; firewall также запрещает лишние пути. OCI containers и воспроизводимый declarative single-host deployment manifest; один active runtime каждого Go сервиса, один PythonAI, один NextBFF, PostgreSQL, Keycloak и edge. Stateless replica/HA/autoscale не включаются без согласованного roster/fencing и capacity review. Kafka, Temporal, Kubernetes, Redis и общий workflow engine не нужны для первого pack.
+
+Публично доступны только edge HTTPS и назначенные OAuth/webhook маршруты. Admin/metrics/health/control/DB endpoints приватны. Каждый runtime работает непривилегированным UID, без docker socket/host PID namespace, с read-only root image, минимальной writable областью и service-specific volumes/credentials. Application DB role не имеет cluster-superuser/DDL/чужого DB grant; migration role выдаётся отдельно ограниченному release процессу. Keycloak имеет отдельные database/user/admin plane.
+
+**Гарантия:** сеть разрешает только связи AD/IF, фиксированные provider destinations и необходимые DNS/IdP/observability пути. AI не может обращаться к production connector/case DB. BFF не получает DB credentials или stored provider credentials; только transient user credential-entry relay BP005/T/023 разрешён без persistence/logging/собственного provider access. Service-to-service и DB передача защищена TLS и аутентификацией по HP-BP-007; Docker bridge сам по себе не доказывает identity или tenant authorization. Проверка — реальные запреты сетевых/DB путей и negative identity requests, не только compose labels.
+
+### HP-BP-006/T/003 — Durable storage и конкретный RPO0 contour
+
+**Предусловие:** целевой block storage и файловая система поддерживают проверяемую синхронную запись; provider/hypervisor write-cache свойства установлены в конкретной среде. PostgreSQL18.6: `fsync=on`, `full_page_writes=on`, `synchronous_commit=on`; business/safety/outbox/inbox таблицы не UNLOGGED и не временные. Запрещено ускорять acknowledgement отключением flush. Каждый сервис владеет только своей DB; cross-service SQL/foreign keys отсутствуют.
+
+**Объявленный контролируемый контур RPO0:** kill/restart runtime, контролируемый restart/OS crash при сохранённом исправном durable storage, временная недоступность PostgreSQL и перезапуск с теми же fsynced PG/content/secret volumes. Уже подтверждённое принятое состояние должно восстанавливаться без потери по HP-NFR-001/014. File+SQL порядок установлен T/006, а не предполагается атомарной общей транзакцией.
+
+Полная утрата/неустранимая коррупция всех актуальных volumes, controller с недостоверным flush и гибель площадки **вне этого контура**. Selective backups T/012 помогают ограниченному восстановлению, но не доказывают RPO0/site recovery. При недостоверной safety state нельзя автоматически возобновлять effect; применяется T/013. Расширение RPO0 до disk/node/site loss потребует нового согласованного синхронного replication/fencing design и реальных fault tests, не тихой настройки asynchronous standby.
+
+**Проверка:** fault injection до/после фактического ACK и commit, сравнение всех durable intents/configs/identities/ledgers и содержимого файлов; никаких новых сомнительных POST после recovery. Восстановление одной health-страницы не является соответствием.
+
+### HP-BP-006/T/004 — Реальный infrastructure fence старого runtime
+
+**Условие:** runtime не даёт достоверный barrier ACK либо сменяется generation; одна lease/heartbeat не доказывает прекращение старых start paths. Сам IAM не выдаёт продуктовую команду «считать процесс убитым» по неподтверждённому caller полю.
+
+**Действие:** технический оператор среды через аутентичную management plane выполняет и проверяет точный boot/generation fence: прекращены все ingress и egress сетевые возможности, остановлен/невозобновляем старый процесс/cgroup либо изолирован его host/namespace, закрыт доступ к БД и прекращены прежние DB sessions; старые credentials заменены/запрещены до открытия replacement. `NOLOGIN` без завершения уже открытых SQL sessions, removal from load balancer и отправленный SIGTERM недостаточны. При общем service credential fencing охватывает всё старое поколение, а не выдаёт точность до одной replica.
+
+**Исход:** подтверждение содержит фактические instance/boot/generation, способы, результаты/время и проверяющего оператора без секретов; IAM связывает его с нужным epoch/scope. Недоступная/неустановленная management plane не даёт proof и не разрешает replacement. Восстановленный старый контейнер начинает CLOSED и не получает вновь доступ к сети/DB через прежний секрет. Реальный security5s предел не ослабляется: Pending сверх него — incident/NFR FAIL по HP-BP-001/T/011, даже если ручное fencing требует дольше.
+
+### HP-BP-006/T/005 — Остановка и обновление без потери неизвестного
+
+**Действие:** управляемая остановка сначала закрывает platform admission/start gates и сообщает честную недоступность/maintenance; это не молчаливое изменение принятой operation lifecycle или пользовательское подтверждение паузы. Intake перестаёт подтверждать новые несохранённые обязательства, workers прекращают новые effect starts. Уже фактически начатые разрешённые обращения получают наблюдение в пределах своих исходных deadlines; новые retries ради завершения остановки не разрешаются.
+
+Выбранный общий drain budget —300 секунд; transport/query/start budgets — HP-BP-007. По истечении drain unresolved внешние попытки сохраняют durable fence и AMBIGUOUS/Unknown knowledge, затем runtime может быть остановлен с настоящим fencing. Нет права превращать их в KNOWN_NO_EFFECT или удалять outbox/case для «чистого restart». Очередь и owner-visible состояние сохраняются в установленных retention пределах.
+
+Перед restart/new generation все startup gates CLOSED; загружаются current epochs/overlay, совместимые DB/schema/config и overdue timers, затем выполняются readiness checks T/007. Таймер остановки не продлевает episode deadline. Проверка — остановка в каждой persist/write/readback/ACK точке, включая crash без graceful shutdown.
+
+### HP-BP-006/T/006 — Content files и порядок durable ссылки
+
+**Предусловие:** реальный business text/envelope/readback/draft/подробная история не помещается в SQL/WAL/outbox payload. SQL хранит только непрозрачную ссылку, digest, size, classification, установленный expiry и минимально необходимую identity/safety metadata. Полные wire bodies собираются из разрешённого content ref в памяти; если content недоступен/истёк, действие удерживается, а body не воссоздаётся выдуманным.
+
+**Действие сохранения:** владелец пишет ограниченный файл с криптографически случайным непрозрачным именем в свою content volume: безопасное создание без symlink/path traversal, mode0600 под directory0700, запись и file fsync, atomic rename в конечное имя, directory fsync; только затем своей SQL transaction коммитит ref+state+outbox. Путь не содержит email/Session/имя клиента. Files не обслуживаются статическим HTTP или соседним контейнером. Все защиты действуют и на экспортные/diagnostic временные files.
+
+**Crash semantics:** commit неизвестного исхода нельзя разрешать удалением файла как «сироты». GC сначала проверяет durable references/inbox/outbox и исход исходной transaction/request identity; при недоступной БД/неясности сохраняет file в ограниченном quarantine и поднимает incident. Неиспользованный файл удаляется только после достоверного отсутствия committed reference и in-progress сохранения; GC не продлевает его исходный expiry. Protected metadata header/sidecar journal с class/origin/expiry/digest fsync-персистируется вместе с файлом ДО SQL commit и не содержит body/PII. Expiry enforcement не зависит от доступности SQL: при наступлении hard deadline истёкший content удаляется в установленный срок даже при unresolved ref/commit; остаются только минимальная отметка missing-content/incident+hold. Quarantine не является исключением retention и не создаёт вторую historical copy. Для совместного ref нескольких records жизненный цикл не расширяется за предел самого content. SQL commit с missing/corrupt file — видимый incident+hold, не успешное чтение пустого контекста. Идемпотентная повторная запись использует прежнюю request identity и проверяет digest.
+
+**Проверка:** power/crash после каждого write/fsync/rename/SQL step, ambiguous commit, orphan GC race, corrupt digest и отсутствие файла; после acknowledged accepted save содержимое доступно в контролируемом disk-intact contour. Основания HP-NFR-001/004/008/009/014.
+
+### HP-BP-006/T/007 — Readiness и время
+
+**Действие:** liveness означает только живой процесс; readiness требует совместимых schema/config, своего durable storage, IAM registration/current deny snapshot, закрытых неизвестных startup gaps и доступного безопасного пути чтения. Недоступный внешний provider отражается как health/hold конкретного подключения, а не как доказательство удаления собственных дел. Недоступный AI не блокирует обычное принятое исполнение и чтение данных.
+
+Все deadline timestamps durable UTC; elapsed budgets не сбрасываются рестартом, retry или обновлением lease. Общее reference time и clock offset наблюдаются; при неопределённом времени, способном ослабить expiry/revoke/episode границу, новая затронутая операция fail-closed. Локальный monotonic timer будит работу, но не переписывает её persisted deadline. NTP/chrony drift warning выбирается1 секунда как engineering guard; это не ослабляет каноническую точность HP-NFR-008 или5s revoke.
+
+До открытия новых starts обрабатываются overdue security/deletion/expiry и episode/pause timers с исходными сроками; backlog не объявляется новым budget. Qualification отдельно проверяет clock step/rollback, задержку scheduler и длительный restart. Readiness API не раскрывает бизнес-идентификаторы/secrets.
+
+### HP-BP-006/T/008 — Наблюдаемость без payload и ложного успеха
+
+**Действие:** service logs/metrics/traces содержат opaque request/message/case correlation, component/version, тип состояния/ошибки, времена/latency и минимальную безопасную cause; реальные order/customer text, credentials, cookie, OAuth code/query, AI prompt и response body не записываются. В metric labels нет Session/contact/task/customer IDs или неограниченной cardinality. Технический trace не является отдельной бессрочной копией business history.
+
+Обязательные эксплуатационные показатели: actual receipt/admission/confirmation intervals; outbox/inbox lag и oldest age; buffer size/age/gaps; paused/draining/unknown cases; episode deadline; actual provider-start и revoke accepted/applied/late; failed secret/epoch checks; purge lag; backup inventory/deletion watermark; disk/memory/DB pressure и safe-work availability. Внутренняя receipt→admission задержка видна отдельно: поздний admission не маскирует очередь ради HP-NFR-002.
+
+SLO availability измеряется по HP-NFR-014 минимум раз в минуту безопасным чтением принятой config+case и безопасной командой; failure/timeout>30s и неизвестный внутренний пробел не считаются успешной минутой. Обслуживание/собственная ошибка не исключаются задним числом. Для HP-VER-001/PILOT сохраняется99.0% за непрерывные7 суток и recovery≤60min; это будущие qualification criteria, не измеренный текущий uptime.
+
+**Критерий:** canary secret/text не находится ни на одной поверхности; наблюдение не меняет case knowledge. Alert даёт действительного технического ответственного и путь к ограниченному incident context, а не автоматический business owner grant.
+
+### HP-BP-006/T/009 — Технические инциденты и ограниченные действия
+
+**Поведение:** security fence failure, DB/content corruption, missing ledger, secret exposure, lost buffer interval, overdue purge и неизвестное control overlay регистрируются с affected scope и техническим owner. Обслуживающий worker может повторить безопасное чтение/доставку прежнего durable сообщения по BP007, перезапустить fenced runtime или увеличить заранее разрешённый ресурс; он не создаёт replacement task, не правит payment fact и не объявляет confirmed без HP-RULE-007.
+
+Provider outage удерживает затронутый effect и сохраняет доступ к собственному case/owner view при доступной внутренней платформе. Ошибка ClickUp не превращается в Healthy из-за живого Go процесса. Незатронутые области доступны только при положительно установленной независимости и сохранении глобальных норм; ошибка общей IAM/storage/security плоскости не маскируется как проблема одной кнопки.
+
+Incident closeout требует установленного результата/ограничения и actual checks. Silence, отсутствие нового webhook, очередь без worker и красивый отчёт не являются resolution. Повторный incident не сбрасывает время исходного пользовательского обязательства.
+
+### HP-BP-006/T/010 — Retention по классам без скрытых копий
+
+**Действие:** каждый content/metadata class имеет неизменяемый origin time и expiry. Read/send/export guards проверяют expiry перед использованием; технический replay не продлевает его. Payload files, memory buffers, protected export/support files и любой контролируемый продуктом временный артефакт включены в purge inventory. Database dumps, host/provider snapshots, container checkpoints и filesystem backup, содержащие content volume, запрещены в этом MVP source/config set.
+
+| Класс | Реализация канонического предела |
+| --- | --- |
+| Raw input | Штатно не сохраняется; body/query logging отключены. Если в разрешённой защищённой диагностике действительно необходим raw capture — только content file,≤24h с получения, unlink≤следующего часа; не в SQL/log/backup |
+| Held normalized envelope | Content file whitelist METHOD/DATA; metadata считает1000signals/16MiB/72h по HP-NFR-004; duplicate не продлевает first_received. После срока file недоступен и удаляется в пределах часа; gap отметка без payload сохраняется отдельно |
+| Case context/free text | Content file expires≤90d от admission или от отдельного дополнения для самого дополнения; read-time denial с expiry, своевременное удаление; повтор/просмотр не продлевают срок |
+| Подробная business history/diagnostics | Content files≤90d; агрегированные известные gaps/отказы без payload≤30d |
+| Minimal identity/effect safety/config | PG allowlist без реального brief/contact/prompt/raw/secret; хранится пока workspace существует по HP-NFR-009 |
+| Provider secret | Отдельный encrypted file T/011, не содержимое config/outbox/history/backup; закрытый доступ/rotation/revoke |
+
+SQL для короткоживущих records содержит только допустимую минимальную управляющую ссылку/время; по окончании file/ref тоже удаляются либо преобразуются в разрешённый минимальный safety/gap fact, а не остаются бессрочным pre-case envelope. Содержимое не перемещается при expiry в «архив диагностики». Первичная физическая среда не обещает forensic secure erasure удалённых SSD blocks; это не разрешение сохранять управляемые восстанавливаемые copies или позволять продукту читать истёкшее.
+
+**Критерий:** реальные граничные записи каждого класса проверяются на всех управляемых surfaces/backup manifests/restore, включая именованные временные files и direct backend endpoints. Нельзя подменить erasure отчётом о запуске cron.
+
+### HP-BP-006/T/011 — Secrets, ключи и административный доступ
+
+**Действие:** connector access/refresh tokens и webhook secrets находятся только в своих encrypted secret files, с random opaque filename, keyID/version, authenticated encryption и привязкой AAD к provider/binding/context. Выбран AES-256-GCM с криптографически случайным nonce и запретом reuse под одним ключом; long-term master keys монтируются только соответствующему connector runtime из отдельного permission-restricted secret source, не SQL/content image/env dump/общего backup. IAM имеет только свой IdP client secret, runtime/control credentials и refs/epochs provider binding.
+
+Secret file сохранён file fsync+atomic rename+directory fsync до durable connection-ref commit; ошибки сохранения не дают Healthy connection. Rotation сначала готовит/проверяет новый материал той же identity, затем согласованно переключает secret reference+epoch; прежний доступ закрывается gate/revoke, старые ciphertext/ключи удаляются после отсутствия использования и допустимой bounded recovery нужды. Смена credentials не меняет account/context или case lineage. Key loss/corruption удерживает обращения и требует явного reconnect; это не KNOWN_NO_EFFECT старого дела.
+
+**Граница:** selective backups не содержат provider secrets, master key или пользовательские sessions/refresh credentials. После полной утраты secret volume восстановление из safety backup не считается прежним действительным подключением. Каналы обслуживания именованные и минимальные, admin controls/private keys не передаются AI/обычному пользователю. Привилегированный доступ оператора аудитируется отдельно; product support grant не даёт shell/DB superuser. Проверки canary leakage, AAD mismatch, nonce/rotation tests и реально закрытый доступ обязательны до live.
+
+### HP-BP-006/T/012 — Selective logical backup без content и полной PITR
+
+**Единственный выбранный backup scope MVP:** минимальные safety/configuration/deletion/revocation registry projections. Нет полного physical base backup, WAL archive, logical whole-DB dump, provider/host disk snapshot, replica для исторического чтения или content/secret volume copy. `archive_mode=off`; для исходного single-node contour не создаются replication/logical slots и WAL senders. Local WAL нужен только crash recovery, а не служебному чтению customer history; он не экспортируется/архивируется. Необходимая PostgreSQL очистка/rotation контролируется; ручное удаление нужных WAL files запрещено. Перевод на физическую PITR/HA требует нового согласованного privacy/retention design, а не включения backup checkbox.
+
+**Backup protocol:** каждый сервис предоставляет schema-versioned allowlist export минимальных колонок с consistent local snapshot и собственным watermark/digest; временные filenames/records тоже минимальны. Обычный `pg_dump` всей service DB не разрешён. Согласованные component snapshot identities входят в backup manifest; межсервисная атомарность не выдумывается. IAM current control overlay и roster export включены как отдельная защищённая часть. Экспорт не содержит current session grants, plaintext/ciphertext secret files, real context/AI/free history и полных outbox wire payloads; outbox имеет только minimal identity/ref/hash по T/006.
+
+Выбран интервал backup6 часов, отдельная encrypted backup location, hard maximum retention21 сутки от фактического создания каждого объекта, включая временные и старые версии. Удаление выполняет проверяемый inventory job, не только policy в UI. Максимальная age не продлевается копированием/re-encryption. Manifest отмечает отсутствие content/credentials и что site-loss RPO0 не поддержан. Backup не является доказательством отсутствия provider effects после его watermark.
+
+**Критерий:** actual file listing + decrypt/restore scan подтверждают минимальный scope, все копии/версии и expiry. Backup6h означает известный возможный gap при полной утрате latest storage, не разрешение терять accepted state в T/003 disk-intact contour. При backup failure incident видим; previous backup не объявляется актуальным молча.
+
+### HP-BP-006/T/013 — Restore с quarantine до любых внешних действий
+
+**Порядок:** все ingress/execution/response gates CLOSED; старый runtime fenced; установлен exact code/schema/formal/config compatibility; получен **последний достоверный** deletion/revocation overlay из живой authority/control storage, сохранён отдельно от откатываемых business projections; восстановлены durable owner state/content refs/ledgers; применены deletes/denies/expiry; проверены digest/files и expired timers; только затем допускается scope-specific readiness и новые полномочия.
+
+Для disk-intact crash используются текущие fsynced PG+content+secret volumes и их WAL crash recovery; queue/message replay сохраняет identity и old configuration. DISPATCHING/AMBIGUOUS остаются possible effect и не сбрасываются новым lease. Отсутствующий file, epoch, ledger range либо неизвестное соответствие secret identity удерживает затронутый path.
+
+При восстановлении старого selective backup после утраты latest state **все затронутые прежние bindings/operations имеют execution quarantine**: backup не доказывает полную case/effect историю, не содержит content/secrets и может предшествовать уже выполненному revoke/delete. Нельзя автоматически загрузить из backup старую session/grant, открыть webhook, повторить effect или назвать прошлый заказ новым из-за отсутствующего case. Если последний control overlay не установлен, восстановленные workspace данные не открываются пользователю и внешнему исполнению; неподтверждённые customer records уничтожаются/удерживаются согласно действительным deletion срокам, а не используются как новая истина.
+
+Явный manual reconnect устанавливает credentials/identity, но сам по себе **не** доказывает отсутствие прежнего effect и не снимает quarantine старых cases. Продолжение прежней области требует независимо установленной полной safety identity/effect authority; при её невосстановимости поддерживается честный incident/hold и отдельное решение владельца о дальнейшей новой операции в продуктовых границах. Нельзя сдвинуть первую activation boundary старой операции или задним числом импортировать старые заказы. Полное site-loss автоматическое продолжение не входит в RPO0 contour и не выдумывается.
+
+**Критерий:** restore на изолированном стенде с ранее удалённым workspace, revoked connection, post-backup possible effect, истёкшим content и разными component watermarks не даёт нового provider POST, доступа или resurrection. После контролируемого T/003 отказа safe-work recovery укладывается в HP-NFR-014 выбранного варианта; временное скрытие всего UI не подменяет safe recovery.
+
+### HP-BP-006/T/014 — Полное workspace erasure и конечный overlay
+
+**Начало:** допустимая заявка владельца фиксируется durable с реальным временем принятия T0 и подтверждением **заявки**, не готового стирания. IAM закрывает новую authority, intake endpoints и effect starts; full-scope revoke выполняется по HP-BP-001/007. Стирание не называется отменой уже начатого внешнего effect; Stripe/ClickUp объекты автоматически не удаляются.
+
+Каждый service owner удаляет content/secret files, profile/business copies и минимальные SQL records в своей области, экспортные/служебные copies и старые grant state; проверяет gaps/in-flight knowledge до уничтожения необходимой текущей safety state и отдаёт фактический receipt. Активные управляемые копии исчезают≤T0+7 суток. Все recovery/backup/service copies —≤T0+35 суток. Backup allowlist прекращает включать область после active purge; выбранный maximum21d означает, что последний допустимый backup до7d исчезнет≤28d отT0, оставляя запас до35d. Неучтённая snapshot/version копия — дефект, не новое исключение.
+
+Current deletion overlay хранит только защищаемые минимальные IDs/epoch/cutoff/receipts, необходимые запретить resurrection и доказать coverage всех managed копий. Он применяется до restore opening и удаляется после отсутствия всех старых восстановительных копий, не позже35d границы, а не становится вечным source-ID tombstone. Старый opaque webhook не может создать workspace: новые области создаются только явным authenticated onboarding с новой первой activation boundary. Ошибка receipt/purge сохраняет incident и честный незавершённый status; elapsed time не создаёт ложное Completed.
+
+### HP-BP-006/T/015 — Миграции и совместимый generation set
+
+**Действие:** один reviewed release manifest связывает exact application commit, dependency locks, image content digests, wire/schema logical versions, SQL migrations, runtime roster и конфигурационные значения. Mutable tag/latest и независимые upgrades сервисов не заменяют этот набор. Применяются совместимые expand→backfill→switch→contract миграции; destructive шаг только после отсутствия старых readers/writers и сохранения safety/retention. DB DDL выполняет отдельный ограниченный migration actor; rollback не понижает deny epoch и не удаляет effect fence.
+
+Сгенерированные Go/TS models и payload projections проверяются по canonical OAS без ручной правки; unknown/error/version поведение принадлежит HP-BP-007. Full provider POST retry и credential scope не включаются по новому SDK default. Материальный wire/data/trust/consistency change требует нового/изменённого ADR и совместимого source set. Исторические operation configs и frozen task/source pins не подменяются latest автоматически.
+
+**Критерий:** clean locked installs, generation-diff, relevant unit/contract/race/security tests, production Next build и targeted end-to-end/fault checks выполняются для реального change. Обновление patch допустимо в принятой совместимости, но lock не разрешает бессрочно сохранять известную уязвимость. Статус CI не выдумывается и не равен live qualification.
+
+### HP-BP-006/T/016 — Операционные границы пяти рабочих потоков
+
+Пять назначаемых разработческих ролей: IAM/platform; Intake; Processing; Delivery; UX+BFF+PythonAI. До параллельной реализации согласованы HP-FORMAL-001, BP007, shared IDs/errors и test fixtures; затем каждый owner реализует свой service и mock соседних formal contracts. Один интегратор владеет canonical schema merge, cross-service integration и release manifest; это явная ответственность, не шестой автоматически нанятый сотрудник.
+
+Ни один разработчик не правит чужой service DB для устранения очереди. Core состояние/внешний effect/security меняются с peer review владельцев границ. Завершённый unit service не означает готовность handoff; финальный набор включает contract tests, provider sandbox/live-authorized checks, все188 selected product obligations, revoke/fault/restore/retention и реальный UX acceptance. Ночные агенты/отчёты не создают staff/on-call наличие; до live задаётся фактический технический incident owner и возможность выполнить проверенный recovery в пределах выбранного NFR, без обещания круглосуточной человеческой поддержки, которого продукт не делал.
+
+## 4. Взаимодействия, состояния и исходы
+
+| Состояние / исход | Норма | Что разрешено |
+| --- | --- | --- |
+| Boot Closed | T/004/005/007 | Только безопасная startup/control проверка; нет business serving/dispatch |
+| Ready compatible generation | T/002/007/015 | Только разрешённый Product scope и current grants; health не доказывает provider truth |
+| Graceful drain | T/005 | Нет новых starts; ранее начатые завершаются/становятся честно Unknown в исходных сроках |
+| Disk-intact crash recovery | T/003/006/013 | Восстановление текущего durable state, overlays и timers перед открытием |
+| Safety/content/control corruption | T/006/009/013 | Incident+affected hold; не replacement POST и не ложная пустая операция |
+| Old-backup/site-loss restore | T/012/013 | Quarantine; никакого автоматического продолжения прежних внешних операций |
+| Content expired/deleted | T/010 | Недоступно чтению/действию; минимальная safety identity не сбрасывается, нужны новые допустимые сведения |
+| Erasure Pending/Complete | T/014 | Полная закрытая область; Complete только по фактическим receipts всех управляемых копий |
+
+Identity/transport/case/effect ownership не дублируется этим operational state. Повтор job — тот же intent; рестарт не создаёт новую business episode или новую временную границу. Deployment grace не отменяет исходный expiry/security deadline.
+
+## 5. Обеспечение качественных и продуктовых ограничений
+
+| Норма | Механизм / владелец | Сквозной метод |
+| --- | --- | --- |
+| HP-NFR-001 | T/003/006/013; local commit+file fsync и safety ledger | ACK/crash/restart, сравнение state/files, отсутствие duplicate effect |
+| HP-NFR-002/003/004 | T/001/005/007/008; finite queues/deadlines и honest admission | Одновременная выбранная нагрузка; latency/timeout/buffer boundary tests |
+| HP-NFR-005/006 | T/002/004/011/013; role/gate/secret/fence | Actual IO-start revoke race, negative access и canary surfaces |
+| HP-NFR-007/010 | T/002/008/010; AI/rehearsal network/data segregation | Реальные forbidden connector/case paths и отсутствие live effect репетиции |
+| HP-NFR-008 | T/007/008; безопасный causal audit/UTC | Контролируемые события и время, не реконструкция успешной истории из догадок |
+| HP-NFR-009 | T/006/010–014; no content backup, expiry и current overlay | Все managed copies, erasure deadlines и restore older backup |
+| HP-NFR-011/012 | T/001/002/015/016; UX/browser target и совместимый build | Browser/keyboard/usability checks принадлежат HP-BP-005 и самому Product NFR |
+| HP-NFR-013/014 | T/007–009/013; scoped health/hold и safe-work recovery | Provider denied/outage, контролируемый service failure, непрерывное availability окно |
+
+Матрица не переписывает NFR и не заявляет их выполнение. Локальный successful restart, available edge или restore SQL dump не доказывают весь end-to-end критерий.
+
+## 6. Параметризация, версии и совместимость
+
+| Параметр | Выбранное значение / предел | Кто фиксирует фактическое | Гарантия и проверка |
+| --- | --- | --- | --- |
+| Dev envelope | Минимум4vCPU/8GiB/80GiB | Platform owner в versioned deployment manifest | Не evidence capacity; T/001 qualification |
+| Initial staging/live allocation | 8vCPU/16GiB/200GiB исходно | Platform owner, подтверждает конкретные ресурсы | Все выбранные NFR проверяются совместно, без рекламной ёмкости |
+| Controlled RPO0 | Disk-intact contour T/003 | Release/qualification source | Нет расширения до disk/site loss без нового решения |
+| Graceful drain | 300s maximum | Общая runtime config | Не продлевает episode/revoke/expiry, unknown остаётся |
+| Backup | Каждые6h; hard max21d per object | Versioned exporter/config + actual inventory | Только allowlist safety/config/control; no full PITR/content/secret snapshots |
+| Active/full erasure | 7d/35d отT0 | Канонический HP-NFR-009 | Не локальный параметр; все copies/versions/receipts |
+| Clock drift warning | 1s engineering guard | Platform config | При опасной неизвестности fail-closed, no deadline shift |
+| WAL durability | fsync/full_page_writes/synchronous_commit on | Versioned PostgreSQL config | ACK соответствует durable current state; архивация отключена |
+
+Низкорисковые resource limits/trace sampling/log verbosity можно выбирать только без payload logging, сохранения privacy/security и новых guarantees; реальные значения versioned. Provider endpoint, secret recipient, data authority, storage/backup class, revocation fence, canonical schema и Product guarantees не меняются как AUTO. Размеры source contract и historical pins не сокращаются ради bootstrap/parser лимитов.
+
+## 7. Проверка соответствия и фактическое evidence
+
+| Нормы | Планируемый адекватный метод | Что нельзя заявить по одному методу |
+| --- | --- | --- |
+| T/001–003 | Provisioned resource check, реальные PG/file durable fault tests, совместная нагрузка HP-NFR-004 | Размер VPS или fsync config не доказывают achieved throughput/RPO0 сами |
+| T/004–005/007 | Реальный suspend/kill/partition/replacement и gate timestamps | SIGTERM/heartbeat/один mock не доказывают отсутствие stale starts |
+| T/006/010–014 | File/SQL crash matrix, TTL boundaries, exporter allowlist, old backup restore с revoked/deleted scope | Ни cron report, ни decryptable backup сами не доказывают полное удаление/безопасный replay |
+| T/008–009 | Canary logging, actual availability minute probes, scoped incident drill | Живая health page не означает safe operation |
+| T/011/015–016 | Secret rotation/nonce/AAD, locked build/generation diff, cross-service contract+E2E | Установка библиотек не означает корректный authentication/provider/UX сценарий |
+
+Supporting evidence: stack report содержит действительно выполненные compatibility checks и их ограничения; данная спецификация прочитала реальные Product source candidates и официальные [PostgreSQL WAL/durability](https://www.postgresql.org/docs/18/runtime-config-wal.html), [logical backup](https://www.postgresql.org/docs/18/backup-dump.html), [pg_dump](https://www.postgresql.org/docs/18/app-pgdump.html) и [Keycloak deployment/database](https://www.keycloak.org/server/db) документы. Настройки и narrow backup policy — принятое решение HitPipe; внешние источники не подтверждают уже работающий deployment.
+
+**Фактические platform E2E, live capacity,5s revocation, full7d availability window, restore/erasure/fencing и credential controls здесь ещё не выполнены.** Они получают отдельные реальные evidence с implementation/config/source pins. Независимая проверка этой конечной revision выполняется другим reviewer и не называется платформенным trusted faithful-review receipt без действительного механизма.
+
+## 8. Существенные вопросы и контроль перед приёмкой
+
+Содержательная модель выбрана: simple self-hosted services, service-owned metadata+content/secret volumes, disk-intact durability, selective logical safety backups и fail-closed restore. Не оставлен невыбранный вариант «PITR или KMS». Полная disk/site-loss автоматическая continuity является явной границей, а не незаметным обещанием MVP; расширение требует нового решения и проверки.
+
+До live остаются внешние/implementation qualification gates: конкретные ресурсы и storage flush properties, actual runtime/operator fencing, service contract implementation, customer provider access и role/retention/restore/load/usability tests. Эти gates не выдаются за отсутствующие архитектурные решения и не ослабляют продуктовые условия. Если иной внешний контекст требует хранения/backup, несовместимых с выбранной privacy моделью, он удерживается до правомерного согласованного решения.
+
+Финальный review проверяет согласованность AD/PART/DATA/IF и BP001–007, SQL отсутствие полных payload/secrets, точную real Git/source closure, no content snapshots, необход старых denies после restore, scope всех188 selected obligations и явные implementation границы. Принятие source revisions, Contract candidate, формальная faithful acceptance, admission и фактическое execution остаются разными состояниями; никаких вымышленных signatures/PASS/работающих процессов не добавлено.

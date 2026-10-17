@@ -1,0 +1,753 @@
+[
+  {
+    "operation_id": "getSession",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/session",
+    "request_schema": null,
+    "response_schema": "Session",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "logoutSession",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "DELETE",
+    "path": "/api/v1/session",
+    "request_schema": null,
+    "response_schema": "Revocation",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getProfile",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/profile",
+    "request_schema": null,
+    "response_schema": "Profile",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "updateProfile",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "PATCH",
+    "path": "/api/v1/profile",
+    "request_schema": "ProfileUpdate",
+    "response_schema": "Profile",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listWorkspaces",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "request_schema": null,
+    "response_schema": "Workspaces",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "createWorkspace",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces",
+    "request_schema": "WorkspaceCreate",
+    "response_schema": "Workspace",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "changeMembership",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/memberships",
+    "request_schema": "MembershipCommand",
+    "response_schema": "Member",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "grantScopedSupport",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/support-grants",
+    "request_schema": "SupportGrantCommand",
+    "response_schema": "SupportGrant",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "requestRevocation",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/revocations",
+    "request_schema": "RevokeCommand",
+    "response_schema": "Revocation",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getRevocation",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/revocations/{revocation_id}",
+    "request_schema": null,
+    "response_schema": "Revocation",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "requestWorkspaceDeletion",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/deletion",
+    "request_schema": "DeletionRequest",
+    "response_schema": "DeletionStatus",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getWorkspaceDeletion",
+    "owner": "IAM",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/deletion",
+    "request_schema": null,
+    "response_schema": "DeletionStatus",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "connectService",
+    "owner": "CONNECTOR",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/connections",
+    "request_schema": "ConnectorCreate",
+    "response_schema": "Connection",
+    "behavior": "HP-BP-002",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listConnections",
+    "owner": "CONNECTOR",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/connections",
+    "request_schema": null,
+    "response_schema": "Connections",
+    "behavior": "HP-BP-002",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listConnectionOptions",
+    "owner": "CONNECTOR",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/connections/{connection_id}/options",
+    "request_schema": null,
+    "response_schema": "Options",
+    "behavior": "HP-BP-002",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listOperations",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/operations",
+    "request_schema": null,
+    "response_schema": "Operations",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "saveDraft",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/drafts",
+    "request_schema": "DraftWrite",
+    "response_schema": "DraftConfig",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getDraft",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/drafts/{draft_id}",
+    "request_schema": null,
+    "response_schema": "DraftConfig",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "checkDraftReadiness",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/drafts/{draft_id}/readiness",
+    "request_schema": "CommandMeta",
+    "response_schema": "ReadinessCheck",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "rehearseDraft",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/rehearsals",
+    "request_schema": "RehearsalRequest",
+    "response_schema": "RehearsalResult",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "activateOperation",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/operations/activate",
+    "request_schema": "ActivationCommand",
+    "response_schema": "Operation",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "changeOperationLifecycle",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/operations/{operation_id}/lifecycle",
+    "request_schema": "LifecycleCommand",
+    "response_schema": "Operation",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getConfigurationDiff",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration-diff",
+    "request_schema": null,
+    "response_schema": "ConfigDiff",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "acceptConfigurationChange",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration",
+    "request_schema": "ChangeConfigCommand",
+    "response_schema": "Operation",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getResumeSnapshot",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/operations/{operation_id}/resume-snapshot",
+    "request_schema": null,
+    "response_schema": "ResumeSnapshot",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listCases",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/cases",
+    "request_schema": null,
+    "response_schema": "Cases",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getCase",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}",
+    "request_schema": null,
+    "response_schema": "CaseDetail",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "addCaseContext",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}/context",
+    "request_schema": "ContextCommand",
+    "response_schema": "CaseDetail",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "deleteCaseContent",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "DELETE",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}/context",
+    "request_schema": "CommandMeta",
+    "response_schema": "CaseDetail",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "recoverCase",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}/recovery",
+    "request_schema": "RecoveryCommand",
+    "response_schema": "CaseDetail",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getObservationEvidence",
+    "owner": "DELIVERY",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}/evidence/{observation_id}",
+    "request_schema": null,
+    "response_schema": "ObservationEvidence",
+    "behavior": "HP-BP-004",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getCaseHistory",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/cases/{case_id}/history",
+    "request_schema": null,
+    "response_schema": "History",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "listNotifications",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/notifications",
+    "request_schema": null,
+    "response_schema": "Notifications",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "ackNotification",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/notifications/ack",
+    "request_schema": "AckCommand",
+    "response_schema": "Receipt",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getAdmissionGaps",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/workspaces/{workspace_id}/admission-gaps",
+    "request_schema": null,
+    "response_schema": "AdmissionGaps",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "createExport",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/workspaces/{workspace_id}/exports",
+    "request_schema": "ExportCommand",
+    "response_schema": "Export",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "getExport",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-001",
+    "method": "GET",
+    "path": "/api/v1/exports/{export_id}",
+    "request_schema": null,
+    "response_schema": "Export",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "prepareAIProposal",
+    "owner": "BFF",
+    "interface_id": "HP-IF-001",
+    "method": "POST",
+    "path": "/api/v1/ai/proposals",
+    "request_schema": "AIRequest",
+    "response_schema": "AIProposal",
+    "behavior": "HP-BP-005",
+    "callers": [
+      "EDGE"
+    ]
+  },
+  {
+    "operation_id": "beginOIDC",
+    "owner": "IAM",
+    "interface_id": "HP-IF-002",
+    "method": "GET",
+    "path": "/auth/login",
+    "request_schema": null,
+    "response_schema": null,
+    "behavior": "HP-BP-001",
+    "callers": [
+      "EDGE"
+    ]
+  },
+  {
+    "operation_id": "finishOIDC",
+    "owner": "IAM",
+    "interface_id": "HP-IF-002",
+    "method": "GET",
+    "path": "/auth/callback",
+    "request_schema": null,
+    "response_schema": null,
+    "behavior": "HP-BP-001",
+    "callers": [
+      "EDGE"
+    ]
+  },
+  {
+    "operation_id": "authorizeAction",
+    "owner": "IAM",
+    "interface_id": "HP-IF-002",
+    "method": "POST",
+    "path": "/internal/v1/authorize",
+    "request_schema": "AuthorizeRequest",
+    "response_schema": "Authorization",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "IAM",
+      "INTAKE",
+      "PROCESSING",
+      "DELIVERY",
+      "BFF",
+      "AI"
+    ]
+  },
+  {
+    "operation_id": "registerRuntime",
+    "owner": "IAM",
+    "interface_id": "HP-IF-010",
+    "method": "POST",
+    "path": "/internal/v1/runtime/register",
+    "request_schema": "RuntimeRegistration",
+    "response_schema": "RuntimeSnapshot",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "IAM",
+      "INTAKE",
+      "PROCESSING",
+      "DELIVERY",
+      "BFF",
+      "AI"
+    ]
+  },
+  {
+    "operation_id": "applyRevocationBarrier",
+    "owner": "ALL",
+    "interface_id": "HP-IF-010",
+    "method": "POST",
+    "path": "/internal/v1/runtime/barrier",
+    "request_schema": "BarrierCommand",
+    "response_schema": "BarrierAck",
+    "behavior": "HP-BP-001",
+    "callers": [
+      "IAM"
+    ]
+  },
+  {
+    "operation_id": "receiveNormalizedSignal",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-004",
+    "method": "POST",
+    "path": "/internal/v1/intake-signals",
+    "request_schema": "NormalizedSignal",
+    "response_schema": "Receipt",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "INTAKE"
+    ]
+  },
+  {
+    "operation_id": "readSourceFacts",
+    "owner": "INTAKE",
+    "interface_id": "HP-IF-005",
+    "method": "POST",
+    "path": "/internal/v1/source-facts/read",
+    "request_schema": "SourceReadRequest",
+    "response_schema": "SourceFacts",
+    "behavior": "HP-BP-002",
+    "callers": [
+      "PROCESSING"
+    ]
+  },
+  {
+    "operation_id": "acceptDeliveryIntent",
+    "owner": "DELIVERY",
+    "interface_id": "HP-IF-006",
+    "method": "POST",
+    "path": "/internal/v1/delivery-intents",
+    "request_schema": "DeliveryIntent",
+    "response_schema": "Receipt",
+    "behavior": "HP-BP-004",
+    "callers": [
+      "PROCESSING"
+    ]
+  },
+  {
+    "operation_id": "applyTaskObservation",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-007",
+    "method": "POST",
+    "path": "/internal/v1/delivery-observations",
+    "request_schema": "TaskObservation",
+    "response_schema": "Receipt",
+    "behavior": "HP-BP-003",
+    "callers": [
+      "DELIVERY"
+    ]
+  },
+  {
+    "operation_id": "queryKnownTask",
+    "owner": "DELIVERY",
+    "interface_id": "HP-IF-006",
+    "method": "POST",
+    "path": "/internal/v1/delivery-query",
+    "request_schema": "DeliveryQuery",
+    "response_schema": "TaskObservation",
+    "behavior": "HP-BP-004",
+    "callers": [
+      "PROCESSING"
+    ]
+  },
+  {
+    "operation_id": "generateAIProposal",
+    "owner": "AI",
+    "interface_id": "HP-IF-009",
+    "method": "POST",
+    "path": "/internal/v1/ai/proposals",
+    "request_schema": "AuthorizedAIRequest",
+    "response_schema": "AIProposal",
+    "behavior": "HP-BP-005",
+    "callers": [
+      "BFF"
+    ]
+  },
+  {
+    "operation_id": "receiveStripeWebhook",
+    "owner": "INTAKE",
+    "interface_id": "HP-IF-003",
+    "method": "POST",
+    "path": "/webhooks/stripe/{endpoint_id}",
+    "request_schema": null,
+    "response_schema": null,
+    "behavior": "HP-BP-002",
+    "callers": [
+      "EDGE"
+    ]
+  },
+  {
+    "operation_id": "healthIam",
+    "owner": "IAM",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/iam",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "healthIntake",
+    "owner": "INTAKE",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/intake",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "healthProcessing",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/processing",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "healthDelivery",
+    "owner": "DELIVERY",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/delivery",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "healthAi",
+    "owner": "AI",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/ai",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "healthBff",
+    "owner": "BFF",
+    "interface_id": "HP-IF-013",
+    "method": "GET",
+    "path": "/internal/v1/health/bff",
+    "request_schema": null,
+    "response_schema": "Health",
+    "behavior": "HP-BP-006",
+    "callers": [
+      "OPS"
+    ]
+  },
+  {
+    "operation_id": "downloadExport",
+    "owner": "PROCESSING",
+    "interface_id": "HP-IF-008",
+    "method": "GET",
+    "path": "/api/v1/exports/{export_id}/content",
+    "request_schema": null,
+    "response_schema": null,
+    "behavior": "HP-BP-003",
+    "callers": [
+      "BFF"
+    ]
+  }
+]

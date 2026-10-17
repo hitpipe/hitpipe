@@ -1,0 +1,1194 @@
+{
+  "package_id": "hitpipe-pr12-manual-20261017-v1",
+  "mode": "MANUAL_LAB_PR12",
+  "epic_key": "HIT-10",
+  "platform_task_key": "HIT-16",
+  "deadline": {
+    "date": "2026-10-19",
+    "timezone": "Europe/Moscow",
+    "hour": "NOT_SPECIFIED_BY_TEACHER"
+  },
+  "created_at": "2026-10-17T13:24:55.756730+00:00",
+  "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+  "source_lock": "context-lock.json",
+  "source_hashes": "source-files.json",
+  "readme": "README.md",
+  "workflow": "AGENT_LAB_WORKFLOW.md",
+  "universal_entrypoint": "upstream/project-os/AGENT_MASTER_PROMPT.md",
+  "report_profile": "templates/report-profile.json",
+  "formal_authority": "Candidate/In Review; no grant; bounded manual user authorization only",
+  "features": [
+    {
+      "code": "dk",
+      "name": "Дмитрий Карачебан",
+      "feature_key": "HIT-11",
+      "component": "IAM - Identity & Access",
+      "component_id": "10034",
+      "assignee_account_id": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+      "repository": "hitpipe/hitpipe",
+      "repository_url": "https://github.com/hitpipe/hitpipe",
+      "owned_root": "services/iam",
+      "personal_documents": "docs/labs/pr12/dk/",
+      "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+      "base_ref_policy": "Resolve once to full SHA; never move this tag. Exact published SHA is also recorded in Jira Feature/SHARED.",
+      "task_keys": [
+        "HIT-17",
+        "HIT-18",
+        "HIT-19",
+        "HIT-20",
+        "HIT-21",
+        "HIT-22",
+        "HIT-23",
+        "HIT-24"
+      ],
+      "code_tasks": [
+        "HIT-19",
+        "HIT-20",
+        "HIT-21"
+      ],
+      "agent_prompt": "prompts/dk.md",
+      "reviews_other": "HIT-12",
+      "reviewed_by": "HIT-15",
+      "peer_check_status": "PLANNED_NOT_PERFORMED",
+      "future_epic_policy": "Keep issue keys/code/PR/test/evidence history; reparent this Feature to its future component Epic, do not recreate completed work.",
+      "report_profile": "templates/report-profile.json",
+      "template_status": "TEMPLATE_UNFILLED"
+    },
+    {
+      "code": "tp",
+      "name": "Тимофей Патрушев",
+      "feature_key": "HIT-12",
+      "component": "Processing - Operations Core",
+      "component_id": "10036",
+      "assignee_account_id": "712020:5b25ca4a-332a-4a5a-893b-8f9ec1d8b6b6",
+      "repository": "hitpipe/hitpipe",
+      "repository_url": "https://github.com/hitpipe/hitpipe",
+      "owned_root": "services/processing",
+      "personal_documents": "docs/labs/pr12/tp/",
+      "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+      "base_ref_policy": "Resolve once to full SHA; never move this tag. Exact published SHA is also recorded in Jira Feature/SHARED.",
+      "task_keys": [
+        "HIT-25",
+        "HIT-26",
+        "HIT-27",
+        "HIT-28",
+        "HIT-29",
+        "HIT-30",
+        "HIT-31",
+        "HIT-32"
+      ],
+      "code_tasks": [
+        "HIT-27",
+        "HIT-28",
+        "HIT-29"
+      ],
+      "agent_prompt": "prompts/tp.md",
+      "reviews_other": "HIT-13",
+      "reviewed_by": "HIT-11",
+      "peer_check_status": "PLANNED_NOT_PERFORMED",
+      "future_epic_policy": "Keep issue keys/code/PR/test/evidence history; reparent this Feature to its future component Epic, do not recreate completed work.",
+      "report_profile": "templates/report-profile.json",
+      "template_status": "TEMPLATE_UNFILLED"
+    },
+    {
+      "code": "mg",
+      "name": "Матвей Головачев",
+      "feature_key": "HIT-13",
+      "component": "UX - Web Experience",
+      "component_id": "10038",
+      "assignee_account_id": "712020:315cb145-9ab6-45a9-af5a-ff4283ba3b25",
+      "repository": "hitpipe/hitpipe_client",
+      "repository_url": "https://github.com/hitpipe/hitpipe_client",
+      "owned_root": "src/features/case-status",
+      "personal_documents": "docs/labs/pr12/mg/",
+      "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+      "base_ref_policy": "Resolve once to full SHA; never move this tag. Exact published SHA is also recorded in Jira Feature/SHARED.",
+      "task_keys": [
+        "HIT-33",
+        "HIT-34",
+        "HIT-35",
+        "HIT-36",
+        "HIT-37",
+        "HIT-38",
+        "HIT-39",
+        "HIT-40"
+      ],
+      "code_tasks": [
+        "HIT-35",
+        "HIT-36",
+        "HIT-37"
+      ],
+      "agent_prompt": "prompts/mg.md",
+      "reviews_other": "HIT-14",
+      "reviewed_by": "HIT-12",
+      "peer_check_status": "PLANNED_NOT_PERFORMED",
+      "future_epic_policy": "Keep issue keys/code/PR/test/evidence history; reparent this Feature to its future component Epic, do not recreate completed work.",
+      "report_profile": "templates/report-profile.json",
+      "template_status": "TEMPLATE_UNFILLED"
+    },
+    {
+      "code": "ds",
+      "name": "Дмитрий Стацюк",
+      "feature_key": "HIT-14",
+      "component": "Delivery - Destination Integrations",
+      "component_id": "10037",
+      "assignee_account_id": "712020:3c6a69db-985b-49f8-ad2b-b622b07e7bd7",
+      "repository": "hitpipe/hitpipe",
+      "repository_url": "https://github.com/hitpipe/hitpipe",
+      "owned_root": "services/delivery",
+      "personal_documents": "docs/labs/pr12/ds/",
+      "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+      "base_ref_policy": "Resolve once to full SHA; never move this tag. Exact published SHA is also recorded in Jira Feature/SHARED.",
+      "task_keys": [
+        "HIT-41",
+        "HIT-42",
+        "HIT-43",
+        "HIT-44",
+        "HIT-45",
+        "HIT-46",
+        "HIT-47",
+        "HIT-48"
+      ],
+      "code_tasks": [
+        "HIT-43",
+        "HIT-44",
+        "HIT-45"
+      ],
+      "agent_prompt": "prompts/ds.md",
+      "reviews_other": "HIT-15",
+      "reviewed_by": "HIT-13",
+      "peer_check_status": "PLANNED_NOT_PERFORMED",
+      "future_epic_policy": "Keep issue keys/code/PR/test/evidence history; reparent this Feature to its future component Epic, do not recreate completed work.",
+      "report_profile": "templates/report-profile.json",
+      "template_status": "TEMPLATE_UNFILLED"
+    },
+    {
+      "code": "nb",
+      "name": "Никита Будыкин",
+      "feature_key": "HIT-15",
+      "component": "Intake - Source Integrations",
+      "component_id": "10035",
+      "assignee_account_id": "712020:06108138-5f9e-457c-8072-e763ac5b59a1",
+      "repository": "hitpipe/hitpipe",
+      "repository_url": "https://github.com/hitpipe/hitpipe",
+      "owned_root": "services/intake",
+      "personal_documents": "docs/labs/pr12/nb/",
+      "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+      "base_ref_policy": "Resolve once to full SHA; never move this tag. Exact published SHA is also recorded in Jira Feature/SHARED.",
+      "task_keys": [
+        "HIT-49",
+        "HIT-50",
+        "HIT-51",
+        "HIT-52",
+        "HIT-53",
+        "HIT-54",
+        "HIT-55",
+        "HIT-56"
+      ],
+      "code_tasks": [
+        "HIT-51",
+        "HIT-52",
+        "HIT-53"
+      ],
+      "agent_prompt": "prompts/nb.md",
+      "reviews_other": "HIT-11",
+      "reviewed_by": "HIT-14",
+      "peer_check_status": "PLANNED_NOT_PERFORMED",
+      "future_epic_policy": "Keep issue keys/code/PR/test/evidence history; reparent this Feature to its future component Epic, do not recreate completed work.",
+      "report_profile": "templates/report-profile.json",
+      "template_status": "TEMPLATE_UNFILLED"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "HIT-16",
+      "local_id": "SHARED",
+      "person_code": null,
+      "role": "SHARED",
+      "parent_key": "HIT-10",
+      "dependency_keys": []
+    },
+    {
+      "key": "HIT-17",
+      "local_id": "DK-R1",
+      "person_code": "dk",
+      "role": "R1",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-16"
+      ]
+    },
+    {
+      "key": "HIT-18",
+      "local_id": "DK-R2",
+      "person_code": "dk",
+      "role": "R2",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-17"
+      ]
+    },
+    {
+      "key": "HIT-19",
+      "local_id": "DK-C1",
+      "person_code": "dk",
+      "role": "C1",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-16",
+        "HIT-17",
+        "HIT-18"
+      ]
+    },
+    {
+      "key": "HIT-20",
+      "local_id": "DK-C2",
+      "person_code": "dk",
+      "role": "C2",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-19"
+      ]
+    },
+    {
+      "key": "HIT-21",
+      "local_id": "DK-C3",
+      "person_code": "dk",
+      "role": "C3",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-20"
+      ]
+    },
+    {
+      "key": "HIT-22",
+      "local_id": "DK-D1",
+      "person_code": "dk",
+      "role": "D1",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-20"
+      ]
+    },
+    {
+      "key": "HIT-23",
+      "local_id": "DK-H1",
+      "person_code": "dk",
+      "role": "H1",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-17"
+      ]
+    },
+    {
+      "key": "HIT-24",
+      "local_id": "DK-REPORT",
+      "person_code": "dk",
+      "role": "REPORT",
+      "parent_key": "HIT-11",
+      "dependency_keys": [
+        "HIT-17",
+        "HIT-18",
+        "HIT-19",
+        "HIT-20",
+        "HIT-21",
+        "HIT-22",
+        "HIT-23"
+      ]
+    },
+    {
+      "key": "HIT-25",
+      "local_id": "TP-R1",
+      "person_code": "tp",
+      "role": "R1",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-16"
+      ]
+    },
+    {
+      "key": "HIT-26",
+      "local_id": "TP-R2",
+      "person_code": "tp",
+      "role": "R2",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-25"
+      ]
+    },
+    {
+      "key": "HIT-27",
+      "local_id": "TP-C1",
+      "person_code": "tp",
+      "role": "C1",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-16",
+        "HIT-25",
+        "HIT-26"
+      ]
+    },
+    {
+      "key": "HIT-28",
+      "local_id": "TP-C2",
+      "person_code": "tp",
+      "role": "C2",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-27"
+      ]
+    },
+    {
+      "key": "HIT-29",
+      "local_id": "TP-C3",
+      "person_code": "tp",
+      "role": "C3",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-28"
+      ]
+    },
+    {
+      "key": "HIT-30",
+      "local_id": "TP-D1",
+      "person_code": "tp",
+      "role": "D1",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-28"
+      ]
+    },
+    {
+      "key": "HIT-31",
+      "local_id": "TP-H1",
+      "person_code": "tp",
+      "role": "H1",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-25"
+      ]
+    },
+    {
+      "key": "HIT-32",
+      "local_id": "TP-REPORT",
+      "person_code": "tp",
+      "role": "REPORT",
+      "parent_key": "HIT-12",
+      "dependency_keys": [
+        "HIT-25",
+        "HIT-26",
+        "HIT-27",
+        "HIT-28",
+        "HIT-29",
+        "HIT-30",
+        "HIT-31"
+      ]
+    },
+    {
+      "key": "HIT-33",
+      "local_id": "MG-R1",
+      "person_code": "mg",
+      "role": "R1",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-16"
+      ]
+    },
+    {
+      "key": "HIT-34",
+      "local_id": "MG-R2",
+      "person_code": "mg",
+      "role": "R2",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-33"
+      ]
+    },
+    {
+      "key": "HIT-35",
+      "local_id": "MG-C1",
+      "person_code": "mg",
+      "role": "C1",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-16",
+        "HIT-33",
+        "HIT-34"
+      ]
+    },
+    {
+      "key": "HIT-36",
+      "local_id": "MG-C2",
+      "person_code": "mg",
+      "role": "C2",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-35"
+      ]
+    },
+    {
+      "key": "HIT-37",
+      "local_id": "MG-C3",
+      "person_code": "mg",
+      "role": "C3",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-36"
+      ]
+    },
+    {
+      "key": "HIT-38",
+      "local_id": "MG-D1",
+      "person_code": "mg",
+      "role": "D1",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-36"
+      ]
+    },
+    {
+      "key": "HIT-39",
+      "local_id": "MG-H1",
+      "person_code": "mg",
+      "role": "H1",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-33"
+      ]
+    },
+    {
+      "key": "HIT-40",
+      "local_id": "MG-REPORT",
+      "person_code": "mg",
+      "role": "REPORT",
+      "parent_key": "HIT-13",
+      "dependency_keys": [
+        "HIT-33",
+        "HIT-34",
+        "HIT-35",
+        "HIT-36",
+        "HIT-37",
+        "HIT-38",
+        "HIT-39"
+      ]
+    },
+    {
+      "key": "HIT-41",
+      "local_id": "DS-R1",
+      "person_code": "ds",
+      "role": "R1",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-16"
+      ]
+    },
+    {
+      "key": "HIT-42",
+      "local_id": "DS-R2",
+      "person_code": "ds",
+      "role": "R2",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-41"
+      ]
+    },
+    {
+      "key": "HIT-43",
+      "local_id": "DS-C1",
+      "person_code": "ds",
+      "role": "C1",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-16",
+        "HIT-41",
+        "HIT-42"
+      ]
+    },
+    {
+      "key": "HIT-44",
+      "local_id": "DS-C2",
+      "person_code": "ds",
+      "role": "C2",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-43"
+      ]
+    },
+    {
+      "key": "HIT-45",
+      "local_id": "DS-C3",
+      "person_code": "ds",
+      "role": "C3",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-44"
+      ]
+    },
+    {
+      "key": "HIT-46",
+      "local_id": "DS-D1",
+      "person_code": "ds",
+      "role": "D1",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-44"
+      ]
+    },
+    {
+      "key": "HIT-47",
+      "local_id": "DS-H1",
+      "person_code": "ds",
+      "role": "H1",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-41"
+      ]
+    },
+    {
+      "key": "HIT-48",
+      "local_id": "DS-REPORT",
+      "person_code": "ds",
+      "role": "REPORT",
+      "parent_key": "HIT-14",
+      "dependency_keys": [
+        "HIT-41",
+        "HIT-42",
+        "HIT-43",
+        "HIT-44",
+        "HIT-45",
+        "HIT-46",
+        "HIT-47"
+      ]
+    },
+    {
+      "key": "HIT-49",
+      "local_id": "NB-R1",
+      "person_code": "nb",
+      "role": "R1",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-16"
+      ]
+    },
+    {
+      "key": "HIT-50",
+      "local_id": "NB-R2",
+      "person_code": "nb",
+      "role": "R2",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-49"
+      ]
+    },
+    {
+      "key": "HIT-51",
+      "local_id": "NB-C1",
+      "person_code": "nb",
+      "role": "C1",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-16",
+        "HIT-49",
+        "HIT-50"
+      ]
+    },
+    {
+      "key": "HIT-52",
+      "local_id": "NB-C2",
+      "person_code": "nb",
+      "role": "C2",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-51"
+      ]
+    },
+    {
+      "key": "HIT-53",
+      "local_id": "NB-C3",
+      "person_code": "nb",
+      "role": "C3",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-52"
+      ]
+    },
+    {
+      "key": "HIT-54",
+      "local_id": "NB-D1",
+      "person_code": "nb",
+      "role": "D1",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-52"
+      ]
+    },
+    {
+      "key": "HIT-55",
+      "local_id": "NB-H1",
+      "person_code": "nb",
+      "role": "H1",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-49"
+      ]
+    },
+    {
+      "key": "HIT-56",
+      "local_id": "NB-REPORT",
+      "person_code": "nb",
+      "role": "REPORT",
+      "parent_key": "HIT-15",
+      "dependency_keys": [
+        "HIT-49",
+        "HIT-50",
+        "HIT-51",
+        "HIT-52",
+        "HIT-53",
+        "HIT-54",
+        "HIT-55"
+      ]
+    }
+  ],
+  "criteria_crosswalk": {
+    "dk": {
+      "0302-pz01/Р1": [
+        "DK-R1",
+        "DK-H1"
+      ],
+      "0302-pz01/Р2": [
+        "DK-R1",
+        "DK-R2"
+      ],
+      "0302-pz01/Р3": [
+        "DK-R1"
+      ],
+      "0302-pz01/Р4": [
+        "DK-R1",
+        "DK-C1"
+      ],
+      "0302-pz01/Р5": [
+        "DK-R2",
+        "DK-H1"
+      ],
+      "0302-pz01/Р6": [
+        "DK-H1",
+        "DK-REPORT"
+      ],
+      "0302-pz01/Р7": [
+        "DK-H1",
+        "DK-R2"
+      ],
+      "0302-pz02/Р1": [
+        "DK-C1",
+        "DK-C3"
+      ],
+      "0302-pz02/Р2": [
+        "DK-C3"
+      ],
+      "0302-pz02/Р3": [
+        "DK-C1",
+        "DK-C3"
+      ],
+      "0302-pz02/Р4": [
+        "DK-C3"
+      ],
+      "0302-pz02/Р5": [
+        "DK-C3"
+      ],
+      "0302-pz02/Р6": [
+        "DK-C3"
+      ],
+      "0302-pz02/Р7": [
+        "DK-C3"
+      ],
+      "0104-pz01/Р1": [
+        "DK-C1",
+        "SHARED",
+        "DK-D1"
+      ],
+      "0104-pz01/Р2": [
+        "DK-C1",
+        "DK-H1"
+      ],
+      "0104-pz01/Р3": [
+        "DK-C1"
+      ],
+      "0104-pz01/Р4": [
+        "DK-C1"
+      ],
+      "0104-pz01/Р5": [
+        "DK-C1"
+      ],
+      "0104-pz01/Р6": [
+        "DK-H1"
+      ],
+      "0104-pz01/Р7": [
+        "DK-C3"
+      ],
+      "0104-pz02/Р1": [
+        "DK-C1"
+      ],
+      "0104-pz02/Р2": [
+        "DK-C1",
+        "DK-C2",
+        "DK-D1"
+      ],
+      "0104-pz02/Р3": [
+        "DK-C1",
+        "DK-C2",
+        "DK-H1"
+      ],
+      "0104-pz02/Р4": [
+        "DK-C2"
+      ],
+      "0104-pz02/Р5": [
+        "DK-C2",
+        "DK-D1"
+      ],
+      "0104-pz02/Р6": [
+        "DK-C2"
+      ],
+      "0104-pz02/Р7": [
+        "DK-H1"
+      ],
+      "0104-pz02/Р8": [
+        "DK-C2",
+        "DK-D1"
+      ]
+    },
+    "tp": {
+      "0302-pz01/Р1": [
+        "TP-R1",
+        "TP-H1"
+      ],
+      "0302-pz01/Р2": [
+        "TP-R1",
+        "TP-R2"
+      ],
+      "0302-pz01/Р3": [
+        "TP-R1"
+      ],
+      "0302-pz01/Р4": [
+        "TP-R1",
+        "TP-C1"
+      ],
+      "0302-pz01/Р5": [
+        "TP-R2",
+        "TP-H1"
+      ],
+      "0302-pz01/Р6": [
+        "TP-H1",
+        "TP-REPORT"
+      ],
+      "0302-pz01/Р7": [
+        "TP-H1",
+        "TP-R2"
+      ],
+      "0302-pz02/Р1": [
+        "TP-C1",
+        "TP-C3"
+      ],
+      "0302-pz02/Р2": [
+        "TP-C3"
+      ],
+      "0302-pz02/Р3": [
+        "TP-C1",
+        "TP-C3"
+      ],
+      "0302-pz02/Р4": [
+        "TP-C3"
+      ],
+      "0302-pz02/Р5": [
+        "TP-C3"
+      ],
+      "0302-pz02/Р6": [
+        "TP-C3"
+      ],
+      "0302-pz02/Р7": [
+        "TP-C3"
+      ],
+      "0104-pz01/Р1": [
+        "TP-C1",
+        "SHARED",
+        "TP-D1"
+      ],
+      "0104-pz01/Р2": [
+        "TP-C1",
+        "TP-H1"
+      ],
+      "0104-pz01/Р3": [
+        "TP-C1"
+      ],
+      "0104-pz01/Р4": [
+        "TP-C1"
+      ],
+      "0104-pz01/Р5": [
+        "TP-C1"
+      ],
+      "0104-pz01/Р6": [
+        "TP-H1"
+      ],
+      "0104-pz01/Р7": [
+        "TP-C3"
+      ],
+      "0104-pz02/Р1": [
+        "TP-C1"
+      ],
+      "0104-pz02/Р2": [
+        "TP-C1",
+        "TP-C2",
+        "TP-D1"
+      ],
+      "0104-pz02/Р3": [
+        "TP-C1",
+        "TP-C2",
+        "TP-H1"
+      ],
+      "0104-pz02/Р4": [
+        "TP-C2"
+      ],
+      "0104-pz02/Р5": [
+        "TP-C2",
+        "TP-D1"
+      ],
+      "0104-pz02/Р6": [
+        "TP-C2"
+      ],
+      "0104-pz02/Р7": [
+        "TP-H1"
+      ],
+      "0104-pz02/Р8": [
+        "TP-C2",
+        "TP-D1"
+      ]
+    },
+    "mg": {
+      "0302-pz01/Р1": [
+        "MG-R1",
+        "MG-H1"
+      ],
+      "0302-pz01/Р2": [
+        "MG-R1",
+        "MG-R2"
+      ],
+      "0302-pz01/Р3": [
+        "MG-R1"
+      ],
+      "0302-pz01/Р4": [
+        "MG-R1",
+        "MG-C1"
+      ],
+      "0302-pz01/Р5": [
+        "MG-R2",
+        "MG-H1"
+      ],
+      "0302-pz01/Р6": [
+        "MG-H1",
+        "MG-REPORT"
+      ],
+      "0302-pz01/Р7": [
+        "MG-H1",
+        "MG-R2"
+      ],
+      "0302-pz02/Р1": [
+        "MG-C1",
+        "MG-C3"
+      ],
+      "0302-pz02/Р2": [
+        "MG-C3"
+      ],
+      "0302-pz02/Р3": [
+        "MG-C1",
+        "MG-C3"
+      ],
+      "0302-pz02/Р4": [
+        "MG-C3"
+      ],
+      "0302-pz02/Р5": [
+        "MG-C3"
+      ],
+      "0302-pz02/Р6": [
+        "MG-C3"
+      ],
+      "0302-pz02/Р7": [
+        "MG-C3"
+      ],
+      "0104-pz01/Р1": [
+        "MG-C1",
+        "SHARED",
+        "MG-D1"
+      ],
+      "0104-pz01/Р2": [
+        "MG-C1",
+        "MG-H1"
+      ],
+      "0104-pz01/Р3": [
+        "MG-C1"
+      ],
+      "0104-pz01/Р4": [
+        "MG-C1"
+      ],
+      "0104-pz01/Р5": [
+        "MG-C1"
+      ],
+      "0104-pz01/Р6": [
+        "MG-H1"
+      ],
+      "0104-pz01/Р7": [
+        "MG-C3"
+      ],
+      "0104-pz02/Р1": [
+        "MG-C1"
+      ],
+      "0104-pz02/Р2": [
+        "MG-C1",
+        "MG-C2",
+        "MG-D1"
+      ],
+      "0104-pz02/Р3": [
+        "MG-C1",
+        "MG-C2",
+        "MG-H1"
+      ],
+      "0104-pz02/Р4": [
+        "MG-C2"
+      ],
+      "0104-pz02/Р5": [
+        "MG-C2",
+        "MG-D1"
+      ],
+      "0104-pz02/Р6": [
+        "MG-C2"
+      ],
+      "0104-pz02/Р7": [
+        "MG-H1"
+      ],
+      "0104-pz02/Р8": [
+        "MG-C2",
+        "MG-D1"
+      ]
+    },
+    "ds": {
+      "0302-pz01/Р1": [
+        "DS-R1",
+        "DS-H1"
+      ],
+      "0302-pz01/Р2": [
+        "DS-R1",
+        "DS-R2"
+      ],
+      "0302-pz01/Р3": [
+        "DS-R1"
+      ],
+      "0302-pz01/Р4": [
+        "DS-R1",
+        "DS-C1"
+      ],
+      "0302-pz01/Р5": [
+        "DS-R2",
+        "DS-H1"
+      ],
+      "0302-pz01/Р6": [
+        "DS-H1",
+        "DS-REPORT"
+      ],
+      "0302-pz01/Р7": [
+        "DS-H1",
+        "DS-R2"
+      ],
+      "0302-pz02/Р1": [
+        "DS-C1",
+        "DS-C3"
+      ],
+      "0302-pz02/Р2": [
+        "DS-C3"
+      ],
+      "0302-pz02/Р3": [
+        "DS-C1",
+        "DS-C3"
+      ],
+      "0302-pz02/Р4": [
+        "DS-C3"
+      ],
+      "0302-pz02/Р5": [
+        "DS-C3"
+      ],
+      "0302-pz02/Р6": [
+        "DS-C3"
+      ],
+      "0302-pz02/Р7": [
+        "DS-C3"
+      ],
+      "0104-pz01/Р1": [
+        "DS-C1",
+        "SHARED",
+        "DS-D1"
+      ],
+      "0104-pz01/Р2": [
+        "DS-C1",
+        "DS-H1"
+      ],
+      "0104-pz01/Р3": [
+        "DS-C1"
+      ],
+      "0104-pz01/Р4": [
+        "DS-C1"
+      ],
+      "0104-pz01/Р5": [
+        "DS-C1"
+      ],
+      "0104-pz01/Р6": [
+        "DS-H1"
+      ],
+      "0104-pz01/Р7": [
+        "DS-C3"
+      ],
+      "0104-pz02/Р1": [
+        "DS-C1"
+      ],
+      "0104-pz02/Р2": [
+        "DS-C1",
+        "DS-C2",
+        "DS-D1"
+      ],
+      "0104-pz02/Р3": [
+        "DS-C1",
+        "DS-C2",
+        "DS-H1"
+      ],
+      "0104-pz02/Р4": [
+        "DS-C2"
+      ],
+      "0104-pz02/Р5": [
+        "DS-C2",
+        "DS-D1"
+      ],
+      "0104-pz02/Р6": [
+        "DS-C2"
+      ],
+      "0104-pz02/Р7": [
+        "DS-H1"
+      ],
+      "0104-pz02/Р8": [
+        "DS-C2",
+        "DS-D1"
+      ]
+    },
+    "nb": {
+      "0302-pz01/Р1": [
+        "NB-R1",
+        "NB-H1"
+      ],
+      "0302-pz01/Р2": [
+        "NB-R1",
+        "NB-R2"
+      ],
+      "0302-pz01/Р3": [
+        "NB-R1"
+      ],
+      "0302-pz01/Р4": [
+        "NB-R1",
+        "NB-C1"
+      ],
+      "0302-pz01/Р5": [
+        "NB-R2",
+        "NB-H1"
+      ],
+      "0302-pz01/Р6": [
+        "NB-H1",
+        "NB-REPORT"
+      ],
+      "0302-pz01/Р7": [
+        "NB-H1",
+        "NB-R2"
+      ],
+      "0302-pz02/Р1": [
+        "NB-C1",
+        "NB-C3"
+      ],
+      "0302-pz02/Р2": [
+        "NB-C3"
+      ],
+      "0302-pz02/Р3": [
+        "NB-C1",
+        "NB-C3"
+      ],
+      "0302-pz02/Р4": [
+        "NB-C3"
+      ],
+      "0302-pz02/Р5": [
+        "NB-C3"
+      ],
+      "0302-pz02/Р6": [
+        "NB-C3"
+      ],
+      "0302-pz02/Р7": [
+        "NB-C3"
+      ],
+      "0104-pz01/Р1": [
+        "NB-C1",
+        "SHARED",
+        "NB-D1"
+      ],
+      "0104-pz01/Р2": [
+        "NB-C1",
+        "NB-H1"
+      ],
+      "0104-pz01/Р3": [
+        "NB-C1"
+      ],
+      "0104-pz01/Р4": [
+        "NB-C1"
+      ],
+      "0104-pz01/Р5": [
+        "NB-C1"
+      ],
+      "0104-pz01/Р6": [
+        "NB-H1"
+      ],
+      "0104-pz01/Р7": [
+        "NB-C3"
+      ],
+      "0104-pz02/Р1": [
+        "NB-C1"
+      ],
+      "0104-pz02/Р2": [
+        "NB-C1",
+        "NB-C2",
+        "NB-D1"
+      ],
+      "0104-pz02/Р3": [
+        "NB-C1",
+        "NB-C2",
+        "NB-H1"
+      ],
+      "0104-pz02/Р4": [
+        "NB-C2"
+      ],
+      "0104-pz02/Р5": [
+        "NB-C2",
+        "NB-D1"
+      ],
+      "0104-pz02/Р6": [
+        "NB-C2"
+      ],
+      "0104-pz02/Р7": [
+        "NB-H1"
+      ],
+      "0104-pz02/Р8": [
+        "NB-C2",
+        "NB-D1"
+      ]
+    }
+  },
+  "counts": {
+    "features": 5,
+    "subtasks": 40,
+    "shared_tasks": 1,
+    "code_tasks": 15,
+    "criteria_per_person": 29,
+    "human_image_slots_per_person": 21
+  },
+  "bootstrap_status": "PUBLISHED_PREPARATION_NOT_STUDENT_EXECUTION",
+  "human_actions": "shared/human-actions.md"
+}

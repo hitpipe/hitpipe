@@ -1,0 +1,115 @@
+{
+  "logical_version": "1.0.0",
+  "status": "DESIGN_ALLOCATION_NOT_MEASURED_CAPACITY",
+  "product_target": "HP-VER-001",
+  "selected_nfr_variant": "PILOT",
+  "topology": "single-active-instance-per-service; no automatic old-generation promotion",
+  "development": {
+    "vcpus": 4,
+    "ram_mib": 8192,
+    "ssd_gib": 80,
+    "runtime_memory_mib": {
+      "iam": 192,
+      "intake": 192,
+      "processing": 192,
+      "delivery": 192,
+      "python_ai": 384,
+      "next_bff": 512,
+      "postgresql": 1536,
+      "keycloak": 2048,
+      "caddy": 128,
+      "observability": 256
+    },
+    "remaining_for_os_builds_and_headroom_mib": 2560
+  },
+  "staging_live_initial": {
+    "vcpus": 8,
+    "ram_mib": 16384,
+    "ssd_gib": 200,
+    "runtime_memory_mib": {
+      "iam": 384,
+      "intake": 384,
+      "processing": 384,
+      "delivery": 384,
+      "python_ai": 512,
+      "next_bff": 768,
+      "postgresql": 4096,
+      "keycloak": 2048,
+      "caddy": 128,
+      "observability": 768
+    },
+    "remaining_for_os_builds_and_headroom_mib": 6528
+  },
+  "postgresql": {
+    "databases": [
+      "hp_iam",
+      "hp_intake",
+      "hp_processing",
+      "hp_delivery",
+      "hp_keycloak"
+    ],
+    "max_connections": 60,
+    "go_service_pool_default": 5,
+    "go_service_pool_range": [
+      1,
+      10
+    ],
+    "keycloak_pool_max": 10,
+    "reserved_minimum": 10,
+    "fsync": true,
+    "full_page_writes": true,
+    "synchronous_commit": "on",
+    "archive_mode": false,
+    "physical_backup": false,
+    "unlogged_business_tables": false
+  },
+  "listeners": {
+    "business": {
+      "port": 8443,
+      "authentication": "mTLS exact operation caller allowlist; EDGE only for Next business"
+    },
+    "barrier": {
+      "port": 9443,
+      "authentication": "IAM-only issuer/SAN; same runtime process/gates; no business/health routes"
+    },
+    "health": {
+      "port": 9444,
+      "authentication": "OPS-only issuer/SAN; no business/control routes"
+    },
+    "postgresql": {
+      "port": 5432,
+      "authentication": "private TLS+per-service DB role only"
+    }
+  },
+  "content": {
+    "durability": "file fsync,atomic rename,directory fsync before SQL ref commit",
+    "backup": false,
+    "historical_snapshots": false,
+    "expiry": "class/origin/expiry durable sidecar independent of SQL; read-time deny and hard-deadline purge"
+  },
+  "backup": {
+    "kind": "selective logical minimum safety/config/deletion metadata only",
+    "maximum_age_days": 21,
+    "exclude": [
+      "content files",
+      "raw webhook",
+      "full wire outbox bodies",
+      "AI transcript",
+      "provider credential files",
+      "host-volume snapshots",
+      "physical PG/WAL archive"
+    ]
+  },
+  "controlled_rpo0_contour": [
+    "runtime kill/restart",
+    "OS/DB restart with intact correctly flushed PG+content volumes",
+    "temporary state unavailability with same durable volumes"
+  ],
+  "outside_rpo0_contour": [
+    "all-current-volume loss",
+    "unrecoverable storage corruption",
+    "dishonest flush controller",
+    "site loss"
+  ],
+  "qualification": "No resource value grants capacity/live readiness. Joint selected workload and availability/recovery/privacy/security gates must pass before admission. No purchase or deployment performed by authoring this file."
+}

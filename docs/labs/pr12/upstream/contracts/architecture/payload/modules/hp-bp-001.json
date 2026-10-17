@@ -1,0 +1,1051 @@
+{
+  "format": "pcf.module/1",
+  "module_id": "HP-BP-001",
+  "phase": "architecture",
+  "records": {
+    "HP-BP-001": {
+      "body": {
+        "compatibility_refs": [
+          {
+            "object_id": "HP-COMPAT-ARCH-001"
+          }
+        ],
+        "formal_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-001"
+          },
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-BP-001/T/001"
+          },
+          {
+            "object_id": "HP-BP-001/T/002"
+          },
+          {
+            "object_id": "HP-BP-001/T/003"
+          },
+          {
+            "object_id": "HP-BP-001/T/004"
+          },
+          {
+            "object_id": "HP-BP-001/T/005"
+          },
+          {
+            "object_id": "HP-BP-001/T/006"
+          },
+          {
+            "object_id": "HP-BP-001/T/007"
+          },
+          {
+            "object_id": "HP-BP-001/T/008"
+          },
+          {
+            "object_id": "HP-BP-001/T/009"
+          },
+          {
+            "object_id": "HP-BP-001/T/010"
+          },
+          {
+            "object_id": "HP-BP-001/T/011"
+          },
+          {
+            "object_id": "HP-BP-001/T/012"
+          },
+          {
+            "object_id": "HP-BP-001/T/013"
+          },
+          {
+            "object_id": "HP-BP-001/T/014"
+          }
+        ],
+        "parameter_refs": [],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-008"
+          }
+        ],
+        "scope": "## 1. Граница спецификации и применимость\n\nHP-PART-001 — отдельный Go IAM service: аутентифицированная identity, минимальный профиль, workspace, членство и роли, непрерывность владельца, непрозрачные пользовательские сессии, реестр проверенных внешних bindings, epochs отзыва, реестр runtime и координация barriers. Пароли, MFA и восстановление identity принадлежат HP-PART-008 Keycloak. HP-PART-006 Next BFF передаёт cookie и отображает результат; бизнес-права не выводятся из UI или IdP-role claim.\n\nПродуктовый контекст: точный кандидат Product `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, HP-VER-001; транзитивный Discovery закреплён этим импортом. Формальный статус upstream не повышается. Основные основания: HP-RULE-005/010/011, HP-POL-001/003/005, HP-NFR-001/005/006/008/009/013/014, HP-FR-001/002/003/004/307/308. TEAM-функции не появляются в SINGLE только потому, что нижний IAM способен хранить несколько участников.\n\nВне области: business case state, правила операции, платёжные факты, ClickUp effect ledger, хранение provider credentials в IAM, AI-исполнение и администрирование Project OS. Реальный инициатор пользовательского изменения сохраняется; background service identity не заменяет его задним числом.\n\n| Сторона | Ответственность |\n| --- | --- |\n| HP-PART-001 | Authority HP-DATA-001; разрешение или отказ для текущего субъекта/области; epochs, runtime registry и revoke coordinator |\n| HP-PART-008 | OIDC-аутентификация, пароль/MFA/recovery; отдельная БД и административная плоскость |\n| HP-PART-006 | Same-origin UX/BFF, защищённая cookie и CSRF, response-start gate; без независимой копии бизнес-ролей |\n| HP-PART-002/003/004 | Проверка полученного actor context и текущей authority; локальный gate; владение своими данными/эффектом |\n| HP-PART-005 | Только разрешённая подготовка; локальный user-request gate, без доступа к реальным делам и credentials |",
+        "text": "# HP-BP-001 — Identity, профиль и полномочия\n\n**ID Blueprint:** HP-BP-001. **Рабочее состояние:** In Review / Candidate. **Ответственный за содержание:** автономный архитектор в пределах делегирования владельца продукта; интеграция — Codex root. Документ определяет целевую систему, а не утверждает, что она уже реализована, испытана или формально принята.\n\n## 1. Граница спецификации и применимость\n\nHP-PART-001 — отдельный Go IAM service: аутентифицированная identity, минимальный профиль, workspace, членство и роли, непрерывность владельца, непрозрачные пользовательские сессии, реестр проверенных внешних bindings, epochs отзыва, реестр runtime и координация barriers. Пароли, MFA и восстановление identity принадлежат HP-PART-008 Keycloak. HP-PART-006 Next BFF передаёт cookie и отображает результат; бизнес-права не выводятся из UI или IdP-role claim.\n\nПродуктовый контекст: точный кандидат Product `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, HP-VER-001; транзитивный Discovery закреплён этим импортом. Формальный статус upstream не повышается. Основные основания: HP-RULE-005/010/011, HP-POL-001/003/005, HP-NFR-001/005/006/008/009/013/014, HP-FR-001/002/003/004/307/308. TEAM-функции не появляются в SINGLE только потому, что нижний IAM способен хранить несколько участников.\n\nВне области: business case state, правила операции, платёжные факты, ClickUp effect ledger, хранение provider credentials в IAM, AI-исполнение и администрирование Project OS. Реальный инициатор пользовательского изменения сохраняется; background service identity не заменяет его задним числом.\n\n| Сторона | Ответственность |\n| --- | --- |\n| HP-PART-001 | Authority HP-DATA-001; разрешение или отказ для текущего субъекта/области; epochs, runtime registry и revoke coordinator |\n| HP-PART-008 | OIDC-аутентификация, пароль/MFA/recovery; отдельная БД и административная плоскость |\n| HP-PART-006 | Same-origin UX/BFF, защищённая cookie и CSRF, response-start gate; без независимой копии бизнес-ролей |\n| HP-PART-002/003/004 | Проверка полученного actor context и текущей authority; локальный gate; владение своими данными/эффектом |\n| HP-PART-005 | Только разрешённая подготовка; локальный user-request gate, без доступа к реальным делам и credentials |\n\n## 2. Канонические определения и формальные источники\n\nHP-DOC-AD-001 определяет PART/DATA/IF ownership. Этот BP определяет IAM-поведение. HP-BP-007 определяет общий start gate, durable HTTP, epochs, wire/error/version semantics. HP-BP-006 определяет deployment roster, инфраструктурный fencing, recovery overlay и копии данных. Поля, типы, обязательность, HTTP methods/paths/statuses и имена операций принадлежат **HP-FORMAL-001**, каноническому OpenAPI3.1.0 в Git; здесь они не авторятся второй таблицей. SQL constraints и точные миграции принадлежат `/formal/sql/` того же source set. Фактические commit, digests, imports и source revisions закрепляются только после реальной публикации/commit в manifest; выдуманных pins нет.\n\nЗначимые IAM-объекты: identity `(issuer, subject)`; workspace; membership и business role; opaque session; verified external binding `(provider, external_account, test/live context, pack)`; connection reference без credentials; per-scope deny epoch; revoke request; runtime registration `(deployment_generation, instance_id, boot_id)`; bounded support grant; ownership transfer; deletion/revocation control overlay. Их точные представления находятся в formal owners, а семантика — в нормах ниже.\n\n| Граница | Канонический источник |\n| --- | --- |\n| HP-IF-002 — BFF↔IAM | HP-FORMAL-001; OIDC/session/workspace и безопасные ошибки; HP-BP-001/T/001–008 |\n| HP-IF-010 — IAM↔runtime gates | HP-BP-007 и HP-FORMAL-001; координация HP-BP-001/T/009–012 |\n| HP-IF-012 — IAM↔своя БД | IAM SQL constraints; HP-BP-001/T/003/008/013/014 |\n| Credentials и source/destination identity | HP-BP-002/004; IAM хранит только проверенную binding identity, права и epoch |\n\n## 3. Точные технические обязательства\n\n### HP-BP-001/T/001 — Единственная аутентификационная identity\n\n**Роль и условие:** IAM обязан аутентифицировать вход в пользовательский HitPipe через настроенный confidential OIDC client Keycloak; браузер не передаёт пароль приложению HitPipe. Выбран Authorization Code + PKCE S256, одноразовые state и nonce, точный разрешённый redirect URI. Не используются implicit flow, password grant, wildcard redirect или account linking по одному email.\n\n**Действие и исход:** IAM проверяет подпись и разрешённый алгоритм, точные issuer/client audience, срок и nonce. Ключ пользователя — проверенные issuer+subject; email и отображаемое имя — атрибуты, не tenant grant. Code/state употребляются один раз, попытка истекает через10 минут. Несовпадение, replay, неизвестный issuer/alg или неоднозначный callback прекращает вход без создания авторизованной сессии. Непроверенные token/claims не уходят в бизнес-историю. Изменение IdP subject не переносит workspace автоматически.\n\n**Соответствие и проверка:** положительный code flow и отрицательные state/nonce/issuer/audience/expiry/replay проверки, включая два параллельных callback. Keycloak MFA/recovery используются штатно; прикладной runtime не получает realm-admin credentials. Основания HP-NFR-005/006, HP-POL-003.\n\n### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006.\n\n### HP-BP-001/T/003 — Текущая бизнес-авторизация\n\n**Условие и действие:** каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.\n\n**Гарантия:** отсутствие подтверждённого актуального grant, IAM partition, неизвестная membership или epoch дают fail-closed для затронутого нового действия/чтения. Срок токена/кэша не заменяет start gate. Ответ наружу не различает чужой существующий объект и недоступный объект так, чтобы раскрывать tenant. Разрешённый фон операции имеет отдельный operation/system principal, закреплённые connection и область; он не продолжает пользовательскую команду от имени уже отозванного оператора.\n\n**Критерий:** серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow.\n\n### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.\n\n### HP-BP-001/T/005 — Workspace и первый действительный владелец\n\n**Предусловие:** workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.\n\n**Действие:** IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний.\n\n**Исход:** до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009.\n\n### HP-BP-001/T/006 — Привязка внешнего account/context\n\n**Условие:** HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.\n\n**Поведение:** IAM сериализует резервирование binding; одна проверенная source account+test/live+pack область не принадлежит двум workspace по HP-RULE-011. UNIQUE constraint у единственного владельца исключает конкурирующую регистрацию. Конфликт возвращает общий отказ без имени, количества операций или других сведений соседней компании. Успешная connection rotation сохраняет прежнюю внешнюю identity; другой account/context требует отдельного разрешённого изменения, не перенаправляет старые cases.\n\n**Проверка:** две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006.\n\n### HP-BP-001/T/007 — Поддержка без постоянного бизнес-доступа\n\n**Условие и действие:** диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.\n\n**Гарантия:** реальная support identity, инициатор согласия и время сохраняются. Отмена/expiry проходят тот же start gate и отзыв всей области, а не только скрытие панели. Любое необходимое бизнес-действие выполняет полномочный владелец, не impersonation поддержки. Debug через shell/DB не является продуктовым support grant и учитывается отдельным административным контролем HP-BP-006.\n\n**Критерий:** незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс.\n\n### HP-BP-001/T/008 — Передача владения без осиротевших дел\n\n**Предусловие:** прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.\n\n**Действие:** используется durable transfer с уникальной identity и ожидаемыми membership/config revisions. IAM готовит проверенного нового владельца; Processing идемпотентно подтверждает новую operation ownership/fallback для всех затронутых объектов своей транзакцией; только после фактического подтверждения IAM завершает старую owner membership/роль при её отзыве. До завершения сохраняется действительный прежний владелец; timeout показывает Pending/установленный частичный исход и доступное действие, а не ложный Done. Повтор не переносит ответственность второй раз.\n\n**Предел:** удаление membership последнего требуемого owner без допустимой передачи — недопустимая команда и отвергается до её принятия, а не принимается с бесконечным Pending. Это не препятствует отдельному допустимому отзыву скомпрометированной session, токена или connection: такой security deny применяется независимо от transfer и не стирает ownership relation как факт ответственности. Сохранённый owner не получает доступ через уже отозванную сессию; затронутое исполнение удерживается, если нет необходимых действительных полномочий. Автоматического всемогущего service/recovery owner или grant поддержке не возникает. Восстановление identity использует проверенный IdP recovery, после чего полномочия и transfer проверяются заново. В SINGLE передача ownership не создаёт отдельного case operator; допустимое TEAM assignment не сбрасывается от смены owner.\n\n**Проверка:** fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа.\n\n### HP-BP-001/T/009 — Runtime registry и новая generation\n\n**Условие:** deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.\n\n**Действие:** новый/перезапущенный процесс стартует с CLOSED gates. IAM проверяет аутентичную service identity и roster; runtime получает полный current epoch/deny snapshot, применяет его локально и подтверждает boot-specific состояние. Только после этого можно включить protected serving. Новый boot, PID reuse, истёкшая registration lease, потеря heartbeat и смена IP не дают права продолжить старый grant. Unknown instance не получает credentials/БД/сетевую возможность в обход roster.\n\n**Критерий:** прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch.\n\n### HP-BP-001/T/010 — Отзыв как deny commit и synchronous barrier\n\n**Условие и начало:** после принятия допустимой команды membership/session/support/connection revoke IAM своей транзакцией повышает scope epoch, фиксирует deny и неизменяемое revoke intent с началом измерения. Новые authoritative grants для отозванной области сразу отвергаются; ответ на принятие показывает Pending, не положительное завершение. Scope включает все использующие connection операции/аккаунты и все защищённые поверхности участника.\n\n**Действие:** coordinator требует подтверждения каждого затронутого boot из конечного roster; точный start-critical-section и barrier определены единственно в HP-BP-007. ACK означает установленный локальный deny epoch и невозможность нового старта от старого epoch после release; ACK «получил событие» недостаточен. При запросе нового поколения учитывается текущий revoke. Внутренний outbox доставляет состояние повторно, но его eventual delivery не является единственным enforcement.\n\n**Исход:** IAM помечает revoke Applied и выдаёт положительное подтверждение только после всех действительных ACK либо подтверждённого фактического infrastructure fencing отсутствующих boot по HP-BP-006/T/004. Доказательство fencing аутентично оператору deployment, имеет точный instance/generation и проверяемый результат; его нельзя создать произвольным полем API. Устаревший ACK, другой scope/epoch/boot, частичное отключение или lost response не дают Applied. Повтор запроса возвращает тот же установленный результат.\n\n**Проверка:** revoke применяется ко всей области≤5 секунд с принятия допустимого запроса согласно HP-NFR-005/006. Это предел соответствия будущей реализации, не доказанный результат документа. После positive confirmation нет нового protected read/provider send со старым доступом; уже начатые обращения остаются in-flight и могут иметь эффект. Неизвестность эффекта принадлежит прежнему case/ledger, отзыв не отменяет её.\n\n### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.\n\n### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.\n\n### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.\n\n### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.\n\n## 4. Взаимодействия, состояния и исходы\n\n| Исход | Локатор | Что доказано и что разрешено |\n| --- | --- | --- |\n| Login rejected / session expired | T/001–003 | Нет действительного доступа; не создаётся workspace/grant из старых claims |\n| Workspace established | T/005 | Есть действительный owner и durable identity; ещё нет автоматического разрешения live operation |\n| Binding conflict | T/006 | Запрошенную область нельзя связать; чужие tenant facts не раскрываются |\n| Transfer Pending | T/008 | Передача не завершена; прежняя действительная ответственность сохраняется, business effect не выводится из промежуточного ACK |\n| Revoke Pending | T/010–011 | IAM deny установлен, barriers ещё не подтверждены; нельзя показать positive |\n| Revoke Applied | T/010/012 | Полная затронутая область fenced против новых starts; прежний in-flight effect может оставаться Unknown |\n| Deadline violated | T/011 | Security incident и NFR FAIL; не новая успешная разновидность отзыва |\n| Connection restored | T/006/010 | Проверена та же identity и новые действительные полномочия; прежние cases/unknown effects не сброшены |\n\nIAM serializes membership, owner, binding и epoch constraints в своей БД; Processing/connector владеют своими фактами. Межсервисный переход — durable protocol с явным Pending и повторяемыми intent IDs, без SQL-транзакции через чужие БД. Transport/inbox conflict и duplicate semantics принадлежат HP-BP-007. Restart загружает durable deny перед serving; поздний control ACK не понижает current epoch. Операционная пауза и security revoke различаются: пауза операции принадлежит Processing, deny доступа применяется немедленно по своей области.\n\n## 5. Обеспечение качественных и продуктовых ограничений\n\n| Продуктовая норма | Техническое обеспечение | Сквозная проверка |\n| --- | --- | --- |\n| HP-RULE-005; HP-NFR-005 | T/001–005/007/009–012; business role check + actual gate | Отрицательная матрица, BFF/service/direct-ID пути, actual read/write starts после отзыва |\n| HP-RULE-010; HP-FR-308 | T/005/008; действительный owner и подтверждённая передача | Все места saga/crash/конкуренция; нет осиротевшего case и обхода SINGLE |\n| HP-RULE-011; HP-FR-003/307 | T/006; verified binding + UNIQUE authority | Две компании/одна source identity, смена credentials/account, privacy errors |\n| HP-NFR-006 | T/002/010–013; secret boundaries и полный revoke | Canary scans, HTTP/DB start race, реальный fencing до replacement |\n| HP-NFR-001/008 | T/005/008/014; state+audit+outbox | Lost response/replay, durability и проверяемая causal history |\n| HP-NFR-009/014 | T/013/014 и HP-BP-006 | Purge/restore не возвращает удалённое и отозванное; неизвестный overlay удерживает выполнение |\n\nНи один локальный IAM PASS не доказывает полный NFR005/006: нужны все реальные обслуживающие/connector runtime и реальные граничные starts. IdP token revocation сам по себе не доказывает бизнес-отзыв HitPipe.\n\n## 6. Параметризация, версии и совместимость\n\n| Параметр | Выбранное значение и предел | Полномочие и фиксация | Сохраняемый критерий |\n| --- | --- | --- | --- |\n| Session idle/absolute | 8h/24h; idle≤absolute; увеличение за эти пределы не локальная правка | IAM owner через reviewed deployment config | T/002, current permission и revoke не зависят от срока cookie |\n| OIDC one-time flow | TTL10min, одно применение | IAM config; issuer/client/redirect pinned | T/001, replay и межissuer linking запрещены |\n| Support grant | Явная область, максимум60min | Владелец даёт конкретный grant; IAM фиксирует срок | T/007, никаких бизнес-write прав автоматически |\n| Start SQL/network budget | Точные2s start/query и response deadlines — HP-BP-007 | Только совместимый общий runtime config | Не ослабляет5s полного отзыва; timeout не даёт ACK или allow |\n| Revoke conformance limit | 5s, непродляемый | Продуктовый HP-NFR-005/006; не локальный параметр | T/010–011; превышение всегда violation |\n\nWire/version negotiation, incompatible changes и immutable command ID/hash определены HP-BP-007 и HP-FORMAL-001. Развёртывание совместимого IAM и всех gates происходит одним проверенным generation set; downgrade, теряющий epoch/denies, не разрешается rollback. Изменение issuer, trust boundary, data authority, barrier proof или foreign binding uniqueness — существенный архитектурный выбор, не AUTO. Исторические configs/cases и frozen source pins не мигрируют от изменения страницы BP.\n\n## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция.\n\n## 8. Существенные вопросы и контроль перед приёмкой\n\nВсе архитектурные choices в данной области выбраны. Остались **implementation conformance gates**, а не неопределённый MVP scope: реальный OIDC login/logout, вся tenant matrix, suspend/revoke race, доказанный инфраструктурный fence и restore с последним overlay. Их непрохождение удерживает соответствующий live контур; наличие этого BP не является admission.\n\nПеред приёмкой полного source set проверяется: каждая T-норма имеет единственного владельца; IAM/Processing transfer и runtime gate согласованы с HP-BP-003/006/007; wire/SQL assets реальны и полностью закреплены; все необходимые cases/scopes учтены; новый boot не обходит deny; роли не расширяют SINGLE; source acceptance, choice adoption, technical readiness и implementation evidence не смешаны. Формальные ревизии/manifest/review записываются в общем Architecture acceptance package после действительной публикации.\n"
+      },
+      "content_role": "specification",
+      "kind": "technical_blueprint",
+      "origin_refs": [
+        "origin:HP-BP-001"
+      ],
+      "relations": [],
+      "title": "HP-BP-001 — Identity, профиль и полномочия"
+    },
+    "HP-BP-001/T/001": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "IAM проверяет подпись и разрешённый алгоритм, точные issuer/client audience, срок и nonce. Ключ пользователя — проверенные issuer+subject; email и отображаемое имя — атрибуты, не tenant grant. Code/state употребляются один раз, попытка истекает через10 минут. Несовпадение, replay, неизвестный issuer/alg или неоднозначный callback прекращает вход без создания авторизованной сессии. Непроверенные token/claims не уходят в бизнес-историю. Изменение IdP subject не переносит workspace автоматически."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "положительный code flow и отрицательные state/nonce/issuer/audience/expiry/replay проверки, включая два параллельных callback. Keycloak MFA/recovery используются штатно; прикладной runtime не получает realm-admin credentials. Основания HP-NFR-005/006, HP-POL-003.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/001 — Единственная аутентификационная identity\n\n**Роль и условие:** IAM обязан аутентифицировать вход в пользовательский HitPipe через настроенный confidential OIDC client Keycloak; браузер не передаёт пароль приложению HitPipe. Выбран Authorization Code + PKCE S256, одноразовые state и nonce, точный разрешённый redirect URI. Не используются implicit flow, password grant, wildcard redirect или account linking по одному email.\n\n**Действие и исход:** IAM проверяет подпись и разрешённый алгоритм, точные issuer/client audience, срок и nonce. Ключ пользователя — проверенные issuer+subject; email и отображаемое имя — атрибуты, не tenant grant. Code/state употребляются один раз, попытка истекает через10 минут. Несовпадение, replay, неизвестный issuer/alg или неоднозначный callback прекращает вход без создания авторизованной сессии. Непроверенные token/claims не уходят в бизнес-историю. Изменение IdP subject не переносит workspace автоматически.\n\n**Соответствие и проверка:** положительный code flow и отрицательные state/nonce/issuer/audience/expiry/replay проверки, включая два параллельных callback. Keycloak MFA/recovery используются штатно; прикладной runtime не получает realm-admin credentials. Основания HP-NFR-005/006, HP-POL-003."
+        ],
+        "outcomes": [
+          {
+            "meaning": "IAM проверяет подпись и разрешённый алгоритм, точные issuer/client audience, срок и nonce. Ключ пользователя — проверенные issuer+subject; email и отображаемое имя — атрибуты, не tenant grant. Code/state употребляются один раз, попытка истекает через10 минут. Несовпадение, replay, неизвестный issuer/alg или неоднозначный callback прекращает вход без создания авторизованной сессии. Непроверенные token/claims не уходят в бизнес-историю. Изменение IdP subject не переносит workspace автоматически.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "положительный code flow и отрицательные state/nonce/issuer/audience/expiry/replay проверки, включая два параллельных callback. Keycloak MFA/recovery используются штатно; прикладной runtime не получает realm-admin credentials. Основания HP-NFR-005/006, HP-POL-003."
+            ],
+            "when": {
+              "criterion": "IAM обязан аутентифицировать вход в пользовательский HitPipe через настроенный confidential OIDC client Keycloak; браузер не передаёт пароль приложению HitPipe. Выбран Authorization Code + PKCE S256, одноразовые state и nonce, точный разрешённый redirect URI. Не используются implicit flow, password grant, wildcard redirect или account linking по одному email.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "IAM обязан аутентифицировать вход в пользовательский HitPipe через настроенный confidential OIDC client Keycloak; браузер не передаёт пароль приложению HitPipe. Выбран Authorization Code + PKCE S256, одноразовые state и nonce, точный разрешённый redirect URI. Не используются implicit flow, password grant, wildcard redirect или account linking по одному email.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-008"
+          }
+        ],
+        "text": "### HP-BP-001/T/001 — Единственная аутентификационная identity\n\n**Роль и условие:** IAM обязан аутентифицировать вход в пользовательский HitPipe через настроенный confidential OIDC client Keycloak; браузер не передаёт пароль приложению HitPipe. Выбран Authorization Code + PKCE S256, одноразовые state и nonce, точный разрешённый redirect URI. Не используются implicit flow, password grant, wildcard redirect или account linking по одному email.\n\n**Действие и исход:** IAM проверяет подпись и разрешённый алгоритм, точные issuer/client audience, срок и nonce. Ключ пользователя — проверенные issuer+subject; email и отображаемое имя — атрибуты, не tenant grant. Code/state употребляются один раз, попытка истекает через10 минут. Несовпадение, replay, неизвестный issuer/alg или неоднозначный callback прекращает вход без создания авторизованной сессии. Непроверенные token/claims не уходят в бизнес-историю. Изменение IdP subject не переносит workspace автоматически.\n\n**Соответствие и проверка:** положительный code flow и отрицательные state/nonce/issuer/audience/expiry/replay проверки, включая два параллельных callback. Keycloak MFA/recovery используются штатно; прикладной runtime не получает realm-admin credentials. Основания HP-NFR-005/006, HP-POL-003.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/001"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/001 — Единственная аутентификационная identity"
+    },
+    "HP-BP-001/T/002": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006."
+            ],
+            "when": {
+              "criterion": "после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF\n\n**Условие:** после успешного T/001 IAM создаёт случайную криптографическую сессию с минимум256 бит энтропии; в БД хранится только digest session secret. Cookie — `__Host-hp_session`, Secure, HttpOnly, Path=/, без Domain, SameSite=Lax. Токен не попадает в localStorage, URL, client bundle, AI или обычные логи. BFF не расшифровывает роль из cookie.\n\n**Поведение:** idle timeout8 часов и absolute lifetime24 часа, оба от серверного времени; ротация при новом входе и изменении privilege/session security. Просроченная, неизвестная или отозванная сессия не получает доступа из cache. Logout сначала закрывает прикладную сессию с общей revoke-процедурой, затем штатно завершает IdP session; ошибка IdP logout не возвращает прикладной доступ.\n\nДля изменяющих команд BFF проверяет exact Origin, CSRF synchronizer token, разрешённый метод/content type; SameSite не единственная защита. GET не изменяет бизнес-состояние. Callback OAuth имеет отдельную одноразовую state-проверку и не открывает CSRF-исключение для других команд. Проверка: фиксация/кража старой cookie, cross-origin submit, logout race и session replay после положительного отзыва дают отказ. Основания HP-NFR-005/006.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/002"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/002 — Непрозрачная серверная сессия и CSRF"
+    },
+    "HP-BP-001/T/003": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/003 — Текущая бизнес-авторизация\n\n**Условие и действие:** каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.\n\n**Гарантия:** отсутствие подтверждённого актуального grant, IAM partition, неизвестная membership или epoch дают fail-closed для затронутого нового действия/чтения. Срок токена/кэша не заменяет start gate. Ответ наружу не различает чужой существующий объект и недоступный объект так, чтобы раскрывать tenant. Разрешённый фон операции имеет отдельный operation/system principal, закреплённые connection и область; он не продолжает пользовательскую команду от имени уже отозванного оператора.\n\n**Критерий:** серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/003 — Текущая бизнес-авторизация\n\n**Условие и действие:** каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.\n\n**Гарантия:** отсутствие подтверждённого актуального grant, IAM partition, неизвестная membership или epoch дают fail-closed для затронутого нового действия/чтения. Срок токена/кэша не заменяет start gate. Ответ наружу не различает чужой существующий объект и недоступный объект так, чтобы раскрывать tenant. Разрешённый фон операции имеет отдельный operation/system principal, закреплённые connection и область; он не продолжает пользовательскую команду от имени уже отозванного оператора.\n\n**Критерий:** серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow."
+            ],
+            "when": {
+              "criterion": "каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/003 — Текущая бизнес-авторизация\n\n**Условие и действие:** каждая пользовательская команда и новое защищённое чтение получает от IAM текущий actor, workspace, применимую роль/область и epochs; сервер-собственник объекта проверяет принадлежность и требуемое действие. Успех OIDC, старый подписанный JWT, переданный workspace ID, заголовок BFF или обладание ссылкой не являются бизнес-полномочием. Внутренний сервис аутентифицируется отдельно по HP-BP-007; доверенный service channel не разрешает ему выбирать произвольного human actor.\n\n**Гарантия:** отсутствие подтверждённого актуального grant, IAM partition, неизвестная membership или epoch дают fail-closed для затронутого нового действия/чтения. Срок токена/кэша не заменяет start gate. Ответ наружу не различает чужой существующий объект и недоступный объект так, чтобы раскрывать tenant. Разрешённый фон операции имеет отдельный operation/system principal, закреплённые connection и область; он не продолжает пользовательскую команду от имени уже отозванного оператора.\n\n**Критерий:** серверная матрица субъект×workspace×роль×действие покрывает API, прямые IDs, поиск, export, repeated command, background result и ошибки, не только кнопки. Полный критерий не менее1000 отрицательных попыток принадлежит HP-NFR-005. Сервисный timeout не превращается в allow.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/003"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/003 — Текущая бизнес-авторизация"
+    },
+    "HP-BP-001/T/004": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/004 — Роли без расширения MVP\n\n**Поведение:** права соответствуют HP-RULE-005: владелец workspace/операции, оператор дела, читатель, явно ограниченная поддержка. Все действия сохраняют реального инициатора, роль и scope на момент решения. Текущие роли устанавливаются IAM; case assignment и действительный operation owner принадлежат HP-PART-003 и подтверждаются им.\n\n**Граница:** HP-VER-001 использует SINGLE-профили; включение ролей/таблиц IAM не активирует TEAM assignment, multi-operation или новые UI capabilities. Право пользователя во внешнем Stripe/ClickUp не выводится из его HitPipe роли. Reader не меняет дело/конфигурацию; оператор не меняет подключение, финансовый факт или продуктовый scope. Повышение роли — новая проверяемая команда, не массовая правка claims в IdP.\n\n**Проверка:** сравнение разрешений с HP-RULE-005 и выбранным профилем; отрицательные попытки имеют отсутствие реального side effect/утечки, а не только код403. Основания HP-FR-214/308 и HP-NFR-005 с сохранением version applicability.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/004"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/004 — Роли без расширения MVP"
+    },
+    "HP-BP-001/T/005": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "### HP-BP-001/T/005 — Workspace и первый действительный владелец\n\n**Предусловие:** workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.\n\n**Действие:** IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний.\n\n**Исход:** до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/005 — Workspace и первый действительный владелец\n\n**Предусловие:** workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.\n\n**Действие:** IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний.\n\n**Исход:** до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009."
+        ],
+        "outcomes": [
+          {
+            "meaning": "до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "### HP-BP-001/T/005 — Workspace и первый действительный владелец\n\n**Предусловие:** workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.\n\n**Действие:** IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний.\n\n**Исход:** до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009."
+            ],
+            "when": {
+              "criterion": "workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/005 — Workspace и первый действительный владелец\n\n**Предусловие:** workspace создаётся только явной разрешённой onboarding-командой; provider webhook и найденный внешний account не создают workspace. Для MVP допустимо управляемое первичное приглашение с подтверждением аутентифицированного владельца, как разрешает HP-RULE-005; это не скрытая постоянная ручная обработка дел.\n\n**Действие:** IAM одной своей транзакцией фиксирует новый workspace, действительного первого owner и audit/outbox. Создание без owner не коммитится. Повтор одного command ID с тем же содержанием возвращает установленный результат, а другое содержание того же ID конфликтует по HP-BP-007. Имена/email не используются для автоматического объединения компаний.\n\n**Исход:** до установленного owner нельзя подключить live scope или активировать операцию. Удалённая область не восстанавливается старой cookie/webhook. Проверяются crash до/после commit и lost response. Основания HP-RULE-005/010/011 и HP-NFR-001/008/009.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/005"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/005 — Workspace и первый действительный владелец"
+    },
+    "HP-BP-001/T/006": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "IAM сериализует резервирование binding; одна проверенная source account+test/live+pack область не принадлежит двум workspace по HP-RULE-011. UNIQUE constraint у единственного владельца исключает конкурирующую регистрацию. Конфликт возвращает общий отказ без имени, количества операций или других сведений соседней компании. Успешная connection rotation сохраняет прежнюю внешнюю identity; другой account/context требует отдельного разрешённого изменения, не перенаправляет старые cases."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/006 — Привязка внешнего account/context\n\n**Условие:** HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.\n\n**Поведение:** IAM сериализует резервирование binding; одна проверенная source account+test/live+pack область не принадлежит двум workspace по HP-RULE-011. UNIQUE constraint у единственного владельца исключает конкурирующую регистрацию. Конфликт возвращает общий отказ без имени, количества операций или других сведений соседней компании. Успешная connection rotation сохраняет прежнюю внешнюю identity; другой account/context требует отдельного разрешённого изменения, не перенаправляет старые cases.\n\n**Проверка:** две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/006 — Привязка внешнего account/context\n\n**Условие:** HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.\n\n**Поведение:** IAM сериализует резервирование binding; одна проверенная source account+test/live+pack область не принадлежит двум workspace по HP-RULE-011. UNIQUE constraint у единственного владельца исключает конкурирующую регистрацию. Конфликт возвращает общий отказ без имени, количества операций или других сведений соседней компании. Успешная connection rotation сохраняет прежнюю внешнюю identity; другой account/context требует отдельного разрешённого изменения, не перенаправляет старые cases.\n\n**Проверка:** две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006."
+            ],
+            "when": {
+              "criterion": "HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-BP-001/T/006 — Привязка внешнего account/context\n\n**Условие:** HP-PART-002 или004 с проверенными credentials устанавливает реальный provider account/context; IAM получает аутентифицированное подтверждение коннектора, а не пользовательскую строку как доказательство. Секрет остаётся только у коннектора по T/013.\n\n**Поведение:** IAM сериализует резервирование binding; одна проверенная source account+test/live+pack область не принадлежит двум workspace по HP-RULE-011. UNIQUE constraint у единственного владельца исключает конкурирующую регистрацию. Конфликт возвращает общий отказ без имени, количества операций или других сведений соседней компании. Успешная connection rotation сохраняет прежнюю внешнюю identity; другой account/context требует отдельного разрешённого изменения, не перенаправляет старые cases.\n\n**Проверка:** две конкурентные заявки разных workspace на одну identity; test/live разделение; подмена account после OAuth; повтор/rollback reservation; освобождение выполняется только после действительного безопасного закрытия прежней области и не стирает минимальную case identity. Основания HP-RULE-001/006/011, HP-FR-003/307, HP-NFR-005/006.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/006"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/006 — Привязка внешнего account/context"
+    },
+    "HP-BP-001/T/007": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/007 — Поддержка без постоянного бизнес-доступа\n\n**Условие и действие:** диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.\n\n**Гарантия:** реальная support identity, инициатор согласия и время сохраняются. Отмена/expiry проходят тот же start gate и отзыв всей области, а не только скрытие панели. Любое необходимое бизнес-действие выполняет полномочный владелец, не impersonation поддержки. Debug через shell/DB не является продуктовым support grant и учитывается отдельным административным контролем HP-BP-006.\n\n**Критерий:** незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/007 — Поддержка без постоянного бизнес-доступа\n\n**Условие и действие:** диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.\n\n**Гарантия:** реальная support identity, инициатор согласия и время сохраняются. Отмена/expiry проходят тот же start gate и отзыв всей области, а не только скрытие панели. Любое необходимое бизнес-действие выполняет полномочный владелец, не impersonation поддержки. Debug через shell/DB не является продуктовым support grant и учитывается отдельным административным контролем HP-BP-006.\n\n**Критерий:** незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс."
+            ],
+            "when": {
+              "criterion": "диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/007 — Поддержка без постоянного бизнес-доступа\n\n**Условие и действие:** диагностический доступ поддержки требует явной разрешённой заявки владельца с workspace/областью/целью/сроком. Максимальный выбранный срок grant —60 минут; продление является новым решением владельца. Grant по умолчанию read-only минимизированной диагностики, не разрешает подключение, принятие конфигурации, закрытие дела, изменение оплаты или новый внешний effect. Grant не выдаёт secrets или свободный доступ ко всем tenant.\n\n**Гарантия:** реальная support identity, инициатор согласия и время сохраняются. Отмена/expiry проходят тот же start gate и отзыв всей области, а не только скрытие панели. Любое необходимое бизнес-действие выполняет полномочный владелец, не impersonation поддержки. Debug через shell/DB не является продуктовым support grant и учитывается отдельным административным контролем HP-BP-006.\n\n**Критерий:** незатронутые компании недоступны; после positive revoke новые support reads запрещены; audit не содержит секреты. Основания HP-NFR-005/006/008, HP-RULE-005. Самообслуживание выдачи grant не добавляется в MVP: допустим обслуживаемый контролируемый процесс.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/007"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/007 — Поддержка без постоянного бизнес-доступа"
+    },
+    "HP-BP-001/T/008": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "используется durable transfer с уникальной identity и ожидаемыми membership/config revisions. IAM готовит проверенного нового владельца; Processing идемпотентно подтверждает новую operation ownership/fallback для всех затронутых объектов своей транзакцией; только после фактического подтверждения IAM завершает старую owner membership/роль при её отзыве. До завершения сохраняется действительный прежний владелец; timeout показывает Pending/установленный частичный исход и доступное действие, а не ложный Done. Повтор не переносит ответственность второй раз."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/008 — Передача владения без осиротевших дел\n\n**Предусловие:** прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.\n\n**Действие:** используется durable transfer с уникальной identity и ожидаемыми membership/config revisions. IAM готовит проверенного нового владельца; Processing идемпотентно подтверждает новую operation ownership/fallback для всех затронутых объектов своей транзакцией; только после фактического подтверждения IAM завершает старую owner membership/роль при её отзыве. До завершения сохраняется действительный прежний владелец; timeout показывает Pending/установленный частичный исход и доступное действие, а не ложный Done. Повтор не переносит ответственность второй раз.\n\n**Предел:** удаление membership последнего требуемого owner без допустимой передачи — недопустимая команда и отвергается до её принятия, а не принимается с бесконечным Pending. Это не препятствует отдельному допустимому отзыву скомпрометированной session, токена или connection: такой security deny применяется независимо от transfer и не стирает ownership relation как факт ответственности. Сохранённый owner не получает доступ через уже отозванную сессию; затронутое исполнение удерживается, если нет необходимых действительных полномочий. Автоматического всемогущего service/recovery owner или grant поддержке не возникает. Восстановление identity использует проверенный IdP recovery, после чего полномочия и transfer проверяются заново. В SINGLE передача ownership не создаёт отдельного case operator; допустимое TEAM assignment не сбрасывается от смены owner.\n\n**Проверка:** fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/008 — Передача владения без осиротевших дел\n\n**Предусловие:** прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.\n\n**Действие:** используется durable transfer с уникальной identity и ожидаемыми membership/config revisions. IAM готовит проверенного нового владельца; Processing идемпотентно подтверждает новую operation ownership/fallback для всех затронутых объектов своей транзакцией; только после фактического подтверждения IAM завершает старую owner membership/роль при её отзыве. До завершения сохраняется действительный прежний владелец; timeout показывает Pending/установленный частичный исход и доступное действие, а не ложный Done. Повтор не переносит ответственность второй раз.\n\n**Предел:** удаление membership последнего требуемого owner без допустимой передачи — недопустимая команда и отвергается до её принятия, а не принимается с бесконечным Pending. Это не препятствует отдельному допустимому отзыву скомпрометированной session, токена или connection: такой security deny применяется независимо от transfer и не стирает ownership relation как факт ответственности. Сохранённый owner не получает доступ через уже отозванную сессию; затронутое исполнение удерживается, если нет необходимых действительных полномочий. Автоматического всемогущего service/recovery owner или grant поддержке не возникает. Восстановление identity использует проверенный IdP recovery, после чего полномочия и transfer проверяются заново. В SINGLE передача ownership не создаёт отдельного case operator; допустимое TEAM assignment не сбрасывается от смены owner.\n\n**Проверка:** fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа."
+            ],
+            "when": {
+              "criterion": "прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "### HP-BP-001/T/008 — Передача владения без осиротевших дел\n\n**Предусловие:** прежний owner и предполагаемый получатель действительны, scope явен; Processing устанавливает затронутые операции/дела и применимую бизнес-ответственность. IAM не делает cross-service SQL.\n\n**Действие:** используется durable transfer с уникальной identity и ожидаемыми membership/config revisions. IAM готовит проверенного нового владельца; Processing идемпотентно подтверждает новую operation ownership/fallback для всех затронутых объектов своей транзакцией; только после фактического подтверждения IAM завершает старую owner membership/роль при её отзыве. До завершения сохраняется действительный прежний владелец; timeout показывает Pending/установленный частичный исход и доступное действие, а не ложный Done. Повтор не переносит ответственность второй раз.\n\n**Предел:** удаление membership последнего требуемого owner без допустимой передачи — недопустимая команда и отвергается до её принятия, а не принимается с бесконечным Pending. Это не препятствует отдельному допустимому отзыву скомпрометированной session, токена или connection: такой security deny применяется независимо от transfer и не стирает ownership relation как факт ответственности. Сохранённый owner не получает доступ через уже отозванную сессию; затронутое исполнение удерживается, если нет необходимых действительных полномочий. Автоматического всемогущего service/recovery owner или grant поддержке не возникает. Восстановление identity использует проверенный IdP recovery, после чего полномочия и transfer проверяются заново. В SINGLE передача ownership не создаёт отдельного case operator; допустимое TEAM assignment не сбрасывается от смены owner.\n\n**Проверка:** fault после каждого saga step, конкурирующий transfer/revoke, несуществующий получатель, существующий оператор и lost ACK. Основания HP-FR-308, HP-RULE-005/010, HP-NFR-001/005/008. Проверяются раздельно недопустимое снятие последнего owner membership и допустимый немедленный отзыв его старой сессии/connection; сохранение ответственности не означает сохранение доступа.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/008"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/008 — Передача владения без осиротевших дел"
+    },
+    "HP-BP-001/T/009": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "новый/перезапущенный процесс стартует с CLOSED gates. IAM проверяет аутентичную service identity и roster; runtime получает полный current epoch/deny snapshot, применяет его локально и подтверждает boot-specific состояние. Только после этого можно включить protected serving. Новый boot, PID reuse, истёкшая registration lease, потеря heartbeat и смена IP не дают права продолжить старый grant. Unknown instance не получает credentials/БД/сетевую возможность в обход roster."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/009 — Runtime registry и новая generation\n\n**Условие:** deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.\n\n**Действие:** новый/перезапущенный процесс стартует с CLOSED gates. IAM проверяет аутентичную service identity и roster; runtime получает полный current epoch/deny snapshot, применяет его локально и подтверждает boot-specific состояние. Только после этого можно включить protected serving. Новый boot, PID reuse, истёкшая registration lease, потеря heartbeat и смена IP не дают права продолжить старый grant. Unknown instance не получает credentials/БД/сетевую возможность в обход roster.\n\n**Критерий:** прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/009 — Runtime registry и новая generation\n\n**Условие:** deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.\n\n**Действие:** новый/перезапущенный процесс стартует с CLOSED gates. IAM проверяет аутентичную service identity и roster; runtime получает полный current epoch/deny snapshot, применяет его локально и подтверждает boot-specific состояние. Только после этого можно включить protected serving. Новый boot, PID reuse, истёкшая registration lease, потеря heartbeat и смена IP не дают права продолжить старый grant. Unknown instance не получает credentials/БД/сетевую возможность в обход roster.\n\n**Критерий:** прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch."
+            ],
+            "when": {
+              "criterion": "deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/009 — Runtime registry и новая generation\n\n**Условие:** deployment имеет конечный утверждённый roster всех runtime, способных обслужить protected read/response, новую user proposal либо provider call. Каждая запись имеет generation, instance и boot identity; включены IAM, BFF, Intake, Processing, Delivery и AI user-request surface, а не только бизнес-workers.\n\n**Действие:** новый/перезапущенный процесс стартует с CLOSED gates. IAM проверяет аутентичную service identity и roster; runtime получает полный current epoch/deny snapshot, применяет его локально и подтверждает boot-specific состояние. Только после этого можно включить protected serving. Новый boot, PID reuse, истёкшая registration lease, потеря heartbeat и смена IP не дают права продолжить старый grant. Unknown instance не получает credentials/БД/сетевую возможность в обход roster.\n\n**Критерий:** прежняя generation не возвращается в serving после регистрации новой. HP-BP-007 задаёт gate semantics; HP-BP-006/T/004 определяет необходимое физическое fencing старого runtime до замены. Registry является IAM authority, а readiness/health инфраструктуры не подменяет его. Проверяются process suspend/resume и старый container image с сохранённым epoch.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/009"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/009 — Runtime registry и новая generation"
+    },
+    "HP-BP-001/T/010": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "coordinator требует подтверждения каждого затронутого boot из конечного roster; точный start-critical-section и barrier определены единственно в HP-BP-007. ACK означает установленный локальный deny epoch и невозможность нового старта от старого epoch после release; ACK «получил событие» недостаточен. При запросе нового поколения учитывается текущий revoke. Внутренний outbox доставляет состояние повторно, но его eventual delivery не является единственным enforcement."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "revoke применяется ко всей области≤5 секунд с принятия допустимого запроса согласно HP-NFR-005/006. Это предел соответствия будущей реализации, не доказанный результат документа. После positive confirmation нет нового protected read/provider send со старым доступом; уже начатые обращения остаются in-flight и могут иметь эффект. Неизвестность эффекта принадлежит прежнему case/ledger, отзыв не отменяет её.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/010 — Отзыв как deny commit и synchronous barrier\n\n**Условие и начало:** после принятия допустимой команды membership/session/support/connection revoke IAM своей транзакцией повышает scope epoch, фиксирует deny и неизменяемое revoke intent с началом измерения. Новые authoritative grants для отозванной области сразу отвергаются; ответ на принятие показывает Pending, не положительное завершение. Scope включает все использующие connection операции/аккаунты и все защищённые поверхности участника.\n\n**Действие:** coordinator требует подтверждения каждого затронутого boot из конечного roster; точный start-critical-section и barrier определены единственно в HP-BP-007. ACK означает установленный локальный deny epoch и невозможность нового старта от старого epoch после release; ACK «получил событие» недостаточен. При запросе нового поколения учитывается текущий revoke. Внутренний outbox доставляет состояние повторно, но его eventual delivery не является единственным enforcement.\n\n**Исход:** IAM помечает revoke Applied и выдаёт положительное подтверждение только после всех действительных ACK либо подтверждённого фактического infrastructure fencing отсутствующих boot по HP-BP-006/T/004. Доказательство fencing аутентично оператору deployment, имеет точный instance/generation и проверяемый результат; его нельзя создать произвольным полем API. Устаревший ACK, другой scope/epoch/boot, частичное отключение или lost response не дают Applied. Повтор запроса возвращает тот же установленный результат.\n\n**Проверка:** revoke применяется ко всей области≤5 секунд с принятия допустимого запроса согласно HP-NFR-005/006. Это предел соответствия будущей реализации, не доказанный результат документа. После positive confirmation нет нового protected read/provider send со старым доступом; уже начатые обращения остаются in-flight и могут иметь эффект. Неизвестность эффекта принадлежит прежнему case/ledger, отзыв не отменяет её."
+        ],
+        "outcomes": [
+          {
+            "meaning": "IAM помечает revoke Applied и выдаёт положительное подтверждение только после всех действительных ACK либо подтверждённого фактического infrastructure fencing отсутствующих boot по HP-BP-006/T/004. Доказательство fencing аутентично оператору deployment, имеет точный instance/generation и проверяемый результат; его нельзя создать произвольным полем API. Устаревший ACK, другой scope/epoch/boot, частичное отключение или lost response не дают Applied. Повтор запроса возвращает тот же установленный результат.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "revoke применяется ко всей области≤5 секунд с принятия допустимого запроса согласно HP-NFR-005/006. Это предел соответствия будущей реализации, не доказанный результат документа. После positive confirmation нет нового protected read/provider send со старым доступом; уже начатые обращения остаются in-flight и могут иметь эффект. Неизвестность эффекта принадлежит прежнему case/ledger, отзыв не отменяет её."
+            ],
+            "when": {
+              "criterion": "после принятия допустимой команды membership/session/support/connection revoke IAM своей транзакцией повышает scope epoch, фиксирует deny и неизменяемое revoke intent с началом измерения. Новые authoritative grants для отозванной области сразу отвергаются; ответ на принятие показывает Pending, не положительное завершение. Scope включает все использующие connection операции/аккаунты и все защищённые поверхности участника.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "после принятия допустимой команды membership/session/support/connection revoke IAM своей транзакцией повышает scope epoch, фиксирует deny и неизменяемое revoke intent с началом измерения. Новые authoritative grants для отозванной области сразу отвергаются; ответ на принятие показывает Pending, не положительное завершение. Scope включает все использующие connection операции/аккаунты и все защищённые поверхности участника.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/010 — Отзыв как deny commit и synchronous barrier\n\n**Условие и начало:** после принятия допустимой команды membership/session/support/connection revoke IAM своей транзакцией повышает scope epoch, фиксирует deny и неизменяемое revoke intent с началом измерения. Новые authoritative grants для отозванной области сразу отвергаются; ответ на принятие показывает Pending, не положительное завершение. Scope включает все использующие connection операции/аккаунты и все защищённые поверхности участника.\n\n**Действие:** coordinator требует подтверждения каждого затронутого boot из конечного roster; точный start-critical-section и barrier определены единственно в HP-BP-007. ACK означает установленный локальный deny epoch и невозможность нового старта от старого epoch после release; ACK «получил событие» недостаточен. При запросе нового поколения учитывается текущий revoke. Внутренний outbox доставляет состояние повторно, но его eventual delivery не является единственным enforcement.\n\n**Исход:** IAM помечает revoke Applied и выдаёт положительное подтверждение только после всех действительных ACK либо подтверждённого фактического infrastructure fencing отсутствующих boot по HP-BP-006/T/004. Доказательство fencing аутентично оператору deployment, имеет точный instance/generation и проверяемый результат; его нельзя создать произвольным полем API. Устаревший ACK, другой scope/epoch/boot, частичное отключение или lost response не дают Applied. Повтор запроса возвращает тот же установленный результат.\n\n**Проверка:** revoke применяется ко всей области≤5 секунд с принятия допустимого запроса согласно HP-NFR-005/006. Это предел соответствия будущей реализации, не доказанный результат документа. После positive confirmation нет нового protected read/provider send со старым доступом; уже начатые обращения остаются in-flight и могут иметь эффект. Неизвестность эффекта принадлежит прежнему case/ledger, отзыв не отменяет её.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/010"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/010 — Отзыв как deny commit и synchronous barrier"
+    },
+    "HP-BP-001/T/011": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/011 — Неответивший runtime и провал срока\n\n**Поведение:** partition, suspend, остановленный GC, потерянный control ACK или неизвестное состояние исключают положительное завершение до достоверного T/010. Timer/lease expiry, removal from load balancer, намерение kill и cancellation context не являются доказательством fencing.\n\nЕсли через5 секунд применение всей области не установлено, IAM оставляет честное Pending/FailedToConverge, записывает security incident/NFR violation и блокирует затронутые новые выдачи; нельзя назвать ожидание допустимым availability exclusion или показать «успешно отозвано». Непрерывный повтор управления не сбрасывает начало срока. Уже приложенный deny не откатывается из-за недоступного worker. Возврат к разрешённой работе требует явного нового допустимого grant/подключения, не автоматического завершения timeout.\n\n**Критерий:** fault test удерживает процесс между grant и фактическим IO-start, выполняет revoke, затем возобновляет процесс; либо barrier остаётся без positive, либо старый runtime достоверно лишён ingress/egress/DB. Новый вызов после positive — FAIL. Основания HP-NFR-005/006/014, HP-POL-001/005.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/011"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/011 — Неответивший runtime и провал срока"
+    },
+    "HP-BP-001/T/012": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/012 — Честная граница старта и поздние результаты\n\nIAM не считает выданный JWT, запущенную goroutine или помещённую команду начатым внешним запросом. Runtime HP-BP-007 держит локальный read gate от последней epoch-проверки до фактического request write/start либо доказанной отмены до него; protected SQL read держит gate до ограниченного завершения запроса; новая выдача защищённого response проходит response-start gate. По окончании старта in-flight register сохраняет действительные времена/operation/effect identity. Revoke barrier исключает будущие old-epoch starts, но не обещает удалённую отмену уже начатого вызова.\n\nПоздний результат сохраняется владельцем данных с исходной identity и знанием, однако не раскрывается отозванному участнику и не инициирует новую попытку от его имени. Продолжение допустимого фонового сопровождения использует действующую отдельную authority операции/connection и проверки своего case/episode, а не прежний user grant. Норма конкретизирует HP-NFR-005/006 и ссылается на HP-BP-007 как единственного владельца механики gate.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/012"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/012 — Честная граница старта и поздние результаты"
+    },
+    "HP-BP-001/T/013": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-BP-001/T/013 — Credentials и минимальный профиль\n\nIAM хранит только необходимые issuer/subject, display profile, workspace/membership, session digests, verified binding identity/epoch и audit. Секреты Stripe принадлежат только Intake; ClickUp — только Delivery; IdP client secret — только IAM. Provider access/refresh/webhook secrets не копируются в IAM profile/config, role event, audit, AI или support export.\n\nCredential ciphertext использует назначенное защищённое хранилище/ключи по HP-BP-006; доступ на выдачу plaintext ограничен конкретным connector runtime и provider call. Прочие сервисы получают references/health/epoch, не секрет. Удаление пользовательского свободного текста не стирает минимальные safety/ownership facts; сроки и полное workspace erasure определены HP-NFR-009 и HP-BP-006/T/010–013. Изменение display name/email не меняет identity или права. Проверяются canary secrets на всех поверхностях, включая error path и traces.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/013"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/013 — Credentials и минимальный профиль"
+    },
+    "HP-BP-001/T/014": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "allowed": [
+          "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным."
+        ],
+        "blueprint_ref": {
+          "object_id": "HP-BP-001"
+        },
+        "conformance": "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.",
+        "exceptions": [],
+        "forbidden": [],
+        "invariants": [
+          "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным."
+        ],
+        "outcomes": [
+          {
+            "meaning": "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.",
+            "name": "prescribed_bounded_result",
+            "norm_refs": [],
+            "postconditions": [
+              "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным."
+            ],
+            "when": {
+              "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.",
+              "op": "semantic"
+            }
+          }
+        ],
+        "preconditions": [
+          {
+            "criterion": "Полная применимость/условия и стороны сохранены в данном source clause: ### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-BP-001/T/014 — Audit и control overlay\n\nКаждая изменяющая команда фиксирует canonical request identity/hash, действительного инициатора, workspace/scope, прежнюю и новую revision/epoch, принятое решение и server UTC time; sensitive tokens и полный free text не пишутся. Persisted state и audit/outbox коммитятся одной IAM-транзакцией. Нельзя заявить Applied до durable результата и T/010. Duplicate delivery не создаёт вторую историю бизнес-решения.\n\nТекущий deletion/revocation overlay HP-DATA-007 экспортируется и применяется при restore по HP-BP-006 до открытия любого gate; откат бизнес-БД не понижает epoch и не воскресает session/grant. Неустановленный последний overlay удерживает восстановленную область. Сроки обычной истории и минимальной safety-записи различаются по HP-NFR-009; audit не объявляется бессрочно анонимным.",
+        "verification": "## 7. Проверка соответствия и фактическое evidence\n\n| Норма | Обязательный метод будущей проверки | Граница |\n| --- | --- | --- |\n| T/001–002 | Реальный Keycloak code+PKCE login/logout; replay/nonce/CSRF/expiry/cookie tests | Только выбранный realm/client/browser set; не текущий выполненный E2E |\n| T/003–007 | Полная role/tenant отрицательная матрица≥1000 попыток по HP-NFR-005 | Проверяется содержимое/состояние/логи, а не одни status codes |\n| T/008 | Saga fault injection после каждой persist/send/ACK точки, конкурентный revoke | Не заменяет проверку ownership в Processing |\n| T/009–012 | Suspend runtime между check и write; split network; lost ACK; old boot; BFF/read/query/write gates | Нужны actual first-write/read markers и positive-confirm timestamp; одни mocks не достаточны |\n| T/013–014 | Canary credential leakage, backup/restore revoked sessions и workspace erasure | Все служебные/восстановительные поверхности, точные retention clocks |\n\nВыполнено как документальное основание: прочитаны точные Product source candidates, действующие формы и официальные OIDC/Go/PostgreSQL источники; совместимость выбранных библиотек проверяется отдельным stack artifact. **Полный login/revocation/tenant E2E и реальные5s не выполнены этой спецификацией.** Независимый review конечной revision выполняет другой reviewer и связывает результат с её фактическим SHA-256; авторский self-review не называется независимым PASS.\n\nПроверенные первичные источники: [Keycloak OIDC endpoints](https://www.keycloak.org/securing-apps/oidc-layers), [Keycloak database support](https://www.keycloak.org/server/db), [Go HTTP trace callbacks](https://pkg.go.dev/net/http/httptrace#ClientTrace). Эти документы подтверждают свойства инструментов; protocol T/008–012 — принятое проектное решение HitPipe, а не обещанная Keycloak функция."
+      },
+      "content_role": "obligation",
+      "kind": "technical_obligation",
+      "origin_refs": [
+        "origin:HP-BP-001/T/014"
+      ],
+      "relations": [],
+      "title": "HP-BP-001/T/014 — Audit и control overlay"
+    }
+  }
+}

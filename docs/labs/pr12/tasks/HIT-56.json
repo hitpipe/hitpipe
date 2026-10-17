@@ -1,0 +1,65 @@
+{
+  "local_id": "NB-REPORT",
+  "summary": "[NB/REPORT] Собрать два основных отчета,0104экспорты и submissionpackage",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nСобрать два основных отчета,0104экспорты и submissionpackage\n\n## SCOPE\n\nФинальный owner личного комплекта: два законченных по содержанию0302DOCXс0104support и дваотдельных0104DOCX; не заменять незавершенныепроверки красивымтекстом.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-BP-002/T/001, HP-BP-002/T/002, HP-BP-002/T/010, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15106073; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/NormalizedSignal`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/paths/~1webhooks~1stripe~1{endpoint_id}`.\n\nМодуль: StripeSignature; собственные направления: Хранение и обработка данных: raw bytes vs parsed/normalized body; Межкомпонентное взаимодействие: untrusted ingress, clock/secret lookup failure.\n\n## ACCEPTANCE CRITERIA\n\n1. Все29обязательныхрезультатов изчетырехметодичек имеют exacttask/Jirakey→source→artifact→actualevidence/status. Матрицаполная и неclaimPАSSдляNOTRUN/HUMAN_PENDING.\n2. Основные`0302-pz01-nb.docx`и`0302-pz02-nb.docx` заполнены всемсодержаниемиограничениями;0104ПР1/ПР2support/appendixвыделеныясно. Дваотдельных`0104-pz01-nb.docx`/`0104-pz02-nb.docx`такжесобраны, безclaimсогласованияпреподавателемобъединеннойсдачи.\n3. Минимальныекорректировкистарыхформзафиксированывtemplate-adjustments;не менее5компилируемыхdefectsвместоодного, matrixrisks/survivors/retests/naturalcount/hiddennotprovidedчестны.\n4. Ровно21humanimageplaceholderсlabel/insertlocation/caption/exactsource/command/cwd/SHA/mustvisible/targetfilename/redactioninstructions; агент негенерируетинеcaptureизображения. Отчетныйтекстcontentreadyтолько`CONTENT_READY_IMAGES_PENDING`.\n5. DOCXZIP/XML/text/tables/link/placeholderintegrity проверены; realrendererеслидоступенсactualboundary, ничего непотеряноприконвертации. Неизвестныегруппа/кафедра/подпись/оценкаостаются явнымиpersonalfields.\n6. После реальныхreview/merge/checks подготовлены4непереносимыхtag:0104-pz01-nb-v1,0104-pz02-nb-v1,0302-pz01-nb-v1,0302-pz02-nb-v1. Теги→actualcommit→CIrecord; старыйtagнепереставлять,v2дляпеределки.\n7. Краткаяиндивидуальнаяdefenseпамяткапоказываетсвоиrules/DI/build/test/mutation/risk; студентобъясняетсамбезгенеративногоИИназащите. Handoffясноотделяетсделанноеиpendinghumanactions; FeaturecloseLead.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; finalowner:Никита Будыкин. `docs/labs/pr12/nb/reports/`4DOCX+editableMD/JSON,`evidence/index.json`,`evidence/screenshots/INSTRUCTIONS.md`,`criteria-crosswalk.json`,`submission-record.json`,`handoff.md`.\n\n## DEFINITION OF DONE\n\n- Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.",
+  "role": "REPORT",
+  "person_code": "nb",
+  "depends_on": [
+    "NB-R1",
+    "NB-R2",
+    "NB-C1",
+    "NB-C2",
+    "NB-C3",
+    "NB-D1",
+    "NB-H1"
+  ],
+  "parent_local_id": "F-NB",
+  "parent_key": "HIT-15",
+  "component_id": "10035",
+  "task_mode": "MANUAL_REPORT",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/nb/reports/",
+    "docs/labs/pr12/nb/evidence/",
+    "docs/labs/pr12/nb/criteria-crosswalk.json",
+    "docs/labs/pr12/nb/submission-record.json",
+    "docs/labs/pr12/nb/handoff.md"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/nb/reports/",
+    "docs/labs/pr12/nb/evidence/",
+    "docs/labs/pr12/nb/criteria-crosswalk.json",
+    "docs/labs/pr12/nb/submission-record.json",
+    "docs/labs/pr12/nb/handoff.md"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-nb"
+  ],
+  "assignee_account_id": "712020:06108138-5f9e-457c-8072-e763ac5b59a1",
+  "criteria_ids": [
+    "0302-pz01/Р6"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-56",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-56",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:24:55.756730+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-49",
+    "HIT-50",
+    "HIT-51",
+    "HIT-52",
+    "HIT-53",
+    "HIT-54",
+    "HIT-55"
+  ]
+}

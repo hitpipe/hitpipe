@@ -1,0 +1,71 @@
+{
+  "format": "pcf.module/1",
+  "module_id": "HP-ADR-002",
+  "phase": "architecture",
+  "records": {
+    "HP-ADR-002": {
+      "body": {
+        "alternatives": [
+          {
+            "assessment": "Меньше инфраструктуры, но lost response/crash оставляет непереносимое намерение и опасные повторы | Не выбран для принятых фоновых операций",
+            "evidence_refs": [],
+            "option": "Простые синхронные HTTP-вызовы без durable outbox"
+          },
+          {
+            "assessment": "Уже нужен durable owner state; достаточно для выбранного bounded pack, прозрачно тестируется | Выбран; требуется собственная понятная доставка/lag/poison recovery",
+            "evidence_refs": [],
+            "option": "PostgreSQL outbox/inbox + HTTP"
+          },
+          {
+            "assessment": "Полезен для большого fan-out/replay/масштаба, но добавляет новый operational domain; не решает внешнюю idempotency сам | Не нужен для MVP без измеренного основания",
+            "evidence_refs": [],
+            "option": "Kafka/NATS/другой broker"
+          },
+          {
+            "assessment": "Даёт workflow tooling; добавляет новый стек и не снимает provider unknown-effect проблему | Не выбран для конечной case machine и небольшого числа durable timers",
+            "evidence_refs": [],
+            "option": "Temporal/универсальная workflow платформа"
+          },
+          {
+            "assessment": "Упрощает отдельные join, но уничтожает ownership и независимость миграций | Не выбран; сервисное API является единственной границей",
+            "evidence_refs": [],
+            "option": "Shared database tables между сервисами"
+          }
+        ],
+        "choice": "## 2. Выбранный вариант и rationale\n\nОдин начальный PostgreSQL cluster с отдельными service databases/SQL roles. Каждая локальная business transaction сохраняет state+outbox; consumer transaction сохраняет inbox+state+свой outbox. Outbox worker передаёт HTTP-сообщение с постоянным ID и content hash; повтор после lost ACK — штатная at-least-once доставка. Получатель применяет неизменный ID идемпотентно и подтверждает только durable результат. Совпавший ID с другим содержанием — конфликт, не новая версия сообщения.\n\nБизнес-уникальность обеспечивают отдельные owner constraints: Session case identity в Processing и create-effect lineage в Delivery. Inbox dedup не заменяет их. External write start имеет отдельный durable fence, и DISPATCHING/AMBIGUOUS никогда не повторяется по истечению transport lease. Общая реализация protocol принадлежит HP-BP-007; provider-specific safety — HP-BP-002/004. Межсервисный network IO не выполняется под удерживаемым SQL row lock; нет cross-service SQL/foreign key/двухфазного SQL commit.",
+        "choice_status": "Accepted",
+        "consequence_refs": [
+          {
+            "object_id": "HP-BP-003"
+          },
+          {
+            "object_id": "HP-BP-004"
+          },
+          {
+            "object_id": "HP-BP-006"
+          },
+          {
+            "object_id": "HP-BP-007"
+          }
+        ],
+        "rationale": "## 2. Выбранный вариант и rationale\n\nОдин начальный PostgreSQL cluster с отдельными service databases/SQL roles. Каждая локальная business transaction сохраняет state+outbox; consumer transaction сохраняет inbox+state+свой outbox. Outbox worker передаёт HTTP-сообщение с постоянным ID и content hash; повтор после lost ACK — штатная at-least-once доставка. Получатель применяет неизменный ID идемпотентно и подтверждает только durable результат. Совпавший ID с другим содержанием — конфликт, не новая версия сообщения.\n\nБизнес-уникальность обеспечивают отдельные owner constraints: Session case identity в Processing и create-effect lineage в Delivery. Inbox dedup не заменяет их. External write start имеет отдельный durable fence, и DISPATCHING/AMBIGUOUS никогда не повторяется по истечению transport lease. Общая реализация protocol принадлежит HP-BP-007; provider-specific safety — HP-BP-002/004. Межсервисный network IO не выполняется под удерживаемым SQL row lock; нет cross-service SQL/foreign key/двухфазного SQL commit.",
+        "revisit_triggers": [
+          "## 5. Пересмотр, исторические связи и изменения\n\nПересмотр по фактическим устойчивым lag/contention, потребности независимого fan-out/replay или новому классу workflows, который не помещается в выбранную машину. Само число разработчиков или слово «микросервисы» не требует broker. При смене транспорта сохраняются IDs, consumer dedup, effects и исторические неизвестности; миграция не включает replay всех старых сообщений автоматически. Первый целевой ADR этого решения; исторических принятых pins не заменяет."
+        ],
+        "risks": [
+          "## 4. Последствия и канонические технические источники\n\n| Следствие | Точный владелец | Контекст |\n| --- | --- | --- |\n| ID/hash, inbox/outbox/ACK, retry/deadline и incompatibility | HP-BP-007; HP-FORMAL-001; formal SQL | Все durable сообщения, без повторного авторства в каждом BP |\n| Session uniqueness и immutable config admission | HP-BP-003 | Один business case независимо от event ID/version/episode |\n| Effect lineage и conservative possible-effect fence | HP-BP-004 | Повторяется доставка intent/observation, а не сомнительная provider запись |\n| DB durability, backlog visibility и восстановление | HP-BP-006 | RPO0 только в явно выбранном контролируемом fault contour |\n\nРиски: lag/claim contention, poison messages, необходимость поддержать protocol migrations и ограничить backlog. Их conformance и метрики фиксируются в BP; generic HTTP retry не может самовольно создать новую business attempt. Нельзя использовать transport success как подтверждение task readiness."
+        ],
+        "scope": "## 1. Контекст и область решения\n\nРаздельные сервисы должны сохранять принятый intent, не терять подтверждённое состояние при контролируемом отказе и безопасно повторять доставку без повторного ClickUp effect. Продукт требует case identity, неизменной конфигурации и честного неизвестного исхода, а не технологического exactly-once. Scope: HP-IF-004/006/007, внутренние durable команды/события и все service databases. Основания HP-RULE-001/004/008/013, HP-NFR-001/003/004/008/014.",
+        "supersession_refs": [],
+        "text": "# HP-ADR-002 — PostgreSQL outbox/inbox и durable HTTP\n\n**ID ADR:** HP-ADR-002. **Рабочее состояние:** In Review / Candidate. **Выбор:** Accepted by delegated autonomous architect; полномочия из текущего пользовательского поручения. Это не human acceptance и не execution grant.\n\n## 1. Контекст и область решения\n\nРаздельные сервисы должны сохранять принятый intent, не терять подтверждённое состояние при контролируемом отказе и безопасно повторять доставку без повторного ClickUp effect. Продукт требует case identity, неизменной конфигурации и честного неизвестного исхода, а не технологического exactly-once. Scope: HP-IF-004/006/007, внутренние durable команды/события и все service databases. Основания HP-RULE-001/004/008/013, HP-NFR-001/003/004/008/014.\n\n## 2. Выбранный вариант и rationale\n\nОдин начальный PostgreSQL cluster с отдельными service databases/SQL roles. Каждая локальная business transaction сохраняет state+outbox; consumer transaction сохраняет inbox+state+свой outbox. Outbox worker передаёт HTTP-сообщение с постоянным ID и content hash; повтор после lost ACK — штатная at-least-once доставка. Получатель применяет неизменный ID идемпотентно и подтверждает только durable результат. Совпавший ID с другим содержанием — конфликт, не новая версия сообщения.\n\nБизнес-уникальность обеспечивают отдельные owner constraints: Session case identity в Processing и create-effect lineage в Delivery. Inbox dedup не заменяет их. External write start имеет отдельный durable fence, и DISPATCHING/AMBIGUOUS никогда не повторяется по истечению transport lease. Общая реализация protocol принадлежит HP-BP-007; provider-specific safety — HP-BP-002/004. Межсервисный network IO не выполняется под удерживаемым SQL row lock; нет cross-service SQL/foreign key/двухфазного SQL commit.\n\n## 3. Рассмотренные альтернативы\n\n| Вариант | Trade-offs | Решение |\n| --- | --- | --- |\n| Простые синхронные HTTP-вызовы без durable outbox | Меньше инфраструктуры, но lost response/crash оставляет непереносимое намерение и опасные повторы | Не выбран для принятых фоновых операций |\n| PostgreSQL outbox/inbox + HTTP | Уже нужен durable owner state; достаточно для выбранного bounded pack, прозрачно тестируется | Выбран; требуется собственная понятная доставка/lag/poison recovery |\n| Kafka/NATS/другой broker | Полезен для большого fan-out/replay/масштаба, но добавляет новый operational domain; не решает внешнюю idempotency сам | Не нужен для MVP без измеренного основания |\n| Temporal/универсальная workflow платформа | Даёт workflow tooling; добавляет новый стек и не снимает provider unknown-effect проблему | Не выбран для конечной case machine и небольшого числа durable timers |\n| Shared database tables между сервисами | Упрощает отдельные join, но уничтожает ownership и независимость миграций | Не выбран; сервисное API является единственной границей |\n\nПубличные нагрузочные ступени — критерии будущей квалификации, не измеренная ёмкость выбранного PostgreSQL. Отсутствие broker не является обещанием бесконечного throughput.\n\n## 4. Последствия и канонические технические источники\n\n| Следствие | Точный владелец | Контекст |\n| --- | --- | --- |\n| ID/hash, inbox/outbox/ACK, retry/deadline и incompatibility | HP-BP-007; HP-FORMAL-001; formal SQL | Все durable сообщения, без повторного авторства в каждом BP |\n| Session uniqueness и immutable config admission | HP-BP-003 | Один business case независимо от event ID/version/episode |\n| Effect lineage и conservative possible-effect fence | HP-BP-004 | Повторяется доставка intent/observation, а не сомнительная provider запись |\n| DB durability, backlog visibility и восстановление | HP-BP-006 | RPO0 только в явно выбранном контролируемом fault contour |\n\nРиски: lag/claim contention, poison messages, необходимость поддержать protocol migrations и ограничить backlog. Их conformance и метрики фиксируются в BP; generic HTTP retry не может самовольно создать новую business attempt. Нельзя использовать transport success как подтверждение task readiness.\n\n## 5. Пересмотр, исторические связи и изменения\n\nПересмотр по фактическим устойчивым lag/contention, потребности независимого fan-out/replay или новому классу workflows, который не помещается в выбранную машину. Само число разработчиков или слово «микросервисы» не требует broker. При смене транспорта сохраняются IDs, consumer dedup, effects и исторические неизвестности; миграция не включает replay всех старых сообщений автоматически. Первый целевой ADR этого решения; исторических принятых pins не заменяет.\n\n## 6. Проверка перед source review и faithful-проекцией\n\nIndependent review должен пройти producer/consumer crash до/после commit/send/ACK, повторID/hash conflict, deadline, schema incompatibility и восстановление Delivery fence. Реальные PostgreSQL, network-fault и application E2E проверки ещё не доказаны этим ADR. Контракт сохраняет full BP semantics и formal refs; один ADR summary не заменяет transport Blueprint. Формальная приёмка источников и admission остаются отдельными.\n"
+      },
+      "content_role": "decision",
+      "kind": "architecture_decision",
+      "origin_refs": [
+        "origin:HP-ADR-002"
+      ],
+      "relations": [],
+      "title": "HP-ADR-002 — PostgreSQL outbox/inbox и durable HTTP"
+    }
+  }
+}

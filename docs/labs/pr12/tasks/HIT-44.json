@@ -1,0 +1,125 @@
+{
+  "local_id": "DS-C2",
+  "summary": "[DS/C2] Delivery: подключить VerifyTarget через TargetReader без provider writes",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nDelivery: подключить VerifyTarget через TargetReader без provider writes\n\n## SCOPE\n\nПодключенный production application consumer, narrow dependency ports, реальные файловые diagnostic adapters и изолированные synthetic doubles.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-007, HP-RULE-008, HP-BP-004/T/007, HP-BP-004/T/008, HP-BP-004/T/013, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15302657; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DeliveryIntent`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/ObservedTaskAttributes`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/TaskObservation`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/delivery.sql`.\n\nОбъект: Сравнение concrete destination observation с pinned expectation: Workspace/List/configured assignee/title/единственный exact handoff-block обязательны. Unknown/missing/mismatch не дают ResultVerified; task ID/POST success/empty search не proof. Evaluator не пишет state Processing и не инициирует create/retry.\n\nПределы: Saved observation не подтверждает настоящий ClickUp GET/permissions; Нет effect ledger/fence/one-shot provider transport verification; Нет окончательного business state transition/confirmation.\n\n## ACCEPTANCE CRITERIA\n\n1. Один VerifyTarget application consumer вызывает TargetReader; file-backed saved-observation adapter и synthetic test double взаимозаменяемы без изменения consumer.\n2. Сохраняются observed values/time/provenance в returned result; consumer не объявляет Processing Confirmed и не эмитит durable message без отдельного canonical protocol.\n3. Read error/404/expired observation не доказывают no-effect, не разрешают новое создание; любые дальнейшие provider adapters требуют отдельно common gate/one-shot policy.\n4. Документация module contract описывает purpose/input/output/errors/ownership/side-effects/error precedence и пример; Godoc либо TSDoc соответствует выбранному стеку.\n5. DI contract test запускает штатный, ошибочный и граничный сценарий с обеими реализациями; одна точка сборки, consumer unchanged; ограничения подмены указаны явно.\n6. Запись собственного модуля в карте с фактическими import arrows, статусом и автором; две системные сложности, существующий module-candidate и собственный local implementation ADR с options/cost/check; не создавать второй HP-ADR-001.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; PRIMARYpaths: `services/delivery/internal/domain/readback`, `services/delivery/docs/module-contract.md`, `services/delivery/internal/application/verifytarget`, `services/delivery/internal/adapters/fixtures/targetreader`; личные evidence/statuslogs `docs/labs/pr12/ds/`. Finalowner:Дмитрий Стацюк.\n\n## DEFINITION OF DONE\n\n- Все применимые checks действительно выполнены агентом; PR review/merge настоящие, донихInReview.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## IMPLEMENTATION / CHECKS\n- exact allmatches\n- each workspace/list/title/marker/context mismatch independently\n- expected assignee among extra external assignees\n- null inaccessible workspace or block\n- missing/duplicate/malformed handoff delimiters\n- NFC/decomposed Unicode and CRLF equivalence\n- meaningful whitespace mismatch\n- taskID-only and missing retrieval evidence\n- size boundaries32KiB context/36KiB block from normative serialization\n\n## CONTINUATION\nБудущий componentepic: Delivery & Destination Connectors. Код/ports/testhistory сохраняются.\n\n## FULL ORIGINAL CODE TASK\n```json\n{\n  \"id\": \"DS-C2\",\n  \"person\": \"Дмитрий Стацюк\",\n  \"person_code\": \"ds\",\n  \"component\": \"Delivery—Destination Integrations\",\n  \"repo\": \"hitpipe/hitpipe\",\n  \"summary\": \"Delivery: подключить VerifyTarget через TargetReader без provider writes\",\n  \"execution_kind\": \"IMP\",\n  \"scope\": \"Подключенный production application consumer, narrow dependency ports, реальные файловые diagnostic adapters и изолированные synthetic doubles.\",\n  \"owned_paths\": [\n    \"services/delivery/internal/domain/readback\",\n    \"services/delivery/docs/module-contract.md\",\n    \"services/delivery/internal/application/verifytarget\",\n    \"services/delivery/internal/adapters/fixtures/targetreader\"\n  ],\n  \"depends_on\": [\n    \"DS-C1\"\n  ],\n  \"shared_preconditions\": [\n    \"COMMON-CONTEXT: exact source bundle + implementation convention\",\n    \"COMMON-QG: Lead branch protection and shared instruction package; no false admission\"\n  ],\n  \"normative_refs\": [\n    \"HP-RULE-007\",\n    \"HP-RULE-008\",\n    \"HP-BP-004/T/007\",\n    \"HP-BP-004/T/008\",\n    \"HP-BP-004/T/013\",\n    \"HP-BP-007/T/005\"\n  ],\n  \"formal_refs\": [\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DeliveryIntent\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/ObservedTaskAttributes\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/TaskObservation\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/sql/delivery.sql\"\n  ],\n  \"canonical_source_page\": \"https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15302657\",\n  \"acceptance_criteria\": [\n    \"Один VerifyTarget application consumer вызывает TargetReader; file-backed saved-observation adapter и synthetic test double взаимозаменяемы без изменения consumer.\",\n    \"Сохраняются observed values/time/provenance в returned result; consumer не объявляет Processing Confirmed и не эмитит durable message без отдельного canonical protocol.\",\n    \"Read error/404/expired observation не доказывают no-effect, не разрешают новое создание; любые дальнейшие provider adapters требуют отдельно common gate/one-shot policy.\",\n    \"Документация module contract описывает purpose/input/output/errors/ownership/side-effects/error precedence и пример; Godoc либо TSDoc соответствует выбранному стеку.\",\n    \"DI contract test запускает штатный, ошибочный и граничный сценарий с обеими реализациями; одна точка сборки, consumer unchanged; ограничения подмены указаны явно.\",\n    \"Запись собственного модуля в карте с фактическими import arrows, статусом и автором; две системные сложности, существующий module-candidate и собственный local implementation ADR с options/cost/check; не создавать второй HP-ADR-001.\"\n  ],\n  \"test_cases\": [\n    \"exact allmatches\",\n    \"each workspace/list/title/marker/context mismatch independently\",\n    \"expected assignee among extra external assignees\",\n    \"null inaccessible workspace or block\",\n    \"missing/duplicate/malformed handoff delimiters\",\n    \"NFC/decomposed Unicode and CRLF equivalence\",\n    \"meaningful whitespace mismatch\",\n    \"taskID-only and missing retrieval evidence\",\n    \"size boundaries32KiB context/36KiB block from normative serialization\"\n  ],\n  \"seeded_defect_candidates\": [],\n  \"limitations\": [\n    \"Saved observation не подтверждает настоящий ClickUp GET/permissions\",\n    \"Нет effect ledger/fence/one-shot provider transport verification\",\n    \"Нет окончательного business state transition/confirmation\"\n  ],\n  \"future_component_epic\": \"Delivery & Destination Connectors\",\n  \"lab_mapping\": [\n    \"0104-P02\",\n    \"0302-P01\"\n  ]\n}\n```",
+  "role": "C2",
+  "person_code": "ds",
+  "depends_on": [
+    "DS-C1"
+  ],
+  "parent_local_id": "F-DS",
+  "parent_key": "HIT-14",
+  "component_id": "10037",
+  "task_mode": "MANUAL_CODE",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "services/delivery/internal/domain/readback",
+    "services/delivery/docs/module-contract.md",
+    "services/delivery/internal/application/verifytarget",
+    "services/delivery/internal/adapters/fixtures/targetreader"
+  ],
+  "ownedpaths": [
+    "services/delivery/internal/domain/readback",
+    "services/delivery/docs/module-contract.md",
+    "services/delivery/internal/application/verifytarget",
+    "services/delivery/internal/adapters/fixtures/targetreader"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-ds"
+  ],
+  "assignee_account_id": "712020:3c6a69db-985b-49f8-ad2b-b622b07e7bd7",
+  "code_task_source": {
+    "id": "DS-C2",
+    "person": "Дмитрий Стацюк",
+    "person_code": "ds",
+    "component": "Delivery—Destination Integrations",
+    "repo": "hitpipe/hitpipe",
+    "summary": "Delivery: подключить VerifyTarget через TargetReader без provider writes",
+    "execution_kind": "IMP",
+    "scope": "Подключенный production application consumer, narrow dependency ports, реальные файловые diagnostic adapters и изолированные synthetic doubles.",
+    "owned_paths": [
+      "services/delivery/internal/domain/readback",
+      "services/delivery/docs/module-contract.md",
+      "services/delivery/internal/application/verifytarget",
+      "services/delivery/internal/adapters/fixtures/targetreader"
+    ],
+    "depends_on": [
+      "DS-C1"
+    ],
+    "shared_preconditions": [
+      "COMMON-CONTEXT: exact source bundle + implementation convention",
+      "COMMON-QG: Lead branch protection and shared instruction package; no false admission"
+    ],
+    "normative_refs": [
+      "HP-RULE-007",
+      "HP-RULE-008",
+      "HP-BP-004/T/007",
+      "HP-BP-004/T/008",
+      "HP-BP-004/T/013",
+      "HP-BP-007/T/005"
+    ],
+    "formal_refs": [
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DeliveryIntent",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/ObservedTaskAttributes",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/TaskObservation",
+      "contracts/hitpipe/architecture-2026-10-16/formal/sql/delivery.sql"
+    ],
+    "canonical_source_page": "https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15302657",
+    "acceptance_criteria": [
+      "Один VerifyTarget application consumer вызывает TargetReader; file-backed saved-observation adapter и synthetic test double взаимозаменяемы без изменения consumer.",
+      "Сохраняются observed values/time/provenance в returned result; consumer не объявляет Processing Confirmed и не эмитит durable message без отдельного canonical protocol.",
+      "Read error/404/expired observation не доказывают no-effect, не разрешают новое создание; любые дальнейшие provider adapters требуют отдельно common gate/one-shot policy.",
+      "Документация module contract описывает purpose/input/output/errors/ownership/side-effects/error precedence и пример; Godoc либо TSDoc соответствует выбранному стеку.",
+      "DI contract test запускает штатный, ошибочный и граничный сценарий с обеими реализациями; одна точка сборки, consumer unchanged; ограничения подмены указаны явно.",
+      "Запись собственного модуля в карте с фактическими import arrows, статусом и автором; две системные сложности, существующий module-candidate и собственный local implementation ADR с options/cost/check; не создавать второй HP-ADR-001."
+    ],
+    "test_cases": [
+      "exact allmatches",
+      "each workspace/list/title/marker/context mismatch independently",
+      "expected assignee among extra external assignees",
+      "null inaccessible workspace or block",
+      "missing/duplicate/malformed handoff delimiters",
+      "NFC/decomposed Unicode and CRLF equivalence",
+      "meaningful whitespace mismatch",
+      "taskID-only and missing retrieval evidence",
+      "size boundaries32KiB context/36KiB block from normative serialization"
+    ],
+    "seeded_defect_candidates": [],
+    "limitations": [
+      "Saved observation не подтверждает настоящий ClickUp GET/permissions",
+      "Нет effect ledger/fence/one-shot provider transport verification",
+      "Нет окончательного business state transition/confirmation"
+    ],
+    "future_component_epic": "Delivery & Destination Connectors",
+    "lab_mapping": [
+      "0104-P02",
+      "0302-P01"
+    ]
+  },
+  "execution_kind": "IMP",
+  "criteria_ids": [
+    "0104-pz02/Р2",
+    "0104-pz02/Р3",
+    "0104-pz02/Р4",
+    "0104-pz02/Р5",
+    "0104-pz02/Р6",
+    "0104-pz02/Р8"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-44",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-44",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:24:55.756730+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-43"
+  ]
+}

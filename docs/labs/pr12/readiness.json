@@ -1,0 +1,40 @@
+{
+  "scope": "Bootstrap package; not student results",
+  "as_of": "2026-10-17T13:24:55.756730+00:00",
+  "base_ref": "refs/tags/pr12-bootstrap-20261017-v1",
+  "shared_task": "HIT-16",
+  "jira_backlog": {
+    "epic": "HIT-10",
+    "features": 5,
+    "subtasks": 40,
+    "shared_task": 1,
+    "dependency_links_created": 80
+  },
+  "backend_main_protection": {
+    "status": "CONFIGURED_READBACK",
+    "required_checks": [
+      "pr12-iam",
+      "pr12-intake",
+      "pr12-processing",
+      "pr12-delivery"
+    ],
+    "human_approvals": 1,
+    "last_push_other_approval": true,
+    "enforce_admins": true,
+    "force_push": false,
+    "deletion": false
+  },
+  "frontend_main_protection": {
+    "status": "BLOCKED_HUMAN_GITHUB_PLAN",
+    "actual_response": "HTTP403: Upgrade to GitHub Pro or make this repository public to enable this feature",
+    "policy": "Privacy unchanged; human Lead-only merge until technical protection available. No claim this satisfies protected-main acceptance."
+  },
+  "student_modules": "NOT_IMPLEMENTED",
+  "student_tests": "NOT_RUN",
+  "student_reports": "TEMPLATE_UNFILLED",
+  "human_checks": "NOT_PERFORMED",
+  "bootstrap_pr_review_merge": "PENDING_REAL_HUMAN",
+  "report_image_policy": "HUMAN_CAPTURE_ONLY; complete instructions, no generated/captured images",
+  "human_actions": "shared/human-actions.md",
+  "validation_boundary": "SDK/module tests not claimed; bootstrap Python wrapper tests/source checks only. Actual CI URLs/head SHA in Jira HIT-16 after publication."
+}
