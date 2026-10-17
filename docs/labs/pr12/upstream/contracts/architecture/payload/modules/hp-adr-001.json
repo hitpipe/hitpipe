@@ -1,0 +1,75 @@
+{
+  "format": "pcf.module/1",
+  "module_id": "HP-ADR-001",
+  "phase": "architecture",
+  "records": {
+    "HP-ADR-001": {
+      "body": {
+        "alternatives": [
+          {
+            "assessment": "Меньше distributed states и локально проще; хуже соответствует явному пожеланию распределить отдельные backend microservices | Не выбран для данного поручения; остаётся допустимой альтернативой при существенном изменении команды/стоимости эксплуатации",
+            "evidence_refs": [],
+            "option": "Модульный монолит"
+          },
+          {
+            "assessment": "Соответствует полномочиям/языкам, отделяет provider side effects и сохраняет одного владельца case | Выбран; цена — строгие HTTP/outbox contracts, barriers и распределённый review",
+            "evidence_refs": [],
+            "option": "Выбранные четыре Go домена + PythonAI + NextBFF"
+          },
+          {
+            "assessment": "Размножает совместные transactions, credentials и повседневные deployments без доказанной необходимости | Не выбран; разделение по экрану не является доменной ответственностью",
+            "evidence_refs": [],
+            "option": "Отдельный сервис на каждую capability, provider endpoint или экран"
+          },
+          {
+            "assessment": "Быстрый прототип ценой смешения generation и execution и лишнего LLM в штатном пути | Не выбран: противоречит выбранной независимости исполнения от LLM",
+            "evidence_refs": [],
+            "option": "Единый универсальный workflow/LLM agent backend"
+          }
+        ],
+        "choice": "## 2. Выбранный вариант и rationale\n\nЧетыре Go runtime: HP-PART-001 IAM/profile,002 Intake/Stripe,003 Processing,004 Delivery/ClickUp. Дополнительно HP-PART-005 Python AI Interaction и006 Next.js UX/BFF. PostgreSQL007, Keycloak008 и edge009 — инфраструктурные части с отдельными trust boundaries.\n\nIAM владеет identity/membership/epochs, Intake — приёмом и source facts, Processing — конфигурацией/операцией/единственной case machine/ответственностью, Delivery — credentials назначения и effect lineage. Python предлагает конфигурацию, а не выполняет бизнес-правила. BFF обслуживает UX и same-origin session surface, не становится привилегированным backend. Общее runtime-правило и wire source принадлежат HP-BP-007 и HP-FORMAL-001.\n\nПять workstreams: IAM+platform; Intake/source; Processing/core; Delivery/destination; UX+BFF+PythonAI. Владелец общей интеграции контролирует схемы и сквозной acceptance. Core сложнее остальных; его изменение review-ят source/destination owners. Разделение позволяет параллельную разработку после фиксации общих контрактов, но не выдаёт сервисы за полностью независимые по безопасности/данным.",
+        "choice_status": "Accepted",
+        "consequence_refs": [
+          {
+            "object_id": "HP-BP-001"
+          },
+          {
+            "object_id": "HP-BP-002"
+          },
+          {
+            "object_id": "HP-BP-003"
+          },
+          {
+            "object_id": "HP-BP-004"
+          },
+          {
+            "object_id": "HP-BP-005"
+          },
+          {
+            "object_id": "HP-BP-006"
+          },
+          {
+            "object_id": "HP-BP-007"
+          }
+        ],
+        "rationale": "## 2. Выбранный вариант и rationale\n\nЧетыре Go runtime: HP-PART-001 IAM/profile,002 Intake/Stripe,003 Processing,004 Delivery/ClickUp. Дополнительно HP-PART-005 Python AI Interaction и006 Next.js UX/BFF. PostgreSQL007, Keycloak008 и edge009 — инфраструктурные части с отдельными trust boundaries.\n\nIAM владеет identity/membership/epochs, Intake — приёмом и source facts, Processing — конфигурацией/операцией/единственной case machine/ответственностью, Delivery — credentials назначения и effect lineage. Python предлагает конфигурацию, а не выполняет бизнес-правила. BFF обслуживает UX и same-origin session surface, не становится привилегированным backend. Общее runtime-правило и wire source принадлежат HP-BP-007 и HP-FORMAL-001.\n\nПять workstreams: IAM+platform; Intake/source; Processing/core; Delivery/destination; UX+BFF+PythonAI. Владелец общей интеграции контролирует схемы и сквозной acceptance. Core сложнее остальных; его изменение review-ят source/destination owners. Разделение позволяет параллельную разработку после фиксации общих контрактов, но не выдаёт сервисы за полностью независимые по безопасности/данным.",
+        "revisit_triggers": [
+          "## 5. Пересмотр, исторические связи и изменения\n\nПересмотр нужен, если реальная команда/операционная стоимость не поддерживает шесть runtime, ownership постоянно требует синхронных распределённых записей или измеренная нагрузка/новые packs требуют другого разделения. Новый сервис требует существенного нового DATA/effect/trust boundary, а не просто нового endpoint. Первый целевой ADR этого выбора; superseded accepted product architecture не заявляется. Legacy код — технический baseline, а не автоматически принятая новая архитектура.\n\nМиграция к иному разбиению требует нового ADR, согласованных AD/BP/wire revisions и impact review активных configs/cases, security gates и frozen work. Новая страница не переключает исторические pins."
+        ],
+        "risks": [
+          "## 4. Последствия и канонические технические источники\n\n| Следствие | Канонический источник смысла | Согласованный контекст |\n| --- | --- | --- |\n| Единственный владелец каждого DATA и PART | HP-DOC-AD-001; HP-BP-001–007 | Все сервисы и SQL assets; cross-service SQL запрещён |\n| Пять рабочих потоков и общая интеграция | HP-DOC-AD-001; HP-BP-006 | Общие schemas/gates первыми, затем service mocks и реализация |\n| Межсервисная доставка, а не shared tables | HP-BP-007; HP-ADR-002 | Durable intent/ACK/state, eventual propagation не заменяет security revoke |\n| AI не подключается к production case/credential store | HP-BP-005 | HP-NFR-007; принятая operation исполняется Go-путём |\n\nРиски: более дорогой integration/debug, Processing bottleneck по сложности, центральная IAM/gate зависимость, общая начальная БД как fault domain. Они приняты как цена выбранного организационного разделения; механизмы и проверки принадлежат соответствующим BP, не этой таблице. Издание документа не доказывает runtime capacity или фактическую staffing готовность."
+        ],
+        "scope": "## 1. Контекст и область решения\n\nНужно независимо распределить разработку между пятью людьми, сохранив сквозную безопасность одной сопровождаемой операции. Пользователь предпочёл Go, Python для AI, Next.js/TS/Tailwind и четыре backend-границы: identity, приём, обработка, отправка. Разделение по процессам не должно создавать несколько владельцев case state, credentials или неизвестного внешнего эффекта.\n\nКонтекст — точный Product candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, HP-VER-001. Драйверы: HP-RULE-001/004/005/008/010/011, HP-NFR-001/005/006/007/009/014, HP-VIS-D-009. Продуктовые capabilities и сервисы не приравниваются; пять направлений — ролевые слоты, не утверждение о найденных/назначенных сотрудниках.",
+        "supersession_refs": [],
+        "text": "# HP-ADR-001 — Микросервисные границы и пять направлений разработки\n\n**ID ADR:** HP-ADR-001. **Рабочее состояние revision:** In Review / Candidate. **Статус архитектурного выбора:** Accepted by delegated autonomous architect. Основание полномочия — пользователь поручил полную Architecture Design и делегировал остальные архитектурные решения; это действительное принятие выбора исполнителем в пределах делегирования, **не** человеческая Project OS source acceptance, не Accepted Architecture baseline и не разрешение live execution.\n\n## 1. Контекст и область решения\n\nНужно независимо распределить разработку между пятью людьми, сохранив сквозную безопасность одной сопровождаемой операции. Пользователь предпочёл Go, Python для AI, Next.js/TS/Tailwind и четыре backend-границы: identity, приём, обработка, отправка. Разделение по процессам не должно создавать несколько владельцев case state, credentials или неизвестного внешнего эффекта.\n\nКонтекст — точный Product candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, HP-VER-001. Драйверы: HP-RULE-001/004/005/008/010/011, HP-NFR-001/005/006/007/009/014, HP-VIS-D-009. Продуктовые capabilities и сервисы не приравниваются; пять направлений — ролевые слоты, не утверждение о найденных/назначенных сотрудниках.\n\n## 2. Выбранный вариант и rationale\n\nЧетыре Go runtime: HP-PART-001 IAM/profile,002 Intake/Stripe,003 Processing,004 Delivery/ClickUp. Дополнительно HP-PART-005 Python AI Interaction и006 Next.js UX/BFF. PostgreSQL007, Keycloak008 и edge009 — инфраструктурные части с отдельными trust boundaries.\n\nIAM владеет identity/membership/epochs, Intake — приёмом и source facts, Processing — конфигурацией/операцией/единственной case machine/ответственностью, Delivery — credentials назначения и effect lineage. Python предлагает конфигурацию, а не выполняет бизнес-правила. BFF обслуживает UX и same-origin session surface, не становится привилегированным backend. Общее runtime-правило и wire source принадлежат HP-BP-007 и HP-FORMAL-001.\n\nПять workstreams: IAM+platform; Intake/source; Processing/core; Delivery/destination; UX+BFF+PythonAI. Владелец общей интеграции контролирует схемы и сквозной acceptance. Core сложнее остальных; его изменение review-ят source/destination owners. Разделение позволяет параллельную разработку после фиксации общих контрактов, но не выдаёт сервисы за полностью независимые по безопасности/данным.\n\n## 3. Рассмотренные альтернативы\n\n| Вариант | Соответствие и trade-offs | Решение |\n| --- | --- | --- |\n| Модульный монолит | Меньше distributed states и локально проще; хуже соответствует явному пожеланию распределить отдельные backend microservices | Не выбран для данного поручения; остаётся допустимой альтернативой при существенном изменении команды/стоимости эксплуатации |\n| Выбранные четыре Go домена + PythonAI + NextBFF | Соответствует полномочиям/языкам, отделяет provider side effects и сохраняет одного владельца case | Выбран; цена — строгие HTTP/outbox contracts, barriers и распределённый review |\n| Отдельный сервис на каждую capability, provider endpoint или экран | Размножает совместные transactions, credentials и повседневные deployments без доказанной необходимости | Не выбран; разделение по экрану не является доменной ответственностью |\n| Единый универсальный workflow/LLM agent backend | Быстрый прототип ценой смешения generation и execution и лишнего LLM в штатном пути | Не выбран: противоречит выбранной независимости исполнения от LLM |\n\nЧисленных оценок производительности/скорости команды не заявляется: данное сравнение — инженерное решение по известным ограничениям, не проведённый командный эксперимент.\n\n## 4. Последствия и канонические технические источники\n\n| Следствие | Канонический источник смысла | Согласованный контекст |\n| --- | --- | --- |\n| Единственный владелец каждого DATA и PART | HP-DOC-AD-001; HP-BP-001–007 | Все сервисы и SQL assets; cross-service SQL запрещён |\n| Пять рабочих потоков и общая интеграция | HP-DOC-AD-001; HP-BP-006 | Общие schemas/gates первыми, затем service mocks и реализация |\n| Межсервисная доставка, а не shared tables | HP-BP-007; HP-ADR-002 | Durable intent/ACK/state, eventual propagation не заменяет security revoke |\n| AI не подключается к production case/credential store | HP-BP-005 | HP-NFR-007; принятая operation исполняется Go-путём |\n\nРиски: более дорогой integration/debug, Processing bottleneck по сложности, центральная IAM/gate зависимость, общая начальная БД как fault domain. Они приняты как цена выбранного организационного разделения; механизмы и проверки принадлежат соответствующим BP, не этой таблице. Издание документа не доказывает runtime capacity или фактическую staffing готовность.\n\n## 5. Пересмотр, исторические связи и изменения\n\nПересмотр нужен, если реальная команда/операционная стоимость не поддерживает шесть runtime, ownership постоянно требует синхронных распределённых записей или измеренная нагрузка/новые packs требуют другого разделения. Новый сервис требует существенного нового DATA/effect/trust boundary, а не просто нового endpoint. Первый целевой ADR этого выбора; superseded accepted product architecture не заявляется. Legacy код — технический baseline, а не автоматически принятая новая архитектура.\n\nМиграция к иному разбиению требует нового ADR, согласованных AD/BP/wire revisions и impact review активных configs/cases, security gates и frozen work. Новая страница не переключает исторические pins.\n\n## 6. Проверка перед source review и faithful-проекцией\n\nВыбор один и явен; ownership и пять направлений определены; реальные альтернативы сопоставлены; новая capability не добавлена. Проверка полного source set должна подтвердить, что ни один state/credential/effect не получил второго владельца и все микросервисы включены в revoke/restore. Общая independent source review и точные source revisions закрепляются в Architecture package. Содержательное adoption архитектурного выбора отделено от формальной source acceptance и ещё не выполненных implementation/E2E проверок.\n"
+      },
+      "content_role": "decision",
+      "kind": "architecture_decision",
+      "origin_refs": [
+        "origin:HP-ADR-001"
+      ],
+      "relations": [],
+      "title": "HP-ADR-001 — Микросервисные границы и пять направлений разработки"
+    }
+  }
+}

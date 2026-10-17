@@ -1,0 +1,54 @@
+{
+  "local_id": "MG-H1",
+  "summary": "[MG/H1] Выполнить реальные взаимные проверки, review и внешние учебные gates",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nВыполнить реальные взаимные проверки, review и внешние учебные gates\n\n## SCOPE\n\nПодготовить и провести только реальные human actions; агент составляет пакеты и исправляет последствия. Начинать рано сR1, собирать последующиеPR по мере готовности.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-002, HP-RULE-007, HP-RULE-008, HP-BP-005/T/010, HP-BP-005/T/013, HP-BP-005/T/014, HP-BP-005/T/015, HP-BP-005/T/019.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json`.\n\nМодуль: CasePresentation; собственные направления: Модель исполнения: async refresh/late replies и monotonic revision; Межкомпонентное взаимодействие: authoritative snapshot vs UI/transport state.\n\n## ACCEPTANCE CRITERIA\n\n1. Реальное обследование с пользователем/согласованнымпредставителем записано сдатой/ролью/ответами; Lead организуетконтакт, агент не сочиняетинтервью.\n2. Другой реальный студент проверил однозначность своихFR/AC поblindnormal/error/boundary; сравнениеожиданий/фактическихответов/решений иперепроверка имеются.\n3. Студент лично проверил ЧУЖОЙ scaffold вcleanenvironment, который не готовил: environment/fullSHA/commands/results/remarks/retest; свойscaffold реально независимо воспроизвелдругойстудент.\n4. Студент лично проверил ЧУЖОЙmodule(contract/substitution/map/build/normal/error/boundary), а другойстудент проверилегоmodule; обаactualprotocol сauthor/date/commit/commands/results/remarks/retest.\n5. Cross-project opposition проводится с другимпроектом поteacher-assignedring: свойразборчужихтребований, реальноеобсуждение, замечанияк своим ирешения. Leadтого же проекта не выдается за внешнийпроект.\n6. Lead/разрешенныйreviewer реально review-ит significant PRs; замечания исправлены, checksактуальны иmergeдействителен. Pendingreview/merge остаетсяоткрытым.\n7. Агент продолжает независимые code/test/docs артефакты, пока externalgatepending. Human evidence несодержит фиктивныхподписей/фальшивыхscreenshots/пройденнойзащиты.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe_client`; finalowner:Матвей Головачев. `docs/labs/pr12/mg/human-gates/`: interview, clarity, peer-scaffold-out/in, peer-module-out/in, external-opposition, review-merge protocols; real Jira/PR references.\n\n## DEFINITION OF DONE\n\n- Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\nНезависимость: автор не проверяет и не одобряет свой PR. Значимое изменение проверяет другой реальный студент проекта (для одиночного проекта — назначенный преподавателем внешний студент/преподаватель). Lead организует review/merge; его роль не подменяет чужой личный результат.",
+  "role": "H1",
+  "person_code": "mg",
+  "depends_on": [
+    "MG-R1"
+  ],
+  "parent_local_id": "F-MG",
+  "parent_key": "HIT-13",
+  "component_id": "10038",
+  "task_mode": "MANUAL_HUMAN_GATE",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/mg/human-gates/",
+    "docs/labs/pr12/mg/ambiguity-decisions.md"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/mg/human-gates/",
+    "docs/labs/pr12/mg/ambiguity-decisions.md"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-mg"
+  ],
+  "assignee_account_id": "712020:315cb145-9ab6-45a9-af5a-ff4283ba3b25",
+  "criteria_ids": [
+    "0302-pz01/Р1",
+    "0302-pz01/Р5",
+    "0302-pz01/Р6",
+    "0302-pz01/Р7",
+    "0104-pz01/Р2",
+    "0104-pz01/Р6",
+    "0104-pz02/Р3",
+    "0104-pz02/Р7"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-39",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-39",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-33"
+  ]
+}

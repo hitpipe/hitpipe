@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "test_count": 7,
+  "tests": [
+    {
+      "id": "DDL-01-all-four-canonical-migrations-real-NOLOGIN-groups",
+      "status": "PASS"
+    },
+    {
+      "id": "DDL-02-app-RLS-default-deny-cross-DB-deny-worker-only-job-index",
+      "status": "PASS",
+      "seconds": 0.761
+    },
+    {
+      "id": "DDL-03-queue1000-1001-byte-overflow-rollback-age-immutable",
+      "status": "PASS",
+      "seconds": 0.651
+    },
+    {
+      "id": "DDL-04-config-case-clock-attempts-immutable-draft-prose-rejected",
+      "status": "PASS",
+      "seconds": 1.001
+    },
+    {
+      "id": "DDL-05-aggregate32KiB-context-and-concurrent-rollback",
+      "status": "PASS",
+      "seconds": 2.129
+    },
+    {
+      "id": "DDL-06-32-effect-CAS-one-fence-no-reset-no-delete-no-fake-proof",
+      "status": "PASS",
+      "seconds": 2.934
+    },
+    {
+      "id": "DDL-07-IAM-RLS-revoke5s-effective-time-ack-epoch-constraints",
+      "status": "PASS",
+      "seconds": 0.888
+    }
+  ],
+  "timestamp_utc": "2026-10-16T20:41:58.278706+00:00",
+  "source_sql": [
+    {
+      "path": "sql/delivery.sql",
+      "sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+      "bytes": 12754
+    },
+    {
+      "path": "sql/iam.sql",
+      "sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+      "bytes": 9175
+    },
+    {
+      "path": "sql/intake.sql",
+      "sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+      "bytes": 11656
+    },
+    {
+      "path": "sql/processing.sql",
+      "sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+      "bytes": 18150
+    }
+  ],
+  "scope": "Actual four authored DDLs applied and bounded real group-role, constraint, concurrency tests on isolated PostgreSQL18.6. Not complete HitPipe implementation.",
+  "limits": [
+    "No live provider, HTTP transport, distributed physical-start revocation, full access matrix, content-file retention/backup deletion or release gate PASS",
+    "Accepted config JSON shape is defense-in-depth, not proof of semantic readiness/payment truth. Runtime reducer and file-reference integrity require service tests",
+    "PostgreSQL container data uses task-only host tmpfs: SIGKILL durability test covers process restart, not storage-host loss or physical RPO0"
+  ]
+}

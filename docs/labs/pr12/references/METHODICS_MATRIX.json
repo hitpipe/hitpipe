@@ -1,0 +1,382 @@
+{
+  "status": "PLANNING_AND_TEMPLATE_TRACEABILITY_NOT_COMPLETION",
+  "deadline": "2026-10-19 Europe/Moscow (no invented hour)",
+  "source_precedence": "User instructions govern requested actions; teacher methodics govern academic acceptance; old report templates are adapted minimally. Examples in appendices are not facts/evidence.",
+  "report_count_boundary": "Four methodics define four individual lab results. Two provided report templates cover only MDK03.02 PR1 and PR2. Four export-ready templates are prepared; whether two combined submissions suffice for two disciplines requires actual teacher confirmation; do not silently waive two labs.",
+  "sources": [
+    {
+      "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК01.04практика02модульнаяархитектураметодическиеуказания.docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/01--МДК01.04практика02модульнаяархитектураметодическиеуказания.txt",
+      "sha256": "d54d9eaedc62c5cde803e16c40266b25557d8a98c0c4dfe125b2a5804242c06a",
+      "characters": 23467,
+      "images": 0
+    },
+    {
+      "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика01требованияирегламентметодическиеуказания (1).docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/02--МДК03.02практика01требованияирегламентметодическиеуказания (1).txt",
+      "sha256": "37479c7a296e358c0356fdef0aa9c4c565cc4626a90ae576d8b82b249cacc839",
+      "characters": 25634,
+      "images": 0
+    },
+    {
+      "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика01шаблониндивидуальногоотчета (1).docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/03--МДК03.02практика01шаблониндивидуальногоотчета (1).txt",
+      "sha256": "7bc425d4ac80d042bac78cdd50edaf4f133f2a0aaadfbc0d81d2cde61a4e67b2",
+      "characters": 5922,
+      "images": 0
+    },
+    {
+      "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика02системапроверокметодическиеуказания (1).docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/04--МДК03.02практика02системапроверокметодическиеуказания (1).txt",
+      "sha256": "da530591ecd403c5d4ecc1e5a5990a4394b942243e6664a927edd218ef185bd2",
+      "characters": 28516,
+      "images": 0
+    },
+    {
+      "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика02шаблониндивидуальногоотчета (1).docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/05--МДК03.02практика02шаблониндивидуальногоотчета (1).txt",
+      "sha256": "340fdf0933ce2b4ec37f0026806a10449d1d1ddf519bc292c1351f3fadf33f0c",
+      "characters": 3941,
+      "images": 0
+    },
+    {
+      "source": "/home/deploy/.codex/attachments/bde0673c-72a3-45f5-98ee-3f9900b44665/МДК01.04практика01инструментальныйконтурметодическиеуказания.docx",
+      "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/06--МДК01.04практика01инструментальныйконтурметодическиеуказания.txt",
+      "sha256": "634558eccc37617289d2beee8e4a56e12f4f3cedf989cd2046a8649cae102b9c",
+      "characters": 26215,
+      "images": 0
+    }
+  ],
+  "labs": [
+    {
+      "id": "0302-pz01",
+      "source": {
+        "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика01требованияирегламентметодическиеуказания (1).docx",
+        "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/02--МДК03.02практика01требованияирегламентметодическиеуказания (1).txt",
+        "sha256": "37479c7a296e358c0356fdef0aa9c4c565cc4626a90ae576d8b82b249cacc839",
+        "characters": 25634,
+        "images": 0
+      },
+      "required_results": [
+        {
+          "id": "Р1",
+          "title": "Обследование по своему участку",
+          "acceptance": "Собственные вопросы и реально полученные ответы; факты/предположения/открытые вопросы отдельно. Разговор с пользователем или согласованным с преподавателем представителем заказчика.",
+          "expected_artifacts": "interview.md; common/project-charter.md",
+          "human_gate": "real_interview",
+          "methodic_sections": "4.1–4.2; 6/Р1",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р2",
+          "title": "Проверяемые требования своего участка",
+          "acceptance": "Штатный FR, существенный ошибочный исход, значимый NFR с измеримым критерием; ID, основание, MVP/резерв, критерий приёмки каждого. Целевые числа не выдавать за измеренные.",
+          "expected_artifacts": "requirements.md",
+          "human_gate": "none",
+          "methodic_sections": "4.5; 6/Р2",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р3",
+          "title": "Место участка в MVP",
+          "acceptance": "Путь к полезному результату и существенный ошибочный исход; конкретная роль участка, обязательное ядро и резерв, выполнимый scope. Менять MVP только явным CR/ADR, не подгонять утверждённый продукт.",
+          "expected_artifacts": "common/mvp-baseline.md; requirements.md",
+          "human_gate": "none",
+          "methodic_sections": "4.3; 6/Р3",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р4",
+          "title": "Исходное состояние и ранняя безопасность",
+          "acceptance": "Воспроизводимые входы/учебные учётные записи/конфигурация; защищаемые ресурсы; недоверенный ввод; доступ; реалистичный ущерб; секреты/запреты логирования. Внешние интеграции в учебном режиме без личных доступов.",
+          "expected_artifacts": "fixtures/; security-notes.md; RUNBOOK.md",
+          "human_gate": "none",
+          "methodic_sections": "4.6; 6/Р4",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р5",
+          "title": "Собственное значимое изменение по регламенту",
+          "acceptance": "Задача → ветка → PR → реальные применимые проверки → независимое review другим студентом проекта → merge; применён DoD. Защищённая main, прямые записи не допускаются. Рисунки1–2.",
+          "expected_artifacts": "requirements PR; common/CHANGE_POLICY.md; pipeline evidence",
+          "human_gate": "independent_student_review_and_merge",
+          "methodic_sections": "4.4,4.7; 6/Р5",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р6",
+          "title": "Оппонирование другого проекта",
+          "acceptance": "Лично разобрать требования другого проекта по назначенному преподавателем кольцу; решения по реальным замечаниям к своим требованиям с обоснованием. Без искусственных замечаний. Рисунок3.",
+          "expected_artifacts": "opposition.md; discussion permalink",
+          "human_gate": "external_project_opposition",
+          "methodic_sections": "4.9; 6/Р6",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р7",
+          "title": "Независимая проверка однозначности",
+          "acceptance": "Другой студент своего проекта по одному тексту определяет исходы нескольких ситуаций, включая ошибочную. Фактические ответы и устранённые расхождения. Автор/агент не подсказывает ожидаемые ответы.",
+          "expected_artifacts": "requirements-clarity-review.md",
+          "human_gate": "other_student_clarity_check",
+          "methodic_sections": "4.8; 6/Р7",
+          "initial_status": "NOT_STARTED"
+        }
+      ],
+      "required_figure_count": 3,
+      "tag_pattern": "0302-pz01-<student_code>-v1",
+      "template": "artifacts/templates/0302-pz01-report-template.docx"
+    },
+    {
+      "id": "0302-pz02",
+      "source": {
+        "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК03.02практика02системапроверокметодическиеуказания (1).docx",
+        "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/04--МДК03.02практика02системапроверокметодическиеуказания (1).txt",
+        "sha256": "da530591ecd403c5d4ecc1e5a5990a4394b942243e6664a927edd218ef185bd2",
+        "characters": 28516,
+        "images": 0
+      },
+      "required_results": [
+        {
+          "id": "Р1",
+          "title": "Реальный объект и проверяемые правила",
+          "acceptance": "Существующая содержательная функция/модуль своего участка; вход, результат и ошибки, каждый оракул из требования/независимого эталона. Для UX — логика формы/представления/состояний, не вёрстка.",
+          "expected_artifacts": "module contract; TEST_DESIGN.md",
+          "human_gate": "none",
+          "methodic_sections": "3,4.1; 6/Р1",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р2",
+          "title": "Набор минимум двумя техниками",
+          "acceptance": "Не менее двух техник с обоснованием классов/границ/решений/переходов. Есть штатный, ошибочный, граничный случаи. Точное число тестов не нормируется; краткий чек-лист.",
+          "expected_artifacts": "TEST_DESIGN.md; tests",
+          "human_gate": "none",
+          "methodic_sections": "4.2; 6/Р2",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р3",
+          "title": "Чисто воспроизводимые данные",
+          "acceptance": "Фикстуры/фиксированный seed в репозитории, команда из чистого клона, без личных файлов/рабочих ключей/реальных персональных данных. Скрытый набор — «не получен», пока не выдан преподавателем.",
+          "expected_artifacts": "fixtures/; RUNBOOK.md",
+          "human_gate": "teacher_hidden_set_if_issued",
+          "methodic_sections": "4.3; 6/Р3",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р4",
+          "title": "Фактические локальные и CI прогоны",
+          "acceptance": "Содержательные assertions; одна сдаваемая версия; тестовый FAIL ломает CI. Заглушки допустимы с границами вывода. PASS/FAIL/BLOCKED/NOT RUN, успешен только PASS. Рисунки1–2, ссылка pipeline. Отсутствие CI не объективное исключение.",
+          "expected_artifacts": "test logs; pipeline permalink",
+          "human_gate": "none",
+          "methodic_sections": "4.4–4.5; 6/Р4",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р5",
+          "title": "Анализ покрытия",
+          "acceptance": "Отчёт покрытия именно своего модуля; непроверенный участок и решение (добавить/обоснованно отложить/не требуется). При100% объяснить непроверяемые свойства. Процент отдельно недостаточен. Рисунок3.",
+          "expected_artifacts": "coverage/; COVERAGE_ANALYSIS.md",
+          "human_gate": "none",
+          "methodic_sections": "4.6; 6/Р5",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р6",
+          "title": "Не менее пяти отдельных мутаций",
+          "acceptance": "Исправный PASS → каждый из≥5 компилируемых нарушающих правило мутантов по одному → результаты с тем же набором → разбор пропусков, усиление и повтор → восстановленный PASS. Итоги seeded/detected/missed и natural-defect count+issue links. Ошибка компиляции не обнаружение. Мутанты не сливать. Рисунки4–5.",
+          "expected_artifacts": "mutations/*.patch; MUTATION_PROTOCOL.md; logs/",
+          "human_gate": "none",
+          "methodic_sections": "4.7; 6/Р6",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р7",
+          "title": "Риск-ориентированная система проверок",
+          "acceptance": "Событие, причина, последствие, вероятность, ущерб, основания, матричный приоритет, проверка/частота/решение/остаточный риск. ≥1 риск безопасности. Высокие приоритеты при каждом изменении; реальные внешние проверки с оговорённой частотой.",
+          "expected_artifacts": "RISK_REGISTER.md",
+          "human_gate": "none",
+          "methodic_sections": "2.4,4.8; 6/Р7",
+          "initial_status": "NOT_STARTED"
+        }
+      ],
+      "required_figure_count": 5,
+      "tag_pattern": "0302-pz02-<student_code>-v1",
+      "template": "artifacts/templates/0302-pz02-report-template.docx"
+    },
+    {
+      "id": "0104-pz01",
+      "source": {
+        "source": "/home/deploy/.codex/attachments/bde0673c-72a3-45f5-98ee-3f9900b44665/МДК01.04практика01инструментальныйконтурметодическиеуказания.docx",
+        "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/06--МДК01.04практика01инструментальныйконтурметодическиеуказания.txt",
+        "sha256": "634558eccc37617289d2beee8e4a56e12f4f3cedf989cd2046a8649cae102b9c",
+        "characters": 26215,
+        "images": 0
+      },
+      "required_results": [
+        {
+          "id": "Р1",
+          "title": "Стек и семь позиций инструментального контура",
+          "acceptance": "Общий ADR с автором: контекст, язык/технологии/модель исполнения, причины/альтернатива, последствия. Каждый объясняет применение. Все7 позиций: build,dependencies,tests,static,dynamic,profiling,CI — средство/версия/назначение/маршрут/работает или план+этап. Всё сразу вCI не требуется.",
+          "expected_artifacts": "common/stack-adr.md; TOOLCHAIN.md",
+          "human_gate": "none",
+          "methodic_sections": "4.1–4.2; 6/Р1",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р2",
+          "title": "Своя существенная часть каркаса",
+          "acceptance": "Собственный вклад через задачу, ветку, PR, проверки, независимое review значимого изменения, merge. Не только присвоение общей инфраструктуры. Рисунок1.",
+          "expected_artifacts": "scaffold PR; contribution record",
+          "human_gate": "independent_student_review_and_merge",
+          "methodic_sections": "4.3; 6/Р2",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р3",
+          "title": "Минимальный компонент с наблюдаемым поведением",
+          "acceptance": "Конфиг влияет; неверный даёт понятную ошибку; версия→исходники; диагностика безсекретов; успех; остановка/повтор/восстановление. Версии runtime/прямых deps зафиксированы, безопасный configexample. Рисунки4–5.",
+          "expected_artifacts": "service skeleton; locks; config example; run logs",
+          "human_gate": "none",
+          "methodic_sections": "4.4; 6/Р3",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р4",
+          "title": "Действительный путь исполнения и состав артефакта",
+          "acceptance": "Схема исходники→deps/environment→преобразования→запускаемый результат→процесс/runtime, без вымышленных стадий. Реальная команда инспекции по стеку и существенный вывод (Go executable/readelf/go version-m; Node/Python package/bytecode/deps).",
+          "expected_artifacts": "EXECUTION_PATH.md; inspection logs",
+          "human_gate": "none",
+          "methodic_sections": "4.5; 6/Р4",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р5",
+          "title": "Наблюдённые dev/release и поставка вне исходников",
+          "acceptance": "На одном сценарии: команды, преобразования, оптимизации,debug/diagnostics,runtimechecks,состав. Объяснить равенство строк если нетразличий. Поставку реально запустить вне исходников/IDE. Без performanceclaim безэксперимента. Рисунки2–3.",
+          "expected_artifacts": "DEV_RELEASE_COMPARISON.md; logs",
+          "human_gate": "none",
+          "methodic_sections": "4.6; 6/Р5",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р6",
+          "title": "Независимая чистая проверка чужой части",
+          "acceptance": "Студент проверяет часть другого студента: чистая машина/VM/container/account, commit, только инструкция, версия/диагностика/результат, замечания и повтор из чистой среды. Протокол проверяющий/дата/env/commit/cmd/result. Запуск автором не заменяет другого человека. Рисунок6.",
+          "expected_artifacts": "clean-reproduction-review.md; peer logs",
+          "human_gate": "other_student_clean_reproduction",
+          "methodic_sections": "3,4.7; 6/Р6",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р7",
+          "title": "Содержательный автоматический gate с отрицательной демонстрацией",
+          "acceptance": "CI подготавливает компонент и проверяет результат сдаваемой версии; нарушенное условие реально даёт failure. Длядолгогопроцесса boundedreadiness+shutdown. СсылкаCI и локальный запуск тойже проверки при нарушенном условии (рисунок7), затем восстановление исправного кода.",
+          "expected_artifacts": "CI workflow; negative-gate log; RUNBOOK.md",
+          "human_gate": "none",
+          "methodic_sections": "4.8; 6/Р7",
+          "initial_status": "NOT_STARTED"
+        }
+      ],
+      "required_figure_count": 7,
+      "tag_pattern": "0104-pz01-<student_code>-v1",
+      "template": "artifacts/templates/0104-pz01-report-template.docx"
+    },
+    {
+      "id": "0104-pz02",
+      "source": {
+        "source": "/home/deploy/.codex/attachments/68c1bff6-1326-4ed6-84c2-1ed5a970f916/МДК01.04практика02модульнаяархитектураметодическиеуказания.docx",
+        "extracted": "/home/deploy/.local/share/hitpipe-pr12-20261017/inputs/01--МДК01.04практика02модульнаяархитектураметодическиеуказания.txt",
+        "sha256": "d54d9eaedc62c5cde803e16c40266b25557d8a98c0c4dfe125b2a5804242c06a",
+        "characters": 23467,
+        "images": 0
+      },
+      "required_results": [
+        {
+          "id": "Р1",
+          "title": "Ответственность содержательного модуля",
+          "acceptance": "Требование→ответственность→публичная операция→реальный потребитель. Отделены внешние обязанности. Один интерфейс/схема/заглушка без логики не подходит.",
+          "expected_artifacts": "module-contract.md",
+          "human_gate": "none",
+          "methodic_sections": "3,4.1; 6/Р1",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р2",
+          "title": "Поведенческий контракт и документация",
+          "acceptance": "Назначение; допустимые входы; результат/гарантии; категории ошибок и порядок при нескольких нарушениях; владение; состояние/побочные эффекты, явно еслинет. Документация по стеку: GoDoc/TSDoc/docstring, зависимости+пример; рядомскодом до демонстрации. Рисунок2.",
+          "expected_artifacts": "module-contract.md; source docs",
+          "human_gate": "none",
+          "methodic_sections": "2.2,4.2; 6/Р2",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р3",
+          "title": "Собственная реализация и интеграция",
+          "acceptance": "Реальное продуктовоеправило вызывается потребителем, не зависящим от внутренних структур. Задача/ветка/PR/checks/independentreview/merge; свойства каркасаПР1 сохранены. Рисунок1.",
+          "expected_artifacts": "module source; consumer; PR",
+          "human_gate": "independent_student_review_and_merge",
+          "methodic_sections": "4.3; 6/Р3",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р4",
+          "title": "Две реализации, неизменный потребитель",
+          "acceptance": "Общий контракт/точка сборки, тотжесценарий сдвумяреализациями либо тестовойподменойзависимости; потребительнепереписан, результаты и ограничения. Одинаковые сигнатуры безсемантики недостаточны. Рисунок3.",
+          "expected_artifacts": "replacement demo; composition root; consumer evidence",
+          "human_gate": "none",
+          "methodic_sections": "2.3–2.4,4.4; 6/Р4",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р5",
+          "title": "Точная общая модульная карта",
+          "acceptance": "Имя/ответственность/контракт/зависимости/путь/статус работает илиплан/авторзаписи. A→B исходная зависимостьA отB; сверить среальнымиимпортами/сборкой, циклыобъяснить. Не показывать будущую архитектуру готовой. Рисунок4.",
+          "expected_artifacts": "common/module-map.md; import check",
+          "human_gate": "none",
+          "methodic_sections": "4.5; 6/Р5",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р6",
+          "title": "Штатный, граничный, ошибочный случаи обеих реализаций",
+          "acceptance": "Три категории×две реализации минимум6 исполненных сценариев (не обязательно6 отдельныхtestfunctions). Фактические ожидаемые/полученные исходы. Рисунок5.",
+          "expected_artifacts": "contract test suite; logs",
+          "human_gate": "none",
+          "methodic_sections": "4.8; 6/Р6",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р7",
+          "title": "Взаимная проверка чужого модуля",
+          "acceptance": "Студентполучаетcommitмодуля другогостудента, строитпоинструкции, проверяетконтракт+подмену+карту; протоколимя/дата/commit/cmd/results/comments/retest. Рисунок6.",
+          "expected_artifacts": "module-peer-review.md; peer logs",
+          "human_gate": "other_student_module_review",
+          "methodic_sections": "4.8; 6/Р7",
+          "initial_status": "NOT_STARTED"
+        },
+        {
+          "id": "Р8",
+          "title": "Два направления сложности, реальный кандидат, личный ADR",
+          "acceptance": "≥2направления посвоейзоне, каждыйобъект/вопрос/готовность (язык/библиотеканенаправление). Кандидатсуществует, воспроизводимыйвход/отдельнонаблюдаемое поведение; не объявлятьbottleneckбезизмерений. ЛичныйADRсавтором/контекстом/вариантами/решением/последствиями/ценой/проверкой, не копия общегоADR.",
+          "expected_artifacts": "COMPLEXITY_PROFILE.md; candidate harness; personal ADR",
+          "human_gate": "none",
+          "methodic_sections": "4.6–4.7; 6/Р8",
+          "initial_status": "NOT_STARTED"
+        }
+      ],
+      "required_figure_count": 6,
+      "tag_pattern": "0104-pz02-<student_code>-v1",
+      "template": "artifacts/templates/0104-pz02-report-template.docx"
+    }
+  ],
+  "human_evidence_policy": "Agents never capture, fabricate or generate report screenshots. They write every figure slot with exact resolved page/command, version, required visible content, framing/redaction, filename and caption; students insert actual pictures. CONTENT_READY_IMAGES_PENDING is not submission ready.",
+  "common_gates": [
+    "Real interview/user or teacher-approved customer representative",
+    "Other-project opposition under teacher ring, not internal team-only review",
+    "Actual other-student clarity/clean reproduction/module review as applicable",
+    "Lead handles review/merge and external arrangements, without impersonating missing student/project roles",
+    "Independent immutable tags per discipline/lab/student; never force-move old tags",
+    "Student can explain and defend result without generative AI"
+  ]
+}

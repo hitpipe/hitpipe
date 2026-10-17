@@ -1,0 +1,137 @@
+{
+  "local_id": "NB-C1",
+  "summary": "[NB/C1] Intake: реализовать строгую проверку Stripe raw-body signatures",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nIntake: реализовать строгую проверку Stripe raw-body signatures\n\n## SCOPE\n\nМинимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-BP-002/T/001, HP-BP-002/T/002, HP-BP-002/T/010, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15106073; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/NormalizedSignal`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/paths/~1webhooks~1stripe~1{endpoint_id}`.\n\nОбъект: Verify exact raw Stripe body before JSON: HMAC-SHA256 over timestamp+dot+bytes, v1 signatures only, constant-time MAC, absolute tolerance300s. Missing/contradictory timestamp/v0/altered bytes/unsupported shape cannot become admitted signal. Verification alone is not durable receipt or 2xx acceptance.\n\nПределы: Нет Stripe live deliveries/credential setup; Нет durable normalized receipt/outbox/admission/2xx gate; Нет source read proof и финансовой допустимости оплаты.\n\n## ACCEPTANCE CRITERIA\n\n1. Строгий parser signature header однозначно обрабатывает v1, timestamps и malformed/duplicate contradictory timestamp cases, затем constant-time HMAC compare по неизмененным bytes.\n2. Точность300s соблюдается для прошлых и будущих timestamps; tolerance не отключается параметром0, secret/body/header не пишутся в diagnostics.\n3. CLI intake-contractcheck читает synthetic raw-body/header/secret fixture, выводит только safe verdict/reason/version; status VERIFIED не называется ACCEPTED/paid.\n4. Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.\n5. Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.\n6. Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; PRIMARYpaths: `services/intake/internal/domain/stripesignature`, `services/intake/docs/module-contract.md`, `services/intake/go.mod`, `services/intake/go.sum`, `services/intake/cmd/intake-contractcheck`, `services/intake/testdata`, `services/intake/Makefile`; личные evidence/statuslogs `docs/labs/pr12/nb/`. Finalowner:Никита Будыкин.\n\n## DEFINITION OF DONE\n\n- Все применимые checks действительно выполнены агентом; PR review/merge настоящие, донихInReview.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## IMPLEMENTATION / CHECKS\n- official-style known expected HMAC vector fixed offline\n- same bytes success/onebytechange fail\n- past/future299/300/301s\n- missing timestamp/v1/empty signature\n- conflicting timestamp headers\n- multiple v1 rotation candidates\n- v0 downgrade only\n- nonUTF8 raw bytes versus reserialized JSON\n- unavailable installation secret/clock\n\n## CONTINUATION\nБудущий componentepic: Intake & Source Connectors. Код/ports/testhistory сохраняются.\n\n## FULL ORIGINAL CODE TASK\n```json\n{\n  \"id\": \"NB-C1\",\n  \"person\": \"Никита Будыкин\",\n  \"person_code\": \"nb\",\n  \"component\": \"Intake—Source Integrations\",\n  \"repo\": \"hitpipe/hitpipe\",\n  \"summary\": \"Intake: реализовать строгую проверку Stripe raw-body signatures\",\n  \"execution_kind\": \"IMP\",\n  \"scope\": \"Минимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.\",\n  \"owned_paths\": [\n    \"services/intake/internal/domain/stripesignature\",\n    \"services/intake/docs/module-contract.md\",\n    \"services/intake/go.mod\",\n    \"services/intake/go.sum\",\n    \"services/intake/cmd/intake-contractcheck\",\n    \"services/intake/testdata\",\n    \"services/intake/Makefile\"\n  ],\n  \"depends_on\": [],\n  \"shared_preconditions\": [\n    \"COMMON-CONTEXT: exact source bundle + implementation convention\",\n    \"COMMON-QG: Lead branch protection and shared instruction package; no false admission\"\n  ],\n  \"normative_refs\": [\n    \"HP-BP-002/T/001\",\n    \"HP-BP-002/T/002\",\n    \"HP-BP-002/T/010\",\n    \"HP-BP-007/T/005\"\n  ],\n  \"formal_refs\": [\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/NormalizedSignal\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/paths/~1webhooks~1stripe~1{endpoint_id}\"\n  ],\n  \"canonical_source_page\": \"https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15106073\",\n  \"acceptance_criteria\": [\n    \"Строгий parser signature header однозначно обрабатывает v1, timestamps и malformed/duplicate contradictory timestamp cases, затем constant-time HMAC compare по неизмененным bytes.\",\n    \"Точность300s соблюдается для прошлых и будущих timestamps; tolerance не отключается параметром0, secret/body/header не пишутся в diagnostics.\",\n    \"CLI intake-contractcheck читает synthetic raw-body/header/secret fixture, выводит только safe verdict/reason/version; status VERIFIED не называется ACCEPTED/paid.\",\n    \"Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.\",\n    \"Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.\",\n    \"Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок.\"\n  ],\n  \"test_cases\": [\n    \"official-style known expected HMAC vector fixed offline\",\n    \"same bytes success/onebytechange fail\",\n    \"past/future299/300/301s\",\n    \"missing timestamp/v1/empty signature\",\n    \"conflicting timestamp headers\",\n    \"multiple v1 rotation candidates\",\n    \"v0 downgrade only\",\n    \"nonUTF8 raw bytes versus reserialized JSON\",\n    \"unavailable installation secret/clock\"\n  ],\n  \"seeded_defect_candidates\": [],\n  \"limitations\": [\n    \"Нет Stripe live deliveries/credential setup\",\n    \"Нет durable normalized receipt/outbox/admission/2xx gate\",\n    \"Нет source read proof и финансовой допустимости оплаты\"\n  ],\n  \"future_component_epic\": \"Intake & Source Connectors\",\n  \"lab_mapping\": [\n    \"0104-P01\",\n    \"0302-P01\"\n  ]\n}\n```",
+  "role": "C1",
+  "person_code": "nb",
+  "depends_on": [
+    "SHARED",
+    "NB-R1",
+    "NB-R2"
+  ],
+  "parent_local_id": "F-NB",
+  "parent_key": "HIT-15",
+  "component_id": "10035",
+  "task_mode": "MANUAL_CODE",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "services/intake/internal/domain/stripesignature",
+    "services/intake/docs/module-contract.md",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/cmd/intake-contractcheck",
+    "services/intake/testdata",
+    "services/intake/Makefile"
+  ],
+  "ownedpaths": [
+    "services/intake/internal/domain/stripesignature",
+    "services/intake/docs/module-contract.md",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/cmd/intake-contractcheck",
+    "services/intake/testdata",
+    "services/intake/Makefile"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-nb"
+  ],
+  "assignee_account_id": "712020:06108138-5f9e-457c-8072-e763ac5b59a1",
+  "code_task_source": {
+    "id": "NB-C1",
+    "person": "Никита Будыкин",
+    "person_code": "nb",
+    "component": "Intake—Source Integrations",
+    "repo": "hitpipe/hitpipe",
+    "summary": "Intake: реализовать строгую проверку Stripe raw-body signatures",
+    "execution_kind": "IMP",
+    "scope": "Минимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.",
+    "owned_paths": [
+      "services/intake/internal/domain/stripesignature",
+      "services/intake/docs/module-contract.md",
+      "services/intake/go.mod",
+      "services/intake/go.sum",
+      "services/intake/cmd/intake-contractcheck",
+      "services/intake/testdata",
+      "services/intake/Makefile"
+    ],
+    "depends_on": [],
+    "shared_preconditions": [
+      "COMMON-CONTEXT: exact source bundle + implementation convention",
+      "COMMON-QG: Lead branch protection and shared instruction package; no false admission"
+    ],
+    "normative_refs": [
+      "HP-BP-002/T/001",
+      "HP-BP-002/T/002",
+      "HP-BP-002/T/010",
+      "HP-BP-007/T/005"
+    ],
+    "formal_refs": [
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/NormalizedSignal",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/paths/~1webhooks~1stripe~1{endpoint_id}"
+    ],
+    "canonical_source_page": "https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15106073",
+    "acceptance_criteria": [
+      "Строгий parser signature header однозначно обрабатывает v1, timestamps и malformed/duplicate contradictory timestamp cases, затем constant-time HMAC compare по неизмененным bytes.",
+      "Точность300s соблюдается для прошлых и будущих timestamps; tolerance не отключается параметром0, secret/body/header не пишутся в diagnostics.",
+      "CLI intake-contractcheck читает synthetic raw-body/header/secret fixture, выводит только safe verdict/reason/version; status VERIFIED не называется ACCEPTED/paid.",
+      "Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.",
+      "Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.",
+      "Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок."
+    ],
+    "test_cases": [
+      "official-style known expected HMAC vector fixed offline",
+      "same bytes success/onebytechange fail",
+      "past/future299/300/301s",
+      "missing timestamp/v1/empty signature",
+      "conflicting timestamp headers",
+      "multiple v1 rotation candidates",
+      "v0 downgrade only",
+      "nonUTF8 raw bytes versus reserialized JSON",
+      "unavailable installation secret/clock"
+    ],
+    "seeded_defect_candidates": [],
+    "limitations": [
+      "Нет Stripe live deliveries/credential setup",
+      "Нет durable normalized receipt/outbox/admission/2xx gate",
+      "Нет source read proof и финансовой допустимости оплаты"
+    ],
+    "future_component_epic": "Intake & Source Connectors",
+    "lab_mapping": [
+      "0104-P01",
+      "0302-P01"
+    ]
+  },
+  "execution_kind": "IMP",
+  "criteria_ids": [
+    "0302-pz01/Р4",
+    "0302-pz02/Р1",
+    "0302-pz02/Р3",
+    "0104-pz01/Р1",
+    "0104-pz01/Р2",
+    "0104-pz01/Р3",
+    "0104-pz01/Р4",
+    "0104-pz01/Р5",
+    "0104-pz02/Р1",
+    "0104-pz02/Р2",
+    "0104-pz02/Р3"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-51",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-51",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-16",
+    "HIT-49",
+    "HIT-50"
+  ]
+}

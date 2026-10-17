@@ -1,0 +1,24 @@
+{
+  "name": "hitpipe-architecture-compatibility",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {"node": "24.22.0", "npm": "11.19.1"},
+  "scripts": {
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "generate": "openapi-typescript ../shared/contract.yaml -o src/generated-api.d.ts",
+    "test": "playwright test"
+  },
+  "dependencies": {"next": "16.4.2", "react": "19.3.1", "react-dom": "19.3.1"},
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/node": "24.19.2",
+    "postcss": "8.5.30",
+    "openapi-typescript": "7.13.0",
+    "@playwright/test": "1.64.1"
+  }
+}

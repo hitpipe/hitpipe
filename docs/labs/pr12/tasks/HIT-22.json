@@ -1,0 +1,50 @@
+{
+  "local_id": "DK-D1",
+  "summary": "[DK/D1] Согласовать инструментальный контур, module map и личный ADR",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nСогласовать инструментальный контур, module map и личный ADR\n\n## SCOPE\n\nЕдинственный владелец финальной консолидации инженерных документов своего модуля. Переиспользовать реальныеC1/C2артефакты, не генерировать второй competingcontract.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-BP-001/T/002, HP-BP-001/T/003, HP-BP-001/T/013, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15237121; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/Session`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/Authorization`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/iam.sql`.\n\nМодуль: SessionPolicy; собственные направления: Межкомпонентное взаимодействие: freshness/error semantics authority lookup; Хранение и обработка данных: минимальный session snapshot и lifetime boundaries.\n\n## ACCEPTANCE CRITERIA\n\n1. Семь позиций toolchain имеют конкретные pinnedtools, purpose/route/status работает либо plannedstage:build,deps,test,static,dynamic,profiling,CI. СсылкинаобщийstackADR+свояприменимость.\n2. Modulecontract полный:purpose,inputs/results/errors/errorprecedence,ownership/lifetime,sideeffects/deps/example; Godoc/TSDoc вкоде соответствует actual consumer.\n3. Modulemap указывает ответственность/publiccontract/path/deps/status/author; import arrows означают зависимости исходников и сверены реальнымиimports, циклы объяснены/устранены.\n4. Не менее2направлений системнойсложности своего участка с object/question/readiness; существующий modulecandidate воспроизводим отдельно, bottleneck доизмерений не заявляется.\n5. Свой implementationADR имеет author/context/options/decision/rationale/cost/verification; не занимаетcanonicalHP-ADR-ID и не меняетphasecontract.\n6. Source→dependency→compile/transformation→artifact→runtime diagram, dev/release same-scenario actualobservations/artifactinspection/outsidecheckoutrun изC1 собраны точно; plannedtools не названыexecuted.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; finalowner:Дмитрий Карачебан. `docs/labs/pr12/dk/toolchain.md`, `module-map.md`, `module-adr.md`, `complexity-profile.md`, `execution-path.md`, ссылка owner `docs/module-contract.md`.\n\n## DEFINITION OF DONE\n\n- Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.",
+  "role": "D1",
+  "person_code": "dk",
+  "depends_on": [
+    "DK-C2"
+  ],
+  "parent_local_id": "F-DK",
+  "parent_key": "HIT-11",
+  "component_id": "10034",
+  "task_mode": "MANUAL_DOC",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/dk",
+    "services/iam/docs/"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/dk",
+    "services/iam/docs/"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-dk"
+  ],
+  "assignee_account_id": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+  "criteria_ids": [
+    "0104-pz01/Р1",
+    "0104-pz02/Р2",
+    "0104-pz02/Р5",
+    "0104-pz02/Р8"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-22",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-22",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-20"
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "local_id": "MG-C3",
+  "summary": "[MG/C3] UX: проверить revision/freshness/scope boundaries и seeded UI defects",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nUX: проверить revision/freshness/scope boundaries и seeded UI defects\n\n## SCOPE\n\nСистема проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-002, HP-RULE-007, HP-RULE-008, HP-BP-005/T/010, HP-BP-005/T/013, HP-BP-005/T/014, HP-BP-005/T/015, HP-BP-005/T/019.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json`.\n\nОбъект: Честное представление authoritative CaseDetail: 8 канонических states, исход/последняя проверка отдельно от transport/loading freshness; stale/failed query не меняют business state, old revision не перезаписывает новую, scope switch очищает old view. Доступные действия — только из authority snapshot; нет generic Retry create для Unknown.\n\nПределы: Fixture source не доказывает IAM/BFF authorization; Unit projection не доказывает полные accessibility/user study gates; Python/model preparation и prod custom server revoke не входят в эту порцию.\n\n## ACCEPTANCE CRITERIA\n\n1. Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.\n2. Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.\n3. Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.\n4. Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.\n5. Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.\n6. Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.\n\n## WORK RESULT / WORK DEST\n\nRepo `hitpipe/hitpipe_client`; PRIMARY: `src/features/case-status/domain`, `src/features/case-status/docs/module-contract.md`, `src/features/case-status/**/*.test.ts`, `tools/mutations/case-status`, `tests/browser/case-status.spec.ts`, `.github/workflows/pr12-mg.yml`; личные документы/логи `docs/labs/pr12/mg/`. Единственный владелец: Матвей Головачев.\n\nPRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner.\n\n## DEFINITION OF DONE\n\n- Все применимые checks действительно выполнены агентом; PR review/merge настоящие, донихInReview.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## IMPLEMENTATION / CHECKS\n- all8canonical states table\n- UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create\n- 202/pending transport not business confirmation\n- late lower revision ignored\n- equal/newer revision behavior\n- failed refresh keeps last knowledge+stale marker\n- workspace switch drops late old result\n- null last_observation_at differs current UI read time\n- malicious markup renders escaped text\n\n## SEEDED DEFECT CANDIDATES (НЕ ВЫПОЛНЕНО)\n- UNKNOWN label заменить Confirmed\n- 202 принять как business success\n- revision guard удалить\n- workspace binding guard удалить\n- failed refresh заменить empty success\n- available_actions дополнить generic retry\n\n## CONTINUATION\nБудущий componentepic: Experience & AI Preparation. Код/ports/testhistory сохраняются.\n\n## FULL ORIGINAL CODE TASK PAYLOAD\n\n```json\n{\n  \"id\": \"MG-C3\",\n  \"person\": \"Матвей Головачев\",\n  \"person_code\": \"mg\",\n  \"component\": \"UX—Web Experience\",\n  \"repo\": \"hitpipe/hitpipe_client\",\n  \"summary\": \"UX: проверить revision/freshness/scope boundaries и seeded UI defects\",\n  \"execution_kind\": \"VAL\",\n  \"scope\": \"Система проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.\",\n  \"owned_paths\": [\n    \"src/features/case-status/domain\",\n    \"src/features/case-status/docs/module-contract.md\",\n    \"src/features/case-status/**/*.test.ts\",\n    \"tools/mutations/case-status\",\n    \"tests/browser/case-status.spec.ts\",\n    \".github/workflows/pr12-mg.yml\"\n  ],\n  \"depends_on\": [\n    \"MG-C2\"\n  ],\n  \"shared_preconditions\": [\n    \"COMMON-CONTEXT: exact source bundle + implementation convention\",\n    \"COMMON-QG: Lead branch protection and shared instruction package; no false admission\"\n  ],\n  \"normative_refs\": [\n    \"HP-RULE-002\",\n    \"HP-RULE-007\",\n    \"HP-RULE-008\",\n    \"HP-BP-005/T/010\",\n    \"HP-BP-005/T/013\",\n    \"HP-BP-005/T/014\",\n    \"HP-BP-005/T/015\",\n    \"HP-BP-005/T/019\"\n  ],\n  \"formal_refs\": [\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json\"\n  ],\n  \"canonical_source_page\": \"https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767\",\n  \"acceptance_criteria\": [\n    \"Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.\",\n    \"Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.\",\n    \"Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.\",\n    \"Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.\",\n    \"Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.\",\n    \"Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.\",\n    \"Локальный отрицательный прогон ТОЙ ЖЕ содержательной CI-проверки: намеренно нарушить проверяемое условие → фактический ненулевой exit/FAIL и журнал → восстановить исправный код/условие → повторный PASS. Сохранены exact argv, SHA, patch/digest, exit/log paths и human instruction для рисунка7 МДК01.04 ПР1; мутация/ошибочное условие не попадают в main.\"\n  ],\n  \"test_cases\": [\n    \"all8canonical states table\",\n    \"UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create\",\n    \"202/pending transport not business confirmation\",\n    \"late lower revision ignored\",\n    \"equal/newer revision behavior\",\n    \"failed refresh keeps last knowledge+stale marker\",\n    \"workspace switch drops late old result\",\n    \"null last_observation_at differs current UI read time\",\n    \"malicious markup renders escaped text\"\n  ],\n  \"seeded_defect_candidates\": [\n    \"UNKNOWN label заменить Confirmed\",\n    \"202 принять как business success\",\n    \"revision guard удалить\",\n    \"workspace binding guard удалить\",\n    \"failed refresh заменить empty success\",\n    \"available_actions дополнить generic retry\"\n  ],\n  \"limitations\": [\n    \"Fixture source не доказывает IAM/BFF authorization\",\n    \"Unit projection не доказывает полные accessibility/user study gates\",\n    \"Python/model preparation и prod custom server revoke не входят в эту порцию\"\n  ],\n  \"future_component_epic\": \"Experience & AI Preparation\",\n  \"lab_mapping\": [\n    \"0302-P02\",\n    \"0104-P01-CI\",\n    \"0104-P02-checks\"\n  ],\n  \"ownership_notes\": \"PRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner.\"\n}\n```\n",
+  "role": "C3",
+  "person_code": "mg",
+  "depends_on": [
+    "MG-C2"
+  ],
+  "parent_local_id": "F-MG",
+  "parent_key": "HIT-13",
+  "component_id": "10038",
+  "task_mode": "MANUAL_VERIFY",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "src/features/case-status/domain",
+    "src/features/case-status/docs/module-contract.md",
+    "src/features/case-status/**/*.test.ts",
+    "tools/mutations/case-status",
+    "tests/browser/case-status.spec.ts",
+    ".github/workflows/pr12-mg.yml"
+  ],
+  "ownedpaths": [
+    "src/features/case-status/domain",
+    "src/features/case-status/docs/module-contract.md",
+    "src/features/case-status/**/*.test.ts",
+    "tools/mutations/case-status",
+    "tests/browser/case-status.spec.ts",
+    ".github/workflows/pr12-mg.yml"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-mg"
+  ],
+  "assignee_account_id": "712020:315cb145-9ab6-45a9-af5a-ff4283ba3b25",
+  "code_task_source": {
+    "id": "MG-C3",
+    "person": "Матвей Головачев",
+    "person_code": "mg",
+    "component": "UX—Web Experience",
+    "repo": "hitpipe/hitpipe_client",
+    "summary": "UX: проверить revision/freshness/scope boundaries и seeded UI defects",
+    "execution_kind": "VAL",
+    "scope": "Система проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.",
+    "owned_paths": [
+      "src/features/case-status/domain",
+      "src/features/case-status/docs/module-contract.md",
+      "src/features/case-status/**/*.test.ts",
+      "tools/mutations/case-status",
+      "tests/browser/case-status.spec.ts",
+      ".github/workflows/pr12-mg.yml"
+    ],
+    "depends_on": [
+      "MG-C2"
+    ],
+    "shared_preconditions": [
+      "COMMON-CONTEXT: exact source bundle + implementation convention",
+      "COMMON-QG: Lead branch protection and shared instruction package; no false admission"
+    ],
+    "normative_refs": [
+      "HP-RULE-002",
+      "HP-RULE-007",
+      "HP-RULE-008",
+      "HP-BP-005/T/010",
+      "HP-BP-005/T/013",
+      "HP-BP-005/T/014",
+      "HP-BP-005/T/015",
+      "HP-BP-005/T/019"
+    ],
+    "formal_refs": [
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary",
+      "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json",
+      "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json"
+    ],
+    "canonical_source_page": "https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767",
+    "acceptance_criteria": [
+      "Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.",
+      "Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.",
+      "Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.",
+      "Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.",
+      "Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.",
+      "Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.",
+      "Локальный отрицательный прогон ТОЙ ЖЕ содержательной CI-проверки: намеренно нарушить проверяемое условие → фактический ненулевой exit/FAIL и журнал → восстановить исправный код/условие → повторный PASS. Сохранены exact argv, SHA, patch/digest, exit/log paths и human instruction для рисунка7 МДК01.04 ПР1; мутация/ошибочное условие не попадают в main."
+    ],
+    "test_cases": [
+      "all8canonical states table",
+      "UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create",
+      "202/pending transport not business confirmation",
+      "late lower revision ignored",
+      "equal/newer revision behavior",
+      "failed refresh keeps last knowledge+stale marker",
+      "workspace switch drops late old result",
+      "null last_observation_at differs current UI read time",
+      "malicious markup renders escaped text"
+    ],
+    "seeded_defect_candidates": [
+      "UNKNOWN label заменить Confirmed",
+      "202 принять как business success",
+      "revision guard удалить",
+      "workspace binding guard удалить",
+      "failed refresh заменить empty success",
+      "available_actions дополнить generic retry"
+    ],
+    "limitations": [
+      "Fixture source не доказывает IAM/BFF authorization",
+      "Unit projection не доказывает полные accessibility/user study gates",
+      "Python/model preparation и prod custom server revoke не входят в эту порцию"
+    ],
+    "future_component_epic": "Experience & AI Preparation",
+    "lab_mapping": [
+      "0302-P02",
+      "0104-P01-CI",
+      "0104-P02-checks"
+    ],
+    "ownership_notes": "PRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner."
+  },
+  "execution_kind": "VAL",
+  "criteria_ids": [
+    "0302-pz02/Р1",
+    "0302-pz02/Р2",
+    "0302-pz02/Р3",
+    "0302-pz02/Р4",
+    "0302-pz02/Р5",
+    "0302-pz02/Р6",
+    "0302-pz02/Р7",
+    "0104-pz01/Р7"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "ownership_notes": {
+    "primary": "owner module tests/testdata/mutation harness/evidence; .github/workflows/pr12-mg.yml",
+    "related_by_lead_only": "shared root CI/config/includes and other owners workflows"
+  },
+  "key": "HIT-37",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-37",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-36"
+  ]
+}

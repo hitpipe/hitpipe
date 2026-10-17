@@ -1,0 +1,6326 @@
+[
+  {
+    "coverage_id": "HP-COV-POL-001",
+    "product_ref": {
+      "dependency": "product/discovery",
+      "object_id": "HP-POL-001"
+    },
+    "upstream_kind": "product_policy",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-001/T/011"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Каждое actual protected start требует текущую authority; реальные внешние права и live gate отдельно проверяются.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-POL-002",
+    "product_ref": {
+      "dependency": "product/discovery",
+      "object_id": "HP-POL-002"
+    },
+    "upstream_kind": "product_policy",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-004"
+      },
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "ACK/attempt/knowledge/result различны во всех UI/API/recovery ветвях; unknown не объявлен успехом.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-POL-003",
+    "product_ref": {
+      "dependency": "product/discovery",
+      "object_id": "HP-POL-003"
+    },
+    "upstream_kind": "product_policy",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-ARC-009"
+      },
+      {
+        "object_id": "HP-BP-005/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/017"
+      },
+      {
+        "object_id": "HP-BP-006/T/008"
+      },
+      {
+        "object_id": "HP-BP-006/T/010"
+      },
+      {
+        "object_id": "HP-BP-006/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Outbound AI/log/export/support/backup surfaces проверяются canary и permission/retention tests.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-POL-004",
+    "product_ref": {
+      "dependency": "product/discovery",
+      "object_id": "HP-POL-004"
+    },
+    "upstream_kind": "product_policy",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "AI или неизвестность не даёт новые grants, конфигурацию или подтверждение; required unknown блокирует action.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-POL-005",
+    "product_ref": {
+      "dependency": "product/discovery",
+      "object_id": "HP-POL-005"
+    },
+    "upstream_kind": "product_policy",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-012"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-001/T/008"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact acceptance/pause/reconnect/owner changes не меняют исторические cases и непрерывность ответственности.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-001",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/001"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-002",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/002"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-003",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/003"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-004",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/004"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-005",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/005"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-006",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/006"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-007",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/007"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-008",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/008"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-009",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/009"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-DOC-ROADMAP-001-EDGE-010",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-DOC-ROADMAP-001/EDGE/010"
+    },
+    "upstream_kind": "strategic_dependency",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact prerequisite/outcome/conditionality данного EDGE остаются стратегическими gates. Workstream sequence не объявляет commercial/TEAM/public outcomes достигнутыми; independent review проверяет отсутствие обхода.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-001",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-001"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-001"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Явный английский intent преобразуется в pack draft с known/unknown; не поддержанный смысл не подменяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-001-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-001/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-001"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-001/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Явный английский intent преобразуется в pack draft с known/unknown; не поддержанный смысл не подменяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-001-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-001/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-001"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-001/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Явный английский intent преобразуется в pack draft с known/unknown; не поддержанный смысл не подменяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-002",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-002"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-002"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Изменение существенного ответа пересчитывает зависимые поля; неизвестность не скрывается.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-002-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-002/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-002"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-002/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Изменение существенного ответа пересчитывает зависимые поля; неизвестность не скрывается.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-002-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-002/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-002"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-002/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Изменение существенного ответа пересчитывает зависимые поля; неизвестность не скрывается.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-003",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-003"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Фактические account/mode/target/read-write права и binding conflict проверяются в разрешённом контуре.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-003-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-003/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-003/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Фактические account/mode/target/read-write права и binding conflict проверяются в разрешённом контуре.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-003-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-003/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-003/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Фактические account/mode/target/read-write права и binding conflict проверяются в разрешённом контуре.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-004",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-004"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/009"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Review view показывает все перечисленные в FR значения и исключения, а не только JSON.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-004-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-004/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/009"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-004/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Review view показывает все перечисленные в FR значения и исключения, а не только JSON.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-004-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-004/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/009"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-004/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Review view показывает все перечисленные в FR значения и исключения, а не только JSON.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-005",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-005"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-005"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Все шесть обязательных synthetic ветвей проверяются без production authority.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-005-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-005/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-005"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-005/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Все шесть обязательных synthetic ветвей проверяются без production authority.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-005-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-005/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-005"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-005/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Все шесть обязательных synthetic ветвей проверяются без production authority.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-006",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-006"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-006"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Каждое блокирующее условие отдельно препятствует Prepared/activation и имеет доступное действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-006-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-006/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-006"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-006/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Каждое блокирующее условие отдельно препятствует Prepared/activation и имеет доступное действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-006-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-006/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-006"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-006/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Каждое блокирующее условие отдельно препятствует Prepared/activation и имеет доступное действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-007",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-007"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-007"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Version/digest-bound owner action фиксируется атомарно; lost ACK/duplicate не создаёт новую активацию.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-007-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-007/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-007"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-007/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Version/digest-bound owner action фиксируется атомарно; lost ACK/duplicate не создаёт новую активацию.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-007-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-007/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-007"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-007/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Version/digest-bound owner action фиксируется атомарно; lost ACK/duplicate не создаёт новую активацию.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-008",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-008"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-008"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Unsupported intent сохраняется как unsupported; ограниченная альтернатива требует явного нового согласия.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-008-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-008/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-008"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-008/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Unsupported intent сохраняется как unsupported; ограниченная альтернатива требует явного нового согласия.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-008-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-008/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-008"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-008/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Unsupported intent сохраняется как unsupported; ограниченная альтернатива требует явного нового согласия.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-009",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-009"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/011"
+      },
+      {
+        "object_id": "HP-BP-005/T/012"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-009"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Без AI сохранённый draft/config читается и редактируется прямой формой.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-009-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-009/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/011"
+      },
+      {
+        "object_id": "HP-BP-005/T/012"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-009"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-009/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Без AI сохранённый draft/config читается и редактируется прямой формой.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-009-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-009/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-005/T/011"
+      },
+      {
+        "object_id": "HP-BP-005/T/012"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-009"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-009/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Без AI сохранённый draft/config читается и редактируется прямой формой.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-010",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-010"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-010"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Чужой субъект/неустановленный owner не может подключать и активировать; managed onboarding передаёт контроль owner.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-010-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-010/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-010"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-010/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Чужой субъект/неустановленный owner не может подключать и активировать; managed onboarding передаёт контроль owner.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-010-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-010/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-010"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-010/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Чужой субъект/неустановленный owner не может подключать и активировать; managed onboarding передаёт контроль owner.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-101",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-101"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/001"
+      },
+      {
+        "object_id": "HP-BP-002/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-101"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Подпись, durable ACK, неустановленный маршрут, overflow и crash проверяются раздельно; принятый сигнал не исчезает.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-101-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-101/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/001"
+      },
+      {
+        "object_id": "HP-BP-002/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-101"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-101/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Подпись, durable ACK, неустановленный маршрут, overflow и crash проверяются раздельно; принятый сигнал не исчезает.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-101-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-101/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/001"
+      },
+      {
+        "object_id": "HP-BP-002/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-101"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-101/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Подпись, durable ACK, неустановленный маршрут, overflow и crash проверяются раздельно; принятый сигнал не исчезает.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-102",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-102"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-102"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Concurrent candidates одной Session дают один case/config до последующей financial проверки.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-102-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-102/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-102"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-102/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Concurrent candidates одной Session дают один case/config до последующей financial проверки.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-102-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-102/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-102"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-102/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Concurrent candidates одной Session дают один case/config до последующей financial проверки.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-103",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-103"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-103"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Полный same-currency captured/received/refund/dispute proof и разрешённый контекст проверяются перед effect permission.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-103-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-103/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-103"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-103/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Полный same-currency captured/received/refund/dispute proof и разрешённый контекст проверяются перед effect permission.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-103-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-103/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-103"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-103/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Полный same-currency captured/received/refund/dispute proof и разрешённый контекст проверяются перед effect permission.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-104",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-104"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-104"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Повтор сигнала/версии/episode не меняет identity/config и не открывает второй возможный create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-104-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-104/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-104"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-104/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Повтор сигнала/версии/episode не меняет identity/config и не открывает второй возможный create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-104-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-104/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-002/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-104"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-104/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Повтор сигнала/версии/episode не меняет identity/config и не открывает второй возможный create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-105",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-105"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/013"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-105"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Known target используется; create возможен лишь без прежнего возможного эффекта; вся передаваемая business mapping проверяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-105-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-105/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/013"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-105"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-105/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Known target используется; create возможен лишь без прежнего возможного эффекта; вся передаваемая business mapping проверяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-105-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-105/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/013"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-105"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-105/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Known target используется; create возможен лишь без прежнего возможного эффекта; вся передаваемая business mapping проверяется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-106",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-106"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-106"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Все mandatory target fields/area/completeness проверены конкретным GET; ID/POST не является Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-106-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-106/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-106"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-106/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Все mandatory target fields/area/completeness проверены конкретным GET; ID/POST не является Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-106-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-106/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-106"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-106/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Все mandatory target fields/area/completeness проверены конкретным GET; ID/POST не является Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-107",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-107"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-107"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Case view объясняет исходный заказ, состояние, границу знания, ответственного и следующее допустимое действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-107-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-107/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-107"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-107/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Case view объясняет исходный заказ, состояние, границу знания, ответственного и следующее допустимое действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-107-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-107/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-107"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-107/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Case view объясняет исходный заказ, состояние, границу знания, ответственного и следующее допустимое действие.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-108",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-108"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-108"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Deadline/retry counters durable; timeout/5xx не превращаются в no-effect и бесконечный Working.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-108-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-108/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-108"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-108/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Deadline/retry counters durable; timeout/5xx не превращаются в no-effect и бесконечный Working.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-108-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-108/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-108"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-108/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Deadline/retry counters durable; timeout/5xx не превращаются в no-effect и бесконечный Working.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-109",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-109"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-006/T/002"
+      },
+      {
+        "object_id": "HP-BP-006/T/005"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-109"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Работа принятого правила после restart и без LLM сохраняется в объявленном контуре; outage не выдаётся за успех.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-109-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-109/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-006/T/002"
+      },
+      {
+        "object_id": "HP-BP-006/T/005"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-109"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-109/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Работа принятого правила после restart и без LLM сохраняется в объявленном контуре; outage не выдаётся за успех.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-109-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-109/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-006/T/002"
+      },
+      {
+        "object_id": "HP-BP-006/T/005"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-109"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-109/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Работа принятого правила после restart и без LLM сохраняется в объявленном контуре; outage не выдаётся за успех.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-110",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-110"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-110"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Поздний факт прикреплён к прежнему case; historical confirmation не переписан, continuous reconciliation не обещан.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-110-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-110/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-110"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-110/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Поздний факт прикреплён к прежнему case; historical confirmation не переписан, continuous reconciliation не обещан.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-110-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-110/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-110"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-110/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Поздний факт прикреплён к прежнему case; historical confirmation не переписан, continuous reconciliation не обещан.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-201",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-201"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-201"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Авторизованная очередь показывает все незавершённые состояния и объяснение/ответственного без tenant leaks.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-201-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-201/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-201"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-201/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Авторизованная очередь показывает все незавершённые состояния и объяснение/ответственного без tenant leaks.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-201-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-201/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-201"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-201/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Авторизованная очередь показывает все незавершённые состояния и объяснение/ответственного без tenant leaks.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-201-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-201/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-201"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-201/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Авторизованная очередь показывает все незавершённые состояния и объяснение/ответственного без tenant leaks.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-202",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-202"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-202"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Оператор меняет только заданный business context; payment/account/config/source truth не редактируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-202-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-202/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-202"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-202/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Оператор меняет только заданный business context; payment/account/config/source truth не редактируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-202-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-202/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-202"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-202/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Оператор меняет только заданный business context; payment/account/config/source truth не редактируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-202-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-202/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-202"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-202/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Оператор меняет только заданный business context; payment/account/config/source truth не редактируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-203",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-203"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-203"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Новые данные не обходят свежие права/source eligibility/effect fence и durable episode limits.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-203-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-203/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-203"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-203/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Новые данные не обходят свежие права/source eligibility/effect fence и durable episode limits.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-203-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-203/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-203"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-203/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Новые данные не обходят свежие права/source eligibility/effect fence и durable episode limits.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-203-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-203/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-203"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-203/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Новые данные не обходят свежие права/source eligibility/effect fence и durable episode limits.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-204",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-204"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-204"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "GET конкретного target обновляет знание; провал чтения/отсутствие полного proof не Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-204-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-204/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-204"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-204/AC/1 своего canonical FR, включая условия/исключения/negative исходы. GET конкретного target обновляет знание; провал чтения/отсутствие полного proof не Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-204-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-204/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-204"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-204/AC/2 своего canonical FR, включая условия/исключения/negative исходы. GET конкретного target обновляет знание; провал чтения/отсутствие полного proof не Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-204-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-204/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-204"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-204/AC/3 своего canonical FR, включая условия/исключения/negative исходы. GET конкретного target обновляет знание; провал чтения/отсутствие полного proof не Confirmed.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-205",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-205"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-205"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Manual native ID/canonical URL проверяет существующий target/area/content; галочка и arbitrary URL не достаточны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-205-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-205/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-205"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-205/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Manual native ID/canonical URL проверяет существующий target/area/content; галочка и arbitrary URL не достаточны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-205-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-205/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-205"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-205/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Manual native ID/canonical URL проверяет существующий target/area/content; галочка и arbitrary URL не достаточны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-205-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-205/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-205"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-205/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Manual native ID/canonical URL проверяет существующий target/area/content; галочка и arbitrary URL не достаточны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-206",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-206"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-206"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Локально доказанный pre-network failure и любой возможный send различаются; empty search/новый episode не разрешают create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-206-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-206/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-206"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-206/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Локально доказанный pre-network failure и любой возможный send различаются; empty search/новый episode не разрешают create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-206-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-206/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-206"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-206/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Локально доказанный pre-network failure и любой возможный send различаются; empty search/новый episode не разрешают create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-206-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-206/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-206"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-206/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Локально доказанный pre-network failure и любой возможный send различаются; empty search/новый episode не разрешают create.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-207",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-207"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-207"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Пользователь исправляет task в внешнем сервисе; HitPipe повторно читает, не создаёт замену и не добавляет непредусмотренный write.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-207-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-207/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-207"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-207/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Пользователь исправляет task в внешнем сервисе; HitPipe повторно читает, не создаёт замену и не добавляет непредусмотренный write.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-207-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-207/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-207"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-207/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Пользователь исправляет task в внешнем сервисе; HitPipe повторно читает, не создаёт замену и не добавляет непредусмотренный write.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-207-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-207/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-207"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-207/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Пользователь исправляет task в внешнем сервисе; HitPipe повторно читает, не создаёт замену и не добавляет непредусмотренный write.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-208",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-208"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-208"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Lost ACK, duplicate hash mismatch и concurrent incompatible commands имеют один установленный результат либо явный conflict.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-208-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-208/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-208"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-208/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Lost ACK, duplicate hash mismatch и concurrent incompatible commands имеют один установленный результат либо явный conflict.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-208-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-208/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-208"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-208/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Lost ACK, duplicate hash mismatch и concurrent incompatible commands имеют один установленный результат либо явный conflict.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-208-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-208/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-208"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-208/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Lost ACK, duplicate hash mismatch и concurrent incompatible commands имеют один установленный результат либо явный conflict.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-209",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-209"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-209"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Снятие operator/owner transfer сохраняет действительного owner; deduplicated notice не заменяет ответственность.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-209-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-209/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-209"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-209/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Снятие operator/owner transfer сохраняет действительного owner; deduplicated notice не заменяет ответственность.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-209-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-209/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-209"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-209/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Снятие operator/owner transfer сохраняет действительного owner; deduplicated notice не заменяет ответственность.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-209-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-209/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-209"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-209/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Снятие operator/owner transfer сохраняет действительного owner; deduplicated notice не заменяет ответственность.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-210",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-210"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-210"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Только owner явно закрывает с reason; неопределённость/effect history не стёрта и не названа подтверждением.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-210-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-210/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-210"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-210/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Только owner явно закрывает с reason; неопределённость/effect history не стёрта и не названа подтверждением.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-210-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-210/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-210"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-210/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Только owner явно закрывает с reason; неопределённость/effect history не стёрта и не названа подтверждением.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-210-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-210/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-210"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-210/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Только owner явно закрывает с reason; неопределённость/effect history не стёрта и не названа подтверждением.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-211",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-211"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-211"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Owner reopen сохраняет identity/config/effect fence; не создаёт новую копию заказа.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-211-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-211/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-211"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-211/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Owner reopen сохраняет identity/config/effect fence; не создаёт новую копию заказа.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-211-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-211/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-211"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-211/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Owner reopen сохраняет identity/config/effect fence; не создаёт новую копию заказа.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-211-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-211/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-211"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-211/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Owner reopen сохраняет identity/config/effect fence; не создаёт новую копию заказа.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-212",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-212"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-212"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Новые подтверждённые facts допускают owner reconsider только по исходным rules/time и без possible prior effect.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-212-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-212/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-212"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-212/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Новые подтверждённые facts допускают owner reconsider только по исходным rules/time и без possible prior effect.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-212-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-212/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-212"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-212/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Новые подтверждённые facts допускают owner reconsider только по исходным rules/time и без possible prior effect.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-212-AC-3",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-212/AC/3"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-212"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-212/AC/3 своего canonical FR, включая условия/исключения/negative исходы. Новые подтверждённые facts допускают owner reconsider только по исходным rules/time и без possible prior effect.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-301",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-301"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      },
+      {
+        "object_id": "HP-BP-005/T/014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-301"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Lifecycle, connection health и business-case outcomes показаны раздельно с временем/причиной.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-301-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-301/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      },
+      {
+        "object_id": "HP-BP-005/T/014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-301"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-301/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Lifecycle, connection health и business-case outcomes показаны раздельно с временем/причиной.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-301-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-301/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      },
+      {
+        "object_id": "HP-BP-005/T/014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-301"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-301/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Lifecycle, connection health и business-case outcomes показаны раздельно с временем/причиной.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-302",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-302"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-302"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Pause/admission имеют атомарный порядок; новая admission после принятой паузы исключена.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-302-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-302/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-302"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-302/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Pause/admission имеют атомарный порядок; новая admission после принятой паузы исключена.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-302-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-302/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-302"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-302/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Pause/admission имеют атомарный порядок; новая admission после принятой паузы исключена.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-303",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-303"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-303"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Уже разрешённые episodes ограничены исходными deadline; к300s каждое имеет честное состояние без unsafe retry.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-303-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-303/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-303"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-303/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Уже разрешённые episodes ограничены исходными deadline; к300s каждое имеет честное состояние без unsafe retry.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-303-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-303/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-303"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-303/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Уже разрешённые episodes ограничены исходными deadline; к300s каждое имеет честное состояние без unsafe retry.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-304",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-304"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-304"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Resume имеет явные current config/readiness/disposition signals/gaps; старые cases не перепривязаны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-304-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-304/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-304"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-304/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Resume имеет явные current config/readiness/disposition signals/gaps; старые cases не перепривязаны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-304-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-304/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-304"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-304/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Resume имеет явные current config/readiness/disposition signals/gaps; старые cases не перепривязаны.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-305",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-305"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-305"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Change draft отделён от действующей config и старых cases; review показывает полный diff.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-305-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-305/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-305"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-305/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Change draft отделён от действующей config и старых cases; review показывает полный diff.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-305-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-305/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-305"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-305/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Change draft отделён от действующей config и старых cases; review показывает полный diff.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-306",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-306"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/012"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-306"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Changed readiness/rehearsal/explicit acceptance и resume обязательны; старые cases исполняют старую config.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-306-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-306/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/012"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-306"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-306/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Changed readiness/rehearsal/explicit acceptance и resume обязательны; старые cases исполняют старую config.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-306-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-306/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/012"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-306"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-306/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Changed readiness/rehearsal/explicit acceptance и resume обязательны; старые cases исполняют старую config.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-307",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-307"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-307"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Каждый connector state/read right/revoke/reconnect учитывает account context; автоматического переноса нет.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-307-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-307/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-307"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-307/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Каждый connector state/read right/revoke/reconnect учитывает account context; автоматического переноса нет.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-307-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-307/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-307"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-307/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Каждый connector state/read right/revoke/reconnect учитывает account context; автоматического переноса нет.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-308",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-308"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-308"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Operation-owner transfer сохраняет действительную ответственность всех cases; TEAM per-case assignment не активируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-308-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-308/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-308"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-308/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Operation-owner transfer сохраняет действительную ответственность всех cases; TEAM per-case assignment не активируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-308-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-308/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-308"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-308/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Operation-owner transfer сохраняет действительную ответственность всех cases; TEAM per-case assignment не активируется.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-309",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-309"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-309"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Архивирование требует Paused и explicit unresolved disposition; не стирает unknown/ledger.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-309-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-309/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-309"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-309/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Архивирование требует Paused и explicit unresolved disposition; не стирает unknown/ledger.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-309-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-309/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-309"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-309/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Архивирование требует Paused и explicit unresolved disposition; не стирает unknown/ledger.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-310",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-310"
+    },
+    "upstream_kind": "functional_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-310"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Actor/time/version/command receipt позволяют восстановить lost outcome, без выдуманного local success.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-310-AC-1",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-310/AC/1"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-310"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-310/AC/1 своего canonical FR, включая условия/исключения/negative исходы. Actor/time/version/command receipt позволяют восстановить lost outcome, без выдуманного local success.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-FR-310-AC-2",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-FR-310/AC/2"
+    },
+    "upstream_kind": "acceptance_criterion",
+    "technical_refs": [
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-007/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-FR-310"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Проверить весь exact AC HP-FR-310/AC/2 своего canonical FR, включая условия/исключения/negative исходы. Actor/time/version/command receipt позволяют восстановить lost outcome, без выдуманного local success.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-001",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-001"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Сохранить exact limiting action/evidence/условия HP-GATE-001; real-world/user/commercial/human acceptance не выведены из архитектуры. Проверка gate до applicable action, не fake PASS.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-002",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-002"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Сохранить exact limiting action/evidence/условия HP-GATE-002; real-world/user/commercial/human acceptance не выведены из архитектуры. Проверка gate до applicable action, не fake PASS.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-003",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-003"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Сохранить exact limiting action/evidence/условия HP-GATE-003; real-world/user/commercial/human acceptance не выведены из архитектуры. Проверка gate до applicable action, не fake PASS.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-004",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-004"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Сохранить exact limiting action/evidence/условия HP-GATE-004; real-world/user/commercial/human acceptance не выведены из архитектуры. Проверка gate до applicable action, не fake PASS.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-005",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-005"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Сохранить exact limiting action/evidence/условия HP-GATE-005; real-world/user/commercial/human acceptance не выведены из архитектуры. Проверка gate до applicable action, не fake PASS.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-GATE-006",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-GATE-006"
+    },
+    "upstream_kind": "decision_gate",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-ARC-016"
+      },
+      {
+        "object_id": "HP-BP-006/T/016"
+      },
+      {
+        "object_id": "HP-ARC-014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exact Product/Architecture source set, independent review и реальный human-only ProjectOS acceptance/admission обязательны. Candidate не даёт grant и не считается принятым upstream.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-001",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-001"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-002"
+      },
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-004"
+      },
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-ARC-010"
+      },
+      {
+        "object_id": "HP-BP-006/T/003"
+      },
+      {
+        "object_id": "HP-BP-006/T/005"
+      },
+      {
+        "object_id": "HP-BP-006/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Crash/restart/lost ACK и LLM outage сохраняют принятые facts в объявленном disk-intact fault contour.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-002",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-002"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Измерение first Received→first confirmation и visibility новых фактов CAP002/003 использует полный предопределённый denominator; internal queue/unknown не исключаются.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-003",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-003"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-004"
+      },
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-007/T/010"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "300s episode/drain, ≤3 только safe writes,24h missing-data timer и recovery проверены controlled clock; unknown не сброшен.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-004",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-004"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-BP-002/T/001"
+      },
+      {
+        "object_id": "HP-BP-002/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      },
+      {
+        "object_id": "HP-BP-006/T/001"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Joint выбранный load profile/256KiB/32KiB/1000signals&16MiB/72h/75%/1h/60s проверяются в единой среде; future profiles не объявлены реализованными.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-005",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-005"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/004"
+      },
+      {
+        "object_id": "HP-BP-001/T/007"
+      },
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-001/T/009"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-001/T/011"
+      },
+      {
+        "object_id": "HP-BP-001/T/012"
+      },
+      {
+        "object_id": "HP-BP-007/T/007"
+      },
+      {
+        "object_id": "HP-BP-007/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Cross-tenant/role/support negative matrix и revoke/start race; ≤5s global effective confirmation без скрытых исключений.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-006",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-006"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-001/T/010"
+      },
+      {
+        "object_id": "HP-BP-001/T/011"
+      },
+      {
+        "object_id": "HP-BP-001/T/012"
+      },
+      {
+        "object_id": "HP-BP-001/T/013"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/006"
+      },
+      {
+        "object_id": "HP-BP-006/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Secret surfaces и каждый physical provider-start fence проверены; no new start after positive revoke.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-007",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-007"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-BP-005/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/005"
+      },
+      {
+        "object_id": "HP-BP-005/T/006"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/017"
+      },
+      {
+        "object_id": "HP-BP-005/T/018"
+      },
+      {
+        "object_id": "HP-BP-005/T/022"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Explicit visible minimized input, aliases, no real business IDs in payload/header/metadata/log; recipient/routing verified before live.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-008",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-008"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      },
+      {
+        "object_id": "HP-BP-006/T/008"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Event actor/time/old-new knowledge/source refs/UTC export и bound clocks позволяют реконструкцию без fake proof.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-009",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-009"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-009"
+      },
+      {
+        "object_id": "HP-BP-002/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/010"
+      },
+      {
+        "object_id": "HP-BP-006/T/006"
+      },
+      {
+        "object_id": "HP-BP-006/T/010"
+      },
+      {
+        "object_id": "HP-BP-006/T/012"
+      },
+      {
+        "object_id": "HP-BP-006/T/013"
+      },
+      {
+        "object_id": "HP-BP-006/T/014"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Все data classes/copies TTL, full erasure7d/35d, replay safety и restore-after-delete проверены; raw/content в backup исключены.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-010",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-010"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-005/T/006"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      },
+      {
+        "object_id": "HP-BP-006/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Synthetic evaluator без production credentials/network authority, все positive/negative/retry репетиции без live effects.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-011",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-011"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-013"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      },
+      {
+        "object_id": "HP-BP-005/T/014"
+      },
+      {
+        "object_id": "HP-BP-005/T/015"
+      },
+      {
+        "object_id": "HP-BP-005/T/016"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Все ключевые journeys keyboard/reader320px200%contrast с настоящим browser matrix; один smoke недостаточен.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-012",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-012"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-007"
+      },
+      {
+        "object_id": "HP-ARC-013"
+      },
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-005/T/007"
+      },
+      {
+        "object_id": "HP-BP-005/T/008"
+      },
+      {
+        "object_id": "HP-BP-005/T/009"
+      },
+      {
+        "object_id": "HP-BP-005/T/012"
+      },
+      {
+        "object_id": "HP-BP-005/T/015"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Полная NFR cohort n≥8/ceil thresholds/20min/0critical protocol — будущая actual user study, не desk evidence.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-013",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-013"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-ARC-015"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/009"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Health на actual read/write scopes/current context; verified external limitations учитываются отдельно, внутренний простой не скрывается.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-NFR-014",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-NFR-014"
+    },
+    "upstream_kind": "quality_requirement",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-010"
+      },
+      {
+        "object_id": "HP-ARC-012"
+      },
+      {
+        "object_id": "HP-BP-006/T/003"
+      },
+      {
+        "object_id": "HP-BP-006/T/004"
+      },
+      {
+        "object_id": "HP-BP-006/T/005"
+      },
+      {
+        "object_id": "HP-BP-006/T/007"
+      },
+      {
+        "object_id": "HP-BP-006/T/012"
+      },
+      {
+        "object_id": "HP-BP-006/T/013"
+      },
+      {
+        "object_id": "HP-BP-006/T/015"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Availability observation windows, RTO и RPO0 только controlled fault contour; recovery gates до любого replay и честные disaster holds.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-001",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-001"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-004/T/002"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Workspace/account/mode/Session unique identity неизменна при event type/retry/config/episode.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-002",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-002"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-005/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Exhaustive восемь states+positive/negative guards; unknown/excluded/closed не обходят reducer.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-003",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-003"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Draft/Prepared/Active/Draining/Paused/Archived отличаются от case knowledge и connection health.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-004",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-004"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-012"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/003"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/012"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "При первом Received фиксируется config до полной financial проверки; held/new cases используют явно выбранную config, old не мигрируют.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-005",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-005"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-BP-001/T/003"
+      },
+      {
+        "object_id": "HP-BP-001/T/004"
+      },
+      {
+        "object_id": "HP-BP-001/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Полная ролевая matrix, owner-only controls, constrained support и future operator profile сохраняются без расширения SINGLE.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-006",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-006"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Stripe Session/Priceqty1/positive fullyreceivedcaptured samecurrency/unrefunded/undisputed и исходное activation time установлены.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-007",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-007"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-BP-004/T/007"
+      },
+      {
+        "object_id": "HP-BP-004/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/013"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "List/Workspace/assignee/title/marker/required context complete match конкретного task; ограниченный исторический результат.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-008",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-008"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-004"
+      },
+      {
+        "object_id": "HP-BP-004/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/003"
+      },
+      {
+        "object_id": "HP-BP-004/T/004"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "No possible prior effect либо sufficient concrete no-effect proof; timeout/empty search/delete/manual close не разрешают recreate.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-009",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-009"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      },
+      {
+        "object_id": "HP-BP-003/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Поздние факты видимы с пределом знания; historical fact не стирается, unrestricted reconcile не подразумевается.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-010",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-010"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-001/T/008"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Каждое admitted case имеет действительного operation owner; last-owner removal запрещено и revoked operator не orphan.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-011",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-011"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-006"
+      },
+      {
+        "object_id": "HP-BP-001/T/006"
+      },
+      {
+        "object_id": "HP-BP-002/T/006"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-004/T/001"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Единственный account/mode/List binding/route; conflicting workspace context отвергнут, нет implicit reroute.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-012",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-012"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-005"
+      },
+      {
+        "object_id": "HP-BP-002/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/006"
+      },
+      {
+        "object_id": "HP-BP-004/T/013"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Payment/source truth read-only для оператора; local contact/brief additions имеют provenance и expiry.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-013",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-013"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-004"
+      },
+      {
+        "object_id": "HP-BP-003/T/004"
+      },
+      {
+        "object_id": "HP-BP-003/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/007"
+      },
+      {
+        "object_id": "HP-BP-003/T/008"
+      },
+      {
+        "object_id": "HP-BP-004/T/005"
+      },
+      {
+        "object_id": "HP-BP-004/T/011"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Owner close/reopen сохраняет same identity/config/history/unknown/effect lineage; никакого automatic recreation.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-014",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-014"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-003"
+      },
+      {
+        "object_id": "HP-ARC-012"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-001"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-004"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "TEAM-only routing rule сохраняется условным upstream; SINGLE одинroute не обходит conflict; TEAM реализации здесь не объявлено.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  },
+  {
+    "coverage_id": "HP-COV-RULE-101",
+    "product_ref": {
+      "dependency": "product",
+      "object_id": "HP-RULE-101"
+    },
+    "upstream_kind": "product_rule",
+    "technical_refs": [
+      {
+        "object_id": "HP-ARC-002"
+      },
+      {
+        "object_id": "HP-ARC-008"
+      },
+      {
+        "object_id": "HP-ARC-011"
+      },
+      {
+        "object_id": "HP-BP-002/T/002"
+      },
+      {
+        "object_id": "HP-BP-002/T/005"
+      },
+      {
+        "object_id": "HP-BP-003/T/001"
+      },
+      {
+        "object_id": "HP-BP-003/T/009"
+      }
+    ],
+    "scope_refs": [
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-002"
+      },
+      {
+        "dependency": "product",
+        "object_id": "HP-CAP-003"
+      }
+    ],
+    "state": "specified",
+    "question_refs": [],
+    "verification": "Неразрешённый accepted ingress имеет reason/time/owner/status/finiteTTL и visible gap; nofake case/no ACK-beforecommit.",
+    "claim_boundary": "Specified architecture and prescribed verification only; no implementation/live/user-study/commercial/phase acceptance claim."
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "local_id": "SHARED",
+  "summary": "[ПР1–2][Platform] Подготовить общий контекст, инструкции и Quality Gate v0",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nОбщая подготовка Lead для пяти исполнителей\n\n## SCOPE\n\nПодготовить инфраструктуру и документы ручного процесса; не писать за студентов их15business/test slices.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nAD §3–4/§9; HP-ADR-001; HP-BP-005/T/019–020; HP-BP-007/T/005/009/012. Все четыре methodics, source index и report-profile.\n\n## ACCEPTANCE CRITERIA\n\n1. Один versioned context package и source-lock с SHA четырех методичек/шаблонов, Candidate contract pins и formal commit84249ff3; фактически доступные source bundles проверены.\n2. Ручные инструкции, masterprompt и feature/task export позволяют запуск по одному Feature key; no official runtime invocation, manualmode/ownership/status границы явны.\n3. Шесть canonical components и native Epic→Feature→Subtask структура с component owners; shared schemas/root tooling единолично принадлежат Lead.\n4. Изолированные pinned Go/Next/TS toolchains совместимы с frozen cohort; не заменять корневой legacy runtime/lock массовой миграцией, не смешивать Vite и Next locks.\n5. Применимые root path-filter CI/include conventions и branch/review rules проверены реально; недоступную branch protection настройку назвать blocker, не claim success.\n6. Четыре корректных DOCX forms, два основных0302+0104support и два отдельных0104exports;29criteria/person,21HUMAN_CAPTURE instructions/person, четыре immutabletags/person.\n7. Три кодовых задачи на владельца остаются PLANNED: подготовка инфраструктуры не реализует business rules и не подменяет личный вклад студентов.\n\n## WORK RESULT / WORK DEST\n\nBackend/client: `docs/labs/pr12/`, isolated `tooling/pr12/`, root instructions and path-filter CI only Lead; no student service domain ownership.\n\n## DEFINITION OF DONE\n\n- Готовые артефакты реально закоммичены/опубликованы и readback/clone validated;PR/CI/branch-settings evidence, никаких фиктивных grants.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.",
+  "role": "SHARED",
+  "person_code": null,
+  "depends_on": [],
+  "parent_local_id": "EPIC",
+  "parent_key": "HIT-10",
+  "component_id": "10039",
+  "task_mode": "MANUAL_INFRA",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/",
+    "tooling/pr12/",
+    ".github/workflows/",
+    "AGENTS.md"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/",
+    "tooling/pr12/",
+    ".github/workflows/",
+    "AGENTS.md"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10046",
+  "issue_type": "Task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-dk"
+  ],
+  "assignee_account_id": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+  "key": "HIT-16",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-16",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": []
+}

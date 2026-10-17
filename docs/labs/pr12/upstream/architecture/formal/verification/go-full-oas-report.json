@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "timestamp_utc": "2026-10-16T20:39:19.048366+00:00",
+  "source_sha256": "7c47ab0792487d5548658e10075ca837147b19acc4f5ce2822d4430972533829",
+  "generator": "oapi-codegen2.8.0 exact checks/stack/go/codegen/go.mod/sum",
+  "go": "1.27.2",
+  "jcs": "github.com/gowebpki/jcs v1.0.2 origin f5011b64e085aad7a0501c2d615065832d252a36 Apache-2.0",
+  "operation_count": 57,
+  "schema_count": 70,
+  "test_count": 4,
+  "commands": [
+    "go tool oapi-codegen --config checks/formal/go/oapi-config.yaml formal/openapi/hitpipe.v1.json",
+    "go test -mod=readonly -count=1 -v ./...",
+    "go vet -mod=readonly ./..."
+  ],
+  "scope": "Full final canonical OAS generated chi strict server/models/client, compiled, financial-nullable roundtrip and JCS adversarial vectors tested. Not implementation/E2E/live provider proof.",
+  "files": [
+    {
+      "path": "formal/openapi/hitpipe.v1.json",
+      "sha256": "7c47ab0792487d5548658e10075ca837147b19acc4f5ce2822d4430972533829",
+      "bytes": 329607
+    },
+    {
+      "path": "checks/formal/go/generated.go",
+      "sha256": "29caa8f1e07bc8739e667a93c8e563766ff5d3733bd2abea57e44567c48b33e6",
+      "bytes": 1155668
+    },
+    {
+      "path": "checks/formal/go/go.mod",
+      "sha256": "21718fdc33cc34816c6014d90cc6243a768d89a32b1fd1786d8e31185f526639",
+      "bytes": 1844
+    },
+    {
+      "path": "checks/formal/go/go.sum",
+      "sha256": "56dc0bdaf6a994f5ec587eb18a78bcd68c6c04320e1048d0a2842a7996caa9db",
+      "bytes": 9188
+    },
+    {
+      "path": "checks/formal/go/jcs_test.go",
+      "sha256": "17381facedf72ad626be2d49d2b04aca5cd3bff3f3ac749d9c481dd9ad359430",
+      "bytes": 1855
+    },
+    {
+      "path": "checks/formal/go/wire_roundtrip_test.go",
+      "sha256": "e3a939ea7f1dee6ed83f3af8d763d34af3ce22f32d5efa9aaeb675f2632b442a",
+      "bytes": 1087
+    },
+    {
+      "path": "checks/formal/go-codegen-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checks/formal/go-final-test.log",
+      "sha256": "08cc556ef42accf053009a1105c61ca26ec616a032d334e1f54246f5c1b98765",
+      "bytes": 477
+    },
+    {
+      "path": "checks/formal/go-final-vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}

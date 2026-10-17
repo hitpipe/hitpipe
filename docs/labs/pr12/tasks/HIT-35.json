@@ -1,0 +1,140 @@
+{
+  "local_id": "MG-C1",
+  "summary": "[MG/C1] UX: реализовать CasePresentation и диагностический TS-компонент",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nUX: реализовать CasePresentation и диагностический TS-компонент\n\n## SCOPE\n\nМинимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-002, HP-RULE-007, HP-RULE-008, HP-BP-005/T/010, HP-BP-005/T/013, HP-BP-005/T/014, HP-BP-005/T/015, HP-BP-005/T/019.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json`; `contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json`.\n\nОбъект: Честное представление authoritative CaseDetail: 8 канонических states, исход/последняя проверка отдельно от transport/loading freshness; stale/failed query не меняют business state, old revision не перезаписывает новую, scope switch очищает old view. Доступные действия — только из authority snapshot; нет generic Retry create для Unknown.\n\nПределы: Fixture source не доказывает IAM/BFF authorization; Unit projection не доказывает полные accessibility/user study gates; Python/model preparation и prod custom server revoke не входят в эту порцию.\n\n## ACCEPTANCE CRITERIA\n\n1. Pure TS projection не импортирует React/Next/fetch/process и не создает девятое case state; отображает authoritative state+knowledge+timestamps без hidden inference.\n2. Неполный/невалидный boundary JSON отклоняется runtime validator по frozen OAS; generated types не объявляются validator и не создается вторая ручная wire schema.\n3. CLI case-contractcheck собирается в release JS под pinned Node/TS, принимает --fixture/--format, выводит version/SHA и безопасную summary; тот же core используется React consumer.\n4. Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.\n5. Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.\n6. Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок.\n\n## WORK RESULT / WORK DEST\n\nRepo `hitpipe/hitpipe_client`; PRIMARY: `src/features/case-status/domain`, `src/features/case-status/docs/module-contract.md`, `src/features/case-status/testdata`, `tools/pr12/case-contractcheck.ts`; личные документы/логи `docs/labs/pr12/mg/`. Единственный владелец: Матвей Головачев.\n\nPRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner.\n\n## DEFINITION OF DONE\n\n- Все применимые checks действительно выполнены агентом; PR review/merge настоящие, донихInReview.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## IMPLEMENTATION / CHECKS\n- all8canonical states table\n- UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create\n- 202/pending transport not business confirmation\n- late lower revision ignored\n- equal/newer revision behavior\n- failed refresh keeps last knowledge+stale marker\n- workspace switch drops late old result\n- null last_observation_at differs current UI read time\n- malicious markup renders escaped text\n\n## CONTINUATION\nБудущий componentepic: Experience & AI Preparation. Код/ports/testhistory сохраняются.\n\n## FULL ORIGINAL CODE TASK PAYLOAD\n\n```json\n{\n  \"id\": \"MG-C1\",\n  \"person\": \"Матвей Головачев\",\n  \"person_code\": \"mg\",\n  \"component\": \"UX—Web Experience\",\n  \"repo\": \"hitpipe/hitpipe_client\",\n  \"summary\": \"UX: реализовать CasePresentation и диагностический TS-компонент\",\n  \"execution_kind\": \"IMP\",\n  \"scope\": \"Минимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.\",\n  \"owned_paths\": [\n    \"src/features/case-status/domain\",\n    \"src/features/case-status/docs/module-contract.md\",\n    \"src/features/case-status/testdata\",\n    \"tools/pr12/case-contractcheck.ts\"\n  ],\n  \"depends_on\": [],\n  \"shared_preconditions\": [\n    \"COMMON-CONTEXT: exact source bundle + implementation convention\",\n    \"COMMON-QG: Lead branch protection and shared instruction package; no false admission\"\n  ],\n  \"normative_refs\": [\n    \"HP-RULE-002\",\n    \"HP-RULE-007\",\n    \"HP-RULE-008\",\n    \"HP-BP-005/T/010\",\n    \"HP-BP-005/T/013\",\n    \"HP-BP-005/T/014\",\n    \"HP-BP-005/T/015\",\n    \"HP-BP-005/T/019\"\n  ],\n  \"formal_refs\": [\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json\"\n  ],\n  \"canonical_source_page\": \"https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767\",\n  \"acceptance_criteria\": [\n    \"Pure TS projection не импортирует React/Next/fetch/process и не создает девятое case state; отображает authoritative state+knowledge+timestamps без hidden inference.\",\n    \"Неполный/невалидный boundary JSON отклоняется runtime validator по frozen OAS; generated types не объявляются validator и не создается вторая ручная wire schema.\",\n    \"CLI case-contractcheck собирается в release JS под pinned Node/TS, принимает --fixture/--format, выводит version/SHA и безопасную summary; тот же core используется React consumer.\",\n    \"Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.\",\n    \"Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.\",\n    \"Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок.\"\n  ],\n  \"test_cases\": [\n    \"all8canonical states table\",\n    \"UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create\",\n    \"202/pending transport not business confirmation\",\n    \"late lower revision ignored\",\n    \"equal/newer revision behavior\",\n    \"failed refresh keeps last knowledge+stale marker\",\n    \"workspace switch drops late old result\",\n    \"null last_observation_at differs current UI read time\",\n    \"malicious markup renders escaped text\"\n  ],\n  \"seeded_defect_candidates\": [],\n  \"limitations\": [\n    \"Fixture source не доказывает IAM/BFF authorization\",\n    \"Unit projection не доказывает полные accessibility/user study gates\",\n    \"Python/model preparation и prod custom server revoke не входят в эту порцию\"\n  ],\n  \"future_component_epic\": \"Experience & AI Preparation\",\n  \"lab_mapping\": [\n    \"0104-P01\",\n    \"0302-P01\"\n  ],\n  \"ownership_notes\": \"PRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner.\"\n}\n```\n",
+  "role": "C1",
+  "person_code": "mg",
+  "depends_on": [
+    "SHARED",
+    "MG-R1",
+    "MG-R2"
+  ],
+  "parent_local_id": "F-MG",
+  "parent_key": "HIT-13",
+  "component_id": "10038",
+  "task_mode": "MANUAL_CODE",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "src/features/case-status/domain",
+    "src/features/case-status/docs/module-contract.md",
+    "src/features/case-status/testdata",
+    "tools/pr12/case-contractcheck.ts"
+  ],
+  "ownedpaths": [
+    "src/features/case-status/domain",
+    "src/features/case-status/docs/module-contract.md",
+    "src/features/case-status/testdata",
+    "tools/pr12/case-contractcheck.ts"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-mg"
+  ],
+  "assignee_account_id": "712020:315cb145-9ab6-45a9-af5a-ff4283ba3b25",
+  "code_task_source": {
+    "id": "MG-C1",
+    "person": "Матвей Головачев",
+    "person_code": "mg",
+    "component": "UX—Web Experience",
+    "repo": "hitpipe/hitpipe_client",
+    "summary": "UX: реализовать CasePresentation и диагностический TS-компонент",
+    "execution_kind": "IMP",
+    "scope": "Минимальный сохраняемый компонент и собственная содержательная rule-логика; не реализовать весь сервис.",
+    "owned_paths": [
+      "src/features/case-status/domain",
+      "src/features/case-status/docs/module-contract.md",
+      "src/features/case-status/testdata",
+      "tools/pr12/case-contractcheck.ts"
+    ],
+    "depends_on": [],
+    "shared_preconditions": [
+      "COMMON-CONTEXT: exact source bundle + implementation convention",
+      "COMMON-QG: Lead branch protection and shared instruction package; no false admission"
+    ],
+    "normative_refs": [
+      "HP-RULE-002",
+      "HP-RULE-007",
+      "HP-RULE-008",
+      "HP-BP-005/T/010",
+      "HP-BP-005/T/013",
+      "HP-BP-005/T/014",
+      "HP-BP-005/T/015",
+      "HP-BP-005/T/019"
+    ],
+    "formal_refs": [
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseDetail",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/CaseSummary",
+      "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json",
+      "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json"
+    ],
+    "canonical_source_page": "https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15007767",
+    "acceptance_criteria": [
+      "Pure TS projection не импортирует React/Next/fetch/process и не создает девятое case state; отображает authoritative state+knowledge+timestamps без hidden inference.",
+      "Неполный/невалидный boundary JSON отклоняется runtime validator по frozen OAS; generated types не объявляются validator и не создается вторая ручная wire schema.",
+      "CLI case-contractcheck собирается в release JS под pinned Node/TS, принимает --fixture/--format, выводит version/SHA и безопасную summary; тот же core используется React consumer.",
+      "Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.",
+      "Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.",
+      "Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок."
+    ],
+    "test_cases": [
+      "all8canonical states table",
+      "UNKNOWN/POSSIBLE_EFFECT cannot show success or retry-create",
+      "202/pending transport not business confirmation",
+      "late lower revision ignored",
+      "equal/newer revision behavior",
+      "failed refresh keeps last knowledge+stale marker",
+      "workspace switch drops late old result",
+      "null last_observation_at differs current UI read time",
+      "malicious markup renders escaped text"
+    ],
+    "seeded_defect_candidates": [],
+    "limitations": [
+      "Fixture source не доказывает IAM/BFF authorization",
+      "Unit projection не доказывает полные accessibility/user study gates",
+      "Python/model preparation и prod custom server revoke не входят в эту порцию"
+    ],
+    "future_component_epic": "Experience & AI Preparation",
+    "lab_mapping": [
+      "0104-P01",
+      "0302-P01"
+    ],
+    "ownership_notes": "PRIMARY includes tools/pr12/case-contractcheck.ts and owner src/features/case-status paths; tooling/pr12/frontend/{package.json,package-lock.json,tsconfig.json} RELATED_BY_LEAD_ONLY; root legacy manifests DO NOT TOUCH. Own .github/workflows/pr12-mg.yml may be extended only by its C3 owner."
+  },
+  "execution_kind": "IMP",
+  "criteria_ids": [
+    "0302-pz01/Р4",
+    "0302-pz02/Р1",
+    "0302-pz02/Р3",
+    "0104-pz01/Р1",
+    "0104-pz01/Р2",
+    "0104-pz01/Р3",
+    "0104-pz01/Р4",
+    "0104-pz01/Р5",
+    "0104-pz02/Р1",
+    "0104-pz02/Р2",
+    "0104-pz02/Р3"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "ownership_notes": {
+    "primary": "src/features/case-status/**; tools/pr12/case-contractcheck.ts",
+    "related_by_lead_only": "isolated tooling/pr12/frontend/package-lock.json and shared scripts",
+    "do_not_touch": "legacy root package.json/package-lock.json"
+  },
+  "key": "HIT-35",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-35",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-16",
+    "HIT-33",
+    "HIT-34"
+  ]
+}
