@@ -9,6 +9,8 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility"
 	"io"
 	"os"
+	"reflect"
+	"strings"
 	"time"
 )
 
@@ -39,11 +41,16 @@ func Read(path string) (Scenario, error) {
 	return s, nil
 }
 
-// StrictDecode rejects duplicate/unknown keys, trailing JSON and invalid typed
-// numbers. Its error is safe for diagnostic output. It does not validate OAS.
+// StrictDecode rejects duplicate/unknown keys, including case aliases of the
+// declared field names, trailing JSON and invalid typed numbers. Its error is
+// safe for diagnostic output. It does not validate OAS.
 func StrictDecode(b []byte, out any) error {
+	v := reflect.ValueOf(out)
+	if !v.IsValid() || v.Kind() != reflect.Pointer || v.IsNil() {
+		return errors.New("INVALID_JSON_SHAPE")
+	}
 	d := json.NewDecoder(bytes.NewReader(b))
-	if err := walk(d); err != nil {
+	if err := walk(d, v.Type().Elem()); err != nil {
 		return errors.New("INVALID_JSON")
 	}
 	if _, err := d.Token(); err != io.EOF {
@@ -56,7 +63,7 @@ func StrictDecode(b []byte, out any) error {
 	}
 	return nil
 }
-func walk(d *json.Decoder) error {
+func walk(d *json.Decoder, shape reflect.Type) error {
 	t, err := d.Token()
 	if err != nil {
 		return err
@@ -77,14 +84,22 @@ func walk(d *json.Decoder) error {
 			if !ok || seen[key] {
 				return errors.New("duplicate")
 			}
+			fieldShape, declared := jsonField(shape, key)
+			if !declared {
+				return errors.New("unknown field")
+			}
 			seen[key] = true
-			if e = walk(d); e != nil {
+			if e = walk(d, fieldShape); e != nil {
 				return e
 			}
 		}
 	case '[':
+		var elementShape reflect.Type
+		if shape != nil && (shape.Kind() == reflect.Slice || shape.Kind() == reflect.Array) {
+			elementShape = shape.Elem()
+		}
 		for d.More() {
-			if e := walk(d); e != nil {
+			if e := walk(d, elementShape); e != nil {
 				return e
 			}
 		}
@@ -93,4 +108,29 @@ func walk(d *json.Decoder) error {
 	}
 	_, err = d.Token()
 	return err
+}
+
+// jsonField derives the fixture's exact names from its existing Go JSON tags;
+// it does not maintain a second schema or rely on encoding/json's case folding.
+func jsonField(shape reflect.Type, key string) (reflect.Type, bool) {
+	for shape != nil && shape.Kind() == reflect.Pointer {
+		shape = shape.Elem()
+	}
+	if shape == nil || shape.Kind() != reflect.Struct {
+		return nil, false
+	}
+	for i := 0; i < shape.NumField(); i++ {
+		field := shape.Field(i)
+		name, _, _ := strings.Cut(field.Tag.Get("json"), ",")
+		if field.PkgPath != "" || name == "-" {
+			continue
+		}
+		if name == "" {
+			name = field.Name
+		}
+		if name == key {
+			return field.Type, true
+		}
+	}
+	return nil, false
 }
