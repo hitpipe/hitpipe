@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=ba160a70d6bb506979f96dec6b84619f00cb081a -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/deploy/.local/share/hitpipe-tp-review-20261018/backend/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck
++ /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-_tfngnxy/processing-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-_tfngnxy/processing-contractcheck --fixture /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-_tfngnxy/positive_fixture.json --format json
+{"component": "processing", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=ba160a70d6bb506979f96dec6b84619f00cb081a -X main.dirty=false -X main.buildMode=release -trimpath -o /home/deploy/.local/share/hitpipe-tp-review-20261018/backend/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck
++ /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-slleamzy/processing-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-slleamzy/processing-contractcheck --fixture /dev/shm/hitpipe-tp-review-work-20261018/pr12-outside-checkout-slleamzy/positive_fixture.json --format json
+{"component": "processing", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}

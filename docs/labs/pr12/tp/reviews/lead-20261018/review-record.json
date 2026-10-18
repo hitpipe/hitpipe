@@ -1,0 +1,188 @@
+{
+  "reviewer": "Codex, acting on explicit delegation by Dmitriy Karacheban",
+  "performed_at_utc": "2026-10-18T20:08:51.329448+00:00",
+  "original_complete_tip": "adfbfc33bf20cb0b0641e49e48c0502d2f5d108d",
+  "full_review_integration_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+  "targeted_fix_code_sha": "09c10e2afc1600f9fb575e865100759d42766170",
+  "target_pr": 5,
+  "target_branch": "work/HIT-27-paid-order-eligibility",
+  "fix_code_equivalence": [
+    {
+      "path": "services/processing/internal/adapters/fixtures/input/input.go",
+      "sha256": "03c0a76eb3cc1637c5059524eb0609693cbf1b5a3ecd2dd28de629efb1b1a8e7",
+      "matches_full_review_integration": true
+    },
+    {
+      "path": "services/processing/internal/adapters/fixtures/input/canonical_fields_test.go",
+      "sha256": "37b6dbe665984b49ae44af0b34a04afe5591178ea49bf4d7fd713f4fe313034d",
+      "matches_full_review_integration": true
+    }
+  ],
+  "finding": {
+    "id": "TP-REV-001",
+    "priority": "P2",
+    "scope": "offline JSON fixture parsing",
+    "status": "FIX_IMPLEMENTED_PENDING_REVIEW_AND_MERGE",
+    "before": "known refund=1 shadowed by AMOUNT_REFUNDED=0 yielded VALID",
+    "after": "undeclared JSON alias rejected with exit 2"
+  },
+  "financial_interpretation": "three declared scenarios agree with requirements and implementation",
+  "empirical_interview": "NOT_CONDUCTED_BLOCKED_NO_USER",
+  "human_student_peer_review": "PENDING_NOT_REPLACED_BY_AI",
+  "external_opposition": "BLOCKED_HUMAN_ASSIGNMENT",
+  "step_8": "NOT_STARTED_PER_USER_REQUEST",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "ec19979bc3bd64784124996b4e2694b7837076878449b2647ef3637d7539e5f1"
+    },
+    {
+      "path": "activation_equality_expiry.json",
+      "sha256": "682f2c576c63880b85283700bf858fad8c1a0a4f83063f00c3a7913c66193f46"
+    },
+    {
+      "path": "bundle.log",
+      "sha256": "511e2450c1428c781c3edd7f7b998d9304d018daa6330cc3df1f4ba02d14de9f"
+    },
+    {
+      "path": "json-alias-before.json",
+      "sha256": "cfbb368a25b79886045dd5fe23909fdb36d71acd89c1e543a778d03d313e5c10"
+    },
+    {
+      "path": "json-alias-before.log",
+      "sha256": "94d8f6848b72ba41d2d67f2639245191d6a265cbd2abd157fd45f6991fef2e29"
+    },
+    {
+      "path": "json-shadow-before-after.json",
+      "sha256": "fc4792977fa687775d393ca2d2b708a755a7f8b1e2f14114333272165fa3d29f"
+    },
+    {
+      "path": "mutations/M01-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M01-test.log",
+      "sha256": "c24f9ff064200f3685feff34af9ce05ef71f126fb7087d3163b399e9096e597e"
+    },
+    {
+      "path": "mutations/M01.patch",
+      "sha256": "8d872438785acb8f94e4ac669f3749e9b8800942d93734d6a59cfd406581bcfa"
+    },
+    {
+      "path": "mutations/M02-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M02-test.log",
+      "sha256": "92f05afb11d43768db4401a28419355ee06ae016b154a72ace7304aa6f60a10a"
+    },
+    {
+      "path": "mutations/M02.patch",
+      "sha256": "1e61c6451291c25293dd401ab4fe7cde09185313131f21762d4574aadd509923"
+    },
+    {
+      "path": "mutations/M03-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M03-test.log",
+      "sha256": "2f596b50c47cedb3859e799e1bfc5651f756e4bd13ba102caeb4deed8533063b"
+    },
+    {
+      "path": "mutations/M03.patch",
+      "sha256": "59ef9ad58c39e11f19e910b5a411bfd6da71ac1a66077011e3164924af5c6199"
+    },
+    {
+      "path": "mutations/M04-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M04-test.log",
+      "sha256": "0aac44cc876e63097cf59a0d7f86d43003dd12b15a093fa78561e6ff46f233f0"
+    },
+    {
+      "path": "mutations/M04.patch",
+      "sha256": "dc3f6aaa2863a7fcfee7b94bc0a46d2243fde9f5309c1972e74eac8a883fce89"
+    },
+    {
+      "path": "mutations/M05-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M05-test.log",
+      "sha256": "37f55b2e603e291733dee118bff327bad4d3737c4c4383c08d2dffd99b0ee844"
+    },
+    {
+      "path": "mutations/M05.patch",
+      "sha256": "872f21af23833472982f802c61143b22c10617307eaf102240ae7c668ee89ab2"
+    },
+    {
+      "path": "mutations/M06-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mutations/M06-test.log",
+      "sha256": "44ebe55e57b58db1035180799561377b9147b909ffbc0c983219b18c02a4402f"
+    },
+    {
+      "path": "mutations/M06.patch",
+      "sha256": "9f39c4b3dae588d726c8e73bc1b82d4cccefad41a887f085e14cae764ebcddcd"
+    },
+    {
+      "path": "mutations/baseline.log",
+      "sha256": "dfc2d1dcaf378202c6eb66d64f714bd977ac7dfa70f7db54abdebc474a4c93da"
+    },
+    {
+      "path": "mutations/negative-gate.log",
+      "sha256": "760a086faed64df090277c54987a4418978381eb873f31390c55b18477e2bbc4"
+    },
+    {
+      "path": "mutations/restored.log",
+      "sha256": "9f60f64c3c4e28bd2ea0b0613222df5efbbff910470269b7db5f73a23d718405"
+    },
+    {
+      "path": "mutations/summary.json",
+      "sha256": "7669d1d51274b6d1e5f74a5a192c843e51e7715bac7b3526e6ee0bba1216a08f"
+    },
+    {
+      "path": "normal.json",
+      "sha256": "e2ce7a46295caadc53eb9a2bfb6f700bdf5f429cafc2cbab014e14f550f413f7"
+    },
+    {
+      "path": "processing-check.log",
+      "sha256": "79b61d99878509af18766a70f92ac7816978c124bb2be4b8e8954a5c931c8b52"
+    },
+    {
+      "path": "processing-race.log",
+      "sha256": "169d056eea1d072586b26ddb1181f57a42f3e97d6230cc824a9e501fdf6239bd"
+    },
+    {
+      "path": "processing-smoke.log",
+      "sha256": "376d42678d6bdd69476f05a8802a8a5d79ff76b53f83c0ea98273f9bbc199368"
+    },
+    {
+      "path": "review-checks.json",
+      "sha256": "a1262ee634a62ced0a52f5fbce85bb824126cdb8d6823118e919b339fc3475d1"
+    },
+    {
+      "path": "review-mutations.log",
+      "sha256": "da9aa48000789f706ee764812036c6be32b7bb0866a41b6efde8155e88681150"
+    },
+    {
+      "path": "semantic-cases.json",
+      "sha256": "4817132ceb82adcf1943f35e8f434d52e4ecd35ee363f5e7f3a9087e4e3d38a4"
+    },
+    {
+      "path": "shadowed-refund.json",
+      "sha256": "87cce6b3273ea1ae68fe8de56c4ea55c5f4ff44c1ac87fc2d0040cf2816fa0b2"
+    },
+    {
+      "path": "unknown_refund_expired.json",
+      "sha256": "b1e1480fffb1c3af2cb4997592d07e7a6f5f30b7a4bbb2c8a9f101a950f6e63a"
+    },
+    {
+      "path": "wrapper.log",
+      "sha256": "001a33d4c42a36569327520e30b85595129b21668514afc7c738de26f9e7c182"
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "baseline_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+  "tool_versions": {
+    "go": "go version go1.27.2 linux/amd64",
+    "python": "Python 3.14.4"
+  },
+  "baseline": {
+    "argv": [
+      "go",
+      "test",
+      "-count=1",
+      "-v",
+      "./..."
+    ],
+    "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "started_at_utc": "2026-10-18T20:05:52.387984+00:00",
+    "finished_at_utc": "2026-10-18T20:05:53.817935+00:00",
+    "exit": 0,
+    "log": "baseline.log",
+    "sha256": "dfc2d1dcaf378202c6eb66d64f714bd977ac7dfa70f7db54abdebc474a4c93da"
+  },
+  "mutants": [
+    {
+      "id": "M01",
+      "rule": "HP-RULE-006/refund",
+      "patch": "M01.patch",
+      "patch_sha256": "8d872438785acb8f94e4ac669f3749e9b8800942d93734d6a59cfd406581bcfa",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:53.821746+00:00",
+        "finished_at_utc": "2026-10-18T20:05:54.144316+00:00",
+        "exit": 0,
+        "log": "M01-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:54.144455+00:00",
+        "finished_at_utc": "2026-10-18T20:05:55.184321+00:00",
+        "exit": 1,
+        "log": "M01-test.log",
+        "sha256": "c24f9ff064200f3685feff34af9ce05ef71f126fb7087d3163b399e9096e597e"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestCLIConfiguration (0.00s)",
+        "--- FAIL: TestReaderSubstitution (0.02s)",
+        "--- FAIL: TestReaderSubstitution/file/denied (0.00s)",
+        "--- FAIL: TestReaderSubstitution/double/denied (0.00s)",
+        "--- FAIL: TestFinancialDenial (0.00s)",
+        "--- FAIL: TestFinancialDenial/refund (0.00s)",
+        "--- FAIL: TestPrecedence (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "a968353d06aa0f9bf5bbf2bd449684fc5b9c4b9d07fa9fefc19f67ea460e4f06"
+    },
+    {
+      "id": "M02",
+      "rule": "HP-BP-002/T/004/capture",
+      "patch": "M02.patch",
+      "patch_sha256": "1e61c6451291c25293dd401ab4fe7cde09185313131f21762d4574aadd509923",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:56.782355+00:00",
+        "finished_at_utc": "2026-10-18T20:05:57.188256+00:00",
+        "exit": 0,
+        "log": "M02-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:57.188324+00:00",
+        "finished_at_utc": "2026-10-18T20:05:58.457140+00:00",
+        "exit": 1,
+        "log": "M02-test.log",
+        "sha256": "92f05afb11d43768db4401a28419355ee06ae016b154a72ace7304aa6f60a10a"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestFinancialDecisionTable (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable/over_captured (0.00s)",
+        "--- FAIL: TestFinancialDenial (0.00s)",
+        "--- FAIL: TestFinancialDenial/partial_capture (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "adbecbcf7eab4b6dc2fac8d17c4a1a10c147148aa771a5e9c3a0b8671512eb13"
+    },
+    {
+      "id": "M03",
+      "rule": "HP-RULE-006/quantity",
+      "patch": "M03.patch",
+      "patch_sha256": "59ef9ad58c39e11f19e910b5a411bfd6da71ac1a66077011e3164924af5c6199",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:58.464118+00:00",
+        "finished_at_utc": "2026-10-18T20:05:58.793579+00:00",
+        "exit": 0,
+        "log": "M03-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:05:58.793626+00:00",
+        "finished_at_utc": "2026-10-18T20:05:59.995351+00:00",
+        "exit": 1,
+        "log": "M03-test.log",
+        "sha256": "2f596b50c47cedb3859e799e1bfc5651f756e4bd13ba102caeb4deed8533063b"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestFinancialDenial (0.00s)",
+        "--- FAIL: TestFinancialDenial/quantity (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "467dd7fa9123a4728a1e9721b808667a90d3a48793f247ab2c8185953ee0178e"
+    },
+    {
+      "id": "M04",
+      "rule": "HP-RULE-006/activation",
+      "patch": "M04.patch",
+      "patch_sha256": "dc3f6aaa2863a7fcfee7b94bc0a46d2243fde9f5309c1972e74eac8a883fce89",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:00.009029+00:00",
+        "finished_at_utc": "2026-10-18T20:06:00.449662+00:00",
+        "exit": 0,
+        "log": "M04-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:00.449722+00:00",
+        "finished_at_utc": "2026-10-18T20:06:01.620577+00:00",
+        "exit": 1,
+        "log": "M04-test.log",
+        "sha256": "0aac44cc876e63097cf59a0d7f86d43003dd12b15a093fa78561e6ff46f233f0"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestFinancialDecisionTable (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable/activation_equality (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "6a3bb1d138562fc3780491fd972bcb0c9d7420e0acc7365b3148ec99762d7b75"
+    },
+    {
+      "id": "M05",
+      "rule": "HP-RULE-006/account",
+      "patch": "M05.patch",
+      "patch_sha256": "872f21af23833472982f802c61143b22c10617307eaf102240ae7c668ee89ab2",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:01.629726+00:00",
+        "finished_at_utc": "2026-10-18T20:06:02.037122+00:00",
+        "exit": 0,
+        "log": "M05-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:02.037181+00:00",
+        "finished_at_utc": "2026-10-18T20:06:03.250185+00:00",
+        "exit": 1,
+        "log": "M05-test.log",
+        "sha256": "37f55b2e603e291733dee118bff327bad4d3737c4c4383c08d2dffd99b0ee844"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestFinancialDecisionTable (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable/account (0.00s)",
+        "--- FAIL: TestPrecedence (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "d98307b1bbcd98efbd97131a868179602a8baceae27976a7a799f8367f82632c"
+    },
+    {
+      "id": "M06",
+      "rule": "HP-RULE-006/dispute",
+      "patch": "M06.patch",
+      "patch_sha256": "9f39c4b3dae588d726c8e73bc1b82d4cccefad41a887f085e14cae764ebcddcd",
+      "build": {
+        "argv": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:03.258127+00:00",
+        "finished_at_utc": "2026-10-18T20:06:03.583313+00:00",
+        "exit": 0,
+        "log": "M06-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test": {
+        "argv": [
+          "go",
+          "test",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+        "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+        "started_at_utc": "2026-10-18T20:06:03.583368+00:00",
+        "finished_at_utc": "2026-10-18T20:06:04.561073+00:00",
+        "exit": 1,
+        "log": "M06-test.log",
+        "sha256": "44ebe55e57b58db1035180799561377b9147b909ffbc0c983219b18c02a4402f"
+      },
+      "outcome": "KILLED",
+      "failing_tests": [
+        "--- FAIL: TestCLIConfiguration (0.00s)",
+        "--- FAIL: TestReaderSubstitution (0.00s)",
+        "--- FAIL: TestReaderSubstitution/file/normal (0.00s)",
+        "--- FAIL: TestReaderSubstitution/double/normal (0.00s)",
+        "--- FAIL: TestFinancialScope (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable/activation_equality (0.00s)",
+        "--- FAIL: TestFinancialDecisionTable/max_money (0.00s)",
+        "--- FAIL: TestDeterminismAndOwnership (0.00s)",
+        "--- FAIL: TestNormal (0.00s)",
+        "--- FAIL: TestUnknownAndZero (0.00s)",
+        "--- FAIL: TestProofBoundary (0.00s)",
+        "--- FAIL: TestFinancialDenial (0.00s)",
+        "--- FAIL: TestFinancialDenial/dispute (0.00s)",
+        "--- FAIL: TestFinancialDenial/currency (0.00s)"
+      ],
+      "retest": "NOT_NEEDED",
+      "source_file_sha256": "43aa250cdac6d670c404b0bff748b7a0c6383235d5ee8d7e5f9f1d50a013b9c6"
+    }
+  ],
+  "seeded": 6,
+  "compiled": 6,
+  "detected": 6,
+  "missed": 0,
+  "invalid": 0,
+  "natural_defects": 2,
+  "natural_defect_task_links": [
+    "https://hitpipe.atlassian.net/browse/HIT-29",
+    "https://hitpipe.atlassian.net/browse/HIT-27"
+  ],
+  "natural_count_boundary": "Natural count is supplied from separately recorded genuine failing tests; mutation runner does not discover or estimate natural defects.",
+  "negative_gate": {
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "processing",
+      "--require"
+    ],
+    "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "started_at_utc": "2026-10-18T20:05:55.184714+00:00",
+    "finished_at_utc": "2026-10-18T20:05:56.775667+00:00",
+    "exit": 1,
+    "log": "negative-gate.log",
+    "sha256": "760a086faed64df090277c54987a4418978381eb873f31390c55b18477e2bbc4"
+  },
+  "restored": {
+    "argv": [
+      "go",
+      "test",
+      "-count=1",
+      "-v",
+      "./..."
+    ],
+    "cwd": "/dev/shm/hitpipe-tp-review-work-20261018/hit29-mutations-2mkjwsi9/checkout/services/processing",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "started_at_utc": "2026-10-18T20:06:04.566084+00:00",
+    "finished_at_utc": "2026-10-18T20:06:05.182069+00:00",
+    "exit": 0,
+    "log": "restored.log",
+    "sha256": "9f60f64c3c4e28bd2ea0b0613222df5efbbff910470269b7db5f73a23d718405"
+  },
+  "clean": true,
+  "hidden_suite": "NOT_PROVIDED_NOT_RUN",
+  "limitations": "Synthetic offline domain and consumer only; no human review, provider or full-system correctness claim."
+}

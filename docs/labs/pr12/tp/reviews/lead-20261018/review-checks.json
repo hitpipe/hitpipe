@@ -1,0 +1,87 @@
+[
+  {
+    "name": "bundle",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "validate"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend",
+    "started_at": "2026-10-18T20:02:03.911853+00:00",
+    "exit_code": 0,
+    "seconds": 0.21,
+    "sha256": "511e2450c1428c781c3edd7f7b998d9304d018daa6330cc3df1f4ba02d14de9f",
+    "log": "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/bundle.log",
+    "artifact_path": "bundle.log"
+  },
+  {
+    "name": "wrapper",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "python3",
+      "tools/pr12/test_workspace.py"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend",
+    "started_at": "2026-10-18T20:02:04.127447+00:00",
+    "exit_code": 0,
+    "seconds": 0.12,
+    "sha256": "001a33d4c42a36569327520e30b85595129b21668514afc7c738de26f9e7c182",
+    "log": "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/wrapper.log",
+    "artifact_path": "wrapper.log"
+  },
+  {
+    "name": "processing-check",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "processing",
+      "--require"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend",
+    "started_at": "2026-10-18T20:02:04.244188+00:00",
+    "exit_code": 0,
+    "seconds": 1.97,
+    "sha256": "79b61d99878509af18766a70f92ac7816978c124bb2be4b8e8954a5c931c8b52",
+    "log": "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/processing-check.log",
+    "artifact_path": "processing-check.log"
+  },
+  {
+    "name": "processing-smoke",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "smoke",
+      "processing",
+      "--require"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend",
+    "started_at": "2026-10-18T20:02:06.218830+00:00",
+    "exit_code": 0,
+    "seconds": 1.47,
+    "sha256": "376d42678d6bdd69476f05a8802a8a5d79ff76b53f83c0ea98273f9bbc199368",
+    "log": "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/processing-smoke.log",
+    "artifact_path": "processing-smoke.log"
+  },
+  {
+    "name": "processing-race",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "go",
+      "test",
+      "-race",
+      "-count=1",
+      "./..."
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend/services/processing",
+    "started_at": "2026-10-18T20:02:07.689699+00:00",
+    "exit_code": 0,
+    "seconds": 4.9,
+    "sha256": "169d056eea1d072586b26ddb1181f57a42f3e97d6230cc824a9e501fdf6239bd",
+    "log": "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/processing-race.log",
+    "artifact_path": "processing-race.log"
+  }
+]

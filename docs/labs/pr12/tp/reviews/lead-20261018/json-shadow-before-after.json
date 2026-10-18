@@ -1,0 +1,30 @@
+[
+  {
+    "phase": "before",
+    "source_sha": "adfbfc33bf20cb0b0641e49e48c0502d2f5d108d",
+    "argv": [
+      "/dev/shm/hitpipe-tp-review-before-20261018/before-contractcheck",
+      "--fixture",
+      "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/shadowed-refund.json",
+      "--format",
+      "json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"status\":\"VALID\",\"reason\":\"FINANCIAL_ELIGIBILITY_ONLY\"}\n",
+    "stderr": "start processing-contractcheck offline\nresult status=VALID reason=FINANCIAL_ELIGIBILITY_ONLY\n"
+  },
+  {
+    "phase": "after",
+    "source_sha": "ba160a70d6bb506979f96dec6b84619f00cb081a",
+    "argv": [
+      "/home/deploy/.local/share/hitpipe-tp-review-20261018/backend/.pr12-build/processing/release/processing-contractcheck",
+      "--fixture",
+      "/home/deploy/.local/share/hitpipe-tp-review-20261018/evidence/shadowed-refund.json",
+      "--format",
+      "json"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": "start processing-contractcheck offline\nINVALID_JSON\n"
+  }
+]
