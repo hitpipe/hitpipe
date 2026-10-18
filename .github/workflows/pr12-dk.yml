@@ -38,6 +38,10 @@ jobs:
       - name: Run declared diagnostic smoke in both modes
         if: hashFiles('services/iam/lab-component.json') != ''
         run: python3 tools/pr12/workspace.py smoke iam --require
+      - name: Collect cross-package IAM coverage including adapter calls from CLI tests
+        if: hashFiles('services/iam/lab-component.json') != ''
+        working-directory: services/iam
+        run: go test -count=1 -coverpkg=./... -coverprofile=../../.pr12-build/iam-all.cover ./...
       - name: Compile isolated IAM mutations and verify the same CI gate rejects them
         if: hashFiles('services/iam/tools/mutation_check.py') != ''
         run: python3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci
@@ -47,6 +51,7 @@ jobs:
           name: pr12-iam-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             .pr12-build/iam.cover
+            .pr12-build/iam-all.cover
             .pr12-build/iam/mutations-ci/
           if-no-files-found: error
       - name: Scope of this job

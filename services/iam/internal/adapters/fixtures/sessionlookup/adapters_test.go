@@ -3,6 +3,7 @@ package sessionlookup_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -158,5 +159,29 @@ func TestAdapterFailureAndBoundaryInputs(t *testing.T) {
 	broken, _ := sessionlookup.NewFile(path)
 	if _, e := broken.Lookup(context.Background(), "a"); e == nil || strings.Contains(e.Error(), path) {
 		t.Fatal("bad file allowed or path leaked")
+	}
+}
+
+type brokenReader struct{}
+
+func (brokenReader) Read([]byte) (int, error) { return 0, errors.New("SYNTHETIC_READER_SECRET") }
+
+func TestReaderFailureAndUnknownProjection(t *testing.T) {
+	if _, _, err := sessionlookup.Decode(brokenReader{}); err == nil || strings.Contains(err.Error(), "SYNTHETIC_READER_SECRET") {
+		t.Fatal("read error leaked or accepted")
+	}
+	unknown := `{"version":1,"session":{"found":false,"revoked":false},"clock":{"trusted":true,"now":"2026-10-18T00:00:00Z"}}`
+	s, o, err := sessionlookup.Decode(strings.NewReader(unknown))
+	if err != nil || s.Found || !o.Usable() {
+		t.Fatal("valid unknown projection rejected", err)
+	}
+	if d := sessionpolicy.Evaluate(s, o); d.Reason != sessionpolicy.ReasonUnknown || d.IsValid() {
+		t.Fatal(d)
+	}
+	for _, value := range []string{"2026-02-30T00:00:00Z", "0000-01-01T00:00:00Z", "2026-10-18T00:00:00+00:60"} {
+		bad := strings.Replace(unknown, "2026-10-18T00:00:00Z", value, 1)
+		if _, _, err := sessionlookup.Decode(strings.NewReader(bad)); err == nil {
+			t.Fatal("invalid time accepted")
+		}
 	}
 }

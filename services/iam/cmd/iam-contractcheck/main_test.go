@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"
 	"os"
 	"path/filepath"
@@ -117,6 +118,20 @@ func TestDiagnosticCompositionAndUnavailableClock(t *testing.T) {
 		diag.Reset()
 		if code := run(args, &out, &diag); code != 2 {
 			t.Fatal("invalid adapter accepted")
+		}
+	}
+}
+
+type brokenOutput struct{}
+
+func (brokenOutput) Write([]byte) (int, error) { return 0, errors.New("SYNTHETIC_OUTPUT_SECRET") }
+
+func TestOutputFailureReturnsErrorWithoutLeaking(t *testing.T) {
+	path := fixtureFile(t, fixture)
+	for _, args := range [][]string{{"--version"}, {"--fixture", path, "--format", "text"}, {"--fixture", path, "--format", "json"}} {
+		var diag bytes.Buffer
+		if code := run(args, brokenOutput{}, &diag); code != 2 || strings.Contains(diag.String(), "SYNTHETIC_OUTPUT_SECRET") {
+			t.Fatal("write failure mishandled", code)
 		}
 	}
 }
