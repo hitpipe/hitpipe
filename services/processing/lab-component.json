@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "component": "processing",
+  "positive_fixture": "testdata/valid.json",
+  "negative_fixture": "testdata/invalid.json",
+  "positive_output_contains": [
+    "VALID",
+    "FINANCIAL_ELIGIBILITY_ONLY"
+  ],
+  "expected_test_names": [
+    "TestNormal",
+    "TestUnknownAndZero",
+    "TestProofBoundary"
+  ],
+  "runtime_dependencies": []
+}
