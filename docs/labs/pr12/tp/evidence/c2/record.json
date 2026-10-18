@@ -1,0 +1,53 @@
+{
+  "stage": "c2",
+  "sha": "7ee6b126c3ce126bfb6cbe6d9a1797c4ba562d8b",
+  "component_tree": "7a57b7d1a7ccae9c6944b7d2996bd22ff850c5cd",
+  "dirty": false,
+  "environment": {
+    "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "go": "go version go1.27.2 darwin/arm64",
+    "python": "3.14.2",
+    "git": "git version 2.52.0",
+    "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+  },
+  "runs": [
+    {
+      "id": "c2-check",
+      "sha": "7ee6b126c3ce126bfb6cbe6d9a1797c4ba562d8b",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "check",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:49:28.581584+00:00",
+      "finished_at_utc": "2026-10-18T10:49:29.210779+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "check.log",
+      "sha256": "e1a17e0e20870a33ec19249bc727d8f2ff101b39c62d209d23d30c5ed63f2457",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification."
+    },
+    {
+      "id": "c2-smoke",
+      "sha": "7ee6b126c3ce126bfb6cbe6d9a1797c4ba562d8b",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "smoke",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:49:29.210941+00:00",
+      "finished_at_utc": "2026-10-18T10:49:30.412857+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "smoke.log",
+      "sha256": "dc18f77140815343af95b0f6f3bf277898a7e0a4f69ee8c8d250c0b7a56a5a69",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification."
+    }
+  ]
+}
