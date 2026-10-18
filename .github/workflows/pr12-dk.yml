@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Verify bootstrap documentation and frozen copies
         run: python3 tools/pr12/workspace.py validate
       - name: Verify bootstrap wrapper boundaries (not student tests)
@@ -30,10 +32,23 @@ jobs:
           go-version: '1.27.2'
           cache: false
       - name: Run actual named tests when module exists
+        env:
+          PR12_RACE: '1'
         run: python3 tools/pr12/workspace.py check iam
       - name: Run declared diagnostic smoke in both modes
         if: hashFiles('services/iam/lab-component.json') != ''
         run: python3 tools/pr12/workspace.py smoke iam --require
+      - name: Compile isolated IAM mutations and verify the same CI gate rejects them
+        if: hashFiles('services/iam/tools/mutation_check.py') != ''
+        run: python3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci
+      - uses: actions/upload-artifact@v4
+        if: always() && hashFiles('services/iam/lab-component.json') != ''
+        with:
+          name: pr12-iam-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            .pr12-build/iam.cover
+            .pr12-build/iam/mutations-ci/
+          if-no-files-found: error
       - name: Scope of this job
         if: always()
         run: |
