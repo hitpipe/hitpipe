@@ -43,7 +43,7 @@ jobs:
           cd services/processing
           go test -race -count=1 ./...
           cd ../..
-          python3 services/processing/tools/mutations/run.py --output .pr12-build/processing-mutations
+          python3 services/processing/tools/mutations/run.py --output .pr12-build/processing-mutations --natural-defects 1 --natural-defect-task https://hitpipe.atlassian.net/browse/HIT-29
       - uses: actions/upload-artifact@v4
         if: always()
         with:
