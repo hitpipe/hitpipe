@@ -1,0 +1,21 @@
+{
+  "task": "HIT-29",
+  "url": "https://hitpipe.atlassian.net/browse/HIT-29",
+  "base_sha": "590e80d4b77426856e1c22afad47a0cf5c0d7a76",
+  "observed_at_utc": "2026-10-18T10:52:22.461964+00:00",
+  "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing",
+  "argv": [
+    "go",
+    "test",
+    "-count=1",
+    "-run",
+    "TestOutputFailure",
+    "-v",
+    "./cmd/processing-contractcheck"
+  ],
+  "exit": 1,
+  "actual": "text and version write failures returned exit0; expected exit3; JSON branch already behaved correctly",
+  "test_patch_sha256": "224cb415c83a9c1446f4845f52ab22ffafbdba481ae9c143607c5b136daac72a",
+  "red_log_sha256": "779ec28c0d31ae37bc3ac02fb950cd98ba8988e4c01ac9349142099c03d57a9a",
+  "prior_setup_error": "Initial invocation from legacy root failed module setup, not counted as a product defect."
+}

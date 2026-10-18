@@ -1,0 +1,28 @@
+diff --git a/services/processing/cmd/processing-contractcheck/main_test.go b/services/processing/cmd/processing-contractcheck/main_test.go
+index 629aeee..94b80ec 100644
+--- a/services/processing/cmd/processing-contractcheck/main_test.go
++++ b/services/processing/cmd/processing-contractcheck/main_test.go
+@@ -2,6 +2,7 @@ package main
+ 
+ import (
+ 	"bytes"
++	"fmt"
+ 	"strings"
+ 	"testing"
+ )
+@@ -30,3 +31,15 @@ func TestCLIConfiguration(t *testing.T) {
+ 		}
+ 	}
+ }
++
++type failedWriter struct{}
++
++func (failedWriter) Write(p []byte) (int, error) { return 0, fmt.Errorf("output unavailable") }
++func TestOutputFailure(t *testing.T) {
++	for _, args := range [][]string{{"--version"}, {"--fixture", "../../testdata/valid.json", "--format", "text"}, {"--fixture", "../../testdata/valid.json", "--format", "json"}} {
++		var diag bytes.Buffer
++		if exit := run(args, failedWriter{}, &diag); exit != 3 {
++			t.Errorf("args=%v got exit=%d want 3", args, exit)
++		}
++	}
++}

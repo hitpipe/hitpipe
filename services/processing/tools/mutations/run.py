@@ -18,7 +18,8 @@ def run(argv,cwd,folder,label,sha):
  path=folder/(label+'.log');path.write_text(p.stdout)
  return {'argv':argv,'cwd':str(cwd),'source_sha':sha,'started_at_utc':start,'finished_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':p.returncode,'log':path.name,'sha256':digest(path.read_bytes())}
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--output',required=True);args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--output',required=True);parser.add_argument('--natural-defects',type=int,default=0);parser.add_argument('--natural-defect-task',action='append',default=[]);args=parser.parse_args()
+ if args.natural_defects<0 or (args.natural_defects and not args.natural_defect_task):raise ValueError('natural defect count requires actual task references')
  output=pathlib.Path(args.output).resolve();output.mkdir(parents=True,exist_ok=True)
  sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
  records=[];gate=None
@@ -49,7 +50,7 @@ def main():
    restored=run(['go','test','-count=1','-v','./...'],module,output,'restored',sha)
    if restored['exit']!=0:raise RuntimeError('restoration not green')
    clean=not subprocess.check_output(['git','status','--porcelain'],cwd=wt,text=True).strip()
-   summary={'baseline_sha':sha,'tool_versions':{'go':subprocess.check_output(['go','version'],text=True).strip(),'python':subprocess.check_output(['python3','--version'],text=True).strip()},'baseline':baseline,'mutants':records,'seeded':len(records),'compiled':sum(x['build']['exit']==0 for x in records),'detected':sum(x['outcome']=='KILLED' for x in records),'missed':sum(x['outcome']=='SURVIVED' for x in records),'invalid':sum(x['outcome']=='INVALID' for x in records),'natural_defects':0,'natural_defect_task_links':[],'natural_count_boundary':'No naturally failing business test observed in this run; no extrapolated defect estimate.','negative_gate':gate,'restored':restored,'clean':clean,'hidden_suite':'NOT_PROVIDED_NOT_RUN','limitations':'Synthetic offline domain and consumer only; no human review, provider or full-system correctness claim.'}
+   summary={'baseline_sha':sha,'tool_versions':{'go':subprocess.check_output(['go','version'],text=True).strip(),'python':subprocess.check_output(['python3','--version'],text=True).strip()},'baseline':baseline,'mutants':records,'seeded':len(records),'compiled':sum(x['build']['exit']==0 for x in records),'detected':sum(x['outcome']=='KILLED' for x in records),'missed':sum(x['outcome']=='SURVIVED' for x in records),'invalid':sum(x['outcome']=='INVALID' for x in records),'natural_defects':args.natural_defects,'natural_defect_task_links':args.natural_defect_task,'natural_count_boundary':'Natural count is supplied from separately recorded genuine failing tests; mutation runner does not discover or estimate natural defects.','negative_gate':gate,'restored':restored,'clean':clean,'hidden_suite':'NOT_PROVIDED_NOT_RUN','limitations':'Synthetic offline domain and consumer only; no human review, provider or full-system correctness claim.'}
    (output/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
    print(json.dumps({k:summary[k] for k in ['baseline_sha','seeded','compiled','detected','missed','invalid','clean']}))
    if not clean or any(x['outcome']!='KILLED' for x in records):raise RuntimeError('inspect INVALID/SURVIVED protocol; strengthen tests and preserve retest')
