@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -9,7 +10,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+	systemclock "github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system"
+	"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"
+	"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
 )
 
 var version = "pr12"
@@ -25,15 +28,18 @@ func run(args []string, stdout, stderr io.Writer) int {
 	path := flags.String("fixture", "", "synthetic fixture path")
 	format := flags.String("format", "text", "text or json")
 	showVersion := flags.Bool("version", false, "print build metadata")
+	lookupMode := flags.String("lookup", "file", "file or fixed synthetic lookup")
+	clockMode := flags.String("clock", "fixture", "fixture or system (requires real trust probe)")
 	if err := flags.Parse(args); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			fmt.Fprintln(stdout, "iam-contractcheck --fixture PATH --format text|json | --version")
+			fmt.Fprintln(stdout, "iam-contractcheck --fixture PATH --format text|json [--lookup file|fixed] [--clock fixture|system] | --version")
 			fmt.Fprintln(stderr, "iam-contractcheck event=end status=help")
 			return 0
 		}
 		return fail()
 	}
-	if flags.NArg() != 0 || (*format != "text" && *format != "json") {
+	if flags.NArg() != 0 || (*format != "text" && *format != "json") ||
+		(*lookupMode != "file" && *lookupMode != "fixed") || (*clockMode != "fixture" && *clockMode != "system") {
 		return fail()
 	}
 	if *showVersion {
@@ -52,11 +58,28 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return fail()
 	}
 	defer file.Close()
-	snapshot, observation, err := decodeFixture(file)
+	snapshot, observation, err := sessionlookup.Decode(file)
 	if err != nil {
 		return fail()
 	}
-	decision := sessionpolicy.Evaluate(snapshot, observation)
+	var lookup authenticatesession.SessionLookup
+	if *lookupMode == "fixed" {
+		lookup = sessionlookup.NewFixed(snapshot, false)
+	} else {
+		lookup, err = sessionlookup.NewFile(*path)
+		if err != nil {
+			return fail()
+		}
+	}
+	var clock authenticatesession.Clock = sessionlookup.NewFixedClock(observation)
+	if *clockMode == "system" {
+		clock = systemclock.New(nil)
+	}
+	service, err := authenticatesession.New(lookup, clock)
+	if err != nil {
+		return fail()
+	}
+	decision := service.Execute(context.Background(), "diagnostic")
 	if *format == "json" {
 		if json.NewEncoder(stdout).Encode(decision) != nil {
 			return fail()
@@ -65,6 +88,9 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return fail()
 	}
 	fmt.Fprintf(stderr, "iam-contractcheck event=end status=%s\n", decision.State)
+	if decision.State == "unavailable" {
+		return 3
+	}
 	return 0
 }
 

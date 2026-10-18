@@ -1,6 +1,6 @@
 # SessionPolicy и AuthenticateSession — локальный контракт v2
 
-Task HIT-18, после R1 commit `0661a3ea64bd9f5243a9a7f5b3e1195c31eef152`. Сначала спецификация, затем реализация HIT-19/20. Это внутренняя проекция IAM, не изменение OAS/SQL. До C1 документ находится в личном пакете; при создании module канонический файл переедет в `services/iam/docs/module-contract.md`, а эта страница станет указателем.
+Task HIT-18, после R1 commit `0661a3ea64bd9f5243a9a7f5b3e1195c31eef152`. Сначала спецификация PR #13, затем реализация HIT-19/20. Это внутренняя проекция IAM, не изменение OAS/SQL. С C1 канонический файл находится здесь; прежний `docs/labs/pr12/dk/module-contract.md` — указатель.
 
 ## Ответственность и публичная операция
 
@@ -70,7 +70,9 @@ Constructor отвергает nil и typed-nil реализации. Execute т
 
 Для known session и clock требуемые поля не принимают null/отсутствие. В unknown projection timestamps могут отсутствовать; присутствующие timestamp всё равно должны разбираться. Boolean presence отличается от false. Timestamp — RFC3339Nano с offset. Строгий decoder отклоняет duplicate/extra keys, unknown version, неверные типы, trailing document, malformed JSON и input >64 KiB; глубина JSON ограничена 16. Значения из ошибок parser не печатаются.
 
-`iam-contractcheck --fixture PATH --format text|json`, `--version`. Путь и формат влияют на выполнение; отсутствующий/неверный путь, формат и broken fixture дают exit 2. Структурно корректное решение policy, включая безопасный denied, даёт exit 0: отказ сессии — ожидаемый бизнес-результат, не неисправность CLI. После C2 `--lookup file|fixed` меняет adapter в одной точке сборки, без правки Execute. `--clock fixture|system` выбирает фиксированное синтетическое время либо host clock adapter; последний остаётся unavailable без реального clock-health probe, а не объявляет `time.Now()` доказанно доверенным.
+`iam-contractcheck --fixture PATH --format text|json`, `--version`. Путь и формат влияют на выполнение; отсутствующий/неверный путь, формат и broken fixture дают exit 2. Структурно корректное решение policy, включая безопасный denied, даёт exit 0: отказ сессии — ожидаемый бизнес-результат, не неисправность CLI. Application unavailable даёт exit 3. С C2 `--lookup file|fixed` меняет adapter в одной точке сборки, без правки Execute. `--clock fixture|system` выбирает фиксированное синтетическое время либо host clock adapter; последний остаётся unavailable без реального clock-health probe, а не объявляет `time.Now()` доказанно доверенным.
+
+File повторно читает один synthetic fixture на каждый Lookup; Fixed хранит неизменяемую копию. Оба игнорируют reference и потому НЕ являются multi-session authority. Fixture clock — construction-time observation из исходного файла; она не доказывает свежесть изменённого authority. Адаптеры возвращают value, а не изменяемые ссылки. System.HealthProbe получает наблюдённый instant и должен реально установить его доверенность в среде deployment; тестовая true-функция только unit-test double. CLI такую функцию не устанавливает.
 
 На stderr только фиксированные коды старта/исхода; stdout — state/reason либо build metadata. Профили, reference, fixture body и canary не выводятся. Повторный запуск не меняет исходные данные, не создаёт sessions, не выполняет внешних команд.
 

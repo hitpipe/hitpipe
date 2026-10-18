@@ -1,4 +1,6 @@
-package main
+// Package sessionlookup provides strictly synthetic diagnostic adapters. It is
+// not a production session authority and never accepts cookies or credentials.
+package sessionlookup
 
 import (
 	"bytes"
@@ -13,7 +15,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
 )
 
-const maxFixtureBytes = 64 * 1024
+const MaxFixtureBytes = 64 * 1024
 
 var errFixture = errors.New("invalid_fixture")
 var timestampPattern = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$`)
@@ -148,11 +150,16 @@ func parseTimestamp(text *string, required bool) (time.Time, error) {
 	return t, nil
 }
 
-func decodeFixture(reader io.Reader) (sessionpolicy.Snapshot, sessionpolicy.Observation, error) {
+// Decode validates the local fixture format, not the canonical public wire API.
+// All errors are safe codes and never include input text or parser diagnostics.
+func Decode(reader io.Reader) (sessionpolicy.Snapshot, sessionpolicy.Observation, error) {
 	var s sessionpolicy.Snapshot
 	var o sessionpolicy.Observation
-	data, err := io.ReadAll(io.LimitReader(reader, maxFixtureBytes+1))
-	if err != nil || len(data) > maxFixtureBytes || !utf8.Valid(data) || checkJSON(data) != nil || exactShape(data) != nil {
+	if reader == nil {
+		return s, o, errFixture
+	}
+	data, err := io.ReadAll(io.LimitReader(reader, MaxFixtureBytes+1))
+	if err != nil || len(data) > MaxFixtureBytes || !utf8.Valid(data) || checkJSON(data) != nil || exactShape(data) != nil {
 		return s, o, errFixture
 	}
 	d := json.NewDecoder(bytes.NewReader(data))

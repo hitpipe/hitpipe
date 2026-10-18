@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"
 	"os"
 	"path/filepath"
 	"strings"
@@ -55,7 +56,7 @@ func TestDiagnosticMalformedAndCanary(t *testing.T) {
 		"bad timestamp":   strings.Replace(fixture, "2026-10-18T07:59:59Z", canary, 1),
 		"comma timestamp": strings.Replace(fixture, "07:59:59Z", "07:59:59,1Z", 1),
 		"large offset":    strings.Replace(fixture, "07:59:59Z", "07:59:59+24:00", 1),
-		"oversize":        strings.Repeat(" ", maxFixtureBytes+1),
+		"oversize":        strings.Repeat(" ", sessionlookup.MaxFixtureBytes+1),
 	}
 	for name, data := range cases {
 		t.Run(name, func(t *testing.T) {
@@ -96,5 +97,26 @@ func TestDiagnosticDeniedIsSuccessfulEvaluation(t *testing.T) {
 	var out, diagnostics bytes.Buffer
 	if code := run([]string{"--fixture", fixtureFile(t, data)}, &out, &diagnostics); code != 0 || !strings.Contains(out.String(), "revoked_session") {
 		t.Fatal("expected successful denied decision")
+	}
+}
+
+func TestDiagnosticCompositionAndUnavailableClock(t *testing.T) {
+	path := fixtureFile(t, fixture)
+	for _, lookup := range []string{"file", "fixed"} {
+		var out, diag bytes.Buffer
+		if code := run([]string{"--fixture", path, "--lookup", lookup}, &out, &diag); code != 0 || !strings.Contains(out.String(), "session_valid") {
+			t.Fatal(lookup, code, out.String())
+		}
+	}
+	var out, diag bytes.Buffer
+	if code := run([]string{"--fixture", path, "--clock", "system"}, &out, &diag); code != 3 || !strings.Contains(out.String(), "clock_unavailable") {
+		t.Fatal("unattested clock allowed", code, out.String())
+	}
+	for _, args := range [][]string{{"--fixture", path, "--lookup", "real"}, {"--fixture", path, "--clock", "trusted"}} {
+		out.Reset()
+		diag.Reset()
+		if code := run(args, &out, &diag); code != 2 {
+			t.Fatal("invalid adapter accepted")
+		}
 	}
 }
