@@ -26,6 +26,9 @@ jobs:
         run: python3 tools/pr12/test_workspace.py
       - name: Report actual implementation state
         run: python3 tools/pr12/workspace.py status iam
+      - name: Verify the filled DK report package and retained evidence
+        if: hashFiles('docs/labs/pr12/dk/reports/verify_package.py') != ''
+        run: python3 docs/labs/pr12/dk/reports/verify_package.py
       - uses: actions/setup-go@v5
         if: hashFiles('services/iam/lab-component.json') != ''
         with:

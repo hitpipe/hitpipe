@@ -1,0 +1,87 @@
+{
+  "id": "c1-inspect",
+  "source_sha": "0ead65c2a7bd767841659c0f26f66edd7d763cfb",
+  "source_tree_dirty": false,
+  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree",
+  "command": [
+    "python3",
+    "tools/pr12/workspace.py",
+    "inspect",
+    "iam",
+    "--mode",
+    "release",
+    "--require"
+  ],
+  "environment": {
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "2",
+    "GOFLAGS": "-p=1",
+    "GOCACHE": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/cache/go-build"
+  },
+  "started_at": "2026-10-18T23:25:15.629926+00:00",
+  "completed_at": "2026-10-18T23:25:15.881225+00:00",
+  "elapsed_seconds": 0.251,
+  "exit_code": 0,
+  "expected_exit_codes": [
+    0
+  ],
+  "actual_result": "PASS",
+  "artifact_path": "c1-inspect.log",
+  "sha256": "e76ceafcec41b4cb3c00a667e889f779a315ef58d8b413258f5d73afcfbd17cc",
+  "limitations": "Agent execution only; not human review, merge or formal acceptance.",
+  "module_files": [
+    {
+      "path": "services/iam/Makefile",
+      "sha256": "7f51b2c27cf73dae22f27a21b96bed1d01af61c1467f76d3c1d77f517971e7e4"
+    },
+    {
+      "path": "services/iam/README.md",
+      "sha256": "874f70d349a3b5af769fce0dfee550c9bba8907847969dc6799e5ccf18f11902"
+    },
+    {
+      "path": "services/iam/cmd/iam-contractcheck/fixture.go",
+      "sha256": "2edcd8274c13e8c599ec679a75754d45e45677658327a5db3c16f1f34f514695"
+    },
+    {
+      "path": "services/iam/cmd/iam-contractcheck/main.go",
+      "sha256": "da099c0ed282d584fa48c408d334f6b5b83d5d2ca0b38131181d13428c18ffd8"
+    },
+    {
+      "path": "services/iam/cmd/iam-contractcheck/main_test.go",
+      "sha256": "cc388a694abb57deda52c97a00bbabc7953377b79b0e9e7a4d3732887ae3acc1"
+    },
+    {
+      "path": "services/iam/docs/module-contract.md",
+      "sha256": "c26e28c9b645328207acc90c09f807ece6e587d79f275ff084756fd157e2a004"
+    },
+    {
+      "path": "services/iam/go.mod",
+      "sha256": "ab4528a42642dc5e455b958e1103e9d60448db64a6e4c3c4a510aaeadc27f6a4"
+    },
+    {
+      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39"
+    },
+    {
+      "path": "services/iam/internal/domain/sessionpolicy/policy_test.go",
+      "sha256": "c65d0165169cc708a27de60fb1ad4caf68a35a604de41cea5cf0c71fadb069ac"
+    },
+    {
+      "path": "services/iam/lab-component.json",
+      "sha256": "408d192d9f21e02d9512c56172d89655a433654f319b0587abaeef87e797fb65"
+    },
+    {
+      "path": "services/iam/testdata/idle-equal.json",
+      "sha256": "11b458a32d092c5776167e2195ae75bf66d3bce6ecbf15177bec74223482ab83"
+    },
+    {
+      "path": "services/iam/testdata/malformed.json",
+      "sha256": "dc26eaa81946fce51b0eb1c29723e77da915bfd5612262555f5e243bea15ae65"
+    },
+    {
+      "path": "services/iam/testdata/valid.json",
+      "sha256": "799e95aab91ac535173d239f52e3814c0cc9a5ece0a0aff6dbacc69be1c49a1f"
+    }
+  ],
+  "module_tree_sha256": "3c494c4df1887a67002be453d1d519d0499ac79bd95569ba6690bbfc8b2d1ff6"
+}

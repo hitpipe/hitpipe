@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -74,7 +74,7 @@
+ 	if !snapshot.Found {
+ 		return deny(ReasonUnknown)
+ 	}
+-	if snapshot.Revoked {
++	if false {
+ 		return deny(ReasonRevoked)
+ 	}
+ 	created := snapshot.CreatedAt.UTC()
