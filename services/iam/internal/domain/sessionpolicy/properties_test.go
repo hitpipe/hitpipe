@@ -6,6 +6,20 @@ import (
 	"time"
 )
 
+// Added after the actual M07 survivor: callers can construct a value whose
+// positive state and reason disagree, even though Evaluate never emits it.
+func TestDecisionRejectsMixedStateAndReason(t *testing.T) {
+	for _, d := range []sessionpolicy.Decision{
+		{State: sessionpolicy.StateValid, Reason: sessionpolicy.ReasonUnknown},
+		{State: sessionpolicy.StateDenied, Reason: sessionpolicy.ReasonValid},
+		{State: sessionpolicy.StateValid}, {Reason: sessionpolicy.ReasonValid}, {},
+	} {
+		if d.IsValid() {
+			t.Fatalf("incomplete/mixed decision allowed: %+v", d)
+		}
+	}
+}
+
 func TestDecisionTablePrecedence(t *testing.T) {
 	s := baseline()
 	now := observe(s.ExpiresAt)
