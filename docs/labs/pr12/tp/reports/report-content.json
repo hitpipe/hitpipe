@@ -1,0 +1,996 @@
+{
+  "0104-pz01": {
+    "paragraph_updates": {
+      "16": "Автор результата Тимофей Патрушев при помощи Codex. MANUAL_LAB_PR12; Processing — Operations Core. Контракты Candidate/In Review, grant отсутствует; formal admission и backend /start /review не выполнялись. Технические проверки фактические, человеческие действия и изображения ожидаются.",
+      "17": "Профиль pr12-two-primary-plus-system-evidence-v1: два основных 03.02 и отдельные материалы 01.04, плюс два самостоятельных экспорта 01.04. Согласие преподавателя на объединённую сдачу не предполагается.",
+      "20": "Цель — подготовить воспроизводимый компонент Processing и объяснить путь к исполнению. Собственная часть HIT-27: pure eligibility policy, configurable processing-contractcheck, version/build metadata, strict synthetic fixture parsing, diagnostics и meaningful tests. Среда macOS arm64, Go1.27.2, Python3.10+ wrapper; CI Ubuntu24.04. LAB-STACK-001 (17.10.2026, агент Lead) переиспользован; личная применимость — toolchain.md.",
+      "24": "https://hitpipe.atlassian.net/browse/HIT-27 → work/HIT-27-paid-order-eligibility → https://github.com/hitpipe/hitpipe/pull/5. Реальные check/smoke/inspection evidence/c1. Независимый human review/merge HUMAN_PENDING, main напрямую не менялся. Рисунок1 после реального открытия кода.",
+      "26": "Go sources + go.mod → stdlib/dependency resolution → compiler → linker с version/fullSHA/dirty/buildMode → Mach-O → OS loader + system libraries → flags/fixture → application consumer → domain → typed result/exit. go version -m и otool -L реально выполнены (evidence/c1). Подключены libSystem.B.dylib и libresolv.9.dylib; полностью статический binary не заявляется. Подробнее execution-path.md.",
+      "28": "Один fixed scenario valid.json, затем refunded.json и invalid.json. При SHA 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb оба режима запущены вне checkout: version, normal, changed fixture и invalid input. Dev binary3948210 bytes; release3909730 bytes. Все восемь expected exits совпали; timing/performance не измерялись. Cwd/argv/binary/log digests в evidence/d1/delivery-observations.json. Рисунки2–3.",
+      "31": "go.mod закрепляет Go1.27.2, внешних modules0, go.sum не требуется. Fixture testdata/valid.json синтетический, now фиксирован, reset перечитыванием. Конфигурация --fixture изменяет observable result. Диагностика не содержит payload/secrets. Рисунки4–5.",
+      "33": "HUMAN_PENDING. Тимофей лично должен проверить scaffold исполнителя HIT-13; собственный scaffold независимо проверяет исполнитель HIT-11. Lead выдаёт exact чужой SHA/инструкцию. Реальных дат/env/results/remarks нет. Конкретные шаги human-gates/peer-scaffold-out.md и -in.md; авторский outside-checkout run не независимый. Рисунок6 пока не доказывает PASS.",
+      "35": "CI https://github.com/hitpipe/hitpipe/actions/runs/39121031226 на 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb: named tests/vet, smoke обоих режимов, race, compiled mutation experiments. Чувствительность проверена локально тем же workspace.py check processing --require на M01: exit ненулевой из-за refund assertion; evidence/mutations/negative-gate.log. После восстановления baseline/restored PASS, clean=true. Offline scope; human review, provider truth и full MVP не проверяются. Рисунок7.",
+      "37": "Реализован переиспользуемый Processing diagnostic и финансовый evaluator, сопоставлены реальные режимы и dependencies. Введённые настройки дают наблюдаемое изменение и error exit. Независимое воспроизведение, review/merge, снимки и защита ещё human gates; tag0104-pz01-tp-v1 не создан. VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS.",
+      "39": "Источники: ../context-lock.json, ../source-files.json, ../upstream/product/HP-DOC-SHARED-001.md (RULE006/011/012, revision2), HP-CAP-002 (revision2), HP-DOC-PVL-001 (HP-VER-001, revision2); ../upstream/architecture/HP-BP-002.md T004, HP-BP-003.md T002/006/012, HP-BP-007.md T005/010; реальные revisions ../upstream/architecture/published-revisions.json. Общие charter/MVP/regulation/stack-decision созданы Lead/его агентом и переиспользованы; личные требования, код, tests и отчёты подготовлены для Тимофея с Codex. Методичка 01.04 ПР1: SHA256 634558eccc37617289d2beee8e4a56e12f4f3cedf989cd2046a8649cae102b9c; точный файл inputs/index.json."
+    },
+    "table_rows": {
+      "3": [
+        [
+          "ФИО, группа",
+          "Тимофей Патрушев. Группа не предоставлена; заполняет участник"
+        ],
+        [
+          "Проект и команда",
+          "HitPipe; пять участников"
+        ],
+        [
+          "Личный участок",
+          "Processing / PaidOrderEligibility; services/processing"
+        ],
+        [
+          "Репозиторий",
+          "https://github.com/hitpipe/hitpipe"
+        ],
+        [
+          "Тег сдачи",
+          "0104-pz01-tp-v1 — НЕ СОЗДАН, human gate"
+        ],
+        [
+          "Вариант",
+          "Собственный существенный module и offline consumer, не резервный стенд"
+        ],
+        [
+          "Версия",
+          "Code 4a2bfcdd9bf7; CI 8ae5d67b9eb0. Полные SHA: evidence/c3/record.json и evidence/ci/runs.json"
+        ],
+        [
+          "Состояние",
+          "CONTENT_READY_IMAGES_PENDING; human gates pending"
+        ],
+        [
+          "Источник формы",
+          "Четыре адаптированные формы bootstrap v2"
+        ]
+      ],
+      "4": [
+        [
+          "Сборка",
+          "Go1.27.2",
+          "wrapper build processing --mode dev/release",
+          "РАБОТАЕТ; evidence/d1"
+        ],
+        [
+          "Зависимости",
+          "go.mod / stdlib",
+          "go version -m; сторонних modules0",
+          "РАБОТАЕТ"
+        ],
+        [
+          "Тесты",
+          "Go testing1.27.2",
+          "workspace.py check; именованные assertions",
+          "РАБОТАЕТ; c3/check"
+        ],
+        [
+          "Статический анализ",
+          "go vet + import guard",
+          "в составе check, service-local",
+          "РАБОТАЕТ"
+        ],
+        [
+          "Динамическая диагностика",
+          "go test -race; safe CLI",
+          "race и start/result/version; Delve позднее",
+          "Race РАБОТАЕТ; Delve PLANNED"
+        ],
+        [
+          "Профилирование",
+          "Go pprof1.27.2",
+          "будущий benchmark/cpuprofile evaluator",
+          "PLANNED следующая работа"
+        ],
+        [
+          "CI",
+          "Actions Ubuntu24.04, Go1.27.2",
+          "pr12-tp.yml pull_request/work push",
+          "РАБОТАЕТ, actual CI link в тексте"
+        ]
+      ],
+      "5": [
+        [
+          "Подготовка",
+          "wrapper build --mode dev",
+          "wrapper build --mode release"
+        ],
+        [
+          "Преобразования",
+          "compiler/linker, metadata SHA/dirty",
+          "compiler/linker, metadata SHA/dirty"
+        ],
+        [
+          "Оптимизации",
+          "-gcflags=all=-N -l",
+          "-trimpath; обычные Go optimizations"
+        ],
+        [
+          "Отладка",
+          "debug info compiler; safe diagnostics",
+          "debug info не удалена; trimmed paths"
+        ],
+        [
+          "Проверки",
+          "valid0, refund0, invalid2",
+          "valid0, refund0, invalid2"
+        ],
+        [
+          "Поставка",
+          "3948210 bytes; binary+fixture",
+          "3909730 bytes; binary+fixture; system dylibs"
+        ]
+      ],
+      "6": [
+        [
+          "Настройка fixture",
+          "VALID → INELIGIBLE/REFUND",
+          "PASS в обоих режимах",
+          "evidence/d1/*normal / *changed-config"
+        ],
+        [
+          "Invalid config",
+          "INVALID_JSON, exit2",
+          "PASS: actual exit2",
+          "d1/*invalid-config.log"
+        ],
+        [
+          "Версия",
+          "full SHA + dirty + mode",
+          "PASS, dirty=false",
+          "d1/*version.log"
+        ],
+        [
+          "Диагностика",
+          "start/result без raw data",
+          "PASS, CLI tests и actual logs",
+          "c3/check.log; d1 logs"
+        ],
+        [
+          "Повтор/reset",
+          "fresh immutable fixtures",
+          "PASS same result; нет durable state",
+          "c3/check; ReaderSubstitution"
+        ]
+      ]
+    },
+    "appendices": []
+  },
+  "0104-pz02": {
+    "paragraph_updates": {
+      "16": "Автор результата Тимофей Патрушев при помощи Codex. MANUAL_LAB_PR12; Processing — Operations Core. Контракты Candidate/In Review, grant отсутствует; formal admission и backend /start /review не выполнялись. Технические проверки фактические, человеческие действия и изображения ожидаются.",
+      "17": "Профиль pr12-two-primary-plus-system-evidence-v1: два основных 03.02 и отдельные материалы 01.04, плюс два самостоятельных экспорта 01.04. Согласие преподавателя на объединённую сдачу не предполагается.",
+      "20": "Цель — отделить содержательную финансовую policy и выполнить подмену dependency без изменения consumer. RULE006 → paid-order predicates → eligibility.Evaluate → evaluatepaidorder.EvaluatePaidOrder → processing-contractcheck. VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS.",
+      "23": "Контракт services/processing/docs/module-contract.md хранится рядом с кодом. GoDoc eligibility.Evaluate и EvaluatePaidOrder описывает purpose/input/result/errors/ownership/side effects. Source-bound precedence зафиксирован HIT-26 до реализации; examples и команды воспроизводимы. Рисунки1–2.",
+      "25": "Реализованы все paid/received/captured/refund/dispute/currency/item/price/account/mode predicates, nullable unknown и proof freshness. HIT-27 PR5, HIT-28 PR6, HIT-29 PR7; настоящие tests/CI PASS, human review/merge pending. CLI использует тот же application/domain module; отдельного учебного дубля нет. Metadata/config/diagnostics сохранены.",
+      "27": "Один EvaluatePaidOrder и один SourceFactsReader. TestReaderSubstitution вызывает неизменный consumer с File и finite in-memory double для normal/error/boundary/denial/read failure. File выбран в composition root CLI, double только в tests. Результаты совпали; sourcefacts reader не выдаёт fake unconditional success. Runtime TLS/provider/authenticity не проверены.",
+      "29": "Личная запись общей карты module-map.md; author Тимофей. cmd→application/adapters/domain; sourcefacts→application/input; input→domain; application→domain. A→B — source import. Go list и import guard реально выполнены, evidence/c3/imports.log. Циклов нет; future authenticated Intake/storage/owner-path отмечены ПЛАН. Shared карту публикует Lead, чужие области не переавторены.",
+      "31": "Кандидат уже существует: internal/domain/eligibility, fixed testdata/valid.json + explicit now, CLI наблюдение отдельно от системы. Два направления — nullable/exact financial data и bounded source snapshot interaction. Личный ADR module-adr.md: варианты handler/shared business helper/service-local policy; выбран последний. Цена — Query/Snapshot/Request, mapping/copy/lifetime и interface call; проверка DI/errors/imports. Измеренного bottleneck нет.",
+      "34": "Ниже шесть обязательных случаев × две реализации фактически исполнены в одном TestReaderSubstitution; дополнительные denied/unavailable checks также прошли. Source 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0; evidence/c3/check.log, CI https://github.com/hitpipe/hitpipe/actions/runs/39121031226. Рисунок5.",
+      "36": "HUMAN_PENDING. Тимофей лично проверяет чужой UX module HIT-13; собственный Processing проверяет исполнитель HIT-11. Чужой exact artifact и реальные protocols ещё не получены. human-gates/peer-module-out.md и -in.md содержат задачи проверяющему; self-review и CI не заменяют отзыв студента. Рисунок6.",
+      "38": "Контракт реализован и используется одним application consumer; DI scenario сохранён при смене dependency; карта сверена imports, личный ADR и профиль сложности существуют. Технический scope подтверждён local/CI, human review/merge/peer check/tag/снимки/защита pending. VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS.",
+      "40": "Источники: ../context-lock.json, ../source-files.json, ../upstream/product/HP-DOC-SHARED-001.md (RULE006/011/012, revision2), HP-CAP-002 (revision2), HP-DOC-PVL-001 (HP-VER-001, revision2); ../upstream/architecture/HP-BP-002.md T004, HP-BP-003.md T002/006/012, HP-BP-007.md T005/010; реальные revisions ../upstream/architecture/published-revisions.json. Общие charter/MVP/regulation/stack-decision созданы Lead/его агентом и переиспользованы; личные требования, код, tests и отчёты подготовлены для Тимофея с Codex. Методичка01.04 ПР2 SHA256 d54d9eaedc62c5cde803e16c40266b25557d8a98c0c4dfe125b2a5804242c06a."
+    },
+    "table_rows": {
+      "3": [
+        [
+          "ФИО, группа",
+          "Тимофей Патрушев. Группа не предоставлена; заполняет участник"
+        ],
+        [
+          "Проект и команда",
+          "HitPipe; пять участников"
+        ],
+        [
+          "Личный участок",
+          "Processing / PaidOrderEligibility; services/processing"
+        ],
+        [
+          "Репозиторий",
+          "https://github.com/hitpipe/hitpipe"
+        ],
+        [
+          "Тег сдачи",
+          "0104-pz02-tp-v1 — НЕ СОЗДАН, human gate"
+        ],
+        [
+          "Вариант",
+          "Собственный существенный module и offline consumer, не резервный стенд"
+        ],
+        [
+          "Версия",
+          "Code 4a2bfcdd9bf7; CI 8ae5d67b9eb0. Полные SHA: evidence/c3/record.json и evidence/ci/runs.json"
+        ],
+        [
+          "Состояние",
+          "CONTENT_READY_IMAGES_PENDING; human gates pending"
+        ],
+        [
+          "Источник формы",
+          "Четыре адаптированные формы bootstrap v2"
+        ]
+      ],
+      "4": [
+        [
+          "Назначение",
+          "Financial eligibility under already accepted policy; Evaluate / EvaluatePaidOrder"
+        ],
+        [
+          "Вход",
+          "Immutable borrowed policy/facts, explicit now, supported schema1.0/evaluator paid-order-v1"
+        ],
+        [
+          "Результат",
+          "VALID/INELIGIBLE/INCOMPLETE/REFRESH_REQUIRED; no dispatch permission"
+        ],
+        [
+          "Ошибки/порядок",
+          "Shape/version → scope → unknown → invalid fact → freshness → financial checks; reader failure INCOMPLETE"
+        ],
+        [
+          "Владение",
+          "Вход read-only на вызов; caller не мутирует конкурентно; result owned strings"
+        ],
+        [
+          "Состояние/effects",
+          "Domain без IO/state/clock; application one reader call; adapter только synthetic local file"
+        ]
+      ],
+      "5": [
+        [
+          "File",
+          "CLI composition; same reader port",
+          "normal VALID; expiry REFRESH; unknown INCOMPLETE",
+          "Offline file, не remote authenticity"
+        ],
+        [
+          "In-memory double",
+          "TestReaderSubstitution parameter",
+          "те же expected и actual; no consumer rewrite",
+          "Finite test behavior; не production Intake"
+        ]
+      ],
+      "6": [
+        [
+          "Данные",
+          "Nullable facts / exact integer predicates",
+          "Сохранение null/false/zero и цена mapping",
+          "Correctness tests работают; profiling planned"
+        ],
+        [
+          "Взаимодействие",
+          "Scoped reader / oldest proof",
+          "Как hold отличает read failure/negative data?",
+          "DI/proof tests работают; real adapter planned"
+        ]
+      ],
+      "7": [
+        [
+          "file",
+          "Штатный",
+          "VALID / financial only",
+          "PASS; TestReaderSubstitution/file/normal; c3/check"
+        ],
+        [
+          "file",
+          "Граница expiry",
+          "REFRESH_REQUIRED / PROOF_EXPIRED",
+          "PASS; TestReaderSubstitution/file/boundary; c3/check"
+        ],
+        [
+          "file",
+          "Unknown/error",
+          "INCOMPLETE / UNKNOWN_FACT",
+          "PASS; TestReaderSubstitution/file/error_unknown; c3/check"
+        ],
+        [
+          "double",
+          "Штатный",
+          "VALID / financial only",
+          "PASS; TestReaderSubstitution/double/normal; c3/check"
+        ],
+        [
+          "double",
+          "Граница expiry",
+          "REFRESH_REQUIRED / PROOF_EXPIRED",
+          "PASS; TestReaderSubstitution/double/boundary; c3/check"
+        ],
+        [
+          "double",
+          "Unknown/error",
+          "INCOMPLETE / UNKNOWN_FACT",
+          "PASS; TestReaderSubstitution/double/error_unknown; c3/check"
+        ]
+      ]
+    },
+    "appendices": []
+  },
+  "0302-pz01": {
+    "paragraph_updates": {
+      "27": "Цель — сформулировать проверяемые требования Processing и применить регламент изменения.",
+      "28": "Задача участка: финансово допустимый оплаченный заказ отличать от известной недопустимости, unknown и expired proof; не выдавать финансовый результат за permission.",
+      "29": "Автор результата Тимофей Патрушев при помощи Codex. MANUAL_LAB_PR12; Processing — Operations Core. Контракты Candidate/In Review, grant отсутствует; formal admission и backend /start /review не выполнялись. Технические проверки фактические, человеческие действия и изображения ожидаются.",
+      "30": "Профиль pr12-two-primary-plus-system-evidence-v1: два основных 03.02 и отдельные материалы 01.04, плюс два самостоятельных экспорта 01.04. Согласие преподавателя на объединённую сдачу не предполагается.",
+      "35": "Владелец операции принимает Stripe→ClickUp правило; Intake устанавливает source facts, Processing проверяет финансовую допустимость, Delivery отдельно исполняет разрешённый effect и readback. Существенный ошибочный исход — incomplete/refund/dispute удерживает действие с reason.",
+      "36": "HIT-25…HIT-32, component Processing. База pr12-bootstrap-20261017-v2 → 94b78199c202a31bcb63326ae7f2a4748aa29360, bootstrap PR2 открыт. Context-lock и 205 файлов source/export inventory проверены. Formal Git 84249ff3ba611358232294c46f6022f030ea223d; локальный OAS совпал с реальным Git blob SHA256 7c47ab0792487d5548658e10075ca837147b19acc4f5ce2822d4430972533829. Product/Architecture/Discovery source status Candidate/In Review.",
+      "37": "Реальное интервью NOT CONDUCTED; даты, участники и согласованная преподавателем роль представителя неизвестны. Вопросы подготовлены в interview.md; Lead организует контакт. Desk research в pinned DA/Vision/Product не подменяет разговор участника.",
+      "40": "Подтверждённые документальные facts: source pins, владельцы и выбранный pack. Product decisions: RULE006 ограничения. Empirical hypotheses: реальная доступность данных, удобство объяснений и спрос. Реальных пользовательских ответов нет; открытые вопросы закреплены за HIT-31/Lead.",
+      "41": "HP-VER-001 — полное SINGLE ядро четырёх capabilities, не только evaluator. Мой bounded subset — financial policy перед owner dispatch. TEAM/новые packs относятся будущим версиям; обязательные authorization/lifecycle/readback MVP не вырезаны, просто вне данного модуля.",
+      "42": "Общие charter/MVP/regulation/stack-decision ../shared/ и их hashes в source-files.json; ownership Lead. Личные требования requirements.md, interview.md и security-baseline.md подготовлены отдельно.",
+      "47": "Synthetic account acct_synthetic, Session cs_synthetic, Price price_fixed,12000 minor units usd, test mode; observation2026-10-18T10:00:00Z, now+5s. testdata/valid/refunded/invalid.json; fresh value/т.TempDir, reset перечитыванием. Без customer data/secrets/live accounts.",
+      "48": "Пять security вопросов: защищаем source/config identity и финансовую truth; недоверенный input JSON/будущий Intake; существенные действия только scoped owner, оператор не меняет payment; ущерб — чужая/неоплаченная работа и утечка; secrets в будущих owner secret files, payload/contacts/brief/cookies/tokens запрещены в logs. Offline module секретов не требует. Подробно security-baseline.md; риски связаны с C3.",
+      "50": "HIT-26 исправляет реальный gap R1: не определён observable reason при одновременном wrong identity/unknown/expired. PR https://github.com/hitpipe/hitpipe/pull/4, branch work/HIT-26-processing-contract-refinement. Before/after и clauses в requirement-change.md.",
+      "51": "DoD: requirement ID/source/AC есть; отдельная task/branch/PR есть; actual bundle check PASS; meaningful executable checks того же контракта C1–C3 PASS; safe diagnostics/документация обновлены; human independent review/merge ещё pending. Не Done.",
+      "52": "Изменение существенно: порядок hold и точные null/zero/expiry/activation semantics влияют на consumer result и тесты. Кодировалось после требования, не подгонкой под вывод. Новые реальные human remarks не получены; собственный output-exit defect исправлен HIT-29.",
+      "53": "Cross-project opposition BLOCKED_HUMAN_ASSIGNMENT: внешний проект/кольцо преподавателя/дискуссия неизвестны. Lead должен получить настоящее назначение и пакет. human-gates/external-opposition.md. Внутренние PR и self-review эту процедуру не заменяют.",
+      "55": "Реальных замечаний оппонентов не получено. Таблица фиксирует отсутствие проведённого обсуждения, а не утверждает отсутствие замечаний после проверки.",
+      "56": "Порядок для будущих замечаний: автор/дата/requirement/версии → решение и rationale → actual commit/PR/retest. Полный протокол human-gates/external-opposition.md.",
+      "57": "Решения автора по локальной неоднозначности уже записаны HIT-26, но они не приписаны оппонентам.",
+      "58": "Существенный конфликт upstream удерживает affected path; текущий refinement сохраняет canonical wire и ownership.",
+      "59": "Сейчас external review/merge остаются HUMAN_PENDING; не заполняются fictitious author/date/approval.",
+      "62": "Оппонирование не проводилось; для него не сочинялись замечания. После реальной дискуссии обновляются её участники, версия и решения.",
+      "63": "Рисунок3 вставляется только после настоящего внешнего обсуждения; инструкция содержит pending gate и точный протокол.",
+      "68": "Другой студент HIT-11 должен получить requirements/requirement-change и blind normal/error/boundary сценарии human-gates/clarity.md. Самостоятельные ответы ещё не получены; в таблице авторский oracle отделён от пустого human result.",
+      "70": "Документальная baseline — exact candidate bootstrap/pins, не принятие спецификации после оппонирования. Путь требования HIT-26 → branch → PR4 → applicable CI https://github.com/hitpipe/hitpipe/actions/runs/39120467832 (bundle validation, bootstrap scope) → real review/merge pending. Последующие code PR5/6/7 реализуют контракт и имеют собственные tests/CI.",
+      "71": "Будущие проверки: реальные interview/clarity/peer/opposition, authenticated source adapter, lifecycle/authority/lineage и full-system tests. Скрытый набор не выдавался. Текущие локальные и CI module checks выполнены; не обещается full Product PASS.",
+      "72": "Снимки делает человек после действительных проверок. Текст сохраняет exact SHA/log/CI; placeholder не является evidence PASS.",
+      "76": "Lead/его агент подготовили общий charter/scaffold wrapper/frozen package и нормативные contracts. Я подготовил личные требования, code/test/evidence и reports с Codex; участие других студентов в review ещё не состоялось.",
+      "78": "Проверяемые требования и значимый refinement подготовлены, соответствующий финансовый module и проверки реально исполняются. Интервью, independent clarity, cross-project opposition, human review/merge и защита остаются незавершёнными. Подмена этих действий текстом не выполнялась.",
+      "81": "Теги0302-pz01-tp-v1 и остальные три — human step после actual merge/CI. Итоговый SHA фиксируется внешней submission record после tag, без report commit ради собственного SHA.",
+      "83": "Источники: ../context-lock.json, ../source-files.json, ../upstream/product/HP-DOC-SHARED-001.md (RULE006/011/012, revision2), HP-CAP-002 (revision2), HP-DOC-PVL-001 (HP-VER-001, revision2); ../upstream/architecture/HP-BP-002.md T004, HP-BP-003.md T002/006/012, HP-BP-007.md T005/010; реальные revisions ../upstream/architecture/published-revisions.json. Общие charter/MVP/regulation/stack-decision созданы Lead/его агентом и переиспользованы; личные требования, код, tests и отчёты подготовлены для Тимофея с Codex. Методичка03.02 ПР1 SHA256 37479c7a296e358c0356fdef0aa9c4c565cc4626a90ae576d8b82b249cacc839."
+    },
+    "table_rows": {
+      "3": [
+        [
+          "ФИО, группа",
+          "Тимофей Патрушев. Группа не предоставлена; заполняет участник"
+        ],
+        [
+          "Проект и команда",
+          "HitPipe; пять участников"
+        ],
+        [
+          "Личный участок",
+          "Processing / PaidOrderEligibility; services/processing"
+        ],
+        [
+          "Репозиторий",
+          "https://github.com/hitpipe/hitpipe"
+        ],
+        [
+          "Тег сдачи",
+          "0302-pz01-tp-v1 — НЕ СОЗДАН, human gate"
+        ],
+        [
+          "Вариант",
+          "Собственный существенный module и offline consumer, не резервный стенд"
+        ],
+        [
+          "Версия",
+          "Code 4a2bfcdd9bf7; CI 8ae5d67b9eb0. Полные SHA: evidence/c3/record.json и evidence/ci/runs.json"
+        ],
+        [
+          "Состояние",
+          "CONTENT_READY_IMAGES_PENDING; human gates pending"
+        ],
+        [
+          "Источник формы",
+          "Четыре адаптированные формы bootstrap v2"
+        ]
+      ],
+      "4": [
+        [
+          "Как сейчас проверяется full payment?",
+          "Ответ не получен; интервью NOT CONDUCTED",
+          "Lead организует представителя"
+        ],
+        [
+          "Какие account/mode/Price/activation?",
+          "Документальные решения RULE006; не интервью",
+          "Подтвердить реальный текущий процесс"
+        ],
+        [
+          "Какие ошибки/ограничения/достаточный результат?",
+          "Собственные вопросы interview.md",
+          "Ответы и empirical validation pending"
+        ]
+      ],
+      "5": [
+        [
+          "TP-FR-01",
+          "Conjunction финансовых predicates",
+          "RULE006; BP002/T004",
+          "MVP subset",
+          "Given full fresh supported facts → VALID; FinancialDecisionTable",
+          "Реализовано, local/CI PASS"
+        ],
+        [
+          "TP-ERR-01",
+          "Unknown/read error не zero/unpaid",
+          "RULE012; BP007/T005",
+          "MVP subset",
+          "null refund→INCOMPLETE; refund1→INELIGIBLE",
+          "Реализовано, tests PASS"
+        ],
+        [
+          "TP-FR-02",
+          "Oldest proof expiry",
+          "BP007/T010; SourceFacts",
+          "MVP subset",
+          "9.999999999s VALID; 10s REFRESH",
+          "Реализовано, boundary PASS"
+        ],
+        [
+          "TP-NFR-01",
+          "Deterministic/no input mutation",
+          "BP003/T002",
+          "MVP subset",
+          "100 одинаковых вызовов, same result/input bytes",
+          "PASS; no full-system performance claim"
+        ]
+      ],
+      "6": [
+        [
+          "Обсуждение внешнего проекта отсутствует",
+          "BLOCKED_HUMAN_ASSIGNMENT, Lead",
+          "Настоящие замечания/решения/версии ещё не получены"
+        ]
+      ],
+      "7": [
+        [
+          "Source package",
+          "validate_bundle.py",
+          "PASS,205 файлов",
+          "bootstrap-validation.log; exact base",
+          "Не student/source acceptance"
+        ],
+        [
+          "Requirements PR4",
+          "CI source/bundle checks",
+          "PASS в своём scope",
+          "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "До C1 module ещё отсутствовал"
+        ],
+        [
+          "Module C1–C3",
+          "named/vet/race/smoke",
+          "PASS",
+          "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "Offline synthetic scope"
+        ],
+        [
+          "Human process",
+          "Interview/clarity/opposition/review",
+          "HUMAN_PENDING",
+          "human-gates/README.md",
+          "Самостоятельные люди"
+        ]
+      ],
+      "8": [
+        [
+          "Normal all predicates",
+          "VALID/financial only",
+          "Ответ не получен",
+          "HIT-11; дата неизвестна",
+          "Проверка pending"
+        ],
+        [
+          "Unknown refund + expired",
+          "INCOMPLETE/UNKNOWN_FACT",
+          "Ответ не получен",
+          "HIT-11; дата неизвестна",
+          "Проверка pending"
+        ],
+        [
+          "Now==valid_until",
+          "REFRESH_REQUIRED/PROOF_EXPIRED",
+          "Ответ не получен",
+          "HIT-11; дата неизвестна",
+          "Проверка pending"
+        ]
+      ],
+      "9": [
+        [
+          "Личные требования",
+          "FR/error/NFR/AC/security/questions",
+          "HIT-25 PR3"
+        ],
+        [
+          "Существенный refinement",
+          "precedence/null/expiry before implementation",
+          "HIT-26 PR4"
+        ],
+        [
+          "Code/test evidence",
+          "Processing evaluator/consumer/mutations",
+          "HIT-27/28/29 PR5/6/7"
+        ],
+        [
+          "Реальные human interactions",
+          "Подготовлен пакет, действия не состоялись",
+          "HIT-31 PR9"
+        ]
+      ],
+      "10": [
+        [
+          "Работа и автор",
+          "МДК03.02 ПР1, Тимофей Патрушев с Codex"
+        ],
+        [
+          "Tag → commit",
+          "НЕ СОЗДАН; после human merge, external record"
+        ],
+        [
+          "Материалы",
+          "requirements/interview/security/ambiguity + 0104 support"
+        ],
+        [
+          "Задачи и PR",
+          "HIT-25…HIT-32; PR3…9, report PR регистрируется после создания"
+        ],
+        [
+          "Pipeline",
+          "https://github.com/hitpipe/hitpipe/actions/runs/39121031226"
+        ],
+        [
+          "Оппонирование",
+          "BLOCKED_HUMAN_ASSIGNMENT"
+        ],
+        [
+          "Ограничения",
+          "VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS. Human gates pending."
+        ]
+      ]
+    },
+    "appendices": [
+      [
+        "Материалы 01 04 ПР1",
+        [
+          "toolchain.md",
+          "execution-path.md"
+        ]
+      ]
+    ]
+  },
+  "0302-pz02": {
+    "paragraph_updates": {
+      "30": "Цель — построить и проверить набор assertions для собственной финансовой policy, оценить его coverage и чувствительность к поведенческим дефектам.",
+      "31": "Объект — eligibility.Evaluate и application EvaluatePaidOrder в services/processing; источники ожидаемых исходов requirements.md/requirement-change.md зафиксированы до реализации.",
+      "32": "Автор результата Тимофей Патрушев при помощи Codex. MANUAL_LAB_PR12; Processing — Operations Core. Контракты Candidate/In Review, grant отсутствует; formal admission и backend /start /review не выполнялись. Технические проверки фактические, человеческие действия и изображения ожидаются.",
+      "33": "Профиль pr12-two-primary-plus-system-evidence-v1: два основных 03.02 и отдельные материалы 01.04, плюс два самостоятельных экспорта 01.04. Согласие преподавателя на объединённую сдачу не предполагается.",
+      "38": "Контракт: pure policy + one-reader application; типизированные financial knowledge outcomes, явный now и immutable context. Shape/version/scope/completeness/proof/business precedence документирован. services/processing/docs/module-contract.md.",
+      "39": "VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS.",
+      "40": "Stdlib Go1.27.2; File adapter и finite double вместо Intake. Нет сети, БД, product AI, provider SDK и customer credentials. Обе замены не доказывают real provider/source authenticity.",
+      "45": "Техника1 — equivalence classes и boundary values: valid/disallowed/unknown/malformed/foreign; money0/12000/2^53−1; activation±1ns; expiry±1ns. Expected из RULE006 и BP002/T004, не actual output.",
+      "46": "Техника2 — decision table: каждый conjunct меняется отдельно, плюс несколько нарушений для precedence. Штатные/ошибочные/граничные случаи обеих reader implementations проверены. Stateless evaluator не выдаётся за lifecycle state machine.",
+      "49": "Полный список — services/processing/internal/domain/eligibility/*_test.go, application/evaluatepaidorder/evaluate_test.go, adapter/CLI tests; source-bound design docs/test-design.md. Число тестов определяется правилами, arbitrary minimum не введён.",
+      "50": "Чек-лист: payment/paid/positive total; received/captured total; refund0/dispute false; item1/qty1/Price; account/connection/live; null/false/zero; oldest freshness; config/version/case/Session pins; failed/canceled read; strict safe JSON; deterministic input ownership.",
+      "52": "Versioned testdata/valid/refunded/invalid.json, fixed time и fresh synthetic values. No random seed needed. File и double в одном unchanged consumer; ограничения внешней подмены выше.",
+      "53": "Сброс: заново прочитать JSON/создать value; temp input в t.TempDir; no persistent mutation. Clean clone prerequisite и команды services/processing/README.md.",
+      "54": "Go tests содержат assertions status/reason/exit/query/calls/input bytes; tests не ограничены пустыми вызовами. Импорт guards и vet входят в общий wrapper.",
+      "55": "HIT-29 → work/HIT-29-financial-proof-verification → https://github.com/hitpipe/hitpipe/pull/7. Owner workflow pr12-tp.yml запускает named tests, smoke, race, six compiled mutations и artifact upload. CI https://github.com/hitpipe/hitpipe/actions/runs/39121031226 реально success.",
+      "57": "Качественная матрица методички п2.4. Низкая×тяжёлый=высокий, высокая×небольшой=средний; произвольные численные баллы не перемножались. Probability — инженерная оценка, не измеренная частота. Высокие локальные риски проверяются при каждом change; реальные integration checks отложены с явной причиной.",
+      "62": "Go1.27.2 darwin/arm64, Git2.52.0, Python фактическая версия в c3/record.json; CI Ubuntu24.04 + exact Go. 18.10.2026, UTC/МСК timestamps в logs. Code source 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0; CI 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb.",
+      "63": "Из repo root: python3 tools/pr12/workspace.py check processing --require и smoke processing --require; из services/processing: go test -race -count=1 ./...; go tool cover -func по сохранённому profile. Full argv/cwd/exit/environment/log digest в evidence/c3/record.json.",
+      "66": "Hidden suite: НЕ ПОЛУЧЕН / NOT RUN. Никаких вымышленных hidden tests и PASS.",
+      "67": "Реальный TestOutputFailure обнаружил exit0 на текстовом/version write error (FAIL), исправлен HIT-29, финальный regression PASS. Controlled mutants дают ожидаемый FAIL, не failure исправного submitted code. Setup-команда из legacy root не нашла service module; исправлен cwd, setup error не посчитан product defect.",
+      "69": "Go statement coverage: wrapper go test -count=1 -json -coverprofile=... ./...; go tool cover -func. Domain все функции100.0%, application100.0%, весь service92.3%. Не branch coverage и не proof всей семантики.",
+      "70": "Сохранены evidence/c3/processing.cover и coverage.log. Конкретные gaps и решения coverage-analysis.md; source SHA 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0.",
+      "73": "Даже100% domain statements не доказывают authenticity, scope acquisition, source atomicity, concurrent caller mutation или полноту всех возможных входов. Borrowed data требует caller discipline; future authenticated adapter и live integration остаются явными задачами.",
+      "75": "Серия состоит из шести независимых поведенческих изменений реальных финансовых predicates, без искусственной бизнес-логики.",
+      "76": "Временный detached Git worktree исходного SHA; build каждого мутанта выполнен ДО tests. Мутации по одной, original bytes восстанавливаются после каждого; baseline и restored green, clean=true.",
+      "77": "Воспроизводимая команда и автоматический cleanup — services/processing/tools/mutations/run.py --output .pr12-build/processing-mutations; details в README. Каждый patch/digest/build/test/failing assertion сохранён evidence/mutations. Мутанты не pushed/merged.",
+      "81": "Засеяно6, компилируется6, обнаружено первым набором6, пропущено0, INVALID0. Survivors отсутствуют, усиление/retest не требовались; natural defects1 — действительный output-exit defect HIT-29 с red log/regression. Остаточная дефектность по Миллсу не оценивается по шести специально выбранным ошибкам.",
+      "82": "Для каждого мутанта сохранён первый реальный прогон; нулевые пропуски честны. При будущем survivor нужны причина, новый test, оба результата; автоматическое SUCCESS ему не присваивается.",
+      "83": "Восстановлен исправный код source 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0, original diff clean и restored PASS; CI 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb success. Последующие report-only commits сохраняют code tree. Tag0302-pz02-tp-v1 ещё не создан; actual merge/tag/CI external record остаётся человеческим шагом.",
+      "87": "Общий wrapper/CI scaffold и frozen contracts — Lead/его агент. Собственные domain/application/adapter/CLI tests, decision table, mutation runner, risk analysis и correction подготовлены для Тимофея с Codex; чужие modules не менялись.",
+      "88": "Полученных human remarks ещё нет. Self-review нашёл и реальным тестом подтвердил output-exit defect; он исправлен. Независимый reviewer и другие студенты не симулировались.",
+      "90": "Набор обнаруживает выбранные финансовые/identity/null/proof нарушения и ошибку output exit. Это подтверждено named assertions, шесть compile+FAIL mutants и clean restoration, local/CI PASS исправного code.",
+      "91": "Полное statement execution domain/application сочетается с explicit external limitations; по нему не заявляется full-system correctness. Survival0 в шести экспериментах не гарантирует отсутствие других дефектов.",
+      "92": "VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS. Human peer checks, screenshots, tag, review/merge и защита pending.",
+      "95": "Окончательный report SHA и CI фиксируются внешне после тега. Не создавать бесконечный commit ради собственного SHA.",
+      "97": "Источники: ../context-lock.json, ../source-files.json, ../upstream/product/HP-DOC-SHARED-001.md (RULE006/011/012, revision2), HP-CAP-002 (revision2), HP-DOC-PVL-001 (HP-VER-001, revision2); ../upstream/architecture/HP-BP-002.md T004, HP-BP-003.md T002/006/012, HP-BP-007.md T005/010; реальные revisions ../upstream/architecture/published-revisions.json. Общие charter/MVP/regulation/stack-decision созданы Lead/его агентом и переиспользованы; личные требования, код, tests и отчёты подготовлены для Тимофея с Codex. Методичка03.02 ПР2 SHA256 da530591ecd403c5d4ecc1e5a5990a4394b942243e6664a927edd218ef185bd2."
+    },
+    "table_rows": {
+      "3": [
+        [
+          "ФИО, группа",
+          "Тимофей Патрушев. Группа не предоставлена; заполняет участник"
+        ],
+        [
+          "Проект и команда",
+          "HitPipe; пять участников"
+        ],
+        [
+          "Личный участок",
+          "Processing / PaidOrderEligibility; services/processing"
+        ],
+        [
+          "Репозиторий",
+          "https://github.com/hitpipe/hitpipe"
+        ],
+        [
+          "Тег сдачи",
+          "0302-pz02-tp-v1 — НЕ СОЗДАН, human gate"
+        ],
+        [
+          "Вариант",
+          "Собственный существенный module и offline consumer, не резервный стенд"
+        ],
+        [
+          "Версия",
+          "Code 4a2bfcdd9bf7; CI 8ae5d67b9eb0. Полные SHA: evidence/c3/record.json и evidence/ci/runs.json"
+        ],
+        [
+          "Состояние",
+          "CONTENT_READY_IMAGES_PENDING; human gates pending"
+        ],
+        [
+          "Источник формы",
+          "Четыре адаптированные формы bootstrap v2"
+        ]
+      ],
+      "4": [
+        [
+          "TP-FR-01/R01",
+          "Full exact financial conjunction",
+          "RULE006; BP002/T004",
+          "unit decision table"
+        ],
+        [
+          "TP-ERR-01/R03",
+          "Unknown отдельно от false/zero",
+          "RULE012; BP007/T005",
+          "unit + reader contract"
+        ],
+        [
+          "TP-FR-02/R04",
+          "Oldest proof ≤10s, expiry exclusive",
+          "BP007/T010; OAS SourceFacts",
+          "boundary/timeline"
+        ],
+        [
+          "TP-NFR-01",
+          "100 deterministic calls; read-only",
+          "BP003/T002",
+          "unit ownership"
+        ]
+      ],
+      "5": [
+        [
+          "Normal",
+          "TP-FR-01",
+          "full synthetic facts, now+5s",
+          "Evaluate",
+          "VALID/financial only",
+          "Valid class"
+        ],
+        [
+          "DecisionTable",
+          "R01/R02",
+          "один conjunct нарушен",
+          "Evaluate",
+          "INELIGIBLE/reason",
+          "Decision table"
+        ],
+        [
+          "EveryNullableFact",
+          "R03",
+          "по одному nil",
+          "Evaluate",
+          "INCOMPLETE",
+          "Unknown class"
+        ],
+        [
+          "ProofBoundary",
+          "R04",
+          "expiry−1ns/= /+1ns",
+          "Evaluate",
+          "VALID / REFRESH / REFRESH",
+          "Boundary"
+        ],
+        [
+          "ReaderSubstitution",
+          "R03",
+          "File/double, same case",
+          "Same consumer",
+          "normal/error/boundary match",
+          "Contract DI"
+        ],
+        [
+          "OutputFailure",
+          "R06",
+          "failed output writer",
+          "run CLI",
+          "exit3",
+          "Observed natural defect"
+        ]
+      ],
+      "6": [
+        [
+          "R01",
+          "Refund/partial capture даёт permission",
+          "Средняя: many facts",
+          "Тяжёлый: лишняя работа",
+          "Высокий",
+          "Decision/M01/M02/M03/M06 every change"
+        ],
+        [
+          "R02",
+          "Чужой scope принят",
+          "Низкая: scoped query",
+          "Тяжёлый: изоляция",
+          "Высокий",
+          "Scope/ContextPins/M05 every change"
+        ],
+        [
+          "R03",
+          "Unknown→zero/success",
+          "Средняя: nullable/outages",
+          "Тяжёлый: ложный допуск",
+          "Высокий",
+          "EveryNullable/DI every change"
+        ],
+        [
+          "R04",
+          "Oldest proof омоложен",
+          "Средняя: multiple reads",
+          "Тяжёлый: stale action",
+          "Высокий",
+          "Proof tests every change"
+        ],
+        [
+          "R05",
+          "Unsafe JSON/log disclosure",
+          "Средняя: untrusted input",
+          "Тяжёлый: secret exposure",
+          "Высокий",
+          "StrictFixture/CLI every change; real adapter later"
+        ],
+        [
+          "R06",
+          "Lost CLI output/exit0",
+          "Низкая: pipe failure",
+          "Значимый: неверный diagnostic",
+          "Средний",
+          "OutputFailure every change"
+        ],
+        [
+          "R07",
+          "Fake принята за live truth",
+          "Низкая: explicit scope",
+          "Тяжёлый: financial error",
+          "Высокий",
+          "Human integration review; no live path"
+        ],
+        [
+          "R08",
+          "Неясные инструкции",
+          "Высокая: many criteria",
+          "Небольшой: задержка",
+          "Средний",
+          "Real clarity/clean-room pending"
+        ]
+      ],
+      "7": [
+        [
+          "Named/vet",
+          "local 4a2bfcdd9bf7",
+          "Все обязательные имена PASS",
+          "PASS",
+          "c3/check.log"
+        ],
+        [
+          "Race",
+          "Go1.27.2, local",
+          "data-race не обнаружено",
+          "PASS",
+          "c3/race.log"
+        ],
+        [
+          "Smoke dev/release",
+          "outside checkout",
+          "expected valid/invalid exits",
+          "PASS",
+          "c3/smoke.log"
+        ],
+        [
+          "CI",
+          "Ubuntu24.04 8ae5d67b9eb0",
+          "named/smoke/race/mutations success",
+          "PASS",
+          "https://github.com/hitpipe/hitpipe/actions/runs/39121031226"
+        ],
+        [
+          "Hidden suite",
+          "не предоставлен",
+          "не запускался",
+          "NOT RUN",
+          "Не выдуман"
+        ],
+        [
+          "Human peer",
+          "не состоялся",
+          "пакет подготовлен",
+          "HUMAN_PENDING",
+          "HIT-31"
+        ]
+      ],
+      "8": [
+        [
+          "Domain/application100%",
+          "Не доказывает remote truth",
+          "Будущий authenticated adapter/integration",
+          "Не заявлен PASS"
+        ],
+        [
+          "main wrapper0%",
+          "os.Exit вне unit instrumentation",
+          "Actual CLI outside checkout smoke",
+          "PASS, c3/smoke"
+        ],
+        [
+          "File post-read cancel",
+          "Недетерминированная IO boundary",
+          "Не добавлять flaky sleep; injection при расширении",
+          "pre-cancel и read errors PASS"
+        ],
+        [
+          "input.walk79.2%",
+          "Не все malformed paths/arrays",
+          "Strict bounded parser; расширить при real boundary",
+          "Current negative cases PASS"
+        ]
+      ],
+      "9": [
+        [
+          "Корректная baseline",
+          "4a2bfcdd9bf7",
+          "PASS",
+          "mutations/baseline.log"
+        ],
+        [
+          "Каждый отдельный мутант",
+          "base+patch digest",
+          "build0; tests FAIL",
+          "M01…M06-build/test.log"
+        ],
+        [
+          "Восстановленный code",
+          "4a2bfcdd9bf7",
+          "PASS, clean=true",
+          "mutations/restored.log; summary.json"
+        ]
+      ],
+      "10": [
+        [
+          "M01 M01.patch",
+          "HP-RULE-006/refund",
+          "ДА, exit0",
+          "TestCLIConfiguration",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M01-test.log; финальный restored PASS"
+        ],
+        [
+          "M02 M02.patch",
+          "HP-BP-002/T/004/capture",
+          "ДА, exit0",
+          "TestFinancialDecisionTable",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M02-test.log; финальный restored PASS"
+        ],
+        [
+          "M03 M03.patch",
+          "HP-RULE-006/quantity",
+          "ДА, exit0",
+          "TestFinancialDenial",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M03-test.log; финальный restored PASS"
+        ],
+        [
+          "M04 M04.patch",
+          "HP-RULE-006/activation",
+          "ДА, exit0",
+          "TestFinancialDecisionTable",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M04-test.log; финальный restored PASS"
+        ],
+        [
+          "M05 M05.patch",
+          "HP-RULE-006/account",
+          "ДА, exit0",
+          "TestFinancialDecisionTable",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M05-test.log; финальный restored PASS"
+        ],
+        [
+          "M06 M06.patch",
+          "HP-RULE-006/dispute",
+          "ДА, exit0",
+          "TestCLIConfiguration",
+          "KILLED",
+          "Пропуска нет; усиление не требовалось",
+          "M06-test.log; финальный restored PASS"
+        ]
+      ],
+      "11": [
+        [
+          "Код и consumer",
+          "Evaluator/reader/CLI",
+          "HIT-27/28, PR5/6"
+        ],
+        [
+          "Тесты/мутации",
+          "Decision/boundary/6 mutants/risk",
+          "HIT-29 PR7"
+        ],
+        [
+          "Естественный defect",
+          "OutputFailure red→fix→green",
+          "HIT-29, natural-defect evidence"
+        ],
+        [
+          "Независимые проверки",
+          "Пакет подготовлен; действий нет",
+          "HIT-31 HUMAN_PENDING"
+        ]
+      ],
+      "12": [
+        [
+          "Работа и автор",
+          "МДК03.02 ПР2, Тимофей Патрушев с Codex"
+        ],
+        [
+          "Tag → commit",
+          "НЕ СОЗДАН, human merge/tag step"
+        ],
+        [
+          "Участок и требования",
+          "PaidOrderEligibility; TP-FR-01/02, ERR01, NFR01"
+        ],
+        [
+          "Кейсы/команды",
+          "docs/test-design.md; README; actual record.json"
+        ],
+        [
+          "Local и pipeline",
+          "PASS; https://github.com/hitpipe/hitpipe/actions/runs/39121031226"
+        ],
+        [
+          "Coverage",
+          "domain/app100%, service92.3%, gaps explained"
+        ],
+        [
+          "Мутации",
+          "6/6 compiled killed,0 survivors; clean restored PASS"
+        ],
+        [
+          "Риски/пределы",
+          "risk-registry.md; VALID означает только финансовую допустимость. Case admission/lifecycle, actor/epoch, lineage, fresh dispatch, authenticated source provenance/digest, реальные Stripe/ClickUp и full MVP не реализованы этим модулем и не объявлены PASS."
+        ]
+      ]
+    },
+    "appendices": [
+      [
+        "Материалы 01 04 ПР2",
+        [
+          "module-map.md",
+          "module-adr.md",
+          "complexity-profile.md"
+        ]
+      ]
+    ]
+  }
+}
