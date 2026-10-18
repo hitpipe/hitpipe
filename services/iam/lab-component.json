@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "component": "iam",
+  "positive_fixture": "testdata/valid.json",
+  "negative_fixture": "testdata/malformed.json",
+  "positive_output_contains": ["valid", "session_valid"],
+  "expected_test_names": ["TestEvaluateValid", "TestEvaluateUnknown", "TestEvaluateIdleBoundary"]
+}
