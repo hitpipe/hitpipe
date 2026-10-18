@@ -30,10 +30,28 @@ jobs:
           go-version: '1.27.2'
           cache: false
       - name: Run actual named tests when module exists
-        run: python3 tools/pr12/workspace.py check processing
+        run: |
+          set -o pipefail
+          mkdir -p .pr12-build
+          python3 tools/pr12/workspace.py check processing | tee .pr12-build/processing-check.log
       - name: Run declared diagnostic smoke in both modes
         if: hashFiles('services/processing/lab-component.json') != ''
         run: python3 tools/pr12/workspace.py smoke processing --require
+      - name: Race and mutation sensitivity for Processing
+        if: hashFiles('services/processing/tools/mutations/run.py') != ''
+        run: |
+          cd services/processing
+          go test -race -count=1 ./...
+          cd ../..
+          python3 services/processing/tools/mutations/run.py --output .pr12-build/processing-mutations
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: processing-evidence-${{ github.sha }}
+          path: |
+            .pr12-build/processing.cover
+            .pr12-build/processing-check.log
+            .pr12-build/processing-mutations/
       - name: Scope of this job
         if: always()
         run: |
