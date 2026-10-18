@@ -1,0 +1,43 @@
+# HIT-23 — один пакет настоящих человеческих действий
+
+Состояние: **PREPARED_FOR_REVIEW / HUMAN_ACTIONS_PENDING**. Владелец Дмитрий Карачебан; агент подготовил код, проверки и материалы. Ниже нет подписей, проведённых интервью, student peer review, cross-project discussion или факта merge. Пользователь прямо остановил агентный scope перед отдельным человеческим review.
+
+## 1. Review кода и требований
+
+Проверяющий должен быть отдельным реальным человеком с собственным GitHub account. PR созданы авторизованным dkar-dev, поэтому собственное approval автора не заменяет review. Проверить изменения последовательно: bootstrap [#2](https://github.com/hitpipe/hitpipe/pull/2), R1 [#12](https://github.com/hitpipe/hitpipe/pull/12), R2 [#13](https://github.com/hitpipe/hitpipe/pull/13), C1 [#14](https://github.com/hitpipe/hitpipe/pull/14), C2 [#15](https://github.com/hitpipe/hitpipe/pull/15), C3 [#16](https://github.com/hitpipe/hitpipe/pull/16), D1 [#17](https://github.com/hitpipe/hitpipe/pull/17). H1/REPORT добавляют пакет и отчёты, не заменяют эти review.
+
+Приоритеты review: source Candidate не назван Accepted; valid не business grant; idle относится к authority deadline; no default allow при неизвестности/error/cancel; clock после Lookup; exact JSON keys/без утечек; реальные assertions/семь compiling mutations; карта imports совпадает с Go; отчёты не объявляют human gates выполненными.
+
+Фактический readback защиты **main** 18.10.2026 UTC: enforce_admins=true, strict required checks pr12-iam/intake/processing/delivery, one approval, dismiss stale reviews, require last push approval. Защита не менялась. Stacked task branches не называются protected main; до merge checks и review должны быть актуальны.
+
+Все PR stacked, parent не merged. Наиболее простой маршрут сохранения ancestry после review — merge commit parent, retarget следующего PR на main, дождаться актуального CI и выполнить следующий human merge. Если выбран squash/rebase, автор обязан корректно перенести зависимые branches на новый base и повторить CI/review; нельзя объявить прежний child SHA проверенным после переписывания. Агент сейчас ничего не сливает и не создаёт submission tags.
+
+## 2. Обследование
+
+Передать реальному пользователю или согласованному представителю восемь вопросов из `interview.md`. Реальный человек фиксирует дату, роль, ответы/источники, факты/предположения/неизвестные и решения. Продуктовые документы не являются выдуманным интервью. Удобство 8h/24h и понятность повторного входа остаются эмпирическими неизвестными. До контакта статус **NOT CONDUCTED**.
+
+## 3. Requirement clarity NB → DK
+
+Назначение ring: Никита Будыкин (HIT-15) проверяет DK (HIT-11). Передать R2 contract на exact `9d7c37151606656e9dc2f2f65876b8bd93b397cd`, `review/blind-scenarios.md`, затем получить письменные ответы **до** открытия `review/oracle.md`. Сравнить, записать замечания, решения и retest после исправлений. Статус **NOT PERFORMED**; пакет не свидетельствует о совпадении понимания.
+
+## 4. Реальное взаимное воспроизведение scaffold/module
+
+DK проверяет Тимофея Патрушева [HIT-12](https://hitpipe.atlassian.net/browse/HIT-12), конкретный существующий candidate [PR #10](https://github.com/hitpipe/hitpipe/pull/10) SHA `adfbfc33bf20cb0b0641e49e48c0502d2f5d108d`. NB проверяет DK candidate C3 [#16](https://github.com/hitpipe/hitpipe/pull/16), SHA `2cd7c032e8ede98c75181599b440e97657bff197`. Это входы для проверки, а не прошедшие проверку результаты. Если source обновлён, reviewer фиксирует новый full SHA и объясняет смену; старое evidence не переносится молча.
+
+Реальный студент в отдельном чистом каталоге выполняет `git clone https://github.com/hitpipe/hitpipe.git`; `cd hitpipe`; `git fetch origin <full-SHA>`; `git switch --detach <full-SHA>`; `git status --short`; `git rev-parse HEAD`; `go version`; `python3 --version`. Для DK component=iam, TP component=processing. Из root: `python3 tools/pr12/workspace.py validate`; `python3 tools/pr12/workspace.py check <component> --require`; `python3 tools/pr12/workspace.py smoke <component> --require`. Никакие production credentials не нужны.
+
+Для module check открыть его реальный contract/README, показать public operation→consumer, две реализации и одну composition root, сравнить module map с `cd services/<component> && go list -json ./...`. Для IAM отдельно: `go test ./internal/adapters/fixtures/sessionlookup -run TestSameConsumerContractWithBothAdapters -v -count=1`. Зафиксировать normal/error/boundary и фактические замечания/повтор. Для Processing использовать команды/названия тестов из его версии README/manifest; не подставлять выдуманные IAM names.
+
+Форма `review/peer-protocol.json` хранит обе стороны, author/date/environment/fullSHA/argv/exit/log/remarks/retest. Сейчас **NOT PERFORMED**. Собственный агентный outside-checkout smoke и CI не являются другим студентом и не выполняют личное задание DK по проверке TP.
+
+## 5. Оппонирование другого проекта
+
+Lead организует преподавательское кольцо, реальный внешний проект/версию/участников. DK разбирает их требования и фиксирует наблюдения, затем реальные замечания к своим, решение с основанием/изменением/повтором. Другой участник HitPipe и второй агент не заменяют другой проект. Назначение/проект пока **NOT PROVIDED**, обсуждение **NOT CONDUCTED**. Подготовленные review вопросы: основной и ошибочный сценарий, измеримость NFR, MVP/резерв, source provenance, fail closed/PII, oracle до actual run.
+
+## 6. Завершение сдачи
+
+После реального review/merge и актуальных checks: реальные human protocols; личные реквизиты; вставка 21 снимка по `evidence/screenshots/INSTRUCTIONS.md`; визуальная проверка Word/LibreOffice/оглавления; четыре immutable tags 0104-pz01-dk-v1,0104-pz02-dk-v1,0302-pz01-dk-v1,0302-pz02-dk-v1 на итоговый согласованный commit. `submission-record.json` пока не утверждает tag/merge/acceptance. Если исправления после тега — v2, не переносить v1. Личная защита выполняется самим студентом без генеративного ИИ; агент готовит только памятку.
+
+## Jira automation boundary
+
+Feature HIT-11 фактически In Progress. Действующий Project OS не исключает MANUAL_LAB_PR12 Subtasks и компенсирует ручной Start в Todo с `/start human confirmation missing`. Это инфраструктурный конфликт с явным ручным workflow. Агент не создаёт фиктивный preflight/review verdict, не отключает общую защиту и не меняет shared runtime в этой IAM работе. Реальные PR/evidence и статус агентной части указаны в комментариях и labels; final Jira readback сохраняется отдельно. Формальный In Review не объявляется, если backend его не удерживает.
