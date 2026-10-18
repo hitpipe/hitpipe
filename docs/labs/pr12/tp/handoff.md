@@ -15,7 +15,7 @@
 | HIT-29 | work/HIT-29-financial-proof-verification | https://github.com/hitpipe/hitpipe/pull/7 | 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb |
 | HIT-30 | work/HIT-30-processing-engineering-docs | https://github.com/hitpipe/hitpipe/pull/8 | 0d448475e8d3a637190f313975790f56ada3c971 |
 | HIT-31 | work/HIT-31-human-review-package | https://github.com/hitpipe/hitpipe/pull/9 | 4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4 |
-| HIT-32 | work/HIT-32-individual-reports | записывается после actual создания в сопровождающей внешней записи | own SHA фиксируется внешне после commit |
+| HIT-32 | work/HIT-32-individual-reports | https://github.com/hitpipe/hitpipe/pull/10 | own SHA фиксируется внешне после commit |
 
 Полные SHA сверяются actual refs в финальной внешней record; own final report SHA не добавляется самоссылочным report commit. Колонка сверена с actual refs; финальная внешняя record отдельно фиксирует report head после commit.
 
@@ -49,3 +49,5 @@ Lead организует reviewer и реальные контакты из hum
 ## Продолжение компонентного Epic
 
 Переиспользовать services/processing domain/application/reader contracts/tests/fixtures, все три PR и Jira/evidence history; reparent/link существующую Feature по решению Lead. Не переизобретать финансовую policy. Будущие реальные Intake auth/OAS/digest mapping, actor/epoch/lifecycle/lineage/dispatch/DB/concurrency/full Product E2E остаются отдельной owner-разработкой. Текущая лабораторная не означает реализацию всего HP-VER-001, production/live deployment или acceptance фаз.
+
+Локальные точные source-checkout для ручных снимков уже подготовлены: task work/figure-source (4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0) и work/figure-delivery (8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb). Инструкции указывают их полные cwd и PATH локального exact Go; снимки ещё не выполнялись.

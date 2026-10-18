@@ -100,9 +100,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go test -count=1 -v ./...
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go test -count=1 -v ./...
 
 STEPS: 1. В отдельном clean checkout версии из STATE открыть terminal. 2. Показать git rev-parse HEAD и go version. 3. Перейти в services/processing. 4. Выполнить указанную команду, затем echo $?. 5. Оставить имена своих tests и итог в кадре.
 
@@ -156,9 +156,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go tool cover -func=../../docs/labs/pr12/tp/evidence/c3/processing.cover
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go tool cover -func=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/docs/labs/pr12/tp/evidence/c3/processing.cover
 
 STEPS: 1. Открыть сохранённый exact profile и coverage-analysis.md. 2. Выполнить команду. 3. Показать domain/application100%, total92.3% и конкретный File.Read/input.walk gap. 4. Показать решение о post-read cancellation/future adapter, а не только процент.
 
@@ -184,9 +184,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source
 
-COMMAND: python3 services/processing/tools/mutations/run.py --output .pr12-build/figure-mutations --natural-defects 1 --natural-defect-task https://hitpipe.atlassian.net/browse/HIT-29
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; python3 services/processing/tools/mutations/run.py --output .pr12-build/figure-mutations --natural-defects 1 --natural-defect-task https://hitpipe.atlassian.net/browse/HIT-29
 
 STEPS: 1. Открыть M01.patch, M01-build.log и summary.json: build exit0, patch digest. 2. Открыть M01-test.log и failing refund assertion. 3. Для повторения использовать указанную команду в clean exact checkout: она сама создаёт отдельный временный worktree, меняет по одному и полностью восстанавливает. 4. Снять diff+реальный FAIL, не compile error.
 
@@ -212,9 +212,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: git status --short; git rev-parse HEAD; go test -count=1 -v ./...; echo $?
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; git status --short; git rev-parse HEAD; go test -count=1 -v ./...; echo $?
 
 STEPS: 1. Использовать исправный exact checkout, не mutation worktree. 2. Показать git status и full SHA. 3. Выполнить tests и echo exit. 4. Сопоставить с summary clean=true/restored exit0.
 
@@ -240,7 +240,7 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source
 
 COMMAND: git show 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0:services/processing/cmd/processing-contractcheck/main.go
 
@@ -268,9 +268,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-delivery
 
-COMMAND: python3 tools/pr12/workspace.py build processing --mode dev --require; python3 tools/pr12/workspace.py build processing --mode release --require
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; python3 tools/pr12/workspace.py build processing --mode dev --require; python3 tools/pr12/workspace.py build processing --mode release --require
 
 STEPS: 1. Открыть terminal exact source8ae5 и показать fullSHA/Go1.27.2. 2. Выполнить обе команды. 3. Раскрыть actual flags -N -l и -trimpath, linker metadata. 4. Показать exit0 каждого; размеры из delivery-observations.json.
 
@@ -298,7 +298,7 @@ CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
 CWD: repo root затем отдельный каталог вне checkout
 
-COMMAND: python3 tools/pr12/workspace.py smoke processing --require
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; python3 tools/pr12/workspace.py build processing --mode release --require; TP_DELIVERY_DIR=$(mktemp -d /tmp/tp-delivery.XXXXXX); cp .pr12-build/processing/release/processing-contractcheck services/processing/testdata/valid.json "$TP_DELIVERY_DIR/"; cd "$TP_DELIVERY_DIR"; pwd; ./processing-contractcheck --version; ./processing-contractcheck --fixture valid.json --format json; echo $?
 
 STEPS: 1. Выполнить smoke: он собирает оба режима и копирует binary+fixtures во временный каталог. 2. В выводе показать пути pr12-outside-checkout, invocation --version и --fixture. 3. Для ручной демонстрации скопировать release binary и valid.json в новый пустой каталог, перейти туда. 4. Запустить ./processing-contractcheck --version, затем --fixture valid.json --format json и echo $?.
 
@@ -324,9 +324,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-delivery
 
-COMMAND: .pr12-build/processing/release/processing-contractcheck --version; .pr12-build/processing/release/processing-contractcheck --fixture services/processing/testdata/valid.json --format json; echo $?
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; .pr12-build/processing/release/processing-contractcheck --version; .pr12-build/processing/release/processing-contractcheck --fixture services/processing/testdata/valid.json --format json; echo $?
 
 STEPS: 1. Собрать release exact source как на рисунке2. 2. Выполнить указанные version и fixture команды. 3. Оставить start/result, VALID/FINANCIAL_ELIGIBILITY_ONLY и exit0 в кадре.
 
@@ -352,9 +352,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-delivery
 
-COMMAND: .pr12-build/processing/release/processing-contractcheck --fixture services/processing/testdata/invalid.json --format json; echo $?
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; .pr12-build/processing/release/processing-contractcheck --fixture services/processing/testdata/invalid.json --format json; echo $?
 
 STEPS: 1. Использовать тот же binary/source что normal. 2. Выполнить invalid command без set -e, чтобы показать exit. 3. Повторить с --format invalid при valid fixture. 4. В обоих случаях должно быть понятное INVALID_JSON/CONFIGURATION и nonzero2, без payload.
 
@@ -408,9 +408,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source
 
-COMMAND: python3 services/processing/tools/mutations/run.py --output .pr12-build/figure-mutations --natural-defects 1 --natural-defect-task https://hitpipe.atlassian.net/browse/HIT-29
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; python3 services/processing/tools/mutations/run.py --output .pr12-build/figure-mutations --natural-defects 1 --natural-defect-task https://hitpipe.atlassian.net/browse/HIT-29
 
 STEPS: 1. Запустить mutation runner в exact clean checkout или открыть сохранённые logs. 2. Показать M01.patch (refund condition changed) и build exit0. 3. Открыть negative-gate.log: python3 tools/pr12/workspace.py check processing --require действительно nonzero из refund assertion. 4. Показать summary negative_gate.exit и restored.exit0/clean=true.
 
@@ -436,7 +436,7 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source
 
 COMMAND: git show 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0:services/processing/internal/domain/eligibility/eligibility.go
 
@@ -464,9 +464,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go doc ./internal/domain/eligibility Evaluate; go doc ./internal/application/evaluatepaidorder EvaluatePaidOrder
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go doc ./internal/domain/eligibility Evaluate; go doc ./internal/application/evaluatepaidorder EvaluatePaidOrder
 
 STEPS: 1. Показать Go1.27.2 и exact SHA. 2. Выполнить обе go doc команды. 3. В редакторе рядом открыть module-contract.md: purpose/inputs/results/errors/precedence/ownership/effects/example.
 
@@ -492,9 +492,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go test -count=1 -v ./internal/application/evaluatepaidorder -run TestReaderSubstitution
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go test -count=1 -v ./internal/application/evaluatepaidorder -run TestReaderSubstitution
 
 STEPS: 1. Открыть test и consumer. 2. Показать File и double selection и одну EvaluatePaidOrder callsite. 3. Выполнить команду. 4. Показать обе реализации и normal/error/boundary, объяснить finite mock limits.
 
@@ -520,9 +520,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go list -f '{{.ImportPath}} => {{join .Imports " "}}' ./...
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go list -f '{{.ImportPath}} => {{join .Imports " "}}' ./...
 
 STEPS: 1. Открыть module-map.md и показать автора. 2. Показать легенду A→B source dependency и actual/planned statuses. 3. Выполнить go list и сопоставить imports; показать отсутствие production cycles и неготовность future adapter.
 
@@ -548,9 +548,9 @@ SOURCE_SHA: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0
 
 CI_SHA: 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb
 
-CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing
+CWD: /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/figure-source/services/processing
 
-COMMAND: go test -count=1 -v ./internal/application/evaluatepaidorder -run TestReaderSubstitution
+COMMAND: export PATH=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin:$PATH; go version; git rev-parse HEAD; go test -count=1 -v ./internal/application/evaluatepaidorder -run TestReaderSubstitution
 
 STEPS: 1. Выполнить same consumer contract suite. 2. Развернуть file/normal,boundary,error_unknown и double/normal,boundary,error_unknown. 3. Показать expected actual assertions и PASS, завершить echo $?.
 
