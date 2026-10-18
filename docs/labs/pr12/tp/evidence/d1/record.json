@@ -1,0 +1,74 @@
+{
+  "stage": "d1",
+  "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+  "component_tree": "81eb934df79878072f24c506f410ebd0009bf554",
+  "dirty": false,
+  "environment": {
+    "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "go": "go version go1.27.2 darwin/arm64",
+    "python": "3.14.2",
+    "git": "git version 2.52.0",
+    "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+  },
+  "runs": [
+    {
+      "id": "d1-build-dev",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "build",
+        "processing",
+        "--mode",
+        "dev",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.289621+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.525171+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "build-dev.log",
+      "sha256": "c0e5ff9f7f924ec43011505c87ae783eaaa525358d97bdacf303e407b60aad09",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification."
+    },
+    {
+      "id": "d1-build-release",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "build",
+        "processing",
+        "--mode",
+        "release",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.525308+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.761445+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "build-release.log",
+      "sha256": "a3497e74cdcd706f8fc1fad80e75dccdfb3443a1647f020732f01595ac19e289",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification."
+    },
+    {
+      "id": "d1-inspect-release",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "otool",
+        "-l",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.761542+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.771418+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "inspect-release.log",
+      "sha256": "a0476043215ed9b4f708c2198773f1e861cd30bc63318e4097cc6f66cb3cf57e",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification."
+    }
+  ]
+}
