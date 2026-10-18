@@ -1,0 +1,18 @@
+{
+  "task": "HIT-17",
+  "revision": "R1",
+  "status": "PREPARED_FOR_REVIEW",
+  "source_status": "CANDIDATE_MANUAL_LAB_INPUT",
+  "implementation": "NOT_IMPLEMENTED_AT_R1",
+  "human_interview": "NOT_CONDUCTED",
+  "independent_review": "NOT_PERFORMED",
+  "requirements": [
+    {"id":"DK-FR-01","source":["HP-BP-001/T/002"],"cases":["DK-NORMAL"],"task":"HIT-19"},
+    {"id":"DK-FR-02","source":["HP-BP-001/T/002","HP-BP-001/T/003"],"cases":["DK-UNKNOWN","DK-REVOKED","DK-IDLE","DK-ABSOLUTE","DK-CHRONOLOGY"],"task":"HIT-19"},
+    {"id":"DK-FR-03","source":["HP-BP-001/T/003"],"cases":["DK-CLOCK","DK-LOOKUP-ERROR","DK-NIL-PORT"],"task":"HIT-20"},
+    {"id":"DK-FR-04","source":["HP-BP-007/T/005"],"cases":["DK-NORMAL","DK-PARSE"],"task":"HIT-19"},
+    {"id":"DK-NFR-01","source":["HP-BP-001/T/003"],"cases":["DK-REPEAT-IMMUTABLE","DK-IMPORTS"],"task":"HIT-21"},
+    {"id":"DK-NFR-02","source":["HP-BP-001/T/013"],"cases":["DK-CANARY-OUTPUT"],"task":"HIT-21"},
+    {"id":"DK-NFR-03","source":["HIT-16","HIT-19","HIT-21"],"cases":["DK-CLEAN-CLONE","DK-LOCAL-CI"],"task":"HIT-21"}
+  ]
+}
