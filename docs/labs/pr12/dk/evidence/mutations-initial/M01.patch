@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -92,7 +92,7 @@
+ 	if !now.Before(absolute) {
+ 		return deny(ReasonAbsoluteExpired)
+ 	}
+-	if !now.Before(idle) {
++	if now.After(idle) {
+ 		return deny(ReasonIdleExpired)
+ 	}
+ 	return Decision{State: StateValid, Reason: ReasonValid}

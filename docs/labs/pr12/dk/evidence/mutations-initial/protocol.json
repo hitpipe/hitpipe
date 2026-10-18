@@ -1,0 +1,378 @@
+{
+  "source_sha": "462d553e8373af6047f0950e0a9adfe15e85c83f",
+  "started_at": "2026-10-18T23:32:13.724960+00:00",
+  "input_dirty": false,
+  "go_version": "go version go1.27.2 linux/amd64",
+  "environment": {
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "2",
+    "GOFLAGS": "-p=1",
+    "PR12_RACE": ""
+  },
+  "mutations": [
+    {
+      "id": "M01",
+      "rule": "DK-RULE-02: idle equality must expire",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "12da0e0f4a788285a9066c142216d6e34390fdc19917b1fe78e106ae9ec74038",
+      "patch": "M01.patch",
+      "patch_sha256": "42a34ac922e55792d413414daa6ce2e69b44093ce67e2549f52e21e429d44352",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:15.752511+00:00",
+        "completed_at": "2026-10-18T23:32:16.083308+00:00",
+        "exit_code": 0,
+        "log": "M01-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:16.083356+00:00",
+        "completed_at": "2026-10-18T23:32:17.271581+00:00",
+        "exit_code": 1,
+        "log": "M01-check.log",
+        "sha256": "3a7cdd0e20b62279c3fc1865be4e0900cb9261fba81a34dd07ab6c22187d5c9e",
+        "failed_tests": [
+          "FuzzValidityInvariants",
+          "FuzzValidityInvariants/seed#3",
+          "TestClockReadAfterLookupAndCancellation",
+          "TestEvaluateIdleBoundary",
+          "TestEvaluateIdleBoundary/equal",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/idle_equal",
+          "TestSameConsumerContractWithBothAdapters/fixed/idle_equal"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M02",
+      "rule": "DK-RULE-02: absolute equality and precedence",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "52f2ab49437cbfdb5b7926ae636914fa02dcdaccc39c816682858cdf17e05a24",
+      "patch": "M02.patch",
+      "patch_sha256": "6aeec8033efbf56e782fef87219c753db26e0c7e02e375d4d5d3f52ec4d86460",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:17.272219+00:00",
+        "completed_at": "2026-10-18T23:32:17.539747+00:00",
+        "exit_code": 0,
+        "log": "M02-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:17.539811+00:00",
+        "completed_at": "2026-10-18T23:32:18.914765+00:00",
+        "exit_code": 1,
+        "log": "M02-check.log",
+        "sha256": "b5c100a5db463b46c936e745ca00f146c40be932aef9e6f6b1c4ad1f26bd0424",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestEvaluateAbsoluteBoundary"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M03",
+      "rule": "DK-FR-01: revoked cannot be valid",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "0e1fdfc24800d3f03aa131b438eb90ad345df53521e674c6728dbac1f0ee9d68",
+      "patch": "M03.patch",
+      "patch_sha256": "ffcbbb116a64ca78cb2a2cb2fa302be641aec473b238301315065649ce0f33e7",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:18.915353+00:00",
+        "completed_at": "2026-10-18T23:32:19.253910+00:00",
+        "exit_code": 0,
+        "log": "M03-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:19.253972+00:00",
+        "completed_at": "2026-10-18T23:32:20.629552+00:00",
+        "exit_code": 1,
+        "log": "M03-check.log",
+        "sha256": "a9c43ed27611ca52252bd5046463007b975082d16345924fe36e26486281a514",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestDiagnosticDeniedIsSuccessfulEvaluation",
+          "TestEvaluateRevoked",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/revoked",
+          "TestSameConsumerContractWithBothAdapters/fixed/revoked"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M04",
+      "rule": "DK-FR-01: unknown must fail closed",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "dfd911e7436a7c545e7da948c89b8cb3a2bdfca427f84331afbbbbdf0aa84fc9",
+      "patch": "M04.patch",
+      "patch_sha256": "003a8c4ac39a50b335233fb0bf63a7903edf0a85ac46ae92a94db32e75e1c5b9",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:20.630100+00:00",
+        "completed_at": "2026-10-18T23:32:20.898514+00:00",
+        "exit_code": 0,
+        "log": "M04-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:20.898565+00:00",
+        "completed_at": "2026-10-18T23:32:22.294480+00:00",
+        "exit_code": 1,
+        "log": "M04-check.log",
+        "sha256": "2040a2b39f2d95eda0d9c74d41e710d13df361573c4ed3a3cfe5119b59c5c1f9",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestEvaluateUnknown",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/unknown",
+          "TestSameConsumerContractWithBothAdapters/fixed/unknown"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M05",
+      "rule": "DK-RULE-01: absolute lifetime cap",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "03bf07ebc3ac5028e1cfc2682e24add4bccbe8b78c829ca5056959423da42787",
+      "patch": "M05.patch",
+      "patch_sha256": "565ea27c3585f2e6252bc59bedb06d5d3367a70a90146abcdfe35d03544dc96d",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:22.294982+00:00",
+        "completed_at": "2026-10-18T23:32:22.555218+00:00",
+        "exit_code": 0,
+        "log": "M05-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:22.555268+00:00",
+        "completed_at": "2026-10-18T23:32:23.969637+00:00",
+        "exit_code": 1,
+        "log": "M05-check.log",
+        "sha256": "6f5cea039daf0c543c325e914adc35239c91fef5bc18e9a6d3c5d0c94124d88c",
+        "failed_tests": [
+          "TestEvaluateInvalidChronology",
+          "TestEvaluateInvalidChronology/lifetime_above_cap"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M06",
+      "rule": "DK-FR-02: lookup error must not allow",
+      "file": "services/iam/internal/application/authenticatesession/service.go",
+      "before_sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c",
+      "mutated_sha256": "043808946b64e47cf90befedf2c588e4de17fb4a92b34e4983504c17915fb75d",
+      "patch": "M06.patch",
+      "patch_sha256": "19b07be2c95d40c8052ee3f088dac743cfaa157d222eabb13c27903160eb9181",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:23.970228+00:00",
+        "completed_at": "2026-10-18T23:32:24.281836+00:00",
+        "exit_code": 0,
+        "log": "M06-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:24.281884+00:00",
+        "completed_at": "2026-10-18T23:32:25.412038+00:00",
+        "exit_code": 1,
+        "log": "M06-check.log",
+        "sha256": "87bfd2f79e4eb896413811decd14109538ded8fd701b02530e58345347168818",
+        "failed_tests": [
+          "TestPortErrorsDoNotAllowOrLeak",
+          "TestPortErrorsDoNotAllowOrLeak/lookup",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/error",
+          "TestSameConsumerContractWithBothAdapters/fixed/error"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c",
+      "restored": true
+    },
+    {
+      "id": "M07",
+      "rule": "DK-RULE-02: IsValid requires complete positive decision",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "2ca94f442f218e4147e4fed57700daef2b925ffcb2de3acbcff606bf6263a01d",
+      "patch": "M07.patch",
+      "patch_sha256": "946446d7282b2b268f3f3fd80077a350e8bfa396d26ca5a2d5993345d7422516",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout/services/iam",
+        "started_at": "2026-10-18T23:32:25.412555+00:00",
+        "completed_at": "2026-10-18T23:32:25.731483+00:00",
+        "exit_code": 0,
+        "log": "M07-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+        "started_at": "2026-10-18T23:32:25.731532+00:00",
+        "completed_at": "2026-10-18T23:32:27.105998+00:00",
+        "exit_code": 0,
+        "log": "M07-check.log",
+        "sha256": "4b0a8176aff29e09ebe56c5f1277564374684c90672cb3f6444827025b39bbc6",
+        "failed_tests": []
+      },
+      "result": "SURVIVED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    }
+  ],
+  "scope": "Synthetic IAM slice; not real authority, independent human review or acceptance.",
+  "temporary_branch": "temp/pr12-dk-mutations-b07e89b8f9ba",
+  "baseline": {
+    "command": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+    "started_at": "2026-10-18T23:32:13.814154+00:00",
+    "completed_at": "2026-10-18T23:32:15.751940+00:00",
+    "exit_code": 0,
+    "log": "baseline.log",
+    "sha256": "9c5fecca9b61f252ea4888be862882d2d0bd40360d914bdc97334e1d85de6b9d",
+    "failed_tests": []
+  },
+  "final_clean": {
+    "command": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/dk-mutations-kqatvvpv/checkout",
+    "started_at": "2026-10-18T23:32:27.106277+00:00",
+    "completed_at": "2026-10-18T23:32:27.892294+00:00",
+    "exit_code": 0,
+    "log": "final-clean.log",
+    "sha256": "4fbe927e46474c083f76748ce57be7b62bb8421a18ec912b62e57d0074972bb5",
+    "failed_tests": []
+  },
+  "restored_worktree_clean": true,
+  "completed_at": "2026-10-18T23:32:27.910229+00:00"
+}

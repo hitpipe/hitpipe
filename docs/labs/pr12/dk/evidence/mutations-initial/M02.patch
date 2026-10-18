@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -89,7 +89,7 @@
+ 	if now.Before(created) {
+ 		return deny(ReasonNotYetValid)
+ 	}
+-	if !now.Before(absolute) {
++	if now.After(absolute) {
+ 		return deny(ReasonAbsoluteExpired)
+ 	}
+ 	if !now.Before(idle) {
