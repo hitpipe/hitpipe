@@ -1,0 +1,120 @@
+{
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "observations": [
+    {
+      "mode": "dev",
+      "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
+      "bytes": 4622983,
+      "sha256": "ec3d04c58207164aadba5c3bbd7e38527e223a37033e1808bd74a35a132f1fc8",
+      "file": {
+        "argv": [
+          "file",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=ItiWOYdeC784nLdx5aXs/Fkxq4LdOPHIozE832efa/eS8i3oxUcPZE3n1N7xyl/j9aw-tDQs6AD4fzvZhV-, BuildID[sha1]=878dedeb442869d8ff5cb3c97feb2e9ebd9c1b14, with debug_info, not stripped\n",
+        "stderr": ""
+      },
+      "metadata": {
+        "argv": [
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+          "version",
+          "-m",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck: go1.27.2\n\tpath\tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\n\tmod\tgithub.com/hitpipe/hitpipe/services/iam\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-gcflags=\"all=-N -l\"\n\tbuild\t-ldflags=\"-X main.version=pr12 -X main.commit=2cd7c032e8ede98c75181599b440e97657bff197 -X main.dirty=false -X main.buildMode=dev\"\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=2cd7c032e8ede98c75181599b440e97657bff197\n\tbuild\tvcs.time=2026-10-18T23:35:16Z\n\tbuild\tvcs.modified=false\n",
+        "stderr": ""
+      },
+      "sections": {
+        "argv": [
+          "readelf",
+          "-S",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "There are 26 section headers, starting at offset 0x190:\n\nSection Headers:\n  [Nr] Name              Type             Address           Offset\n       Size              EntSize          Flags  Link  Info  Align\n  [ 0]                   NULL             0000000000000000  00000000\n       0000000000000000  0000000000000000           0     0     0\n  [ 1] .note.go.buildid  NOTE             0000000000400f78  00000f78\n       0000000000000064  0000000000000000   A       0     0     4\n  [ 2] .note.gnu.bu[...] NOTE             0000000000400fdc  00000fdc\n       0000000000000024  0000000000000000   A       0     0     4\n  [ 3] .text             PROGBITS         0000000000401000  00001000\n       00000000001e6d71  0000000000000000  AX       0     0     64\n  [ 4] .rodata           PROGBITS         00000000005e8000  001e8000\n       0000000000016ba2  0000000000000000   A       0     0     32\n  [ 5] .gopclntab        PROGBITS         00000000005feba8  001feba8\n       00000000000f314a  0000000000000000   A       0     0     8\n  [ 6] .go.type          PROGBITS         00000000006f1d00  002f1d00\n       000000000003cc18  0000000000000000   A       0     0     16\n  [ 7] .go.func          PROGBITS         000000000072e918  0032e918\n       0000000000000698  0000000000000000   A       0     0     8\n  [ 8] .go.buildinfo     PROGBITS         000000000072f000  0032f000\n       00000000000002b0  0000000000000000  WA       0     0     16\n  [ 9] .go.fipsinfo      PROGBITS         000000000072f2c0  0032f2c0\n       0000000000000078  0000000000000000  WA       0     0     32\n  [10] .go.module        PROGBITS         000000000072f340  0032f340\n       0000000000000238  0000000000000000  WA       0     0     32\n  [11] .noptrdata        PROGBITS         000000000072f580  0032f580\n       0000000000013a22  0000000000000000  WA       0     0     32\n  [12] .data             PROGBITS         0000000000742fc0  00342fc0\n       0000000000008e72  0000000000000000  WA       0     0     32\n  [13] .bss              NOBITS           000000000074be40  0034be40\n       00000000000210f8  0000000000000000  WA       0     0     32\n  [14] .noptrbss         NOBITS           000000000076cf40  0036cf40\n       0000000000015678  0000000000000000  WA       0     0     32\n  [15] .debug_abbrev     PROGBITS         0000000000000000  0034c000\n       0000000000000170  0000000000000000   C       0     0     1\n  [16] .debug_line       PROGBITS         0000000000000000  0034c170\n       0000000000033338  0000000000000000   C       0     0     1\n  [17] .debug_frame      PROGBITS         0000000000000000  0037f4a8\n       0000000000013185  0000000000000000   C       0     0     1\n  [18] .debug_gdb_s[...] PROGBITS         0000000000000000  0039262d\n       0000000000000058  0000000000000000           0     0     1\n  [19] .debug_info       PROGBITS         0000000000000000  00392685\n       000000000005c136  0000000000000000   C       0     0     1\n  [20] .debug_loclists   PROGBITS         0000000000000000  003ee7bb\n       000000000001d413  0000000000000000   C       0     0     1\n  [21] .debug_rnglists   PROGBITS         0000000000000000  0040bbce\n       00000000000070fd  0000000000000000   C       0     0     1\n  [22] .debug_addr       PROGBITS         0000000000000000  00412ccb\n       0000000000002fee  0000000000000000   C       0     0     1\n  [23] .symtab           SYMTAB           0000000000000000  00415cc0\n       0000000000023c58  0000000000000018          24   663     8\n  [24] .strtab           STRTAB           0000000000000000  00439918\n       000000000002f04d  0000000000000000           0     0     1\n  [25] .shstrtab         STRTAB           0000000000000000  00468965\n       0000000000000122  0000000000000000           0     0     1\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n",
+        "stderr": ""
+      },
+      "dynamic": {
+        "argv": [
+          "readelf",
+          "-d",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "\nThere is no dynamic section in this file.\n",
+        "stderr": ""
+      },
+      "version": {
+        "argv": [
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "version=pr12 commit=2cd7c032e8ede98c75181599b440e97657bff197 dirty=false buildMode=dev\n",
+        "stderr": "iam-contractcheck event=start\niam-contractcheck event=end status=version\n"
+      },
+      "has_dwarf_debug_info": true
+    },
+    {
+      "mode": "release",
+      "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
+      "bytes": 4409836,
+      "sha256": "f17251b77333794a84c5dffa59d6fe645673e68c81f43a7b4ac128719bdc93dd",
+      "file": {
+        "argv": [
+          "file",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=EXj5eL4uiOO3ZHQdWkNf/OwBI_yU3yK2aeMbWs0Aw/kIuwH3GnbebC5vOCUZ4M/6eKkoMecAByQlW4SqCJy, BuildID[sha1]=264c868ba9a0a5c07ce5fc958b2b140d4c869933, with debug_info, not stripped\n",
+        "stderr": ""
+      },
+      "metadata": {
+        "argv": [
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+          "version",
+          "-m",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck: go1.27.2\n\tpath\tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\n\tmod\tgithub.com/hitpipe/hitpipe/services/iam\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=2cd7c032e8ede98c75181599b440e97657bff197\n\tbuild\tvcs.time=2026-10-18T23:35:16Z\n\tbuild\tvcs.modified=false\n",
+        "stderr": ""
+      },
+      "sections": {
+        "argv": [
+          "readelf",
+          "-S",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "There are 26 section headers, starting at offset 0x190:\n\nSection Headers:\n  [Nr] Name              Type             Address           Offset\n       Size              EntSize          Flags  Link  Info  Align\n  [ 0]                   NULL             0000000000000000  00000000\n       0000000000000000  0000000000000000           0     0     0\n  [ 1] .note.go.buildid  NOTE             0000000000400f78  00000f78\n       0000000000000064  0000000000000000   A       0     0     4\n  [ 2] .note.gnu.bu[...] NOTE             0000000000400fdc  00000fdc\n       0000000000000024  0000000000000000   A       0     0     4\n  [ 3] .text             PROGBITS         0000000000401000  00001000\n       0000000000149911  0000000000000000  AX       0     0     64\n  [ 4] .rodata           PROGBITS         000000000054b000  0014b000\n       0000000000016642  0000000000000000   A       0     0     32\n  [ 5] .gopclntab        PROGBITS         0000000000561648  00161648\n       0000000000110442  0000000000000000   A       0     0     8\n  [ 6] .go.type          PROGBITS         0000000000671a90  00271a90\n       0000000000039950  0000000000000000   A       0     0     16\n  [ 7] .go.func          PROGBITS         00000000006ab3e0  002ab3e0\n       00000000000005f0  0000000000000000   A       0     0     8\n  [ 8] .go.buildinfo     PROGBITS         00000000006ac000  002ac000\n       00000000000001d0  0000000000000000  WA       0     0     16\n  [ 9] .go.fipsinfo      PROGBITS         00000000006ac1e0  002ac1e0\n       0000000000000078  0000000000000000  WA       0     0     32\n  [10] .go.module        PROGBITS         00000000006ac260  002ac260\n       0000000000000238  0000000000000000  WA       0     0     32\n  [11] .noptrdata        PROGBITS         00000000006ac4a0  002ac4a0\n       0000000000013902  0000000000000000  WA       0     0     32\n  [12] .data             PROGBITS         00000000006bfdc0  002bfdc0\n       0000000000009b52  0000000000000000  WA       0     0     32\n  [13] .bss              NOBITS           00000000006c9920  002c9920\n       00000000000209b8  0000000000000000  WA       0     0     32\n  [14] .noptrbss         NOBITS           00000000006ea2e0  002ea2e0\n       0000000000015668  0000000000000000  WA       0     0     32\n  [15] .debug_abbrev     PROGBITS         0000000000000000  002ca000\n       0000000000000170  0000000000000000   C       0     0     1\n  [16] .debug_line       PROGBITS         0000000000000000  002ca170\n       0000000000047f6a  0000000000000000   C       0     0     1\n  [17] .debug_frame      PROGBITS         0000000000000000  003120da\n       000000000000d4e3  0000000000000000   C       0     0     1\n  [18] .debug_gdb_s[...] PROGBITS         0000000000000000  0031f5bd\n       0000000000000018  0000000000000000           0     0     1\n  [19] .debug_info       PROGBITS         0000000000000000  0031f5d5\n       000000000007a79e  0000000000000000   C       0     0     1\n  [20] .debug_loclists   PROGBITS         0000000000000000  00399d73\n       000000000003f5c7  0000000000000000   C       0     0     1\n  [21] .debug_rnglists   PROGBITS         0000000000000000  003d933a\n       000000000001faca  0000000000000000   C       0     0     1\n  [22] .debug_addr       PROGBITS         0000000000000000  003f8e04\n       00000000000020f4  0000000000000000   C       0     0     1\n  [23] .symtab           SYMTAB           0000000000000000  003faef8\n       00000000000196e0  0000000000000018          24   641     8\n  [24] .strtab           STRTAB           0000000000000000  004145d8\n       00000000000202f2  0000000000000000           0     0     1\n  [25] .shstrtab         STRTAB           0000000000000000  004348ca\n       0000000000000122  0000000000000000           0     0     1\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n",
+        "stderr": ""
+      },
+      "dynamic": {
+        "argv": [
+          "readelf",
+          "-d",
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
+        ],
+        "exit": 0,
+        "stdout": "\nThere is no dynamic section in this file.\n",
+        "stderr": ""
+      },
+      "version": {
+        "argv": [
+          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "version=pr12 commit=2cd7c032e8ede98c75181599b440e97657bff197 dirty=false buildMode=release\n",
+        "stderr": "iam-contractcheck event=start\niam-contractcheck event=end status=version\n"
+      },
+      "has_dwarf_debug_info": true
+    }
+  ],
+  "limitation": "No throughput or bottleneck claim; synthetic diagnostic, same source, no production authority.",
+  "collected_at_file_mtime_utc": "2026-10-18T23:36:15.401236+00:00",
+  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree"
+}
