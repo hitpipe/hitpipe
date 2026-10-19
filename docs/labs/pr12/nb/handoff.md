@@ -4,6 +4,8 @@ Current package status: `CONTENT_READY_IMAGES_PENDING`. This is the text and
 evidence package for Lead review, not formal Project OS admission, acceptance,
 merge or final submission.
 
+Correction record for the delegated source review: `docs/labs/pr12/nb/correction-record.md`.
+
 ## Candidate branches and commits
 
 | task | branch | current candidate SHA | local result | external state |
