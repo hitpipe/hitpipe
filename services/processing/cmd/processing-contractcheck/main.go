@@ -2,10 +2,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder"
 	"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility"
 	"io"
 	"os"
@@ -45,7 +48,7 @@ func run(args []string, out, diagnostics io.Writer) int {
 		fmt.Fprintln(diagnostics, "INVALID_POLICY")
 		return 2
 	}
-	r := eligibility.Evaluate(s.Policy, s.Facts, s.Now)
+	r := evaluatepaidorder.EvaluatePaidOrder(context.Background(), evaluatepaidorder.Request{Policy: s.Policy, CaseID: s.Facts.CaseID, SessionID: s.Facts.SessionID, Now: s.Now}, sourcefacts.File{Path: *fixture})
 	if *format == "json" {
 		if json.NewEncoder(out).Encode(r) != nil {
 			return 3
