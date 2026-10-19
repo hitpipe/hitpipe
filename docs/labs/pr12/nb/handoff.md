@@ -10,18 +10,18 @@ Correction record for the delegated source review: `docs/labs/pr12/nb/correction
 
 | task | branch | current candidate SHA | local result | external state |
 | --- | --- | --- | --- | --- |
-| HIT-49 R1 | `work/HIT-49-nb-requirements` | `9659c39` | requirements/security/trace checks PASS | Jira/PR state UNKNOWN; interview pending |
-| HIT-50 R2 | `work/HIT-50-nb-refinement` | `35b4c247319cf3bf0c8d8288d109c996fc721d0b` | document validation PASS | [Actions run](https://github.com/hitpipe/hitpipe/actions/runs/39262488242) success; PR/review/human clarity pending |
-| HIT-51 C1 | `work/HIT-51-nb-stripe-signature` | `8634767abf8fa235407db3581a8c38705bbdebb8` | Go tests/vet/race/wrapper/CLI smoke PASS in logs | PR/review/merge pending |
-| HIT-52 C2 | `work/HIT-52-nb-authenticate-webhook` | `2a20fb6a21fe762f2cf37ded433c99bf5390be81` | application tests/vet/race/wrapper/release PASS | PR/review/merge pending |
-| HIT-53 C3 | `work/HIT-53-nb-verification` | `df1a7d58179148abfda8e71862654f5ef7fcdbc7` | overflow-safe parser/freshness fix plus regressions; CI pending | PR/review/merge pending |
-| HIT-54 D1 | `work/HIT-54-nb-docs` | `a74a5e1a8ada1147b5755503fd01fd458b8a4706` | toolchain/document checks PASS | [Actions run](https://github.com/hitpipe/hitpipe/actions/runs/39262425665) success; review pending |
-| HIT-55 H1 | `work/HIT-55-nb-human-gates` | `78a4ecb` | protocols prepared | all human gates pending |
-| HIT-56 REPORT | `work/HIT-56-nb-reports` | `803c9c14727d0649be23994444d5e114179bee41` plus correction commits | four DOCX and correction evidence are being rebuilt; 29-criterion crosswalk; 21 instructions | independent repeat review pending |
+| HIT-49 R1 | `work/HIT-49-nb-requirements` | `9659c39ad0010e1329bfe3e3bc92c9edd84982bb` | requirements/security/trace checks PASS | [PR #37](https://github.com/hitpipe/hitpipe/pull/37), base `main`; interview/review pending |
+| HIT-50 R2 | `work/HIT-50-nb-refinement` | `35b4c247319cf3bf0c8d8288d109c996fc721d0b` | document validation PASS | [PR #38](https://github.com/hitpipe/hitpipe/pull/38), base HIT-49; review/clarity pending |
+| HIT-51 C1 | `work/HIT-51-nb-stripe-signature` | `53687c138e266fda9104ef620edbc7d4252d8f6f` | corrected parser/clock/distance plus regressions | [PR #31](https://github.com/hitpipe/hitpipe/pull/31); current-head native checks queued |
+| HIT-52 C2 | `work/HIT-52-nb-authenticate-webhook` | `e64f4ff4310c597414f768ea705b6ceb1221e1b2` | ordinary no-ff parent merge of C1 | [PR #32](https://github.com/hitpipe/hitpipe/pull/32); current-head native checks queued |
+| HIT-53 C3 | `work/HIT-53-nb-verification` | `d164aebd5b746151da41717f0ffb483eb9b39a63` | ordinary no-ff parent merge of C2; corrected policy retained | [PR #33](https://github.com/hitpipe/hitpipe/pull/33); current-head native checks queued |
+| HIT-54 D1 | `work/HIT-54-nb-docs` | `a74a5e1a8ada1147b5755503fd01fd458b8a4706` | toolchain/document checks PASS | [PR #39](https://github.com/hitpipe/hitpipe/pull/39), base C2; review pending |
+| HIT-55 H1 | `work/HIT-55-nb-human-gates` | `78a4ecb87a50ec79f8979b08a4449fcfd3d77c6b` | protocols prepared | [PR #40](https://github.com/hitpipe/hitpipe/pull/40); all human gates pending |
+| HIT-56 REPORT | `work/HIT-56-nb-reports` | source snapshot `a2eee527180ba5f8456046cd40cdd41a2fd5ff5b`; final commit recorded after commit | four regenerated DOCX, 29-key crosswalk, 21 instructions; r2 CI queue tracked | [PR #34](https://github.com/hitpipe/hitpipe/pull/34); independent repeat review pending |
 
-Three code branches are pushed and ready for separate PR creation. No PR has
-been created by this package yet. The GitHub “create PR here” links emitted by
-push are not PRs and are not recorded as PR URLs.
+Three code PRs remain separate and stacked (#31–#33); R1/R2/D1/H1 each also
+have their own published PR (#37–#40). None is merged into `main`, and no PR
+review or acceptance is claimed by this package.
 
 ## Verified commands and CI
 
@@ -30,10 +30,11 @@ push are not PRs and are not recorded as PR URLs.
   `evidence/hit-51-c1-clean.log` and `hit-51-c1-cli-clean.log`.
 - C2: same local route with application tests and both dependency
   implementations; see `evidence/hit-52-c2-local-clean.log`.
-- C3: original baseline source SHA `835bbb1...`, Go `go1.27.2`, domain coverage 87.7%,
-  application coverage 83.3%, five compiled mutants all KILLED, controlled
-  wrapper failure exit 1 and restored PASS; see baseline, mutation and
-  sensitivity logs.
+- C3: corrected source/test baseline
+  `d164aebd5b746151da41717f0ffb483eb9b39a63`, verifier source digest
+  `0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640`; current
+  native checks are queued. Prior verified observations remain historical and
+  are not silently relabeled as the current-head result.
 - Verified GitHub Actions: run
   `https://github.com/hitpipe/hitpipe/actions/runs/39262304491`, SHA
   `2186a00ca9c441645c99f82fd45b34241864ac6a`, conclusion `success`.
@@ -47,9 +48,24 @@ push are not PRs and are not recorded as PR URLs.
   `https://github.com/hitpipe/hitpipe/actions/runs/39274386817`, job
   `118134753907`, SHA `df1a7d58179148abfda8e71862654f5ef7fcdbc7`, conclusion
   `success`.
-- Verified report-package Actions job `118096896666` in run
-  `https://github.com/hitpipe/hitpipe/actions/runs/39263470537`, SHA
-  `47807726acbcbfcbae048c6afc2bcb062df192cb`, conclusion `success`.
+- Current refreshed report-package Actions runs are queued; exact URLs and
+  statuses are in `evidence/index.json`. The previous successful run is
+  historical and does not prove the refreshed report content.
+
+## NB-REV-007 temporary mutation series
+
+The historical mutation files remain untouched. The new r2 branches are seeded
+from corrected C3 and each has a compile-preserving patch plus a temporary native
+workflow with separate compile and behavioral exits. Runs are currently queued;
+no mutation PASS is claimed until logs are available:
+
+| ID | branch / full SHA | patch SHA-256 | native run |
+| --- | --- | --- | --- |
+| M01 | `work/nb-mutation-r2-M01` / `4606e78f350b85717ef56d9b3766c5fd8bd4af4f` | `8695baa773b424149417e7d453e2341ef512ddfaa8ef98511e721c1d34db6dd1` | [39282875566](https://github.com/hitpipe/hitpipe/actions/runs/39282875566) |
+| M02 | `work/nb-mutation-r2-M02` / `b835a7eb3fbd4512396ef44ec8b693d6a5bf0c18` | `d075109572c75d2cb512a09f2df226bfe11c6b04d61c2af4f81b07bc57be4f59` | [39282905596](https://github.com/hitpipe/hitpipe/actions/runs/39282905596) |
+| M03 | `work/nb-mutation-r2-M03` / `5a8929b141f2b75774418114cfac1bbb7d8a01dd` | `ae02bb56e32c1b8f933aec90dde742da67d0dd5d73a9bada5393608008eaa050` | [39282909976](https://github.com/hitpipe/hitpipe/actions/runs/39282909976) |
+| M04 | `work/nb-mutation-r2-M04` / `3cc2a0d5ef75a55283802152b7295b2bb244cc83` | `462b7897cf1f55a84bca439a9ce86c0246b1127267647566780f11079b728ace` | [39282914689](https://github.com/hitpipe/hitpipe/actions/runs/39282914689) |
+| M05 | `work/nb-mutation-r2-M05` / `90cc9ab91ce0d24a157fa451c9f4efe71a725286` | `b38e284c736844cb43d16acb5fcbb53a226bce2c989cd4cbf26fa1fb5bc028c2` | [39282919252](https://github.com/hitpipe/hitpipe/actions/runs/39282919252) |
 
 ## Human actions required
 

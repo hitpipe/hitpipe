@@ -3,7 +3,7 @@
   "student": "Никита Будыкин",
   "feature": "HIT-15",
   "repository": "hitpipe/hitpipe",
-  "candidate_code_sha": "df1a7d58179148abfda8e71862654f5ef7fcdbc7",
+  "candidate_code_sha": "d164aebd5b746151da41717f0ffb483eb9b39a63",
   "report_branch": "work/HIT-56-nb-reports",
   "report_commit": "[record after final report commit and human tags]",
   "tags": {
@@ -16,7 +16,11 @@
     "HIT-51": "https://github.com/hitpipe/hitpipe/pull/31",
     "HIT-52": "https://github.com/hitpipe/hitpipe/pull/32",
     "HIT-53": "https://github.com/hitpipe/hitpipe/pull/33",
-    "HIT-56": "https://github.com/hitpipe/hitpipe/pull/34"
+    "HIT-56": "https://github.com/hitpipe/hitpipe/pull/34",
+    "HIT-49": "https://github.com/hitpipe/hitpipe/pull/37",
+    "HIT-50": "https://github.com/hitpipe/hitpipe/pull/38",
+    "HIT-54": "https://github.com/hitpipe/hitpipe/pull/39",
+    "HIT-55": "https://github.com/hitpipe/hitpipe/pull/40"
   },
   "ci": {
     "HIT-50": {
@@ -44,8 +48,62 @@
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39275300874",
       "job": "118137942247",
       "conclusion": "success"
+    },
+    "HIT-51-current-head": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39281570088",
+      "job": "118156713785",
+      "sha": "53687c138e266fda9104ef620edbc7d4252d8f6",
+      "conclusion": "success"
+    },
+    "HIT-52-current-head": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39281582647",
+      "job": "118156750440",
+      "sha": "e64f4ff4310c597414f768ea705b6ceb1221e1b2",
+      "conclusion": "success"
+    },
+    "HIT-53-current-head": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39281598031",
+      "job": "118156796184",
+      "sha": "d164aebd5b746151da41717f0ffb483eb9b39a63",
+      "conclusion": "success"
+    },
+    "HIT-56-source-snapshot": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39281604280",
+      "job": "118156815091",
+      "sha": "a2eee527180ba5f8456046cd40cdd41a2fd5ff5b",
+      "conclusion": "success"
+    },
+    "NB-REV-007-M01": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282875566",
+      "job": "118160603037",
+      "sha": "4606e78f350b85717ef56d9b3766c5fd8bd4af4f",
+      "conclusion": "queued"
+    },
+    "NB-REV-007-M02": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282905596",
+      "job": "118160720826",
+      "sha": "b835a7eb3fbd4512396ef44ec8b693d6a5bf0c18",
+      "conclusion": "in_progress"
+    },
+    "NB-REV-007-M03": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282909976",
+      "job": "118160734812",
+      "sha": "5a8929b141f2b75774418114cfac1bbb7d8a01dd",
+      "conclusion": "queued"
+    },
+    "NB-REV-007-M04": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282914689",
+      "job": "118160751628",
+      "sha": "3cc2a0d5ef75a55283802152b7295b2bb244cc83",
+      "conclusion": "queued"
+    },
+    "NB-REV-007-M05": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282919252",
+      "job": "118160771432",
+      "sha": "90cc9ab91ce0d24a157fa451c9f4efe71a725286",
+      "conclusion": "queued"
     }
   },
   "human_gates": "PENDING: interview, blind clarity, reciprocal scaffold/module checks, opposition, review, merge, screenshots, defense",
-  "note": "Not formal acceptance or submission-ready until humans complete gates and create immutable tags."
+  "note": "Current C1/C2/C3 heads have native CI success. The refreshed report source snapshot has its historical package CI success; a new report-head run will be recorded after the correction commit is pushed. r2 mutation jobs are explicitly queued/in progress until their compile/test logs are available. Not formal acceptance or submission-ready until humans complete gates, current report-head CI concludes, mutation evidence is complete, and immutable tags are created."
 }

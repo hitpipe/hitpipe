@@ -1,0 +1,15 @@
+diff --git a/services/intake/internal/domain/stripesignature/verifier.go b/services/intake/internal/domain/stripesignature/verifier.go
+--- a/services/intake/internal/domain/stripesignature/verifier.go
++++ b/services/intake/internal/domain/stripesignature/verifier.go
+@@ -177,10 +177,7 @@ func validUnixSeconds(value int64) bool {
+ }
+ 
+ func outsideTolerance(nowUnix, timestamp int64) bool {
+-	if nowUnix >= timestamp {
+-		return nowUnix-timestamp > ToleranceSeconds
+-	}
+-	return timestamp-nowUnix > ToleranceSeconds
++	return nowUnix >= timestamp && nowUnix-timestamp > ToleranceSeconds
+ }
+ 
+ func formatUnix(value int64) string {
