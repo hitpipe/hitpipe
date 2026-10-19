@@ -1,0 +1,14 @@
+package sessionpolicy // import "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+
+Package sessionpolicy evaluates a minimal authority-owned session snapshot.
+It performs no IO, reads no clock and grants no business authorization.
+
+const MaxAbsoluteLifetime = 24 * time.Hour
+type Decision struct{ ... }
+    func Evaluate(snapshot Snapshot, observation Observation) Decision
+type Observation struct{ ... }
+type Reason string
+    const ReasonValid Reason = "session_valid" ...
+type Snapshot struct{ ... }
+type State string
+    const StateValid State = "valid" ...

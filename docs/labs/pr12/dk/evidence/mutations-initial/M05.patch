@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -83,7 +83,7 @@
+ 	now := observation.At.UTC()
+ 	if !usableTime(created) || !usableTime(absolute) || !usableTime(idle) ||
+ 		!absolute.After(created) || !idle.After(created) || idle.After(absolute) ||
+-		absolute.Sub(created) > MaxAbsoluteLifetime {
++		absolute.Sub(created) > MaxAbsoluteLifetime*2 {
+ 		return deny(ReasonInvalidSnapshot)
+ 	}
+ 	if now.Before(created) {

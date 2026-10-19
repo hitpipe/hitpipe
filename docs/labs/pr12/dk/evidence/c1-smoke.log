@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=0ead65c2a7bd767841659c0f26f66edd7d763cfb -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck ./cmd/iam-contractcheck
++ /tmp/pr12-outside-checkout-ftjz4jce/iam-contractcheck --version
++ git rev-parse --short HEAD
++ /tmp/pr12-outside-checkout-ftjz4jce/iam-contractcheck --fixture /tmp/pr12-outside-checkout-ftjz4jce/positive_fixture.json --format json
+{"component": "iam", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=0ead65c2a7bd767841659c0f26f66edd7d763cfb -X main.dirty=false -X main.buildMode=release -trimpath -o /home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck ./cmd/iam-contractcheck
++ /tmp/pr12-outside-checkout-y0d1ip3d/iam-contractcheck --version
++ git rev-parse --short HEAD
++ /tmp/pr12-outside-checkout-y0d1ip3d/iam-contractcheck --fixture /tmp/pr12-outside-checkout-y0d1ip3d/positive_fixture.json --format json
+{"component": "iam", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}

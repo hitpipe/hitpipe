@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -72,7 +72,7 @@
+ 		return deny(ReasonClockUncertain)
+ 	}
+ 	if !snapshot.Found {
+-		return deny(ReasonUnknown)
++		return Decision{State: StateValid, Reason: ReasonValid}
+ 	}
+ 	if snapshot.Revoked {
+ 		return deny(ReasonRevoked)

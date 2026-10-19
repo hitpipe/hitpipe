@@ -1,0 +1,11 @@
+# HIT-22 — профиль сложности и существующий модуль-кандидат
+
+Это вопросы для следующей работы и readiness оценки, не отчёт о найденных performance bottlenecks. Владелец IAM Дмитрий Карачебан. Reusable module-candidate уже существует: `services/iam/internal/domain/sessionpolicy`, consumer `internal/application/authenticatesession`; input `testdata/valid.json`, bounded diagnostic command из README.
+
+| Направление | Конкретный объект и вопрос | Наличие / готовность | Воспроизводимая проверка и следующий шаг |
+| --- | --- | --- | --- |
+| Межкомпонентное взаимодействие | Lookup latency/error + Clock freshness: не остаётся ли прежний now после ожидания, не маскируется ли недоступность успехом? | Narrow ports и consumer реализованы; delayed/error/cancel tests PASS; real authority отсутствует | TestClockReadAfterLookupAndCancellation + оба DI adapters. Далее production authority adapter с timeout/freshness contract, integration fault injection и актуальными бизнес-полномочиями; этот пакет этого не доказывает |
+| Хранение и обработка данных | Minimal snapshot/idle/absolute: сохраняются ли value ownership, порядок причин и точная equality без overflow? | Pure domain реализован, 100% statements и границы/decision table/race; SQL durability/RLS не реализованы | TestEvaluateIdleBoundary/AbsoluteBoundary/InvalidChronology/DeterministicImmutable; fixture fixed 2026-10-18. Далее owner SQL consistency/epoch/renewal testing по exact architecture; canonical schema здесь не меняется |
+| Организация вычислений и памяти, перспективно | Стоимость копирования time values/JSON parser под реальным workload: есть ли причина оптимизировать? | Реализуемый объект есть, profile НЕ СНИМАЛСЯ; bottleneck неизвестен | После representative workload — benchmark, pprof CPU/alloc, trace с warmup/seed/env/variance. Нельзя выводить latency/throughput из размера двух binary |
+
+Изоляция воспроизводима без БД, ключей или provider: `cd services/iam && go test ./internal/domain/sessionpolicy ./internal/application/authenticatesession -count=1`; CLI `go run ./cmd/iam-contractcheck --fixture testdata/valid.json --format json`. Интерфейсы и contract дают конкретный seam для дальнейшей разработки; общий runtime/architecture не переизобретается.
