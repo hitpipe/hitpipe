@@ -21,10 +21,15 @@ var (
 func main() {
 	versionFlag := flag.Bool("version", false, "print build identity")
 	fixturePath := flag.String("fixture", "", "synthetic fixture JSON")
+	format := flag.String("format", "json", "diagnostic output format")
 	config := flag.String("config", "default", "diagnostic config name")
 	flag.Parse()
 	if *config != "default" {
 		fmt.Fprintln(os.Stderr, "unsupported config:", *config)
+		os.Exit(2)
+	}
+	if *format != "json" {
+		fmt.Fprintln(os.Stderr, "unsupported format:", *format)
 		os.Exit(2)
 	}
 	if *versionFlag {
