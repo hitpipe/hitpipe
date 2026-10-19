@@ -1,0 +1,496 @@
+[
+  {
+    "name": "identity",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:10.521966+00:00",
+    "completed_at_utc": "2026-10-19T17:39:10.535522+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "f7969906aa74c6b2367f05277ff317da118d8be8bcaada37dee41fb0e03b2313",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "go-version",
+    "argv": [
+      "go",
+      "version"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:10.535769+00:00",
+    "completed_at_utc": "2026-10-19T17:39:10.566437+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "ed4307d760c597256afdc696a61d47d13e832615d7741ead11c64966a440b376",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "validate",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "validate"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:10.566689+00:00",
+    "completed_at_utc": "2026-10-19T17:39:10.884165+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "cdca87d298bc458baf51e25a04370aec0bee4341b3fc9d426e1537308e3e360f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "tests",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:10.884492+00:00",
+    "completed_at_utc": "2026-10-19T17:39:19.724435+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "4ef232f5cebfef424560ee154cf9cfa23a789dd09245f53252ecfdef471e4618",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "build-dev",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "build",
+      "iam",
+      "--mode",
+      "dev",
+      "--require"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:19.724844+00:00",
+    "completed_at_utc": "2026-10-19T17:39:28.236139+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "fe8ec7edc0832913ded2e454593b22554436bdc89706bdbe8de53c89d123d59d",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "build-release",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "build",
+      "iam",
+      "--mode",
+      "release",
+      "--require"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:28.236675+00:00",
+    "completed_at_utc": "2026-10-19T17:39:39.583979+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "577a5db2c97df8ea51a5e1f0b61c2e7737926e9125e95eb6ad292a5dc83a5982",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dev-version",
+    "argv": [
+      ".pr12-build/iam/dev/iam-contractcheck",
+      "--version"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:39.584594+00:00",
+    "completed_at_utc": "2026-10-19T17:39:39.587210+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "adc6d04045884b8a5af5b937ad27e2d62027272e4e59771fd21d9a67c2f3a82a",
+    "stderr_sha256": "cc13aad6f652f6e1da0e726a7ece41110f52772ebfb8d32b9de8869d0f0b5ccc"
+  },
+  {
+    "name": "release-version",
+    "argv": [
+      ".pr12-build/iam/release/iam-contractcheck",
+      "--version"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:39.587490+00:00",
+    "completed_at_utc": "2026-10-19T17:39:39.589429+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "4ee24454442256148715cc2046f984e3746116cc467d622808553e48583af868",
+    "stderr_sha256": "cc13aad6f652f6e1da0e726a7ece41110f52772ebfb8d32b9de8869d0f0b5ccc"
+  },
+  {
+    "name": "file",
+    "argv": [
+      "file",
+      ".pr12-build/iam/dev/iam-contractcheck",
+      ".pr12-build/iam/release/iam-contractcheck"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:39.589672+00:00",
+    "completed_at_utc": "2026-10-19T17:39:39.624797+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "07fcdd7e6ba6ed620a127a766b07801f836bf31d12de6fc164372cb4599b0c9f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "smoke",
+    "argv": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "smoke",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:39.625538+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.248301+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "e5dd8f2e5a4d6f8ad653014b6d6d053569e51d45ecacf9a160a15b349ac5d3b2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "positive",
+    "argv": [
+      ".pr12-build/iam/release/iam-contractcheck",
+      "--fixture",
+      "services/iam/testdata/valid.json",
+      "--format",
+      "json"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.248783+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.250722+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "920033bb4563ab0551adf752284c75baece545bee03e8da2d5c9e088fc93e5a0",
+    "stderr_sha256": "b29a17ed48faf5990e799ed3d60e5ac551cc7587f53e3f30e249f711cf66f77c"
+  },
+  {
+    "name": "negative-config",
+    "argv": [
+      ".pr12-build/iam/release/iam-contractcheck",
+      "--fixture",
+      "services/iam/testdata/malformed.json",
+      "--format",
+      "json"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.250950+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.252451+00:00",
+    "exit_code": 2,
+    "expected_exit_code": 2,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "33a9cf7e01e284260fa76233a3937ebc76911b9e182074e3b8773c36b64c75f1"
+  },
+  {
+    "name": "negative-format",
+    "argv": [
+      ".pr12-build/iam/release/iam-contractcheck",
+      "--fixture",
+      "services/iam/testdata/valid.json",
+      "--format",
+      "invalid"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.252653+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.254032+00:00",
+    "exit_code": 2,
+    "expected_exit_code": 2,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "33a9cf7e01e284260fa76233a3937ebc76911b9e182074e3b8773c36b64c75f1"
+  },
+  {
+    "name": "fixed",
+    "argv": [
+      ".pr12-build/iam/release/iam-contractcheck",
+      "--lookup",
+      "fixed",
+      "--fixture",
+      "services/iam/testdata/valid.json",
+      "--format",
+      "json"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.254267+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.255838+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "920033bb4563ab0551adf752284c75baece545bee03e8da2d5c9e088fc93e5a0",
+    "stderr_sha256": "b29a17ed48faf5990e799ed3d60e5ac551cc7587f53e3f30e249f711cf66f77c"
+  },
+  {
+    "name": "doc-domain",
+    "argv": [
+      "go",
+      "-C",
+      "services/iam",
+      "doc",
+      "./internal/domain/sessionpolicy"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.256190+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.282728+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "da17ae68263870b2e559dbacda16b1038a2fd24b0493b90456d8af8804a80543",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "doc-application",
+    "argv": [
+      "go",
+      "-C",
+      "services/iam",
+      "doc",
+      "./internal/application/authenticatesession"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.283215+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.306168+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "837528d99af985538205724a47badc891c2d10c74e9b1bb42dbbf5632428e045",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "substitution",
+    "argv": [
+      "go",
+      "-C",
+      "services/iam",
+      "test",
+      "./internal/adapters/fixtures/sessionlookup",
+      "-run",
+      "TestSameConsumerContractWithBothAdapters",
+      "-v",
+      "-count=1"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.306603+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.640430+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "133eeebeb6b6115620a5725490f5612e1dd9e1ff22c2cfa0d4855d7d482c58da",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "imports",
+    "argv": [
+      "go",
+      "-C",
+      "services/iam",
+      "list",
+      "-f",
+      "{{.ImportPath}}: {{join .Imports \" \"}}",
+      "./..."
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.641001+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.685050+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "99a3dc0275e88b4e545629d01ff915fa1ceeb8aafed378a4c123bcf10b4f4c28",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "coverage",
+    "argv": [
+      "go",
+      "-C",
+      "services/iam",
+      "tool",
+      "cover",
+      "-html=../../docs/labs/pr12/dk/evidence/iam-all.cover",
+      "-o",
+      "/dev/shm/hitpipe-dk-report-assets-20261019/logs/coverage.html"
+    ],
+    "cwd": "/dev/shm/hitpipe-dk-final-reports-20261019",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "environment": {
+      "GOCACHE": "/dev/shm/hitpipe-dk-docx-render-20261019/go-cache",
+      "GOMAXPROCS": "2",
+      "GOFLAGS": "-p=1",
+      "GOTOOLCHAIN": "local",
+      "GOTMPDIR": "/run/user/1001/hitpipe-dk-report-go-tmp",
+      "PR12_RACE": "1"
+    },
+    "started_at_utc": "2026-10-19T17:39:40.685533+00:00",
+    "completed_at_utc": "2026-10-19T17:39:40.768805+00:00",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

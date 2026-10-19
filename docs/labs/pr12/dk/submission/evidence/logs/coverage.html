@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>iam-contractcheck: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck/main.go (94.7%)</option>
+				
+				<option value="file1">github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system/clock.go (100.0%)</option>
+				
+				<option value="file2">github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup/adapters.go (100.0%)</option>
+				
+				<option value="file3">github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup/fixture.go (90.2%)</option>
+				
+				<option value="file4">github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession/service.go (97.3%)</option>
+				
+				<option value="file5">github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy/policy.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">// iam-contractcheck exercises the real policy with synthetic data. It is not an auth server.
+package main
+
+import (
+        "context"
+        "encoding/json"
+        "errors"
+        "flag"
+        "fmt"
+        "io"
+        "os"
+
+        systemclock "github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system"
+        "github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"
+        "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
+)
+
+var version = "pr12"
+var commit = "unknown"
+var dirty = "unknown"
+var buildMode = "source"
+
+func run(args []string, stdout, stderr io.Writer) int {
+        <span class="cov8" title="1">fmt.Fprintln(stderr, "iam-contractcheck event=start")
+        fail := func() int </span>{ <span class="cov8" title="1">fmt.Fprintln(stderr, "iam-contractcheck event=end status=invalid_config"); return 2 }</span>
+        <span class="cov8" title="1">flags := flag.NewFlagSet("iam-contractcheck", flag.ContinueOnError)
+        flags.SetOutput(io.Discard)
+        path := flags.String("fixture", "", "synthetic fixture path")
+        format := flags.String("format", "text", "text or json")
+        showVersion := flags.Bool("version", false, "print build metadata")
+        lookupMode := flags.String("lookup", "file", "file or fixed synthetic lookup")
+        clockMode := flags.String("clock", "fixture", "fixture or system (requires real trust probe)")
+        if err := flags.Parse(args); err != nil </span>{
+                <span class="cov8" title="1">if errors.Is(err, flag.ErrHelp) </span>{
+                        <span class="cov8" title="1">fmt.Fprintln(stdout, "iam-contractcheck --fixture PATH --format text|json [--lookup file|fixed] [--clock fixture|system] | --version")
+                        fmt.Fprintln(stderr, "iam-contractcheck event=end status=help")
+                        return 0
+</span>                }
+                <span class="cov8" title="1">return fail()</span>
+        }
+        <span class="cov8" title="1">if flags.NArg() != 0 || (*format != "text" &amp;&amp; *format != "json") ||
+                (*lookupMode != "file" &amp;&amp; *lookupMode != "fixed") || (*clockMode != "fixture" &amp;&amp; *clockMode != "system") </span>{
+                <span class="cov8" title="1">return fail()
+</span>        }
+        <span class="cov8" title="1">if *showVersion </span>{
+                <span class="cov8" title="1">_, err := fmt.Fprintf(stdout, "version=%s commit=%s dirty=%s buildMode=%s\n", version, commit, dirty, buildMode)
+                if err != nil </span>{
+                        <span class="cov8" title="1">return fail()
+</span>                }
+                <span class="cov8" title="1">fmt.Fprintln(stderr, "iam-contractcheck event=end status=version")
+                return 0</span>
+        }
+        <span class="cov8" title="1">if *path == "" </span>{
+                <span class="cov8" title="1">return fail()
+</span>        }
+        <span class="cov8" title="1">file, err := os.Open(*path)
+        if err != nil </span>{
+                <span class="cov8" title="1">return fail()
+</span>        }
+        <span class="cov8" title="1">defer file.Close()
+        snapshot, observation, err := sessionlookup.Decode(file)
+        if err != nil </span>{
+                <span class="cov8" title="1">return fail()
+</span>        }
+        <span class="cov8" title="1">var lookup authenticatesession.SessionLookup
+        if *lookupMode == "fixed" </span>{
+                <span class="cov8" title="1">lookup = sessionlookup.NewFixed(snapshot, false)
+</span>        } else {
+                <span class="cov8" title="1">lookup, err = sessionlookup.NewFile(*path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return fail()
+</span>                }
+        }
+        <span class="cov8" title="1">var clock authenticatesession.Clock = sessionlookup.NewFixedClock(observation)
+        if *clockMode == "system" </span>{
+                <span class="cov8" title="1">clock = systemclock.New(nil)
+</span>        }
+        <span class="cov8" title="1">service, err := authenticatesession.New(lookup, clock)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fail()
+</span>        }
+        <span class="cov8" title="1">decision := service.Execute(context.Background(), "diagnostic")
+        if *format == "json" </span>{
+                <span class="cov8" title="1">if json.NewEncoder(stdout).Encode(decision) != nil </span>{
+                        <span class="cov8" title="1">return fail()
+</span>                }
+        } else <span class="cov8" title="1">if _, err := fmt.Fprintf(stdout, "state=%s reason=%s\n", decision.State, decision.Reason); err != nil </span>{
+                <span class="cov8" title="1">return fail()
+</span>        }
+        <span class="cov8" title="1">fmt.Fprintf(stderr, "iam-contractcheck event=end status=%s\n", decision.State)
+        if decision.State == "unavailable" </span>{
+                <span class="cov8" title="1">return 3
+</span>        }
+        <span class="cov8" title="1">return 0</span>
+}
+
+func main() { <span class="cov0" title="0">os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Package system wraps the host clock without inventing an attestation of it.
+package system
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
+        "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+)
+
+// HealthProbe must establish trust for the supplied host observation in the
+// deployment environment. No such real probe is shipped by this offline slice.
+type HealthProbe func(context.Context, time.Time) bool
+
+type Clock struct{ probe HealthProbe }
+
+// New can be given nil, which deliberately yields unavailable, never Trusted.
+func New(probe HealthProbe) *Clock { <span class="cov8" title="1">return &amp;Clock{probe: probe} }</span>
+
+func (c *Clock) Now(ctx context.Context) (sessionpolicy.Observation, error) {
+        <span class="cov8" title="1">if c == nil || c.probe == nil || ctx == nil || ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Observation{}, errors.New("clock_unavailable")
+</span>        }
+        <span class="cov8" title="1">now := time.Now().UTC()
+        if !c.probe(ctx, now) || ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Observation{}, errors.New("clock_unavailable")
+</span>        }
+        <span class="cov8" title="1">return sessionpolicy.Observation{At: now, Trusted: true}, nil</span>
+}
+
+var _ authenticatesession.Clock = (*Clock)(nil)
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package sessionlookup
+
+import (
+        "context"
+        "errors"
+        "os"
+
+        "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
+        "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+)
+
+var errLookup = errors.New("lookup_unavailable")
+
+// File reads and strictly decodes its fixture on each Lookup. The reference is
+// a synthetic routing key; no production identifier-to-file mapping is implied.
+type File struct{ path string }
+
+// NewFile binds one synthetic fixture, with no filesystem side effects.
+func NewFile(path string) (*File, error) {
+        <span class="cov8" title="1">if path == "" </span>{
+                <span class="cov8" title="1">return nil, errLookup
+</span>        }
+        <span class="cov8" title="1">return &amp;File{path: path}, nil</span>
+}
+
+func (f *File) Lookup(ctx context.Context, _ string) (sessionpolicy.Snapshot, error) {
+        <span class="cov8" title="1">if f == nil || ctx == nil || ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Snapshot{}, errLookup
+</span>        }
+        <span class="cov8" title="1">file, err := os.Open(f.path)
+        if err != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Snapshot{}, errLookup
+</span>        }
+        <span class="cov8" title="1">defer file.Close()
+        snapshot, _, err := Decode(file)
+        if err != nil || ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Snapshot{}, errLookup
+</span>        }
+        <span class="cov8" title="1">return snapshot, nil</span>
+}
+
+// Fixed is an immutable in-memory synthetic double. Lookup returns values, never
+// caller-owned pointers. Unlike File it performs no IO or freshness check.
+type Fixed struct {
+        snapshot sessionpolicy.Snapshot
+        failed   bool
+}
+
+func NewFixed(snapshot sessionpolicy.Snapshot, failed bool) *Fixed {
+        <span class="cov8" title="1">return &amp;Fixed{snapshot: snapshot, failed: failed}
+</span>}
+
+func (f *Fixed) Lookup(ctx context.Context, _ string) (sessionpolicy.Snapshot, error) {
+        <span class="cov8" title="1">if f == nil || ctx == nil || ctx.Err() != nil || f.failed </span>{
+                <span class="cov8" title="1">return sessionpolicy.Snapshot{}, errLookup
+</span>        }
+        <span class="cov8" title="1">return f.snapshot, nil</span>
+}
+
+// FixedClock returns the immutable synthetic observation read from a fixture.
+// It makes deterministic tests possible; it does not attest host clock health.
+type FixedClock struct{ observation sessionpolicy.Observation }
+
+func NewFixedClock(observation sessionpolicy.Observation) *FixedClock {
+        <span class="cov8" title="1">return &amp;FixedClock{observation: observation}
+</span>}
+
+func (f *FixedClock) Now(ctx context.Context) (sessionpolicy.Observation, error) {
+        <span class="cov8" title="1">if f == nil || ctx == nil || ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return sessionpolicy.Observation{}, errors.New("clock_unavailable")
+</span>        }
+        <span class="cov8" title="1">return f.observation, nil</span>
+}
+
+var _ authenticatesession.SessionLookup = (*File)(nil)
+var _ authenticatesession.SessionLookup = (*Fixed)(nil)
+var _ authenticatesession.Clock = (*FixedClock)(nil)
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">// Package sessionlookup provides strictly synthetic diagnostic adapters. It is
+// not a production session authority and never accepts cookies or credentials.
+package sessionlookup
+
+import (
+        "bytes"
+        "encoding/json"
+        "errors"
+        "io"
+        "regexp"
+        "strconv"
+        "time"
+        "unicode/utf8"
+
+        "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+)
+
+const MaxFixtureBytes = 64 * 1024
+
+var errFixture = errors.New("invalid_fixture")
+var timestampPattern = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$`)
+
+// encoding/json matches struct fields without regard to case. The fixture
+// contract deliberately requires exact names and non-null values when present.
+func exactObject(data []byte, allowed ...string) (map[string]json.RawMessage, error) {
+        <span class="cov8" title="1">var fields map[string]json.RawMessage
+        if json.Unmarshal(data, &amp;fields) != nil || fields == nil </span>{
+                <span class="cov8" title="1">return nil, errFixture
+</span>        }
+        <span class="cov8" title="1">for name, value := range fields </span>{
+                <span class="cov8" title="1">known := false
+                for _, key := range allowed </span>{
+                        <span class="cov8" title="1">known = known || name == key
+</span>                }
+                <span class="cov8" title="1">if !known || bytes.Equal(bytes.TrimSpace(value), []byte("null")) </span>{
+                        <span class="cov8" title="1">return nil, errFixture
+</span>                }
+        }
+        <span class="cov8" title="1">return fields, nil</span>
+}
+
+func exactShape(data []byte) error {
+        <span class="cov8" title="1">root, err := exactObject(data, "version", "session", "clock")
+        if err != nil </span>{
+                <span class="cov8" title="1">return err
+</span>        }
+        <span class="cov8" title="1">if _, err := exactObject(root["session"], "found", "revoked", "created_at", "expires_at", "idle_expires_at"); err != nil </span>{
+                <span class="cov8" title="1">return err
+</span>        }
+        <span class="cov8" title="1">_, err = exactObject(root["clock"], "trusted", "now")
+        return err</span>
+}
+
+type rawFixture struct {
+        Version *int `json:"version"`
+        Session *struct {
+                Found    *bool   `json:"found"`
+                Revoked  *bool   `json:"revoked"`
+                Created  *string `json:"created_at"`
+                Absolute *string `json:"expires_at"`
+                Idle     *string `json:"idle_expires_at"`
+        } `json:"session"`
+        Clock *struct {
+                Trusted *bool   `json:"trusted"`
+                Now     *string `json:"now"`
+        } `json:"clock"`
+}
+
+// checkJSON rejects duplicate keys and excessive depth before typed decoding.
+func checkJSON(data []byte) error {
+        <span class="cov8" title="1">d := json.NewDecoder(bytes.NewReader(data))
+        var value func(int) error
+        value = func(depth int) error </span>{
+                <span class="cov8" title="1">if depth &gt; 16 </span>{
+                        <span class="cov8" title="1">return errFixture
+</span>                }
+                <span class="cov8" title="1">token, err := d.Token()
+                if err != nil </span>{
+                        <span class="cov0" title="0">return errFixture
+</span>                }
+                <span class="cov8" title="1">if delim, ok := token.(json.Delim); ok </span>{
+                        <span class="cov8" title="1">switch delim </span>{
+                        case '{':
+                                <span class="cov8" title="1">seen := map[string]bool{}
+                                for d.More() </span>{
+                                        <span class="cov8" title="1">key, err := d.Token()
+                                        if err != nil </span>{
+                                                <span class="cov8" title="1">return errFixture
+</span>                                        }
+                                        <span class="cov8" title="1">name, ok := key.(string)
+                                        if !ok || seen[name] </span>{
+                                                <span class="cov8" title="1">return errFixture
+</span>                                        }
+                                        <span class="cov8" title="1">seen[name] = true
+                                        if err := value(depth + 1); err != nil </span>{
+                                                <span class="cov8" title="1">return err
+</span>                                        }
+                                }
+                                <span class="cov8" title="1">end, err := d.Token()
+                                if err != nil || end != json.Delim('}') </span>{
+                                        <span class="cov0" title="0">return errFixture
+</span>                                }
+                        case '[':
+                                <span class="cov8" title="1">for d.More() </span>{
+                                        <span class="cov8" title="1">if err := value(depth + 1); err != nil </span>{
+                                                <span class="cov8" title="1">return err
+</span>                                        }
+                                }
+                                <span class="cov0" title="0">end, err := d.Token()
+                                if err != nil || end != json.Delim(']') </span>{
+                                        <span class="cov0" title="0">return errFixture
+</span>                                }
+                        default:
+                                <span class="cov0" title="0">return errFixture</span>
+                        }
+                }
+                <span class="cov8" title="1">return nil</span>
+        }
+        <span class="cov8" title="1">if err := value(0); err != nil </span>{
+                <span class="cov8" title="1">return err
+</span>        }
+        <span class="cov8" title="1">if _, err := d.Token(); err != io.EOF </span>{
+                <span class="cov8" title="1">return errFixture
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func parseTimestamp(text *string, required bool) (time.Time, error) {
+        <span class="cov8" title="1">if text == nil </span>{
+                <span class="cov8" title="1">if required </span>{
+                        <span class="cov8" title="1">return time.Time{}, errFixture
+</span>                }
+                <span class="cov8" title="1">return time.Time{}, nil</span>
+        }
+        <span class="cov8" title="1">if !timestampPattern.MatchString(*text) </span>{
+                <span class="cov8" title="1">return time.Time{}, errFixture
+</span>        }
+        <span class="cov8" title="1">if (*text)[len(*text)-1] != 'Z' </span>{
+                <span class="cov8" title="1">offset := (*text)[len(*text)-6:]
+                hour, _ := strconv.Atoi(offset[1:3])
+                minute, _ := strconv.Atoi(offset[4:6])
+                if hour &gt; 23 || minute &gt; 59 </span>{
+                        <span class="cov8" title="1">return time.Time{}, errFixture
+</span>                }
+        }
+        <span class="cov8" title="1">t, err := time.Parse(time.RFC3339Nano, *text)
+        if err != nil || t.UTC().Year() &lt; 1 || t.UTC().Year() &gt; 9999 </span>{
+                <span class="cov8" title="1">return time.Time{}, errFixture
+</span>        }
+        <span class="cov8" title="1">return t, nil</span>
+}
+
+// Decode validates the local fixture format, not the canonical public wire API.
+// All errors are safe codes and never include input text or parser diagnostics.
+func Decode(reader io.Reader) (sessionpolicy.Snapshot, sessionpolicy.Observation, error) {
+        <span class="cov8" title="1">var s sessionpolicy.Snapshot
+        var o sessionpolicy.Observation
+        if reader == nil </span>{
+                <span class="cov8" title="1">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">data, err := io.ReadAll(io.LimitReader(reader, MaxFixtureBytes+1))
+        if err != nil || len(data) &gt; MaxFixtureBytes || !utf8.Valid(data) || checkJSON(data) != nil || exactShape(data) != nil </span>{
+                <span class="cov8" title="1">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">d := json.NewDecoder(bytes.NewReader(data))
+        d.DisallowUnknownFields()
+        var raw rawFixture
+        if d.Decode(&amp;raw) != nil || raw.Version == nil || *raw.Version != 1 || raw.Session == nil || raw.Clock == nil ||
+                raw.Session.Found == nil || raw.Session.Revoked == nil || raw.Clock.Trusted == nil </span>{
+                <span class="cov8" title="1">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">s.Found, s.Revoked, o.Trusted = *raw.Session.Found, *raw.Session.Revoked, *raw.Clock.Trusted
+        if s.CreatedAt, err = parseTimestamp(raw.Session.Created, s.Found); err != nil </span>{
+                <span class="cov0" title="0">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">if s.ExpiresAt, err = parseTimestamp(raw.Session.Absolute, s.Found); err != nil </span>{
+                <span class="cov0" title="0">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">if s.IdleExpiresAt, err = parseTimestamp(raw.Session.Idle, s.Found); err != nil </span>{
+                <span class="cov0" title="0">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">if o.At, err = parseTimestamp(raw.Clock.Now, true); err != nil </span>{
+                <span class="cov8" title="1">return s, o, errFixture
+</span>        }
+        <span class="cov8" title="1">return s, o, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">// Package authenticatesession orchestrates a session check through consumer-owned
+// ports. It authenticates only a session snapshot; business grants are separate.
+package authenticatesession
+
+import (
+        "context"
+        "errors"
+        "reflect"
+
+        "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+)
+
+// SessionLookup returns the current minimal snapshot from its authority. An
+// absent session is Found=false, not an infrastructure error. Implementations
+// must honor cancellation and must not imply business authorization.
+type SessionLookup interface {
+        Lookup(context.Context, string) (sessionpolicy.Snapshot, error)
+}
+
+// Clock returns an observation whose trust is established by the adapter's
+// environment. A readable host clock alone does not establish trust.
+type Clock interface {
+        Now(context.Context) (sessionpolicy.Observation, error)
+}
+
+// Result has bounded state/reason only. Adapter errors and references never
+// escape this boundary. The zero result is never valid.
+type Result struct {
+        State  string `json:"state"`
+        Reason string `json:"reason"`
+}
+
+// IsValid explicitly requires the complete positive result; it grants no action.
+func (r Result) IsValid() bool { <span class="cov8" title="1">return r.State == "valid" &amp;&amp; r.Reason == "session_valid" }</span>
+
+// Service owns no mutable state; injected dependencies remain caller-owned and
+// must be safe for their intended concurrency/lifetime. New checks dependencies.
+type Service struct {
+        lookup SessionLookup
+        clock  Clock
+}
+
+func absent(v any) bool {
+        <span class="cov8" title="1">if v == nil </span>{
+                <span class="cov8" title="1">return true
+</span>        }
+        <span class="cov8" title="1">r := reflect.ValueOf(v)
+        switch r.Kind() </span>{
+        case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+                <span class="cov8" title="1">return r.IsNil()</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+// New rejects unconfigured and typed-nil dependencies without invoking them.
+func New(lookup SessionLookup, clock Clock) (Service, error) {
+        <span class="cov8" title="1">if absent(lookup) || absent(clock) </span>{
+                <span class="cov8" title="1">return Service{}, errors.New("dependencies_unavailable")
+</span>        }
+        <span class="cov8" title="1">return Service{lookup: lookup, clock: clock}, nil</span>
+}
+
+func validReference(ref string) bool {
+        <span class="cov8" title="1">if len(ref) &lt; 1 || len(ref) &gt; 128 </span>{
+                <span class="cov8" title="1">return false
+</span>        }
+        <span class="cov8" title="1">for i, c := range []byte(ref) </span>{
+                <span class="cov8" title="1">alnum := c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c &gt;= '0' &amp;&amp; c &lt;= '9'
+                if !alnum &amp;&amp; (i == 0 || c != '_' &amp;&amp; c != '-') </span>{
+                        <span class="cov8" title="1">return false
+</span>                }
+        }
+        <span class="cov8" title="1">return true</span>
+}
+
+// Execute obtains the snapshot before reading the clock so lookup latency does
+// not freeze an earlier now. Errors, cancellation and untrusted time fail closed.
+// No store mutation, session renewal or protected business effect is performed.
+func (s Service) Execute(ctx context.Context, reference string) Result {
+        <span class="cov8" title="1">unavailable := func(reason string) Result </span>{ <span class="cov8" title="1">return Result{State: "unavailable", Reason: reason} }</span>
+        <span class="cov8" title="1">if absent(s.lookup) || absent(s.clock) </span>{
+                <span class="cov8" title="1">return unavailable("dependencies_unavailable")
+</span>        }
+        <span class="cov8" title="1">if ctx == nil || !validReference(reference) </span>{
+                <span class="cov8" title="1">return Result{State: "denied", Reason: "invalid_request"}
+</span>        }
+        <span class="cov8" title="1">if ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return unavailable("request_cancelled")
+</span>        }
+        <span class="cov8" title="1">snapshot, err := s.lookup.Lookup(ctx, reference)
+        if ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return unavailable("request_cancelled")
+</span>        }
+        <span class="cov8" title="1">if err != nil </span>{
+                <span class="cov8" title="1">return unavailable("lookup_unavailable")
+</span>        }
+        <span class="cov8" title="1">observation, err := s.clock.Now(ctx)
+        if ctx.Err() != nil </span>{
+                <span class="cov8" title="1">return unavailable("request_cancelled")
+</span>        }
+        <span class="cov8" title="1">if err != nil || !observation.Usable() </span>{
+                <span class="cov8" title="1">return unavailable("clock_unavailable")
+</span>        }
+        <span class="cov8" title="1">decision := sessionpolicy.Evaluate(snapshot, observation)
+        return Result{State: string(decision.State), Reason: string(decision.Reason)}</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">// Package sessionpolicy evaluates a minimal authority-owned session snapshot.
+// It performs no IO, reads no clock and grants no business authorization.
+package sessionpolicy
+
+import "time"
+
+// MaxAbsoluteLifetime is the absolute lifetime bound from HP-BP-001/T/002.
+const MaxAbsoluteLifetime = 24 * time.Hour
+
+// Snapshot is a value projection, not the public Session wire schema or a cookie.
+// The authority computes IdleExpiresAt from activity; this policy does not renew it.
+type Snapshot struct {
+        Found         bool
+        Revoked       bool
+        CreatedAt     time.Time
+        ExpiresAt     time.Time
+        IdleExpiresAt time.Time
+}
+
+// Observation carries explicit time and its caller-established trust status.
+type Observation struct {
+        At      time.Time
+        Trusted bool
+}
+
+// Usable reports whether the supplied observation can be used for a decision.
+// time.Now alone does not establish Trusted.
+func (o Observation) Usable() bool { <span class="cov8" title="1">return o.Trusted &amp;&amp; usableTime(o.At) }</span>
+
+// State is session validity only, never permission for a protected action.
+type State string
+
+const (
+        StateValid  State = "valid"
+        StateDenied State = "denied"
+)
+
+// Reason is a bounded diagnostic code; it never contains input or identity data.
+type Reason string
+
+const (
+        ReasonValid           Reason = "session_valid"
+        ReasonClockUncertain  Reason = "clock_uncertain"
+        ReasonUnknown         Reason = "unknown_session"
+        ReasonRevoked         Reason = "revoked_session"
+        ReasonInvalidSnapshot Reason = "invalid_snapshot"
+        ReasonNotYetValid     Reason = "not_yet_valid"
+        ReasonAbsoluteExpired Reason = "absolute_expired"
+        ReasonIdleExpired     Reason = "idle_expired"
+)
+
+// Decision owns only its state and safe reason. The zero value is not valid.
+type Decision struct {
+        State  State  `json:"state"`
+        Reason Reason `json:"reason"`
+}
+
+// IsValid requires the complete positive decision, not a default bool value.
+func (d Decision) IsValid() bool { <span class="cov8" title="1">return d.State == StateValid &amp;&amp; d.Reason == ReasonValid }</span>
+
+func deny(reason Reason) Decision { <span class="cov8" title="1">return Decision{State: StateDenied, Reason: reason} }</span>
+
+func usableTime(t time.Time) bool {
+        <span class="cov8" title="1">return !t.IsZero() &amp;&amp; t.UTC().Year() &gt;= 1 &amp;&amp; t.UTC().Year() &lt;= 9999
+</span>}
+
+// Evaluate implements DK-RULE-01/02 without modifying either argument.
+// Precedence: clock, unknown, revoked, malformed snapshot, future creation,
+// absolute expiry, idle expiry, valid. Equality at either deadline is expired.
+func Evaluate(snapshot Snapshot, observation Observation) Decision {
+        <span class="cov8" title="1">if !observation.Usable() </span>{
+                <span class="cov8" title="1">return deny(ReasonClockUncertain)
+</span>        }
+        <span class="cov8" title="1">if !snapshot.Found </span>{
+                <span class="cov8" title="1">return deny(ReasonUnknown)
+</span>        }
+        <span class="cov8" title="1">if snapshot.Revoked </span>{
+                <span class="cov8" title="1">return deny(ReasonRevoked)
+</span>        }
+        <span class="cov8" title="1">created := snapshot.CreatedAt.UTC()
+        absolute := snapshot.ExpiresAt.UTC()
+        idle := snapshot.IdleExpiresAt.UTC()
+        now := observation.At.UTC()
+        if !usableTime(created) || !usableTime(absolute) || !usableTime(idle) ||
+                !absolute.After(created) || !idle.After(created) || idle.After(absolute) ||
+                absolute.Sub(created) &gt; MaxAbsoluteLifetime </span>{
+                <span class="cov8" title="1">return deny(ReasonInvalidSnapshot)
+</span>        }
+        <span class="cov8" title="1">if now.Before(created) </span>{
+                <span class="cov8" title="1">return deny(ReasonNotYetValid)
+</span>        }
+        <span class="cov8" title="1">if !now.Before(absolute) </span>{
+                <span class="cov8" title="1">return deny(ReasonAbsoluteExpired)
+</span>        }
+        <span class="cov8" title="1">if !now.Before(idle) </span>{
+                <span class="cov8" title="1">return deny(ReasonIdleExpired)
+</span>        }
+        <span class="cov8" title="1">return Decision{State: StateValid, Reason: ReasonValid}</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

@@ -1,0 +1,15 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Подготовка IAM: dev и release</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>Подготовка IAM: dev и release</h1><div class="meta">Версия исходников: 73aef8d976c9f0676ee568d8dc5a82c8d35a2f00
+Время UTC: 2026-10-19T17:39:19.724844+00:00
+$ python3 tools/pr12/workspace.py build iam --mode dev --require
+Фактический exit: 0
+$ python3 tools/pr12/workspace.py build iam --mode release --require
+Фактический exit: 0</div><h2>Версии реальных бинарников</h2><pre>version=pr12 commit=73aef8d976c9f0676ee568d8dc5a82c8d35a2f00 dirty=false buildMode=dev
+iam-contractcheck event=start
+iam-contractcheck event=end status=version
+
+version=pr12 commit=73aef8d976c9f0676ee568d8dc5a82c8d35a2f00 dirty=false buildMode=release
+iam-contractcheck event=start
+iam-contractcheck event=end status=version
+</pre><h2>Тип и состав</h2><pre>.pr12-build/iam/dev/iam-contractcheck:     ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=HTmAD8mIlosghQZpDOtT/hu73-X5fJNYuzf4SjO-a/4bdvkFdAKxAITC7mMZba/xz8ntYIzcaMWT0lldKYU, BuildID[sha1]=8b84616c84d3295066b1e439f68fd3ff2e5a10b0, with debug_info, not stripped
+.pr12-build/iam/release/iam-contractcheck: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=kbI87MKa6pqD4pLMytEj/ptVC38XCzij7393YpChh/kIuwH3GnbebC5vOCUZ4M/k3RsO3lS_p4A3JuoY3rZ, BuildID[sha1]=58f1d6cdd4ac2f16dd20bee7d7368834c5be156a, with debug_info, not stripped
+</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. </p></main></html>

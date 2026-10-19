@@ -55,11 +55,14 @@
     "comparison": null
   },
   "human_pr_review": {
-    "status": "PENDING",
-    "approval": null,
-    "merge": null,
+    "status": "DELEGATED_TECHNICAL_REVIEW_COMPLETED",
     "reviewer": "Тимофей Патрушев",
-    "reviewer_github": "Tim1hik"
+    "reviewer_github": "Tim1hik",
+    "executor": "Codex по делегации Тимофея Патрушева",
+    "approval": "Original scoped APPROVE PR12–18; report findings corrected by author, no repeat approval claimed",
+    "merge": "https://github.com/hitpipe/hitpipe/pull/19",
+    "merged_main_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "student_personal_gates_attested": false
   },
   "defense": {
     "status": "NOT_PERFORMED",
@@ -98,12 +101,29 @@
       "review_url": "https://github.com/hitpipe/hitpipe/pull/19#issuecomment-6271215905",
       "evidence_url": "https://github.com/hitpipe/hitpipe/tree/6e1ac5bd36fce07d979b757cbf957393ed83e3f3/docs/labs/pr12/tp/reviews/HIT-23-dk-20261019T152453Z",
       "human_student_gates_attested": false
-    }
+    },
+    "current_integration_status": "AUTHOR_CORRECTIONS_VERIFIED_OWNER_MERGED"
   },
   "owner_merge_decision": {
     "repeat_approval_required": false,
     "authority": "Direct user instruction 2026-10-19, author corrections plus owner bypass after successful checks",
     "reviewer_reapproval_claimed": false,
     "student_personal_gates_attested": false
+  },
+  "delegated_foreign_component_check": {
+    "status": "PASS",
+    "owner": "Дмитрий Карачебан",
+    "executor": "Codex по поручению Дмитрия Карачебана",
+    "component_owner": "Тимофей Патрушев",
+    "component": "processing",
+    "source_sha": "73aef8d976c9f0676ee568d8dc5a82c8d35a2f00",
+    "commands": "../submission/evidence/peer-technical/commands.json",
+    "results": [
+      "check with race PASS",
+      "outside-checkout dev/release smoke PASS",
+      "TestReaderSubstitution File/double normal,error,boundary PASS",
+      "actual imports compared with TP module map; no cycles"
+    ],
+    "personal_student_execution_attested": false
   }
 }

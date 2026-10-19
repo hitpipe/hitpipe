@@ -1,0 +1,30 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Документация модуля: go doc</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>Документация модуля: go doc</h1><div class="meta">Версия исходников: 73aef8d976c9f0676ee568d8dc5a82c8d35a2f00
+Время UTC: 2026-10-19T17:39:40.256190+00:00
+$ go -C services/iam doc ./internal/domain/sessionpolicy
+Фактический exit: 0
+$ go -C services/iam doc ./internal/application/authenticatesession
+Фактический exit: 0</div><h2>SessionPolicy</h2><pre>package sessionpolicy // import &quot;github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy&quot;
+
+Package sessionpolicy evaluates a minimal authority-owned session snapshot.
+It performs no IO, reads no clock and grants no business authorization.
+
+const MaxAbsoluteLifetime = 24 * time.Hour
+type Decision struct{ ... }
+    func Evaluate(snapshot Snapshot, observation Observation) Decision
+type Observation struct{ ... }
+type Reason string
+    const ReasonValid Reason = &quot;session_valid&quot; ...
+type Snapshot struct{ ... }
+type State string
+    const StateValid State = &quot;valid&quot; ...
+</pre><h2>Application consumer</h2><pre>package authenticatesession // import &quot;github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession&quot;
+
+Package authenticatesession orchestrates a session check through consumer-owned
+ports. It authenticates only a session snapshot; business grants are separate.
+
+type Clock interface{ ... }
+type Result struct{ ... }
+type Service struct{ ... }
+    func New(lookup SessionLookup, clock Clock) (Service, error)
+type SessionLookup interface{ ... }
+</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. </p></main></html>

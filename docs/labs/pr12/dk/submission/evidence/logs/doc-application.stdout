@@ -1,0 +1,10 @@
+package authenticatesession // import "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
+
+Package authenticatesession orchestrates a session check through consumer-owned
+ports. It authenticates only a session snapshot; business grants are separate.
+
+type Clock interface{ ... }
+type Result struct{ ... }
+type Service struct{ ... }
+    func New(lookup SessionLookup, clock Clock) (Service, error)
+type SessionLookup interface{ ... }
