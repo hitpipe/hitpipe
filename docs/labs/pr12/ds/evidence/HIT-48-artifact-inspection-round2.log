@@ -1,0 +1,15 @@
+.pr12-build\delivery\release\delivery-contractcheck: go1.27.2
+	path	github.com/hitpipe/hitpipe/services/delivery/cmd/delivery-contractcheck
+	mod	github.com/hitpipe/hitpipe/services/delivery	(devel)	
+	dep	golang.org/x/text	v0.28.0	h1:rhazDwis8INMIwQ4tpjLDzUhx6RlXqZNPEM0huQojng=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-trimpath=true
+	build	CGO_ENABLED=1
+	build	GOARCH=amd64
+	build	GOOS=windows
+	build	GOAMD64=v1
+	build	vcs=git
+	build	vcs.revision=7371aaabcdea9473e631dcea30763eced1a27075
+	build	vcs.time=2026-10-19T15:31:12Z
+	build	vcs.modified=true

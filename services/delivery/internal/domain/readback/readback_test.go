@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-const testBlock = "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
+const testBlock = "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\nContext: context\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
 
 func expected() Expected {
 	return Expected{Workspace: "Ops", List: "Delivery", Title: "Deploy é", Assignee: "dima", HandoffBlock: testBlock, Context: "context"}

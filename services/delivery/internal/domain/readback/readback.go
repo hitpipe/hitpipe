@@ -1,7 +1,9 @@
 package readback
 
 import (
+	"encoding/json"
 	"fmt"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -16,10 +18,11 @@ const (
 )
 
 const (
-	maxContextBytes     = 32 * 1024
-	maxBlockBytes       = 36 * 1024
-	maxHandoffBodyBytes = maxBlockBytes
+	maxContextBytes = 32 * 1024
+	maxBlockBytes   = 36 * 1024
 )
+
+var handoffUUID = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
 
 // Outcome is the bounded result of comparing expected attributes with evidence.
 type Outcome string
@@ -54,6 +57,10 @@ type Result struct {
 }
 
 // Compare validates evidence and compares it without trimming, case-folding or collapsing spaces.
+// Compare validates the local DeliveryIntent/ObservedTaskAttributes projection.
+// It normalizes only NFC and CR/CRLF, preserves meaningful spaces, requires one
+// canonical handoff block and applies the JCS-escaped context and rendered-block
+// byte budgets before returning match, mismatch, incomplete or unknown.
 func Compare(expected Expected, observed Observation) Result {
 	if !observed.Retrieved {
 		if observed.RetrievalError == "" {
@@ -61,13 +68,18 @@ func Compare(expected Expected, observed Observation) Result {
 		}
 		return Result{Outcome: Unknown, Reason: "retrieval failed"}
 	}
-	if !utf8.ValidString(expected.Workspace) || !utf8.ValidString(expected.List) || !utf8.ValidString(expected.Title) || !utf8.ValidString(expected.Assignee) || !utf8.ValidString(expected.Context) || !utf8.ValidString(expected.HandoffBlock) || !utf8.ValidString(observed.Workspace) || !utf8.ValidString(observed.List) || !utf8.ValidString(observed.Title) || !utf8.ValidString(observed.Context) || !utf8.ValidString(observed.HandoffBlock) {
+	if !validText(expected.Workspace) || !validText(expected.List) || !validText(expected.Title) || !validText(expected.Assignee) || !validText(expected.Context) || !validText(expected.HandoffBlock) || !validText(observed.Workspace) || !validText(observed.List) || !validText(observed.Title) || !validText(observed.Context) || !validText(observed.HandoffBlock) || !validText(observed.TargetID) || !validText(observed.RetrievalError) {
 		return Result{Outcome: Unknown, Reason: "readback contains invalid UTF-8"}
+	}
+	for _, assignee := range observed.Assignees {
+		if !validText(assignee) {
+			return Result{Outcome: Unknown, Reason: "readback contains invalid assignee text"}
+		}
 	}
 	if observed.RetrievalError != "" {
 		return Result{Outcome: Unknown, Reason: "retrieval evidence is contradictory"}
 	}
-	if len([]byte(observed.Context)) > maxContextBytes || len([]byte(observed.HandoffBlock)) > maxBlockBytes || len([]byte(expected.Context)) > maxContextBytes || len([]byte(expected.HandoffBlock)) > maxBlockBytes {
+	if contextBudget(expected) > maxContextBytes || contextBudgetFromObserved(observed) > maxContextBytes || renderedBlockBytes(expected.HandoffBlock) > maxBlockBytes || renderedBlockBytes(observed.HandoffBlock) > maxBlockBytes {
 		return Result{Outcome: Incomplete, Reason: "readback exceeds bounded evidence size"}
 	}
 	for name, value := range map[string]string{
@@ -86,6 +98,9 @@ func Compare(expected Expected, observed Observation) Result {
 	}
 	if reason := validateHandoff(observed.HandoffBlock); reason != "" {
 		return Result{Outcome: Incomplete, Reason: reason}
+	}
+	if reason := validateHandoff(expected.HandoffBlock); reason != "" {
+		return Result{Outcome: Incomplete, Reason: "expected " + reason}
 	}
 	if normalize(observed.Workspace) != normalize(expected.Workspace) {
 		return Result{Outcome: Mismatch, Reason: "workspace mismatch"}
@@ -112,6 +127,39 @@ func normalize(value string) string {
 	return norm.NFC.String(strings.ReplaceAll(strings.ReplaceAll(value, "\r\n", "\n"), "\r", "\n"))
 }
 
+func validText(value string) bool {
+	if !utf8.ValidString(value) {
+		return false
+	}
+	for _, r := range value {
+		if r < 0x20 && r != '\n' && r != '\r' && r != '\t' {
+			return false
+		}
+	}
+	return true
+}
+
+func contextBudget(expected Expected) int {
+	return jcsBytes(map[string]string{
+		"assignee": normalize(expected.Assignee), "context": normalize(expected.Context), "handoff_block": normalize(expected.HandoffBlock),
+		"list": normalize(expected.List), "title": normalize(expected.Title), "workspace": normalize(expected.Workspace),
+	})
+}
+
+func contextBudgetFromObserved(observed Observation) int {
+	return jcsBytes(map[string]any{
+		"assignees": observed.Assignees, "context": normalize(observed.Context), "handoff_block": normalize(observed.HandoffBlock),
+		"list": normalize(observed.List), "title": normalize(observed.Title), "workspace": normalize(observed.Workspace),
+	})
+}
+
+func jcsBytes(value any) int {
+	b, _ := json.Marshal(value)
+	return len(b)
+}
+
+func renderedBlockBytes(value string) int { return len([]byte(normalize(value))) }
+
 func containsNormalized(values []string, expected string) bool {
 	for _, value := range values {
 		if normalize(value) == normalize(expected) {
@@ -134,14 +182,26 @@ func validateHandoff(value string) string {
 		return "handoff block case identifier is malformed"
 	}
 	caseID := value[len(prefix):openEnd]
+	if !handoffUUID.MatchString(caseID) {
+		return "handoff block case identifier is not a lowercase UUID"
+	}
 	bodyStart := openEnd + len(suffix) + 1
 	close := "\n" + closePrefix + caseID + suffix
 	if bodyStart >= len(value) || !strings.HasSuffix(value, close) {
 		return "handoff block closing marker is malformed"
 	}
 	body := value[bodyStart : len(value)-len(close)]
-	if len([]byte(body)) == 0 || len([]byte(body)) > maxHandoffBodyBytes {
-		return "handoff block body is empty or exceeds its byte budget"
+	if strings.Contains(body, "[HITPIPE-HANDOFF:") || strings.Contains(body, "[/HITPIPE-HANDOFF:") {
+		return "handoff block contains a nested or multiple marker"
+	}
+	lines := strings.Split(body, "\n")
+	if len(lines) != 3 || !strings.HasPrefix(lines[0], "Service: ") || !strings.HasPrefix(lines[1], "Order: ") || !strings.HasPrefix(lines[2], "Context: ") {
+		return "handoff block must contain Service, Order and Context labels on separate lines"
+	}
+	for _, line := range lines {
+		if strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(strings.TrimPrefix(line, "Service: "), "Order: "), "Context: ")) == "" {
+			return "handoff block labels must have non-empty values"
+		}
 	}
 	return ""
 }

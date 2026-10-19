@@ -22,7 +22,7 @@ func (f *fakeReader) Read(context.Context, string) (readback.Observation, Proven
 }
 
 func TestVerifierUsesReaderAndPreservesProvenance(t *testing.T) {
-	block := "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
+	block := "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\nContext: ctx\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
 	expected := readback.Expected{Workspace: "Ops", List: "Delivery", Title: "Deploy", Assignee: "dima", HandoffBlock: block, Context: "ctx"}
 	reader := &fakeReader{observation: readback.Observation{TargetID: "target-1", Retrieved: true, Workspace: "Ops", List: "Delivery", Title: "Deploy", Assignees: []string{"dima"}, HandoffBlock: block, Context: "ctx"}, provenance: Provenance{ObservedAt: time.Unix(10, 0), Source: "double"}}
 	result := New(reader).VerifyTarget(context.Background(), "target-1", expected)
@@ -40,7 +40,7 @@ func TestVerifierDoesNotConvertReadErrorToNoEffect(t *testing.T) {
 }
 
 func TestVerifierRequiresBoundEvidence(t *testing.T) {
-	block := "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
+	block := "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: handoff-123\nContext: ctx\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
 	expected := readback.Expected{Workspace: "Ops", List: "Delivery", Title: "Deploy", Assignee: "dima", HandoffBlock: block, Context: "ctx"}
 	base := readback.Observation{TargetID: "target-1", Retrieved: true, Workspace: "Ops", List: "Delivery", Title: "Deploy", Assignees: []string{"dima"}, HandoffBlock: block, Context: "ctx"}
 	cases := []struct {

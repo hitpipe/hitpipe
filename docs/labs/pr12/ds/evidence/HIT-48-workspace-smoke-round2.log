@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=7371aaabcdea9473e631dcea30763eced1a27075 -X main.dirty=true -X main.buildMode=dev -gcflags=all=-N -l -o C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\correction-20261019\.pr12-build\delivery\dev\delivery-contractcheck ./cmd/delivery-contractcheck
++ C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-1joc6z31\delivery-contractcheck --version
++ git rev-parse --short HEAD
++ C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-1joc6z31\delivery-contractcheck --fixture C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-1joc6z31\positive_fixture.json --format json
+{"component": "delivery", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=7371aaabcdea9473e631dcea30763eced1a27075 -X main.dirty=true -X main.buildMode=release -trimpath -o C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\correction-20261019\.pr12-build\delivery\release\delivery-contractcheck ./cmd/delivery-contractcheck
++ C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-u8tk50xk\delivery-contractcheck --version
++ git rev-parse --short HEAD
++ C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-u8tk50xk\delivery-contractcheck --fixture C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-u8tk50xk\positive_fixture.json --format json
+{"component": "delivery", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
