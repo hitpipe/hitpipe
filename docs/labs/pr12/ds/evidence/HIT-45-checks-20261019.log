@@ -1,0 +1,16 @@
+HIT-45 evidence log
+Date: 2026-10-19 Europe/Moscow
+Repository: hitpipe/hitpipe
+Branch: work/HIT-45-ds-readback-defects
+Head before evidence append: 2d50ad7d45dd79c4eb91841c3914a09420736980
+Cwd: <workspace>\work\hitpipe-c3-20261019\services\delivery
+Go: C:\Program Files\Go\bin\go.exe, go1.27.2 windows/amd64
+
+Commands:
+- go test ./... — exit 0
+- go vet ./... — exit 0
+- mutation execution — NOT RUN; gcc is unavailable for race and no mutation runner is installed.
+- initial clone-root command go test ./... — FAIL/NOT APPLICABLE because cwd was repository root without a go.mod; rerun from services/delivery passed.
+
+The C3 tests cover five false-confirmation guards. The mutation matrix intentionally keeps
+survivors and retests pending rather than inventing them. Human review, CI and merge remain pending.
