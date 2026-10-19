@@ -14,7 +14,7 @@ COMMON = {
     "component_name": "Intake - Source Integrations",
     "module_path": "services/intake/internal/domain/stripesignature",
     "repository_url": "https://github.com/hitpipe/hitpipe",
-    "submission_commit": "2186a00ca9c441645c99f82fd45b34241864ac6a",
+    "submission_commit": "df1a7d58179148abfda8e71862654f5ef7fcdbc7",
     "submission_tag": "[human after merge: immutable tag not created]",
     "branch": "work/HIT-53-nb-verification",
     "date": "2026-10-19 Europe/Moscow",
@@ -36,7 +36,7 @@ COMMON = {
     "requirements_pr_url": "[PR not created; Lead human action required]",
     "scaffold_pipeline_url": "[CI URL not available for this branch]",
     "requirements_pipeline_url": "[CI URL not available for this branch]",
-    "test_pipeline_url": "https://github.com/hitpipe/hitpipe/actions/runs/39262304491",
+    "test_pipeline_url": "[C3 correction CI URL recorded after push]",
     "external_project_name": "[teacher-assigned external project not provided]",
     "opposition_assignment": "[teacher/Lead assignment not provided]",
     "opposition_discussion_url": "docs/labs/pr12/nb/human-gates/external-opposition.md (NOT_CONDUCTED)",
@@ -59,7 +59,7 @@ COMMON = {
     "release_outside_source_directory": "temporary pr12-outside-checkout directory created by workspace.py",
     "release_run_command": "intake-contractcheck --fixture positive_fixture.json --format json",
     "valid_config_run_command": "python3 tools/pr12/workspace.py smoke intake --require",
-    "invalid_config_run_command": "NOT_APPLICABLE: bounded CLI has no runtime configuration input; do not fabricate an invalid-config run; human records this gap",
+    "invalid_config_run_command": "./intake-contractcheck --fixture positive_fixture.json --format invalid (expected format_invalid, exit 2)",
     "dev_build_command": "python3 tools/pr12/workspace.py smoke intake --require",
     "release_build_command": "python3 tools/pr12/workspace.py inspect intake --mode release",
     "dev_evidence": "PASS; docs/labs/pr12/nb/evidence/hit-54-d1-clean.log",
@@ -86,12 +86,12 @@ COMMON = {
     "composition_root": "cmd/intake-contractcheck composition root",
     "composition_root_path": "services/intake/cmd/intake-contractcheck/main.go",
     "replacement_demo_command": "go test -count=1 ./... (file-backed resolver and in-memory double use same Consumer)",
-    "implementation_a": "file-backed synthetic SecretResolver + SystemClock",
-    "implementation_b": "in-memory SecretResolver double + FixedClock double",
+    "implementation_a": "FileResolver + FixedClock (executed application test)",
+    "implementation_b": "MapSecrets + FixedClock (executed application test)",
     "replacement_demo_command": "go test -count=1 ./...",
     "both_implementations_test_command": "cd services/intake && go test -count=1 ./...",
     "module_map_url_or_path": "docs/labs/pr12/nb/module-map.md",
-    "module_map_url_revision": "docs/labs/pr12/nb/module-map.md at C2 candidate 2a20fb6",
+    "module_map_url_revision": "docs/labs/pr12/nb/module-map.md; verify at final correction SHA",
     "candidate_path": "services/intake/internal/domain/stripesignature",
     "candidate_input": "testdata/verified.json and tampered.json plus in-memory raw-byte fixtures",
     "candidate_observation": "same Consumer behavior with file-backed and in-memory dependency implementations",
@@ -264,7 +264,7 @@ def make_0302_pz01():
 
 def make_0302_pz02():
     d=Document(TEMPLATES/"0302-pz02-report-template.docx"); m=dict(COMMON)
-    m.update({"submission_tag":"[human after merge: 0302-pz02-nb-v1 not created]","submission_commit":"2186a00ca9c441645c99f82fd45b34241864ac6a"})
+    m.update({"submission_tag":"[human after merge: 0302-pz02-nb-v1 not created]","submission_commit":"df1a7d58179148abfda8e71862654f5ef7fcdbc7"})
     fill_common(d,m)
     overrides={
         30:"Цель работы: проверить собственный Intake module contract with equivalence/boundary classes, decision table, fixtures, local+CI checks, coverage analysis and five compiling behavioral mutations.",
@@ -279,17 +279,17 @@ def make_0302_pz02():
         52:"Данные: services/intake/testdata/verified.json and tampered.json plus synthetic Go fixtures; all reproducible from clean clone without personal files or working keys.",
         53:"Подготовка и сброс состояния: fixed timestamp 1700000000, synthetic secret, temporary copies for mutations; baseline source restored after each run.",
         54:"Разработанные автоматические тесты: 7 named tests across domain/application plus CLI fixture checks; mutation protocol M01-M05.",
-        55:"Изменение и включение в CI: .github/workflows/pr12-nb.yml adds PR12_RACE=1 to owned named check and release inspection; run 39262304491 success for C3.",
-        62:"Среда: macOS darwin/arm64, Go go1.27.2 from /tmp/hitpipe-go-1.27.2/go; baseline SHA 835bbb1bc565e9b2786d5ed1a2cac166f816f7a8.",
-        63:"Команды: cd services/intake && go test -coverprofile=... ./...; go tool cover -func=...; go vet ./...; go test -race ./...; PR12_RACE=1 python3 tools/pr12/workspace.py check intake; smoke/inspect.",
+        55:"Изменение и включение в CI: .github/workflows/pr12-nb.yml adds PR12_RACE=1 to owned named check and release inspection. Correction head df1a7d5 adds checked parsing, invalid-clock fail-closed behavior and three regressions; correction CI URL is recorded after push.",
+        62:"Среда: macOS darwin/arm64, Go go1.27.2; original baseline SHA 835bbb1bc565e9b2786d5ed1a2cac166f816f7a8, correction source SHA df1a7d58179148abfda8e71862654f5ef7fcdbc7.",
+        63:"Команды: cd services/intake && go test -coverprofile=.pr12-build/intake.cover ./...; go tool cover -func=.pr12-build/intake.cover; go vet ./...; go test -race -count=1 ./...; PR12_RACE=1 python3 tools/pr12/workspace.py check intake; smoke/inspect.",
         66:"Скрытый набор: не получен; hidden suite NOT_PROVIDED.",
-        67:"Причины FAIL, BLOCKED и пропусков: no test failure on restored baseline; CLI/adapters have 0% unit profile but actual smoke; human CI/review/tag gates remain pending.",
-        69:"Инструмент, команда, вид и область покрытия: Go cover profile for services/intake; domain 87.7%, application 83.3%, CLI/adapters 0% unit profile.",
-        70:"Отчёт инструмента: docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover; analysis in docs/labs/pr12/nb/coverage-analysis.md.",
-        73:"Полное выполнение тестов не доказывает provider behavior, production secret storage, transport, persistence, performance or human independence. The unit coverage gap is explicit.",
+        67:"Причины FAIL, BLOCKED и пропусков: original boundary probes failed before correction; the correction adds rejection and fail-closed tests. CLI/adapters have 0% unit profile but actual smoke; CPU/memory profiling is PLANNED, not run; human review/tag gates remain pending.",
+        69:"Инструмент, команда, вид и область покрытия: Go statement coverage profile for services/intake; domain 87.7%, application 83.3%, CLI/adapters 0% unit profile. This is not CPU/memory profiling.",
+        70:"Отчёт инструмента: docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover; new profiles go to ignored .pr12-build; analysis in docs/labs/pr12/nb/coverage-analysis.md.",
+        73:"Полное выполнение тестов не доказывает provider behavior, production secret storage, transport, persistence, performance or human independence. CPU/memory pprof is planned and the unit coverage gap is explicit.",
         77:"Воспроизведение: docs/labs/pr12/nb/MUTATION_PROTOCOL.md; five patch/log pairs under evidence/mutations; all temporary and not merged.",
         81:"Итог серии: засеяно 5; обнаружено первым набором 5; пропущено первым набором 0; после усиления обнаружено 5. Естественных дефектов 0; hidden suite NOT_PROVIDED.",
-        83:"Состояние сдачи: исправный candidate code 2186a00ca9c441645c99f82fd45b34241864ac6a; all mutations removed; local and C3 CI PASS. Immutable tag not created; human review/merge required.",
+        83:"Состояние сдачи: исправный candidate code df1a7d58179148abfda8e71862654f5ef7fcdbc7; all mutations removed; correction CI is required to confirm the updated code. Immutable tag not created; human review/merge required.",
         87:"Общие средства и результаты других участников: none claimed; human module peer check is NOT_CONDUCTED.",
         88:"Полученные замечания и решения: agent self-review fixed wrapper JSON marker mismatch and CLI composition boundary; no human remarks yet.",
         90:"Что обнаруживает разработанный набор: exact-body, MAC, timestamp, parser and consumer dependency regressions; evidence is local logs, mutation patches and GitHub Actions run.",
@@ -298,12 +298,12 @@ def make_0302_pz02():
     }
     for i,t in overrides.items(): set_para(d.paragraphs[i],t)
     t=d.tables[3]
-    vals={1:"Никита Будыкин; группа [человек]",2:"HitPipe; Intake - Source Integrations",3:"https://github.com/hitpipe/hitpipe",4:"StripeSignature + AuthenticateWebhook",5:"[human after merge: 0302-pz02-nb-v1 not created]",7:"2186a00ca9c441645c99f82fd45b34241864ac6a",8:"CONTENT_READY_IMAGES_PENDING"}
+    vals={1:"Никита Будыкин; группа [человек]",2:"HitPipe; Intake - Source Integrations",3:"https://github.com/hitpipe/hitpipe",4:"StripeSignature + AuthenticateWebhook",5:"[human after merge: 0302-pz02-nb-v1 not created]",7:"df1a7d58179148abfda8e71862654f5ef7fcdbc7",8:"CONTENT_READY_IMAGES_PENDING"}
     for r,v in vals.items(): set_cell(t.cell(r,1),v)
     req=[
         ["FR-SIG-01","exact raw bytes and MAC","HP-BP-002 T/001","unit + mutation"],
         ["FR-SIG-02","strict headers and 300 boundary","HP-BP-002 T/001","unit + mutation"],
-        ["FR-SIG-03","safe dependency failures","HP-BP-007 T/010","application + CLI"],
+        ["FR-SIG-03","safe dependency failures","HP-BP-007 T/005","application + CLI"],
         ["FR-SIG-04","no business admission","HP-BP-002 T/001,T/002","module boundary"],
     ]
     for i,row in enumerate(req,1):
@@ -320,16 +320,16 @@ def make_0302_pz02():
         set_row(d.tables[5], i, row)
     risks=[
         ["R1","MAC bypass or normalized body causes false verification","low after tests; high consequence","heavy: false receipt","high","unit/mutation per commit; residual provider integration"],
-        ["R2","timestamp direction/edge bug enables replay window","medium rule risk","heavy: replay","high","boundary tests + M03/M04; residual clock trust"],
+        ["R2","timestamp direction/edge bug enables replay window","medium rule risk","heavy: replay","high","boundary tests + M03/M04 + overflow regressions; residual clock trust"],
         ["R3","secret/clock failure leaks or fails open","low with ports; heavy","heavy: false action/data leak","high","dependency tests + safe output scan"],
         ["R4","CLI/adapters unit profile gap","medium","significant diagnostic regression","medium","wrapper smoke each run; add unit coverage later"],
     ]
     for i,row in enumerate(risks,1):
         set_row(d.tables[6], i, row)
     runrows=[
-        ["baseline local","2186a00; Go 1.27.2","PASS","PASS","hit-53-baseline-v2.log"],
-        ["race + wrapper","2186a00; PR12_RACE=1","PASS","PASS","hit-53-baseline-v2.log"],
-        ["CI Actions","2186a00; run 39262304491","success","PASS","GitHub URL in handoff"],
+        ["original baseline local","835bbb1; Go 1.27.2","PASS","PASS","hit-53-baseline-v2.log"],
+        ["correction local/CI","df1a7d5; PR12_RACE=1","PENDING ACTUAL RUN","PENDING","correction evidence after push"],
+        ["original CI Actions","2186a00; run 39262304491","success","PASS","GitHub URL in handoff"],
     ]
     for i,row in enumerate(runrows,1):
         set_row(d.tables[7], i, row)
@@ -339,7 +339,7 @@ def make_0302_pz02():
     states=[
         ["Исходный корректный код","835bbb1 baseline","PASS","cover/race/wrapper logs"],
         ["Код с дефектом","M01-M05 temporary source copies","all compile; all test exit 1","five patch/log pairs"],
-        ["Восстановленный код","2186a00","PASS; CI success","sensitivity log and run URL"],
+        ["Восстановленный correction code","df1a7d5","PENDING CI confirmation","correction log and run URL"],
     ]
     for i,row in enumerate(states,1):
         set_row(d.tables[9], i, row)
@@ -368,11 +368,12 @@ def make_0104_pz01():
         ["Тестирование","go test -count=1 ./...","domain/application tests","PASS local"],
         ["Статический анализ","gofmt; go vet; git diff --check","format/static hygiene","PASS local"],
         ["Динамическая диагностика","go test -race; PR12_RACE=1 wrapper","race and CI sensitivity","PASS restored; negative gate exit 1"],
-        ["Профилирование","go cover","coverage analysis","PASS report; gaps explicit"],
+        ["Покрытие","go test -coverprofile + go tool cover","statement coverage and gap analysis","PASS: domain 87.7%, application 83.3%; CLI/adapters 0% unit profile"],
+        ["CPU/memory profiling","Go pprof route","bounded performance measurement","PLANNED; not executed, no performance claim"],
         ["Автоматические проверки CI","GitHub Actions pr12-nb.yml","same wrapper route","C3 success; D1 human/review pending"],
     ]
     for i,row in enumerate(rows,1):
-        for j,v in enumerate(row): set_cell(d.tables[4].cell(i,j),v)
+        set_row(d.tables[4], i, row)
     for i in range(1,6):
         set_cell(d.tables[6].cell(i,2),"PASS local" if i != 2 else "PASS local; tampered rejected")
         set_cell(d.tables[6].cell(i,3),"hit-54-d1-clean.log; SHA 27210ca")
@@ -381,9 +382,9 @@ def make_0104_pz01():
 
 def make_0104_pz02():
     d=Document(TEMPLATES/"0104-pz02-report-template.docx"); m=dict(COMMON)
-    m.update({"submission_tag":"[human after merge: 0104-pz02-nb-v1 not created]","submission_commit":"2a20fb6a21fe762f2cf37ded433c99bf5390be81","jira_task_url":"https://hitpipe.atlassian.net/browse/HIT-52"})
+    m.update({"submission_tag":"[human after merge: 0104-pz02-nb-v1 not created]","submission_commit":"df1a7d58179148abfda8e71862654f5ef7fcdbc7","jira_task_url":"https://hitpipe.atlassian.net/browse/HIT-52"})
     fill_common(d,m)
-    overrides={20:"Цель: StripeSignature module with typed contract and replaceable SecretResolver/Clock. Requirement FR-SIG-01 → raw-body proof → Verify/Consumer → authenticatewebhook.Consumer. Outside: persistence, route and financial decision.",25:"Own logic is in services/intake/internal/domain/stripesignature and is called by authenticatewebhook.Consumer. Candidate branch HIT-52 is work/HIT-52-nb-authenticate-webhook at 2a20fb6; PR/review/merge are pending.",27:"Consumer callsite is unchanged while file-backed resolver/system clock and in-memory/fixed doubles are swapped at composition/tests. This proves a replaceable boundary, not production adapter readiness.",29:"Module map in docs/labs/pr12/nb/module-map.md; actual imports and build recorded in hit-52-c2-local-clean.log. No cycles claimed.",31:"Candidate exists in services/intake/internal/domain/stripesignature with verified/tampered fixtures. Observation: same application consumer works with two dependency implementations. ADR: docs/labs/pr12/nb/module-adr.md; author Никита Будыкин; no canonical HP-ADR ID.",34:"Local C2 checks PASS; actual two-implementation tests are in authenticate_test.go and the evidence log. CI/review/merge status is not promoted here.",36:"Reciprocal module check by another student: NOT_CONDUCTED; protocol docs/labs/pr12/nb/human-gates/peer-module-out.md.",38:"Individual result: module contract, consumer, map, complexity profile and ADR are content-ready. Immutable tag 0104-pz02-nb-v1 not created; defense not conducted."}
+    overrides={20:"Цель: StripeSignature module with typed contract and replaceable SecretResolver/Clock. Requirement FR-SIG-01 → raw-body proof → Verify/Consumer → authenticatewebhook.Consumer. Outside: persistence, route and financial decision.",25:"Own logic is in services/intake/internal/domain/stripesignature and is called by authenticatewebhook.Consumer. Correction source is work/HIT-53-nb-verification at df1a7d5; C2 remains the implementation branch at 2a20fb6; PR/review/merge are pending.",27:"Consumer callsite is unchanged while the executed pair FileResolver+FixedClock and MapSecrets+FixedClock are swapped at composition/tests. SystemClock is compiled/documented but was not executed in this experiment. This proves a replaceable boundary, not production adapter readiness.",29:"Module map is docs/labs/pr12/nb/module-map.md; actual imports and build are recorded in hit-52-c2-local-clean.log. The canonical module contract is services/intake/docs/module-contract.md. No cycles claimed.",31:"Candidate exists in services/intake/internal/domain/stripesignature with verified/tampered fixtures. Observation: same application consumer works with two executed dependency implementations. ADR: docs/labs/pr12/nb/module-adr.md; author Никита Будыкин; no canonical HP-ADR ID.",34:"Local C2 checks PASS; actual two-implementation tests are in authenticate_test.go and the evidence log. CI/review/merge status is not promoted here.",36:"Reciprocal module check by another student: NOT_CONDUCTED; protocol docs/labs/pr12/nb/human-gates/peer-module-out.md.",38:"Individual result: module contract, consumer, map, complexity profile and ADR are content-ready. Immutable tag 0104-pz02-nb-v1 not created; defense not conducted."}
     for i,t in overrides.items(): set_para(d.paragraphs[i],t)
     t=d.tables[3]
     for r,v in {1:"Никита Будыкин; группа [человек]",3:"Intake - Source Integrations / services/intake/internal/domain/stripesignature",4:"[human after merge: 0104-pz02-nb-v1 not created]",5:"https://github.com/hitpipe/hitpipe",7:"CONTENT_READY_IMAGES_PENDING"}.items(): set_cell(t.cell(r,1),v)
@@ -398,8 +399,8 @@ def make_0104_pz02():
     for i,row in enumerate(contract,1):
         for j,v in enumerate(row): set_cell(d.tables[4].cell(i,j),v)
     impl=[
-        ["file-backed SecretResolver + SystemClock","application composition/tests","normal/boundary/error PASS","fixture-only; no live provider"],
-        ["in-memory SecretResolver + FixedClock","application tests","normal/boundary/error PASS","double, not production store"],
+        ["FileResolver + FixedClock","application tests","normal/boundary/error PASS","executed fixture resolver; no live provider"],
+        ["MapSecrets + FixedClock","application tests","normal/boundary/error PASS","executed in-memory double; SystemClock not part of this experiment"],
     ]
     for i,row in enumerate(impl,1):
         set_row(d.tables[5], i, row)

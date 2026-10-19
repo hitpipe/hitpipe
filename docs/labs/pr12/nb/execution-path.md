@@ -44,8 +44,11 @@ storage or deployment.
 
 ## Reproduction and ownership
 
-The application owns `SecretResolver` and `Clock`; adapters are replaceable and
-the domain imports only the standard library. The CLI is a composition root for
-the lab, not a second module or production consumer. Any future transport must
-consume the existing `Consumer`/`VerifiedWebhook` contract rather than recreate
-signature verification.
+The application owns `SecretResolver` and `Clock`; the executed substitution
+pair in C2 is `FileResolver + FixedClock` versus `MapSecrets + FixedClock`.
+`SystemClock` is compiled and documented as an adapter, but it was not executed
+in that DI experiment. `FileResolver` is exercised by application tests; the
+CLI composition root uses a separate fixture resolver and fixture clock. The
+domain imports only the standard library. Any future transport must consume the
+existing `Consumer`/`VerifiedWebhook` contract rather than recreate signature
+verification.

@@ -37,59 +37,59 @@ Status: PLACEHOLDER_ONLY.
 ## 0302-pz02-01 — Локальный прогон тестов собственного модуля
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open a clean checkout at candidate SHA 2186a00ca9c441645c99f82fd45b34241864ac6a.
+1. Open/execute: Open a clean checkout at correction SHA df1a7d58179148abfda8e71862654f5ef7fcdbc7.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -count=1 ./... && go test -race -count=1 ./...`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
-4. Must be visible: git rev-parse HEAD, test names, PASS and exit 0
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
+4. Must be visible: git rev-parse HEAD, named regression tests, PASS and exit 0
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0302-pz02-01.png` and insert it at the matching figure slot with caption `Рисунок — Локальный прогон тестов собственного модуля`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0302-pz02-02 — Тесты сдаваемой версии в CI
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open https://github.com/hitpipe/hitpipe/actions/runs/39262304491 and expand the check job.
+1. Open/execute: Open the correction Actions run linked from docs/labs/pr12/nb/handoff.md after push; do not use the original pre-fix run as correction evidence.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `PR12_RACE=1 python3 tools/pr12/workspace.py check intake`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; run 39262304491`
-4. Must be visible: SHA, job, command, named tests and success
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; correction run URL recorded after push`
+4. Must be visible: SHA, job, command, named regressions and success
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0302-pz02-02.png` and insert it at the matching figure slot with caption `Рисунок — Тесты сдаваемой версии в CI`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0302-pz02-03 — Покрытие собственного модуля и разбор пробела
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -coverprofile=../../docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover ./...; go tool cover -func=../../docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover`
-3. Verify SHA/version: `835bbb1bc565e9b2786d5ed1a2cac166f816f7a8; Go go1.27.2`
-4. Must be visible: domain 87.7%, application 83.3%, CLI/adapters 0% unit profile and gap analysis
+1. Open/execute: Open a clean checkout at original baseline SHA 2186a00ca9c441645c99f82fd45b34241864ac6a and write a new profile under ignored .pr12-build.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && mkdir -p ../../.pr12-build && go test -coverprofile=../../.pr12-build/intake.cover ./...; go tool cover -func=../../.pr12-build/intake.cover`
+3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
+4. Must be visible: domain 87.7%, application 83.3%, CLI/adapters 0% unit profile and explicit no-pprof limitation
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0302-pz02-03.png` and insert it at the matching figure slot with caption `Рисунок — Покрытие собственного модуля и разбор пробела`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0302-pz02-04 — Обнаружение одного из засеянных дефектов
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open evidence/mutations/M01.patch and M01.log; source is a temporary copy.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `go test -run '^$' ./...; go test -count=1 ./...`
-3. Verify SHA/version: `Baseline 835bbb1bc565e9b2786d5ed1a2cac166f816f7a8; M01 digest in log`
-4. Must be visible: compiling mutation, violated raw-byte rule, named FAIL and exit 1
+1. Open/execute: Create an isolated copy from correction SHA df1a7d58179148abfda8e71862654f5ef7fcdbc7; apply the selected patch with git apply; capture compile exit 0, assertion exit 1, then discard the isolated copy.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git clone --no-local . /tmp/hitpipe-pr12-mutant; cd /tmp/hitpipe-pr12-mutant; git checkout --detach df1a7d58179148abfda8e71862654f5ef7fcdbc7; git apply /absolute/path/to/docs/labs/pr12/nb/evidence/mutations/M01.patch; cd services/intake; go test -run '^$' ./...; go test -count=1 ./...`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; M01 patch/log digest recorded in evidence`
+4. Must be visible: isolated copy path, patch apply, compile exit 0, assertion FAIL exit 1, restoration/removal
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0302-pz02-04.png` and insert it at the matching figure slot with caption `Рисунок — Обнаружение одного из засеянных дефектов`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0302-pz02-05 — Успешный прогон после полного восстановления кода
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Return to clean candidate SHA 2186a00ca9c441645c99f82fd45b34241864ac6a.
+1. Open/execute: Return to clean correction SHA df1a7d58179148abfda8e71862654f5ef7fcdbc7.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git status --short; PR12_RACE=1 python3 tools/pr12/workspace.py check intake; go test -race -count=1 ./...`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
-4. Must be visible: no mutations, tests PASS and exit 0
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
+4. Must be visible: no mutations, new regressions PASS and exit 0
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0302-pz02-05.png` and insert it at the matching figure slot with caption `Рисунок — Успешный прогон после полного восстановления кода`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0104-pz01-01 — Собственная часть исполняемого каркаса
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open https://github.com/hitpipe/hitpipe/blob/2186a00ca9c441645c99f82fd45b34241864ac6a/services/intake/cmd/intake-contractcheck/main.go.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git show --stat --oneline 2186a00ca9c441645c99f82fd45b34241864ac6a`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a`
+1. Open/execute: Open the correction source at https://github.com/hitpipe/hitpipe/blob/df1a7d58179148abfda8e71862654f5ef7fcdbc7/services/intake/cmd/intake-contractcheck/main.go.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git show --stat --oneline df1a7d58179148abfda8e71862654f5ef7fcdbc7`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7`
 4. Must be visible: path, own CLI composition/diagnostics, branch and candidate status
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-01.png` and insert it at the matching figure slot with caption `Рисунок — Собственная часть исполняемого каркаса`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
@@ -97,9 +97,9 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz01-02 — Подготовка компонента в двух режимах
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Use the owned wrapper route in the report workspace.
+1. Open/execute: Use the owned wrapper route in the correction checkout.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `python3 tools/pr12/workspace.py smoke intake --require; python3 tools/pr12/workspace.py inspect intake --mode release`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
 4. Must be visible: commands, dev/release outputs, build mode and safe fixture scope
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-02.png` and insert it at the matching figure slot with caption `Рисунок — Подготовка компонента в двух режимах`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
@@ -107,9 +107,9 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz01-03 — Запуск поставки вне исходного кода и IDE
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open the outside-checkout temporary directory shown in hit-53-baseline-v2.log.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `intake-contractcheck --fixture positive_fixture.json --format json`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
+1. Open/execute: Create a new temporary distribution from the clean correction checkout; copy the release binary and synthetic verified.json to it, then leave the checkout.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `dist=$(mktemp -d /tmp/hitpipe-pr12-dist.XXXXXX); cp .pr12-build/intake/release/intake-contractcheck "$dist/"; cp services/intake/testdata/verified.json "$dist/"; cd "$dist"; ./intake-contractcheck --version; ./intake-contractcheck --fixture verified.json --format json`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
 4. Must be visible: pwd outside checkout, release binary, version, PASS and exit 0
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-03.png` and insert it at the matching figure slot with caption `Рисунок — Запуск поставки вне исходного кода и IDE`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
@@ -117,9 +117,9 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz01-04 — Штатный запуск компонента
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open the clean candidate wrapper run and synthetic fixture output.
+1. Open/execute: Open the clean correction wrapper run and synthetic fixture output.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `python3 tools/pr12/workspace.py smoke intake --require`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7`
 4. Must be visible: safe status/reason/version, fixture scope and exit 0
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-04.png` and insert it at the matching figure slot with caption `Рисунок — Штатный запуск компонента`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
@@ -127,10 +127,10 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz01-05 — Неверная конфигурация
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: This bounded component has no runtime configuration input. Do not invent an invalid-config run; record NOT_APPLICABLE if Lead requires this slot.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `No valid command; human records NOT_APPLICABLE`
-3. Verify SHA/version: `Candidate SHA 2186a00ca9c441645c99f82fd45b34241864ac6a`
-4. Must be visible: explicit scope gap, not fabricated PASS
+1. Open/execute: Use the existing CLI representation parameter against the synthetic verified.json fixture.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `./intake-contractcheck --fixture verified.json --format text; ./intake-contractcheck --fixture verified.json --format json; ./intake-contractcheck --fixture verified.json --format invalid (expected exit 2)`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
+4. Must be visible: text/json representations and safe format_invalid with exit 2
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-05.png` and insert it at the matching figure slot with caption `Рисунок — Неверная конфигурация`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
@@ -147,29 +147,29 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz01-07 — Отрицательная локальная проверка автоматического gate
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open docs/labs/pr12/nb/evidence/hit-53-ci-sensitivity.log.
+1. Open/execute: Open docs/labs/pr12/nb/evidence/hit-53-ci-sensitivity.log and the correction CI result.
 2. CWD: `/Users/nic_piter/code/hitpipe`; command: `PR12_RACE=1 python3 tools/pr12/workspace.py check intake`
-3. Verify SHA/version: `2186a00ca9c441645c99f82fd45b34241864ac6a; Go go1.27.2`
-4. Must be visible: controlled failure exit 1 then restored exit 0
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; correction CI run 39273968129`
+4. Must be visible: controlled failure exit 1 then restored exit 0; correction CI success
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz01-07.png` and insert it at the matching figure slot with caption `Рисунок — Отрицательная локальная проверка автоматического gate`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0104-pz02-01 — Публичный контракт и существенная реализация
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open https://github.com/hitpipe/hitpipe/blob/2a20fb6a21fe762f2cf37ded433c99bf5390be81/services/intake/internal/domain/stripesignature/verifier.go and module-contract.md.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git show 2a20fb6a21fe762f2cf37ded433c99bf5390be81 --stat`
-3. Verify SHA/version: `2a20fb6a21fe762f2cf37ded433c99bf5390be81; Go go1.27.2`
-4. Must be visible: Verify, exact bytes, bounded Outcome and no business side effect
+1. Open/execute: Open the correction checkout at df1a7d58179148abfda8e71862654f5ef7fcdbc7: verifier.go and services/intake/docs/module-contract.md.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git show --stat --oneline df1a7d58179148abfda8e71862654f5ef7fcdbc7`
+3. Verify SHA/version: `df1a7d58179148abfda8e71862654f5ef7fcdbc7; Go go1.27.2`
+4. Must be visible: Verify, checked timestamp parsing, exact bytes, bounded Outcome and no business side effect
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz02-01.png` and insert it at the matching figure slot with caption `Рисунок — Публичный контракт и существенная реализация`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0104-pz02-02 — Документация модуля по стандарту стека
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open services/intake/docs/module-contract.md.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `sed -n '1,220p' services/intake/docs/module-contract.md`
-3. Verify SHA/version: `2a20fb6a21fe762f2cf37ded433c99bf5390be81`
+1. Open/execute: Open services/intake/docs/module-contract.md in the final report checkout; first verify the path exists at the source SHA recorded in handoff.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git cat-file -e <SHA>:services/intake/docs/module-contract.md; sed -n '1,220p' services/intake/docs/module-contract.md`
+3. Verify SHA/version: `final report source SHA recorded in handoff`
 4. Must be visible: purpose, inputs, result, errors, dependencies, example and limits
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz02-02.png` and insert it at the matching figure slot with caption `Рисунок — Документация модуля по стандарту стека`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
@@ -177,30 +177,30 @@ Status: PLACEHOLDER_ONLY.
 ## 0104-pz02-03 — Один потребитель и две подключаемые реализации
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open authenticatewebhook Consumer and composition root; inspect tests.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -count=1 ./...`
-3. Verify SHA/version: `2a20fb6a21fe762f2cf37ded433c99bf5390be81; Go go1.27.2`
-4. Must be visible: same consumer, file-backed and in-memory/fixed implementations, normal/error/boundary
+1. Open/execute: Open authenticatewebhook Consumer, composition root and tests; verify the executed pair is FileResolver+FixedClock and MapSecrets+FixedClock.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -count=1 ./internal/application/authenticatewebhook`
+3. Verify SHA/version: `correction/report source SHA recorded in handoff; Go go1.27.2`
+4. Must be visible: same consumer, two executed implementations, normal/error/boundary; SystemClock marked not executed here
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz02-03.png` and insert it at the matching figure slot with caption `Рисунок — Один потребитель и две подключаемые реализации`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0104-pz02-04 — Модульная карта с легендой и статусами
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open docs/labs/pr12/nb/module-map.md at the candidate revision.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git show 2a20fb6a21fe762f2cf37ded433c99bf5390be81:docs/labs/pr12/nb/module-map.md`
-3. Verify SHA/version: `2a20fb6a21fe762f2cf37ded433c99bf5390be81`
-4. Must be visible: responsibilities, paths, imports, statuses, author and A→B legend
+1. Open/execute: Open docs/labs/pr12/nb/module-map.md at the final report source SHA recorded in handoff; first verify the path exists.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `git cat-file -e <SHA>:docs/labs/pr12/nb/module-map.md; git show <SHA>:docs/labs/pr12/nb/module-map.md`
+3. Verify SHA/version: `final report source SHA recorded in handoff`
+4. Must be visible: responsibilities, exact paths, imports, statuses, author and A→B legend
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz02-04.png` and insert it at the matching figure slot with caption `Рисунок — Модульная карта с легендой и статусами`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 
 ## 0104-pz02-05 — Проверки с обеими реализациями
 
 Status: PLACEHOLDER_ONLY.
-1. Open/execute: Open hit-52-c2-local-clean.log and the named application test source.
-2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -count=1 ./...`
-3. Verify SHA/version: `2a20fb6a21fe762f2cf37ded433c99bf5390be81; Go go1.27.2`
-4. Must be visible: both implementations and normal/boundary/error PASS
+1. Open/execute: Open the updated C2 evidence log and named application test source.
+2. CWD: `/Users/nic_piter/code/hitpipe`; command: `cd services/intake && go test -count=1 ./internal/application/authenticatewebhook`
+3. Verify SHA/version: `correction source SHA recorded in handoff; Go go1.27.2`
+4. Must be visible: both executed implementations and normal/boundary/error PASS
 5. Save PNG as `docs/labs/pr12/nb/evidence/screenshots/0104-pz02-05.png` and insert it at the matching figure slot with caption `Рисунок — Проверки с обеими реализациями`.
 6. Hide secrets, cookies, personal data and unrelated windows; never fabricate output.
 

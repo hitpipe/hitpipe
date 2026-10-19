@@ -26,9 +26,10 @@ clock. The consumer must not confuse verification with durable acceptance.
 ## Decision and consequences
 
 `authenticatewebhook.Consumer` owns both narrow interfaces and calls the pure
-`StripeSignature` policy only after successful resolution. File and system adapters
-are diagnostic implementations; a secure production store and trusted service
-clock remain future adapters. A verified result is a typed handoff only; no receipt,
+`StripeSignature` policy only after successful resolution. The executed substitution
+pair is `FileResolver + FixedClock` and `MapSecrets + FixedClock`; `SystemClock` is
+compiled/documented but was not executed in this experiment. A secure production
+store and trusted service clock remain future adapters. A verified result is a typed handoff only; no receipt,
 2xx or financial admission is inferred.
 
 Cost: one extra composition boundary, copies/ownership of raw bytes at the caller,

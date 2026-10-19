@@ -16,14 +16,16 @@ internal/application/authenticatewebhook_test -> adapters + fixed test doubles
 | AuthenticateWebhook | secret/clock resolution then verification handoff | `Consumer.Authenticate(...) Result` | `services/intake/internal/application/authenticatewebhook` | domain + owned ports | works | Никита Будыкин |
 | FixtureSecretResolver | synthetic installation-scoped secret lookup | `Resolve(ctx, id)` | CLI-local fixture double | fixture input | works for CLI lab | Никита Будыкин |
 | FileSecretResolver | file-backed installation-scoped secret adapter | `Resolve(ctx, id)` | `services/intake/internal/adapters/fixtures/signingsecrets` | file/JSON | works for lab | Никита Будыкин |
-| SystemClock | system Unix second adapter | `NowUnix(ctx)` | `services/intake/internal/adapters/clock/system` | time | works for lab | Никита Будыкин |
+| SystemClock | system Unix second adapter | `NowUnix(ctx)` | `services/intake/internal/adapters/clock/system` | time | compiled/documented; not executed in C2 substitution experiment | Никита Будыкин |
 | Durable receipt / HTTP route | persistence/transport/2xx | future port | not present in this slice | future service-owned adapters | plan | Lead/future owner |
 
 The application package owns the ports. Concrete adapters are not imported by the
 domain, and domain/application do not read env, network, database or framework
-state. The CLI composes the same application consumer with a fixture double; the
-application tests compose it with both the file adapter and a double. The CLI is
-an offline diagnostic composition root, not a production webhook endpoint.
+state. The executed C2 pair is `FileResolver + FixedClock` and
+`MapSecrets + FixedClock`; `SystemClock` was compiled but not used in that run.
+The CLI composes the same application consumer with a separate fixture resolver
+and fixture clock. The CLI is an offline diagnostic composition root, not a
+production webhook endpoint.
 
 Actual import check and build evidence: `docs/labs/pr12/nb/evidence/hit-51-c1-clean.log`
 and the C2 local check log. Future composition wiring must preserve this map.

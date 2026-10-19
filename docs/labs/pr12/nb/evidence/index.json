@@ -6,23 +6,23 @@
   "reports": [
     {
       "path": "docs/labs/pr12/nb/reports/0104-pz01-nb.docx",
-      "sha256": "5f586492a620e9e6721a635fac85c389a78f0b49b9ca67444eae57b4de235add",
-      "bytes": 27660
+      "sha256": "37ae6cc8fe335487946276ebc8bbc8c6da4edcdff9ea5af395eb628acfba897b",
+      "bytes": 27731
     },
     {
       "path": "docs/labs/pr12/nb/reports/0104-pz02-nb.docx",
-      "sha256": "8d97fea38eff2a056bd0798514c6f6dfa91d859fedd2c31eb57cd7aca7be7883",
-      "bytes": 27257
+      "sha256": "9b86516773a71f4b715562bdfbd8708f65f38617f47b48b3ca9c236d4c9ced29",
+      "bytes": 27336
     },
     {
       "path": "docs/labs/pr12/nb/reports/0302-pz01-nb.docx",
-      "sha256": "7321e8a9969fcee228a2558816d89e82266e04f7dfb267bbd16e17e0e7ae3efb",
+      "sha256": "cca07de0191ea1e996539b2f0654f9486e03f414b5bb16f7fdec5203988a9d49",
       "bytes": 30954
     },
     {
       "path": "docs/labs/pr12/nb/reports/0302-pz02-nb.docx",
-      "sha256": "80d03dbc7008baf2ce4c43cc12a933267c2dcca6ac8859d8d5cb534a9eee4d36",
-      "bytes": 32800
+      "sha256": "6206739643a6b24de75659194f5f3f09f3c523081f07b035b691867f2a8099ba",
+      "bytes": 33018
     }
   ],
   "evidence": [
@@ -70,6 +70,16 @@
       "path": "docs/labs/pr12/nb/evidence/hit-53-ci-sensitivity.log",
       "sha256": "49925913e969c3ba79c4504187f1286b3c518e55d46cabfa9cd5e8ea9ae5b48b",
       "bytes": 71241
+    },
+    {
+      "path": "docs/labs/pr12/nb/evidence/hit-53-correction-ci.json",
+      "sha256": "d3005294e6bfbb29921121370ec807f7a9754a614bfda720a6a0723fcabde166",
+      "bytes": 1006
+    },
+    {
+      "path": "docs/labs/pr12/nb/evidence/hit-53-correction-cli.md",
+      "sha256": "83ebd84ebdf1fd61ba96cc94519ef0d80f784e521b79728609de34b1f9fc2b83",
+      "bytes": 901
     },
     {
       "path": "docs/labs/pr12/nb/evidence/hit-54-d1-clean.log",
@@ -128,8 +138,8 @@
     },
     {
       "path": "docs/labs/pr12/nb/evidence/screenshots/INSTRUCTIONS.md",
-      "sha256": "93fe8a03f3d7bf2904e916bb6d1738ce509ae8b0b19172bc1dc3f4ff6e42dc87",
-      "bytes": 17699
+      "sha256": "6cb3071eb85e7129ea3b4ba81ae5b13d214279ee88d0158bfa7c5ac8214dbdf5",
+      "bytes": 19212
     }
   ],
   "ci": [
@@ -140,9 +150,16 @@
       "status": "success"
     },
     {
-      "task": "HIT-53",
+      "task": "HIT-53-original",
       "sha": "2186a00ca9c441645c99f82fd45b34241864ac6a",
       "url": "https://github.com/hitpipe/hitpipe/actions/runs/39262304491",
+      "status": "success"
+    },
+    {
+      "task": "HIT-53-correction",
+      "sha": "df1a7d58179148abfda8e71862654f5ef7fcdbc7",
+      "url": "https://github.com/hitpipe/hitpipe/actions/runs/39274386817",
+      "job": "118134753907",
       "status": "success"
     },
     {
@@ -152,10 +169,17 @@
       "status": "success"
     },
     {
-      "task": "HIT-56",
+      "task": "HIT-56-original",
       "sha": "47807726acbcbfcbae048c6afc2bcb062df192cb",
       "url": "https://github.com/hitpipe/hitpipe/actions/runs/39263470537",
       "job": "118096896666",
+      "status": "success"
+    },
+    {
+      "task": "HIT-56-correction",
+      "sha": "803c9c14727d0649be23994444d5e114179bee41",
+      "url": "https://github.com/hitpipe/hitpipe/actions/runs/39273968129",
+      "job": "118133317053",
       "status": "success"
     }
   ],
