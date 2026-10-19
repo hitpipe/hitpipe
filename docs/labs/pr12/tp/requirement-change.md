@@ -1,0 +1,11 @@
+# Изменение контракта финансовой проверки
+
+HIT-26. До: R1 требовал удерживать unknown/expired/wrong identity, но не определял precedence. При нескольких нарушениях проверяющий мог ожидать разные причины. После: добавлена стабильная локальная типизация исходов; это refinement наблюдаемого поведения без изменений canonical wire enum.
+
+Порядок: (1) invalid policy/input shape или unsupported config/evaluator → INCOMPLETE; (2) несовпадение source scope → INELIGIBLE; (3) неполный snapshot/unknown mandatory value → INCOMPLETE; (4) нарушенный timeline/expired proof → REFRESH_REQUIRED; (5) полные известные business predicates в перечисленном порядке → INELIGIBLE; (6) все соблюдены → VALID. Reader exception в application → INCOMPLETE/READER_UNAVAILABLE, не default false/zero. Error category не является состоянием дела.
+
+На now==valid_until proof уже истёк. oldest+10s — верхняя граница, completed не омолаживает старые факты. Timeline требует oldest<=completed<=now и completed-oldest<=30s. Activation equality разрешена; до неё заказ не поддерживается. Money 0..9007199254740991, total>0, received==captured==total, refund==0. Partial refund нельзя выводить из Charge.refunded=false. Нулевое значение известно; null неизвестен. Эти граничные решения вытекают из RULE006, BP002/T004, BP007/T002/005/010 и OAS SourceFacts.
+
+Identity: account, connection, test/live соответствуют принятой policy; application отдельно сверяет case/Session/config/version immutable context. Нельзя менять accepted config, создавать новую или подменять старую latest. Fixture projection — внутренние domain values, не копия generated wire schema; future authenticated adapter обязан валидировать OAS и digest до domain. Офлайн CLI не доказывает такую authenticity.
+
+Given wrong account+unknown refund+expired proof → INELIGIBLE/SOURCE_SCOPE. Given matching identity+unknown refund+expired proof → INCOMPLETE/UNKNOWN_FACT. Given complete matching snapshot+expired proof+refund1 → REFRESH_REQUIRED/PROOF_EXPIRED. Given fresh matching refund1 → INELIGIBLE/REFUND. Test oracle зафиксирован до кода; TestPrecedence проверит эти случаи. Review/merge и blind ответы другого студента pending HIT-31. Никаких содержательных замечаний человека ещё нет.
