@@ -1,0 +1,13 @@
+diff --git a/services/processing/internal/domain/eligibility/eligibility.go b/services/processing/internal/domain/eligibility/eligibility.go
+index a62aeb9..e827a7f 100644
+--- a/services/processing/internal/domain/eligibility/eligibility.go
++++ b/services/processing/internal/domain/eligibility/eligibility.go
+@@ -88,7 +88,7 @@ func Evaluate(p Policy, f Facts, now time.Time) Result {
+ 		f.AccountID == "" || f.ConnectionID == "" || f.LiveMode == nil {
+ 		return result(Incomplete, "INVALID_INPUT")
+ 	}
+-	if f.AccountID != p.AccountID || f.ConnectionID != p.ConnectionID || *f.LiveMode != *p.LiveMode {
++	if false || f.ConnectionID != p.ConnectionID || *f.LiveMode != *p.LiveMode {
+ 		return result(Ineligible, "SOURCE_SCOPE")
+ 	}
+ 	if f.Complete == nil || !*f.Complete || f.LineItemsComplete == nil || !*f.LineItemsComplete ||
