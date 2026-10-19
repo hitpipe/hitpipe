@@ -1,0 +1,675 @@
+﻿2026-10-19T16:18:47.2686548Z Current runner version: '2.337.0'
+2026-10-19T16:18:47.2712581Z ##[group]Runner Image Provisioner
+2026-10-19T16:18:47.2713551Z Hosted Compute Agent
+2026-10-19T16:18:47.2714148Z Version: 20261012.601
+2026-10-19T16:18:47.2714835Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-19T16:18:47.2715616Z Build Date: 2026-10-12T17:48:21Z
+2026-10-19T16:18:47.2716314Z Worker ID: {c50d1af4-81e9-41c4-9dd6-c2fef10ab297}
+2026-10-19T16:18:47.2717095Z Region: westus
+2026-10-19T16:18:47.2717636Z Cloud: Azure
+2026-10-19T16:18:47.2718207Z ##[endgroup]
+2026-10-19T16:18:47.2719735Z ##[group]Operating System
+2026-10-19T16:18:47.2720383Z Ubuntu
+2026-10-19T16:18:47.2720991Z 24.04.5
+2026-10-19T16:18:47.2721832Z LTS
+2026-10-19T16:18:47.2722334Z ##[endgroup]
+2026-10-19T16:18:47.2723002Z ##[group]Runner Image
+2026-10-19T16:18:47.2723659Z Image: ubuntu-24.04
+2026-10-19T16:18:47.2724286Z Version: 20261012.334.1
+2026-10-19T16:18:47.2725599Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-19T16:18:47.2727207Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-19T16:18:47.2728204Z ##[endgroup]
+2026-10-19T16:18:47.2729313Z ##[group]GITHUB_TOKEN Permissions
+2026-10-19T16:18:47.2731507Z Contents: read
+2026-10-19T16:18:47.2732252Z Metadata: read
+2026-10-19T16:18:47.2732813Z ##[endgroup]
+2026-10-19T16:18:47.2734969Z Secret source: Actions
+2026-10-19T16:18:47.2736035Z Cache mode: write
+2026-10-19T16:18:47.2736755Z Prepare workflow directory
+2026-10-19T16:18:47.3137273Z Prepare all required actions
+2026-10-19T16:18:47.3188381Z Getting action download info
+2026-10-19T16:18:47.6817816Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-19T16:18:47.8002198Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+2026-10-19T16:18:48.2502490Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-19T16:18:48.4507146Z Complete job name: pr12-iam
+2026-10-19T16:18:48.5360440Z ##[group]Run actions/checkout@v4
+2026-10-19T16:18:48.5361544Z with:
+2026-10-19T16:18:48.5362044Z   ref: b1c3ae8ac10a885c6f3cc417d1f52af850580516
+2026-10-19T16:18:48.5362657Z   repository: hitpipe/hitpipe
+2026-10-19T16:18:48.5366511Z   token: ***
+2026-10-19T16:18:48.5366948Z   ssh-strict: true
+2026-10-19T16:18:48.5367385Z   ssh-user: git
+2026-10-19T16:18:48.5367827Z   persist-credentials: true
+2026-10-19T16:18:48.5368318Z   clean: true
+2026-10-19T16:18:48.5368766Z   sparse-checkout-cone-mode: true
+2026-10-19T16:18:48.5369293Z   fetch-depth: 1
+2026-10-19T16:18:48.5369720Z   fetch-tags: false
+2026-10-19T16:18:48.5370157Z   show-progress: true
+2026-10-19T16:18:48.5370598Z   lfs: false
+2026-10-19T16:18:48.5371009Z   submodules: false
+2026-10-19T16:18:48.5371680Z   set-safe-directory: true
+2026-10-19T16:18:48.5372188Z   allow-unsafe-pr-checkout: false
+2026-10-19T16:18:48.5373006Z ##[endgroup]
+2026-10-19T16:18:48.6458894Z Syncing repository: hitpipe/hitpipe
+2026-10-19T16:18:48.6461878Z ##[group]Getting Git version info
+2026-10-19T16:18:48.6463027Z Working directory is '/home/runner/work/hitpipe/hitpipe'
+2026-10-19T16:18:48.6464925Z [command]/usr/bin/git version
+2026-10-19T16:18:48.6553151Z git version 2.55.0
+2026-10-19T16:18:48.6587882Z ##[endgroup]
+2026-10-19T16:18:48.6602585Z Temporarily overriding HOME='/home/runner/work/_temp/aa781eea-cedc-433f-acde-08de5856b4e3' before making global git config changes
+2026-10-19T16:18:48.6604879Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T16:18:48.6608840Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+2026-10-19T16:18:48.6670453Z Deleting the contents of '/home/runner/work/hitpipe/hitpipe'
+2026-10-19T16:18:48.6676379Z ##[group]Initializing the repository
+2026-10-19T16:18:48.6680255Z [command]/usr/bin/git init /home/runner/work/hitpipe/hitpipe
+2026-10-19T16:18:48.6814608Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-19T16:18:48.6816719Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-19T16:18:48.6818867Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-19T16:18:48.6820159Z hint: call:
+2026-10-19T16:18:48.6820834Z hint:
+2026-10-19T16:18:48.6822070Z hint: 	git config --global init.defaultBranch <name>
+2026-10-19T16:18:48.6823100Z hint:
+2026-10-19T16:18:48.6824072Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-19T16:18:48.6825697Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-19T16:18:48.6826930Z hint:
+2026-10-19T16:18:48.6827612Z hint: 	git branch -m <name>
+2026-10-19T16:18:48.6828370Z hint:
+2026-10-19T16:18:48.6829379Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-19T16:18:48.6831126Z Initialized empty Git repository in /home/runner/work/hitpipe/hitpipe/.git/
+2026-10-19T16:18:48.6834023Z [command]/usr/bin/git remote add origin https://github.com/hitpipe/hitpipe
+2026-10-19T16:18:48.6892202Z ##[endgroup]
+2026-10-19T16:18:48.6893811Z ##[group]Disabling automatic garbage collection
+2026-10-19T16:18:48.6895299Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-19T16:18:48.6945236Z ##[endgroup]
+2026-10-19T16:18:48.6946298Z ##[group]Setting up auth
+2026-10-19T16:18:48.6947297Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T16:18:48.6984259Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T16:18:48.7422479Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T16:18:48.7463355Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T16:18:48.7699580Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T16:18:48.7738640Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T16:18:48.7978339Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-19T16:18:48.8021127Z ##[endgroup]
+2026-10-19T16:18:48.8031109Z ##[group]Fetching the repository
+2026-10-19T16:18:48.8032951Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin b1c3ae8ac10a885c6f3cc417d1f52af850580516
+2026-10-19T16:18:49.5791055Z From https://github.com/hitpipe/hitpipe
+2026-10-19T16:18:49.5792154Z  * branch            b1c3ae8ac10a885c6f3cc417d1f52af850580516 -> FETCH_HEAD
+2026-10-19T16:18:49.5796974Z ##[endgroup]
+2026-10-19T16:18:49.5798016Z ##[group]Determining the checkout info
+2026-10-19T16:18:49.5799628Z ##[endgroup]
+2026-10-19T16:18:49.5806366Z [command]/usr/bin/git sparse-checkout disable
+2026-10-19T16:18:49.5873422Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-19T16:18:49.5906757Z ##[group]Checking out the ref
+2026-10-19T16:18:49.5911578Z [command]/usr/bin/git checkout --progress --force b1c3ae8ac10a885c6f3cc417d1f52af850580516
+2026-10-19T16:18:49.6579740Z Note: switching to 'b1c3ae8ac10a885c6f3cc417d1f52af850580516'.
+2026-10-19T16:18:49.6580565Z 
+2026-10-19T16:18:49.6581103Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-19T16:18:49.6625260Z changes and commit them, and you can discard any commits you make in this
+2026-10-19T16:18:49.6626761Z state without impacting any branches by switching back to a branch.
+2026-10-19T16:18:49.6627502Z 
+2026-10-19T16:18:49.6628035Z If you want to create a new branch to retain commits you create, you may
+2026-10-19T16:18:49.6629123Z do so (now or later) by using -c with the switch command. Example:
+2026-10-19T16:18:49.6630069Z 
+2026-10-19T16:18:49.6630259Z   git switch -c <new-branch-name>
+2026-10-19T16:18:49.6630588Z 
+2026-10-19T16:18:49.6630826Z Or undo this operation with:
+2026-10-19T16:18:49.6631138Z 
+2026-10-19T16:18:49.6631726Z   git switch -
+2026-10-19T16:18:49.6632207Z 
+2026-10-19T16:18:49.6632828Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-19T16:18:49.6633655Z 
+2026-10-19T16:18:49.6634364Z HEAD is now at b1c3ae8 HIT-24: integrate current main before merging the reviewed IAM stack
+2026-10-19T16:18:49.6637507Z ##[endgroup]
+2026-10-19T16:18:49.6649915Z [command]/usr/bin/git log -1 --format=%H
+2026-10-19T16:18:49.6683017Z b1c3ae8ac10a885c6f3cc417d1f52af850580516
+2026-10-19T16:18:49.6935601Z ##[group]Run python3 tools/pr12/workspace.py validate
+2026-10-19T16:18:49.6936396Z [36;1mpython3 tools/pr12/workspace.py validate[0m
+2026-10-19T16:18:49.7238566Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:18:49.7239343Z ##[endgroup]
+2026-10-19T16:18:49.7763431Z + /usr/bin/python3 /home/runner/work/hitpipe/hitpipe/tools/pr12/validate_bundle.py
+2026-10-19T16:18:49.8750951Z {"status": "PORTABLE_PACKAGE_VALIDATION_PASS", "verified_files": 205, "features": 5, "tasks": 41, "criteria_links": 145, "templates": 4, "student_work": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+2026-10-19T16:18:49.8906007Z {"status": "BOOTSTRAP_VALIDATION_PASS", "verified_frozen_files": 6, "student_implementation": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+2026-10-19T16:18:49.9033400Z ##[group]Run python3 tools/pr12/test_workspace.py
+2026-10-19T16:18:49.9034062Z [36;1mpython3 tools/pr12/test_workspace.py[0m
+2026-10-19T16:18:49.9098674Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:18:49.9099143Z ##[endgroup]
+2026-10-19T16:18:50.1875472Z + tool
+2026-10-19T16:18:50.1982263Z .................
+2026-10-19T16:18:50.1983532Z ----------------------------------------------------------------------
+2026-10-19T16:18:50.1984643Z Ran 17 tests in 0.012s
+2026-10-19T16:18:50.1985323Z 
+2026-10-19T16:18:50.1985718Z OK
+2026-10-19T16:18:50.2177704Z ##[group]Run python3 tools/pr12/workspace.py status iam
+2026-10-19T16:18:50.2178485Z [36;1mpython3 tools/pr12/workspace.py status iam[0m
+2026-10-19T16:18:50.2243238Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:18:50.2243788Z ##[endgroup]
+2026-10-19T16:18:50.2729904Z {"component": "iam", "status": "IMPLEMENTATION_DECLARED_NOT_CHECKED"}
+2026-10-19T16:18:50.3454132Z ##[group]Run python3 docs/labs/pr12/dk/reports/verify_package.py
+2026-10-19T16:18:50.3454911Z [36;1mpython3 docs/labs/pr12/dk/reports/verify_package.py[0m
+2026-10-19T16:18:50.3520633Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:18:50.3521112Z ##[endgroup]
+2026-10-19T16:18:50.4723162Z {
+2026-10-19T16:18:50.4724140Z   "status": "PASS",
+2026-10-19T16:18:50.4724824Z   "reports": 4,
+2026-10-19T16:18:50.4725504Z   "mandatory_results": 29,
+2026-10-19T16:18:50.4726267Z   "unique_screenshot_placeholders": 21,
+2026-10-19T16:18:50.4727056Z   "verified_evidence_files": 102,
+2026-10-19T16:18:50.4727823Z   "external_docx_links": 20,
+2026-10-19T16:18:50.4728522Z   "submitted_or_human_accepted": false,
+2026-10-19T16:18:50.4729688Z   "rendering": "PASS_AUTHOR_LAYOUT_CHECK; real LibreOffice/Poppler pages, exact DOCX/PDF hashes verified"
+2026-10-19T16:18:50.4730846Z }
+2026-10-19T16:18:50.5502992Z ##[group]Run actions/setup-go@v5
+2026-10-19T16:18:50.5503497Z with:
+2026-10-19T16:18:50.5503876Z   go-version: 1.27.2
+2026-10-19T16:18:50.5504264Z   cache: false
+2026-10-19T16:18:50.5504686Z   check-latest: false
+2026-10-19T16:18:50.5507960Z   token: ***
+2026-10-19T16:18:50.5508336Z ##[endgroup]
+2026-10-19T16:18:50.6831121Z Setup go version spec 1.27.2
+2026-10-19T16:18:50.6842315Z Attempting to download 1.27.2...
+2026-10-19T16:18:50.6959933Z (node:2343) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-19T16:18:50.6962060Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T16:18:51.4018057Z matching 1.27.2...
+2026-10-19T16:18:51.4041962Z Acquiring 1.27.2 from https://github.com/actions/go-versions/releases/download/1.27.2-37875086547/go-1.27.2-linux-x64.tar.gz
+2026-10-19T16:18:51.9333396Z Extracting Go...
+2026-10-19T16:18:51.9458253Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/eda940e4-646b-4f32-b0a8-597f53348089 -f /home/runner/work/_temp/d3173a3c-c1e4-4c2d-9d26-bad9eefb2ac5
+2026-10-19T16:18:53.7097231Z Successfully extracted go to /home/runner/work/_temp/eda940e4-646b-4f32-b0a8-597f53348089
+2026-10-19T16:18:53.7098445Z Adding to the cache ...
+2026-10-19T16:19:01.0534835Z Successfully cached go to /opt/hostedtoolcache/go/1.27.2/x64
+2026-10-19T16:19:01.0537998Z Added go to the path
+2026-10-19T16:19:01.0543619Z Successfully set up Go version 1.27.2
+2026-10-19T16:19:01.0804682Z go version go1.27.2 linux/amd64
+2026-10-19T16:19:01.0805468Z 
+2026-10-19T16:19:01.0806307Z ##[group]go env
+2026-10-19T16:19:01.2384622Z AR='ar'
+2026-10-19T16:19:01.2385096Z CC='gcc'
+2026-10-19T16:19:01.2385541Z CGO_CFLAGS='-O2 -g'
+2026-10-19T16:19:01.2385963Z CGO_CPPFLAGS=''
+2026-10-19T16:19:01.2386344Z CGO_CXXFLAGS='-O2 -g'
+2026-10-19T16:19:01.2386731Z CGO_ENABLED='1'
+2026-10-19T16:19:01.2387081Z CGO_FFLAGS='-O2 -g'
+2026-10-19T16:19:01.2387489Z CGO_LDFLAGS='-O2 -g'
+2026-10-19T16:19:01.2387852Z CXX='g++'
+2026-10-19T16:19:01.2388174Z GCCGO='gccgo'
+2026-10-19T16:19:01.2388510Z GO111MODULE=''
+2026-10-19T16:19:01.2388841Z GOAMD64='v1'
+2026-10-19T16:19:01.2389195Z GOARCH='amd64'
+2026-10-19T16:19:01.2389596Z GOAUTH='netrc'
+2026-10-19T16:19:01.2389969Z GOBIN='/home/runner/go/bin'
+2026-10-19T16:19:01.2390428Z GOCACHE='/home/runner/.cache/go-build'
+2026-10-19T16:19:01.2390901Z GOCACHEPROG=''
+2026-10-19T16:19:01.2391471Z GODEBUG=''
+2026-10-19T16:19:01.2391919Z GOENV='/home/runner/.config/go/env'
+2026-10-19T16:19:01.2392359Z GOEXE=''
+2026-10-19T16:19:01.2392688Z GOEXPERIMENT=''
+2026-10-19T16:19:01.2393082Z GOFIPS140='off'
+2026-10-19T16:19:01.2393417Z GOFLAGS=''
+2026-10-19T16:19:01.2394629Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2598125941=/tmp/go-build -gno-record-gcc-switches'
+2026-10-19T16:19:01.2395872Z GOHOSTARCH='amd64'
+2026-10-19T16:19:01.2396237Z GOHOSTOS='linux'
+2026-10-19T16:19:01.2396584Z GOINSECURE=''
+2026-10-19T16:19:01.2397025Z GOMOD='/home/runner/work/hitpipe/hitpipe/go.mod'
+2026-10-19T16:19:01.2397594Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-10-19T16:19:01.2398050Z GONOPROXY=''
+2026-10-19T16:19:01.2398387Z GONOSUMDB=''
+2026-10-19T16:19:01.2398716Z GOOS='linux'
+2026-10-19T16:19:01.2399109Z GOPACKAGESDRIVER=''
+2026-10-19T16:19:01.2399499Z GOPATH='/home/runner/go'
+2026-10-19T16:19:01.2399889Z GOPRIVATE=''
+2026-10-19T16:19:01.2400329Z GOPROXY='https://proxy.golang.org,direct'
+2026-10-19T16:19:01.2400910Z GOROOT='/opt/hostedtoolcache/go/1.27.2/x64'
+2026-10-19T16:19:01.2401631Z GOSUMDB='sum.golang.org'
+2026-10-19T16:19:01.2402037Z GOTELEMETRY='local'
+2026-10-19T16:19:01.2402498Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-10-19T16:19:01.2403054Z GOTMPDIR=''
+2026-10-19T16:19:01.2403387Z GOTOOLCHAIN='auto'
+2026-10-19T16:19:01.2403943Z GOTOOLDIR='/opt/hostedtoolcache/go/1.27.2/x64/pkg/tool/linux_amd64'
+2026-10-19T16:19:01.2404566Z GOVCS=''
+2026-10-19T16:19:01.2404894Z GOVERSION='go1.27.2'
+2026-10-19T16:19:01.2405608Z GOWORK=''
+2026-10-19T16:19:01.2405975Z PKG_CONFIG='pkg-config'
+2026-10-19T16:19:01.2406234Z 
+2026-10-19T16:19:01.2406837Z ##[endgroup]
+2026-10-19T16:19:01.2644005Z ##[group]Run python3 tools/pr12/workspace.py check iam
+2026-10-19T16:19:01.2644485Z [36;1mpython3 tools/pr12/workspace.py check iam[0m
+2026-10-19T16:19:01.2713457Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:19:01.2713755Z env:
+2026-10-19T16:19:01.2713989Z   PR12_RACE: 1
+2026-10-19T16:19:01.2714234Z ##[endgroup]
+2026-10-19T16:19:01.3212218Z + go version
+2026-10-19T16:19:01.3285895Z + go vet ./...
+2026-10-19T16:19:08.8029956Z + go test -count=1 -json -coverprofile=/home/runner/work/hitpipe/hitpipe/.pr12-build/iam.cover ./...
+2026-10-19T16:19:11.7873817Z {"Time":"2026-10-19T16:19:11.749386812Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck"}
+2026-10-19T16:19:11.7875511Z {"Time":"2026-10-19T16:19:11.750228981Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system"}
+2026-10-19T16:19:11.7876640Z {"Time":"2026-10-19T16:19:11.750384639Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"}
+2026-10-19T16:19:11.7878602Z {"Time":"2026-10-19T16:19:11.750959341Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"}
+2026-10-19T16:19:11.7880828Z {"Time":"2026-10-19T16:19:11.753291378Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation"}
+2026-10-19T16:19:11.7883333Z {"Time":"2026-10-19T16:19:11.753324393Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid"}
+2026-10-19T16:19:11.7886113Z {"Time":"2026-10-19T16:19:11.753337094Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Output":"=== RUN   TestSystemClockRequiresAttestation\n","OutputType":"frame"}
+2026-10-19T16:19:11.7889257Z {"Time":"2026-10-19T16:19:11.753345813Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Output":"=== RUN   TestDiagnosticValid\n","OutputType":"frame"}
+2026-10-19T16:19:11.7893577Z {"Time":"2026-10-19T16:19:11.753360948Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Output":"--- PASS: TestSystemClockRequiresAttestation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7895529Z {"Time":"2026-10-19T16:19:11.75336725Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Elapsed":0}
+2026-10-19T16:19:11.7897014Z {"Time":"2026-10-19T16:19:11.753375646Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"PASS\n","OutputType":"frame"}
+2026-10-19T16:19:11.7898828Z {"Time":"2026-10-19T16:19:11.753720461Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Output":"--- PASS: TestDiagnosticValid (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7900444Z {"Time":"2026-10-19T16:19:11.753790342Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Elapsed":0}
+2026-10-19T16:19:11.7902148Z {"Time":"2026-10-19T16:19:11.753830517Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary"}
+2026-10-19T16:19:11.7903626Z {"Time":"2026-10-19T16:19:11.753841507Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Output":"=== RUN   TestDiagnosticMalformedAndCanary\n","OutputType":"frame"}
+2026-10-19T16:19:11.7905576Z {"Time":"2026-10-19T16:19:11.753861344Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters"}
+2026-10-19T16:19:11.7907316Z {"Time":"2026-10-19T16:19:11.753891251Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Output":"=== RUN   TestSameConsumerContractWithBothAdapters\n","OutputType":"frame"}
+2026-10-19T16:19:11.7909048Z {"Time":"2026-10-19T16:19:11.75391244Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal"}
+2026-10-19T16:19:11.7911024Z {"Time":"2026-10-19T16:19:11.753919353Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/normal\n","OutputType":"frame"}
+2026-10-19T16:19:11.7913256Z {"Time":"2026-10-19T16:19:11.753931215Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"coverage: 100.0% of statements\n"}
+2026-10-19T16:19:11.7914508Z {"Time":"2026-10-19T16:19:11.754089942Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case"}
+2026-10-19T16:19:11.7916084Z {"Time":"2026-10-19T16:19:11.754100532Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Output":"=== RUN   TestDiagnosticMalformedAndCanary/nested_case\n","OutputType":"frame"}
+2026-10-19T16:19:11.7917695Z {"Time":"2026-10-19T16:19:11.754120289Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests"}
+2026-10-19T16:19:11.7919503Z {"Time":"2026-10-19T16:19:11.754145807Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Output":"=== RUN   TestDependenciesAndInvalidRequests\n","OutputType":"frame"}
+2026-10-19T16:19:11.7922042Z {"Time":"2026-10-19T16:19:11.754976702Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Output":"--- PASS: TestDependenciesAndInvalidRequests (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7924515Z {"Time":"2026-10-19T16:19:11.754986947Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7926506Z {"Time":"2026-10-19T16:19:11.754993723Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Elapsed":0}
+2026-10-19T16:19:11.7928280Z {"Time":"2026-10-19T16:19:11.75499906Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Elapsed":0}
+2026-10-19T16:19:11.7929881Z {"Time":"2026-10-19T16:19:11.755000857Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak"}
+2026-10-19T16:19:11.7931931Z {"Time":"2026-10-19T16:19:11.755006978Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak\n","OutputType":"frame"}
+2026-10-19T16:19:11.7933780Z {"Time":"2026-10-19T16:19:11.755012509Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup"}
+2026-10-19T16:19:11.7935813Z {"Time":"2026-10-19T16:19:11.755016616Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/lookup\n","OutputType":"frame"}
+2026-10-19T16:19:11.7938120Z {"Time":"2026-10-19T16:19:11.755022697Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/lookup (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7940344Z {"Time":"2026-10-19T16:19:11.755005552Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal"}
+2026-10-19T16:19:11.7942278Z {"Time":"2026-10-19T16:19:11.755028919Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Elapsed":0}
+2026-10-19T16:19:11.7944982Z {"Time":"2026-10-19T16:19:11.755036093Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock"}
+2026-10-19T16:19:11.7948252Z {"Time":"2026-10-19T16:19:11.755040931Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/clock\n","OutputType":"frame"}
+2026-10-19T16:19:11.7952399Z {"Time":"2026-10-19T16:19:11.755044324Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Output":"--- PASS: TestDiagnosticMalformedAndCanary/nested_case (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7955760Z {"Time":"2026-10-19T16:19:11.755050866Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Elapsed":0}
+2026-10-19T16:19:11.7958294Z {"Time":"2026-10-19T16:19:11.755055525Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra"}
+2026-10-19T16:19:11.7961466Z {"Time":"2026-10-19T16:19:11.755059222Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Output":"=== RUN   TestDiagnosticMalformedAndCanary/extra\n","OutputType":"frame"}
+2026-10-19T16:19:11.7965268Z {"Time":"2026-10-19T16:19:11.755074795Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/clock (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7968709Z {"Time":"2026-10-19T16:19:11.755083772Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Elapsed":0}
+2026-10-19T16:19:11.7971711Z {"Time":"2026-10-19T16:19:11.755089422Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted"}
+2026-10-19T16:19:11.7974992Z {"Time":"2026-10-19T16:19:11.75509365Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/untrusted\n","OutputType":"frame"}
+2026-10-19T16:19:11.7979212Z {"Time":"2026-10-19T16:19:11.755099441Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/untrusted (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7982958Z {"Time":"2026-10-19T16:19:11.75510403Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Elapsed":0}
+2026-10-19T16:19:11.7985722Z {"Time":"2026-10-19T16:19:11.755108318Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock"}
+2026-10-19T16:19:11.7989045Z {"Time":"2026-10-19T16:19:11.755111884Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/zero_clock\n","OutputType":"frame"}
+2026-10-19T16:19:11.7993685Z {"Time":"2026-10-19T16:19:11.755117745Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/zero_clock (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.7997235Z {"Time":"2026-10-19T16:19:11.755124728Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Elapsed":0}
+2026-10-19T16:19:11.8000647Z {"Time":"2026-10-19T16:19:11.755130379Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8004237Z {"Time":"2026-10-19T16:19:11.755135959Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Elapsed":0}
+2026-10-19T16:19:11.8006971Z {"Time":"2026-10-19T16:19:11.755139897Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation"}
+2026-10-19T16:19:11.8010352Z {"Time":"2026-10-19T16:19:11.755144215Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Output":"=== RUN   TestClockReadAfterLookupAndCancellation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8013953Z {"Time":"2026-10-19T16:19:11.755149204Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none"}
+2026-10-19T16:19:11.8017519Z {"Time":"2026-10-19T16:19:11.755153422Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/none\n","OutputType":"frame"}
+2026-10-19T16:19:11.8022224Z {"Time":"2026-10-19T16:19:11.755034816Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/idle_equal\n","OutputType":"frame"}
+2026-10-19T16:19:11.8026808Z {"Time":"2026-10-19T16:19:11.755171813Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8029215Z {"Time":"2026-10-19T16:19:11.755182012Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Elapsed":0}
+2026-10-19T16:19:11.8031128Z {"Time":"2026-10-19T16:19:11.755187232Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown"}
+2026-10-19T16:19:11.8033657Z {"Time":"2026-10-19T16:19:11.75519156Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/unknown\n","OutputType":"frame"}
+2026-10-19T16:19:11.8036254Z {"Time":"2026-10-19T16:19:11.755159163Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/none (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8038607Z {"Time":"2026-10-19T16:19:11.755206882Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Elapsed":0}
+2026-10-19T16:19:11.8040324Z {"Time":"2026-10-19T16:19:11.755214587Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before"}
+2026-10-19T16:19:11.8042607Z {"Time":"2026-10-19T16:19:11.755220067Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/before\n","OutputType":"frame"}
+2026-10-19T16:19:11.8046153Z {"Time":"2026-10-19T16:19:11.755226619Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/before (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8049119Z {"Time":"2026-10-19T16:19:11.755232721Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Elapsed":0}
+2026-10-19T16:19:11.8052604Z {"Time":"2026-10-19T16:19:11.755237078Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup"}
+2026-10-19T16:19:11.8055226Z {"Time":"2026-10-19T16:19:11.755240996Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/lookup\n","OutputType":"frame"}
+2026-10-19T16:19:11.8057783Z {"Time":"2026-10-19T16:19:11.755246707Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/lookup (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8059965Z {"Time":"2026-10-19T16:19:11.755251315Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Elapsed":0}
+2026-10-19T16:19:11.8061974Z {"Time":"2026-10-19T16:19:11.755255623Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock"}
+2026-10-19T16:19:11.8064763Z {"Time":"2026-10-19T16:19:11.755261013Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/clock\n","OutputType":"frame"}
+2026-10-19T16:19:11.8069335Z {"Time":"2026-10-19T16:19:11.755266954Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/clock (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8072786Z {"Time":"2026-10-19T16:19:11.755271663Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Elapsed":0}
+2026-10-19T16:19:11.8076405Z {"Time":"2026-10-19T16:19:11.755276603Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Output":"--- PASS: TestClockReadAfterLookupAndCancellation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8080352Z {"Time":"2026-10-19T16:19:11.755281151Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Elapsed":0}
+2026-10-19T16:19:11.8082735Z {"Time":"2026-10-19T16:19:11.755285038Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"PASS\n","OutputType":"frame"}
+2026-10-19T16:19:11.8084334Z {"Time":"2026-10-19T16:19:11.755293755Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"coverage: 97.3% of statements\n"}
+2026-10-19T16:19:11.8086794Z {"Time":"2026-10-19T16:19:11.755913296Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession\t0.005s\tcoverage: 97.3% of statements\n"}
+2026-10-19T16:19:11.8089843Z {"Time":"2026-10-19T16:19:11.755937271Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Elapsed":0.005}
+2026-10-19T16:19:11.8093384Z {"Time":"2026-10-19T16:19:11.755310583Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system\t0.005s\tcoverage: 100.0% of statements\n"}
+2026-10-19T16:19:11.8096260Z {"Time":"2026-10-19T16:19:11.756326714Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Elapsed":0.006}
+2026-10-19T16:19:11.8099144Z {"Time":"2026-10-19T16:19:11.75540377Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Output":"--- PASS: TestDiagnosticMalformedAndCanary/extra (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8101794Z {"Time":"2026-10-19T16:19:11.756454172Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Elapsed":0}
+2026-10-19T16:19:11.8103335Z {"Time":"2026-10-19T16:19:11.756465473Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate"}
+2026-10-19T16:19:11.8105253Z {"Time":"2026-10-19T16:19:11.756471595Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Output":"=== RUN   TestDiagnosticMalformedAndCanary/duplicate\n","OutputType":"frame"}
+2026-10-19T16:19:11.8107577Z {"Time":"2026-10-19T16:19:11.756479039Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Output":"--- PASS: TestDiagnosticMalformedAndCanary/duplicate (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8110306Z {"Time":"2026-10-19T16:19:11.756484409Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Elapsed":0}
+2026-10-19T16:19:11.8113380Z {"Time":"2026-10-19T16:19:11.756489859Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool"}
+2026-10-19T16:19:11.8116188Z {"Time":"2026-10-19T16:19:11.756494528Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Output":"=== RUN   TestDiagnosticMalformedAndCanary/null_bool\n","OutputType":"frame"}
+2026-10-19T16:19:11.8119009Z {"Time":"2026-10-19T16:19:11.756501411Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Output":"--- PASS: TestDiagnosticMalformedAndCanary/null_bool (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8121527Z {"Time":"2026-10-19T16:19:11.756506941Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Elapsed":0}
+2026-10-19T16:19:11.8123243Z {"Time":"2026-10-19T16:19:11.756511449Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now"}
+2026-10-19T16:19:11.8125038Z {"Time":"2026-10-19T16:19:11.756515427Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Output":"=== RUN   TestDiagnosticMalformedAndCanary/missing_now\n","OutputType":"frame"}
+2026-10-19T16:19:11.8127561Z {"Time":"2026-10-19T16:19:11.755653865Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8129824Z {"Time":"2026-10-19T16:19:11.75657581Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Elapsed":0}
+2026-10-19T16:19:11.8131918Z {"Time":"2026-10-19T16:19:11.756584796Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked"}
+2026-10-19T16:19:11.8134169Z {"Time":"2026-10-19T16:19:11.756588874Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/revoked\n","OutputType":"frame"}
+2026-10-19T16:19:11.8136889Z {"Time":"2026-10-19T16:19:11.756600556Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8139181Z {"Time":"2026-10-19T16:19:11.756606136Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Elapsed":0}
+2026-10-19T16:19:11.8140896Z {"Time":"2026-10-19T16:19:11.756611106Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error"}
+2026-10-19T16:19:11.8143505Z {"Time":"2026-10-19T16:19:11.756615253Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/error\n","OutputType":"frame"}
+2026-10-19T16:19:11.8146442Z {"Time":"2026-10-19T16:19:11.756621275Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8148766Z {"Time":"2026-10-19T16:19:11.756626184Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Elapsed":0}
+2026-10-19T16:19:11.8150499Z {"Time":"2026-10-19T16:19:11.756630071Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal"}
+2026-10-19T16:19:11.8154333Z {"Time":"2026-10-19T16:19:11.75663446Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/normal\n","OutputType":"frame"}
+2026-10-19T16:19:11.8158436Z {"Time":"2026-10-19T16:19:11.756640491Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8161921Z {"Time":"2026-10-19T16:19:11.756646813Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Elapsed":0}
+2026-10-19T16:19:11.8164850Z {"Time":"2026-10-19T16:19:11.756669886Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal"}
+2026-10-19T16:19:11.8168325Z {"Time":"2026-10-19T16:19:11.756674043Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/idle_equal\n","OutputType":"frame"}
+2026-10-19T16:19:11.8173246Z {"Time":"2026-10-19T16:19:11.756681107Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8177181Z {"Time":"2026-10-19T16:19:11.756687248Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Elapsed":0}
+2026-10-19T16:19:11.8180257Z {"Time":"2026-10-19T16:19:11.756693159Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown"}
+2026-10-19T16:19:11.8184294Z {"Time":"2026-10-19T16:19:11.756697287Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/unknown\n","OutputType":"frame"}
+2026-10-19T16:19:11.8188754Z {"Time":"2026-10-19T16:19:11.756702978Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8192699Z {"Time":"2026-10-19T16:19:11.756708438Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Elapsed":0}
+2026-10-19T16:19:11.8196173Z {"Time":"2026-10-19T16:19:11.756713047Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked"}
+2026-10-19T16:19:11.8199890Z {"Time":"2026-10-19T16:19:11.756717214Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/revoked\n","OutputType":"frame"}
+2026-10-19T16:19:11.8204031Z {"Time":"2026-10-19T16:19:11.756723446Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8208143Z {"Time":"2026-10-19T16:19:11.756728355Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Elapsed":0}
+2026-10-19T16:19:11.8211545Z {"Time":"2026-10-19T16:19:11.756733615Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error"}
+2026-10-19T16:19:11.8215269Z {"Time":"2026-10-19T16:19:11.756738123Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/error\n","OutputType":"frame"}
+2026-10-19T16:19:11.8217615Z {"Time":"2026-10-19T16:19:11.756744465Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8219529Z {"Time":"2026-10-19T16:19:11.756748834Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Elapsed":0}
+2026-10-19T16:19:11.8221875Z {"Time":"2026-10-19T16:19:11.756753983Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Output":"--- PASS: TestSameConsumerContractWithBothAdapters (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8224067Z {"Time":"2026-10-19T16:19:11.756758902Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Elapsed":0}
+2026-10-19T16:19:11.8226819Z {"Time":"2026-10-19T16:19:11.756763511Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency"}
+2026-10-19T16:19:11.8230149Z {"Time":"2026-10-19T16:19:11.756767609Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Output":"=== RUN   TestFileReloadFixedOwnershipAndConcurrency\n","OutputType":"frame"}
+2026-10-19T16:19:11.8234414Z {"Time":"2026-10-19T16:19:11.756962153Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Output":"--- PASS: TestDiagnosticMalformedAndCanary/missing_now (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8237761Z {"Time":"2026-10-19T16:19:11.756973043Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Elapsed":0}
+2026-10-19T16:19:11.8240238Z {"Time":"2026-10-19T16:19:11.756978814Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing"}
+2026-10-19T16:19:11.8243119Z {"Time":"2026-10-19T16:19:11.756982961Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Output":"=== RUN   TestDiagnosticMalformedAndCanary/trailing\n","OutputType":"frame"}
+2026-10-19T16:19:11.8245077Z {"Time":"2026-10-19T16:19:11.757106479Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Output":"--- PASS: TestDiagnosticMalformedAndCanary/trailing (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8246848Z {"Time":"2026-10-19T16:19:11.757152826Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Elapsed":0}
+2026-10-19T16:19:11.8248154Z {"Time":"2026-10-19T16:19:11.75716027Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key"}
+2026-10-19T16:19:11.8250153Z {"Time":"2026-10-19T16:19:11.757165299Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Output":"=== RUN   TestDiagnosticMalformedAndCanary/case_mismatched_key\n","OutputType":"frame"}
+2026-10-19T16:19:11.8251975Z {"Time":"2026-10-19T16:19:11.757260167Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"}
+2026-10-19T16:19:11.8253550Z {"Time":"2026-10-19T16:19:11.757400453Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Output":"--- PASS: TestFileReloadFixedOwnershipAndConcurrency (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8255622Z {"Time":"2026-10-19T16:19:11.757492325Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Elapsed":0}
+2026-10-19T16:19:11.8257066Z {"Time":"2026-10-19T16:19:11.757529244Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs"}
+2026-10-19T16:19:11.8258707Z {"Time":"2026-10-19T16:19:11.757538531Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Output":"=== RUN   TestAdapterFailureAndBoundaryInputs\n","OutputType":"frame"}
+2026-10-19T16:19:11.8262283Z {"Time":"2026-10-19T16:19:11.757616591Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Output":"--- PASS: TestDiagnosticMalformedAndCanary/case_mismatched_key (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8265562Z {"Time":"2026-10-19T16:19:11.757699596Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Elapsed":0}
+2026-10-19T16:19:11.8268057Z {"Time":"2026-10-19T16:19:11.757752315Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp"}
+2026-10-19T16:19:11.8271043Z {"Time":"2026-10-19T16:19:11.757760179Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/bad_timestamp\n","OutputType":"frame"}
+2026-10-19T16:19:11.8275190Z {"Time":"2026-10-19T16:19:11.758157249Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Output":"--- PASS: TestAdapterFailureAndBoundaryInputs (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8278649Z {"Time":"2026-10-19T16:19:11.758278806Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Elapsed":0}
+2026-10-19T16:19:11.8280843Z {"Time":"2026-10-19T16:19:11.758294325Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection"}
+2026-10-19T16:19:11.8283874Z {"Time":"2026-10-19T16:19:11.758300176Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Output":"=== RUN   TestReaderFailureAndUnknownProjection\n","OutputType":"frame"}
+2026-10-19T16:19:11.8286658Z {"Time":"2026-10-19T16:19:11.758422238Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/bad_timestamp (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8290097Z {"Time":"2026-10-19T16:19:11.758538746Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Elapsed":0}
+2026-10-19T16:19:11.8291903Z {"Time":"2026-10-19T16:19:11.758571989Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset"}
+2026-10-19T16:19:11.8293946Z {"Time":"2026-10-19T16:19:11.758593008Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Output":"=== RUN   TestDiagnosticMalformedAndCanary/large_offset\n","OutputType":"frame"}
+2026-10-19T16:19:11.8296302Z {"Time":"2026-10-19T16:19:11.758619507Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Output":"--- PASS: TestReaderFailureAndUnknownProjection (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8298778Z {"Time":"2026-10-19T16:19:11.759013655Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Elapsed":0}
+2026-10-19T16:19:11.8301115Z {"Time":"2026-10-19T16:19:11.759053299Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"PASS\n","OutputType":"frame"}
+2026-10-19T16:19:11.8303067Z {"Time":"2026-10-19T16:19:11.759086271Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"coverage: 85.8% of statements\n"}
+2026-10-19T16:19:11.8304726Z {"Time":"2026-10-19T16:19:11.759723115Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid"}
+2026-10-19T16:19:11.8306339Z {"Time":"2026-10-19T16:19:11.759756257Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Output":"=== RUN   TestEvaluateValid\n","OutputType":"frame"}
+2026-10-19T16:19:11.8308325Z {"Time":"2026-10-19T16:19:11.759765104Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Output":"--- PASS: TestEvaluateValid (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8310099Z {"Time":"2026-10-19T16:19:11.759770434Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Elapsed":0}
+2026-10-19T16:19:11.8312420Z {"Time":"2026-10-19T16:19:11.759797748Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup\t0.009s\tcoverage: 85.8% of statements\n"}
+2026-10-19T16:19:11.8314889Z {"Time":"2026-10-19T16:19:11.759806965Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Elapsed":0.009}
+2026-10-19T16:19:11.8316902Z {"Time":"2026-10-19T16:19:11.759808866Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Output":"--- PASS: TestDiagnosticMalformedAndCanary/large_offset (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8319324Z {"Time":"2026-10-19T16:19:11.759815328Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Elapsed":0}
+2026-10-19T16:19:11.8322351Z {"Time":"2026-10-19T16:19:11.759820778Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize"}
+2026-10-19T16:19:11.8325501Z {"Time":"2026-10-19T16:19:11.759825086Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Output":"=== RUN   TestDiagnosticMalformedAndCanary/oversize\n","OutputType":"frame"}
+2026-10-19T16:19:11.8329266Z {"Time":"2026-10-19T16:19:11.759840946Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Output":"--- PASS: TestDiagnosticMalformedAndCanary/oversize (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8332838Z {"Time":"2026-10-19T16:19:11.759846256Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Elapsed":0}
+2026-10-19T16:19:11.8335364Z {"Time":"2026-10-19T16:19:11.759850293Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken"}
+2026-10-19T16:19:11.8338368Z {"Time":"2026-10-19T16:19:11.759853669Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Output":"=== RUN   TestDiagnosticMalformedAndCanary/broken\n","OutputType":"frame"}
+2026-10-19T16:19:11.8341712Z {"Time":"2026-10-19T16:19:11.75980052Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown"}
+2026-10-19T16:19:11.8345638Z {"Time":"2026-10-19T16:19:11.759873366Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Output":"=== RUN   TestEvaluateUnknown\n","OutputType":"frame"}
+2026-10-19T16:19:11.8348815Z {"Time":"2026-10-19T16:19:11.759880149Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Output":"--- PASS: TestEvaluateUnknown (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8351727Z {"Time":"2026-10-19T16:19:11.759884517Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Elapsed":0}
+2026-10-19T16:19:11.8354094Z {"Time":"2026-10-19T16:19:11.759888294Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary"}
+2026-10-19T16:19:11.8356800Z {"Time":"2026-10-19T16:19:11.75989146Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Output":"=== RUN   TestEvaluateIdleBoundary\n","OutputType":"frame"}
+2026-10-19T16:19:11.8359679Z {"Time":"2026-10-19T16:19:11.759895839Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before"}
+2026-10-19T16:19:11.8363221Z {"Time":"2026-10-19T16:19:11.759899796Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Output":"=== RUN   TestEvaluateIdleBoundary/before\n","OutputType":"frame"}
+2026-10-19T16:19:11.8366743Z {"Time":"2026-10-19T16:19:11.759907581Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Output":"--- PASS: TestEvaluateIdleBoundary/before (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8370397Z {"Time":"2026-10-19T16:19:11.759917789Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Elapsed":0}
+2026-10-19T16:19:11.8382132Z {"Time":"2026-10-19T16:19:11.759922368Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal"}
+2026-10-19T16:19:11.8385207Z {"Time":"2026-10-19T16:19:11.759925985Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Output":"=== RUN   TestEvaluateIdleBoundary/equal\n","OutputType":"frame"}
+2026-10-19T16:19:11.8388831Z {"Time":"2026-10-19T16:19:11.759931635Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Output":"--- PASS: TestEvaluateIdleBoundary/equal (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8392153Z {"Time":"2026-10-19T16:19:11.759936435Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Elapsed":0}
+2026-10-19T16:19:11.8394534Z {"Time":"2026-10-19T16:19:11.759940482Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after"}
+2026-10-19T16:19:11.8397501Z {"Time":"2026-10-19T16:19:11.759954288Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Output":"=== RUN   TestEvaluateIdleBoundary/after\n","OutputType":"frame"}
+2026-10-19T16:19:11.8400923Z {"Time":"2026-10-19T16:19:11.759960059Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Output":"--- PASS: TestEvaluateIdleBoundary/after (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8407741Z {"Time":"2026-10-19T16:19:11.759964567Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Elapsed":0}
+2026-10-19T16:19:11.8410827Z {"Time":"2026-10-19T16:19:11.759969116Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Output":"--- PASS: TestEvaluateIdleBoundary (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8414122Z {"Time":"2026-10-19T16:19:11.759980016Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Elapsed":0}
+2026-10-19T16:19:11.8416518Z {"Time":"2026-10-19T16:19:11.759983733Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary"}
+2026-10-19T16:19:11.8419273Z {"Time":"2026-10-19T16:19:11.759988121Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Output":"=== RUN   TestEvaluateAbsoluteBoundary\n","OutputType":"frame"}
+2026-10-19T16:19:11.8422764Z {"Time":"2026-10-19T16:19:11.759993181Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Output":"--- PASS: TestEvaluateAbsoluteBoundary (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8425750Z {"Time":"2026-10-19T16:19:11.760004161Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Elapsed":0}
+2026-10-19T16:19:11.8428422Z {"Time":"2026-10-19T16:19:11.760007898Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked"}
+2026-10-19T16:19:11.8431084Z {"Time":"2026-10-19T16:19:11.760011054Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Output":"=== RUN   TestEvaluateRevoked\n","OutputType":"frame"}
+2026-10-19T16:19:11.8436079Z {"Time":"2026-10-19T16:19:11.760015683Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Output":"--- PASS: TestEvaluateRevoked (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8439143Z {"Time":"2026-10-19T16:19:11.760020401Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Elapsed":0}
+2026-10-19T16:19:11.8442088Z {"Time":"2026-10-19T16:19:11.760024279Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology"}
+2026-10-19T16:19:11.8445053Z {"Time":"2026-10-19T16:19:11.760028036Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Output":"=== RUN   TestEvaluateInvalidChronology\n","OutputType":"frame"}
+2026-10-19T16:19:11.8448293Z {"Time":"2026-10-19T16:19:11.760032013Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute"}
+2026-10-19T16:19:11.8451983Z {"Time":"2026-10-19T16:19:11.760042503Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Output":"=== RUN   TestEvaluateInvalidChronology/idle_exceeds_absolute\n","OutputType":"frame"}
+2026-10-19T16:19:11.8456243Z {"Time":"2026-10-19T16:19:11.760048564Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Output":"--- PASS: TestEvaluateInvalidChronology/idle_exceeds_absolute (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8460152Z {"Time":"2026-10-19T16:19:11.760061489Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Elapsed":0}
+2026-10-19T16:19:11.8463291Z {"Time":"2026-10-19T16:19:11.760065786Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year"}
+2026-10-19T16:19:11.8467166Z {"Time":"2026-10-19T16:19:11.760069203Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Output":"=== RUN   TestEvaluateInvalidChronology/unsupported_year\n","OutputType":"frame"}
+2026-10-19T16:19:11.8471411Z {"Time":"2026-10-19T16:19:11.760074914Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Output":"--- PASS: TestEvaluateInvalidChronology/unsupported_year (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8477077Z {"Time":"2026-10-19T16:19:11.760079262Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Elapsed":0}
+2026-10-19T16:19:11.8479670Z {"Time":"2026-10-19T16:19:11.760082979Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation"}
+2026-10-19T16:19:11.8484371Z {"Time":"2026-10-19T16:19:11.760086685Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Output":"=== RUN   TestEvaluateInvalidChronology/zero_creation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8488651Z {"Time":"2026-10-19T16:19:11.760098608Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Output":"--- PASS: TestEvaluateInvalidChronology/zero_creation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8492265Z {"Time":"2026-10-19T16:19:11.760102916Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Elapsed":0}
+2026-10-19T16:19:11.8495228Z {"Time":"2026-10-19T16:19:11.760106693Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle"}
+2026-10-19T16:19:11.8498428Z {"Time":"2026-10-19T16:19:11.76011029Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Output":"=== RUN   TestEvaluateInvalidChronology/zero_idle\n","OutputType":"frame"}
+2026-10-19T16:19:11.8503109Z {"Time":"2026-10-19T16:19:11.76011586Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Output":"--- PASS: TestEvaluateInvalidChronology/zero_idle (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8506301Z {"Time":"2026-10-19T16:19:11.760144965Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Elapsed":0}
+2026-10-19T16:19:11.8508953Z {"Time":"2026-10-19T16:19:11.760149573Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation"}
+2026-10-19T16:19:11.8512928Z {"Time":"2026-10-19T16:19:11.76015325Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Output":"=== RUN   TestEvaluateInvalidChronology/absolute_equals_creation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8517271Z {"Time":"2026-10-19T16:19:11.760169771Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Output":"--- PASS: TestEvaluateInvalidChronology/absolute_equals_creation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8521409Z {"Time":"2026-10-19T16:19:11.760174089Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Elapsed":0}
+2026-10-19T16:19:11.8524328Z {"Time":"2026-10-19T16:19:11.760177786Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation"}
+2026-10-19T16:19:11.8527881Z {"Time":"2026-10-19T16:19:11.760182836Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Output":"=== RUN   TestEvaluateInvalidChronology/idle_equals_creation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8548327Z {"Time":"2026-10-19T16:19:11.760187825Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Output":"--- PASS: TestEvaluateInvalidChronology/idle_equals_creation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8555584Z {"Time":"2026-10-19T16:19:11.760191993Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Elapsed":0}
+2026-10-19T16:19:11.8558838Z {"Time":"2026-10-19T16:19:11.7601958Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap"}
+2026-10-19T16:19:11.8562525Z {"Time":"2026-10-19T16:19:11.760199366Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Output":"=== RUN   TestEvaluateInvalidChronology/lifetime_above_cap\n","OutputType":"frame"}
+2026-10-19T16:19:11.8566828Z {"Time":"2026-10-19T16:19:11.760204245Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Output":"--- PASS: TestEvaluateInvalidChronology/lifetime_above_cap (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8570770Z {"Time":"2026-10-19T16:19:11.760215807Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Elapsed":0}
+2026-10-19T16:19:11.8590258Z {"Time":"2026-10-19T16:19:11.760219725Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future"}
+2026-10-19T16:19:11.8593676Z {"Time":"2026-10-19T16:19:11.760223021Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Output":"=== RUN   TestEvaluateInvalidChronology/far_future\n","OutputType":"frame"}
+2026-10-19T16:19:11.8597605Z {"Time":"2026-10-19T16:19:11.760228Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Output":"--- PASS: TestEvaluateInvalidChronology/far_future (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8600946Z {"Time":"2026-10-19T16:19:11.760232308Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Elapsed":0}
+2026-10-19T16:19:11.8606647Z {"Time":"2026-10-19T16:19:11.760236195Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute"}
+2026-10-19T16:19:11.8610133Z {"Time":"2026-10-19T16:19:11.760239531Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Output":"=== RUN   TestEvaluateInvalidChronology/zero_absolute\n","OutputType":"frame"}
+2026-10-19T16:19:11.8615998Z {"Time":"2026-10-19T16:19:11.760244371Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Output":"--- PASS: TestEvaluateInvalidChronology/zero_absolute (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8621648Z {"Time":"2026-10-19T16:19:11.760248739Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Elapsed":0}
+2026-10-19T16:19:11.8625043Z {"Time":"2026-10-19T16:19:11.760254099Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Output":"--- PASS: TestEvaluateInvalidChronology (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8628239Z {"Time":"2026-10-19T16:19:11.760258046Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Elapsed":0}
+2026-10-19T16:19:11.8630771Z {"Time":"2026-10-19T16:19:11.760261593Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation"}
+2026-10-19T16:19:11.8636025Z {"Time":"2026-10-19T16:19:11.760264959Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Output":"=== RUN   TestEvaluateClockAndFutureCreation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8640745Z {"Time":"2026-10-19T16:19:11.760274467Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Output":"--- PASS: TestEvaluateClockAndFutureCreation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8645163Z {"Time":"2026-10-19T16:19:11.760278605Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Elapsed":0}
+2026-10-19T16:19:11.8648455Z {"Time":"2026-10-19T16:19:11.760282382Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable"}
+2026-10-19T16:19:11.8652147Z {"Time":"2026-10-19T16:19:11.760285758Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Output":"=== RUN   TestEvaluateDeterministicImmutable\n","OutputType":"frame"}
+2026-10-19T16:19:11.8656751Z {"Time":"2026-10-19T16:19:11.760293222Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Output":"--- PASS: TestEvaluateDeterministicImmutable (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8660852Z {"Time":"2026-10-19T16:19:11.76029727Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Elapsed":0}
+2026-10-19T16:19:11.8664325Z {"Time":"2026-10-19T16:19:11.760300916Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets"}
+2026-10-19T16:19:11.8668166Z {"Time":"2026-10-19T16:19:11.760304483Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Output":"=== RUN   TestEvaluateRenewedIdleAndOffsets\n","OutputType":"frame"}
+2026-10-19T16:19:11.8685116Z {"Time":"2026-10-19T16:19:11.760309372Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Output":"--- PASS: TestEvaluateRenewedIdleAndOffsets (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8688277Z {"Time":"2026-10-19T16:19:11.76031338Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Elapsed":0}
+2026-10-19T16:19:11.8690823Z {"Time":"2026-10-19T16:19:11.760317167Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason"}
+2026-10-19T16:19:11.8694305Z {"Time":"2026-10-19T16:19:11.760320543Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Output":"=== RUN   TestDecisionRejectsMixedStateAndReason\n","OutputType":"frame"}
+2026-10-19T16:19:11.8698116Z {"Time":"2026-10-19T16:19:11.760325572Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Output":"--- PASS: TestDecisionRejectsMixedStateAndReason (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8706990Z {"Time":"2026-10-19T16:19:11.76032971Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Elapsed":0}
+2026-10-19T16:19:11.8713381Z {"Time":"2026-10-19T16:19:11.760333467Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence"}
+2026-10-19T16:19:11.8716477Z {"Time":"2026-10-19T16:19:11.760337074Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Output":"=== RUN   TestDecisionTablePrecedence\n","OutputType":"frame"}
+2026-10-19T16:19:11.8719948Z {"Time":"2026-10-19T16:19:11.760342123Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Output":"--- PASS: TestDecisionTablePrecedence (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8749267Z {"Time":"2026-10-19T16:19:11.760346271Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Elapsed":0}
+2026-10-19T16:19:11.8757367Z {"Time":"2026-10-19T16:19:11.760350118Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants"}
+2026-10-19T16:19:11.8766640Z {"Time":"2026-10-19T16:19:11.760353375Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Output":"=== RUN   FuzzValidityInvariants\n","OutputType":"frame"}
+2026-10-19T16:19:11.8774477Z {"Time":"2026-10-19T16:19:11.760358634Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0"}
+2026-10-19T16:19:11.8782518Z {"Time":"2026-10-19T16:19:11.760362081Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Output":"=== RUN   FuzzValidityInvariants/seed#0\n","OutputType":"frame"}
+2026-10-19T16:19:11.8794327Z {"Time":"2026-10-19T16:19:11.760368232Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Output":"--- PASS: FuzzValidityInvariants/seed#0 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8813029Z {"Time":"2026-10-19T16:19:11.76037238Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Elapsed":0}
+2026-10-19T16:19:11.8815546Z {"Time":"2026-10-19T16:19:11.760376077Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1"}
+2026-10-19T16:19:11.8818357Z {"Time":"2026-10-19T16:19:11.760379413Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Output":"=== RUN   FuzzValidityInvariants/seed#1\n","OutputType":"frame"}
+2026-10-19T16:19:11.8822324Z {"Time":"2026-10-19T16:19:11.760384112Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Output":"--- PASS: FuzzValidityInvariants/seed#1 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8826797Z {"Time":"2026-10-19T16:19:11.76038844Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Elapsed":0}
+2026-10-19T16:19:11.8829541Z {"Time":"2026-10-19T16:19:11.760392107Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2"}
+2026-10-19T16:19:11.8832844Z {"Time":"2026-10-19T16:19:11.760395453Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Output":"=== RUN   FuzzValidityInvariants/seed#2\n","OutputType":"frame"}
+2026-10-19T16:19:11.8836411Z {"Time":"2026-10-19T16:19:11.760400332Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Output":"--- PASS: FuzzValidityInvariants/seed#2 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8839810Z {"Time":"2026-10-19T16:19:11.760410091Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Elapsed":0}
+2026-10-19T16:19:11.8842629Z {"Time":"2026-10-19T16:19:11.76041491Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3"}
+2026-10-19T16:19:11.8845424Z {"Time":"2026-10-19T16:19:11.760418326Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Output":"=== RUN   FuzzValidityInvariants/seed#3\n","OutputType":"frame"}
+2026-10-19T16:19:11.8848843Z {"Time":"2026-10-19T16:19:11.760423145Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Output":"--- PASS: FuzzValidityInvariants/seed#3 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8852366Z {"Time":"2026-10-19T16:19:11.760428395Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Elapsed":0}
+2026-10-19T16:19:11.8855115Z {"Time":"2026-10-19T16:19:11.760432843Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4"}
+2026-10-19T16:19:11.8857920Z {"Time":"2026-10-19T16:19:11.76043636Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Output":"=== RUN   FuzzValidityInvariants/seed#4\n","OutputType":"frame"}
+2026-10-19T16:19:11.8861503Z {"Time":"2026-10-19T16:19:11.760441109Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Output":"--- PASS: FuzzValidityInvariants/seed#4 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8864452Z {"Time":"2026-10-19T16:19:11.760445206Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Elapsed":0}
+2026-10-19T16:19:11.8867466Z {"Time":"2026-10-19T16:19:11.760449484Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Output":"--- PASS: FuzzValidityInvariants (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8870240Z {"Time":"2026-10-19T16:19:11.760453672Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Elapsed":0}
+2026-10-19T16:19:11.8872934Z {"Time":"2026-10-19T16:19:11.760457459Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate"}
+2026-10-19T16:19:11.8876421Z {"Time":"2026-10-19T16:19:11.760460966Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Output":"=== RUN   ExampleEvaluate\n","OutputType":"frame"}
+2026-10-19T16:19:11.8881426Z {"Time":"2026-10-19T16:19:11.760525967Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Output":"--- PASS: TestDiagnosticMalformedAndCanary/broken (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8884906Z {"Time":"2026-10-19T16:19:11.76053251Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Elapsed":0}
+2026-10-19T16:19:11.8887300Z {"Time":"2026-10-19T16:19:11.760536577Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root"}
+2026-10-19T16:19:11.8890251Z {"Time":"2026-10-19T16:19:11.760540324Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Output":"=== RUN   TestDiagnosticMalformedAndCanary/null_root\n","OutputType":"frame"}
+2026-10-19T16:19:11.8893979Z {"Time":"2026-10-19T16:19:11.760547908Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Output":"--- PASS: ExampleEvaluate (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8896643Z {"Time":"2026-10-19T16:19:11.760552928Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Elapsed":0}
+2026-10-19T16:19:11.8899342Z {"Time":"2026-10-19T16:19:11.760557767Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"PASS\n","OutputType":"frame"}
+2026-10-19T16:19:11.8903086Z {"Time":"2026-10-19T16:19:11.760839745Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Output":"--- PASS: TestDiagnosticMalformedAndCanary/null_root (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8906276Z {"Time":"2026-10-19T16:19:11.760850124Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Elapsed":0}
+2026-10-19T16:19:11.8909123Z {"Time":"2026-10-19T16:19:11.760859221Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp"}
+2026-10-19T16:19:11.8912578Z {"Time":"2026-10-19T16:19:11.760863699Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/unknown_null_timestamp\n","OutputType":"frame"}
+2026-10-19T16:19:11.8915743Z {"Time":"2026-10-19T16:19:11.761069257Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"coverage: 100.0% of statements\n"}
+2026-10-19T16:19:11.8918988Z {"Time":"2026-10-19T16:19:11.76123086Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/unknown_null_timestamp (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8922591Z {"Time":"2026-10-19T16:19:11.761246649Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Elapsed":0}
+2026-10-19T16:19:11.8925108Z {"Time":"2026-10-19T16:19:11.761255936Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8"}
+2026-10-19T16:19:11.8928150Z {"Time":"2026-10-19T16:19:11.761260635Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Output":"=== RUN   TestDiagnosticMalformedAndCanary/invalid_UTF8\n","OutputType":"frame"}
+2026-10-19T16:19:11.8932396Z {"Time":"2026-10-19T16:19:11.761538932Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Output":"--- PASS: TestDiagnosticMalformedAndCanary/invalid_UTF8 (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8936023Z {"Time":"2026-10-19T16:19:11.761553981Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Elapsed":0}
+2026-10-19T16:19:11.8938548Z {"Time":"2026-10-19T16:19:11.761562236Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version"}
+2026-10-19T16:19:11.8941838Z {"Time":"2026-10-19T16:19:11.761566674Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Output":"=== RUN   TestDiagnosticMalformedAndCanary/bad_version\n","OutputType":"frame"}
+2026-10-19T16:19:11.8945607Z {"Time":"2026-10-19T16:19:11.761588666Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy\t0.004s\tcoverage: 100.0% of statements\n"}
+2026-10-19T16:19:11.8948387Z {"Time":"2026-10-19T16:19:11.761598634Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Elapsed":0.004}
+2026-10-19T16:19:11.8951539Z {"Time":"2026-10-19T16:19:11.761851281Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Output":"--- PASS: TestDiagnosticMalformedAndCanary/bad_version (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8955075Z {"Time":"2026-10-19T16:19:11.761865187Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Elapsed":0}
+2026-10-19T16:19:11.8957845Z {"Time":"2026-10-19T16:19:11.761870216Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp"}
+2026-10-19T16:19:11.8961074Z {"Time":"2026-10-19T16:19:11.761874304Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/comma_timestamp\n","OutputType":"frame"}
+2026-10-19T16:19:11.8965300Z {"Time":"2026-10-19T16:19:11.762122388Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/comma_timestamp (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8968665Z {"Time":"2026-10-19T16:19:11.762136704Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Elapsed":0}
+2026-10-19T16:19:11.8972028Z {"Time":"2026-10-19T16:19:11.762143217Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Output":"--- PASS: TestDiagnosticMalformedAndCanary (0.01s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8975108Z {"Time":"2026-10-19T16:19:11.762147745Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Elapsed":0.01}
+2026-10-19T16:19:11.8977467Z {"Time":"2026-10-19T16:19:11.762153015Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion"}
+2026-10-19T16:19:11.8980218Z {"Time":"2026-10-19T16:19:11.762186558Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Output":"=== RUN   TestDiagnosticConfigAndVersion\n","OutputType":"frame"}
+2026-10-19T16:19:11.8983828Z {"Time":"2026-10-19T16:19:11.762238274Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Output":"--- PASS: TestDiagnosticConfigAndVersion (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.8986714Z {"Time":"2026-10-19T16:19:11.762261398Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Elapsed":0}
+2026-10-19T16:19:11.8989165Z {"Time":"2026-10-19T16:19:11.762279231Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation"}
+2026-10-19T16:19:11.8992771Z {"Time":"2026-10-19T16:19:11.762284461Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Output":"=== RUN   TestDiagnosticDeniedIsSuccessfulEvaluation\n","OutputType":"frame"}
+2026-10-19T16:19:11.8997543Z {"Time":"2026-10-19T16:19:11.762511015Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Output":"--- PASS: TestDiagnosticDeniedIsSuccessfulEvaluation (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.9001027Z {"Time":"2026-10-19T16:19:11.762522757Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Elapsed":0}
+2026-10-19T16:19:11.9003941Z {"Time":"2026-10-19T16:19:11.762527075Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock"}
+2026-10-19T16:19:11.9007643Z {"Time":"2026-10-19T16:19:11.762530641Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Output":"=== RUN   TestDiagnosticCompositionAndUnavailableClock\n","OutputType":"frame"}
+2026-10-19T16:19:11.9011949Z {"Time":"2026-10-19T16:19:11.762904381Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Output":"--- PASS: TestDiagnosticCompositionAndUnavailableClock (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.9015451Z {"Time":"2026-10-19T16:19:11.762941891Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Elapsed":0}
+2026-10-19T16:19:11.9018177Z {"Time":"2026-10-19T16:19:11.762949175Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking"}
+2026-10-19T16:19:11.9021702Z {"Time":"2026-10-19T16:19:11.76295182Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Output":"=== RUN   TestOutputFailureReturnsErrorWithoutLeaking\n","OutputType":"frame"}
+2026-10-19T16:19:11.9025663Z {"Time":"2026-10-19T16:19:11.763357499Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Output":"--- PASS: TestOutputFailureReturnsErrorWithoutLeaking (0.00s)\n","OutputType":"frame"}
+2026-10-19T16:19:11.9029032Z {"Time":"2026-10-19T16:19:11.763371365Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Elapsed":0}
+2026-10-19T16:19:11.9031880Z {"Time":"2026-10-19T16:19:11.763376013Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"PASS\n","OutputType":"frame"}
+2026-10-19T16:19:11.9034101Z {"Time":"2026-10-19T16:19:11.763847996Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"coverage: 94.7% of statements\n"}
+2026-10-19T16:19:11.9036937Z {"Time":"2026-10-19T16:19:11.76431128Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\t0.014s\tcoverage: 94.7% of statements\n"}
+2026-10-19T16:19:11.9039743Z {"Time":"2026-10-19T16:19:11.764326228Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Elapsed":0.015}
+2026-10-19T16:19:11.9040998Z + go test -race -count=1 ./...
+2026-10-19T16:19:24.3482192Z ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.037s
+2026-10-19T16:19:24.3483274Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.011s
+2026-10-19T16:19:24.3484608Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.020s
+2026-10-19T16:19:24.3485697Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.011s
+2026-10-19T16:19:25.5336184Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.011s
+2026-10-19T16:19:25.6416623Z ##[group]Run python3 tools/pr12/workspace.py smoke iam --require
+2026-10-19T16:19:25.6417134Z [36;1mpython3 tools/pr12/workspace.py smoke iam --require[0m
+2026-10-19T16:19:25.6482296Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:19:25.6482575Z ##[endgroup]
+2026-10-19T16:19:25.6975231Z + go version
+2026-10-19T16:19:25.7010009Z + git rev-parse HEAD
+2026-10-19T16:19:25.7028906Z + git status --porcelain
+2026-10-19T16:19:25.7516952Z + go build -ldflags -X main.version=pr12 -X main.commit=b1c3ae8ac10a885c6f3cc417d1f52af850580516 -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/runner/work/hitpipe/hitpipe/.pr12-build/iam/dev/iam-contractcheck ./cmd/iam-contractcheck
+2026-10-19T16:19:30.1017486Z + /tmp/pr12-outside-checkout-ycjxxw40/iam-contractcheck --version
+2026-10-19T16:19:30.1037013Z + git rev-parse --short HEAD
+2026-10-19T16:19:30.1057679Z + /tmp/pr12-outside-checkout-ycjxxw40/iam-contractcheck --fixture /tmp/pr12-outside-checkout-ycjxxw40/positive_fixture.json --format json
+2026-10-19T16:19:30.1122227Z {"component": "iam", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+2026-10-19T16:19:30.1122864Z + git rev-parse HEAD
+2026-10-19T16:19:30.1138011Z + git status --porcelain
+2026-10-19T16:19:30.1197119Z + go build -ldflags -X main.version=pr12 -X main.commit=b1c3ae8ac10a885c6f3cc417d1f52af850580516 -X main.dirty=false -X main.buildMode=release -trimpath -o /home/runner/work/hitpipe/hitpipe/.pr12-build/iam/release/iam-contractcheck ./cmd/iam-contractcheck
+2026-10-19T16:19:36.0317927Z + /tmp/pr12-outside-checkout-ydz21uq4/iam-contractcheck --version
+2026-10-19T16:19:36.0336630Z + git rev-parse --short HEAD
+2026-10-19T16:19:36.0357016Z + /tmp/pr12-outside-checkout-ydz21uq4/iam-contractcheck --fixture /tmp/pr12-outside-checkout-ydz21uq4/positive_fixture.json --format json
+2026-10-19T16:19:36.0410616Z {"component": "iam", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+2026-10-19T16:19:36.1082616Z ##[group]Run go test -count=1 -coverpkg=./... -coverprofile=../../.pr12-build/iam-all.cover ./...
+2026-10-19T16:19:36.1083329Z [36;1mgo test -count=1 -coverpkg=./... -coverprofile=../../.pr12-build/iam-all.cover ./...[0m
+2026-10-19T16:19:36.1145755Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:19:36.1146013Z ##[endgroup]
+2026-10-19T16:19:36.7146992Z ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	0.016s	coverage: 79.7% of statements in ./...
+2026-10-19T16:19:36.7148569Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	0.005s	coverage: 3.8% of statements in ./...
+2026-10-19T16:19:36.7251836Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	0.007s	coverage: 59.9% of statements in ./...
+2026-10-19T16:19:36.7258319Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	0.004s	coverage: 21.9% of statements in ./...
+2026-10-19T16:19:36.7260319Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	0.005s	coverage: 9.7% of statements in ./...
+2026-10-19T16:19:36.7947791Z ##[group]Run python3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci
+2026-10-19T16:19:36.7948512Z [36;1mpython3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci[0m
+2026-10-19T16:19:36.8012208Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:19:36.8012497Z ##[endgroup]
+2026-10-19T16:19:38.9149081Z M01 KILLED
+2026-10-19T16:19:39.9145458Z M02 KILLED
+2026-10-19T16:19:40.9249772Z M03 KILLED
+2026-10-19T16:19:41.9419883Z M04 KILLED
+2026-10-19T16:19:42.9615915Z M05 KILLED
+2026-10-19T16:19:43.8782006Z M06 KILLED
+2026-10-19T16:19:44.9800410Z M07 KILLED
+2026-10-19T16:19:45.4935607Z All selected compiling behavioral mutants killed; restored final gate PASS.
+2026-10-19T16:19:45.5648663Z ##[group]Run actions/upload-artifact@v4
+2026-10-19T16:19:45.5649007Z with:
+2026-10-19T16:19:45.5649285Z   name: pr12-iam-b1c3ae8ac10a885c6f3cc417d1f52af850580516
+2026-10-19T16:19:45.5649763Z   path: .pr12-build/iam.cover
+.pr12-build/iam-all.cover
+.pr12-build/iam/mutations-ci/
+
+2026-10-19T16:19:45.5650193Z   if-no-files-found: error
+2026-10-19T16:19:45.5650429Z   compression-level: 6
+2026-10-19T16:19:45.5650645Z   overwrite: false
+2026-10-19T16:19:45.5650857Z   include-hidden-files: false
+2026-10-19T16:19:45.5651094Z ##[endgroup]
+2026-10-19T16:19:45.7387419Z (node:11637) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-19T16:19:45.7388853Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T16:19:45.7550514Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-19T16:19:45.7554648Z The least common ancestor is /home/runner/work/hitpipe/hitpipe/.pr12-build. This will be the root directory of the artifact
+2026-10-19T16:19:45.7556571Z With the provided path, there will be 26 files uploaded
+2026-10-19T16:19:45.7558205Z Artifact name is valid!
+2026-10-19T16:19:45.7558849Z Root directory input is valid!
+2026-10-19T16:19:46.1474804Z Beginning upload of artifact content to blob storage
+2026-10-19T16:19:46.2041631Z (node:11637) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-19T16:19:46.5737838Z Uploaded bytes 63326
+2026-10-19T16:19:46.6442419Z Finished uploading artifact content to blob storage!
+2026-10-19T16:19:46.6443624Z SHA256 digest of uploaded artifact zip is d9189500ca10d8d386f5a9d789847a88a452daf10d17f1db8018b26f85995611
+2026-10-19T16:19:46.6445145Z Finalizing artifact upload
+2026-10-19T16:19:49.2737699Z Artifact pr12-iam-b1c3ae8ac10a885c6f3cc417d1f52af850580516.zip successfully finalized. Artifact ID 12203645158
+2026-10-19T16:19:49.2739747Z Artifact pr12-iam-b1c3ae8ac10a885c6f3cc417d1f52af850580516 has been successfully uploaded! Final size is 63326 bytes. Artifact ID is 12203645158
+2026-10-19T16:19:49.2746577Z Artifact download URL: https://github.com/hitpipe/hitpipe/actions/runs/39284442119/artifacts/12203645158
+2026-10-19T16:19:49.2881131Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"
+2026-10-19T16:19:49.2882697Z [36;1mecho 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"[0m
+2026-10-19T16:19:49.2946499Z shell: /usr/bin/bash -e {0}
+2026-10-19T16:19:49.2946774Z ##[endgroup]
+2026-10-19T16:19:49.3109147Z Post job cleanup.
+2026-10-19T16:19:49.4350241Z (node:11650) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-19T16:19:49.4352005Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T16:19:49.4536485Z Post job cleanup.
+2026-10-19T16:19:49.5572145Z [command]/usr/bin/git version
+2026-10-19T16:19:49.5628817Z git version 2.55.0
+2026-10-19T16:19:49.5678668Z Temporarily overriding HOME='/home/runner/work/_temp/365651fc-5c7f-4819-985f-455520f24811' before making global git config changes
+2026-10-19T16:19:49.5690326Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T16:19:49.5691961Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+2026-10-19T16:19:49.5751537Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T16:19:49.5812731Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T16:19:49.6127504Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T16:19:49.6165226Z http.https://github.com/.extraheader
+2026-10-19T16:19:49.6184691Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-19T16:19:49.6230106Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T16:19:49.6577422Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T16:19:49.6631138Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T16:19:49.7040180Z Cleaning up orphan processes
+2026-10-19T16:19:49.7337518Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

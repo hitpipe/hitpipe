@@ -1,0 +1,4 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=73aef8d976c9f0676ee568d8dc5a82c8d35a2f00 -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /dev/shm/hitpipe-dk-final-reports-20261019/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck

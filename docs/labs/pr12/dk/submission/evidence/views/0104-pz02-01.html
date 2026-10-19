@@ -1,0 +1,30 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Публичный контракт и существенные правила SessionPolicy</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>Публичный контракт и существенные правила SessionPolicy</h1><div class="meta">Версия исходников: 73aef8d976c9f0676ee568d8dc5a82c8d35a2f00</div><h2>Реальная реализация policy.go</h2><pre>70: func Evaluate(snapshot Snapshot, observation Observation) Decision {
+71: 	if !observation.Usable() {
+72: 		return deny(ReasonClockUncertain)
+73: 	}
+74: 	if !snapshot.Found {
+75: 		return deny(ReasonUnknown)
+76: 	}
+77: 	if snapshot.Revoked {
+78: 		return deny(ReasonRevoked)
+79: 	}
+80: 	created := snapshot.CreatedAt.UTC()
+81: 	absolute := snapshot.ExpiresAt.UTC()
+82: 	idle := snapshot.IdleExpiresAt.UTC()
+83: 	now := observation.At.UTC()
+84: 	if !usableTime(created) || !usableTime(absolute) || !usableTime(idle) ||
+85: 		!absolute.After(created) || !idle.After(created) || idle.After(absolute) ||
+86: 		absolute.Sub(created) &gt; MaxAbsoluteLifetime {
+87: 		return deny(ReasonInvalidSnapshot)
+88: 	}
+89: 	if now.Before(created) {
+90: 		return deny(ReasonNotYetValid)
+91: 	}
+92: 	if !now.Before(absolute) {
+93: 		return deny(ReasonAbsoluteExpired)
+94: 	}
+95: 	if !now.Before(idle) {
+96: 		return deny(ReasonIdleExpired)
+97: 	}
+98: 	return Decision{State: StateValid, Reason: ReasonValid}
+99: }</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. Полный контракт: services/iam/docs/module-contract.md. Потребитель Service.Execute вызывает этот Evaluate; это не отдельная учебная копия.</p></main></html>

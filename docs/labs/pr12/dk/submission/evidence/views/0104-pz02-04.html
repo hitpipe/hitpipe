@@ -1,0 +1,16 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>IAM: исходные зависимости и статусы модулей</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>IAM: исходные зависимости и статусы модулей</h1><div class="meta">Версия исходников: 73aef8d976c9f0676ee568d8dc5a82c8d35a2f00
+Время UTC: 2026-10-19T17:39:40.641001+00:00
+$ go -C services/iam list -f &#x27;{{.ImportPath}}: {{join .Imports &quot; &quot;}}&#x27; ./...
+Фактический exit: 0</div><h2>Карта исходных импортов</h2><pre>cmd → application + fixture adapter + clock adapter
+fixture adapter → application + domain
+clock adapter → application + domain
+application → domain
+domain → stdlib time</pre><h2>Легенда и статус</h2><pre>A → B означает: исходный package A импортирует B.
+Владелец IAM: Дмитрий Карачебан.
+Код: реализован и объединён в main.
+Рецензент участка: Тимофей Патрушев.
+SQL authority / OIDC / deployment: план.</pre><h2>Фактический go list</h2><pre>github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck: context encoding/json errors flag fmt github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession io os
+github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system: context errors github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy time
+github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup: bytes context encoding/json errors github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy io os regexp strconv time unicode/utf8
+github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession: context errors github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy reflect
+github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy: time</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. Проекция D1-карты с актуализированным статусом интеграции; направление стрелок сверено с настоящими импортами. Циклы не обнаружены.</p></main></html>

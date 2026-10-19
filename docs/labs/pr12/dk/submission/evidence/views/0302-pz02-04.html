@@ -1,0 +1,22 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>M01: компилируемый дефект обнаружен проверками</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>M01: компилируемый дефект обнаружен проверками</h1><div class="meta">Версия исходников: 462d553e8373af6047f0950e0a9adfe15e85c83f</div><h2>Фактически применявшийся patch</h2><pre>--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -92,7 +92,7 @@
+ 	if !now.Before(absolute) {
+ 		return deny(ReasonAbsoluteExpired)
+ 	}
+-	if !now.Before(idle) {
++	if now.After(idle) {
+ 		return deny(ReasonIdleExpired)
+ 	}
+ 	return Decision{State: StateValid, Reason: ReasonValid}
+</pre><h2>Настоящий отрицательный прогон</h2><pre>FAIL
+FAIL	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	0.004s
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	0.007s
+    policy_test.go:53: delta 0s: want idle_expired, got {State:valid Reason:session_valid}
+--- FAIL: TestEvaluateIdleBoundary/equal (0.00s)
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	0.003s</pre><h2>Восстановление исходного состояния</h2><pre>{
+  &quot;restored_worktree_clean&quot;: true,
+  &quot;final_clean_exit_code&quot;: 0
+}</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. Исторический эксперимент 18.10.2026. Дефект отсутствует в main; build/check/restore отражены в оригинальном protocol.json.</p></main></html>

@@ -1,0 +1,16 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Один consumer: normal, error и boundary для обоих адаптеров</title><style>body{margin:0;background:#edf1f6;font-family:Arial,sans-serif;color:#152332}main{width:920px;box-sizing:border-box;padding:26px;background:white;border:1px solid #a6b3c2}h1{font-size:27px;line-height:1.2;margin:0 0 16px}h2{font-size:23px;margin:18px 0 10px}pre{font:22px/1.30 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}p{font-size:21px;line-height:1.3;margin:9px 0}.meta{font:18px/1.35 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#eef4fa;border-left:5px solid #365e8c}.note{border-top:1px solid #b8c1cc;padding-top:13px;color:#4e5966;font-size:18px}</style><main><h1>Один consumer: normal, error и boundary для обоих адаптеров</h1><div class="meta">Версия исходников: 73aef8d976c9f0676ee568d8dc5a82c8d35a2f00
+Время UTC: 2026-10-19T17:39:40.306603+00:00
+$ go -C services/iam test ./internal/adapters/fixtures/sessionlookup -run TestSameConsumerContractWithBothAdapters -v -count=1
+Фактический exit: 0</div><h2>Фактический вывод теста</h2><pre>--- PASS: TestSameConsumerContractWithBothAdapters (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	0.005s</pre><p class="note">Браузерный просмотр фактических файлов. Журнал показан выдержкой; полный оригинал и его SHA-256 сохранены в пакете. </p></main></html>

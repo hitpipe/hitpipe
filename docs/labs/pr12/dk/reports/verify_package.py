@@ -20,8 +20,14 @@ def verify():
     assert {r['id'] for r in cross['criteria']}==set(source)
     assert not cross['submission_ready']
     for row in cross['criteria']:
-        assert row['actual_status'] in {'PASS_AGENT_CHECKED','HUMAN_INTERVIEW_PENDING','HUMAN_REVIEW_MERGE_PENDING','EXTERNAL_OPPOSITION_PENDING','HUMAN_CLARITY_PENDING','HUMAN_PEER_PENDING'}
+        assert row['actual_status'] in {'PASS_AGENT_CHECKED','HUMAN_INTERVIEW_PENDING','HUMAN_REVIEW_MERGE_PENDING','EXTERNAL_OPPOSITION_PENDING','HUMAN_CLARITY_PENDING','HUMAN_PEER_PENDING','PASS_DELEGATED_TECHNICAL_REVIEW_MERGED','DELEGATED_CHECK_PASS_PERSONAL_ATTESTATION_PENDING'}
         for path in row['evidence_paths']:assert (BASE/path).is_file(),path
+    if any(r['actual_status']=='PASS_DELEGATED_TECHNICAL_REVIEW_MERGED' for r in cross['criteria']):
+        merged=json.loads((BASE/'submission/integration-readback.json').read_text())
+        assert {r['number'] for r in merged}==set(range(12,20)) and all(r['merged'] for r in merged)
+    if any(r['actual_status']=='DELEGATED_CHECK_PASS_PERSONAL_ATTESTATION_PENDING' for r in cross['criteria']):
+        peer=json.loads((BASE/'submission/evidence/peer-technical/commands.json').read_text())
+        assert len(peer)==4 and all(r['exit_code']==0 for r in peer)
     figures=json.loads((HERE/'figures.json').read_text());assert len(figures)==21
     expected={'0302-pz01':3,'0302-pz02':5,'0104-pz01':7,'0104-pz02':6}
     validation=json.loads((HERE/'validation.json').read_text())
@@ -97,4 +103,11 @@ def verify():
         rendering='PASS_AUTHOR_LAYOUT_CHECK; real LibreOffice/Poppler pages, exact DOCX/PDF hashes verified'
     return {'status':'PASS','reports':4,'mandatory_results':29,'unique_screenshot_placeholders':21,'verified_evidence_files':len(index['entries']),'external_docx_links':links,'submitted_or_human_accepted':False,'rendering':rendering}
 
-if __name__=='__main__':print(json.dumps(verify(),ensure_ascii=False,indent=2))
+if __name__=='__main__':
+    result=verify()
+    current=BASE/'submission/verify_submission.py'
+    if current.is_file():
+        import subprocess,sys
+        subprocess.run([sys.executable,str(current)],check=True)
+        result['current_illustrated_package']='PASS; external academic evidence still pending'
+    print(json.dumps(result,ensure_ascii=False,indent=2))
