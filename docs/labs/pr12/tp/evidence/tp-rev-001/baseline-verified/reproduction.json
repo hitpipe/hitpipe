@@ -1,0 +1,27 @@
+{
+  "review": "TP-REV-001",
+  "source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+  "expected": "Reject ambiguous noncanonical field before eligibility; CLI nonzero2, no VALID output",
+  "actual": {
+    "valid": {
+      "exit": 0,
+      "stdout": "{\"status\":\"VALID\",\"reason\":\"FINANCIAL_ELIGIBILITY_ONLY\"}",
+      "stderr": "start processing-contractcheck offline\nresult status=VALID reason=FINANCIAL_ELIGIBILITY_ONLY",
+      "fixture_sha256": "938e78d9a379c0d9f7764b083c7c79fc5e2f0868939015e385cddb2754e00f50"
+    },
+    "canonical-refund": {
+      "exit": 0,
+      "stdout": "{\"status\":\"INELIGIBLE\",\"reason\":\"REFUND\"}",
+      "stderr": "start processing-contractcheck offline\nresult status=INELIGIBLE reason=REFUND",
+      "fixture_sha256": "a10ce4083e8e0e24aada2e88a22f0baa40e5a40d2e2039e3c47ece124073ef64"
+    },
+    "shadow-refund": {
+      "exit": 0,
+      "stdout": "{\"status\":\"VALID\",\"reason\":\"FINANCIAL_ELIGIBILITY_ONLY\"}",
+      "stderr": "start processing-contractcheck offline\nresult status=VALID reason=FINANCIAL_ELIGIBILITY_ONLY",
+      "fixture_sha256": "0576fa3db51116342c11d5df19d12ffda1467c33efe46048cfcaf591554d1a71"
+    }
+  },
+  "result": "DEFECT_REPRODUCED",
+  "scope": "Offline synthetic fixture parser only; no production integration claim."
+}
