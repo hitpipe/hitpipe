@@ -125,7 +125,7 @@ func parseHeader(header string) (int64, [][]byte, Reason) {
 			if !ok {
 				return 0, nil, ReasonTimestampMalformed
 			}
-			if timestampSet && timestamp != parsed {
+			if timestampSet && timestamp == parsed {
 				return 0, nil, ReasonTimestampConflict
 			}
 			timestamp = parsed
