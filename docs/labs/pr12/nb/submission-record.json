@@ -67,6 +67,12 @@
       "sha": "d164aebd5b746151da41717f0ffb483eb9b39a63",
       "conclusion": "success"
     },
+    "NB-REV-007-final-corrected-baseline": {
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/39285847846",
+      "job": "118171472621",
+      "sha": "d164aebd5b746151da41717f0ffb483eb9b39a63",
+      "conclusion": "queued"
+    },
     "HIT-56-source-snapshot": {
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39281604280",
       "job": "118156815091",
@@ -77,33 +83,33 @@
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282875566",
       "job": "118160603037",
       "sha": "4606e78f350b85717ef56d9b3766c5fd8bd4af4f",
-      "conclusion": "queued"
+      "conclusion": "success"
     },
     "NB-REV-007-M02": {
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282905596",
       "job": "118160720826",
       "sha": "b835a7eb3fbd4512396ef44ec8b693d6a5bf0c18",
-      "conclusion": "in_progress"
+      "conclusion": "success"
     },
     "NB-REV-007-M03": {
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282909976",
       "job": "118160734812",
       "sha": "5a8929b141f2b75774418114cfac1bbb7d8a01dd",
-      "conclusion": "queued"
+      "conclusion": "success"
     },
     "NB-REV-007-M04": {
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282914689",
       "job": "118160751628",
       "sha": "3cc2a0d5ef75a55283802152b7295b2bb244cc83",
-      "conclusion": "queued"
+      "conclusion": "success"
     },
     "NB-REV-007-M05": {
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/39282919252",
       "job": "118160771432",
       "sha": "90cc9ab91ce0d24a157fa451c9f4efe71a725286",
-      "conclusion": "queued"
+      "conclusion": "success"
     }
   },
   "human_gates": "PENDING: interview, blind clarity, reciprocal scaffold/module checks, opposition, review, merge, screenshots, defense",
-  "note": "Current C1/C2/C3 heads have native CI success. The refreshed report source snapshot has its historical package CI success; a new report-head run will be recorded after the correction commit is pushed. r2 mutation jobs are explicitly queued/in progress until their compile/test logs are available. Not formal acceptance or submission-ready until humans complete gates, current report-head CI concludes, mutation evidence is complete, and immutable tags are created."
+  "note": "Current C1/C2/C3 heads have native CI success. Five versioned r2 mutation jobs have successful harness jobs with compile exit 0, behavioral exit 1 and RESULT=KILLED; logs are recorded under evidence/mutations/r2. The post-series corrected-baseline gate is queued at run 39285847846/job 118171472621. The refreshed report package still requires current-head CI after its final package commit. Not formal acceptance or submission-ready until humans complete gates, current report-head CI concludes, the corrected-baseline gate passes, and immutable tags are created."
 }

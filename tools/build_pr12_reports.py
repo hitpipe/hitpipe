@@ -36,7 +36,7 @@ COMMON = {
     "requirements_pr_url": "https://github.com/hitpipe/hitpipe/pull/38",
     "scaffold_pipeline_url": "https://github.com/hitpipe/hitpipe/actions/runs/39262425665 (success; historical D1 head)",
     "requirements_pipeline_url": "https://github.com/hitpipe/hitpipe/actions/runs/39262488242 (success; historical R2 head)",
-    "test_pipeline_url": "https://github.com/hitpipe/hitpipe/actions/runs/39281597831 (C3 head d164aeb; native check queued at build time)",
+    "test_pipeline_url": "https://github.com/hitpipe/hitpipe/actions/runs/39281598031 (C3 head d164aeb; job 118156796184 success)",
     "external_project_name": "[teacher-assigned external project not provided]",
     "opposition_assignment": "[teacher/Lead assignment not provided]",
     "opposition_discussion_url": "docs/labs/pr12/nb/human-gates/external-opposition.md (NOT_CONDUCTED)",
@@ -67,7 +67,7 @@ COMMON = {
     "release_evidence": "PASS; docs/labs/pr12/nb/evidence/hit-54-d1-clean.log",
     "example_config": "synthetic fixture paths only; no secrets or environment credentials",
     "route": "workspace wrapper around services/intake; local and GitHub workflow route",
-    "actual_status_stage": "content checks PASS; refreshed current-head and r2 native CI queued / human review pending",
+    "actual_status_stage": "content checks PASS; C1/C2/C3 native jobs and five r2 mutation jobs PASS; post-series corrected-baseline gate pending / human review pending",
     "cmd_commit_log": "see evidence/hit-53-baseline-v2.log and hit-54-d1-clean.log",
     "oracle": "safe bounded outcome and exact exit; no secret/body/header in diagnostics",
     "scaffold_contribution": "offline contractcheck component, build metadata, safe fixtures and CI-sensitive wrapper path",
@@ -128,14 +128,14 @@ COMMON = {
     "natural_defect_count": "0 real defects found",
     "natural_defect_issues": "none; no issue/PR link",
     "seeded_count": "5",
-    "detected_initial": "pending native r2 jobs",
-    "missed_initial": "pending native r2 jobs",
-    "detected_final": "pending native r2 jobs",
-    "test_job_name": "temporary PR12 NB mutation r2 harness; native jobs queued",
+    "detected_initial": "5",
+    "missed_initial": "0",
+    "detected_final": "5",
+    "test_job_name": "temporary PR12 NB mutation r2 harness; five native jobs succeeded",
     "local_rationale": "error precedence and boundary determinism remove implementation ambiguity",
     "rule_and_change": "compiled behavioral mutation; see individual patch and log",
-    "analysis_or_not_applicable": "pending until native compile/test logs; hidden suite NOT_PROVIDED",
-    "log": "docs/labs/pr12/nb/evidence/mutations/r2/M0X.log (created only after native job completion)",
+    "analysis_or_not_applicable": "not applicable: no survivor; first named suite killed each mutant",
+    "log": "docs/labs/pr12/nb/evidence/mutations/r2/M0X.log",
     "resolution": "NOT_CONDUCTED; human gate required",
     "negative_gate_condition": "add controlled failing test that violates the expected wrapper condition",
     "negative_gate_log": "docs/labs/pr12/nb/evidence/hit-53-ci-sensitivity.log; fail exit 1, restored exit 0",
@@ -275,7 +275,7 @@ def make_0302_pz01():
     set_cell(d.tables[8].cell(1,4),"Human clarity check remains pending; technical oracle is recorded in results table")
     result_rows = [
         ["Requirements and traceability", "clean checkout; git diff --check; python3 -m json.tool docs/labs/pr12/nb/requirements-trace.json", "JSON and marker validation exit 0; source remains Candidate/In Review", "HIT-50 35b4c247319cf3bf0c8d8288d109c996fc721d0b; hit-50-r2-validation.log; PR #38; CI 39262488242", "No human interview or acceptance is claimed"],
-        ["C1 numerical policy", "PR31 head 53687c138e266fda9104ef620edbc7d4252d8f6f; native intake workflow", "checked parse, positive clock and safe distance are present; three reviewer regressions pass on corrected chain", "PR #31; C1 head 53687c1; native CI after push", "C1/C2/C3 remain unmerged"],
+        ["C1 numerical policy", "PR31 head 53687c138e266fda9104ef620edbc7d4252d8f6; native intake workflow", "checked parse, positive clock and safe distance are present; three reviewer regressions pass on corrected chain", "PR #31; C1 head 53687c1; native CI after push", "C1/C2/C3 remain unmerged"],
         ["C3 verification and CLI", "PR33 head d164aebd5b746151da41717f0ffb483eb9b39a63; race wrapper, smoke and inspection", "tests/vet/race/smoke/inspection PASS; text/json/invalid exits 0/0/2", "PR #33; hit-53-correction-ci.json and hit-53-correction-cli.md", "No production deployment"],
         ["Freshness and HMAC evidence", "49 freshness cases plus four independent HMAC vectors on corrected policy", "all signed cases PASS; 27 report/evidence digests match the reviewed package", "review-checks.json; artifact-verification.json; evidence/index.json", "Reviewer probes are not author mutations"],
     ]
@@ -316,7 +316,7 @@ def make_0302_pz02():
         50:"Чек-лист: compile, go test, vet, race, wrapper check, dev/release smoke, artifact metadata, negative wrapper sensitivity.",
         52:"Данные: services/intake/testdata/verified.json and tampered.json plus synthetic Go fixtures; all reproducible from clean clone without personal files or working keys.",
         53:"Подготовка и сброс состояния: fixed timestamp 1700000000, synthetic secret, temporary copies for mutations; baseline source restored after each run.",
-        54:"Разработанные автоматические тесты: verifier/application named assertions plus CLI fixture checks; historical M01-M05 retained and a new versioned r2 M01-M05 series is queued on corrected C3 baseline.",
+        54:"Разработанные автоматические тесты: verifier/application named assertions plus CLI fixture checks; historical M01-M05 retained and a new versioned r2 M01-M05 series was executed on corrected C3 baseline.",
         55:"Изменение и включение в CI: .github/workflows/pr12-nb.yml runs PR12_RACE=1 and release inspection. C1/C2/C3 ordinary merges now carry the checked parsing, fail-closed clock and safe distance policy; correction CI links are in evidence/index.json.",
         62:"Среда: macOS darwin/arm64 author workspace; native CI Go go1.27.2. Historical baseline is 835bbb1bc565e9b2786d5ed1a2cac166f816f7a8; corrected C3 source/test baseline is d164aebd5b746151da41717f0ffb483eb9b39a63.",
         63:"Commands: cd services/intake && go test -coverprofile=.pr12-build/intake.cover ./...; go tool cover -func=.pr12-build/intake.cover; go vet ./...; go test -race -count=1 ./...; PR12_RACE=1 python3 tools/pr12/workspace.py check intake; smoke/inspect. Native correction checks are linked by full run IDs.",
@@ -326,12 +326,12 @@ def make_0302_pz02():
         70:"Отчёт инструмента: docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover; new profiles go to ignored .pr12-build; analysis in docs/labs/pr12/nb/coverage-analysis.md.",
         73:"Полное выполнение тестов не доказывает provider behavior, production secret storage, transport, persistence, performance or human independence. CPU/memory pprof is planned and the unit coverage gap is explicit.",
         77:"Воспроизведение: docs/labs/pr12/nb/MUTATION_PROTOCOL.md; historical five patch/log pairs remain under evidence/mutations, and new versioned r2 pairs are under evidence/mutations/r2. Each r2 mutant is a separate temporary branch from corrected baseline d164aeb; none is merged.",
-        81:"Итог r2 series на момент сборки отчёта: seeded 5; native compile/detection jobs queued; survivors/retests/final restoration evidence pending. Hidden suite NOT_PROVIDED.",
-        83:"Состояние сдачи: corrected candidate source/test baseline d164aebd5b746151da41717f0ffb483eb9b39a63; all temporary mutants are outside the deliverable branches; native CI links are recorded as queued. Immutable tag not created; human review/merge required.",
+        81:"Итог r2 series: seeded 5; compile 5; first named-suite detection 5; survivors 0; retest 0. Final corrected-baseline gate after the series is still pending. Hidden suite NOT_PROVIDED.",
+        83:"Состояние сдачи: corrected candidate source/test baseline d164aebd5b746151da41717f0ffb483eb9b39a63; all temporary mutants are outside the deliverable branches; five native mutation jobs succeeded at job level. Immutable tag not created; human review/merge required.",
         87:"Общие средства и результаты других участников: none claimed; human module peer check is NOT_CONDUCTED.",
         88:"Полученные замечания и решения: agent self-review fixed wrapper JSON marker mismatch and CLI composition boundary; no human remarks yet.",
         90:"Что обнаруживает разработанный набор: exact-body, MAC, timestamp, parser and consumer dependency regressions; evidence is local logs, mutation patches and GitHub Actions run.",
-        91:"Что показали покрытие и эксперимент: full module statement coverage 55.8%; domain/application historical profiles 87.7%/83.3%; CLI/adapters unit profile 0%; r2 mutation outcome awaits native jobs.",
+        91:"Что показали покрытие и эксперимент: full module statement coverage 55.8%; domain/application historical profiles 87.7%/83.3%; CLI/adapters unit profile 0%; five current compiling mutants were killed; post-series corrected-baseline gate is pending.",
         92:"Границы доказательства и остаточные риски: no live provider/production route, no hidden suite, no human review/merge/opposition/screenshots/defense.",
     }
     for i,t in overrides.items(): set_para(d.paragraphs[i],t)
@@ -368,40 +368,41 @@ def make_0302_pz02():
         set_row(d.tables[6], i, row)
     runrows=[
         ["historical corrected-policy baseline","835bbb1; Go 1.27.2","tests/vet/race/wrapper PASS","PASS","hit-53-baseline-v2.log; historical series only"],
-        ["current corrected C3 chain","d164aeb; PR12_RACE=1","current-head native checks queued; prior PASS is historical","QUEUED","PR #33; current native CI links in evidence/index.json"],
-        ["current report package","a2eee52 source snapshot; refreshed files in working tree","content/evidence checks and report build PASS locally; current CI queued","QUEUED","PR #34; current report CI link in evidence/index.json"],
+        ["current corrected C3 chain","d164aeb; PR12_RACE=1","current-head native checks PASS before mutation series; post-series gate pending","PARTIAL","PR #33; current and final-gate CI links in evidence/index.json"],
+        ["current report package","a2eee52 source snapshot; refreshed files in working tree","content/evidence checks and report build PASS locally; report delivery job 118168664445 success, other current-head jobs tracked","PARTIAL","PR #34; current report CI links in evidence/index.json"],
     ]
+    set_row(d.tables[7], 0, ["Test / set", "Version and conditions", "Observed result", "Status", "Evidence"])
     for i,row in enumerate(runrows,1):
         set_row(d.tables[7], i, row)
     gaps=[["CLI/adapters unit coverage 0%","unit report omits those files","retain black-box smoke and list follow-up","wrapper smoke PASS"],["hidden suite unavailable","unknown external cases","mark NOT_PROVIDED","no retest possible"]]
     for i,row in enumerate(gaps,1):
         set_row(d.tables[8], i, row)
     states=[
-        ["Исходный корректный код","d164aebd5b746151da41717f0ffb483eb9b39a63; Go 1.27.2","baseline is the corrected C3 source; current final gate queued","current C3 native CI link; restoration log pending"],
-        ["Код с дефектом","work/nb-mutation-r2-M01..M05; one branch per mutant","compile/detection results queued","r2 patch files and five queued native runs"],
-        ["Восстановленный correction code","d164aebd5b746151da41717f0ffb483eb9b39a63","restoration/final gate pending native mutation completion","final restoration evidence pending"],
+        ["Исходный корректный код","d164aebd5b746151da41717f0ffb483eb9b39a63; Go 1.27.2","baseline PASS before; post-series final gate pending","current C3 native CI and final-gate link"],
+        ["Код с дефектом","work/nb-mutation-r2-M01..M05; one branch per mutant","all five compile; each named suite exit 1","r2 patch/log pairs and five native jobs"],
+        ["Восстановленный correction code","d164aebd5b746151da41717f0ffb483eb9b39a63","post-series final gate pending","final-gate run 39285847846"],
     ]
     for i,row in enumerate(states,1):
         set_row(d.tables[9], i, row)
     mutrows=[
-        ["M01 / mutations/r2/M01.patch","current exact raw bytes replaced by constant bytes","queued","raw-byte/known-vector assertions / expected exit 1","pending","survivor/retest pending","r2/M01.log after native run; queued run in evidence/index.json"],
-        ["M02 / mutations/r2/M02.patch","current constant-time compare bypassed with expected-vs-expected","queued","altered-body/repeat assertions / expected exit 1","pending","survivor/retest pending","r2/M02.log after native run; queued run in evidence/index.json"],
-        ["M03 / mutations/r2/M03.patch","current outsideTolerance ignores timestamps in the past","queued","past301 freshness assertion / expected exit 1","pending","survivor/retest pending","r2/M03.log after native run; queued run in evidence/index.json"],
-        ["M04 / mutations/r2/M04.patch","current inclusive 300-second boundary becomes stale","queued","past300/future300 boundary / expected exit 1","pending","survivor/retest pending","r2/M04.log after native run; queued run in evidence/index.json"],
-        ["M05 / mutations/r2/M05.patch","current conflicting timestamp comparison is inverted","queued","timestamp-conflict assertion / expected exit 1","pending","survivor/retest pending","r2/M05.log after native run; queued run in evidence/index.json"],
+        ["M01 / mutations/r2/M01.patch","current exact raw bytes replaced by constant bytes","0","raw-byte/known-vector assertions / exit 1","detected","none; no survivor","r2/M01.log; job 118160603037"],
+        ["M02 / mutations/r2/M02.patch","current constant-time compare bypassed with expected-vs-expected","0","altered-body/repeat assertions / exit 1","detected","none; no survivor","r2/M02.log; job 118160720826"],
+        ["M03 / mutations/r2/M03.patch","current outsideTolerance ignores timestamps in the past","0","past301 freshness assertion / exit 1","detected","none; no survivor","r2/M03.log; job 118160734812"],
+        ["M04 / mutations/r2/M04.patch","current inclusive 300-second boundary becomes stale","0","past300/future300 boundary / exit 1","detected","none; no survivor","r2/M04.log; job 118160751628"],
+        ["M05 / mutations/r2/M05.patch","current conflicting timestamp comparison is inverted","0","timestamp-conflict assertion / exit 1","detected","none; no survivor","r2/M05.log; job 118160771432"],
     ]
     for i,row in enumerate(mutrows,1):
         set_row(d.tables[10], i, row)
-    set_row(d.tables[11], 1, ["Технический результат", "Named tests, coverage analysis and five versioned mutation patches are recorded; native mutation compile/detection and restoration jobs are queued.", "See tables above and evidence/index.json; hidden suite NOT_PROVIDED."])
+    set_row(d.tables[11], 1, ["Технический результат", "Named tests, coverage analysis and five versioned mutation patches/logs are recorded; compile 0 and detection 1 are present for each mutant; post-series corrected-baseline gate is pending.", "See tables above and evidence/index.json; hidden suite NOT_PROVIDED."])
     set_row(d.tables[11], 2, ["Человеческие gates", "Peer review, interview, opposition, screenshots, signatures and defense are not agent-run.", "Explicit NOT_CONDUCTED/PENDING human-gate files; status CONTENT_READY_IMAGES_PENDING."])
     summary={
         1:"МДК.03.02, ПЗ №2, Никита Будыкин",
         2:"[immutable tag after authorized human merge] → d164aebd5b746151da41717f0ffb483eb9b39a63 code snapshot",
         3:"HIT-51/52/53 code chain; FR-SIG-01..04; NFR-SIG-01/02; exact raw bytes, HMAC, freshness and safe failures",
         4:"verifier/application tests; verified.json/tampered.json; native CI wrapper; r2 mutation branches; hidden suite NOT_PROVIDED",
-        5:"PR #33 current chain; current native checks queued; prior verified checks remain historical; PR #34 report package open",
+        5:"PR #33 current chain; current native checks PASS before mutation series; post-series final gate pending; PR #34 report package open",
         6:"coverage 55.8% full module statement; domain/application historical 87.7%/83.3%; CLI/adapters 0%; pprof PLANNED",
-        7:"historical M01-M05 retained; current r2 M01-M05 patches and queued runs recorded; no mutation PASS or restoration result claimed yet; no mutant merged",
+        7:"historical M01-M05 retained; current r2 M01-M05 all compile and are killed; post-series restoration gate pending; no mutant merged",
         8:"synthetic offline candidate only; no production route/provider credentials; no hidden suite or human acceptance",
     }
     for r,v in summary.items(): set_cell(d.tables[12].cell(r,1),v)

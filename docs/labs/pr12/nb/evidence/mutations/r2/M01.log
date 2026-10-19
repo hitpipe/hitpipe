@@ -1,0 +1,63 @@
+NB-REV-007 / r2 / M01
+STATUS=KILLED
+MUTATION=replace exact raw body with constant JSON bytes
+BASELINE_SHA=d164aebd5b746151da41717f0ffb483eb9b39a63
+BASELINE_VERIFIER_SHA256=0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640
+MUTANT_SHA=4606e78f350b85717ef56d9b3766c5fd8bd4af4f
+PATCH_SHA256=8695baa773b424149417e7d453e2341ef512ddfaa8ef98511e721c1d34db6dd1
+BRANCH=work/nb-mutation-r2-M01
+RUN=https://github.com/hitpipe/hitpipe/actions/runs/39282875566
+JOB=https://github.com/hitpipe/hitpipe/actions/runs/39282875566/job/118160603037
+RUN_ID=39282875566
+JOB_ID=118160603037
+RUNNER=ubuntu-24.04
+STARTED_AT=2026-10-19T16:06:50Z
+FINISHED_AT=2026-10-19T16:07:00Z
+CWD=/home/runner/work/hitpipe/hitpipe/services/intake
+GIT_VERSION=git version 2.55.0
+GO_VERSION=go version go1.27.2 linux/amd64
+ARGV_COMPILE=go test -run '^$' ./...
+COMPILE_EXIT=0
+COMPILE_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.002s [no tests to run]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.002s [no tests to run]
+COMPILE_STDOUT_END
+ARGV_TEST=go test -count=1 ./...
+TEST_EXIT=1
+TEST_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+--- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble (0.00s)
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/normal (0.00s)
+        authenticate_test.go:68: result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/normal (0.00s)
+        authenticate_test.go:68: result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+--- FAIL: TestAuthenticateWebhookRejectsRepeatWithoutSignature (0.00s)
+    authenticate_test.go:105: first={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>} second={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+FAIL
+FAIL github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.004s
+--- FAIL: TestSignatureKnownVector (0.00s)
+    verifier_test.go:17: known vector: {Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000}
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    verifier_test.go:25: non-UTF-8 raw bytes: {Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000}
+FAIL
+FAIL github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.003s
+FAIL
+TEST_STDOUT_END
+DETECTION_ORACLE=real behavioral assertions failed after successful compilation
+RESULT=KILLED
+SURVIVOR=0
+RETEST=NOT_APPLICABLE
+BASELINE_BEFORE=PASS: corrected C3 run 39281598031, current source head d164aebd5b746151da41717f0ffb483eb9b39a63
+RESTORATION=temporary mutant branch remains unmerged; post-series corrected-baseline gate pending
+FINAL_GATE=PASS before series; after-series rerun pending
+HIDDEN_SUITE=NOT_PROVIDED
+LIMITATION=The workflow is an author-controlled temporary experiment branch; it is not a PR, merge, acceptance or production check. Full step output is retained in the linked native GitHub Actions job log.
