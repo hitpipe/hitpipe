@@ -1,0 +1,75 @@
+ .github/workflows/pr12-dk.yml                      |   3 +
+ docs/labs/pr12/dk/criteria-crosswalk.json          | 611 ++++++++++++++
+ docs/labs/pr12/dk/defense-notes.md                 |  14 +
+ docs/labs/pr12/dk/evidence/c1-committed-check.json |  85 ++
+ docs/labs/pr12/dk/evidence/c1-committed-check.log  | 182 +++++
+ docs/labs/pr12/dk/evidence/c1-inspect.json         |  87 ++
+ docs/labs/pr12/dk/evidence/c1-inspect.log          |  40 +
+ docs/labs/pr12/dk/evidence/c1-smoke.json           |  85 ++
+ docs/labs/pr12/dk/evidence/c1-smoke.log            |  15 +
+ docs/labs/pr12/dk/evidence/c2-committed.json       | 109 +++
+ docs/labs/pr12/dk/evidence/c2-committed.log        | 301 +++++++
+ docs/labs/pr12/dk/evidence/c2-smoke.json           | 109 +++
+ docs/labs/pr12/dk/evidence/c2-smoke.log            |  15 +
+ docs/labs/pr12/dk/evidence/ci-c3/iam-all.cover     | 891 +++++++++++++++++++++
+ docs/labs/pr12/dk/evidence/ci-c3/iam.cover         | 179 +++++
+ .../evidence/ci-c3/iam/mutations-ci/M01-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M01-check.log  | 348 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M01.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M02-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M02-check.log  | 345 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M02.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M03-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M03-check.log  | 348 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M03.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M04-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M04-check.log  | 348 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M04.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M05-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M05-check.log  | 344 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M05.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M06-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M06-check.log  | 346 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M06.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/M07-build.log  |   0
+ .../evidence/ci-c3/iam/mutations-ci/M07-check.log  | 344 ++++++++
+ .../dk/evidence/ci-c3/iam/mutations-ci/M07.patch   |  11 +
+ .../evidence/ci-c3/iam/mutations-ci/baseline.log   | 341 ++++++++
+ .../ci-c3/iam/mutations-ci/final-clean.log         | 341 ++++++++
+ .../evidence/ci-c3/iam/mutations-ci/protocol.json  | 381 +++++++++
+ docs/labs/pr12/dk/evidence/ci-runs.json            | 454 +++++++++++
+ docs/labs/pr12/dk/evidence/index.json              | 519 ++++++++++++
+ docs/labs/pr12/dk/evidence/main-protection.json    |  68 ++
+ docs/labs/pr12/dk/evidence/r1-context.json         |  28 +
+ docs/labs/pr12/dk/evidence/r1-context.log          |   3 +
+ docs/labs/pr12/dk/evidence/r2-context.json         |  28 +
+ docs/labs/pr12/dk/evidence/r2-context.log          |   3 +
+ .../dk/evidence/reviewer-readiness-20261019.json   | 299 +++++++
+ .../pr12/dk/evidence/screenshots/INSTRUCTIONS.md   | 425 ++++++++++
+ docs/labs/pr12/dk/handoff.md                       |  43 +
+ docs/labs/pr12/dk/human-gates.md                   |  27 +-
+ docs/labs/pr12/dk/interview.md                     |   4 +-
+ docs/labs/pr12/dk/reports/0104-pz01-dk.docx        | Bin 0 -> 31972 bytes
+ docs/labs/pr12/dk/reports/0104-pz01-dk.md          | 121 +++
+ docs/labs/pr12/dk/reports/0104-pz02-dk.docx        | Bin 0 -> 31974 bytes
+ docs/labs/pr12/dk/reports/0104-pz02-dk.md          | 116 +++
+ docs/labs/pr12/dk/reports/0302-pz01-dk.docx        | Bin 0 -> 33771 bytes
+ docs/labs/pr12/dk/reports/0302-pz01-dk.md          | 130 +++
+ docs/labs/pr12/dk/reports/0302-pz02-dk.docx        | Bin 0 -> 34031 bytes
+ docs/labs/pr12/dk/reports/0302-pz02-dk.md          | 134 ++++
+ docs/labs/pr12/dk/reports/README.md                |  20 +
+ docs/labs/pr12/dk/reports/build_reports.py         | 163 ++++
+ docs/labs/pr12/dk/reports/figures.json             | 421 ++++++++++
+ docs/labs/pr12/dk/reports/requirements.txt         |   4 +
+ docs/labs/pr12/dk/reports/validation.json          |  52 ++
+ docs/labs/pr12/dk/reports/verify_package.py        |  80 ++
+ docs/labs/pr12/dk/requirements.md                  |   2 +
+ .../dk/review/TIMOFEY_AGENT_REVIEW_PROMPT_RU.md    | 196 +++++
+ .../labs/pr12/dk/review/TIMOFEY_REVIEW_GUIDE_RU.md |  89 ++
+ .../dk/review/TIMOFEY_REVIEW_RESULT_TEMPLATE.md    |  55 ++
+ docs/labs/pr12/dk/review/blind-scenarios.md        |   4 +-
+ docs/labs/pr12/dk/review/peer-protocol.json        |  82 +-
+ docs/labs/pr12/dk/review/reviewer-assignment.json  |  49 ++
+ docs/labs/pr12/dk/submission-record.json           |  54 ++
+ docs/labs/pr12/dk/template-adjustments.md          |  17 +
+ 74 files changed, 9960 insertions(+), 19 deletions(-)

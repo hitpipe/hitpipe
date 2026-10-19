@@ -1,0 +1,675 @@
+pr12-iam	UNKNOWN STEP	﻿2026-10-19T15:12:32.9915263Z Current runner version: '2.337.0'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9937003Z ##[group]Runner Image Provisioner
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9937590Z Hosted Compute Agent
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9938020Z Version: 20261012.601
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9938412Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9938878Z Build Date: 2026-10-12T17:48:21Z
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9939339Z Worker ID: {c411b50a-35d3-4dc0-94ce-59a7e8ed022e}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9939764Z Region: centralus
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9940148Z Cloud: Azure
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9940481Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9941290Z ##[group]Operating System
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9941769Z Ubuntu
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9942090Z 24.04.5
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9942438Z LTS
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9942758Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9943091Z ##[group]Runner Image
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9943548Z Image: ubuntu-24.04
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9943893Z Version: 20261012.334.1
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9944911Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9945826Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9946474Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9947163Z ##[group]GITHUB_TOKEN Permissions
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9948518Z Contents: read
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9948869Z Metadata: read
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9949285Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9950787Z Secret source: Actions
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9951404Z Cache mode: write
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:32.9951863Z Prepare workflow directory
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:33.0748176Z Prepare all required actions
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:33.0809384Z Getting action download info
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:33.3731270Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:33.6008521Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:34.6273523Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.4154826Z Complete job name: pr12-iam
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5152993Z ##[group]Run actions/checkout@v4
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5153775Z with:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5154312Z   ref: f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5155237Z   repository: hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5160580Z   token: ***
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5161067Z   ssh-strict: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5161560Z   ssh-user: git
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5162062Z   persist-credentials: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5162617Z   clean: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5163133Z   sparse-checkout-cone-mode: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5163738Z   fetch-depth: 1
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5164227Z   fetch-tags: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5164824Z   show-progress: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5165352Z   lfs: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5165827Z   submodules: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5166338Z   set-safe-directory: true
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5166930Z   allow-unsafe-pr-checkout: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5167627Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5932532Z Syncing repository: hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5935383Z ##[group]Getting Git version info
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5936686Z Working directory is '/home/runner/work/hitpipe/hitpipe'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5938449Z [command]/usr/bin/git version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5974618Z git version 2.55.0
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.5999144Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6008264Z Temporarily overriding HOME='/home/runner/work/_temp/7bed467f-8b74-4aa0-a4bd-d852eaf761d8' before making global git config changes
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6011019Z Adding repository directory to the temporary git global config as a safe directory
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6013287Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6243267Z Deleting the contents of '/home/runner/work/hitpipe/hitpipe'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6267152Z ##[group]Initializing the repository
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6268811Z [command]/usr/bin/git init /home/runner/work/hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6545590Z hint: Using 'master' as the name for the initial branch. This default branch name
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6547930Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6549642Z hint: to use in all of your new repositories, which will suppress this warning,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6550883Z hint: call:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6551520Z hint:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6552350Z hint: 	git config --global init.defaultBranch <name>
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6553375Z hint:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6554360Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6556138Z hint: 'development'. The just-created branch can be renamed via this command:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6557431Z hint:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6558108Z hint: 	git branch -m <name>
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6558869Z hint:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6559921Z hint: Disable this message with "git config set advice.defaultBranchName false"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6561998Z Initialized empty Git repository in /home/runner/work/hitpipe/hitpipe/.git/
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6565481Z [command]/usr/bin/git remote add origin https://github.com/hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6611096Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6611995Z ##[group]Disabling automatic garbage collection
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6613788Z [command]/usr/bin/git config --local gc.auto 0
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6654973Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6656254Z ##[group]Setting up auth
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6657493Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6689046Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.6972930Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7009141Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7202075Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7238045Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7432842Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7535384Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7536827Z ##[group]Fetching the repository
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:35.7544185Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5293273Z From https://github.com/hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5293722Z  * branch            f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd -> FETCH_HEAD
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5297778Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5298240Z ##[group]Determining the checkout info
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5300384Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5305464Z [command]/usr/bin/git sparse-checkout disable
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5354127Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5384599Z ##[group]Checking out the ref
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5387713Z [command]/usr/bin/git checkout --progress --force f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5763083Z Note: switching to 'f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd'.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5763455Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5763695Z You are in 'detached HEAD' state. You can look around, make experimental
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5764151Z changes and commit them, and you can discard any commits you make in this
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5764614Z state without impacting any branches by switching back to a branch.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5765084Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5765271Z If you want to create a new branch to retain commits you create, you may
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5765706Z do so (now or later) by using -c with the switch command. Example:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766256Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766380Z   git switch -c <new-branch-name>
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766552Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766671Z Or undo this operation with:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766835Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5766942Z   git switch -
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5767116Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5767376Z Turn off this advice by setting config variable advice.detachedHead to false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5767662Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5767872Z HEAD is now at f67dd3f HIT-23: delegate Timofey review to one autonomous agent run
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5773240Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5816629Z [command]/usr/bin/git log -1 --format=%H
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.5843748Z f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.6024626Z ##[group]Run python3 tools/pr12/workspace.py validate
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.6025262Z [36;1mpython3 tools/pr12/workspace.py validate[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.6229282Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.6229566Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.6617381Z + /usr/bin/python3 /home/runner/work/hitpipe/hitpipe/tools/pr12/validate_bundle.py
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7233687Z {"status": "PORTABLE_PACKAGE_VALIDATION_PASS", "verified_files": 205, "features": 5, "tasks": 41, "criteria_links": 145, "templates": 4, "student_work": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7758322Z {"status": "BOOTSTRAP_VALIDATION_PASS", "verified_frozen_files": 6, "student_implementation": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7854458Z ##[group]Run python3 tools/pr12/test_workspace.py
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7854975Z [36;1mpython3 tools/pr12/test_workspace.py[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7907817Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.7908043Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9827294Z + tool
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9893190Z .................
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9893450Z ----------------------------------------------------------------------
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9893773Z Ran 17 tests in 0.007s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9893942Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:36.9894004Z OK
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.0199442Z ##[group]Run python3 tools/pr12/workspace.py status iam
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.0199778Z [36;1mpython3 tools/pr12/workspace.py status iam[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.0253112Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.0253330Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.0608624Z {"component": "iam", "status": "IMPLEMENTATION_DECLARED_NOT_CHECKED"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1110826Z ##[group]Run python3 docs/labs/pr12/dk/reports/verify_package.py
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1111194Z [36;1mpython3 docs/labs/pr12/dk/reports/verify_package.py[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1165130Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1165334Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1877058Z {
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1877484Z   "status": "PASS",
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1877687Z   "reports": 4,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1877895Z   "mandatory_results": 29,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1878109Z   "unique_screenshot_placeholders": 21,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1878330Z   "verified_evidence_files": 102,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1878593Z   "external_docx_links": 18,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1878800Z   "submitted_or_human_accepted": false,
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1879030Z   "rendering": "NOT_RUN_NO_RENDERER"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.1879202Z }
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2386602Z ##[group]Run actions/setup-go@v5
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2386804Z with:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2386954Z   go-version: 1.27.2
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2387104Z   cache: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2387253Z   check-latest: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2388728Z   token: ***
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.2388878Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.3285825Z Setup go version spec 1.27.2
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.3291264Z Attempting to download 1.27.2...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.3369541Z (node:2141) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:37.3370056Z (Use `node --trace-deprecation ...` to show where the warning was created)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:38.1510758Z matching 1.27.2...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:38.1525764Z Acquiring 1.27.2 from https://github.com/actions/go-versions/releases/download/1.27.2-37875086547/go-1.27.2-linux-x64.tar.gz
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:38.6904024Z Extracting Go...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:38.6992044Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/13045078-1387-49ce-bba5-2a02dbe31488 -f /home/runner/work/_temp/02f203aa-1195-4873-b75e-b3144b9e526b
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:39.9866678Z Successfully extracted go to /home/runner/work/_temp/13045078-1387-49ce-bba5-2a02dbe31488
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:39.9867013Z Adding to the cache ...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4597284Z Successfully cached go to /opt/hostedtoolcache/go/1.27.2/x64
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4598675Z Added go to the path
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4603877Z Successfully set up Go version 1.27.2
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4815305Z go version go1.27.2 linux/amd64
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4815518Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.4815876Z ##[group]go env
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5865942Z AR='ar'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5866229Z CC='gcc'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5866403Z CGO_CFLAGS='-O2 -g'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5866591Z CGO_CPPFLAGS=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5866769Z CGO_CXXFLAGS='-O2 -g'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5866929Z CGO_ENABLED='1'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867053Z CGO_FFLAGS='-O2 -g'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867198Z CGO_LDFLAGS='-O2 -g'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867326Z CXX='g++'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867443Z GCCGO='gccgo'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867562Z GO111MODULE=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867681Z GOAMD64='v1'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867797Z GOARCH='amd64'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5867913Z GOAUTH='netrc'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868043Z GOBIN='/home/runner/go/bin'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868209Z GOCACHE='/home/runner/.cache/go-build'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868371Z GOCACHEPROG=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868534Z GODEBUG=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868693Z GOENV='/home/runner/.config/go/env'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5868889Z GOEXE=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5869003Z GOEXPERIMENT=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5869128Z GOFIPS140='off'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5869245Z GOFLAGS=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5869669Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build348108602=/tmp/go-build -gno-record-gcc-switches'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870062Z GOHOSTARCH='amd64'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870191Z GOHOSTOS='linux'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870311Z GOINSECURE=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870495Z GOMOD='/home/runner/work/hitpipe/hitpipe/go.mod'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870694Z GOMODCACHE='/home/runner/go/pkg/mod'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870850Z GONOPROXY=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5870968Z GONOSUMDB=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871084Z GOOS='linux'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871250Z GOPACKAGESDRIVER=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871389Z GOPATH='/home/runner/go'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871526Z GOPRIVATE=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871702Z GOPROXY='https://proxy.golang.org,direct'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5871901Z GOROOT='/opt/hostedtoolcache/go/1.27.2/x64'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872074Z GOSUMDB='sum.golang.org'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872216Z GOTELEMETRY='local'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872376Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872552Z GOTMPDIR=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872670Z GOTOOLCHAIN='auto'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5872859Z GOTOOLDIR='/opt/hostedtoolcache/go/1.27.2/x64/pkg/tool/linux_amd64'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5873059Z GOVCS=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5873173Z GOVERSION='go1.27.2'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5873554Z GOWORK=''
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5873678Z PKG_CONFIG='pkg-config'
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5873768Z 
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.5874212Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6085255Z ##[group]Run python3 tools/pr12/workspace.py check iam
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6085540Z [36;1mpython3 tools/pr12/workspace.py check iam[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6140542Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6140707Z env:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6140827Z   PR12_RACE: 1
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6140954Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6495750Z + go version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:44.6544589Z + go vet ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:49.6073753Z + go test -count=1 -json -coverprofile=/home/runner/work/hitpipe/hitpipe/.pr12-build/iam.cover ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7246624Z {"Time":"2026-10-19T15:12:51.647291171Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7247845Z {"Time":"2026-10-19T15:12:51.647491205Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7248742Z {"Time":"2026-10-19T15:12:51.647568591Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7249628Z {"Time":"2026-10-19T15:12:51.647843482Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7250575Z {"Time":"2026-10-19T15:12:51.650311066Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7251874Z {"Time":"2026-10-19T15:12:51.650385858Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Output":"=== RUN   TestSystemClockRequiresAttestation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7253479Z {"Time":"2026-10-19T15:12:51.650424206Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Output":"--- PASS: TestSystemClockRequiresAttestation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7255021Z {"Time":"2026-10-19T15:12:51.650437285Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Test":"TestSystemClockRequiresAttestation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7255703Z {"Time":"2026-10-19T15:12:51.650453179Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"PASS\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7256346Z {"Time":"2026-10-19T15:12:51.65054095Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"coverage: 100.0% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7257151Z {"Time":"2026-10-19T15:12:51.650658657Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system\t0.003s\tcoverage: 100.0% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7257892Z {"Time":"2026-10-19T15:12:51.650686999Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system","Elapsed":0.003}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7258508Z {"Time":"2026-10-19T15:12:51.651504909Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7259352Z {"Time":"2026-10-19T15:12:51.651543857Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Output":"=== RUN   TestDependenciesAndInvalidRequests\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7260349Z {"Time":"2026-10-19T15:12:51.651553762Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Output":"--- PASS: TestDependenciesAndInvalidRequests (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7261435Z {"Time":"2026-10-19T15:12:51.651557898Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestDependenciesAndInvalidRequests","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7262366Z {"Time":"2026-10-19T15:12:51.651561544Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7263727Z {"Time":"2026-10-19T15:12:51.651564518Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7265474Z {"Time":"2026-10-19T15:12:51.651567553Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7266860Z {"Time":"2026-10-19T15:12:51.651569786Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/lookup\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7268549Z {"Time":"2026-10-19T15:12:51.651573221Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/lookup (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7270028Z {"Time":"2026-10-19T15:12:51.651581594Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/lookup","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7271244Z {"Time":"2026-10-19T15:12:51.651584758Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7272663Z {"Time":"2026-10-19T15:12:51.651591939Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/clock\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7274345Z {"Time":"2026-10-19T15:12:51.651595014Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/clock (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7275940Z {"Time":"2026-10-19T15:12:51.651602455Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/clock","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7277146Z {"Time":"2026-10-19T15:12:51.65160587Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7278594Z {"Time":"2026-10-19T15:12:51.651608714Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/untrusted\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7280455Z {"Time":"2026-10-19T15:12:51.651626371Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/untrusted (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7281989Z {"Time":"2026-10-19T15:12:51.651629125Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/untrusted","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7283417Z {"Time":"2026-10-19T15:12:51.651631769Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7285022Z {"Time":"2026-10-19T15:12:51.651635945Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Output":"=== RUN   TestPortErrorsDoNotAllowOrLeak/zero_clock\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7286799Z {"Time":"2026-10-19T15:12:51.651644147Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak/zero_clock (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7288488Z {"Time":"2026-10-19T15:12:51.651647162Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak/zero_clock","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7289983Z {"Time":"2026-10-19T15:12:51.651650226Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Output":"--- PASS: TestPortErrorsDoNotAllowOrLeak (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7291412Z {"Time":"2026-10-19T15:12:51.65165262Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestPortErrorsDoNotAllowOrLeak","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7292599Z {"Time":"2026-10-19T15:12:51.651654543Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7294060Z {"Time":"2026-10-19T15:12:51.651656766Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Output":"=== RUN   TestClockReadAfterLookupAndCancellation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7295806Z {"Time":"2026-10-19T15:12:51.65165917Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7297393Z {"Time":"2026-10-19T15:12:51.651661063Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/none\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7299192Z {"Time":"2026-10-19T15:12:51.651663626Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/none (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7300753Z {"Time":"2026-10-19T15:12:51.65167241Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/none","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7302025Z {"Time":"2026-10-19T15:12:51.651674933Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7303589Z {"Time":"2026-10-19T15:12:51.651677077Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/before\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7305786Z {"Time":"2026-10-19T15:12:51.651681022Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/before (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7307398Z {"Time":"2026-10-19T15:12:51.651683777Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/before","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7308691Z {"Time":"2026-10-19T15:12:51.6516862Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7310220Z {"Time":"2026-10-19T15:12:51.651700772Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/lookup\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7312240Z {"Time":"2026-10-19T15:12:51.651704307Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/lookup (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7313987Z {"Time":"2026-10-19T15:12:51.651707081Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/lookup","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7315395Z {"Time":"2026-10-19T15:12:51.651709425Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7316942Z {"Time":"2026-10-19T15:12:51.651711979Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Output":"=== RUN   TestClockReadAfterLookupAndCancellation/clock\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7318800Z {"Time":"2026-10-19T15:12:51.65171945Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Output":"--- PASS: TestClockReadAfterLookupAndCancellation/clock (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7320387Z {"Time":"2026-10-19T15:12:51.651722364Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation/clock","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7321949Z {"Time":"2026-10-19T15:12:51.651725569Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Output":"--- PASS: TestClockReadAfterLookupAndCancellation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7323485Z {"Time":"2026-10-19T15:12:51.651728564Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Test":"TestClockReadAfterLookupAndCancellation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7324780Z {"Time":"2026-10-19T15:12:51.651730997Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"PASS\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7325911Z {"Time":"2026-10-19T15:12:51.651736275Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"coverage: 97.3% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7327383Z {"Time":"2026-10-19T15:12:51.65181942Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession\t0.004s\tcoverage: 97.3% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7328859Z {"Time":"2026-10-19T15:12:51.651829705Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession","Elapsed":0.004}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7329757Z {"Time":"2026-10-19T15:12:51.652079393Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7330765Z {"Time":"2026-10-19T15:12:51.653098309Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7332248Z {"Time":"2026-10-19T15:12:51.653120362Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Output":"=== RUN   TestSameConsumerContractWithBothAdapters\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7333862Z {"Time":"2026-10-19T15:12:51.653125299Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7335572Z {"Time":"2026-10-19T15:12:51.653127713Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/normal\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7337633Z {"Time":"2026-10-19T15:12:51.65313249Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7339326Z {"Time":"2026-10-19T15:12:51.653135304Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/normal","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7340641Z {"Time":"2026-10-19T15:12:51.65313944Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7342277Z {"Time":"2026-10-19T15:12:51.653141784Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/idle_equal\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7344253Z {"Time":"2026-10-19T15:12:51.653145259Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7346014Z {"Time":"2026-10-19T15:12:51.653152981Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/idle_equal","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7347331Z {"Time":"2026-10-19T15:12:51.653156366Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7348932Z {"Time":"2026-10-19T15:12:51.653158779Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/unknown\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7350902Z {"Time":"2026-10-19T15:12:51.653161894Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7352698Z {"Time":"2026-10-19T15:12:51.653167683Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/unknown","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7354081Z {"Time":"2026-10-19T15:12:51.653170116Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7355937Z {"Time":"2026-10-19T15:12:51.65317235Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/revoked\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7358018Z {"Time":"2026-10-19T15:12:51.653175554Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7359681Z {"Time":"2026-10-19T15:12:51.653178799Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/revoked","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7360995Z {"Time":"2026-10-19T15:12:51.653181233Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7362777Z {"Time":"2026-10-19T15:12:51.653183506Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/file/error\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7365029Z {"Time":"2026-10-19T15:12:51.653186671Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7366661Z {"Time":"2026-10-19T15:12:51.65319267Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/file/error","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7367957Z {"Time":"2026-10-19T15:12:51.653196115Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7369570Z {"Time":"2026-10-19T15:12:51.653198379Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/normal\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7371579Z {"Time":"2026-10-19T15:12:51.653201483Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7373063Z {"Time":"2026-10-19T15:12:51.653204157Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/normal","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7373974Z {"Time":"2026-10-19T15:12:51.653206691Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7375928Z {"Time":"2026-10-19T15:12:51.653210587Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/idle_equal\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7378011Z {"Time":"2026-10-19T15:12:51.653214152Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7379752Z {"Time":"2026-10-19T15:12:51.653217147Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/idle_equal","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7381483Z {"Time":"2026-10-19T15:12:51.65321955Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7383081Z {"Time":"2026-10-19T15:12:51.653225659Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/unknown\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7385166Z {"Time":"2026-10-19T15:12:51.653229505Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7386836Z {"Time":"2026-10-19T15:12:51.653232079Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/unknown","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7388161Z {"Time":"2026-10-19T15:12:51.653235214Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7389782Z {"Time":"2026-10-19T15:12:51.653237287Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/revoked\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7391772Z {"Time":"2026-10-19T15:12:51.653240221Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7393507Z {"Time":"2026-10-19T15:12:51.653242875Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/revoked","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7394934Z {"Time":"2026-10-19T15:12:51.653247302Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7396605Z {"Time":"2026-10-19T15:12:51.653249665Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Output":"=== RUN   TestSameConsumerContractWithBothAdapters/fixed/error\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7398762Z {"Time":"2026-10-19T15:12:51.65325255Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Output":"--- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7400175Z {"Time":"2026-10-19T15:12:51.653258408Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters/fixed/error","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7401844Z {"Time":"2026-10-19T15:12:51.653261313Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Output":"--- PASS: TestSameConsumerContractWithBothAdapters (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7403576Z {"Time":"2026-10-19T15:12:51.653264017Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestSameConsumerContractWithBothAdapters","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7404960Z {"Time":"2026-10-19T15:12:51.653266631Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7406545Z {"Time":"2026-10-19T15:12:51.653268724Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Output":"=== RUN   TestFileReloadFixedOwnershipAndConcurrency\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7407952Z {"Time":"2026-10-19T15:12:51.653287853Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7409106Z {"Time":"2026-10-19T15:12:51.653300041Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Output":"=== RUN   TestDiagnosticValid\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7410513Z {"Time":"2026-10-19T15:12:51.653303696Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Output":"--- PASS: TestDiagnosticValid (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7411747Z {"Time":"2026-10-19T15:12:51.6533062Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticValid","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7412839Z {"Time":"2026-10-19T15:12:51.653308874Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7414165Z {"Time":"2026-10-19T15:12:51.653310847Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Output":"=== RUN   TestDiagnosticMalformedAndCanary\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7415502Z {"Time":"2026-10-19T15:12:51.653313591Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7416303Z {"Time":"2026-10-19T15:12:51.653315844Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Output":"=== RUN   TestDiagnosticMalformedAndCanary/oversize\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7417531Z {"Time":"2026-10-19T15:12:51.653318839Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Output":"--- PASS: TestDiagnosticMalformedAndCanary/oversize (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7419025Z {"Time":"2026-10-19T15:12:51.653323626Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/oversize","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7420455Z {"Time":"2026-10-19T15:12:51.65332625Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7421871Z {"Time":"2026-10-19T15:12:51.653328423Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/comma_timestamp\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7423574Z {"Time":"2026-10-19T15:12:51.653331858Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/comma_timestamp (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7425465Z {"Time":"2026-10-19T15:12:51.653337707Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/comma_timestamp","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7426666Z {"Time":"2026-10-19T15:12:51.653340041Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7428153Z {"Time":"2026-10-19T15:12:51.653342444Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Output":"=== RUN   TestDiagnosticMalformedAndCanary/case_mismatched_key\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7429871Z {"Time":"2026-10-19T15:12:51.653351518Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Output":"--- PASS: TestDiagnosticMalformedAndCanary/case_mismatched_key (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7431376Z {"Time":"2026-10-19T15:12:51.653354112Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/case_mismatched_key","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7432555Z {"Time":"2026-10-19T15:12:51.653356485Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7434024Z {"Time":"2026-10-19T15:12:51.653358699Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/unknown_null_timestamp\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7435942Z {"Time":"2026-10-19T15:12:51.653362194Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/unknown_null_timestamp (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7437473Z {"Time":"2026-10-19T15:12:51.653365108Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/unknown_null_timestamp","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7438630Z {"Time":"2026-10-19T15:12:51.653367832Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7440056Z {"Time":"2026-10-19T15:12:51.653369865Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Output":"=== RUN   TestDiagnosticMalformedAndCanary/invalid_UTF8\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7441747Z {"Time":"2026-10-19T15:12:51.65337296Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Output":"--- PASS: TestDiagnosticMalformedAndCanary/invalid_UTF8 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7443283Z {"Time":"2026-10-19T15:12:51.653375514Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/invalid_UTF8","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7444424Z {"Time":"2026-10-19T15:12:51.653377998Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7445952Z {"Time":"2026-10-19T15:12:51.653380121Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Output":"=== RUN   TestDiagnosticMalformedAndCanary/bad_timestamp\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7447772Z {"Time":"2026-10-19T15:12:51.653383386Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Output":"--- PASS: TestDiagnosticMalformedAndCanary/bad_timestamp (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7449246Z {"Time":"2026-10-19T15:12:51.653387462Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_timestamp","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7450325Z {"Time":"2026-10-19T15:12:51.653389725Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7451386Z {"Time":"2026-10-19T15:12:51.653391808Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Output":"=== RUN   TestDiagnosticMalformedAndCanary/broken\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7453033Z {"Time":"2026-10-19T15:12:51.653395293Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Output":"--- PASS: TestDiagnosticMalformedAndCanary/broken (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7454447Z {"Time":"2026-10-19T15:12:51.653397697Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/broken","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7455713Z {"Time":"2026-10-19T15:12:51.653400131Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7457104Z {"Time":"2026-10-19T15:12:51.653402134Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Output":"=== RUN   TestDiagnosticMalformedAndCanary/trailing\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7458745Z {"Time":"2026-10-19T15:12:51.653405118Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Output":"--- PASS: TestDiagnosticMalformedAndCanary/trailing (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7460107Z {"Time":"2026-10-19T15:12:51.653407452Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/trailing","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7461193Z {"Time":"2026-10-19T15:12:51.653410096Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7462549Z {"Time":"2026-10-19T15:12:51.653414242Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Output":"=== RUN   TestDiagnosticMalformedAndCanary/null_root\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7464188Z {"Time":"2026-10-19T15:12:51.653417376Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Output":"--- PASS: TestDiagnosticMalformedAndCanary/null_root (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7465869Z {"Time":"2026-10-19T15:12:51.65342001Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_root","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7466973Z {"Time":"2026-10-19T15:12:51.653422404Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7468337Z {"Time":"2026-10-19T15:12:51.653424587Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Output":"=== RUN   TestDiagnosticMalformedAndCanary/duplicate\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7470101Z {"Time":"2026-10-19T15:12:51.653427622Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Output":"--- PASS: TestDiagnosticMalformedAndCanary/duplicate (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7471531Z {"Time":"2026-10-19T15:12:51.653430236Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/duplicate","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7472637Z {"Time":"2026-10-19T15:12:51.653432619Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7474032Z {"Time":"2026-10-19T15:12:51.653434732Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Output":"=== RUN   TestDiagnosticMalformedAndCanary/nested_case\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7475899Z {"Time":"2026-10-19T15:12:51.653438087Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Output":"--- PASS: TestDiagnosticMalformedAndCanary/nested_case (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7477332Z {"Time":"2026-10-19T15:12:51.653440661Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/nested_case","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7478457Z {"Time":"2026-10-19T15:12:51.653443005Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7479798Z {"Time":"2026-10-19T15:12:51.653445098Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Output":"=== RUN   TestDiagnosticMalformedAndCanary/extra\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7481394Z {"Time":"2026-10-19T15:12:51.653450626Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Output":"--- PASS: TestDiagnosticMalformedAndCanary/extra (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7482657Z {"Time":"2026-10-19T15:12:51.653457056Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/extra","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7483760Z {"Time":"2026-10-19T15:12:51.653459229Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7485176Z {"Time":"2026-10-19T15:12:51.653461913Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Output":"=== RUN   TestDiagnosticMalformedAndCanary/null_bool\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7486276Z {"Time":"2026-10-19T15:12:51.653547267Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Output":"--- PASS: TestDiagnosticMalformedAndCanary/null_bool (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7487100Z {"Time":"2026-10-19T15:12:51.653551803Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/null_bool","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7487758Z {"Time":"2026-10-19T15:12:51.653556941Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7488565Z {"Time":"2026-10-19T15:12:51.653559355Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Output":"=== RUN   TestDiagnosticMalformedAndCanary/bad_version\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7489414Z {"Time":"2026-10-19T15:12:51.65372328Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7490098Z {"Time":"2026-10-19T15:12:51.653742469Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Output":"=== RUN   TestEvaluateValid\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7490896Z {"Time":"2026-10-19T15:12:51.653758032Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Output":"--- PASS: TestEvaluateValid (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7491603Z {"Time":"2026-10-19T15:12:51.653762959Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateValid","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7492203Z {"Time":"2026-10-19T15:12:51.653766024Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7492895Z {"Time":"2026-10-19T15:12:51.653768087Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Output":"=== RUN   TestEvaluateUnknown\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7493708Z {"Time":"2026-10-19T15:12:51.653772954Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Output":"--- PASS: TestEvaluateUnknown (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7494426Z {"Time":"2026-10-19T15:12:51.65377665Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateUnknown","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7495198Z {"Time":"2026-10-19T15:12:51.653779073Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7495930Z {"Time":"2026-10-19T15:12:51.653781207Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Output":"=== RUN   TestEvaluateIdleBoundary\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7496659Z {"Time":"2026-10-19T15:12:51.653789829Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7497663Z {"Time":"2026-10-19T15:12:51.653792063Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Output":"=== RUN   TestEvaluateIdleBoundary/before\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7498571Z {"Time":"2026-10-19T15:12:51.653796319Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Output":"--- PASS: TestEvaluateIdleBoundary/before (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7499461Z {"Time":"2026-10-19T15:12:51.653799023Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/before","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7500099Z {"Time":"2026-10-19T15:12:51.65380341Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7500982Z {"Time":"2026-10-19T15:12:51.653805713Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Output":"=== RUN   TestEvaluateIdleBoundary/equal\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7501957Z {"Time":"2026-10-19T15:12:51.653808768Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Output":"--- PASS: TestEvaluateIdleBoundary/equal (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7502836Z {"Time":"2026-10-19T15:12:51.653812223Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/equal","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7503523Z {"Time":"2026-10-19T15:12:51.653814707Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7504448Z {"Time":"2026-10-19T15:12:51.65381677Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Output":"=== RUN   TestEvaluateIdleBoundary/after\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7505690Z {"Time":"2026-10-19T15:12:51.653819945Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Output":"--- PASS: TestEvaluateIdleBoundary/after (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7507075Z {"Time":"2026-10-19T15:12:51.653822508Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary/after","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7508910Z {"Time":"2026-10-19T15:12:51.653826464Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Output":"--- PASS: TestEvaluateIdleBoundary (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7510230Z {"Time":"2026-10-19T15:12:51.653829078Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateIdleBoundary","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7511334Z {"Time":"2026-10-19T15:12:51.653831452Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7512711Z {"Time":"2026-10-19T15:12:51.653833815Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Output":"=== RUN   TestEvaluateAbsoluteBoundary\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7514318Z {"Time":"2026-10-19T15:12:51.6538368Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Output":"--- PASS: TestEvaluateAbsoluteBoundary (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7515695Z {"Time":"2026-10-19T15:12:51.653839404Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateAbsoluteBoundary","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7516743Z {"Time":"2026-10-19T15:12:51.653844161Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7517854Z {"Time":"2026-10-19T15:12:51.653846234Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Output":"=== RUN   TestEvaluateRevoked\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7519081Z {"Time":"2026-10-19T15:12:51.653849288Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Output":"--- PASS: TestEvaluateRevoked (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7519951Z {"Time":"2026-10-19T15:12:51.653851672Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRevoked","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7520750Z {"Time":"2026-10-19T15:12:51.653854386Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7521701Z {"Time":"2026-10-19T15:12:51.653856449Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Output":"=== RUN   TestEvaluateInvalidChronology\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7522883Z {"Time":"2026-10-19T15:12:51.653860255Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7524125Z {"Time":"2026-10-19T15:12:51.65386349Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Output":"=== RUN   TestEvaluateInvalidChronology/zero_creation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7525953Z {"Time":"2026-10-19T15:12:51.653866895Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Output":"--- PASS: TestEvaluateInvalidChronology/zero_creation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7526900Z {"Time":"2026-10-19T15:12:51.653869549Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_creation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7527673Z {"Time":"2026-10-19T15:12:51.653872513Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7529169Z {"Time":"2026-10-19T15:12:51.653874727Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Output":"=== RUN   TestEvaluateInvalidChronology/zero_absolute\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7530845Z {"Time":"2026-10-19T15:12:51.653879634Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Output":"--- PASS: TestEvaluateInvalidChronology/zero_absolute (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7532284Z {"Time":"2026-10-19T15:12:51.653882508Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_absolute","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7533470Z {"Time":"2026-10-19T15:12:51.653885423Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7535029Z {"Time":"2026-10-19T15:12:51.653887756Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Output":"=== RUN   TestEvaluateInvalidChronology/idle_exceeds_absolute\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7536812Z {"Time":"2026-10-19T15:12:51.653891091Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Output":"--- PASS: TestEvaluateInvalidChronology/idle_exceeds_absolute (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7538461Z {"Time":"2026-10-19T15:12:51.653894736Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_exceeds_absolute","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7539656Z {"Time":"2026-10-19T15:12:51.65389729Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7541079Z {"Time":"2026-10-19T15:12:51.653901437Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Output":"=== RUN   TestEvaluateInvalidChronology/lifetime_above_cap\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7542919Z {"Time":"2026-10-19T15:12:51.653905212Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Output":"--- PASS: TestEvaluateInvalidChronology/lifetime_above_cap (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7544402Z {"Time":"2026-10-19T15:12:51.653908517Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/lifetime_above_cap","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7545630Z {"Time":"2026-10-19T15:12:51.653911552Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7546972Z {"Time":"2026-10-19T15:12:51.653913705Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Output":"=== RUN   TestEvaluateInvalidChronology/far_future\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7548594Z {"Time":"2026-10-19T15:12:51.65391722Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Output":"--- PASS: TestEvaluateInvalidChronology/far_future (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7549978Z {"Time":"2026-10-19T15:12:51.653919874Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/far_future","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7550791Z {"Time":"2026-10-19T15:12:51.653922929Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7551604Z {"Time":"2026-10-19T15:12:51.653925162Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Output":"=== RUN   TestEvaluateInvalidChronology/zero_idle\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7553109Z {"Time":"2026-10-19T15:12:51.653928868Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Output":"--- PASS: TestEvaluateInvalidChronology/zero_idle (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7554585Z {"Time":"2026-10-19T15:12:51.653931481Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/zero_idle","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7555787Z {"Time":"2026-10-19T15:12:51.653934466Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7557273Z {"Time":"2026-10-19T15:12:51.653936719Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Output":"=== RUN   TestEvaluateInvalidChronology/absolute_equals_creation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7559731Z {"Time":"2026-10-19T15:12:51.653941026Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Output":"--- PASS: TestEvaluateInvalidChronology/absolute_equals_creation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7561493Z {"Time":"2026-10-19T15:12:51.65394351Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/absolute_equals_creation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7562882Z {"Time":"2026-10-19T15:12:51.653947055Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7565040Z {"Time":"2026-10-19T15:12:51.653949208Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Output":"=== RUN   TestEvaluateInvalidChronology/idle_equals_creation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7566940Z {"Time":"2026-10-19T15:12:51.653954206Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Output":"--- PASS: TestEvaluateInvalidChronology/idle_equals_creation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7568473Z {"Time":"2026-10-19T15:12:51.653958862Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/idle_equals_creation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7569563Z {"Time":"2026-10-19T15:12:51.653961456Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7570584Z {"Time":"2026-10-19T15:12:51.653963469Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Output":"=== RUN   TestEvaluateInvalidChronology/unsupported_year\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7571728Z {"Time":"2026-10-19T15:12:51.653967035Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Output":"--- PASS: TestEvaluateInvalidChronology/unsupported_year (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7572886Z {"Time":"2026-10-19T15:12:51.65397089Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology/unsupported_year","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7574368Z {"Time":"2026-10-19T15:12:51.653974015Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Output":"--- PASS: TestEvaluateInvalidChronology (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7575697Z {"Time":"2026-10-19T15:12:51.653976449Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateInvalidChronology","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7576496Z {"Time":"2026-10-19T15:12:51.653978842Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7577424Z {"Time":"2026-10-19T15:12:51.653981116Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Output":"=== RUN   TestEvaluateClockAndFutureCreation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7578546Z {"Time":"2026-10-19T15:12:51.653986544Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Output":"--- PASS: TestEvaluateClockAndFutureCreation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7579664Z {"Time":"2026-10-19T15:12:51.653989028Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateClockAndFutureCreation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7580757Z {"Time":"2026-10-19T15:12:51.653992984Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7582089Z {"Time":"2026-10-19T15:12:51.653994967Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Output":"=== RUN   TestEvaluateDeterministicImmutable\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7586809Z {"Time":"2026-10-19T15:12:51.654000695Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Output":"--- PASS: TestDiagnosticMalformedAndCanary/bad_version (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7588395Z {"Time":"2026-10-19T15:12:51.654003499Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/bad_version","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7589682Z {"Time":"2026-10-19T15:12:51.654005983Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7591071Z {"Time":"2026-10-19T15:12:51.654008276Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Output":"=== RUN   TestDiagnosticMalformedAndCanary/missing_now\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7592669Z {"Time":"2026-10-19T15:12:51.654055157Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Output":"--- PASS: TestEvaluateDeterministicImmutable (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7594085Z {"Time":"2026-10-19T15:12:51.654057821Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateDeterministicImmutable","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7595460Z {"Time":"2026-10-19T15:12:51.654061025Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7596954Z {"Time":"2026-10-19T15:12:51.654063739Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Output":"=== RUN   TestEvaluateRenewedIdleAndOffsets\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7598854Z {"Time":"2026-10-19T15:12:51.654066894Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Output":"--- PASS: TestEvaluateRenewedIdleAndOffsets (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7600323Z {"Time":"2026-10-19T15:12:51.654070259Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestEvaluateRenewedIdleAndOffsets","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7601472Z {"Time":"2026-10-19T15:12:51.654072533Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7602953Z {"Time":"2026-10-19T15:12:51.654075056Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Output":"=== RUN   TestDecisionRejectsMixedStateAndReason\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7605041Z {"Time":"2026-10-19T15:12:51.654078952Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Output":"--- PASS: TestDecisionRejectsMixedStateAndReason (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7607067Z {"Time":"2026-10-19T15:12:51.654081566Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionRejectsMixedStateAndReason","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7608278Z {"Time":"2026-10-19T15:12:51.654085182Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7609670Z {"Time":"2026-10-19T15:12:51.654087295Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Output":"=== RUN   TestDecisionTablePrecedence\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7611367Z {"Time":"2026-10-19T15:12:51.654090259Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Output":"--- PASS: TestDecisionTablePrecedence (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7612958Z {"Time":"2026-10-19T15:12:51.654093564Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"TestDecisionTablePrecedence","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7614194Z {"Time":"2026-10-19T15:12:51.654108186Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7616128Z {"Time":"2026-10-19T15:12:51.654110209Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Output":"=== RUN   FuzzValidityInvariants\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7617868Z {"Time":"2026-10-19T15:12:51.654116609Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Output":"--- PASS: TestDiagnosticMalformedAndCanary/missing_now (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7619399Z {"Time":"2026-10-19T15:12:51.654120665Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/missing_now","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7630049Z {"Time":"2026-10-19T15:12:51.654123249Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7631691Z {"Time":"2026-10-19T15:12:51.654125412Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Output":"=== RUN   TestDiagnosticMalformedAndCanary/large_offset\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7633539Z {"Time":"2026-10-19T15:12:51.654130379Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7635197Z {"Time":"2026-10-19T15:12:51.654135777Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Output":"=== RUN   FuzzValidityInvariants/seed#0\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7637029Z {"Time":"2026-10-19T15:12:51.654164941Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Output":"--- PASS: FuzzValidityInvariants/seed#0 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7638949Z {"Time":"2026-10-19T15:12:51.654167996Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#0","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7640518Z {"Time":"2026-10-19T15:12:51.654171321Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7642174Z {"Time":"2026-10-19T15:12:51.654173404Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Output":"=== RUN   FuzzValidityInvariants/seed#1\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7643896Z {"Time":"2026-10-19T15:12:51.654183529Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Output":"--- PASS: FuzzValidityInvariants/seed#1 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7646019Z {"Time":"2026-10-19T15:12:51.654186363Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#1","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7647502Z {"Time":"2026-10-19T15:12:51.654188887Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7649191Z {"Time":"2026-10-19T15:12:51.654191Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Output":"=== RUN   FuzzValidityInvariants/seed#2\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7650932Z {"Time":"2026-10-19T15:12:51.654195036Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Output":"--- PASS: FuzzValidityInvariants/seed#2 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7652598Z {"Time":"2026-10-19T15:12:51.654199082Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#2","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7654246Z {"Time":"2026-10-19T15:12:51.654201436Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7655697Z {"Time":"2026-10-19T15:12:51.654203619Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Output":"=== RUN   FuzzValidityInvariants/seed#3\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7657755Z {"Time":"2026-10-19T15:12:51.654206533Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Output":"--- PASS: FuzzValidityInvariants/seed#3 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7659539Z {"Time":"2026-10-19T15:12:51.654210039Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#3","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7660992Z {"Time":"2026-10-19T15:12:51.654214045Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7662622Z {"Time":"2026-10-19T15:12:51.654216278Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Output":"=== RUN   FuzzValidityInvariants/seed#4\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7664523Z {"Time":"2026-10-19T15:12:51.654220094Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Output":"--- PASS: FuzzValidityInvariants/seed#4 (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7666415Z {"Time":"2026-10-19T15:12:51.654222798Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants/seed#4","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7668525Z {"Time":"2026-10-19T15:12:51.654225512Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Output":"--- PASS: FuzzValidityInvariants (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7670304Z {"Time":"2026-10-19T15:12:51.654228256Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"FuzzValidityInvariants","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7671630Z {"Time":"2026-10-19T15:12:51.654230499Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7673210Z {"Time":"2026-10-19T15:12:51.654232783Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Output":"=== RUN   ExampleEvaluate\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7674989Z {"Time":"2026-10-19T15:12:51.654326082Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Output":"--- PASS: ExampleEvaluate (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7676679Z {"Time":"2026-10-19T15:12:51.654332482Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Test":"ExampleEvaluate","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7677987Z {"Time":"2026-10-19T15:12:51.654335076Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"PASS\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7679670Z {"Time":"2026-10-19T15:12:51.654340364Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Output":"--- PASS: TestDiagnosticMalformedAndCanary/large_offset (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7681374Z {"Time":"2026-10-19T15:12:51.654343498Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary/large_offset","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7689077Z {"Time":"2026-10-19T15:12:51.654346303Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Output":"--- PASS: TestDiagnosticMalformedAndCanary (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7690564Z {"Time":"2026-10-19T15:12:51.654367935Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticMalformedAndCanary","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7691674Z {"Time":"2026-10-19T15:12:51.654370399Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7692969Z {"Time":"2026-10-19T15:12:51.654372522Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Output":"=== RUN   TestDiagnosticConfigAndVersion\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7694330Z {"Time":"2026-10-19T15:12:51.654405711Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Output":"--- PASS: TestDiagnosticConfigAndVersion (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7696201Z {"Time":"2026-10-19T15:12:51.65441153Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticConfigAndVersion","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7697347Z {"Time":"2026-10-19T15:12:51.654414995Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7698819Z {"Time":"2026-10-19T15:12:51.654417179Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Output":"=== RUN   TestDiagnosticDeniedIsSuccessfulEvaluation\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7700652Z {"Time":"2026-10-19T15:12:51.654691029Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Output":"--- PASS: TestDiagnosticDeniedIsSuccessfulEvaluation (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7702320Z {"Time":"2026-10-19T15:12:51.654696196Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticDeniedIsSuccessfulEvaluation","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7703485Z {"Time":"2026-10-19T15:12:51.654699611Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7705035Z {"Time":"2026-10-19T15:12:51.654701775Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Output":"=== RUN   TestDiagnosticCompositionAndUnavailableClock\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7706638Z {"Time":"2026-10-19T15:12:51.654895254Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"coverage: 100.0% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7708082Z {"Time":"2026-10-19T15:12:51.65502572Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Output":"--- PASS: TestDiagnosticCompositionAndUnavailableClock (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7709593Z {"Time":"2026-10-19T15:12:51.655030597Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestDiagnosticCompositionAndUnavailableClock","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7710976Z {"Time":"2026-10-19T15:12:51.655052149Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7712432Z {"Time":"2026-10-19T15:12:51.655054673Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Output":"=== RUN   TestOutputFailureReturnsErrorWithoutLeaking\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7714176Z {"Time":"2026-10-19T15:12:51.655298192Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy\t0.003s\tcoverage: 100.0% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7722579Z {"Time":"2026-10-19T15:12:51.655307797Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy","Elapsed":0.003}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7724203Z {"Time":"2026-10-19T15:12:51.655330887Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Output":"--- PASS: TestOutputFailureReturnsErrorWithoutLeaking (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7725937Z {"Time":"2026-10-19T15:12:51.655342514Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Test":"TestOutputFailureReturnsErrorWithoutLeaking","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7726989Z {"Time":"2026-10-19T15:12:51.655345959Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"PASS\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7728078Z {"Time":"2026-10-19T15:12:51.65569368Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"coverage: 94.7% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7729417Z {"Time":"2026-10-19T15:12:51.656083193Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\t0.008s\tcoverage: 94.7% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7755132Z {"Time":"2026-10-19T15:12:51.656092447Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck","Elapsed":0.009}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7756830Z {"Time":"2026-10-19T15:12:51.70399575Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Output":"--- PASS: TestFileReloadFixedOwnershipAndConcurrency (0.05s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7758559Z {"Time":"2026-10-19T15:12:51.704034318Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestFileReloadFixedOwnershipAndConcurrency","Elapsed":0.05}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7759837Z {"Time":"2026-10-19T15:12:51.704045865Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7761501Z {"Time":"2026-10-19T15:12:51.70404908Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Output":"=== RUN   TestAdapterFailureAndBoundaryInputs\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7763419Z {"Time":"2026-10-19T15:12:51.704453175Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Output":"--- PASS: TestAdapterFailureAndBoundaryInputs (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7775223Z {"Time":"2026-10-19T15:12:51.704507096Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestAdapterFailureAndBoundaryInputs","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7776533Z {"Time":"2026-10-19T15:12:51.704515258Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7778051Z {"Time":"2026-10-19T15:12:51.704517882Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Output":"=== RUN   TestReaderFailureAndUnknownProjection\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7779881Z {"Time":"2026-10-19T15:12:51.704558763Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Output":"--- PASS: TestReaderFailureAndUnknownProjection (0.00s)\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7781515Z {"Time":"2026-10-19T15:12:51.704562148Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Test":"TestReaderFailureAndUnknownProjection","Elapsed":0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7782759Z {"Time":"2026-10-19T15:12:51.704565583Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"PASS\n","OutputType":"frame"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7783964Z {"Time":"2026-10-19T15:12:51.704971071Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"coverage: 85.8% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7785561Z {"Time":"2026-10-19T15:12:51.70553817Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup\t0.058s\tcoverage: 85.8% of statements\n"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7786891Z {"Time":"2026-10-19T15:12:51.705555646Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup","Elapsed":0.058}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:12:51.7787566Z + go test -race -count=1 ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:00.6367483Z ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.023s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:00.6367855Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.010s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:00.6368526Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.015s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:00.6393575Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.006s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.7813090Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.008s
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.8974263Z ##[group]Run python3 tools/pr12/workspace.py smoke iam --require
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.8974559Z [36;1mpython3 tools/pr12/workspace.py smoke iam --require[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9027958Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9028107Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9381411Z + go version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9411462Z + git rev-parse HEAD
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9426247Z + git status --porcelain
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:01.9680749Z + go build -ldflags -X main.version=pr12 -X main.commit=f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/runner/work/hitpipe/hitpipe/.pr12-build/iam/dev/iam-contractcheck ./cmd/iam-contractcheck
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9585145Z + /tmp/pr12-outside-checkout-vxji1tve/iam-contractcheck --version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9601378Z + git rev-parse --short HEAD
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9617780Z + /tmp/pr12-outside-checkout-vxji1tve/iam-contractcheck --fixture /tmp/pr12-outside-checkout-vxji1tve/positive_fixture.json --format json
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9666155Z {"component": "iam", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9666516Z + git rev-parse HEAD
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9679559Z + git status --porcelain
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:04.9719779Z + go build -ldflags -X main.version=pr12 -X main.commit=f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd -X main.dirty=false -X main.buildMode=release -trimpath -o /home/runner/work/hitpipe/hitpipe/.pr12-build/iam/release/iam-contractcheck ./cmd/iam-contractcheck
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0210762Z + /tmp/pr12-outside-checkout-fhxrfrmm/iam-contractcheck --version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0224856Z + git rev-parse --short HEAD
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0240272Z + /tmp/pr12-outside-checkout-fhxrfrmm/iam-contractcheck --fixture /tmp/pr12-outside-checkout-fhxrfrmm/positive_fixture.json --format json
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0282506Z {"component": "iam", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0751546Z ##[group]Run go test -count=1 -coverpkg=./... -coverprofile=../../.pr12-build/iam-all.cover ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0751933Z [36;1mgo test -count=1 -coverpkg=./... -coverprofile=../../.pr12-build/iam-all.cover ./...[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0804881Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.0805036Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.4760991Z ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	0.009s	coverage: 79.7% of statements in ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.4762039Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	0.004s	coverage: 3.8% of statements in ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.4763207Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	0.006s	coverage: 59.9% of statements in ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5108119Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	0.003s	coverage: 21.9% of statements in ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5109160Z ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	0.003s	coverage: 9.7% of statements in ./...
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5565324Z ##[group]Run python3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5565718Z [36;1mpython3 services/iam/tools/mutation_check.py --output .pr12-build/iam/mutations-ci[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5618678Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:09.5618833Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:11.0845313Z M01 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:11.8108013Z M02 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:12.5366384Z M03 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:13.2460658Z M04 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:13.9613094Z M05 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:14.6525028Z M06 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.4230442Z M07 KILLED
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8033702Z All selected compiling behavioral mutants killed; restored final gate PASS.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8539356Z ##[group]Run actions/upload-artifact@v4
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8539527Z with:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8539692Z   name: pr12-iam-f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8539961Z   path: .pr12-build/iam.cover
+pr12-iam	UNKNOWN STEP	.pr12-build/iam-all.cover
+pr12-iam	UNKNOWN STEP	.pr12-build/iam/mutations-ci/
+pr12-iam	UNKNOWN STEP	
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8540198Z   if-no-files-found: error
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8540335Z   compression-level: 6
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8540461Z   overwrite: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8540589Z   include-hidden-files: false
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.8540729Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9634173Z (node:11355) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9634752Z (Use `node --trace-deprecation ...` to show where the warning was created)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9707516Z Multiple search paths detected. Calculating the least common ancestor of all paths
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9709317Z The least common ancestor is /home/runner/work/hitpipe/hitpipe/.pr12-build. This will be the root directory of the artifact
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9709984Z With the provided path, there will be 26 files uploaded
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9713222Z Artifact name is valid!
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:15.9713685Z Root directory input is valid!
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.2194454Z Beginning upload of artifact content to blob storage
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.2529497Z (node:11355) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.4848817Z Uploaded bytes 62811
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.5272788Z Finished uploading artifact content to blob storage!
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.5273402Z SHA256 digest of uploaded artifact zip is 74f0c0247187fac383d06739d6ee204fcfb4f4c8878e9388591cfbfe4b76a2f0
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.5274177Z Finalizing artifact upload
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.7768856Z Artifact pr12-iam-f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd.zip successfully finalized. Artifact ID 12196788387
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.7769610Z Artifact pr12-iam-f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd has been successfully uploaded! Final size is 62811 bytes. Artifact ID is 12196788387
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.7773816Z Artifact download URL: https://github.com/hitpipe/hitpipe/actions/runs/39275909026/artifacts/12196788387
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.8098208Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.8098870Z [36;1mecho 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"[0m
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.8151621Z shell: /usr/bin/bash -e {0}
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.8151768Z ##[endgroup]
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.8282219Z Post job cleanup.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9112689Z (node:11368) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9113137Z (Use `node --trace-deprecation ...` to show where the warning was created)
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9250646Z Post job cleanup.
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9834359Z [command]/usr/bin/git version
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9868965Z git version 2.55.0
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9895457Z Temporarily overriding HOME='/home/runner/work/_temp/7b48c7a4-8fac-450a-a747-6374701b0f50' before making global git config changes
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9896273Z Adding repository directory to the temporary git global config as a safe directory
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9899360Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9935996Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:16.9969557Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0183647Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0208341Z http.https://github.com/.extraheader
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0217020Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0249840Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0454993Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0489088Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.0791631Z Cleaning up orphan processes
+pr12-iam	UNKNOWN STEP	2026-10-19T15:13:17.1001516Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

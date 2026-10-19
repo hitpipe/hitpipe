@@ -1,0 +1,1342 @@
+diff --git a/docs/labs/pr12/dk/complexity-profile.md b/docs/labs/pr12/dk/complexity-profile.md
+new file mode 100644
+index 0000000..c251798
+--- /dev/null
++++ b/docs/labs/pr12/dk/complexity-profile.md
+@@ -0,0 +1,11 @@
++# HIT-22 — профиль сложности и существующий модуль-кандидат
++
++Это вопросы для следующей работы и readiness оценки, не отчёт о найденных performance bottlenecks. Владелец IAM Дмитрий Карачебан. Reusable module-candidate уже существует: `services/iam/internal/domain/sessionpolicy`, consumer `internal/application/authenticatesession`; input `testdata/valid.json`, bounded diagnostic command из README.
++
++| Направление | Конкретный объект и вопрос | Наличие / готовность | Воспроизводимая проверка и следующий шаг |
++| --- | --- | --- | --- |
++| Межкомпонентное взаимодействие | Lookup latency/error + Clock freshness: не остаётся ли прежний now после ожидания, не маскируется ли недоступность успехом? | Narrow ports и consumer реализованы; delayed/error/cancel tests PASS; real authority отсутствует | TestClockReadAfterLookupAndCancellation + оба DI adapters. Далее production authority adapter с timeout/freshness contract, integration fault injection и актуальными бизнес-полномочиями; этот пакет этого не доказывает |
++| Хранение и обработка данных | Minimal snapshot/idle/absolute: сохраняются ли value ownership, порядок причин и точная equality без overflow? | Pure domain реализован, 100% statements и границы/decision table/race; SQL durability/RLS не реализованы | TestEvaluateIdleBoundary/AbsoluteBoundary/InvalidChronology/DeterministicImmutable; fixture fixed 2026-10-18. Далее owner SQL consistency/epoch/renewal testing по exact architecture; canonical schema здесь не меняется |
++| Организация вычислений и памяти, перспективно | Стоимость копирования time values/JSON parser под реальным workload: есть ли причина оптимизировать? | Реализуемый объект есть, profile НЕ СНИМАЛСЯ; bottleneck неизвестен | После representative workload — benchmark, pprof CPU/alloc, trace с warmup/seed/env/variance. Нельзя выводить latency/throughput из размера двух binary |
++
++Изоляция воспроизводима без БД, ключей или provider: `cd services/iam && go test ./internal/domain/sessionpolicy ./internal/application/authenticatesession -count=1`; CLI `go run ./cmd/iam-contractcheck --fixture testdata/valid.json --format json`. Интерфейсы и contract дают конкретный seam для дальнейшей разработки; общий runtime/architecture не переизобретается.
+diff --git a/docs/labs/pr12/dk/evidence/binary-inspection.json b/docs/labs/pr12/dk/evidence/binary-inspection.json
+new file mode 100644
+index 0000000..58c0e08
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/binary-inspection.json
+@@ -0,0 +1,120 @@
++{
++  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
++  "observations": [
++    {
++      "mode": "dev",
++      "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++      "bytes": 4622983,
++      "sha256": "ec3d04c58207164aadba5c3bbd7e38527e223a37033e1808bd74a35a132f1fc8",
++      "file": {
++        "argv": [
++          "file",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=ItiWOYdeC784nLdx5aXs/Fkxq4LdOPHIozE832efa/eS8i3oxUcPZE3n1N7xyl/j9aw-tDQs6AD4fzvZhV-, BuildID[sha1]=878dedeb442869d8ff5cb3c97feb2e9ebd9c1b14, with debug_info, not stripped\n",
++        "stderr": ""
++      },
++      "metadata": {
++        "argv": [
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
++          "version",
++          "-m",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck: go1.27.2\n\tpath\tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\n\tmod\tgithub.com/hitpipe/hitpipe/services/iam\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-gcflags=\"all=-N -l\"\n\tbuild\t-ldflags=\"-X main.version=pr12 -X main.commit=2cd7c032e8ede98c75181599b440e97657bff197 -X main.dirty=false -X main.buildMode=dev\"\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=2cd7c032e8ede98c75181599b440e97657bff197\n\tbuild\tvcs.time=2026-10-18T23:35:16Z\n\tbuild\tvcs.modified=false\n",
++        "stderr": ""
++      },
++      "sections": {
++        "argv": [
++          "readelf",
++          "-S",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "There are 26 section headers, starting at offset 0x190:\n\nSection Headers:\n  [Nr] Name              Type             Address           Offset\n       Size              EntSize          Flags  Link  Info  Align\n  [ 0]                   NULL             0000000000000000  00000000\n       0000000000000000  0000000000000000           0     0     0\n  [ 1] .note.go.buildid  NOTE             0000000000400f78  00000f78\n       0000000000000064  0000000000000000   A       0     0     4\n  [ 2] .note.gnu.bu[...] NOTE             0000000000400fdc  00000fdc\n       0000000000000024  0000000000000000   A       0     0     4\n  [ 3] .text             PROGBITS         0000000000401000  00001000\n       00000000001e6d71  0000000000000000  AX       0     0     64\n  [ 4] .rodata           PROGBITS         00000000005e8000  001e8000\n       0000000000016ba2  0000000000000000   A       0     0     32\n  [ 5] .gopclntab        PROGBITS         00000000005feba8  001feba8\n       00000000000f314a  0000000000000000   A       0     0     8\n  [ 6] .go.type          PROGBITS         00000000006f1d00  002f1d00\n       000000000003cc18  0000000000000000   A       0     0     16\n  [ 7] .go.func          PROGBITS         000000000072e918  0032e918\n       0000000000000698  0000000000000000   A       0     0     8\n  [ 8] .go.buildinfo     PROGBITS         000000000072f000  0032f000\n       00000000000002b0  0000000000000000  WA       0     0     16\n  [ 9] .go.fipsinfo      PROGBITS         000000000072f2c0  0032f2c0\n       0000000000000078  0000000000000000  WA       0     0     32\n  [10] .go.module        PROGBITS         000000000072f340  0032f340\n       0000000000000238  0000000000000000  WA       0     0     32\n  [11] .noptrdata        PROGBITS         000000000072f580  0032f580\n       0000000000013a22  0000000000000000  WA       0     0     32\n  [12] .data             PROGBITS         0000000000742fc0  00342fc0\n       0000000000008e72  0000000000000000  WA       0     0     32\n  [13] .bss              NOBITS           000000000074be40  0034be40\n       00000000000210f8  0000000000000000  WA       0     0     32\n  [14] .noptrbss         NOBITS           000000000076cf40  0036cf40\n       0000000000015678  0000000000000000  WA       0     0     32\n  [15] .debug_abbrev     PROGBITS         0000000000000000  0034c000\n       0000000000000170  0000000000000000   C       0     0     1\n  [16] .debug_line       PROGBITS         0000000000000000  0034c170\n       0000000000033338  0000000000000000   C       0     0     1\n  [17] .debug_frame      PROGBITS         0000000000000000  0037f4a8\n       0000000000013185  0000000000000000   C       0     0     1\n  [18] .debug_gdb_s[...] PROGBITS         0000000000000000  0039262d\n       0000000000000058  0000000000000000           0     0     1\n  [19] .debug_info       PROGBITS         0000000000000000  00392685\n       000000000005c136  0000000000000000   C       0     0     1\n  [20] .debug_loclists   PROGBITS         0000000000000000  003ee7bb\n       000000000001d413  0000000000000000   C       0     0     1\n  [21] .debug_rnglists   PROGBITS         0000000000000000  0040bbce\n       00000000000070fd  0000000000000000   C       0     0     1\n  [22] .debug_addr       PROGBITS         0000000000000000  00412ccb\n       0000000000002fee  0000000000000000   C       0     0     1\n  [23] .symtab           SYMTAB           0000000000000000  00415cc0\n       0000000000023c58  0000000000000018          24   663     8\n  [24] .strtab           STRTAB           0000000000000000  00439918\n       000000000002f04d  0000000000000000           0     0     1\n  [25] .shstrtab         STRTAB           0000000000000000  00468965\n       0000000000000122  0000000000000000           0     0     1\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n",
++        "stderr": ""
++      },
++      "dynamic": {
++        "argv": [
++          "readelf",
++          "-d",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "\nThere is no dynamic section in this file.\n",
++        "stderr": ""
++      },
++      "version": {
++        "argv": [
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck",
++          "--version"
++        ],
++        "exit": 0,
++        "stdout": "version=pr12 commit=2cd7c032e8ede98c75181599b440e97657bff197 dirty=false buildMode=dev\n",
++        "stderr": "iam-contractcheck event=start\niam-contractcheck event=end status=version\n"
++      },
++      "has_dwarf_debug_info": true
++    },
++    {
++      "mode": "release",
++      "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++      "bytes": 4409836,
++      "sha256": "f17251b77333794a84c5dffa59d6fe645673e68c81f43a7b4ac128719bdc93dd",
++      "file": {
++        "argv": [
++          "file",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=EXj5eL4uiOO3ZHQdWkNf/OwBI_yU3yK2aeMbWs0Aw/kIuwH3GnbebC5vOCUZ4M/6eKkoMecAByQlW4SqCJy, BuildID[sha1]=264c868ba9a0a5c07ce5fc958b2b140d4c869933, with debug_info, not stripped\n",
++        "stderr": ""
++      },
++      "metadata": {
++        "argv": [
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
++          "version",
++          "-m",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck: go1.27.2\n\tpath\tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\n\tmod\tgithub.com/hitpipe/hitpipe/services/iam\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=2cd7c032e8ede98c75181599b440e97657bff197\n\tbuild\tvcs.time=2026-10-18T23:35:16Z\n\tbuild\tvcs.modified=false\n",
++        "stderr": ""
++      },
++      "sections": {
++        "argv": [
++          "readelf",
++          "-S",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "There are 26 section headers, starting at offset 0x190:\n\nSection Headers:\n  [Nr] Name              Type             Address           Offset\n       Size              EntSize          Flags  Link  Info  Align\n  [ 0]                   NULL             0000000000000000  00000000\n       0000000000000000  0000000000000000           0     0     0\n  [ 1] .note.go.buildid  NOTE             0000000000400f78  00000f78\n       0000000000000064  0000000000000000   A       0     0     4\n  [ 2] .note.gnu.bu[...] NOTE             0000000000400fdc  00000fdc\n       0000000000000024  0000000000000000   A       0     0     4\n  [ 3] .text             PROGBITS         0000000000401000  00001000\n       0000000000149911  0000000000000000  AX       0     0     64\n  [ 4] .rodata           PROGBITS         000000000054b000  0014b000\n       0000000000016642  0000000000000000   A       0     0     32\n  [ 5] .gopclntab        PROGBITS         0000000000561648  00161648\n       0000000000110442  0000000000000000   A       0     0     8\n  [ 6] .go.type          PROGBITS         0000000000671a90  00271a90\n       0000000000039950  0000000000000000   A       0     0     16\n  [ 7] .go.func          PROGBITS         00000000006ab3e0  002ab3e0\n       00000000000005f0  0000000000000000   A       0     0     8\n  [ 8] .go.buildinfo     PROGBITS         00000000006ac000  002ac000\n       00000000000001d0  0000000000000000  WA       0     0     16\n  [ 9] .go.fipsinfo      PROGBITS         00000000006ac1e0  002ac1e0\n       0000000000000078  0000000000000000  WA       0     0     32\n  [10] .go.module        PROGBITS         00000000006ac260  002ac260\n       0000000000000238  0000000000000000  WA       0     0     32\n  [11] .noptrdata        PROGBITS         00000000006ac4a0  002ac4a0\n       0000000000013902  0000000000000000  WA       0     0     32\n  [12] .data             PROGBITS         00000000006bfdc0  002bfdc0\n       0000000000009b52  0000000000000000  WA       0     0     32\n  [13] .bss              NOBITS           00000000006c9920  002c9920\n       00000000000209b8  0000000000000000  WA       0     0     32\n  [14] .noptrbss         NOBITS           00000000006ea2e0  002ea2e0\n       0000000000015668  0000000000000000  WA       0     0     32\n  [15] .debug_abbrev     PROGBITS         0000000000000000  002ca000\n       0000000000000170  0000000000000000   C       0     0     1\n  [16] .debug_line       PROGBITS         0000000000000000  002ca170\n       0000000000047f6a  0000000000000000   C       0     0     1\n  [17] .debug_frame      PROGBITS         0000000000000000  003120da\n       000000000000d4e3  0000000000000000   C       0     0     1\n  [18] .debug_gdb_s[...] PROGBITS         0000000000000000  0031f5bd\n       0000000000000018  0000000000000000           0     0     1\n  [19] .debug_info       PROGBITS         0000000000000000  0031f5d5\n       000000000007a79e  0000000000000000   C       0     0     1\n  [20] .debug_loclists   PROGBITS         0000000000000000  00399d73\n       000000000003f5c7  0000000000000000   C       0     0     1\n  [21] .debug_rnglists   PROGBITS         0000000000000000  003d933a\n       000000000001faca  0000000000000000   C       0     0     1\n  [22] .debug_addr       PROGBITS         0000000000000000  003f8e04\n       00000000000020f4  0000000000000000   C       0     0     1\n  [23] .symtab           SYMTAB           0000000000000000  003faef8\n       00000000000196e0  0000000000000018          24   641     8\n  [24] .strtab           STRTAB           0000000000000000  004145d8\n       00000000000202f2  0000000000000000           0     0     1\n  [25] .shstrtab         STRTAB           0000000000000000  004348ca\n       0000000000000122  0000000000000000           0     0     1\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n",
++        "stderr": ""
++      },
++      "dynamic": {
++        "argv": [
++          "readelf",
++          "-d",
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck"
++        ],
++        "exit": 0,
++        "stdout": "\nThere is no dynamic section in this file.\n",
++        "stderr": ""
++      },
++      "version": {
++        "argv": [
++          "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck",
++          "--version"
++        ],
++        "exit": 0,
++        "stdout": "version=pr12 commit=2cd7c032e8ede98c75181599b440e97657bff197 dirty=false buildMode=release\n",
++        "stderr": "iam-contractcheck event=start\niam-contractcheck event=end status=version\n"
++      },
++      "has_dwarf_debug_info": true
++    }
++  ],
++  "limitation": "No throughput or bottleneck claim; synthetic diagnostic, same source, no production authority.",
++  "collected_at_file_mtime_utc": "2026-10-18T23:36:15.401236+00:00",
++  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree"
++}
+diff --git a/docs/labs/pr12/dk/evidence/d1-build-smoke.json b/docs/labs/pr12/dk/evidence/d1-build-smoke.json
+new file mode 100644
+index 0000000..dc1c707
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-build-smoke.json
+@@ -0,0 +1,117 @@
++{
++  "id": "d1-build-smoke",
++  "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++  "source_tree_dirty": false,
++  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree",
++  "command": [
++    "python3",
++    "tools/pr12/workspace.py",
++    "smoke",
++    "iam",
++    "--require"
++  ],
++  "environment": {
++    "GOTOOLCHAIN": "local",
++    "GOMAXPROCS": "2",
++    "GOFLAGS": "-p=1",
++    "GOCACHE": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/cache/go-build"
++  },
++  "started_at": "2026-10-18T23:36:03.036374+00:00",
++  "completed_at": "2026-10-18T23:36:04.073365+00:00",
++  "elapsed_seconds": 1.037,
++  "exit_code": 0,
++  "expected_exit_codes": [
++    0
++  ],
++  "actual_result": "PASS",
++  "artifact_path": "d1-build-smoke.log",
++  "sha256": "5583dc0ca1e51c9898220c143dd95080577614c7feed422e6da8d140939ed586",
++  "limitations": "Agent execution only; not human review, merge or formal acceptance.",
++  "module_files": [
++    {
++      "path": "services/iam/Makefile",
++      "sha256": "7f51b2c27cf73dae22f27a21b96bed1d01af61c1467f76d3c1d77f517971e7e4"
++    },
++    {
++      "path": "services/iam/README.md",
++      "sha256": "f73f1511a326ca970c8ff87ff432eabef3fd88144f161d5d8078fe29d3b723a9"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main.go",
++      "sha256": "95e4a3cac70e7e841861e0a60b30dc29e2d09e45876c0c89ab9d31450105ca78"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main_test.go",
++      "sha256": "3dcc236acfb16a4cd788009d3e8f4788383303485af08b8552373449ec55a82c"
++    },
++    {
++      "path": "services/iam/docs/module-contract.md",
++      "sha256": "0b10aaff74886382dbdb1a8676005737505614bc355549e14faeae8984e6e3ac"
++    },
++    {
++      "path": "services/iam/go.mod",
++      "sha256": "ab4528a42642dc5e455b958e1103e9d60448db64a6e4c3c4a510aaeadc27f6a4"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock.go",
++      "sha256": "2ea7c15141e576e8a042e9e81b84399b6e19690e36e7e30fec94727339c433dd"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock_test.go",
++      "sha256": "c1d6f1fa8fb796c24aa01f7ee05e3bd5df7b5f18211ce1961b9049a8eb9b248c"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters.go",
++      "sha256": "67d1c726b919d111d0a3a4154e2e0f6e5dad16b7c4db5a5d2669a425ff022b2b"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters_test.go",
++      "sha256": "833034abd8998d8ea94e78804c32189c6f2ab0fd75248ac497269030bb0f77a3"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/fixture.go",
++      "sha256": "c8eee3531d0e41c6c2bdc8810bb4022d19c3fae1d58c2b71d9bb6c3be68470c2"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service.go",
++      "sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service_test.go",
++      "sha256": "31dceaed38c482eb2ee9402b7f282fbd7a41d739dc82de74465ef3bdefcef88c"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
++      "sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy_test.go",
++      "sha256": "c65d0165169cc708a27de60fb1ad4caf68a35a604de41cea5cf0c71fadb069ac"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/properties_test.go",
++      "sha256": "610022ae8eea954430590c2dba2c296be55199575692049100ea46bdd746b543"
++    },
++    {
++      "path": "services/iam/lab-component.json",
++      "sha256": "408d192d9f21e02d9512c56172d89655a433654f319b0587abaeef87e797fb65"
++    },
++    {
++      "path": "services/iam/testdata/idle-equal.json",
++      "sha256": "11b458a32d092c5776167e2195ae75bf66d3bce6ecbf15177bec74223482ab83"
++    },
++    {
++      "path": "services/iam/testdata/malformed.json",
++      "sha256": "dc26eaa81946fce51b0eb1c29723e77da915bfd5612262555f5e243bea15ae65"
++    },
++    {
++      "path": "services/iam/testdata/valid.json",
++      "sha256": "799e95aab91ac535173d239f52e3814c0cc9a5ece0a0aff6dbacc69be1c49a1f"
++    },
++    {
++      "path": "services/iam/tools/mutation_check.py",
++      "sha256": "dc24ff17869e5c1c241e88bc1b327c61560aa2586288159e7ace65c3e3fc5377"
++    }
++  ],
++  "module_tree_sha256": "6b6b3e957678b1e1d4eb1fa416df9c9704048e58290aac3435b865b59db29ead"
++}
+diff --git a/docs/labs/pr12/dk/evidence/d1-build-smoke.log b/docs/labs/pr12/dk/evidence/d1-build-smoke.log
+new file mode 100644
+index 0000000..1f85559
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-build-smoke.log
+@@ -0,0 +1,15 @@
+++ go version
+++ git rev-parse HEAD
+++ git status --porcelain
+++ go build -ldflags -X main.version=pr12 -X main.commit=2cd7c032e8ede98c75181599b440e97657bff197 -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/dev/iam-contractcheck ./cmd/iam-contractcheck
+++ /tmp/pr12-outside-checkout-e_1erbhc/iam-contractcheck --version
+++ git rev-parse --short HEAD
+++ /tmp/pr12-outside-checkout-e_1erbhc/iam-contractcheck --fixture /tmp/pr12-outside-checkout-e_1erbhc/positive_fixture.json --format json
++{"component": "iam", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+++ git rev-parse HEAD
+++ git status --porcelain
+++ go build -ldflags -X main.version=pr12 -X main.commit=2cd7c032e8ede98c75181599b440e97657bff197 -X main.dirty=false -X main.buildMode=release -trimpath -o /home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/.pr12-build/iam/release/iam-contractcheck ./cmd/iam-contractcheck
+++ /tmp/pr12-outside-checkout-8k2_fv7p/iam-contractcheck --version
+++ git rev-parse --short HEAD
+++ /tmp/pr12-outside-checkout-8k2_fv7p/iam-contractcheck --fixture /tmp/pr12-outside-checkout-8k2_fv7p/positive_fixture.json --format json
++{"component": "iam", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+diff --git a/docs/labs/pr12/dk/evidence/d1-domain-doc.json b/docs/labs/pr12/dk/evidence/d1-domain-doc.json
+new file mode 100644
+index 0000000..85342cb
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-domain-doc.json
+@@ -0,0 +1,115 @@
++{
++  "id": "d1-domain-doc",
++  "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++  "source_tree_dirty": false,
++  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++  "command": [
++    "go",
++    "doc",
++    "./internal/domain/sessionpolicy"
++  ],
++  "environment": {
++    "GOTOOLCHAIN": "local",
++    "GOMAXPROCS": "2",
++    "GOFLAGS": "-p=1",
++    "GOCACHE": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/cache/go-build"
++  },
++  "started_at": "2026-10-18T23:36:04.382222+00:00",
++  "completed_at": "2026-10-18T23:36:04.417585+00:00",
++  "elapsed_seconds": 0.035,
++  "exit_code": 0,
++  "expected_exit_codes": [
++    0
++  ],
++  "actual_result": "PASS",
++  "artifact_path": "d1-domain-doc.log",
++  "sha256": "da17ae68263870b2e559dbacda16b1038a2fd24b0493b90456d8af8804a80543",
++  "limitations": "Agent execution only; not human review, merge or formal acceptance.",
++  "module_files": [
++    {
++      "path": "services/iam/Makefile",
++      "sha256": "7f51b2c27cf73dae22f27a21b96bed1d01af61c1467f76d3c1d77f517971e7e4"
++    },
++    {
++      "path": "services/iam/README.md",
++      "sha256": "f73f1511a326ca970c8ff87ff432eabef3fd88144f161d5d8078fe29d3b723a9"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main.go",
++      "sha256": "95e4a3cac70e7e841861e0a60b30dc29e2d09e45876c0c89ab9d31450105ca78"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main_test.go",
++      "sha256": "3dcc236acfb16a4cd788009d3e8f4788383303485af08b8552373449ec55a82c"
++    },
++    {
++      "path": "services/iam/docs/module-contract.md",
++      "sha256": "0b10aaff74886382dbdb1a8676005737505614bc355549e14faeae8984e6e3ac"
++    },
++    {
++      "path": "services/iam/go.mod",
++      "sha256": "ab4528a42642dc5e455b958e1103e9d60448db64a6e4c3c4a510aaeadc27f6a4"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock.go",
++      "sha256": "2ea7c15141e576e8a042e9e81b84399b6e19690e36e7e30fec94727339c433dd"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock_test.go",
++      "sha256": "c1d6f1fa8fb796c24aa01f7ee05e3bd5df7b5f18211ce1961b9049a8eb9b248c"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters.go",
++      "sha256": "67d1c726b919d111d0a3a4154e2e0f6e5dad16b7c4db5a5d2669a425ff022b2b"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters_test.go",
++      "sha256": "833034abd8998d8ea94e78804c32189c6f2ab0fd75248ac497269030bb0f77a3"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/fixture.go",
++      "sha256": "c8eee3531d0e41c6c2bdc8810bb4022d19c3fae1d58c2b71d9bb6c3be68470c2"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service.go",
++      "sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service_test.go",
++      "sha256": "31dceaed38c482eb2ee9402b7f282fbd7a41d739dc82de74465ef3bdefcef88c"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
++      "sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy_test.go",
++      "sha256": "c65d0165169cc708a27de60fb1ad4caf68a35a604de41cea5cf0c71fadb069ac"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/properties_test.go",
++      "sha256": "610022ae8eea954430590c2dba2c296be55199575692049100ea46bdd746b543"
++    },
++    {
++      "path": "services/iam/lab-component.json",
++      "sha256": "408d192d9f21e02d9512c56172d89655a433654f319b0587abaeef87e797fb65"
++    },
++    {
++      "path": "services/iam/testdata/idle-equal.json",
++      "sha256": "11b458a32d092c5776167e2195ae75bf66d3bce6ecbf15177bec74223482ab83"
++    },
++    {
++      "path": "services/iam/testdata/malformed.json",
++      "sha256": "dc26eaa81946fce51b0eb1c29723e77da915bfd5612262555f5e243bea15ae65"
++    },
++    {
++      "path": "services/iam/testdata/valid.json",
++      "sha256": "799e95aab91ac535173d239f52e3814c0cc9a5ece0a0aff6dbacc69be1c49a1f"
++    },
++    {
++      "path": "services/iam/tools/mutation_check.py",
++      "sha256": "dc24ff17869e5c1c241e88bc1b327c61560aa2586288159e7ace65c3e3fc5377"
++    }
++  ],
++  "module_tree_sha256": "6b6b3e957678b1e1d4eb1fa416df9c9704048e58290aac3435b865b59db29ead"
++}
+diff --git a/docs/labs/pr12/dk/evidence/d1-domain-doc.log b/docs/labs/pr12/dk/evidence/d1-domain-doc.log
+new file mode 100644
+index 0000000..4d0c933
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-domain-doc.log
+@@ -0,0 +1,14 @@
++package sessionpolicy // import "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
++
++Package sessionpolicy evaluates a minimal authority-owned session snapshot.
++It performs no IO, reads no clock and grants no business authorization.
++
++const MaxAbsoluteLifetime = 24 * time.Hour
++type Decision struct{ ... }
++    func Evaluate(snapshot Snapshot, observation Observation) Decision
++type Observation struct{ ... }
++type Reason string
++    const ReasonValid Reason = "session_valid" ...
++type Snapshot struct{ ... }
++type State string
++    const StateValid State = "valid" ...
+diff --git a/docs/labs/pr12/dk/evidence/d1-godoc.json b/docs/labs/pr12/dk/evidence/d1-godoc.json
+new file mode 100644
+index 0000000..9b02a52
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-godoc.json
+@@ -0,0 +1,115 @@
++{
++  "id": "d1-godoc",
++  "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++  "source_tree_dirty": false,
++  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++  "command": [
++    "go",
++    "doc",
++    "./internal/application/authenticatesession"
++  ],
++  "environment": {
++    "GOTOOLCHAIN": "local",
++    "GOMAXPROCS": "2",
++    "GOFLAGS": "-p=1",
++    "GOCACHE": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/cache/go-build"
++  },
++  "started_at": "2026-10-18T23:36:04.304916+00:00",
++  "completed_at": "2026-10-18T23:36:04.342430+00:00",
++  "elapsed_seconds": 0.037,
++  "exit_code": 0,
++  "expected_exit_codes": [
++    0
++  ],
++  "actual_result": "PASS",
++  "artifact_path": "d1-godoc.log",
++  "sha256": "837528d99af985538205724a47badc891c2d10c74e9b1bb42dbbf5632428e045",
++  "limitations": "Agent execution only; not human review, merge or formal acceptance.",
++  "module_files": [
++    {
++      "path": "services/iam/Makefile",
++      "sha256": "7f51b2c27cf73dae22f27a21b96bed1d01af61c1467f76d3c1d77f517971e7e4"
++    },
++    {
++      "path": "services/iam/README.md",
++      "sha256": "f73f1511a326ca970c8ff87ff432eabef3fd88144f161d5d8078fe29d3b723a9"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main.go",
++      "sha256": "95e4a3cac70e7e841861e0a60b30dc29e2d09e45876c0c89ab9d31450105ca78"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main_test.go",
++      "sha256": "3dcc236acfb16a4cd788009d3e8f4788383303485af08b8552373449ec55a82c"
++    },
++    {
++      "path": "services/iam/docs/module-contract.md",
++      "sha256": "0b10aaff74886382dbdb1a8676005737505614bc355549e14faeae8984e6e3ac"
++    },
++    {
++      "path": "services/iam/go.mod",
++      "sha256": "ab4528a42642dc5e455b958e1103e9d60448db64a6e4c3c4a510aaeadc27f6a4"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock.go",
++      "sha256": "2ea7c15141e576e8a042e9e81b84399b6e19690e36e7e30fec94727339c433dd"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock_test.go",
++      "sha256": "c1d6f1fa8fb796c24aa01f7ee05e3bd5df7b5f18211ce1961b9049a8eb9b248c"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters.go",
++      "sha256": "67d1c726b919d111d0a3a4154e2e0f6e5dad16b7c4db5a5d2669a425ff022b2b"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters_test.go",
++      "sha256": "833034abd8998d8ea94e78804c32189c6f2ab0fd75248ac497269030bb0f77a3"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/fixture.go",
++      "sha256": "c8eee3531d0e41c6c2bdc8810bb4022d19c3fae1d58c2b71d9bb6c3be68470c2"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service.go",
++      "sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service_test.go",
++      "sha256": "31dceaed38c482eb2ee9402b7f282fbd7a41d739dc82de74465ef3bdefcef88c"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
++      "sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy_test.go",
++      "sha256": "c65d0165169cc708a27de60fb1ad4caf68a35a604de41cea5cf0c71fadb069ac"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/properties_test.go",
++      "sha256": "610022ae8eea954430590c2dba2c296be55199575692049100ea46bdd746b543"
++    },
++    {
++      "path": "services/iam/lab-component.json",
++      "sha256": "408d192d9f21e02d9512c56172d89655a433654f319b0587abaeef87e797fb65"
++    },
++    {
++      "path": "services/iam/testdata/idle-equal.json",
++      "sha256": "11b458a32d092c5776167e2195ae75bf66d3bce6ecbf15177bec74223482ab83"
++    },
++    {
++      "path": "services/iam/testdata/malformed.json",
++      "sha256": "dc26eaa81946fce51b0eb1c29723e77da915bfd5612262555f5e243bea15ae65"
++    },
++    {
++      "path": "services/iam/testdata/valid.json",
++      "sha256": "799e95aab91ac535173d239f52e3814c0cc9a5ece0a0aff6dbacc69be1c49a1f"
++    },
++    {
++      "path": "services/iam/tools/mutation_check.py",
++      "sha256": "dc24ff17869e5c1c241e88bc1b327c61560aa2586288159e7ace65c3e3fc5377"
++    }
++  ],
++  "module_tree_sha256": "6b6b3e957678b1e1d4eb1fa416df9c9704048e58290aac3435b865b59db29ead"
++}
+diff --git a/docs/labs/pr12/dk/evidence/d1-godoc.log b/docs/labs/pr12/dk/evidence/d1-godoc.log
+new file mode 100644
+index 0000000..37d23a5
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-godoc.log
+@@ -0,0 +1,10 @@
++package authenticatesession // import "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
++
++Package authenticatesession orchestrates a session check through consumer-owned
++ports. It authenticates only a session snapshot; business grants are separate.
++
++type Clock interface{ ... }
++type Result struct{ ... }
++type Service struct{ ... }
++    func New(lookup SessionLookup, clock Clock) (Service, error)
++type SessionLookup interface{ ... }
+diff --git a/docs/labs/pr12/dk/evidence/d1-imports.json b/docs/labs/pr12/dk/evidence/d1-imports.json
+new file mode 100644
+index 0000000..79c025d
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-imports.json
+@@ -0,0 +1,116 @@
++{
++  "id": "d1-imports",
++  "source_sha": "2cd7c032e8ede98c75181599b440e97657bff197",
++  "source_tree_dirty": false,
++  "cwd": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++  "command": [
++    "go",
++    "list",
++    "-json",
++    "./..."
++  ],
++  "environment": {
++    "GOTOOLCHAIN": "local",
++    "GOMAXPROCS": "2",
++    "GOFLAGS": "-p=1",
++    "GOCACHE": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/cache/go-build"
++  },
++  "started_at": "2026-10-18T23:36:04.148723+00:00",
++  "completed_at": "2026-10-18T23:36:04.261121+00:00",
++  "elapsed_seconds": 0.112,
++  "exit_code": 0,
++  "expected_exit_codes": [
++    0
++  ],
++  "actual_result": "PASS",
++  "artifact_path": "d1-imports.log",
++  "sha256": "bb61b3f470ebaaca840130424ca40e8a9767513afd6880cec5201adb0526010b",
++  "limitations": "Agent execution only; not human review, merge or formal acceptance.",
++  "module_files": [
++    {
++      "path": "services/iam/Makefile",
++      "sha256": "7f51b2c27cf73dae22f27a21b96bed1d01af61c1467f76d3c1d77f517971e7e4"
++    },
++    {
++      "path": "services/iam/README.md",
++      "sha256": "f73f1511a326ca970c8ff87ff432eabef3fd88144f161d5d8078fe29d3b723a9"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main.go",
++      "sha256": "95e4a3cac70e7e841861e0a60b30dc29e2d09e45876c0c89ab9d31450105ca78"
++    },
++    {
++      "path": "services/iam/cmd/iam-contractcheck/main_test.go",
++      "sha256": "3dcc236acfb16a4cd788009d3e8f4788383303485af08b8552373449ec55a82c"
++    },
++    {
++      "path": "services/iam/docs/module-contract.md",
++      "sha256": "0b10aaff74886382dbdb1a8676005737505614bc355549e14faeae8984e6e3ac"
++    },
++    {
++      "path": "services/iam/go.mod",
++      "sha256": "ab4528a42642dc5e455b958e1103e9d60448db64a6e4c3c4a510aaeadc27f6a4"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock.go",
++      "sha256": "2ea7c15141e576e8a042e9e81b84399b6e19690e36e7e30fec94727339c433dd"
++    },
++    {
++      "path": "services/iam/internal/adapters/clock/system/clock_test.go",
++      "sha256": "c1d6f1fa8fb796c24aa01f7ee05e3bd5df7b5f18211ce1961b9049a8eb9b248c"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters.go",
++      "sha256": "67d1c726b919d111d0a3a4154e2e0f6e5dad16b7c4db5a5d2669a425ff022b2b"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/adapters_test.go",
++      "sha256": "833034abd8998d8ea94e78804c32189c6f2ab0fd75248ac497269030bb0f77a3"
++    },
++    {
++      "path": "services/iam/internal/adapters/fixtures/sessionlookup/fixture.go",
++      "sha256": "c8eee3531d0e41c6c2bdc8810bb4022d19c3fae1d58c2b71d9bb6c3be68470c2"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service.go",
++      "sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c"
++    },
++    {
++      "path": "services/iam/internal/application/authenticatesession/service_test.go",
++      "sha256": "31dceaed38c482eb2ee9402b7f282fbd7a41d739dc82de74465ef3bdefcef88c"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
++      "sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/policy_test.go",
++      "sha256": "c65d0165169cc708a27de60fb1ad4caf68a35a604de41cea5cf0c71fadb069ac"
++    },
++    {
++      "path": "services/iam/internal/domain/sessionpolicy/properties_test.go",
++      "sha256": "610022ae8eea954430590c2dba2c296be55199575692049100ea46bdd746b543"
++    },
++    {
++      "path": "services/iam/lab-component.json",
++      "sha256": "408d192d9f21e02d9512c56172d89655a433654f319b0587abaeef87e797fb65"
++    },
++    {
++      "path": "services/iam/testdata/idle-equal.json",
++      "sha256": "11b458a32d092c5776167e2195ae75bf66d3bce6ecbf15177bec74223482ab83"
++    },
++    {
++      "path": "services/iam/testdata/malformed.json",
++      "sha256": "dc26eaa81946fce51b0eb1c29723e77da915bfd5612262555f5e243bea15ae65"
++    },
++    {
++      "path": "services/iam/testdata/valid.json",
++      "sha256": "799e95aab91ac535173d239f52e3814c0cc9a5ece0a0aff6dbacc69be1c49a1f"
++    },
++    {
++      "path": "services/iam/tools/mutation_check.py",
++      "sha256": "dc24ff17869e5c1c241e88bc1b327c61560aa2586288159e7ace65c3e3fc5377"
++    }
++  ],
++  "module_tree_sha256": "6b6b3e957678b1e1d4eb1fa416df9c9704048e58290aac3435b865b59db29ead"
++}
+diff --git a/docs/labs/pr12/dk/evidence/d1-imports.log b/docs/labs/pr12/dk/evidence/d1-imports.log
+new file mode 100644
+index 0000000..876bcd3
+--- /dev/null
++++ b/docs/labs/pr12/dk/evidence/d1-imports.log
+@@ -0,0 +1,525 @@
++{
++	"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/cmd/iam-contractcheck",
++	"ImportPath": "github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck",
++	"Name": "main",
++	"Doc": "iam-contractcheck exercises the real policy with synthetic data.",
++	"Target": "/home/deploy/go/bin/iam-contractcheck",
++	"Root": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++	"Module": {
++		"Path": "github.com/hitpipe/hitpipe/services/iam",
++		"Main": true,
++		"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++		"GoMod": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/go.mod",
++		"GoVersion": "1.27.2"
++	},
++	"Match": [
++		"./..."
++	],
++	"Stale": true,
++	"StaleReason": "build ID mismatch",
++	"GoFiles": [
++		"main.go"
++	],
++	"Imports": [
++		"context",
++		"encoding/json",
++		"errors",
++		"flag",
++		"fmt",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"io",
++		"os"
++	],
++	"Deps": [
++		"bytes",
++		"cmp",
++		"context",
++		"encoding",
++		"encoding/base32",
++		"encoding/base64",
++		"encoding/binary",
++		"encoding/hex",
++		"encoding/json",
++		"encoding/json/internal",
++		"encoding/json/internal/jsonflags",
++		"encoding/json/internal/jsonopts",
++		"encoding/json/internal/jsonwire",
++		"encoding/json/jsontext",
++		"encoding/json/v2",
++		"errors",
++		"flag",
++		"fmt",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"internal/abi",
++		"internal/asan",
++		"internal/bytealg",
++		"internal/byteorder",
++		"internal/chacha8rand",
++		"internal/coverage/rtcov",
++		"internal/cpu",
++		"internal/filepathlite",
++		"internal/fmtsort",
++		"internal/goarch",
++		"internal/godebugs",
++		"internal/goexperiment",
++		"internal/goos",
++		"internal/msan",
++		"internal/oserror",
++		"internal/poll",
++		"internal/profilerecord",
++		"internal/race",
++		"internal/reflectlite",
++		"internal/runtime/atomic",
++		"internal/runtime/cgroup",
++		"internal/runtime/exithook",
++		"internal/runtime/gc",
++		"internal/runtime/gc/scan",
++		"internal/runtime/maps",
++		"internal/runtime/math",
++		"internal/runtime/pprof/label",
++		"internal/runtime/sys",
++		"internal/runtime/syscall/linux",
++		"internal/strconv",
++		"internal/stringslite",
++		"internal/sync",
++		"internal/synctest",
++		"internal/syscall/execenv",
++		"internal/syscall/unix",
++		"internal/testlog",
++		"internal/trace/tracev2",
++		"internal/unsafeheader",
++		"io",
++		"io/fs",
++		"iter",
++		"math",
++		"math/bits",
++		"os",
++		"path",
++		"reflect",
++		"regexp",
++		"regexp/syntax",
++		"runtime",
++		"slices",
++		"sort",
++		"strconv",
++		"strings",
++		"sync",
++		"sync/atomic",
++		"syscall",
++		"time",
++		"unicode",
++		"unicode/utf16",
++		"unicode/utf8",
++		"unsafe"
++	],
++	"TestGoFiles": [
++		"main_test.go"
++	],
++	"TestImports": [
++		"bytes",
++		"encoding/json",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup",
++		"os",
++		"path/filepath",
++		"strings",
++		"testing"
++	]
++}
++{
++	"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/internal/adapters/clock/system",
++	"ImportPath": "github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system",
++	"Name": "system",
++	"Doc": "Package system wraps the host clock without inventing an attestation of it.",
++	"Root": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++	"Module": {
++		"Path": "github.com/hitpipe/hitpipe/services/iam",
++		"Main": true,
++		"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++		"GoMod": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/go.mod",
++		"GoVersion": "1.27.2"
++	},
++	"Match": [
++		"./..."
++	],
++	"GoFiles": [
++		"clock.go"
++	],
++	"Imports": [
++		"context",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"time"
++	],
++	"Deps": [
++		"cmp",
++		"context",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"internal/abi",
++		"internal/asan",
++		"internal/bytealg",
++		"internal/byteorder",
++		"internal/chacha8rand",
++		"internal/coverage/rtcov",
++		"internal/cpu",
++		"internal/goarch",
++		"internal/godebugs",
++		"internal/goexperiment",
++		"internal/goos",
++		"internal/msan",
++		"internal/oserror",
++		"internal/profilerecord",
++		"internal/race",
++		"internal/reflectlite",
++		"internal/runtime/atomic",
++		"internal/runtime/cgroup",
++		"internal/runtime/exithook",
++		"internal/runtime/gc",
++		"internal/runtime/gc/scan",
++		"internal/runtime/maps",
++		"internal/runtime/math",
++		"internal/runtime/pprof/label",
++		"internal/runtime/sys",
++		"internal/runtime/syscall/linux",
++		"internal/strconv",
++		"internal/stringslite",
++		"internal/sync",
++		"internal/synctest",
++		"internal/trace/tracev2",
++		"internal/unsafeheader",
++		"iter",
++		"math",
++		"math/bits",
++		"reflect",
++		"runtime",
++		"slices",
++		"strconv",
++		"sync",
++		"sync/atomic",
++		"syscall",
++		"time",
++		"unicode",
++		"unicode/utf8",
++		"unsafe"
++	],
++	"XTestGoFiles": [
++		"clock_test.go"
++	],
++	"XTestImports": [
++		"context",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system",
++		"testing",
++		"time"
++	]
++}
++{
++	"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/internal/adapters/fixtures/sessionlookup",
++	"ImportPath": "github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup",
++	"Name": "sessionlookup",
++	"Doc": "Package sessionlookup provides strictly synthetic diagnostic adapters.",
++	"Root": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++	"Module": {
++		"Path": "github.com/hitpipe/hitpipe/services/iam",
++		"Main": true,
++		"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++		"GoMod": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/go.mod",
++		"GoVersion": "1.27.2"
++	},
++	"Match": [
++		"./..."
++	],
++	"GoFiles": [
++		"adapters.go",
++		"fixture.go"
++	],
++	"Imports": [
++		"bytes",
++		"context",
++		"encoding/json",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"io",
++		"os",
++		"regexp",
++		"strconv",
++		"time",
++		"unicode/utf8"
++	],
++	"Deps": [
++		"bytes",
++		"cmp",
++		"context",
++		"encoding",
++		"encoding/base32",
++		"encoding/base64",
++		"encoding/binary",
++		"encoding/hex",
++		"encoding/json",
++		"encoding/json/internal",
++		"encoding/json/internal/jsonflags",
++		"encoding/json/internal/jsonopts",
++		"encoding/json/internal/jsonwire",
++		"encoding/json/jsontext",
++		"encoding/json/v2",
++		"errors",
++		"fmt",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"internal/abi",
++		"internal/asan",
++		"internal/bytealg",
++		"internal/byteorder",
++		"internal/chacha8rand",
++		"internal/coverage/rtcov",
++		"internal/cpu",
++		"internal/filepathlite",
++		"internal/fmtsort",
++		"internal/goarch",
++		"internal/godebugs",
++		"internal/goexperiment",
++		"internal/goos",
++		"internal/msan",
++		"internal/oserror",
++		"internal/poll",
++		"internal/profilerecord",
++		"internal/race",
++		"internal/reflectlite",
++		"internal/runtime/atomic",
++		"internal/runtime/cgroup",
++		"internal/runtime/exithook",
++		"internal/runtime/gc",
++		"internal/runtime/gc/scan",
++		"internal/runtime/maps",
++		"internal/runtime/math",
++		"internal/runtime/pprof/label",
++		"internal/runtime/sys",
++		"internal/runtime/syscall/linux",
++		"internal/strconv",
++		"internal/stringslite",
++		"internal/sync",
++		"internal/synctest",
++		"internal/syscall/execenv",
++		"internal/syscall/unix",
++		"internal/testlog",
++		"internal/trace/tracev2",
++		"internal/unsafeheader",
++		"io",
++		"io/fs",
++		"iter",
++		"math",
++		"math/bits",
++		"os",
++		"path",
++		"reflect",
++		"regexp",
++		"regexp/syntax",
++		"runtime",
++		"slices",
++		"sort",
++		"strconv",
++		"strings",
++		"sync",
++		"sync/atomic",
++		"syscall",
++		"time",
++		"unicode",
++		"unicode/utf16",
++		"unicode/utf8",
++		"unsafe"
++	],
++	"XTestGoFiles": [
++		"adapters_test.go"
++	],
++	"XTestImports": [
++		"context",
++		"encoding/json",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"os",
++		"path/filepath",
++		"strings",
++		"sync",
++		"testing",
++		"time"
++	]
++}
++{
++	"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/internal/application/authenticatesession",
++	"ImportPath": "github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++	"Name": "authenticatesession",
++	"Doc": "Package authenticatesession orchestrates a session check through consumer-owned ports.",
++	"Root": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++	"Module": {
++		"Path": "github.com/hitpipe/hitpipe/services/iam",
++		"Main": true,
++		"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++		"GoMod": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/go.mod",
++		"GoVersion": "1.27.2"
++	},
++	"Match": [
++		"./..."
++	],
++	"GoFiles": [
++		"service.go"
++	],
++	"Imports": [
++		"context",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"reflect"
++	],
++	"Deps": [
++		"cmp",
++		"context",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"internal/abi",
++		"internal/asan",
++		"internal/bytealg",
++		"internal/byteorder",
++		"internal/chacha8rand",
++		"internal/coverage/rtcov",
++		"internal/cpu",
++		"internal/goarch",
++		"internal/godebugs",
++		"internal/goexperiment",
++		"internal/goos",
++		"internal/msan",
++		"internal/oserror",
++		"internal/profilerecord",
++		"internal/race",
++		"internal/reflectlite",
++		"internal/runtime/atomic",
++		"internal/runtime/cgroup",
++		"internal/runtime/exithook",
++		"internal/runtime/gc",
++		"internal/runtime/gc/scan",
++		"internal/runtime/maps",
++		"internal/runtime/math",
++		"internal/runtime/pprof/label",
++		"internal/runtime/sys",
++		"internal/runtime/syscall/linux",
++		"internal/strconv",
++		"internal/stringslite",
++		"internal/sync",
++		"internal/synctest",
++		"internal/trace/tracev2",
++		"internal/unsafeheader",
++		"iter",
++		"math",
++		"math/bits",
++		"reflect",
++		"runtime",
++		"slices",
++		"strconv",
++		"sync",
++		"sync/atomic",
++		"syscall",
++		"time",
++		"unicode",
++		"unicode/utf8",
++		"unsafe"
++	],
++	"XTestGoFiles": [
++		"service_test.go"
++	],
++	"XTestImports": [
++		"context",
++		"errors",
++		"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"strings",
++		"testing",
++		"time"
++	]
++}
++{
++	"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/internal/domain/sessionpolicy",
++	"ImportPath": "github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++	"Name": "sessionpolicy",
++	"Doc": "Package sessionpolicy evaluates a minimal authority-owned session snapshot.",
++	"Root": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++	"Module": {
++		"Path": "github.com/hitpipe/hitpipe/services/iam",
++		"Main": true,
++		"Dir": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam",
++		"GoMod": "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/worktree/services/iam/go.mod",
++		"GoVersion": "1.27.2"
++	},
++	"Match": [
++		"./..."
++	],
++	"GoFiles": [
++		"policy.go"
++	],
++	"Imports": [
++		"time"
++	],
++	"Deps": [
++		"cmp",
++		"errors",
++		"internal/abi",
++		"internal/asan",
++		"internal/bytealg",
++		"internal/byteorder",
++		"internal/chacha8rand",
++		"internal/coverage/rtcov",
++		"internal/cpu",
++		"internal/goarch",
++		"internal/godebugs",
++		"internal/goexperiment",
++		"internal/goos",
++		"internal/msan",
++		"internal/oserror",
++		"internal/profilerecord",
++		"internal/race",
++		"internal/reflectlite",
++		"internal/runtime/atomic",
++		"internal/runtime/cgroup",
++		"internal/runtime/exithook",
++		"internal/runtime/gc",
++		"internal/runtime/gc/scan",
++		"internal/runtime/maps",
++		"internal/runtime/math",
++		"internal/runtime/pprof/label",
++		"internal/runtime/sys",
++		"internal/runtime/syscall/linux",
++		"internal/strconv",
++		"internal/stringslite",
++		"internal/sync",
++		"internal/synctest",
++		"internal/trace/tracev2",
++		"internal/unsafeheader",
++		"iter",
++		"math/bits",
++		"runtime",
++		"slices",
++		"sync",
++		"sync/atomic",
++		"syscall",
++		"time",
++		"unsafe"
++	],
++	"XTestGoFiles": [
++		"policy_test.go",
++		"properties_test.go"
++	],
++	"XTestImports": [
++		"fmt",
++		"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy",
++		"reflect",
++		"testing",
++		"time"
++	]
++}
+diff --git a/docs/labs/pr12/dk/execution-path.md b/docs/labs/pr12/dk/execution-path.md
+new file mode 100644
+index 0000000..3f5d88b
+--- /dev/null
++++ b/docs/labs/pr12/dk/execution-path.md
+@@ -0,0 +1,27 @@
++# HIT-22 — source → binary → runtime, фактическое сравнение
++
++Один сценарий: synthetic `services/iam/testdata/valid.json`, text/JSON result session_valid, source `2cd7c032e8ede98c75181599b440e97657bff197`, dirty=false. Полные build commands и external-directory smoke — `evidence/d1-build-smoke.*`; binary ELF/sections/version/digests — `evidence/binary-inspection.json`. Это actual observation, не план.
++
++```text
++Go source (domain/application/adapters/cmd) + service go.mod (stdlib only)
++  → Go1.27.2 import/type checking + compile + link (Go runtime/stdlib included)
++  → linux/amd64 ELF iam-contractcheck + separate synthetic JSON input
++  → OS loader/runtime → main/run → strict adapter decode → composition root
++  → Execute: Lookup → Clock → Evaluate → safe state/reason → exit
++```
++
++JSON fixture не компилируется в binary и остаётся отдельным input. Python wrapper/Git/gh нужны для подготовки/проверок, не для запуска готового ELF. Interpreter Node/Python/LLM и shared third-party runtime libraries этому binary не требуются на проверенном Linux amd64. Это не cross-platform portability claim.
++
++| Наблюдение | Dev | Release |
++| --- | --- | --- |
++| Общий source, input, ожидаемый результат | один SHA / valid.json / session_valid | тот же SHA / тот же input / тот же result |
++| Флаги | -gcflags=all=-N -l; linker version/commit/dirty/mode | -trimpath; linker version/commit/dirty/mode |
++| Actual bytes | 4622983 | 4409836 |
++| ELF | x86-64, statically linked, no dynamic section | x86-64, statically linked, no dynamic section |
++| DWARF .debug_info | Есть, не stripped | Есть, не stripped; release не означает удаления symbols |
++| Build metadata | Go1.27.2, mode=dev, commit=2cd7c03..., dirty=false | Go1.27.2, mode=release, тот же full SHA, dirty=false |
++| Запуск вне исходников | binary+fixture скопированы в отдельный temporary directory; --version, positive, malformed и invalid format проверены | тот же протокол, PASS |
++
++Это измерение размера и состава **одного** build в одной среде. Скорость, allocation, production capacity не измерялись; меньший файл не доказывает performance benefit. Debug/release могут одинаково содержать symbols; -trimpath убирает build source paths, не runtime data. `CGO_ENABLED=1` в toolchain metadata не делает этот конкретный stdlib-only binary dynamically linked — фактический ELF проверен.
++
++Из root: `python3 tools/pr12/workspace.py build iam --mode dev --require` и с `--mode release`; `python3 tools/pr12/workspace.py smoke iam --require`; `file .pr12-build/iam/release/iam-contractcheck`; `go version -m ...`; `readelf -S ...`; `readelf -d ...`. Для запуска достаточно binary+fixture на совместимом host; `--clock system` без attestation даёт unavailable3. Отдельный student clean reproduction остаётся human gate, собственный outside-checkout запуск за него не выдаётся.
+diff --git a/docs/labs/pr12/dk/module-adr.md b/docs/labs/pr12/dk/module-adr.md
+new file mode 100644
+index 0000000..2e803a0
+--- /dev/null
++++ b/docs/labs/pr12/dk/module-adr.md
+@@ -0,0 +1,25 @@
++# DK-ADR-001 — чистая SessionPolicy и consumer-owned ports
++
++Дата: 18.10.2026 UTC. Автор-owner: Дмитрий Карачебан; подготовил агент Codex. Статус: implemented candidate, **ожидает отдельного человеческого review**. Локальный implementation ADR HIT-22; не новый HP-ADR-001 и не изменение Architecture Contract.
++
++## Контекст
++
++HP-BP-001/T/002–003 требуют fail-closed validity и отделяют её от business grant. Лабораторная должна дать реальную переиспользуемую логику, consumer и подстановку двух реализаций, не захватывая SQL/OIDC/чужие service boundaries. В snapshot нет lastActivity; нельзя изобрести column и нельзя ограничить обновлённый idle первыми восемью часами от created.
++
++## Варианты
++
++1. Проверять всё прямо в CLI с time.Now и чтением JSON: меньше файлов, но тесты зависят от host time, нет reusable consumer и явной authority boundary.
++2. Сразу встроить SQL/OIDC/current authorization: ближе к полному IAM, но требует реальных trust/storage протоколов, меняет общий scope и блокирует isolated verification; fake live endpoint недопустим.
++3. Чистая policy значений + один application consumer с двумя узкими ports; File/Fixed и Clock adapters на внешней границе: проверяет заявленные правила и substitution без новой canonical wire/SQL.
++
++## Решение и основание
++
++Выбран **3**. Ports принадлежат application consumer. Время читается после Lookup; отсутствие/ошибка/отмена dependencies возвращает unavailable. Нельзя конвертировать adapter error в прежний success. New отвергает typed-nil; zero service безопасен. File/fixed diagnostic adapter выбирается только в cmd. Snapshot/Decision — values, внешнее владение не утекает через изменяемые указатели. Strict JSON локален adapter, его ошибка не раскрывает исходный payload. System time требует explicit health probe; CLI не изображает её наличие.
++
++## Цена и последствия
++
++Добавлены две интерфейсные границы, composition root и локальная reflect-проверка nil в application; domain остаётся только time. Синтетические File/Fixed не доказывают production authority и не заменяют будущую persistence/health integration. Ещё нужны production adapters, OIDC, выдача/продление/CSRF и business authorization по контракту. Возможное развитие не требует переписать Evaluate/Execute, но каждый реальный adapter обязан подтвердить freshness, cancellation и error semantics — механическая замена недостаточна.
++
++## Проверка решения
++
++Фактические imports сверены `go list -json`; wrapper guard/vet/tests PASS. Один Service.Execute проходит normal/error/boundary с File/Fixed; test latency crosses idle и clock читается после lookup; typed-nil/zero/cancel/error tests fail closed. Domain/input immutable; shared fixed snapshot проходит race exercise. Семь compiling mutants проверили чувствительность; M07 survivor устранён усилением assertions. Build modes/outside-checkout smoke фактически выполнены. Отдельный человек должен проверить oracle/границы и PR; approval/merge не подделаны.
+diff --git a/docs/labs/pr12/dk/module-map.md b/docs/labs/pr12/dk/module-map.md
+new file mode 100644
+index 0000000..53864ba
+--- /dev/null
++++ b/docs/labs/pr12/dk/module-map.md
+@@ -0,0 +1,29 @@
++# HIT-22 — карта фактического IAM-модуля
++
++Владелец/автор участка: Дмитрий Карачебан; реализация подготовлена агентом Codex. Source of actual imports: `evidence/d1-imports.log` (`go list -json ./...`, exact source `2cd7c032e8ede98c75181599b440e97657bff197`). Status всех пяти package: IMPLEMENTED / SELF_CHECKED / HUMAN_REVIEW_PENDING. Нет состояния Accepted или production deployed.
++
++| Package / путь под services/iam | Ответственность / публичный контракт | Прямые внутренние imports |
++| --- | --- | --- |
++| internal/domain/sessionpolicy | Проверить переданные значения: Evaluate, Snapshot, Observation, Decision | Нет, stdlib time |
++| internal/application/authenticatesession | Оркестрация New/Service.Execute; consumer-owned SessionLookup/Clock; Result | domain/sessionpolicy |
++| internal/adapters/fixtures/sessionlookup | Строго Decode, NewFile/NewFixed, NewFixedClock; синтетическая замена, value ownership | application/authenticatesession, domain/sessionpolicy |
++| internal/adapters/clock/system | Host Clock.Now через явно заданный HealthProbe; без probe unavailable | application/authenticatesession, domain/sessionpolicy |
++| cmd/iam-contractcheck | Составить зависимости, выбрать File/Fixed и fixture/system Clock, выполнить один Execute, безопасный вывод/exit | оба adapters и application/authenticatesession |
++
++```mermaid
++flowchart LR
++    CMD[cmd/iam-contractcheck] --> APP[application/authenticatesession]
++    CMD --> FILE[adapters/fixtures/sessionlookup]
++    CMD --> CLOCK[adapters/clock/system]
++    FILE --> APP
++    CLOCK --> APP
++    FILE --> DOMAIN[domain/sessionpolicy]
++    CLOCK --> DOMAIN
++    APP --> DOMAIN
++```
++
++Легенда: **A→B означает «исходный package A импортирует B»**, не runtime-вызов и не направление данных. Go компиляция/`go list` не допускает import cycle; wrapper дополнительно запрещает concrete adapter imports в domain/application и foreign service internals. Callback через port во время Execute — runtime dependency inversion, не обратный source import. Compile-time interface assertions adapters→application подтверждают совместимость, а consumer не знает File/Fixed/System types.
++
++Requirement→responsibility→operation→consumer: DK-FR-01/02 + HP-BP-001/T/002 → session validity → Evaluate(snapshot, observation) → Service.Execute; DK-FR-03 + T/003 → safe authority orchestration → Execute(ctx, reference) → diagnostic composition root и будущий IAM transport. Диагностический root уже вызывает настоящий consumer, отдельной «учебной копии» policy нет.
++
++Внешние обязанности: SQL authority/tenant/membership/start barriers/OIDC/renewal/fencing — будущие IAM/owner adapters и общая архитектура, а не фиктивные package в этой карте. Другие три backend service и frontend не импортируются. Соседние worktree/PR не редактировались. Модуль и task history сохраняются при переносе Feature в будущий IAM epic.
+diff --git a/docs/labs/pr12/dk/toolchain.md b/docs/labs/pr12/dk/toolchain.md
+new file mode 100644
+index 0000000..3bd8e2f
+--- /dev/null
++++ b/docs/labs/pr12/dk/toolchain.md
+@@ -0,0 +1,19 @@
++# HIT-22 — инструментальный контур IAM
++
++Автор-owner Дмитрий Карачебан; агентное исполнение Codex, MANUAL_LAB_PR12. Основа — [shared/stack-decision.md](../shared/stack-decision.md), [HP-ADR-001](../upstream/architecture/HP-ADR-001.md), [implementation convention](../IMPLEMENTATION_CONVENTION.md). Shared decision остаётся общим источником; личный [DK-ADR-001](module-adr.md) объясняет ограниченную реализацию. Это не принятие Candidate фазовых контрактов.
++
++Go **1.27.2** закреплён в service go.mod и wrapper; per-service module не меняет legacy root. Прямые внешние Go зависимости: **0**; стандартная библиотека версии toolchain. `go.sum` отсутствует обоснованно, implicit latest dependencies нет. Python3.14.4 — фактический локальный wrapper, контракт wrapper Python3.10+; Git2.53.0, GitHub CLI2.46.0, binutils readelf2.46; эти host tools не входят в runtime binary. Go архив получен с официального download index, проверен SHA256 `ecbadb99091a3f46e31f5f934b068b1864eafa7995211b39eaddf76996045fe5` для linux-amd64 Go1.27.2. Проверенные команды и точная среда — evidence.
++
++| Все 7 позиций | Средство и назначение | Маршрут на участке | Фактический статус |
++| --- | --- | --- | --- |
++| 1 Build/transformation | Go1.27.2 compiler/linker; Python wrapper | root → workspace.py build iam --mode dev/release → module cmd → ELF | WORKS: C1/C2/C3/D1 actual smoke |
++| 2 Dependency management | Go modules1.27.2 | собственный services/iam/go.mod; go list -json ./...; no third-party modules | WORKS: d1-imports; никаких private credentials |
++| 3 Tests | go test1.27.2, testing/fuzz, coverage | named tests, fixtures, DI contracts, mutation runner | WORKS: c3-final-check, fuzz, cross coverage, mutation protocols |
++| 4 Static analysis | go vet1.27.2 + existing source import guard | wrapper check: domain/application boundaries, vet ./... | WORKS: local/CI; не SAST proof/security certification |
++| 5 Dynamic analysis | Go race detector1.27.2 + external diagnostic smoke | PR12_RACE=1 wrapper; реальный binary dev/release вне checkout | WORKS на linux/amd64 с C compiler; ограничен выполненными путями |
++| 6 Profiling | Go1.27.2 pprof/benchmark/trace | будущий measured production-authority workload, отдельная задача после реального adapter | PLANNED / NOT RUN. Профиль CPU/alloc не снимался; bottleneck и latency цифры не заявляются |
++| 7 CI | GitHub Actions ubuntu24.04, checkout@v4, setup-go@v5, upload-artifact@v4 | .github/workflows/pr12-dk.yml: exact head→sources→vet/tests/race→smoke→coverage→mutations→artifacts | WORKS подтверждается конкретными CI runs в финальном index; hosted action major refs унаследованы, это не immutable toolchain digests |
++
++В production module нет dependency on Python/gh/Atlassian/LLM/browser. Для clean reproduction нужны Git, Python3.10+, exact Go, Linux binutils для inspection; `PR12_RACE=1` дополнительно требует поддерживаемый host+C compiler. Установка tools и отдельное human воспроизведение — разные факты. Последнее остаётся HIT-23, не заменяется собственным запуском.
++
++Порядок первого запуска и команды — [services/iam/README.md](../../../../services/iam/README.md). Ненулевой gate подтверждён M01 при build0/tests1, затем restored0; false green от отсутствующего/skip теста запрещён wrapper. Доступны все исходники и синтетические fixture без внешнего аккаунта.

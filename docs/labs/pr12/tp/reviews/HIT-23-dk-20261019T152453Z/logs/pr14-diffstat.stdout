@@ -1,0 +1,15 @@
+ docs/labs/pr12/dk/module-contract.md               |  84 +---------
+ services/iam/Makefile                              |   9 ++
+ services/iam/README.md                             |  32 ++++
+ services/iam/cmd/iam-contractcheck/fixture.go      | 179 +++++++++++++++++++++
+ services/iam/cmd/iam-contractcheck/main.go         |  71 ++++++++
+ services/iam/cmd/iam-contractcheck/main_test.go    | 100 ++++++++++++
+ services/iam/docs/module-contract.md               |  83 ++++++++++
+ services/iam/go.mod                                |   3 +
+ .../iam/internal/domain/sessionpolicy/policy.go    |  99 ++++++++++++
+ .../internal/domain/sessionpolicy/policy_test.go   | 154 ++++++++++++++++++
+ services/iam/lab-component.json                    |   8 +
+ services/iam/testdata/idle-equal.json              |  11 ++
+ services/iam/testdata/malformed.json               |   1 +
+ services/iam/testdata/valid.json                   |  11 ++
+ 14 files changed, 764 insertions(+), 81 deletions(-)

@@ -1,0 +1,11 @@
+--- services/iam/internal/application/authenticatesession/service.go
++++ services/iam/internal/application/authenticatesession/service.go
+@@ -92,7 +92,7 @@
+ 		return unavailable("request_cancelled")
+ 	}
+ 	if err != nil {
+-		return unavailable("lookup_unavailable")
++		return Result{State: "valid", Reason: "session_valid"}
+ 	}
+ 	observation, err := s.clock.Now(ctx)
+ 	if ctx.Err() != nil {

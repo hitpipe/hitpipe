@@ -1,0 +1,58 @@
+ .github/workflows/pr12-dk.yml                      |  20 +
+ .../dk/evidence/c3-cross-coverage-functions.json   | 116 +++
+ .../dk/evidence/c3-cross-coverage-functions.log    |  26 +
+ docs/labs/pr12/dk/evidence/c3-cross-coverage.json  | 118 +++
+ docs/labs/pr12/dk/evidence/c3-cross-coverage.log   |   5 +
+ docs/labs/pr12/dk/evidence/c3-final-check.json     | 119 +++
+ docs/labs/pr12/dk/evidence/c3-final-check.log      | 346 ++++++++
+ docs/labs/pr12/dk/evidence/c3-final-smoke.json     | 117 +++
+ docs/labs/pr12/dk/evidence/c3-final-smoke.log      |  15 +
+ docs/labs/pr12/dk/evidence/c3-fuzz.json            | 121 +++
+ docs/labs/pr12/dk/evidence/c3-fuzz.log             |   6 +
+ docs/labs/pr12/dk/evidence/iam-all.cover           | 891 +++++++++++++++++++++
+ .../labs/pr12/dk/evidence/mutation-M07-retest.json | 118 +++
+ docs/labs/pr12/dk/evidence/mutation-M07-retest.log |   2 +
+ docs/labs/pr12/dk/evidence/mutation-initial.json   | 116 +++
+ docs/labs/pr12/dk/evidence/mutation-initial.log    |   7 +
+ .../dk/evidence/mutations-M07-retest/M07-build.log |   0
+ .../dk/evidence/mutations-M07-retest/M07-check.log | 336 ++++++++
+ .../dk/evidence/mutations-M07-retest/M07.patch     |  11 +
+ .../dk/evidence/mutations-M07-retest/baseline.log  | 333 ++++++++
+ .../evidence/mutations-M07-retest/final-clean.log  | 333 ++++++++
+ .../dk/evidence/mutations-M07-retest/protocol.json |  94 +++
+ .../dk/evidence/mutations-initial/M01-build.log    |   0
+ .../dk/evidence/mutations-initial/M01-check.log    | 336 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M01.patch   |  11 +
+ .../dk/evidence/mutations-initial/M02-build.log    |   0
+ .../dk/evidence/mutations-initial/M02-check.log    | 333 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M02.patch   |  11 +
+ .../dk/evidence/mutations-initial/M03-build.log    |   0
+ .../dk/evidence/mutations-initial/M03-check.log    | 336 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M03.patch   |  11 +
+ .../dk/evidence/mutations-initial/M04-build.log    |   0
+ .../dk/evidence/mutations-initial/M04-check.log    | 335 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M04.patch   |  11 +
+ .../dk/evidence/mutations-initial/M05-build.log    |   0
+ .../dk/evidence/mutations-initial/M05-check.log    | 332 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M05.patch   |  11 +
+ .../dk/evidence/mutations-initial/M06-build.log    |   0
+ .../dk/evidence/mutations-initial/M06-check.log    | 334 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M06.patch   |  11 +
+ .../dk/evidence/mutations-initial/M07-build.log    |   0
+ .../dk/evidence/mutations-initial/M07-check.log    | 329 ++++++++
+ .../pr12/dk/evidence/mutations-initial/M07.patch   |  11 +
+ .../dk/evidence/mutations-initial/baseline.log     | 329 ++++++++
+ .../dk/evidence/mutations-initial/final-clean.log  | 329 ++++++++
+ .../dk/evidence/mutations-initial/protocol.json    | 378 +++++++++
+ .../pr12/dk/evidence/natural-json-case-after.json  |  86 ++
+ .../pr12/dk/evidence/natural-json-case-after.log   |   1 +
+ .../pr12/dk/evidence/natural-json-case-before.json |  86 ++
+ .../pr12/dk/evidence/natural-json-case-before.log  |   6 +
+ docs/labs/pr12/dk/risk-registry.md                 |  16 +
+ docs/labs/pr12/dk/test-design.md                   |  27 +
+ docs/labs/pr12/dk/test-results.md                  |  30 +
+ services/iam/cmd/iam-contractcheck/main_test.go    |  15 +
+ .../fixtures/sessionlookup/adapters_test.go        |  25 +
+ .../domain/sessionpolicy/properties_test.go        |  68 ++
+ services/iam/tools/mutation_check.py               | 106 +++
+ 57 files changed, 7164 insertions(+)

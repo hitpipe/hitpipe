@@ -1,0 +1,930 @@
+diff --git a/docs/labs/pr12/dk/module-contract.md b/docs/labs/pr12/dk/module-contract.md
+index b5577c9..ddaaf81 100644
+--- a/docs/labs/pr12/dk/module-contract.md
++++ b/docs/labs/pr12/dk/module-contract.md
+@@ -1,83 +1,5 @@
+-# SessionPolicy и AuthenticateSession — локальный контракт v2
++# Локальный контракт IAM
+ 
+-Task HIT-18, после R1 commit `0661a3ea64bd9f5243a9a7f5b3e1195c31eef152`. Сначала спецификация, затем реализация HIT-19/20. Это внутренняя проекция IAM, не изменение OAS/SQL. До C1 документ находится в личном пакете; при создании module канонический файл переедет в `services/iam/docs/module-contract.md`, а эта страница станет указателем.
++Единственный нормативный владелец после HIT-19: [services/iam/docs/module-contract.md](../../../../services/iam/docs/module-contract.md).
+ 
+-## Ответственность и публичная операция
+-
+-DK-FR-01/02 → установить пригодность прикладной сессии → `sessionpolicy.Evaluate(snapshot, observation) Decision` → application consumer `authenticatesession.Service.Execute(ctx, reference) Result`.
+-
+-Domain принимает значения, не обращается к IO/системному времени, не изменяет вход. Snapshot содержит только `Found`, `Revoked`, `CreatedAt`, `ExpiresAt`, `IdleExpiresAt`. Никаких cookie, digest, actor/workspace ID, profile или credentials. Observation содержит `At` и явный `Trusted`. Данные caller-owned; результат — независимое value с State и безопасным Reason.
+-
+-## DK-RULE-01 — пригодность времени и хронология
+-
+-Все time values должны быть ненулевыми и представимыми в UTC в диапазоне годов 1..9999. Неопределённое время не равно «нулевой дате». Точность сравнения — наносекунда, сравниваются instants; другой UTC offset сам по себе не меняет решение.
+-
+-Для известной неотозванной сессии требуется:
+-
+-- `CreatedAt < ExpiresAt`;
+-- `CreatedAt < IdleExpiresAt <= ExpiresAt`;
+-- `ExpiresAt - CreatedAt <= 24h`;
+-- `observation.At >= CreatedAt`.
+-
+-Сравнения корректности выполняются до проверки дедлайнов; арифметика не использует `UnixNano()` или непроверенное сложение. Разница time.Sub может насыщаться на дальних датах, но такой положительный интервал заведомо больше 24h и отвергается. Не происходит принятия переполненного значения как короткого интервала.
+-
+-Владелец сессии вычисляет idle deadline по своей последней активности с пределом 8h и absolute cap. У минимального snapshot нет last-activity timestamp; эта policy проверяет предоставленный deadline, а не выдаёт доказательство правильности выдачи/продления. Для синтетических исходных данных первоначальный idle=created+8h, absolute=created+24h. Продление, SQL migration и обновление активности здесь не реализуются. Нельзя ограничить idle фиксированными created+8h: это ошибочно запретило бы законно обновлённую сессию.
+-
+-## DK-RULE-02 — равенство и порядок причин
+-
+-`now >= deadline` означает истечение; никакого grace period. Valid возможно только при `now < idle` И `now < absolute`.
+-
+-| Приоритет | Условие | State | Reason |
+-| --- | --- | --- | --- |
+-| 1 | Время не Trusted, zero или вне диапазона | denied | clock_uncertain |
+-| 2 | Found=false | denied | unknown_session |
+-| 3 | Revoked=true | denied | revoked_session |
+-| 4 | Некорректные time values, порядок или lifetime >24h | denied | invalid_snapshot |
+-| 5 | now раньше CreatedAt | denied | not_yet_valid |
+-| 6 | now >= ExpiresAt | denied | absolute_expired |
+-| 7 | now >= IdleExpiresAt | denied | idle_expired |
+-| 8 | Иначе | valid | session_valid |
+-
+-Все отказы закрывают доступ. При одновременно истёкших дедлайнах reason=`absolute_expired`. При Unknown и Revoked одновременно — `unknown_session`; при Revoked и некорректных сроках — `revoked_session`. Это локальный устойчивый порядок диагностики, а не новая информация о чужом объекте на публичном API. Default/zero Decision не является Valid.
+-
+-## DK-RULE-03 — application ports и свежесть
+-
+-Потребитель владеет двумя узкими ports:
+-
+-1. `SessionLookup.Lookup(context.Context, string) (sessionpolicy.Snapshot, error)`;
+-2. `Clock.Now(context.Context) (sessionpolicy.Observation, error)`.
+-
+-Constructor отвергает nil и typed-nil реализации. Execute также безопасен на нулевом/неинициализированном Service. Reference — внутренний непрозрачный ключ длиной 1..128 ASCII `[A-Za-z0-9_-]`, первая буква/цифра. Это не схема cookie, digest или публичного Session UUID; production transport adapter остаётся отдельной обязанностью.
+-
+-Порядок: проверить состав зависимостей → context/reference → получить snapshot через Lookup → проверить отмену context → получить Clock observation → проверить отмену и доверенность времени → вызвать policy. **Время считывается после Lookup**: задержка получения snapshot не должна оставить caller с прежним now. Сам Lookup обязан возвращать текущую authority; файловый fixture этого не доказывает.
+-
+-| Сбой | Application Status | Безопасная причина / действия |
+-| --- | --- | --- |
+-| Неинициализированный Service | unavailable | dependencies_unavailable; IO нет |
+-| nil context / неверный reference | denied | invalid_request; IO нет |
+-| context cancelled/deadline | unavailable | request_cancelled |
+-| Lookup error | unavailable | lookup_unavailable; Clock не вызывается |
+-| Clock error / недоверенное или непригодное время | unavailable | clock_unavailable |
+-| Корректный ответ Lookup с Found=false | denied | unknown_session после пригодного Clock |
+-| Policy denied | denied | фиксированный Reason policy |
+-| Policy valid | valid | session_valid, **без бизнес-гранта** |
+-
+-Ошибки адаптера не пробрасываются в response/log: там могут оказаться пути, PII или секреты. Ошибка одного port не заменяется cache, прежним результатом или default allow. Context cancellation не является доказательством глобального revoke/fencing.
+-
+-## Диагностический fixture и CLI
+-
+-Версия локального JSON fixture — целое `1`; верхний объект содержит только `version`, `session`, `clock`. `session` содержит `found`, `revoked`, `created_at`, `expires_at`, `idle_expires_at`; `clock` содержит `trusted`, `now`. Это отдельная синтетическая форма диагностического adapter, не HP-FORMAL-001 wire.
+-
+-Для known session и clock требуемые поля не принимают null/отсутствие. В unknown projection timestamps могут отсутствовать; присутствующие timestamp всё равно должны разбираться. Boolean presence отличается от false. Timestamp — RFC3339Nano с offset. Строгий decoder отклоняет duplicate/extra keys, unknown version, неверные типы, trailing document, malformed JSON и input >64 KiB; глубина JSON ограничена 16. Значения из ошибок parser не печатаются.
+-
+-`iam-contractcheck --fixture PATH --format text|json`, `--version`. Путь и формат влияют на выполнение; отсутствующий/неверный путь, формат и broken fixture дают exit 2. Структурно корректное решение policy, включая безопасный denied, даёт exit 0: отказ сессии — ожидаемый бизнес-результат, не неисправность CLI. После C2 `--lookup file|fixed` меняет adapter в одной точке сборки, без правки Execute. `--clock fixture|system` выбирает фиксированное синтетическое время либо host clock adapter; последний остаётся unavailable без реального clock-health probe, а не объявляет `time.Now()` доказанно доверенным.
+-
+-На stderr только фиксированные коды старта/исхода; stdout — state/reason либо build metadata. Профили, reference, fixture body и canary не выводятся. Повторный запуск не меняет исходные данные, не создаёт sessions, не выполняет внешних команд.
+-
+-## Примеры oracle до реализации
+-
+-При created=00:00Z, idle=08:00Z, absolute=следующие 00:00Z: now=idle−1ns→valid; now=idle→denied/idle_expired; revoked=true→denied/revoked_session. При idle=absolute и now=absolute→denied/absolute_expired. ExpiresAt=created+24h+1ns→denied/invalid_snapshot, даже если now ещё до deadline. Clock failure после успешного Lookup→unavailable/clock_unavailable.
+-
+-## Границы вывода
+-
+-Не реализованы OIDC/PKCE/CSRF, cookies, SQL/RLS/durability, membership/tenant/business authorization, session renewal, global revoke/epoch/start barrier или production endpoint. File-backed и fixed adapters синтетические. Их взаимозаменяемость доказывает contract потребителя, а не работу настоящего IAM authority. Нормы HP-BP-001/T/001–014 и HP-NFR целиком этим module не закрываются.
++Документ написан в HIT-18 до реализации и перемещён вместе с появлением service; здесь остаётся только навигация.
+diff --git a/services/iam/Makefile b/services/iam/Makefile
+new file mode 100644
+index 0000000..2b89602
+--- /dev/null
++++ b/services/iam/Makefile
+@@ -0,0 +1,9 @@
++.PHONY: check dev release smoke
++check:
++	python3 ../../tools/pr12/workspace.py check iam --require
++dev:
++	python3 ../../tools/pr12/workspace.py build iam --mode dev --require
++release:
++	python3 ../../tools/pr12/workspace.py build iam --mode release --require
++smoke:
++	python3 ../../tools/pr12/workspace.py smoke iam --require
+diff --git a/services/iam/README.md b/services/iam/README.md
+new file mode 100644
+index 0000000..e798103
+--- /dev/null
++++ b/services/iam/README.md
+@@ -0,0 +1,32 @@
++# IAM — bounded SessionPolicy component
++
++HIT-19 / Feature HIT-11, MANUAL_LAB_PR12. Author-owner: Дмитрий Карачебан; agent implementation: Codex. This is reusable IAM logic with a synthetic diagnostic executable, not a deployed authentication service.
++
++## Reproduce
++
++Use Go **1.27.2** (official [download index](https://go.dev/dl/?mode=json)); Python 3.10+ for the existing wrapper, Linux for the documented binary inspection. No external Go libraries or credentials are needed. `go.sum` is absent because this module imports only the standard library. Preserve the legacy root module.
++
++From repository root:
++
++```sh
++python3 tools/pr12/workspace.py validate
++python3 tools/pr12/workspace.py check iam --require
++python3 tools/pr12/workspace.py build iam --mode dev --require
++python3 tools/pr12/workspace.py build iam --mode release --require
++python3 tools/pr12/workspace.py smoke iam --require
++python3 tools/pr12/workspace.py inspect iam --mode release --require
++PR12_RACE=1 python3 tools/pr12/workspace.py check iam --require
++```
++
++For a source diagnostic without linker metadata: `cd services/iam && go run ./cmd/iam-contractcheck --fixture testdata/valid.json --format json`. A built executable accepts `--version`, `--fixture PATH`, `--format text|json`. `testdata/idle-equal.json` yields denied/idle_expired with exit 0; malformed configuration yields exit 2. Diagnostics contain fixed codes, never fixture contents. It is a short process: exit stops it; reset means rerunning the same read-only fixture from the exact commit. No persistent state or external cleanup is involved.
++
++The wrapper creates `.pr12-build/iam-dev` and `iam-release` artifacts (actual filenames printed by build); smoke copies each binary and synthetic input to a temporary directory outside the checkout, then verifies version, positive output and malformed configuration. Debug/release compiler flags and binary observations must be recorded from real runs; no speed advantage is asserted.
++
++## Source boundaries
++
++- `internal/domain/sessionpolicy`: pure rules and value types; only standard time dependency.
++- `cmd/iam-contractcheck`: initial diagnostic composition, strict fixture boundary and safe output.
++- `docs/module-contract.md`: sole local normative contract, authored in HIT-18 before code.
++- `testdata`: synthetic, fixed dates and no user/production data.
++
++The next task introduces the production application consumer and consumer-owned ports; SQL/Keycloak/OIDC/current workspace authorization/runtime barriers remain outside this slice. A session_valid result grants no business permission. See the exact [candidate input context](../../docs/labs/pr12/context-lock.json).
+diff --git a/services/iam/cmd/iam-contractcheck/fixture.go b/services/iam/cmd/iam-contractcheck/fixture.go
+new file mode 100644
+index 0000000..c175f42
+--- /dev/null
++++ b/services/iam/cmd/iam-contractcheck/fixture.go
+@@ -0,0 +1,179 @@
++package main
++
++import (
++	"bytes"
++	"encoding/json"
++	"errors"
++	"io"
++	"regexp"
++	"strconv"
++	"time"
++	"unicode/utf8"
++
++	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
++)
++
++const maxFixtureBytes = 64 * 1024
++
++var errFixture = errors.New("invalid_fixture")
++var timestampPattern = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$`)
++
++// encoding/json matches struct fields without regard to case. The fixture
++// contract deliberately requires exact names and non-null values when present.
++func exactObject(data []byte, allowed ...string) (map[string]json.RawMessage, error) {
++	var fields map[string]json.RawMessage
++	if json.Unmarshal(data, &fields) != nil || fields == nil {
++		return nil, errFixture
++	}
++	for name, value := range fields {
++		known := false
++		for _, key := range allowed {
++			known = known || name == key
++		}
++		if !known || bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
++			return nil, errFixture
++		}
++	}
++	return fields, nil
++}
++
++func exactShape(data []byte) error {
++	root, err := exactObject(data, "version", "session", "clock")
++	if err != nil {
++		return err
++	}
++	if _, err := exactObject(root["session"], "found", "revoked", "created_at", "expires_at", "idle_expires_at"); err != nil {
++		return err
++	}
++	_, err = exactObject(root["clock"], "trusted", "now")
++	return err
++}
++
++type rawFixture struct {
++	Version *int `json:"version"`
++	Session *struct {
++		Found    *bool   `json:"found"`
++		Revoked  *bool   `json:"revoked"`
++		Created  *string `json:"created_at"`
++		Absolute *string `json:"expires_at"`
++		Idle     *string `json:"idle_expires_at"`
++	} `json:"session"`
++	Clock *struct {
++		Trusted *bool   `json:"trusted"`
++		Now     *string `json:"now"`
++	} `json:"clock"`
++}
++
++// checkJSON rejects duplicate keys and excessive depth before typed decoding.
++func checkJSON(data []byte) error {
++	d := json.NewDecoder(bytes.NewReader(data))
++	var value func(int) error
++	value = func(depth int) error {
++		if depth > 16 {
++			return errFixture
++		}
++		token, err := d.Token()
++		if err != nil {
++			return errFixture
++		}
++		if delim, ok := token.(json.Delim); ok {
++			switch delim {
++			case '{':
++				seen := map[string]bool{}
++				for d.More() {
++					key, err := d.Token()
++					if err != nil {
++						return errFixture
++					}
++					name, ok := key.(string)
++					if !ok || seen[name] {
++						return errFixture
++					}
++					seen[name] = true
++					if err := value(depth + 1); err != nil {
++						return err
++					}
++				}
++				end, err := d.Token()
++				if err != nil || end != json.Delim('}') {
++					return errFixture
++				}
++			case '[':
++				for d.More() {
++					if err := value(depth + 1); err != nil {
++						return err
++					}
++				}
++				end, err := d.Token()
++				if err != nil || end != json.Delim(']') {
++					return errFixture
++				}
++			default:
++				return errFixture
++			}
++		}
++		return nil
++	}
++	if err := value(0); err != nil {
++		return err
++	}
++	if _, err := d.Token(); err != io.EOF {
++		return errFixture
++	}
++	return nil
++}
++
++func parseTimestamp(text *string, required bool) (time.Time, error) {
++	if text == nil {
++		if required {
++			return time.Time{}, errFixture
++		}
++		return time.Time{}, nil
++	}
++	if !timestampPattern.MatchString(*text) {
++		return time.Time{}, errFixture
++	}
++	if (*text)[len(*text)-1] != 'Z' {
++		offset := (*text)[len(*text)-6:]
++		hour, _ := strconv.Atoi(offset[1:3])
++		minute, _ := strconv.Atoi(offset[4:6])
++		if hour > 23 || minute > 59 {
++			return time.Time{}, errFixture
++		}
++	}
++	t, err := time.Parse(time.RFC3339Nano, *text)
++	if err != nil || t.UTC().Year() < 1 || t.UTC().Year() > 9999 {
++		return time.Time{}, errFixture
++	}
++	return t, nil
++}
++
++func decodeFixture(reader io.Reader) (sessionpolicy.Snapshot, sessionpolicy.Observation, error) {
++	var s sessionpolicy.Snapshot
++	var o sessionpolicy.Observation
++	data, err := io.ReadAll(io.LimitReader(reader, maxFixtureBytes+1))
++	if err != nil || len(data) > maxFixtureBytes || !utf8.Valid(data) || checkJSON(data) != nil || exactShape(data) != nil {
++		return s, o, errFixture
++	}
++	d := json.NewDecoder(bytes.NewReader(data))
++	d.DisallowUnknownFields()
++	var raw rawFixture
++	if d.Decode(&raw) != nil || raw.Version == nil || *raw.Version != 1 || raw.Session == nil || raw.Clock == nil ||
++		raw.Session.Found == nil || raw.Session.Revoked == nil || raw.Clock.Trusted == nil {
++		return s, o, errFixture
++	}
++	s.Found, s.Revoked, o.Trusted = *raw.Session.Found, *raw.Session.Revoked, *raw.Clock.Trusted
++	if s.CreatedAt, err = parseTimestamp(raw.Session.Created, s.Found); err != nil {
++		return s, o, errFixture
++	}
++	if s.ExpiresAt, err = parseTimestamp(raw.Session.Absolute, s.Found); err != nil {
++		return s, o, errFixture
++	}
++	if s.IdleExpiresAt, err = parseTimestamp(raw.Session.Idle, s.Found); err != nil {
++		return s, o, errFixture
++	}
++	if o.At, err = parseTimestamp(raw.Clock.Now, true); err != nil {
++		return s, o, errFixture
++	}
++	return s, o, nil
++}
+diff --git a/services/iam/cmd/iam-contractcheck/main.go b/services/iam/cmd/iam-contractcheck/main.go
+new file mode 100644
+index 0000000..7cebc01
+--- /dev/null
++++ b/services/iam/cmd/iam-contractcheck/main.go
+@@ -0,0 +1,71 @@
++// iam-contractcheck exercises the real policy with synthetic data. It is not an auth server.
++package main
++
++import (
++	"encoding/json"
++	"errors"
++	"flag"
++	"fmt"
++	"io"
++	"os"
++
++	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
++)
++
++var version = "pr12"
++var commit = "unknown"
++var dirty = "unknown"
++var buildMode = "source"
++
++func run(args []string, stdout, stderr io.Writer) int {
++	fmt.Fprintln(stderr, "iam-contractcheck event=start")
++	fail := func() int { fmt.Fprintln(stderr, "iam-contractcheck event=end status=invalid_config"); return 2 }
++	flags := flag.NewFlagSet("iam-contractcheck", flag.ContinueOnError)
++	flags.SetOutput(io.Discard)
++	path := flags.String("fixture", "", "synthetic fixture path")
++	format := flags.String("format", "text", "text or json")
++	showVersion := flags.Bool("version", false, "print build metadata")
++	if err := flags.Parse(args); err != nil {
++		if errors.Is(err, flag.ErrHelp) {
++			fmt.Fprintln(stdout, "iam-contractcheck --fixture PATH --format text|json | --version")
++			fmt.Fprintln(stderr, "iam-contractcheck event=end status=help")
++			return 0
++		}
++		return fail()
++	}
++	if flags.NArg() != 0 || (*format != "text" && *format != "json") {
++		return fail()
++	}
++	if *showVersion {
++		_, err := fmt.Fprintf(stdout, "version=%s commit=%s dirty=%s buildMode=%s\n", version, commit, dirty, buildMode)
++		if err != nil {
++			return fail()
++		}
++		fmt.Fprintln(stderr, "iam-contractcheck event=end status=version")
++		return 0
++	}
++	if *path == "" {
++		return fail()
++	}
++	file, err := os.Open(*path)
++	if err != nil {
++		return fail()
++	}
++	defer file.Close()
++	snapshot, observation, err := decodeFixture(file)
++	if err != nil {
++		return fail()
++	}
++	decision := sessionpolicy.Evaluate(snapshot, observation)
++	if *format == "json" {
++		if json.NewEncoder(stdout).Encode(decision) != nil {
++			return fail()
++		}
++	} else if _, err := fmt.Fprintf(stdout, "state=%s reason=%s\n", decision.State, decision.Reason); err != nil {
++		return fail()
++	}
++	fmt.Fprintf(stderr, "iam-contractcheck event=end status=%s\n", decision.State)
++	return 0
++}
++
++func main() { os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }
+diff --git a/services/iam/cmd/iam-contractcheck/main_test.go b/services/iam/cmd/iam-contractcheck/main_test.go
+new file mode 100644
+index 0000000..5300e30
+--- /dev/null
++++ b/services/iam/cmd/iam-contractcheck/main_test.go
+@@ -0,0 +1,100 @@
++package main
++
++import (
++	"bytes"
++	"encoding/json"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++)
++
++const fixture = `{"version":1,"session":{"found":true,"revoked":false,"created_at":"2026-10-18T00:00:00Z","expires_at":"2026-10-19T00:00:00Z","idle_expires_at":"2026-10-18T08:00:00Z"},"clock":{"trusted":true,"now":"2026-10-18T07:59:59Z"}}`
++
++func fixtureFile(t *testing.T, data string) string {
++	t.Helper()
++	path := filepath.Join(t.TempDir(), "synthetic.json")
++	if err := os.WriteFile(path, []byte(data), 0600); err != nil {
++		t.Fatal(err)
++	}
++	return path
++}
++
++func TestDiagnosticValid(t *testing.T) {
++	path := fixtureFile(t, fixture)
++	for _, format := range []string{"text", "json"} {
++		var out, diagnostics bytes.Buffer
++		if code := run([]string{"--fixture", path, "--format", format}, &out, &diagnostics); code != 0 {
++			t.Fatalf("exit %d", code)
++		}
++		if !strings.Contains(out.String(), "session_valid") || !strings.Contains(diagnostics.String(), "event=start") || !strings.Contains(diagnostics.String(), "event=end") {
++			t.Fatal("missing safe result/diagnostics")
++		}
++		if format == "json" {
++			var data map[string]string
++			if json.Unmarshal(out.Bytes(), &data) != nil || data["state"] != "valid" {
++				t.Fatal("invalid result JSON")
++			}
++		}
++	}
++}
++
++func TestDiagnosticMalformedAndCanary(t *testing.T) {
++	const canary = "SYNTHETIC_SECRET_MUST_NOT_APPEAR_9E21"
++	cases := map[string]string{
++		"case mismatched key":    strings.Replace(fixture, `"version":1`, `"Version":1`, 1),
++		"nested case":            strings.Replace(fixture, `"trusted":true`, `"Trusted":true`, 1),
++		"unknown null timestamp": strings.Replace(strings.Replace(fixture, `"found":true`, `"found":false`, 1), `"created_at":"2026-10-18T00:00:00Z"`, `"created_at":null`, 1),
++		"invalid UTF8":           strings.Replace(fixture, `"version":1`, "\"version\":1,\"bad\xff\":0", 1),
++		"broken":                 "{", "trailing": fixture + " {}", "null root": "null",
++		"extra":           strings.Replace(fixture, `"version":1`, `"version":1,"secret":"`+canary+`"`, 1),
++		"duplicate":       strings.Replace(fixture, `"trusted":true`, `"trusted":false,"trusted":true`, 1),
++		"null bool":       strings.Replace(fixture, `"found":true`, `"found":null`, 1),
++		"bad version":     strings.Replace(fixture, `"version":1`, `"version":2`, 1),
++		"missing now":     strings.Replace(fixture, `,"now":"2026-10-18T07:59:59Z"`, "", 1),
++		"bad timestamp":   strings.Replace(fixture, "2026-10-18T07:59:59Z", canary, 1),
++		"comma timestamp": strings.Replace(fixture, "07:59:59Z", "07:59:59,1Z", 1),
++		"large offset":    strings.Replace(fixture, "07:59:59Z", "07:59:59+24:00", 1),
++		"oversize":        strings.Repeat(" ", maxFixtureBytes+1),
++	}
++	for name, data := range cases {
++		t.Run(name, func(t *testing.T) {
++			var out, diagnostics bytes.Buffer
++			if code := run([]string{"--fixture", fixtureFile(t, data), "--format", "json"}, &out, &diagnostics); code != 2 {
++				t.Fatalf("expected config exit 2, got %d", code)
++			}
++			if out.Len() != 0 || strings.Contains(diagnostics.String(), canary) || strings.Contains(diagnostics.String(), data) {
++				t.Fatal("input leaked")
++			}
++		})
++	}
++}
++
++func TestDiagnosticConfigAndVersion(t *testing.T) {
++	for _, args := range [][]string{nil, {"--fixture", "/does-not-exist"}, {"--format", "xml"}, {"unexpected"}, {"--secret=SYNTHETIC_CANARY"}} {
++		var out, diagnostics bytes.Buffer
++		if code := run(args, &out, &diagnostics); code != 2 {
++			t.Fatalf("want config error, got %d", code)
++		}
++		if strings.Contains(out.String()+diagnostics.String(), "SYNTHETIC_CANARY") {
++			t.Fatal("flag leaked")
++		}
++	}
++	for _, arg := range []string{"--version", "--help"} {
++		var out, diagnostics bytes.Buffer
++		if code := run([]string{arg}, &out, &diagnostics); code != 0 {
++			t.Fatal("metadata/help failed")
++		}
++		if arg == "--version" && (!strings.Contains(out.String(), "commit=") || !strings.Contains(out.String(), "buildMode=")) {
++			t.Fatal("build identity missing")
++		}
++	}
++}
++
++func TestDiagnosticDeniedIsSuccessfulEvaluation(t *testing.T) {
++	data := strings.Replace(fixture, `"revoked":false`, `"revoked":true`, 1)
++	var out, diagnostics bytes.Buffer
++	if code := run([]string{"--fixture", fixtureFile(t, data)}, &out, &diagnostics); code != 0 || !strings.Contains(out.String(), "revoked_session") {
++		t.Fatal("expected successful denied decision")
++	}
++}
+diff --git a/services/iam/docs/module-contract.md b/services/iam/docs/module-contract.md
+new file mode 100644
+index 0000000..b5577c9
+--- /dev/null
++++ b/services/iam/docs/module-contract.md
+@@ -0,0 +1,83 @@
++# SessionPolicy и AuthenticateSession — локальный контракт v2
++
++Task HIT-18, после R1 commit `0661a3ea64bd9f5243a9a7f5b3e1195c31eef152`. Сначала спецификация, затем реализация HIT-19/20. Это внутренняя проекция IAM, не изменение OAS/SQL. До C1 документ находится в личном пакете; при создании module канонический файл переедет в `services/iam/docs/module-contract.md`, а эта страница станет указателем.
++
++## Ответственность и публичная операция
++
++DK-FR-01/02 → установить пригодность прикладной сессии → `sessionpolicy.Evaluate(snapshot, observation) Decision` → application consumer `authenticatesession.Service.Execute(ctx, reference) Result`.
++
++Domain принимает значения, не обращается к IO/системному времени, не изменяет вход. Snapshot содержит только `Found`, `Revoked`, `CreatedAt`, `ExpiresAt`, `IdleExpiresAt`. Никаких cookie, digest, actor/workspace ID, profile или credentials. Observation содержит `At` и явный `Trusted`. Данные caller-owned; результат — независимое value с State и безопасным Reason.
++
++## DK-RULE-01 — пригодность времени и хронология
++
++Все time values должны быть ненулевыми и представимыми в UTC в диапазоне годов 1..9999. Неопределённое время не равно «нулевой дате». Точность сравнения — наносекунда, сравниваются instants; другой UTC offset сам по себе не меняет решение.
++
++Для известной неотозванной сессии требуется:
++
++- `CreatedAt < ExpiresAt`;
++- `CreatedAt < IdleExpiresAt <= ExpiresAt`;
++- `ExpiresAt - CreatedAt <= 24h`;
++- `observation.At >= CreatedAt`.
++
++Сравнения корректности выполняются до проверки дедлайнов; арифметика не использует `UnixNano()` или непроверенное сложение. Разница time.Sub может насыщаться на дальних датах, но такой положительный интервал заведомо больше 24h и отвергается. Не происходит принятия переполненного значения как короткого интервала.
++
++Владелец сессии вычисляет idle deadline по своей последней активности с пределом 8h и absolute cap. У минимального snapshot нет last-activity timestamp; эта policy проверяет предоставленный deadline, а не выдаёт доказательство правильности выдачи/продления. Для синтетических исходных данных первоначальный idle=created+8h, absolute=created+24h. Продление, SQL migration и обновление активности здесь не реализуются. Нельзя ограничить idle фиксированными created+8h: это ошибочно запретило бы законно обновлённую сессию.
++
++## DK-RULE-02 — равенство и порядок причин
++
++`now >= deadline` означает истечение; никакого grace period. Valid возможно только при `now < idle` И `now < absolute`.
++
++| Приоритет | Условие | State | Reason |
++| --- | --- | --- | --- |
++| 1 | Время не Trusted, zero или вне диапазона | denied | clock_uncertain |
++| 2 | Found=false | denied | unknown_session |
++| 3 | Revoked=true | denied | revoked_session |
++| 4 | Некорректные time values, порядок или lifetime >24h | denied | invalid_snapshot |
++| 5 | now раньше CreatedAt | denied | not_yet_valid |
++| 6 | now >= ExpiresAt | denied | absolute_expired |
++| 7 | now >= IdleExpiresAt | denied | idle_expired |
++| 8 | Иначе | valid | session_valid |
++
++Все отказы закрывают доступ. При одновременно истёкших дедлайнах reason=`absolute_expired`. При Unknown и Revoked одновременно — `unknown_session`; при Revoked и некорректных сроках — `revoked_session`. Это локальный устойчивый порядок диагностики, а не новая информация о чужом объекте на публичном API. Default/zero Decision не является Valid.
++
++## DK-RULE-03 — application ports и свежесть
++
++Потребитель владеет двумя узкими ports:
++
++1. `SessionLookup.Lookup(context.Context, string) (sessionpolicy.Snapshot, error)`;
++2. `Clock.Now(context.Context) (sessionpolicy.Observation, error)`.
++
++Constructor отвергает nil и typed-nil реализации. Execute также безопасен на нулевом/неинициализированном Service. Reference — внутренний непрозрачный ключ длиной 1..128 ASCII `[A-Za-z0-9_-]`, первая буква/цифра. Это не схема cookie, digest или публичного Session UUID; production transport adapter остаётся отдельной обязанностью.
++
++Порядок: проверить состав зависимостей → context/reference → получить snapshot через Lookup → проверить отмену context → получить Clock observation → проверить отмену и доверенность времени → вызвать policy. **Время считывается после Lookup**: задержка получения snapshot не должна оставить caller с прежним now. Сам Lookup обязан возвращать текущую authority; файловый fixture этого не доказывает.
++
++| Сбой | Application Status | Безопасная причина / действия |
++| --- | --- | --- |
++| Неинициализированный Service | unavailable | dependencies_unavailable; IO нет |
++| nil context / неверный reference | denied | invalid_request; IO нет |
++| context cancelled/deadline | unavailable | request_cancelled |
++| Lookup error | unavailable | lookup_unavailable; Clock не вызывается |
++| Clock error / недоверенное или непригодное время | unavailable | clock_unavailable |
++| Корректный ответ Lookup с Found=false | denied | unknown_session после пригодного Clock |
++| Policy denied | denied | фиксированный Reason policy |
++| Policy valid | valid | session_valid, **без бизнес-гранта** |
++
++Ошибки адаптера не пробрасываются в response/log: там могут оказаться пути, PII или секреты. Ошибка одного port не заменяется cache, прежним результатом или default allow. Context cancellation не является доказательством глобального revoke/fencing.
++
++## Диагностический fixture и CLI
++
++Версия локального JSON fixture — целое `1`; верхний объект содержит только `version`, `session`, `clock`. `session` содержит `found`, `revoked`, `created_at`, `expires_at`, `idle_expires_at`; `clock` содержит `trusted`, `now`. Это отдельная синтетическая форма диагностического adapter, не HP-FORMAL-001 wire.
++
++Для known session и clock требуемые поля не принимают null/отсутствие. В unknown projection timestamps могут отсутствовать; присутствующие timestamp всё равно должны разбираться. Boolean presence отличается от false. Timestamp — RFC3339Nano с offset. Строгий decoder отклоняет duplicate/extra keys, unknown version, неверные типы, trailing document, malformed JSON и input >64 KiB; глубина JSON ограничена 16. Значения из ошибок parser не печатаются.
++
++`iam-contractcheck --fixture PATH --format text|json`, `--version`. Путь и формат влияют на выполнение; отсутствующий/неверный путь, формат и broken fixture дают exit 2. Структурно корректное решение policy, включая безопасный denied, даёт exit 0: отказ сессии — ожидаемый бизнес-результат, не неисправность CLI. После C2 `--lookup file|fixed` меняет adapter в одной точке сборки, без правки Execute. `--clock fixture|system` выбирает фиксированное синтетическое время либо host clock adapter; последний остаётся unavailable без реального clock-health probe, а не объявляет `time.Now()` доказанно доверенным.
++
++На stderr только фиксированные коды старта/исхода; stdout — state/reason либо build metadata. Профили, reference, fixture body и canary не выводятся. Повторный запуск не меняет исходные данные, не создаёт sessions, не выполняет внешних команд.
++
++## Примеры oracle до реализации
++
++При created=00:00Z, idle=08:00Z, absolute=следующие 00:00Z: now=idle−1ns→valid; now=idle→denied/idle_expired; revoked=true→denied/revoked_session. При idle=absolute и now=absolute→denied/absolute_expired. ExpiresAt=created+24h+1ns→denied/invalid_snapshot, даже если now ещё до deadline. Clock failure после успешного Lookup→unavailable/clock_unavailable.
++
++## Границы вывода
++
++Не реализованы OIDC/PKCE/CSRF, cookies, SQL/RLS/durability, membership/tenant/business authorization, session renewal, global revoke/epoch/start barrier или production endpoint. File-backed и fixed adapters синтетические. Их взаимозаменяемость доказывает contract потребителя, а не работу настоящего IAM authority. Нормы HP-BP-001/T/001–014 и HP-NFR целиком этим module не закрываются.
+diff --git a/services/iam/go.mod b/services/iam/go.mod
+new file mode 100644
+index 0000000..eddfe10
+--- /dev/null
++++ b/services/iam/go.mod
+@@ -0,0 +1,3 @@
++module github.com/hitpipe/hitpipe/services/iam
++
++go 1.27.2
+diff --git a/services/iam/internal/domain/sessionpolicy/policy.go b/services/iam/internal/domain/sessionpolicy/policy.go
+new file mode 100644
+index 0000000..ea2cd52
+--- /dev/null
++++ b/services/iam/internal/domain/sessionpolicy/policy.go
+@@ -0,0 +1,99 @@
++// Package sessionpolicy evaluates a minimal authority-owned session snapshot.
++// It performs no IO, reads no clock and grants no business authorization.
++package sessionpolicy
++
++import "time"
++
++// MaxAbsoluteLifetime is the absolute lifetime bound from HP-BP-001/T/002.
++const MaxAbsoluteLifetime = 24 * time.Hour
++
++// Snapshot is a value projection, not the public Session wire schema or a cookie.
++// The authority computes IdleExpiresAt from activity; this policy does not renew it.
++type Snapshot struct {
++	Found         bool
++	Revoked       bool
++	CreatedAt     time.Time
++	ExpiresAt     time.Time
++	IdleExpiresAt time.Time
++}
++
++// Observation carries explicit time and its caller-established trust status.
++type Observation struct {
++	At      time.Time
++	Trusted bool
++}
++
++// Usable reports whether the supplied observation can be used for a decision.
++// time.Now alone does not establish Trusted.
++func (o Observation) Usable() bool { return o.Trusted && usableTime(o.At) }
++
++// State is session validity only, never permission for a protected action.
++type State string
++
++const (
++	StateValid  State = "valid"
++	StateDenied State = "denied"
++)
++
++// Reason is a bounded diagnostic code; it never contains input or identity data.
++type Reason string
++
++const (
++	ReasonValid           Reason = "session_valid"
++	ReasonClockUncertain  Reason = "clock_uncertain"
++	ReasonUnknown         Reason = "unknown_session"
++	ReasonRevoked         Reason = "revoked_session"
++	ReasonInvalidSnapshot Reason = "invalid_snapshot"
++	ReasonNotYetValid     Reason = "not_yet_valid"
++	ReasonAbsoluteExpired Reason = "absolute_expired"
++	ReasonIdleExpired     Reason = "idle_expired"
++)
++
++// Decision owns only its state and safe reason. The zero value is not valid.
++type Decision struct {
++	State  State  `json:"state"`
++	Reason Reason `json:"reason"`
++}
++
++// IsValid requires the complete positive decision, not a default bool value.
++func (d Decision) IsValid() bool { return d.State == StateValid && d.Reason == ReasonValid }
++
++func deny(reason Reason) Decision { return Decision{State: StateDenied, Reason: reason} }
++
++func usableTime(t time.Time) bool {
++	return !t.IsZero() && t.UTC().Year() >= 1 && t.UTC().Year() <= 9999
++}
++
++// Evaluate implements DK-RULE-01/02 without modifying either argument.
++// Precedence: clock, unknown, revoked, malformed snapshot, future creation,
++// absolute expiry, idle expiry, valid. Equality at either deadline is expired.
++func Evaluate(snapshot Snapshot, observation Observation) Decision {
++	if !observation.Usable() {
++		return deny(ReasonClockUncertain)
++	}
++	if !snapshot.Found {
++		return deny(ReasonUnknown)
++	}
++	if snapshot.Revoked {
++		return deny(ReasonRevoked)
++	}
++	created := snapshot.CreatedAt.UTC()
++	absolute := snapshot.ExpiresAt.UTC()
++	idle := snapshot.IdleExpiresAt.UTC()
++	now := observation.At.UTC()
++	if !usableTime(created) || !usableTime(absolute) || !usableTime(idle) ||
++		!absolute.After(created) || !idle.After(created) || idle.After(absolute) ||
++		absolute.Sub(created) > MaxAbsoluteLifetime {
++		return deny(ReasonInvalidSnapshot)
++	}
++	if now.Before(created) {
++		return deny(ReasonNotYetValid)
++	}
++	if !now.Before(absolute) {
++		return deny(ReasonAbsoluteExpired)
++	}
++	if !now.Before(idle) {
++		return deny(ReasonIdleExpired)
++	}
++	return Decision{State: StateValid, Reason: ReasonValid}
++}
+diff --git a/services/iam/internal/domain/sessionpolicy/policy_test.go b/services/iam/internal/domain/sessionpolicy/policy_test.go
+new file mode 100644
+index 0000000..cf17d38
+--- /dev/null
++++ b/services/iam/internal/domain/sessionpolicy/policy_test.go
+@@ -0,0 +1,154 @@
++package sessionpolicy_test
++
++import (
++	"fmt"
++	"reflect"
++	"testing"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
++)
++
++func baseline() sessionpolicy.Snapshot {
++	created := time.Date(2026, 10, 18, 0, 0, 0, 0, time.UTC)
++	return sessionpolicy.Snapshot{Found: true, CreatedAt: created,
++		ExpiresAt: created.Add(24 * time.Hour), IdleExpiresAt: created.Add(8 * time.Hour)}
++}
++
++func observe(at time.Time) sessionpolicy.Observation {
++	return sessionpolicy.Observation{At: at, Trusted: true}
++}
++
++func TestEvaluateValid(t *testing.T) {
++	s := baseline()
++	got := sessionpolicy.Evaluate(s, observe(s.IdleExpiresAt.Add(-time.Nanosecond)))
++	if got.State != sessionpolicy.StateValid || got.Reason != sessionpolicy.ReasonValid || !got.IsValid() {
++		t.Fatalf("expected session_valid before both deadlines, got %+v", got)
++	}
++}
++
++func TestEvaluateUnknown(t *testing.T) {
++	s := baseline()
++	s.Found = false
++	got := sessionpolicy.Evaluate(s, observe(s.CreatedAt))
++	if got.State != sessionpolicy.StateDenied || got.Reason != sessionpolicy.ReasonUnknown || got.IsValid() {
++		t.Fatalf("unknown must be denied: %+v", got)
++	}
++}
++
++func TestEvaluateIdleBoundary(t *testing.T) {
++	for _, tc := range []struct {
++		name  string
++		delta time.Duration
++		want  sessionpolicy.Reason
++	}{
++		{"before", -time.Nanosecond, sessionpolicy.ReasonValid},
++		{"equal", 0, sessionpolicy.ReasonIdleExpired},
++		{"after", time.Nanosecond, sessionpolicy.ReasonIdleExpired},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			s := baseline()
++			got := sessionpolicy.Evaluate(s, observe(s.IdleExpiresAt.Add(tc.delta)))
++			if got.Reason != tc.want || got.IsValid() != (tc.want == sessionpolicy.ReasonValid) {
++				t.Fatalf("delta %s: want %s, got %+v", tc.delta, tc.want, got)
++			}
++		})
++	}
++}
++
++func TestEvaluateAbsoluteBoundary(t *testing.T) {
++	s := baseline()
++	s.IdleExpiresAt = s.ExpiresAt
++	for _, delta := range []time.Duration{-time.Nanosecond, 0, time.Nanosecond} {
++		got := sessionpolicy.Evaluate(s, observe(s.ExpiresAt.Add(delta)))
++		want := sessionpolicy.ReasonAbsoluteExpired
++		if delta < 0 {
++			want = sessionpolicy.ReasonValid
++		}
++		if got.Reason != want || got.IsValid() != (delta < 0) {
++			t.Fatalf("absolute delta %s: want %s, got %+v", delta, want, got)
++		}
++	}
++}
++
++func TestEvaluateRevoked(t *testing.T) {
++	s := baseline()
++	s.Revoked = true
++	if got := sessionpolicy.Evaluate(s, observe(s.CreatedAt)); got.Reason != sessionpolicy.ReasonRevoked || got.IsValid() {
++		t.Fatalf("revocation must override future expiry: %+v", got)
++	}
++}
++
++func TestEvaluateInvalidChronology(t *testing.T) {
++	mutations := map[string]func(*sessionpolicy.Snapshot){
++		"zero creation":            func(s *sessionpolicy.Snapshot) { s.CreatedAt = time.Time{} },
++		"zero absolute":            func(s *sessionpolicy.Snapshot) { s.ExpiresAt = time.Time{} },
++		"zero idle":                func(s *sessionpolicy.Snapshot) { s.IdleExpiresAt = time.Time{} },
++		"absolute equals creation": func(s *sessionpolicy.Snapshot) { s.ExpiresAt = s.CreatedAt },
++		"idle equals creation":     func(s *sessionpolicy.Snapshot) { s.IdleExpiresAt = s.CreatedAt },
++		"idle exceeds absolute":    func(s *sessionpolicy.Snapshot) { s.IdleExpiresAt = s.ExpiresAt.Add(time.Nanosecond) },
++		"lifetime above cap":       func(s *sessionpolicy.Snapshot) { s.ExpiresAt = s.ExpiresAt.Add(time.Nanosecond) },
++		"far future":               func(s *sessionpolicy.Snapshot) { s.ExpiresAt = time.Date(9999, 12, 31, 23, 59, 59, 0, time.UTC) },
++		"unsupported year":         func(s *sessionpolicy.Snapshot) { s.IdleExpiresAt = time.Date(10000, 1, 1, 0, 0, 0, 0, time.UTC) },
++	}
++	for name, change := range mutations {
++		t.Run(name, func(t *testing.T) {
++			s := baseline()
++			change(&s)
++			if got := sessionpolicy.Evaluate(s, observe(baseline().CreatedAt)); got.Reason != sessionpolicy.ReasonInvalidSnapshot || got.IsValid() {
++				t.Fatalf("invalid snapshot must be denied: %+v", got)
++			}
++		})
++	}
++}
++
++func TestEvaluateClockAndFutureCreation(t *testing.T) {
++	s := baseline()
++	for _, o := range []sessionpolicy.Observation{
++		{At: s.CreatedAt, Trusted: false}, {Trusted: true},
++		{At: time.Date(10000, 1, 1, 0, 0, 0, 0, time.UTC), Trusted: true},
++	} {
++		if got := sessionpolicy.Evaluate(s, o); got.Reason != sessionpolicy.ReasonClockUncertain || got.IsValid() {
++			t.Fatalf("bad clock must be denied: %+v", got)
++		}
++	}
++	if got := sessionpolicy.Evaluate(s, observe(s.CreatedAt.Add(-time.Nanosecond))); got.Reason != sessionpolicy.ReasonNotYetValid {
++		t.Fatalf("future creation must be denied: %+v", got)
++	}
++}
++
++func TestEvaluateDeterministicImmutable(t *testing.T) {
++	s := baseline()
++	original := s
++	now := observe(s.CreatedAt)
++	want := sessionpolicy.Decision{State: sessionpolicy.StateValid, Reason: sessionpolicy.ReasonValid}
++	for range 100 {
++		if got := sessionpolicy.Evaluate(s, now); got != want {
++			t.Fatalf("unexpected decision: %+v", got)
++		}
++		if !reflect.DeepEqual(s, original) {
++			t.Fatal("input snapshot changed")
++		}
++	}
++	if (sessionpolicy.Decision{}).IsValid() {
++		t.Fatal("zero decision must fail closed")
++	}
++}
++
++func TestEvaluateRenewedIdleAndOffsets(t *testing.T) {
++	s := baseline()
++	s.IdleExpiresAt = s.CreatedAt.Add(16 * time.Hour)
++	now := s.CreatedAt.Add(12 * time.Hour).In(time.FixedZone("fixture-offset", 3*60*60))
++	if got := sessionpolicy.Evaluate(s, observe(now)); !got.IsValid() {
++		t.Fatalf("authority-owned renewed deadline and equivalent offset must work: %+v", got)
++	}
++}
++
++func ExampleEvaluate() {
++	created := time.Date(2026, 10, 18, 0, 0, 0, 0, time.UTC)
++	s := sessionpolicy.Snapshot{Found: true, CreatedAt: created,
++		ExpiresAt: created.Add(24 * time.Hour), IdleExpiresAt: created.Add(8 * time.Hour)}
++	d := sessionpolicy.Evaluate(s, sessionpolicy.Observation{At: created, Trusted: true})
++	fmt.Println(d.State, d.Reason)
++	// Output: valid session_valid
++}
+diff --git a/services/iam/lab-component.json b/services/iam/lab-component.json
+new file mode 100644
+index 0000000..7bc09f7
+--- /dev/null
++++ b/services/iam/lab-component.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version": 1,
++  "component": "iam",
++  "positive_fixture": "testdata/valid.json",
++  "negative_fixture": "testdata/malformed.json",
++  "positive_output_contains": ["valid", "session_valid"],
++  "expected_test_names": ["TestEvaluateValid", "TestEvaluateUnknown", "TestEvaluateIdleBoundary"]
++}
+diff --git a/services/iam/testdata/idle-equal.json b/services/iam/testdata/idle-equal.json
+new file mode 100644
+index 0000000..68d27c2
+--- /dev/null
++++ b/services/iam/testdata/idle-equal.json
+@@ -0,0 +1,11 @@
++{
++  "version": 1,
++  "session": {
++    "found": true,
++    "revoked": false,
++    "created_at": "2026-10-18T00:00:00Z",
++    "expires_at": "2026-10-19T00:00:00Z",
++    "idle_expires_at": "2026-10-18T08:00:00Z"
++  },
++  "clock": {"trusted": true, "now": "2026-10-18T08:00:00Z"}
++}
+diff --git a/services/iam/testdata/malformed.json b/services/iam/testdata/malformed.json
+new file mode 100644
+index 0000000..4e08d61
+--- /dev/null
++++ b/services/iam/testdata/malformed.json
+@@ -0,0 +1 @@
++{"version":1,"version":2,"session":null,"clock":null}
+diff --git a/services/iam/testdata/valid.json b/services/iam/testdata/valid.json
+new file mode 100644
+index 0000000..378a662
+--- /dev/null
++++ b/services/iam/testdata/valid.json
+@@ -0,0 +1,11 @@
++{
++  "version": 1,
++  "session": {
++    "found": true,
++    "revoked": false,
++    "created_at": "2026-10-18T00:00:00Z",
++    "expires_at": "2026-10-19T00:00:00Z",
++    "idle_expires_at": "2026-10-18T08:00:00Z"
++  },
++  "clock": {"trusted": true, "now": "2026-10-18T07:59:59Z"}
++}

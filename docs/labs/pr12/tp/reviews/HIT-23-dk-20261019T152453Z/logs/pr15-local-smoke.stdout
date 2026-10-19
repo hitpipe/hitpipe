@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=d859ad1a48177c5d843d89a7f7de8e7c7c785d8f -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z-pr15/.pr12-build/iam/dev/iam-contractcheck ./cmd/iam-contractcheck
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-un1kl1t7/iam-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-un1kl1t7/iam-contractcheck --fixture /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-un1kl1t7/positive_fixture.json --format json
+{"component": "iam", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=d859ad1a48177c5d843d89a7f7de8e7c7c785d8f -X main.dirty=false -X main.buildMode=release -trimpath -o /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z-pr15/.pr12-build/iam/release/iam-contractcheck ./cmd/iam-contractcheck
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-82y9lpnb/iam-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-82y9lpnb/iam-contractcheck --fixture /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-82y9lpnb/positive_fixture.json --format json
+{"component": "iam", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}

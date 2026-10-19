@@ -1,0 +1,11 @@
+--- services/iam/internal/domain/sessionpolicy/policy.go
++++ services/iam/internal/domain/sessionpolicy/policy.go
+@@ -56,7 +56,7 @@
+ }
+ 
+ // IsValid requires the complete positive decision, not a default bool value.
+-func (d Decision) IsValid() bool { return d.State == StateValid && d.Reason == ReasonValid }
++func (d Decision) IsValid() bool { return d.State == StateValid }
+ 
+ func deny(reason Reason) Decision { return Decision{State: StateDenied, Reason: reason} }
+ 

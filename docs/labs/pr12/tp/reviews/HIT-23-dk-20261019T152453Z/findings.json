@@ -1,0 +1,74 @@
+[
+  {
+    "id": "DK-REV-001",
+    "priority": "P2",
+    "scope": "document_preparation",
+    "affected_pr": 19,
+    "head_sha": "f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd",
+    "introduced_in_pr": 19,
+    "path": "docs/labs/pr12/dk/reports/figures.json",
+    "line": 330,
+    "related_lines": [
+      331,
+      389,
+      390
+    ],
+    "criterion": "HIT-24 AC4; 0104-pz02/Р2 и Р6; точные cwd/command для рисунков 02 и 05",
+    "title": "Согласовать cwd и команды двух инструкций МДК01.04 ПР2",
+    "observed": "Для 0104-pz02-02 и 0104-pz02-05 cwd явно указывает корень clone, тогда как go doc ./internal/... и go test ./internal/... разрешаются относительно services/iam. Navigation указывает services/iam, то есть поля противоречат друг другу. При буквальном выполнении из указанного cwd обе команды завершаются exit 1: directory not found. Та же ошибка встроена в DOCX и INSTRUCTIONS.md.",
+    "expected": "Один однозначный cwd и непосредственно исполняемая команда на source SHA.",
+    "basis": "MANUAL_LAB_PR12 workflow §6/§10 и HIT-24 AC4 требуют точные исполнимые cwd+command, а не только непустые поля.",
+    "reproduction": [
+      "Из корня чистого review checkout: go doc ./internal/domain/sessionpolicy",
+      "Из корня: go test ./internal/adapters/fixtures/sessionlookup -run TestSameConsumerContractWithBothAdapters -v -count=1"
+    ],
+    "actual_exit": [
+      1,
+      1
+    ],
+    "evidence": [
+      "logs/repro-godoc-root.json",
+      "logs/repro-godoc-root.stderr",
+      "logs/repro-contract-root.json",
+      "logs/repro-contract-root.stderr",
+      "logs/godoc-domain.json",
+      "logs/adapter-contract.json"
+    ],
+    "required_fix": "Для обеих записей явно задать services/iam и согласовать путь открытия module-contract.md; либо оставить root и использовать go -C services/iam doc/test. Синхронно обновить figures.json, INSTRUCTIONS.md и пересобранный 0104-pz02-dk.docx. Проверить все21 инструкцию на подобные противоречия.",
+    "retest": "В отдельном чистом clone на новом package head буквально выполнить исправленные команды в записанном cwd: exit0, package docs и 10 file/fixed subtests; verify_package.py PASS, ровно21 placeholder. Авторские исторические логи не переписывать.",
+    "status": "OPEN; future author fix/retest NOT_PERFORMED"
+  },
+  {
+    "id": "DK-REV-002",
+    "priority": "P2",
+    "scope": "document_preparation",
+    "affected_pr": 19,
+    "head_sha": "f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd",
+    "introduced_in_pr": 19,
+    "path": "docs/labs/pr12/dk/reports/build_reports.py",
+    "line": 75,
+    "line_end": 83,
+    "criterion": "HIT-24 AC5; workflow §7: читаемые таблицы и корректная пагинация DOCX",
+    "title": "Устранить разрыв строк и потерю контекста у продолжений таблиц",
+    "observed": "Во всех четырёх PDF строка «Время работы» первой содержательной таблицы разрывается: на следующую страницу уходит только слово JSON в правой ячейке с пустой левой ячейкой. 0104-pz01/02: страницы3→4; 0302-pz01/02:4→5. В 0302-pz02 таблица рисков продолжается на страницах9/10 без повторения шапки, с разрывами записей. Сборщик создаёт строки без cantSplit и tblHeader. ZIP/XML PASS этого не обнаруживает.",
+    "expected": "Короткие строки не разрываются между страницами; многостраничные таблицы имеют повторяемую шапку, идентифицируемые продолжения и достаточную ширину колонок без потери содержания.",
+    "basis": "Проверка реального отображения DOCX/таблиц/пагинации входит в HIT-24 AC5 и общий manual workflow. Замечание относится к полученным формам, не к неизменяемым upstream шаблонам.",
+    "reproduction": [
+      "Рендер каждого из четырёх DOCX штатным render_docx.py; открыть указанные страницы PDF. Exact argv/cwd/time/exit сохранены в logs/render-*.json."
+    ],
+    "actual_exit": [
+      0
+    ],
+    "evidence": [
+      "document-review.json",
+      "docx-structure.json",
+      "pdf/0104-pz01-dk.pdf",
+      "pdf/0104-pz02-dk.pdf",
+      "pdf/0302-pz01-dk.pdf",
+      "pdf/0302-pz02-dk.pdf"
+    ],
+    "required_fix": "Минимально исправить создание таблиц: запрет разрыва коротких строк, повторение шапки, ширины колонок/альбомная секция для широкого реестра при необходимости. Не удалять записи и не уменьшать их до нечитаемого кегля. Пересобрать четыре DOCX и проверить весь рендер.",
+    "retest": "verify_package.py PASS, таблицы/ячейки/полный текст/21 placeholder сохранены, повторный DOCX→PDF с новым SHA и фактическим просмотром всех страниц. Указанных оторванных фрагментов больше нет; продолжения имеют контекст.",
+    "status": "OPEN; future author fix/retest NOT_PERFORMED"
+  }
+]

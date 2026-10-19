@@ -1,0 +1,12 @@
+ services/iam/README.md                             |  11 +-
+ services/iam/cmd/iam-contractcheck/main.go         |  36 ++++-
+ services/iam/cmd/iam-contractcheck/main_test.go    |  24 ++-
+ services/iam/docs/module-contract.md               |   6 +-
+ .../iam/internal/adapters/clock/system/clock.go    |  33 ++++
+ .../internal/adapters/clock/system/clock_test.go   |  35 ++++
+ .../adapters/fixtures/sessionlookup/adapters.go    |  77 +++++++++
+ .../fixtures/sessionlookup/adapters_test.go        | 162 +++++++++++++++++++
+ .../adapters/fixtures/sessionlookup}/fixture.go    |  17 +-
+ .../application/authenticatesession/service.go     | 106 ++++++++++++
+ .../authenticatesession/service_test.go            | 178 +++++++++++++++++++++
+ 11 files changed, 668 insertions(+), 17 deletions(-)

@@ -1,0 +1,381 @@
+{
+  "source_sha": "f67dd3faefb6a9e61dc1b3dbcbdfe158c5744fcd",
+  "started_at": "2026-10-19T15:26:56.259630+00:00",
+  "input_dirty": false,
+  "go_version": "go version go1.27.2 darwin/arm64",
+  "environment": {
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "2",
+    "GOFLAGS": "-p=1",
+    "PR12_RACE": ""
+  },
+  "mutations": [
+    {
+      "id": "M01",
+      "rule": "DK-RULE-02: idle equality must expire",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "12da0e0f4a788285a9066c142216d6e34390fdc19917b1fe78e106ae9ec74038",
+      "patch": "M01.patch",
+      "patch_sha256": "42a34ac922e55792d413414daa6ce2e69b44093ce67e2549f52e21e429d44352",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:26:58.494326+00:00",
+        "completed_at": "2026-10-19T15:26:58.734701+00:00",
+        "exit_code": 0,
+        "log": "M01-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:26:58.734767+00:00",
+        "completed_at": "2026-10-19T15:27:00.689536+00:00",
+        "exit_code": 1,
+        "log": "M01-check.log",
+        "sha256": "4301f95b6f9cd855fe528cbf7fefae9fa5abd78e36371fbf7ef517c5e81bb6a4",
+        "failed_tests": [
+          "FuzzValidityInvariants",
+          "FuzzValidityInvariants/seed#3",
+          "TestClockReadAfterLookupAndCancellation",
+          "TestEvaluateIdleBoundary",
+          "TestEvaluateIdleBoundary/equal",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/idle_equal",
+          "TestSameConsumerContractWithBothAdapters/fixed/idle_equal"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M02",
+      "rule": "DK-RULE-02: absolute equality and precedence",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "52f2ab49437cbfdb5b7926ae636914fa02dcdaccc39c816682858cdf17e05a24",
+      "patch": "M02.patch",
+      "patch_sha256": "6aeec8033efbf56e782fef87219c753db26e0c7e02e375d4d5d3f52ec4d86460",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:00.690313+00:00",
+        "completed_at": "2026-10-19T15:27:00.883647+00:00",
+        "exit_code": 0,
+        "log": "M02-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:00.883707+00:00",
+        "completed_at": "2026-10-19T15:27:02.841411+00:00",
+        "exit_code": 1,
+        "log": "M02-check.log",
+        "sha256": "8f93bdd773e80cd8cd7d8a66037a8d208d83c337166f6d78e8ebd794a31f8d90",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestEvaluateAbsoluteBoundary"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M03",
+      "rule": "DK-FR-01: revoked cannot be valid",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "0e1fdfc24800d3f03aa131b438eb90ad345df53521e674c6728dbac1f0ee9d68",
+      "patch": "M03.patch",
+      "patch_sha256": "ffcbbb116a64ca78cb2a2cb2fa302be641aec473b238301315065649ce0f33e7",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:02.842065+00:00",
+        "completed_at": "2026-10-19T15:27:03.034299+00:00",
+        "exit_code": 0,
+        "log": "M03-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:03.034364+00:00",
+        "completed_at": "2026-10-19T15:27:05.111831+00:00",
+        "exit_code": 1,
+        "log": "M03-check.log",
+        "sha256": "a4abf216e80662d738678442d46a7ac540b79d4bb17df06492dd23abcd710ed9",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestDiagnosticDeniedIsSuccessfulEvaluation",
+          "TestEvaluateRevoked",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/revoked",
+          "TestSameConsumerContractWithBothAdapters/fixed/revoked"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M04",
+      "rule": "DK-FR-01: unknown must fail closed",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "dfd911e7436a7c545e7da948c89b8cb3a2bdfca427f84331afbbbbdf0aa84fc9",
+      "patch": "M04.patch",
+      "patch_sha256": "003a8c4ac39a50b335233fb0bf63a7903edf0a85ac46ae92a94db32e75e1c5b9",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:05.112661+00:00",
+        "completed_at": "2026-10-19T15:27:05.307926+00:00",
+        "exit_code": 0,
+        "log": "M04-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:05.307983+00:00",
+        "completed_at": "2026-10-19T15:27:07.240858+00:00",
+        "exit_code": 1,
+        "log": "M04-check.log",
+        "sha256": "0330bb9a56cb47a56d0dec4b57d8224e330e57711236fb2c25b25c5763d8ba83",
+        "failed_tests": [
+          "TestDecisionTablePrecedence",
+          "TestEvaluateUnknown",
+          "TestReaderFailureAndUnknownProjection",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/unknown",
+          "TestSameConsumerContractWithBothAdapters/fixed/unknown"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M05",
+      "rule": "DK-RULE-01: absolute lifetime cap",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "03bf07ebc3ac5028e1cfc2682e24add4bccbe8b78c829ca5056959423da42787",
+      "patch": "M05.patch",
+      "patch_sha256": "565ea27c3585f2e6252bc59bedb06d5d3367a70a90146abcdfe35d03544dc96d",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:07.241586+00:00",
+        "completed_at": "2026-10-19T15:27:07.433599+00:00",
+        "exit_code": 0,
+        "log": "M05-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:07.433657+00:00",
+        "completed_at": "2026-10-19T15:27:09.385113+00:00",
+        "exit_code": 1,
+        "log": "M05-check.log",
+        "sha256": "465e69e3d747dbbc37b9294c3872217acbef39c8e4293e472c532b8f35a9f4d6",
+        "failed_tests": [
+          "TestEvaluateInvalidChronology",
+          "TestEvaluateInvalidChronology/lifetime_above_cap"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    },
+    {
+      "id": "M06",
+      "rule": "DK-FR-02: lookup error must not allow",
+      "file": "services/iam/internal/application/authenticatesession/service.go",
+      "before_sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c",
+      "mutated_sha256": "043808946b64e47cf90befedf2c588e4de17fb4a92b34e4983504c17915fb75d",
+      "patch": "M06.patch",
+      "patch_sha256": "19b07be2c95d40c8052ee3f088dac743cfaa157d222eabb13c27903160eb9181",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:09.385730+00:00",
+        "completed_at": "2026-10-19T15:27:09.575265+00:00",
+        "exit_code": 0,
+        "log": "M06-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:09.575321+00:00",
+        "completed_at": "2026-10-19T15:27:11.386915+00:00",
+        "exit_code": 1,
+        "log": "M06-check.log",
+        "sha256": "927149c324ca605511673f645be98ee540303c2a79e216ddf14acc62e10be62e",
+        "failed_tests": [
+          "TestPortErrorsDoNotAllowOrLeak",
+          "TestPortErrorsDoNotAllowOrLeak/lookup",
+          "TestSameConsumerContractWithBothAdapters",
+          "TestSameConsumerContractWithBothAdapters/file/error",
+          "TestSameConsumerContractWithBothAdapters/fixed/error"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "ed65540a159ba54193848d284f7fce56112ef22a345d43f426797159ffe6367c",
+      "restored": true
+    },
+    {
+      "id": "M07",
+      "rule": "DK-RULE-02: IsValid requires complete positive decision",
+      "file": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "before_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "mutated_sha256": "2ca94f442f218e4147e4fed57700daef2b925ffcb2de3acbcff606bf6263a01d",
+      "patch": "M07.patch",
+      "patch_sha256": "946446d7282b2b268f3f3fd80077a350e8bfa396d26ca5a2d5993345d7422516",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "./..."
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout/services/iam",
+        "started_at": "2026-10-19T15:27:11.387525+00:00",
+        "completed_at": "2026-10-19T15:27:11.588154+00:00",
+        "exit_code": 0,
+        "log": "M07-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "failed_tests": []
+      },
+      "test": {
+        "command": [
+          "python3",
+          "tools/pr12/workspace.py",
+          "check",
+          "iam",
+          "--require"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+        "started_at": "2026-10-19T15:27:11.588216+00:00",
+        "completed_at": "2026-10-19T15:27:13.650069+00:00",
+        "exit_code": 1,
+        "log": "M07-check.log",
+        "sha256": "ec9fa30c144d50c53ba81b71a129aca21b0bde71ccedb624794fd0325f35761e",
+        "failed_tests": [
+          "TestDecisionRejectsMixedStateAndReason"
+        ]
+      },
+      "result": "KILLED",
+      "restored_sha256": "c7bae715e2ceb07e41aaf1d7bc5da2b273a586540a2678d989a4b4265050cf39",
+      "restored": true
+    }
+  ],
+  "scope": "Synthetic IAM slice; not real authority, independent human review or acceptance.",
+  "temporary_branch": "temp/pr12-dk-mutations-474f5f4e7e67",
+  "baseline": {
+    "command": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+    "started_at": "2026-10-19T15:26:56.321388+00:00",
+    "completed_at": "2026-10-19T15:26:58.493656+00:00",
+    "exit_code": 0,
+    "log": "baseline.log",
+    "sha256": "1bccf96fb7a3156ec3162a8d3747271ecc10579a02124593023b1f83e912f74c",
+    "failed_tests": []
+  },
+  "final_clean": {
+    "command": [
+      "python3",
+      "tools/pr12/workspace.py",
+      "check",
+      "iam",
+      "--require"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/dk-review-20261019T152453Z/.pr12-build/dk-mutations-jqe49zn1/checkout",
+    "started_at": "2026-10-19T15:27:13.650362+00:00",
+    "completed_at": "2026-10-19T15:27:14.714991+00:00",
+    "exit_code": 0,
+    "log": "final-clean.log",
+    "sha256": "b8a10ea5dcef16c2ae2284248591a3d0e0ec5e11ae7fca81e66b42716690264b",
+    "failed_tests": []
+  },
+  "restored_worktree_clean": true,
+  "completed_at": "2026-10-19T15:27:14.767378+00:00"
+}
