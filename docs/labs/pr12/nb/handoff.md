@@ -1,6 +1,14 @@
 # HitPipe HIT-15 Nikita Budykin handoff
 
-Current package status: `CONTENT_READY_IMAGES_PENDING`. This is the text and
+Current package status: `REQUIRES_CORRECTION`. Incoming team reviewer: Дмитрий
+Карачебан; actual source/code/document review: Codex under his delegation.
+See [review results](review/REVIEW_RESULTS_RU.md) and
+[author correction prompt](review/AUTHOR_CORRECTION_PROMPT_RU.md).
+Source review completed with NB-REV-001–006; author PRs are not yet created,
+so no GitHub PR verdict is claimed. No separate Lead conceptual check is pending.
+The original submission narrative below is historical, not a positive review.
+
+This is the text and
 evidence package for Lead review, not formal Project OS admission, acceptance,
 merge or final submission.
 
@@ -47,13 +55,15 @@ push are not PRs and are not recorded as PR URLs.
 
 ## Human actions required
 
-1. Create and independently review/merge PRs for HIT-51, HIT-52 and HIT-53;
+1. The author/agent creates PRs and fixes NB-REV-001–006; Lead performs actual
+   independent PR review and permitted merge after corrections. For HIT-51/52/53,
    preserve exact URLs, review comments, fix commits, final merge SHAs and CI.
 2. Conduct the real interview, blind clarity check, reciprocal scaffold/module
    checks and teacher-assigned cross-project opposition. Fill only actual names,
    dates, answers, remarks and retest evidence.
-3. Resolve the `NOT_APPLICABLE` invalid-config slot with Lead/teacher; do not
-   fabricate a configuration test for a component that has no runtime config.
+3. Use the existing `--format text|json` configuration and actual
+   `--format invalid` error/exit2 for the mandatory configuration observation.
+   No Lead/teacher exception or fake configuration input is required.
 4. Insert exactly 21 real PNGs using
    `evidence/screenshots/INSTRUCTIONS.md`; the agent did not capture them.
 5. After actual merge and CI, create immutable tags
