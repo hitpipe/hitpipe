@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "test_count": 9,
+  "tests": [
+    {
+      "id": "PG-01-state-outbox-atomic-rollback",
+      "status": "PASS",
+      "seconds": 0.13
+    },
+    {
+      "id": "PG-02-concurrent-admission-32-one-case-one-outbox",
+      "status": "PASS",
+      "seconds": 2.398
+    },
+    {
+      "id": "PG-03-32-inbox-replays-one-transition",
+      "status": "PASS",
+      "seconds": 2.058
+    },
+    {
+      "id": "PG-04-32-dispatch-CAS-one-winner",
+      "status": "PASS",
+      "seconds": 2.781
+    },
+    {
+      "id": "PG-05-actual-postgres-SIGKILL-committed-fence-retained",
+      "status": "PASS",
+      "seconds": 2.452
+    },
+    {
+      "id": "PG-06-pause-admission-barrier-old-config-pin",
+      "status": "PASS",
+      "seconds": 3.26
+    },
+    {
+      "id": "PG-07-skip-locked-20-distinct-outbox-claims",
+      "status": "PASS",
+      "seconds": 3.247
+    },
+    {
+      "id": "PG-08-service-DB-grants-and-RLS-default-deny",
+      "status": "PASS",
+      "seconds": 0.382
+    },
+    {
+      "id": "PG-09-deadline-no-reset-content-purge-keeps-safety",
+      "status": "PASS",
+      "seconds": 0.557
+    }
+  ],
+  "server": "PostgreSQL 18.6 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "container": "hp-arch-boundaries-20261016",
+  "timestamp_utc": "2026-10-16T20:40:18.576567+00:00",
+  "script_sha256": "48688d34dd66e2c65bd630ea1f90de62e91fb4d31ebd0d0d3140d0c42b31fb2e",
+  "limits": [
+    "Reference SQL pattern only, not a HitPipe implementation or full E2E",
+    "No provider API, LLM, UI, HTTP revocation barrier, external send counter or distributed fencing tested",
+    "One PostgreSQL process SIGKILL preserves committed volume; not storage destruction/RPO0 of all failures",
+    "DB role/RLS checks are bounded examples, not complete NFR005 1000-attempt matrix",
+    "No latency/availability/NFR release PASS claim"
+  ]
+}

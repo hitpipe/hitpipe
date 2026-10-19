@@ -1,0 +1,81 @@
+{
+  "contract_id": "hitpipe.discovery",
+  "entrypoints": {
+    "build": "build.json",
+    "inventory": "inventory.json",
+    "payload": "payload/root.json",
+    "provenance": "provenance.json",
+    "sources": "sources.json"
+  },
+  "files": [
+    {
+      "digest": "sha256:a94d771c53c68a6e431e2af9c746457624f4de179f66bbab53d7d0a6ca0ffd94",
+      "media_type": "application/json",
+      "path": "build.json",
+      "role": "build"
+    },
+    {
+      "digest": "sha256:6848019f9737159bbe8cefa13bec3ecad143c2d9118f99c68ac5e5d85473b79e",
+      "media_type": "application/json",
+      "path": "inventory.json",
+      "role": "source_inventory"
+    },
+    {
+      "digest": "sha256:85aa07cd8f668a86720c6ed6750bc219b7b6ad3b2b69ac59d5113bf3343d3e76",
+      "media_type": "text/html",
+      "path": "native/da-001.bin",
+      "role": "native_export"
+    },
+    {
+      "digest": "sha256:22090a76a1a78e98c00869bf7ddcd60bd6211a616c40396d8aadbed7e9f17700",
+      "media_type": "text/html",
+      "path": "native/vision-001.bin",
+      "role": "native_export"
+    },
+    {
+      "digest": "sha256:c867bdf16692501f071f0fa9302091a7fa5ca3e98753bf30d6fb2c7bf504200d",
+      "media_type": "application/json",
+      "path": "payload/modules/da-001.json",
+      "role": "payload_module"
+    },
+    {
+      "digest": "sha256:e261d4068d275e5bc07ed76cc27ec1cdd8584ed26affc08deb36f5ea3ac0d389",
+      "media_type": "application/json",
+      "path": "payload/modules/vision-001.json",
+      "role": "payload_module"
+    },
+    {
+      "digest": "sha256:a760862a496e9c272c6454bb79a925222f58165c0c87fdff320927139db6a439",
+      "media_type": "application/json",
+      "path": "payload/root.json",
+      "role": "payload_root"
+    },
+    {
+      "digest": "sha256:0635b5a30730b35f12c2655ecbe58129157c22d0dc74d93b0d8b71534cdaa576",
+      "media_type": "application/json",
+      "path": "provenance.json",
+      "role": "provenance"
+    },
+    {
+      "digest": "sha256:d7fa80d22a03cf2e2738c5590b1e1ef2c509a266dbc1f67df6a0b3062d72b8b2",
+      "media_type": "application/json",
+      "path": "snapshots/da-001.json",
+      "role": "source_snapshot"
+    },
+    {
+      "digest": "sha256:84e3ef42dee899f1e6fb1b805f89ae2ad56957870c9892eea702c806720fd6ce",
+      "media_type": "application/json",
+      "path": "snapshots/vision-001.json",
+      "role": "source_snapshot"
+    },
+    {
+      "digest": "sha256:4a27ace7dcef633022eb62dd2fe0e13fd178c4c0cd753f8c80b8f3c249b36aeb",
+      "media_type": "application/json",
+      "path": "sources.json",
+      "role": "source_manifest"
+    }
+  ],
+  "format": "pcf.package/1",
+  "phase": "discovery",
+  "profile_digest": "sha256:21f62099c6661bb5c8c1c259d556cd0fc59f92a44c69775e392f43ad56b2107b"
+}

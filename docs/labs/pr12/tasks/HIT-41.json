@@ -1,0 +1,48 @@
+{
+  "local_id": "DS-R1",
+  "summary": "[DS/R1] Зафиксировать источники, обследование и проверяемые требования участка",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nЗафиксировать источники, обследование и проверяемые требования участка\n\n## SCOPE\n\nЛичная requirements baseline собственного модуля; сохранить реальные пользовательские сведения отдельно от desk research/product decisions и empirical hypotheses.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-007, HP-RULE-008, HP-BP-004/T/007, HP-BP-004/T/008, HP-BP-004/T/013, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15302657; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DeliveryIntent`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/ObservedTaskAttributes`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/TaskObservation`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/delivery.sql`.\n\nМодуль: TargetReadback; собственные направления: Хранение и обработка данных: exact Unicode/text/byte normalization; Межкомпонентное взаимодействие: retrieved evidence/unknown failure without unsafe retry.\n\n## ACCEPTANCE CRITERIA\n\n1. Собственные вопросы обследования подготовлены; дата/участники/current process/реальные ответы с источником, facts/assumptions/open empirical questions разделены. Нет разговора — явно NOT CONDUCTED, human action в H1.\n2. Связка scenario/MVP/reserve и место участка согласованы с HP-VER-001; учебный модуль не переопределяет продукт и не вырезает mandatoryscope.\n3. Для своего модуля сформулированы normalFR, существенный error outcome и meaningful measurableNFR, каждый с source/clause и Given/When/Then/expected oracle; числовые измерения не выдуманы.\n4. Подготовлены воспроизводимые synthetic исходные данные/контрольные inputs/reset/seed; baseline path+revision фиксированы до проверки, без customer data/secrets.\n5. Ранний анализ безопасности отвечает на все пять вопросов п.4.6: (1) какие данные/ресурсы защищать; (2) откуда недоверенный ввод; (3) кто имеет доступ к существенным действиям; (4) реалистичный ущерб; (5) где хранятся секреты и что запрещено логировать. Ответы конкретны для своего модуля и прослеживаются к C3.\n6. Личный вклад атрибутирован; общий charter/MVP/regulation цитируются точной версией. Матрица source→FR/error/NFR→AC→plannedcheck и blind clarity package существуют.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; finalowner:Дмитрий Стацюк. `docs/labs/pr12/ds/requirements.md`, `interview.md`, `security-baseline.md`, `requirements-trace.json`; synthetic fixture spec при owner module.\n\n## DEFINITION OF DONE\n\n- Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.",
+  "role": "R1",
+  "person_code": "ds",
+  "depends_on": [
+    "SHARED"
+  ],
+  "parent_local_id": "F-DS",
+  "parent_key": "HIT-14",
+  "component_id": "10037",
+  "task_mode": "MANUAL_DOC",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/ds"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/ds"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-ds"
+  ],
+  "assignee_account_id": "712020:3c6a69db-985b-49f8-ad2b-b622b07e7bd7",
+  "criteria_ids": [
+    "0302-pz01/Р1",
+    "0302-pz01/Р2",
+    "0302-pz01/Р3",
+    "0302-pz01/Р4"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-41",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-41",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-16"
+  ]
+}

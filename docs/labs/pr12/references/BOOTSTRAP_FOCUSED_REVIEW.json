@@ -1,0 +1,89 @@
+{
+  "review_type": "AUTHOR_FOCUSED_SELF_REVIEW",
+  "independence": "NOT_CLAIMED_SAME_AUTHOR",
+  "status": "PASS_WITH_EXPLICIT_UNEXECUTED_RUNTIME_SCOPE",
+  "changes": [
+    {
+      "id": "BTR-001",
+      "defect": "All workflows used identical job context; path-filtered required checks could stay pending",
+      "fix": "Unique pr12-<component> names, all workflows trigger on every PR; selective push paths preserved"
+    },
+    {
+      "id": "BTR-002",
+      "defect": "Deleted TS tests could remain in compiler output and produce stale green evidence",
+      "fix": "Remove generated frontend output tree before each tsc invocation; regression checks removal before compiler call"
+    },
+    {
+      "id": "BTR-003",
+      "defect": "TS dev/release mode did not change metadata or deliverable diagnostics",
+      "fix": "Distinct sourceMap/comments flags, enable-source-maps on dev runtime, actual mode embedded in immutable generated buildInfo"
+    },
+    {
+      "id": "BTR-004",
+      "defect": "Unbounded command/diagnostic process could hang local execution",
+      "fix": "Bounded 180s command timeout and 30s smoke, native Node test timeout; timeout never success"
+    },
+    {
+      "id": "BTR-005",
+      "defect": "TAP ok line for skipped/todo required test could count as pass",
+      "fix": "Require nonzero passing summary and actual non-SKIP/non-TODO pass for every expected test; regressions cover nested true pass and skipped false pass"
+    },
+    {
+      "id": "BTR-006",
+      "defect": "Frontend pure-runner documentation did not explicitly explain executable React Card coverage before full Next app",
+      "fix": "Document compiled TSX with pinned react-dom/server semantic rendering tests and separate actual browser fixture gate; no SSR claim of keyboard/hydration verification"
+    }
+  ],
+  "repos": [
+    {
+      "repo": "backend",
+      "required_check_contexts": [
+        "pr12-delivery",
+        "pr12-iam",
+        "pr12-intake",
+        "pr12-processing"
+      ],
+      "all_prs_trigger_checks": true,
+      "wrapper_unit_tests": {
+        "status": "PASS",
+        "count": 10,
+        "scope": "bootstrap boundary tests only; subprocess compiler mocked in regression test; no student code executed",
+        "output": "+ tool\n..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK\n"
+      },
+      "yaml_parse": "PASS",
+      "python_ast": "PASS",
+      "workspace_tool_sha256": "3a038f0c992136ef4603c07683637ecd135a93986fcc58b4de0b054086cde375",
+      "uncommitted": true
+    },
+    {
+      "repo": "frontend",
+      "required_check_contexts": [
+        "pr12-case-status"
+      ],
+      "all_prs_trigger_checks": true,
+      "wrapper_unit_tests": {
+        "status": "PASS",
+        "count": 10,
+        "scope": "bootstrap boundary tests only; subprocess compiler mocked in regression test; no student code executed",
+        "output": "+ tool\n..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK\n"
+      },
+      "yaml_parse": "PASS",
+      "python_ast": "PASS",
+      "workspace_tool_sha256": "3a038f0c992136ef4603c07683637ecd135a93986fcc58b4de0b054086cde375",
+      "uncommitted": true
+    }
+  ],
+  "frontend_branch_protection": {
+    "status": "BLOCKED_HUMAN_GITHUB_PLAN",
+    "basis": "Root observed private repo GitHub branch-protection403 plan limitation; not independently mutated by this reviewer",
+    "fallback": "Lead review/merge and explicit no direct-main-push policy, preserve actual CI links and review records; do not claim technical branch protection until real API readback succeeds"
+  },
+  "runtime_boundaries": [
+    "No SDK/npm cohort installed locally",
+    "No actual Go/TS compile/runtime smoke claimed before student entrypoints exist",
+    "Student components remain NOT_IMPLEMENTED / NOT_RUN",
+    "No user screenshot captured or generated",
+    "No commit/push/branch protection write by this agent",
+    "Root owns actual Jira exports, full source snapshots, task/report files integration"
+  ]
+}

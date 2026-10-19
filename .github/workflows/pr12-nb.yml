@@ -1,0 +1,40 @@
+name: PR12 intake — bootstrap or submitted component checks
+on:
+  pull_request:
+  push:
+    branches: [main, 'work/**', 'codex/pr12-agent-workspace-20261017']
+    paths:
+      - 'services/intake/**'
+      - 'tools/pr12/**'
+      - 'docs/labs/pr12/**'
+      - '.github/workflows/pr12-nb.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  component:
+    name: pr12-intake
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify bootstrap documentation and frozen copies
+        run: python3 tools/pr12/workspace.py validate
+      - name: Verify bootstrap wrapper boundaries (not student tests)
+        run: python3 tools/pr12/test_workspace.py
+      - name: Report actual implementation state
+        run: python3 tools/pr12/workspace.py status intake
+      - uses: actions/setup-go@v5
+        if: hashFiles('services/intake/lab-component.json') != ''
+        with:
+          go-version: '1.27.2'
+          cache: false
+      - name: Run actual named tests when module exists
+        run: python3 tools/pr12/workspace.py check intake
+      - name: Run declared diagnostic smoke in both modes
+        if: hashFiles('services/intake/lab-component.json') != ''
+        run: python3 tools/pr12/workspace.py smoke intake --require
+      - name: Scope of this job
+        if: always()
+        run: |
+          echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"

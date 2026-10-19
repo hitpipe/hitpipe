@@ -1,0 +1,49 @@
+{
+  "local_id": "TP-R2",
+  "summary": "[TP/R2] Уточнить требования значимым PR и устранить неоднозначности",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nУточнить требования значимым PR и устранить неоднозначности\n\n## SCOPE\n\nСодержательное refinement проверяемого контракта модуля: конкретные error precedence/границы/unknown/ownership/sideeffects; не косметическая правка ради PR.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-006, HP-BP-002/T/004, HP-BP-003/T/002, HP-BP-003/T/006, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15269889; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/SourceFacts`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DraftConfig`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/processing.sql`.\n\nМодуль: PaidOrderEligibility; собственные направления: Хранение и обработка данных: null/false/zero и exact financial predicates; Межкомпонентное взаимодействие: bounded source snapshot freshness/completeness.\n\n## ACCEPTANCE CRITERIA\n\n1. Выбран реальный существенный пробел local requirement/contract изR1; before/after и rationale записаны. Canonical upstream не изменяется тайно; conflict направляется Lead с exactclause.\n2. Свой PR содержит meaningful requirement/contract refinement, проверяемые AC и actual applicablecheck; branch/commit/task/PR/author traceability существуют.\n3. DoD/regulation task→branch→PR→CI→review→merge применены честно; review/merge externalaction вH1, до них In Review, не fakeDone.\n4. Blind normal/error/boundary scenarios переданы другому студенту вH1; реальные несовпадения понимания и решения возвращены вrefinement без придуманныхremarks.\n5. Известные содержательные замечания исправлены и relevantchecks повторены; нет известных противоречий source/domainerror. Новые pending human remarks не скрываются.\n6. Candidate exact refinement input доступенC1/C2 при manualmode доmerge с явнымиSHA/PR/status; human approval не объявлен.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; finalowner:Тимофей Патрушев. `docs/labs/pr12/tp/requirement-change.md`, `ambiguity-decisions.md`, realPR+CI; измененный module contract иtraceindex.\n\n## DEFINITION OF DONE\n\n- Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\nPRIMARY module path: `services/processing/internal/domain/eligibility`; локальный contract refinement относится только этому service. Root `internal/` legacy code не входит в scope.",
+  "role": "R2",
+  "person_code": "tp",
+  "depends_on": [
+    "TP-R1"
+  ],
+  "parent_local_id": "F-TP",
+  "parent_key": "HIT-12",
+  "component_id": "10036",
+  "task_mode": "MANUAL_DOC",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "docs/labs/pr12/tp",
+    "services/processing/internal/domain/eligibility"
+  ],
+  "ownedpaths": [
+    "docs/labs/pr12/tp",
+    "services/processing/internal/domain/eligibility"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-tp"
+  ],
+  "assignee_account_id": "712020:5b25ca4a-332a-4a5a-893b-8f9ec1d8b6b6",
+  "criteria_ids": [
+    "0302-pz01/Р2",
+    "0302-pz01/Р5",
+    "0302-pz01/Р7"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "key": "HIT-26",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-26",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-25"
+  ]
+}

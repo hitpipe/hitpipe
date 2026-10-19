@@ -1,0 +1,146 @@
+{
+  "local_id": "TP-C3",
+  "summary": "[TP/C3] Processing: проверить financial decision table, границы proof и seeded defects",
+  "description_markdown": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12\nProcessing: проверить financial decision table, границы proof и seeded defects\n\n## SCOPE\n\nСистема проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-006, HP-BP-002/T/004, HP-BP-003/T/002, HP-BP-003/T/006, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15269889; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/SourceFacts`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DraftConfig`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/processing.sql`.\n\nОбъект: Чистая проверка financial/pack eligibility для одного зафиксированного source snapshot и принятой конфигурации. ALLOWED только при полном совпадении account/mode/Price/qty1/currency, положительной полностью captured/received оплате без refund/dispute и свежем полном proof. Unknown не подменяется false/zero. Это necessary guard, не право dispatch и не state transition.\n\nПределы: Нет фактических Stripe API facts; Нет Processing SQL admission/config pin transaction; ALLOWED не подтверждает side-effect permission/readback.\n\n## ACCEPTANCE CRITERIA\n\n1. Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.\n2. Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.\n3. Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.\n4. Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.\n5. Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.\n6. Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; PRIMARYpaths: `services/processing/internal/domain/eligibility`, `services/processing/docs/module-contract.md`, `services/processing/**/*_test.go`, `services/processing/testdata`, `services/processing/tools/mutations`, `services/processing/docs/test-design.md`, `.github/workflows/pr12-tp.yml`; личные evidence/statuslogs `docs/labs/pr12/tp/`. Finalowner:Тимофей Патрушев.\n\n## DEFINITION OF DONE\n\n- Все применимые checks действительно выполнены агентом; PR review/merge настоящие, донихInReview.\n- Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n- Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n- Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n- Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n- Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n- Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## IMPLEMENTATION / CHECKS\n- complete valid fixed Price qty1\n- zero/partial/captured-false/refund-positive/disputed\n- null financial fields vs explicit false/zero\n- wrong account/mode/Price/qty/currency\n- activation boundary -1ns / exact / +1ns\n- proof oldest observation 10s boundary and expired valid_until\n- complete=false or partial pagination\n- reordered facts/input immutability\n\n## SEEDED DEFECT CANDIDATES (НЕ ВЫПОЛНЕНО)\n- amount_refunded==0 check удалить\n- charge_captured check удалить\n- quantity==1 заменить >=1\n- null disputed привести к false\n- currency equality проигнорировать\n- 10s freshness > заменить <\n\n## CONTINUATION\nБудущий componentepic: Operations Processing. Код/ports/testhistory сохраняются.\n\n## FULL ORIGINAL CODE TASK\n```json\n{\n  \"id\": \"TP-C3\",\n  \"person\": \"Тимофей Патрушев\",\n  \"person_code\": \"tp\",\n  \"component\": \"Processing—Operations Core\",\n  \"repo\": \"hitpipe/hitpipe\",\n  \"summary\": \"Processing: проверить financial decision table, границы proof и seeded defects\",\n  \"execution_kind\": \"VAL\",\n  \"scope\": \"Система проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.\",\n  \"owned_paths\": [\n    \"services/processing/internal/domain/eligibility\",\n    \"services/processing/docs/module-contract.md\",\n    \"services/processing/**/*_test.go\",\n    \"services/processing/testdata\",\n    \"services/processing/tools/mutations\",\n    \"services/processing/docs/test-design.md\",\n    \".github/workflows/pr12-tp.yml\"\n  ],\n  \"depends_on\": [\n    \"TP-C2\"\n  ],\n  \"shared_preconditions\": [\n    \"COMMON-CONTEXT: exact source bundle + implementation convention\",\n    \"COMMON-QG: Lead branch protection and shared instruction package; no false admission\"\n  ],\n  \"normative_refs\": [\n    \"HP-RULE-006\",\n    \"HP-BP-002/T/004\",\n    \"HP-BP-003/T/002\",\n    \"HP-BP-003/T/006\",\n    \"HP-BP-007/T/005\"\n  ],\n  \"formal_refs\": [\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/SourceFacts\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DraftConfig\",\n    \"contracts/hitpipe/architecture-2026-10-16/formal/sql/processing.sql\"\n  ],\n  \"canonical_source_page\": \"https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15269889\",\n  \"acceptance_criteria\": [\n    \"Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.\",\n    \"Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.\",\n    \"Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.\",\n    \"Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.\",\n    \"Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.\",\n    \"Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.\",\n    \"Локальный отрицательный прогон ТОЙ ЖЕ содержательной CI-проверки: намеренно нарушить проверяемое условие → фактический ненулевой exit/FAIL и журнал → восстановить исправный код/условие → повторный PASS. Сохранены exact argv, SHA, patch/digest, exit/log paths и human instruction для рисунка7 МДК01.04 ПР1; мутация/ошибочное условие не попадают в main.\"\n  ],\n  \"test_cases\": [\n    \"complete valid fixed Price qty1\",\n    \"zero/partial/captured-false/refund-positive/disputed\",\n    \"null financial fields vs explicit false/zero\",\n    \"wrong account/mode/Price/qty/currency\",\n    \"activation boundary -1ns / exact / +1ns\",\n    \"proof oldest observation 10s boundary and expired valid_until\",\n    \"complete=false or partial pagination\",\n    \"reordered facts/input immutability\"\n  ],\n  \"seeded_defect_candidates\": [\n    \"amount_refunded==0 check удалить\",\n    \"charge_captured check удалить\",\n    \"quantity==1 заменить >=1\",\n    \"null disputed привести к false\",\n    \"currency equality проигнорировать\",\n    \"10s freshness > заменить <\"\n  ],\n  \"limitations\": [\n    \"Нет фактических Stripe API facts\",\n    \"Нет Processing SQL admission/config pin transaction\",\n    \"ALLOWED не подтверждает side-effect permission/readback\"\n  ],\n  \"future_component_epic\": \"Operations Processing\",\n  \"lab_mapping\": [\n    \"0302-P02\",\n    \"0104-P01-CI\",\n    \"0104-P02-checks\"\n  ]\n}\n```\n\nОбязательный sensitivity check МДК01.04 ПР1: агент локально запускает ту же содержательную команду, которую использует CI, с намеренно нарушенным проверяемым условием; сохраняет реальный nonzero/FAIL журнал, затем восстанавливает условие и получает PASS. Это не искусственный красный основной CI. Человек позже снимает рисунок 7 по точной инструкции.\n\nCI ownership: разрешено изменить только свой `.github/workflows/pr12-tp.yml`. Общие workflow/config/includes и чужие файлы — Lead only. Реальный CI собственных тестов обязателен.\n\nДОПОЛНИТЕЛЬНЫЙ ОБЯЗАТЕЛЬНЫЙ AC: Локальный отрицательный прогон ТОЙ ЖЕ содержательной CI-проверки: намеренно нарушить проверяемое условие → фактический ненулевой exit/FAIL и журнал → восстановить исправный код/условие → повторный PASS. Сохранены exact argv, SHA, patch/digest, exit/log paths и human instruction для рисунка7 МДК01.04 ПР1; мутация/ошибочное условие не попадают в main.",
+  "role": "C3",
+  "person_code": "tp",
+  "depends_on": [
+    "TP-C2"
+  ],
+  "parent_local_id": "F-TP",
+  "parent_key": "HIT-12",
+  "component_id": "10036",
+  "task_mode": "MANUAL_VERIFY",
+  "phase": "LAB_PR12",
+  "owned_paths": [
+    "services/processing/internal/domain/eligibility",
+    "services/processing/docs/module-contract.md",
+    "services/processing/**/*_test.go",
+    "services/processing/testdata",
+    "services/processing/tools/mutations",
+    "services/processing/docs/test-design.md",
+    ".github/workflows/pr12-tp.yml"
+  ],
+  "ownedpaths": [
+    "services/processing/internal/domain/eligibility",
+    "services/processing/docs/module-contract.md",
+    "services/processing/**/*_test.go",
+    "services/processing/testdata",
+    "services/processing/tools/mutations",
+    "services/processing/docs/test-design.md",
+    ".github/workflows/pr12-tp.yml"
+  ],
+  "status": "BACKLOG",
+  "implementation_status": "PLANNED_NOT_EXECUTED",
+  "issue_type_id": "10080",
+  "issue_type": "Sub-task",
+  "due_date": "2026-10-19",
+  "labels": [
+    "MANUAL_LAB_PR12",
+    "pr12-20261019",
+    "owner-tp"
+  ],
+  "assignee_account_id": "712020:5b25ca4a-332a-4a5a-893b-8f9ec1d8b6b6",
+  "code_task_source": {
+    "id": "TP-C3",
+    "person": "Тимофей Патрушев",
+    "person_code": "tp",
+    "component": "Processing—Operations Core",
+    "repo": "hitpipe/hitpipe",
+    "summary": "Processing: проверить financial decision table, границы proof и seeded defects",
+    "execution_kind": "VAL",
+    "scope": "Система проверок собственного настоящего module, coverage, CI и reproducible mutation experiment; без внесения mutant code в main.",
+    "owned_paths": [
+      "services/processing/internal/domain/eligibility",
+      "services/processing/docs/module-contract.md",
+      "services/processing/**/*_test.go",
+      "services/processing/testdata",
+      "services/processing/tools/mutations",
+      "services/processing/docs/test-design.md",
+      ".github/workflows/pr12-tp.yml"
+    ],
+    "depends_on": [
+      "TP-C2"
+    ],
+    "shared_preconditions": [
+      "COMMON-CONTEXT: exact source bundle + implementation convention",
+      "COMMON-QG: Lead branch protection and shared instruction package; no false admission"
+    ],
+    "normative_refs": [
+      "HP-RULE-006",
+      "HP-BP-002/T/004",
+      "HP-BP-003/T/002",
+      "HP-BP-003/T/006",
+      "HP-BP-007/T/005"
+    ],
+    "formal_refs": [
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/SourceFacts",
+      "contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DraftConfig",
+      "contracts/hitpipe/architecture-2026-10-16/formal/sql/processing.sql"
+    ],
+    "canonical_source_page": "https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15269889",
+    "acceptance_criteria": [
+      "Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.",
+      "Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.",
+      "Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.",
+      "Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.",
+      "Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.",
+      "Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.",
+      "Локальный отрицательный прогон ТОЙ ЖЕ содержательной CI-проверки: намеренно нарушить проверяемое условие → фактический ненулевой exit/FAIL и журнал → восстановить исправный код/условие → повторный PASS. Сохранены exact argv, SHA, patch/digest, exit/log paths и human instruction для рисунка7 МДК01.04 ПР1; мутация/ошибочное условие не попадают в main."
+    ],
+    "test_cases": [
+      "complete valid fixed Price qty1",
+      "zero/partial/captured-false/refund-positive/disputed",
+      "null financial fields vs explicit false/zero",
+      "wrong account/mode/Price/qty/currency",
+      "activation boundary -1ns / exact / +1ns",
+      "proof oldest observation 10s boundary and expired valid_until",
+      "complete=false or partial pagination",
+      "reordered facts/input immutability"
+    ],
+    "seeded_defect_candidates": [
+      "amount_refunded==0 check удалить",
+      "charge_captured check удалить",
+      "quantity==1 заменить >=1",
+      "null disputed привести к false",
+      "currency equality проигнорировать",
+      "10s freshness > заменить <"
+    ],
+    "limitations": [
+      "Нет фактических Stripe API facts",
+      "Нет Processing SQL admission/config pin transaction",
+      "ALLOWED не подтверждает side-effect permission/readback"
+    ],
+    "future_component_epic": "Operations Processing",
+    "lab_mapping": [
+      "0302-P02",
+      "0104-P01-CI",
+      "0104-P02-checks"
+    ]
+  },
+  "execution_kind": "VAL",
+  "criteria_ids": [
+    "0302-pz02/Р1",
+    "0302-pz02/Р2",
+    "0302-pz02/Р3",
+    "0302-pz02/Р4",
+    "0302-pz02/Р5",
+    "0302-pz02/Р6",
+    "0302-pz02/Р7",
+    "0104-pz01/Р7"
+  ],
+  "dependency_mode": "ARTIFACT_READY_EXACT_CANDIDATE_ALLOWED; HUMAN_REVIEW_MERGE_NOT_FAKED",
+  "ownership_notes": {
+    "primary": "owner module tests/testdata/mutation harness/evidence; .github/workflows/pr12-tp.yml",
+    "related_by_lead_only": "shared root CI/config/includes and other owners workflows"
+  },
+  "key": "HIT-29",
+  "jira_url": "https://hitpipe.atlassian.net/browse/HIT-29",
+  "mode": "MANUAL_LAB_PR12",
+  "status_snapshot": "Backlog",
+  "captured_at": "2026-10-17T13:27:49.588565+00:00",
+  "snapshot_boundary": "Published planning snapshot; use actual Jira/PR state when available. No student execution claimed.",
+  "dependency_keys": [
+    "HIT-28"
+  ]
+}

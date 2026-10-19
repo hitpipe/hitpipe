@@ -1,0 +1,86 @@
+# HP-PART-009 canonical edge route definition. All HP_* inputs are required deploy
+# manifest values/mounted certificate paths, never committed secret contents.
+{
+ admin off
+ auto_https disable_redirects
+ servers {
+  timeouts {
+   read_header 5s
+   read_body 30s
+   write 40s
+   idle 60s
+  }
+ }
+}
+{$HP_PUBLIC_HOST} {
+ tls {$HP_PUBLIC_CERT} {$HP_PUBLIC_KEY} {
+  protocols tls1.2 tls1.3
+ }
+ header {
+  X-Content-Type-Options nosniff
+  Referrer-Policy strict-origin-when-cross-origin
+  Strict-Transport-Security "max-age=31536000"
+ }
+ handle /webhooks/stripe/* {
+  request_body {
+   max_size 262144
+  }
+  reverse_proxy https://intake:8443 {
+   header_up -X-HitPipe-*
+   header_up -Authorization
+   header_up -Cookie
+   transport http {
+    tls_client_auth {$HP_EDGE_CERT} {$HP_EDGE_KEY}
+    tls_trust_pool file {$HP_SERVICE_CA}
+    tls_server_name intake
+    dial_timeout 2s
+    response_header_timeout 10s
+    versions 1.1
+   }
+  }
+ }
+ handle /auth/* {
+  reverse_proxy https://iam:8443 {
+   header_up -X-HitPipe-*
+   transport http {
+    tls_client_auth {$HP_EDGE_CERT} {$HP_EDGE_KEY}
+    tls_trust_pool file {$HP_SERVICE_CA}
+    tls_server_name iam
+    dial_timeout 2s
+    response_header_timeout 10s
+   }
+  }
+ }
+ handle {
+  reverse_proxy https://bff:8443 {
+   header_up -X-HitPipe-*
+   transport http {
+    tls_client_auth {$HP_EDGE_CERT} {$HP_EDGE_KEY}
+    tls_trust_pool file {$HP_SERVICE_CA}
+    tls_server_name bff
+    dial_timeout 2s
+    response_header_timeout 35s
+   }
+  }
+ }
+}
+{$HP_IDP_HOST} {
+ tls {$HP_IDP_CERT} {$HP_IDP_KEY} {
+  protocols tls1.2 tls1.3
+ }
+ @oidc path /realms/* /resources/* /.well-known/*
+ handle @oidc {
+  reverse_proxy https://keycloak:8443 {
+   header_up -X-HitPipe-*
+   transport http {
+    tls_trust_pool file {$HP_SERVICE_CA}
+    tls_server_name keycloak
+    dial_timeout 2s
+    response_header_timeout 10s
+   }
+  }
+ }
+ handle {
+  respond 404
+ }
+}

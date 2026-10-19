@@ -1,0 +1,687 @@
+{
+  "Error": {
+    "code": "x",
+    "message": "x",
+    "request_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "Receipt": {
+    "message_id": "00000000-0000-0000-0000-000000000001",
+    "disposition": "APPLIED"
+  },
+  "CommandMeta": {
+    "request_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "Profile": {
+    "user_id": "00000000-0000-0000-0000-000000000001",
+    "display_name": "x",
+    "timezone": "x",
+    "revision": 1
+  },
+  "ProfileUpdate": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "display_name": "x",
+    "timezone": "x"
+  },
+  "Session": {
+    "session_id": "00000000-0000-0000-0000-000000000001",
+    "user_id": "00000000-0000-0000-0000-000000000001",
+    "expires_at": "2026-10-16T20:00:00Z",
+    "idle_expires_at": "2026-10-16T20:00:00Z",
+    "csrf_token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "profile": {
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "display_name": "x",
+      "timezone": "x",
+      "revision": 1
+    }
+  },
+  "Workspace": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "name": "x",
+    "role": "OWNER",
+    "revision": 1,
+    "security_epoch": 1,
+    "lifecycle": "ACTIVE"
+  },
+  "Workspaces": {
+    "items": []
+  },
+  "WorkspaceCreate": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "name": "x"
+  },
+  "Member": {
+    "user_id": "00000000-0000-0000-0000-000000000001",
+    "role": "OWNER",
+    "status": "INVITED",
+    "revision": 1
+  },
+  "MembershipCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "action": "INVITE_OWNER"
+  },
+  "SupportGrantCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "support_principal_id": "00000000-0000-0000-0000-000000000001",
+    "resource_id": "00000000-0000-0000-0000-000000000001",
+    "action": "CASE_READ",
+    "duration_seconds": 60,
+    "reason": "x"
+  },
+  "SupportGrant": {
+    "grant_id": "00000000-0000-0000-0000-000000000001",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "resource_id": "00000000-0000-0000-0000-000000000001",
+    "action": "CASE_READ",
+    "expires_at": "2026-10-16T20:00:00Z",
+    "revoked_at": "2026-10-16T20:00:00Z"
+  },
+  "RevokeCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "scope": "SESSION",
+    "subject_id": "00000000-0000-0000-0000-000000000001",
+    "reason": "x"
+  },
+  "Revocation": {
+    "revocation_id": "00000000-0000-0000-0000-000000000001",
+    "scope": "x",
+    "subject_id": "00000000-0000-0000-0000-000000000001",
+    "epoch": 1,
+    "accepted_at": "2026-10-16T20:00:00Z",
+    "status": "PENDING",
+    "effective_at": "2026-10-16T20:00:00Z",
+    "missing_runtime_ids": [],
+    "deadline_at": "2026-10-16T20:00:00Z",
+    "deadline_breached": false,
+    "incident_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "AuthorizeRequest": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "action": "PROFILE_READ",
+    "resource_id": "00000000-0000-0000-0000-000000000001",
+    "runtime_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "Authorization": {
+    "allowed": false,
+    "epoch": 1,
+    "checked_at": "2026-10-16T20:00:00Z",
+    "revocation_pending": false
+  },
+  "RuntimeRegistration": {
+    "runtime_id": "00000000-0000-0000-0000-000000000001",
+    "service": "IAM",
+    "generation": 1,
+    "boot_id": "00000000-0000-0000-0000-000000000001",
+    "certificate_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "DenyEpochSnapshot": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "scope": "SESSION",
+    "subject_id": "00000000-0000-0000-0000-000000000001",
+    "epoch": 1,
+    "revocation_id": "00000000-0000-0000-0000-000000000001",
+    "accepted_at": "2026-10-16T20:00:00Z",
+    "effective_at": "2026-10-16T20:00:00Z"
+  },
+  "RuntimeSnapshot": {
+    "runtime_id": "00000000-0000-0000-0000-000000000001",
+    "generation": 1,
+    "boot_id": "00000000-0000-0000-0000-000000000001",
+    "snapshot_revision": 1,
+    "denials": [],
+    "gate": "CLOSED"
+  },
+  "BarrierCommand": {
+    "target_runtime_id": "00000000-0000-0000-0000-000000000001",
+    "boot_id": "00000000-0000-0000-0000-000000000001",
+    "generation": 1,
+    "revocation_id": "00000000-0000-0000-0000-000000000001",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "scope": "SESSION",
+    "subject_id": "00000000-0000-0000-0000-000000000001",
+    "epoch": 1,
+    "deadline_at": "2026-10-16T20:00:00Z"
+  },
+  "BarrierAck": {
+    "revocation_id": "00000000-0000-0000-0000-000000000001",
+    "runtime_id": "00000000-0000-0000-0000-000000000001",
+    "boot_id": "00000000-0000-0000-0000-000000000001",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "scope": "SESSION",
+    "subject_id": "00000000-0000-0000-0000-000000000001",
+    "generation": 1,
+    "applied_epoch": 1,
+    "old_start_sections_drained": true,
+    "acknowledged_at": "2026-10-16T20:00:00Z"
+  },
+  "DeletionRequest": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "confirmation_name": "x"
+  },
+  "DeletionStatus": {
+    "deletion_id": "00000000-0000-0000-0000-000000000001",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "requested_at": "2026-10-16T20:00:00Z",
+    "status": "CLOSING",
+    "active_deadline_at": "2026-10-16T20:00:00Z",
+    "backup_deadline_at": "2026-10-16T20:00:00Z",
+    "service_receipts": []
+  },
+  "ConnectorCreate": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "provider": "STRIPE",
+    "credential": "xxxxxxxx",
+    "mode": "TEST"
+  },
+  "Connection": {
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "provider": "STRIPE",
+    "mode": "TEST",
+    "account_label": "x",
+    "health": "CHECKING",
+    "security_epoch": 1,
+    "checked_at": "2026-10-16T20:00:00Z",
+    "revision": 1
+  },
+  "Connections": {
+    "items": []
+  },
+  "DestinationOption": {
+    "alias": "ALIAS_ONE",
+    "label": "x",
+    "kind": "LIST",
+    "available": false
+  },
+  "Options": {
+    "items": [],
+    "observed_at": "2026-10-16T20:00:00Z",
+    "complete": false,
+    "next_cursor": "x"
+  },
+  "DraftConfig": {
+    "draft_id": "00000000-0000-0000-0000-000000000001",
+    "revision": 1,
+    "name": "x"
+  },
+  "DraftWrite": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "config": {
+      "draft_id": "00000000-0000-0000-0000-000000000001",
+      "revision": 1,
+      "name": "x"
+    }
+  },
+  "Operation": {
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "revision": 1,
+    "name": "x",
+    "state": "DRAFT",
+    "first_activation_at": "2026-10-16T20:00:00Z",
+    "accepted_config_id": "00000000-0000-0000-0000-000000000001",
+    "accepted_config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "connection_health": "READY",
+    "drain_deadline_at": "2026-10-16T20:00:00Z"
+  },
+  "Operations": {
+    "items": []
+  },
+  "ReadinessCheck": {
+    "check_id": "00000000-0000-0000-0000-000000000001",
+    "draft_id": "00000000-0000-0000-0000-000000000001",
+    "draft_revision": 1,
+    "config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "passed": false,
+    "checked_at": "2026-10-16T20:00:00Z",
+    "expires_at": "2026-10-16T20:00:00Z",
+    "issues": []
+  },
+  "ScenarioExample": {
+    "synthetic_session_alias": "example_order",
+    "amount_minor": 0,
+    "paid": false,
+    "duplicate": false,
+    "missing_context_keys": []
+  },
+  "RehearsalRequest": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "draft_id": "00000000-0000-0000-0000-000000000001",
+    "draft_revision": 1,
+    "examples": [
+      {
+        "synthetic_session_alias": "example_order",
+        "amount_minor": 0,
+        "paid": false,
+        "duplicate": false,
+        "missing_context_keys": []
+      }
+    ]
+  },
+  "RehearsalResult": {
+    "rehearsal_id": "00000000-0000-0000-0000-000000000001",
+    "draft_id": "00000000-0000-0000-0000-000000000001",
+    "draft_revision": 1,
+    "config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "results": [
+      "WOULD_CONFIRM"
+    ],
+    "live_requests_made": 0
+  },
+  "ConfigDiff": {
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "accepted_config_id": "00000000-0000-0000-0000-000000000001",
+    "candidate_draft_id": "00000000-0000-0000-0000-000000000001",
+    "candidate_revision": 1,
+    "changed_fields": [],
+    "new_case_scope": "x",
+    "existing_cases_unchanged": true
+  },
+  "ChangeConfigCommand": {
+    "acceptance": {
+      "command": {
+        "request_id": "00000000-0000-0000-0000-000000000001"
+      },
+      "draft_id": "00000000-0000-0000-0000-000000000001",
+      "draft_revision": 1,
+      "readiness_check_id": "00000000-0000-0000-0000-000000000001",
+      "rehearsal_id": "00000000-0000-0000-0000-000000000001",
+      "accepted_config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "acceptance_text_version": "managed-operation-v1",
+      "confirm_activate": true
+    },
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "expected_operation_revision": 1
+  },
+  "ActivationCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "draft_id": "00000000-0000-0000-0000-000000000001",
+    "draft_revision": 1,
+    "readiness_check_id": "00000000-0000-0000-0000-000000000001",
+    "rehearsal_id": "00000000-0000-0000-0000-000000000001",
+    "accepted_config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "acceptance_text_version": "managed-operation-v1",
+    "confirm_activate": true
+  },
+  "LifecycleCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "action": "PAUSE"
+  },
+  "ResumeSnapshot": {
+    "snapshot_id": "00000000-0000-0000-0000-000000000001",
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "revision": 1,
+    "signal_count": 0,
+    "serialized_bytes": 0,
+    "oldest_received_at": "2026-10-16T20:00:00Z",
+    "gaps": [],
+    "created_at": "2026-10-16T20:00:00Z",
+    "expires_at": "2026-10-16T20:00:00Z"
+  },
+  "CaseSummary": {
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "config_id": "00000000-0000-0000-0000-000000000001",
+    "config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "RECEIVED",
+    "revision": 1,
+    "owner_user_id": "00000000-0000-0000-0000-000000000001",
+    "order_label": "x",
+    "received_at": "2026-10-16T20:00:00Z",
+    "updated_at": "2026-10-16T20:00:00Z",
+    "next_action": "x",
+    "due_at": "2026-10-16T20:00:00Z",
+    "target_url": "https://example.invalid/",
+    "outcome_knowledge": "NO_EFFECT"
+  },
+  "ContextField": {
+    "key": "brief",
+    "value": "x",
+    "added_at": "2026-10-16T20:00:00Z",
+    "expires_at": "2026-10-16T20:00:00Z"
+  },
+  "CaseDetail": {
+    "case": {
+      "case_id": "00000000-0000-0000-0000-000000000001",
+      "operation_id": "00000000-0000-0000-0000-000000000001",
+      "config_id": "00000000-0000-0000-0000-000000000001",
+      "config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "state": "RECEIVED",
+      "revision": 1,
+      "owner_user_id": "00000000-0000-0000-0000-000000000001",
+      "order_label": "x",
+      "received_at": "2026-10-16T20:00:00Z",
+      "updated_at": "2026-10-16T20:00:00Z",
+      "next_action": "x",
+      "due_at": "2026-10-16T20:00:00Z",
+      "target_url": "https://example.invalid/",
+      "outcome_knowledge": "NO_EFFECT"
+    },
+    "context": [],
+    "context_complete": false,
+    "context_expired": false,
+    "last_observation_at": "2026-10-16T20:00:00Z",
+    "observation_complete": false,
+    "available_actions": [],
+    "history_cursor": "x"
+  },
+  "Cases": {
+    "items": [],
+    "next_cursor": "x",
+    "snapshot_at": "2026-10-16T20:00:00Z"
+  },
+  "ContextInput": {
+    "key": "brief",
+    "value": "x"
+  },
+  "ContextCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "fields": [
+      {
+        "key": "brief",
+        "value": "x"
+      }
+    ]
+  },
+  "RecoveryCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "action": "RECHECK",
+    "reason": "x"
+  },
+  "HistoryEntry": {
+    "entry_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "at": "2026-10-16T20:00:00Z",
+    "actor_kind": "USER",
+    "actor_id": "00000000-0000-0000-0000-000000000001",
+    "old_state": "RECEIVED",
+    "new_state": "RECEIVED",
+    "reason_code": "x",
+    "evidence_ref": "00000000-0000-0000-0000-000000000001",
+    "episode_id": "00000000-0000-0000-0000-000000000001",
+    "expires_at": "2026-10-16T20:00:00Z"
+  },
+  "History": {
+    "items": [],
+    "next_cursor": "x"
+  },
+  "Notification": {
+    "notification_id": "00000000-0000-0000-0000-000000000001",
+    "kind": "ACTION_REQUIRED",
+    "resource_id": "00000000-0000-0000-0000-000000000001",
+    "created_at": "2026-10-16T20:00:00Z",
+    "acknowledged_at": "2026-10-16T20:00:00Z",
+    "message": "x"
+  },
+  "Notifications": {
+    "items": [],
+    "next_cursor": "x"
+  },
+  "AckCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "notification_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "Export": {
+    "export_id": "00000000-0000-0000-0000-000000000001",
+    "status": "PREPARING",
+    "created_at": "2026-10-16T20:00:00Z",
+    "expires_at": "2026-10-16T20:00:00Z",
+    "media_type": "text/csv",
+    "download_path": "/api/v1/exports/00000000-0000-0000-0000-000000000001/content"
+  },
+  "ExportCommand": {
+    "command": {
+      "request_id": "00000000-0000-0000-0000-000000000001"
+    },
+    "format": "CSV"
+  },
+  "AIRequest": {
+    "request_id": "00000000-0000-0000-0000-000000000001",
+    "editor_text": "x",
+    "intent_aliases": [],
+    "synthetic_examples": [],
+    "recipient_notice_version": "ai-minimal-v1",
+    "explicit_send": true
+  },
+  "AIControlContext": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "principal_id": "00000000-0000-0000-0000-000000000001",
+    "session_id": "00000000-0000-0000-0000-000000000001",
+    "security_epoch": 1,
+    "expires_at": "2026-10-16T20:00:00Z"
+  },
+  "AuthorizedAIRequest": {
+    "control": {
+      "workspace_id": "00000000-0000-0000-0000-000000000001",
+      "principal_id": "00000000-0000-0000-0000-000000000001",
+      "session_id": "00000000-0000-0000-0000-000000000001",
+      "security_epoch": 1,
+      "expires_at": "2026-10-16T20:00:00Z"
+    },
+    "request": {
+      "request_id": "00000000-0000-0000-0000-000000000001",
+      "editor_text": "x",
+      "intent_aliases": [],
+      "synthetic_examples": [],
+      "recipient_notice_version": "ai-minimal-v1",
+      "explicit_send": true
+    }
+  },
+  "AIProposal": {
+    "request_id": "00000000-0000-0000-0000-000000000001",
+    "status": "PROPOSAL",
+    "explanation": "x",
+    "questions": []
+  },
+  "NormalizedSignal": {
+    "message_id": "00000000-0000-0000-0000-000000000001",
+    "message_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "schema_version": "1.0",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "stripe_account_id": "x",
+    "livemode": false,
+    "session_id": "x",
+    "event_id": "x",
+    "event_type": "checkout.session.completed",
+    "source_created_at": "2026-10-16T20:00:00Z",
+    "first_received_at": "2026-10-16T20:00:00Z",
+    "expires_at": "2026-10-16T20:00:00Z",
+    "receipt_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "SourceReadRequest": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "session_id": "x",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "expected_epoch": 1,
+    "deadline_at": "2026-10-16T20:00:00Z"
+  },
+  "SourceFacts": {
+    "facts_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "stripe_account_id": "x",
+    "livemode": false,
+    "session_id": "x",
+    "session_created_at": "2026-10-16T20:00:00Z",
+    "mode": "payment",
+    "payment_status": "paid",
+    "currency": "usd",
+    "amount_total": 0,
+    "line_items_complete": false,
+    "line_item_count": 0,
+    "price_id": "x",
+    "quantity": 0,
+    "payment_intent_status": "succeeded",
+    "amount_received": 0,
+    "charge_succeeded": false,
+    "charge_captured": false,
+    "amount_captured": 0,
+    "amount_refunded": 0,
+    "disputed": false,
+    "all_currencies_equal": false,
+    "complete": false,
+    "oldest_observed_at": "2026-10-16T20:00:00Z",
+    "completed_at": "2026-10-16T20:00:00Z",
+    "valid_until": "2026-10-16T20:00:00Z",
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "ObservedTaskAttributes": {
+    "task_id": "x",
+    "external_workspace_id": "x",
+    "list_id": "x",
+    "assignee_ids": [],
+    "name": "x",
+    "handoff_block": "x",
+    "retrieved_at": "2026-10-16T20:00:00Z",
+    "source": "CLICKUP_GET_TASK_V2"
+  },
+  "ObservationEvidence": {
+    "observation_id": "00000000-0000-0000-0000-000000000001",
+    "attributes": {
+      "task_id": "x",
+      "external_workspace_id": "x",
+      "list_id": "x",
+      "assignee_ids": [],
+      "name": "x",
+      "handoff_block": "x",
+      "retrieved_at": "2026-10-16T20:00:00Z",
+      "source": "CLICKUP_GET_TASK_V2"
+    },
+    "expired": false,
+    "expires_at": "2026-10-16T20:00:00Z",
+    "proof_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "DeliveryIntent": {
+    "message_id": "00000000-0000-0000-0000-000000000001",
+    "message_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "schema_version": "1.0",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "operation_id": "00000000-0000-0000-0000-000000000001",
+    "config_id": "00000000-0000-0000-0000-000000000001",
+    "config_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "lineage_id": "00000000-0000-0000-0000-000000000001",
+    "episode_id": "00000000-0000-0000-0000-000000000001",
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "connection_epoch": 1,
+    "source_facts_id": "00000000-0000-0000-0000-000000000001",
+    "source_facts_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "facts_valid_until": "2026-10-16T20:00:00Z",
+    "deadline_at": "2026-10-16T20:00:00Z",
+    "destination_workspace_id": "x",
+    "target_list_id": "x",
+    "assignee_id": "x",
+    "title": "x",
+    "service_label": "x",
+    "source_session_id": "x",
+    "order_reference": "x",
+    "rendering_version": "handoff-block-v1",
+    "rendered_handoff_block": "x",
+    "case_marker": "x",
+    "context": []
+  },
+  "TaskObservation": {
+    "message_id": "00000000-0000-0000-0000-000000000001",
+    "message_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "schema_version": "1.0",
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "lineage_id": "00000000-0000-0000-0000-000000000001",
+    "episode_id": "00000000-0000-0000-0000-000000000001",
+    "observation_id": "00000000-0000-0000-0000-000000000001",
+    "knowledge": "KNOWN_NO_EFFECT",
+    "task_id": "x",
+    "observed_at": "2026-10-16T20:00:00Z",
+    "complete": false,
+    "workspace_matches": false,
+    "list_matches": false,
+    "assignee_matches": false,
+    "title_matches": false,
+    "marker_matches": false,
+    "context_matches": false,
+    "proof_code": "x",
+    "proof_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "evidence_ref": "00000000-0000-0000-0000-000000000001",
+    "evidence_expires_at": "2026-10-16T20:00:00Z"
+  },
+  "DeliveryQuery": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "lineage_id": "00000000-0000-0000-0000-000000000001",
+    "expected_connection_epoch": 1,
+    "deadline_at": "2026-10-16T20:00:00Z"
+  },
+  "AdmissionGaps": {
+    "workspace_id": "00000000-0000-0000-0000-000000000001",
+    "held_count": 0,
+    "held_bytes": 0,
+    "oldest_expires_at": "2026-10-16T20:00:00Z",
+    "gaps": [],
+    "observed_at": "2026-10-16T20:00:00Z"
+  },
+  "Health": {
+    "status": "LIVE",
+    "service": "x",
+    "build_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "protocol_version": "1.0",
+    "checked_at": "2026-10-16T20:00:00Z"
+  },
+  "SourceFacts_explicit_unknown": {
+    "facts_id": "00000000-0000-0000-0000-000000000001",
+    "case_id": "00000000-0000-0000-0000-000000000001",
+    "connection_id": "00000000-0000-0000-0000-000000000001",
+    "stripe_account_id": "x",
+    "livemode": false,
+    "session_id": "x",
+    "session_created_at": null,
+    "mode": null,
+    "payment_status": null,
+    "currency": null,
+    "amount_total": null,
+    "line_items_complete": false,
+    "line_item_count": null,
+    "price_id": null,
+    "quantity": null,
+    "payment_intent_status": "succeeded",
+    "amount_received": null,
+    "charge_succeeded": null,
+    "charge_captured": null,
+    "amount_captured": null,
+    "amount_refunded": null,
+    "disputed": null,
+    "all_currencies_equal": null,
+    "complete": false,
+    "oldest_observed_at": "2026-10-16T20:00:00Z",
+    "completed_at": "2026-10-16T20:00:00Z",
+    "valid_until": "2026-10-16T20:00:00Z",
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

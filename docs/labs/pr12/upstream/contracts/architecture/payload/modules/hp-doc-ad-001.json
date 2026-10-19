@@ -1,0 +1,3451 @@
+{
+  "format": "pcf.module/1",
+  "module_id": "HP-DOC-AD-001",
+  "phase": "architecture",
+  "records": {
+    "HP-ARC-001": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "inventory SQL roles/commands и негативные tests не дают межсервисного чтения/записи; BP001–004/007. Основания RULE001/004/005/008, NFR005/008; rationale ADR001.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-001\n\n**Роль/применимость:** интегральная single-writer authority всех MVP-команд. **Обязательство:** каждой области PART001–004 соответствует ровно один владелец записи; другой сервис обращается только по опубликованному IF. Изменение business state не выводится из transport ACK, health или AI. Межсервисный SQL и второй case writer запрещены. **Критерий:** inventory SQL roles/commands и негативные tests не дают межсервисного чтения/записи; BP001–004/007. Основания RULE001/004/005/008, NFR005/008; rationale ADR001."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-001\n\n**Роль/применимость:** интегральная single-writer authority всех MVP-команд. **Обязательство:** каждой области PART001–004 соответствует ровно один владелец записи; другой сервис обращается только по опубликованному IF. Изменение business state не выводится из transport ACK, health или AI. Межсервисный SQL и второй case writer запрещены. **Критерий:** inventory SQL roles/commands и негативные tests не дают межсервисного чтения/записи; BP001–004/007. Основания RULE001/004/005/008, NFR005/008; rationale ADR001.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-001\n\n**Роль/применимость:** интегральная single-writer authority всех MVP-команд. **Обязательство:** каждой области PART001–004 соответствует ровно один владелец записи; другой сервис обращается только по опубликованному IF. Изменение business state не выводится из transport ACK, health или AI. Межсервисный SQL и второй case writer запрещены. **Критерий:** inventory SQL roles/commands и негативные tests не дают межсервисного чтения/записи; BP001–004/007. Основания RULE001/004/005/008, NFR005/008; rationale ADR001."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-001"
+      ],
+      "relations": [],
+      "title": "HP-ARC-001 — Роль/применимость"
+    },
+    "HP-ARC-002": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "crash/lost-ACK/race один consumer transition и отсутствие ложного принятия; BP007/T/001–003, BP002/003/004. Основания FR101/104, RULE001/008/101,NFR001/004/008; ADR002.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-002\n\n**Обязательство распределённого приёма:** state+outbox владельца и inbox+consumer-state коммитятся атомарно в своих БД; успешный HTTP ACK только после установленного commit. Повторяетcя тот же ID/hash, не бизнес-эффект; конфликт hash блокируется и наблюдаем. Case uniqueness и effect lineage независимы от транспорта. **Критерий:** crash/lost-ACK/race один consumer transition и отсутствие ложного принятия; BP007/T/001–003, BP002/003/004. Основания FR101/104, RULE001/008/101,NFR001/004/008; ADR002."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-002\n\n**Обязательство распределённого приёма:** state+outbox владельца и inbox+consumer-state коммитятся атомарно в своих БД; успешный HTTP ACK только после установленного commit. Повторяетcя тот же ID/hash, не бизнес-эффект; конфликт hash блокируется и наблюдаем. Case uniqueness и effect lineage независимы от транспорта. **Критерий:** crash/lost-ACK/race один consumer transition и отсутствие ложного принятия; BP007/T/001–003, BP002/003/004. Основания FR101/104, RULE001/008/101,NFR001/004/008; ADR002.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-002\n\n**Обязательство распределённого приёма:** state+outbox владельца и inbox+consumer-state коммитятся атомарно в своих БД; успешный HTTP ACK только после установленного commit. Повторяетcя тот же ID/hash, не бизнес-эффект; конфликт hash блокируется и наблюдаем. Case uniqueness и effect lineage независимы от транспорта. **Критерий:** crash/lost-ACK/race один consumer transition и отсутствие ложного принятия; BP007/T/001–003, BP002/003/004. Основания FR101/104, RULE001/008/101,NFR001/004/008; ADR002."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-002"
+      ],
+      "relations": [],
+      "title": "HP-ARC-002 — Обязательство распределённого приёма"
+    },
+    "HP-ARC-003": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "совместная гонка admission/pause/config-change/replay сериализуется, прежнее дело сохраняет исходный pin; BP003, DATA003/004. Основания RULE001/003/004/013, FR102/104/306.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-003\n\n**Обязательство identity/config:** Processing фиксирует case identity и accepted config при первом «Получено» до финансовой проверки. Пауза, повтор, новая конфигурация, новое episode и ручное закрытие не создают новую order identity и не стирают safety ledger. **Критерий:** совместная гонка admission/pause/config-change/replay сериализуется, прежнее дело сохраняет исходный pin; BP003, DATA003/004. Основания RULE001/003/004/013, FR102/104/306."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-003\n\n**Обязательство identity/config:** Processing фиксирует case identity и accepted config при первом «Получено» до финансовой проверки. Пауза, повтор, новая конфигурация, новое episode и ручное закрытие не создают новую order identity и не стирают safety ledger. **Критерий:** совместная гонка admission/pause/config-change/replay сериализуется, прежнее дело сохраняет исходный pin; BP003, DATA003/004. Основания RULE001/003/004/013, FR102/104/306.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-003\n\n**Обязательство identity/config:** Processing фиксирует case identity и accepted config при первом «Получено» до финансовой проверки. Пауза, повтор, новая конфигурация, новое episode и ручное закрытие не создают новую order identity и не стирают safety ledger. **Критерий:** совместная гонка admission/pause/config-change/replay сериализуется, прежнее дело сохраняет исходный pin; BP003, DATA003/004. Основания RULE001/003/004/013, FR102/104/306."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-003"
+      ],
+      "relations": [],
+      "title": "HP-ARC-003 — Обязательство identity/config"
+    },
+    "HP-ARC-004": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "fault matrix во всех местах до/после send/response/commit не даёт второго возможного create; BP004 — единственный владелец точного dispatch/readback поведения. RULE008/013, FR104/208,NFR001/003; ADR002.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-004\n\n**Обязательство возможного внешнего эффекта:** Processing/Delivery сохраняют одну lineage на case+effect-kind. После durable DISPATCHING новый create запрещён, пока не получено достаточное доказательство фактического pre-effect отсутствия. Таймаут, crash, 5xx, пустой поиск, удаление task и новый episode сами такого доказательства не дают. **Критерий:** fault matrix во всех местах до/после send/response/commit не даёт второго возможного create; BP004 — единственный владелец точного dispatch/readback поведения. RULE008/013, FR104/208,NFR001/003; ADR002."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-004\n\n**Обязательство возможного внешнего эффекта:** Processing/Delivery сохраняют одну lineage на case+effect-kind. После durable DISPATCHING новый create запрещён, пока не получено достаточное доказательство фактического pre-effect отсутствия. Таймаут, crash, 5xx, пустой поиск, удаление task и новый episode сами такого доказательства не дают. **Критерий:** fault matrix во всех местах до/после send/response/commit не даёт второго возможного create; BP004 — единственный владелец точного dispatch/readback поведения. RULE008/013, FR104/208,NFR001/003; ADR002.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-004\n\n**Обязательство возможного внешнего эффекта:** Processing/Delivery сохраняют одну lineage на case+effect-kind. После durable DISPATCHING новый create запрещён, пока не получено достаточное доказательство фактического pre-effect отсутствия. Таймаут, crash, 5xx, пустой поиск, удаление task и новый episode сами такого доказательства не дают. **Критерий:** fault matrix во всех местах до/после send/response/commit не даёт второго возможного create; BP004 — единственный владелец точного dispatch/readback поведения. RULE008/013, FR104/208,NFR001/003; ADR002."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-004"
+      ],
+      "relations": [],
+      "title": "HP-ARC-004 — Обязательство возможного внешнего эффекта"
+    },
+    "HP-ARC-005": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "все required matches и completeness проверены; BP003/004, RULE002/007/009, FR105/106/206.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-005\n\n**Обязательство знания результата:** только Processing переводит дело в Confirmed по достаточному полному readback конкретного destination и принятого содержания. Факт POST/task ID не является успехом. Incomplete/unknown/mismatch видимы отдельно; уже подтверждённый исторический факт не переписывается поздним наблюдением. **Критерий:** все required matches и completeness проверены; BP003/004, RULE002/007/009, FR105/106/206."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-005\n\n**Обязательство знания результата:** только Processing переводит дело в Confirmed по достаточному полному readback конкретного destination и принятого содержания. Факт POST/task ID не является успехом. Incomplete/unknown/mismatch видимы отдельно; уже подтверждённый исторический факт не переписывается поздним наблюдением. **Критерий:** все required matches и completeness проверены; BP003/004, RULE002/007/009, FR105/106/206.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-005\n\n**Обязательство знания результата:** только Processing переводит дело в Confirmed по достаточному полному readback конкретного destination и принятого содержания. Факт POST/task ID не является успехом. Incomplete/unknown/mismatch видимы отдельно; уже подтверждённый исторический факт не переписывается поздним наблюдением. **Критерий:** все required matches и completeness проверены; BP003/004, RULE002/007/009, FR105/106/206."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-005"
+      ],
+      "relations": [],
+      "title": "HP-ARC-005 — Обязательство знания результата"
+    },
+    "HP-ARC-006": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "конкурентный revoke/paused process/new runtime не даёт нового start после positive confirmation; BP001/007. Основания NFR005/006,RULE005/010/011; ADR003/004.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-006\n\n**Обязательство целостной текущей authority:** каждый защищённый read/response-start и каждый connector request-start проверяет актуальную scope/epoch и actual-start gate; IAM координирует отзыв всех затронутых runtime. Positive revoke только после целостного barrier/fence, а не истечения JWT/lease. Превышение 5s — FAIL/incident, не исключение. **Критерий:** конкурентный revoke/paused process/new runtime не даёт нового start после positive confirmation; BP001/007. Основания NFR005/006,RULE005/010/011; ADR003/004."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-006\n\n**Обязательство целостной текущей authority:** каждый защищённый read/response-start и каждый connector request-start проверяет актуальную scope/epoch и actual-start gate; IAM координирует отзыв всех затронутых runtime. Positive revoke только после целостного barrier/fence, а не истечения JWT/lease. Превышение 5s — FAIL/incident, не исключение. **Критерий:** конкурентный revoke/paused process/new runtime не даёт нового start после positive confirmation; BP001/007. Основания NFR005/006,RULE005/010/011; ADR003/004.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-ARC-006\n\n**Обязательство целостной текущей authority:** каждый защищённый read/response-start и каждый connector request-start проверяет актуальную scope/epoch и actual-start gate; IAM координирует отзыв всех затронутых runtime. Positive revoke только после целостного barrier/fence, а не истечения JWT/lease. Превышение 5s — FAIL/incident, не исключение. **Критерий:** конкурентный revoke/paused process/new runtime не даёт нового start после positive confirmation; BP001/007. Основания NFR005/006,RULE005/010/011; ADR003/004."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-006"
+      ],
+      "relations": [],
+      "title": "HP-ARC-006 — Обязательство целостной текущей authority"
+    },
+    "HP-ARC-007": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "PII/secret-canary и prompt-injection tests включают payload/headers/metadata/logs; отключение model provider не останавливает принятую операцию; BP005. POL004,NFR007/010/012,FR001/002/005/006/008; ADR006.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-007\n\n**Обязательство AI изоляции:** Python model path имеет только разрешённый minimized request и untrusted proposal, без live business authority/credentials/DB; минимальные внутренние authorization IDs служат только IAM/control и никогда не пересылаются model provider. Go повторно валидирует и человек явно принимает фактическую конфигурацию до активации. LLM не участвует в ordinary execution/retry/recovery arbitration. **Критерий:** PII/secret-canary и prompt-injection tests включают payload/headers/metadata/logs; отключение model provider не останавливает принятую операцию; BP005. POL004,NFR007/010/012,FR001/002/005/006/008; ADR006."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-007\n\n**Обязательство AI изоляции:** Python model path имеет только разрешённый minimized request и untrusted proposal, без live business authority/credentials/DB; минимальные внутренние authorization IDs служат только IAM/control и никогда не пересылаются model provider. Go повторно валидирует и человек явно принимает фактическую конфигурацию до активации. LLM не участвует в ordinary execution/retry/recovery arbitration. **Критерий:** PII/secret-canary и prompt-injection tests включают payload/headers/metadata/logs; отключение model provider не останавливает принятую операцию; BP005. POL004,NFR007/010/012,FR001/002/005/006/008; ADR006.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-ARC-007\n\n**Обязательство AI изоляции:** Python model path имеет только разрешённый minimized request и untrusted proposal, без live business authority/credentials/DB; минимальные внутренние authorization IDs служат только IAM/control и никогда не пересылаются model provider. Go повторно валидирует и человек явно принимает фактическую конфигурацию до активации. LLM не участвует в ordinary execution/retry/recovery arbitration. **Критерий:** PII/secret-canary и prompt-injection tests включают payload/headers/metadata/logs; отключение model provider не останавливает принятую операцию; BP005. POL004,NFR007/010/012,FR001/002/005/006/008; ADR006."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-007"
+      ],
+      "relations": [],
+      "title": "HP-ARC-007 — Обязательство AI изоляции"
+    },
+    "HP-ARC-008": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "совместная нагрузка выбранной ступени и независимые превышения каждого предела; BP002–004/006/007, NFR002/003/004/013.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-008\n\n**Обязательство срока/ёмкости:** ingress, scheduler и workers совместно соблюдают Product queue/case/data limits и исходные timestamps; внутреннее ожидание не выводится из end-to-end знаменателя. Quota на реальный token общая для всех его bindings. Reboot не освежает TTL/episode/deadline. **Критерий:** совместная нагрузка выбранной ступени и независимые превышения каждого предела; BP002–004/006/007, NFR002/003/004/013."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-008\n\n**Обязательство срока/ёмкости:** ingress, scheduler и workers совместно соблюдают Product queue/case/data limits и исходные timestamps; внутреннее ожидание не выводится из end-to-end знаменателя. Quota на реальный token общая для всех его bindings. Reboot не освежает TTL/episode/deadline. **Критерий:** совместная нагрузка выбранной ступени и независимые превышения каждого предела; BP002–004/006/007, NFR002/003/004/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "### HP-ARC-008\n\n**Обязательство срока/ёмкости:** ingress, scheduler и workers совместно соблюдают Product queue/case/data limits и исходные timestamps; внутреннее ожидание не выводится из end-to-end знаменателя. Quota на реальный token общая для всех его bindings. Reboot не освежает TTL/episode/deadline. **Критерий:** совместная нагрузка выбранной ступени и независимые превышения каждого предела; BP002–004/006/007, NFR002/003/004/013."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-008"
+      ],
+      "relations": [],
+      "title": "HP-ARC-008 — Обязательство срока/ёмкости"
+    },
+    "HP-ARC-009": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "controlled-clock expiry, surface inventory и restore-after-delete test; BP006 и DATA002–007. NFR009/014,RULE012/013.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-009\n\n**Обязательство жизненного цикла данных:** expiring raw/envelope/content/history и lifetime minimal safety физически разделены. Дубликат/чтение не продлевает content retention и не удаляет возможный эффект. Deletion overlay применяется до восстановления ingress/egress; внешние Stripe/ClickUp объекты не удаляются HitPipe purge. **Критерий:** controlled-clock expiry, surface inventory и restore-after-delete test; BP006 и DATA002–007. NFR009/014,RULE012/013."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-009\n\n**Обязательство жизненного цикла данных:** expiring raw/envelope/content/history и lifetime minimal safety физически разделены. Дубликат/чтение не продлевает content retention и не удаляет возможный эффект. Deletion overlay применяется до восстановления ingress/egress; внешние Stripe/ClickUp объекты не удаляются HitPipe purge. **Критерий:** controlled-clock expiry, surface inventory и restore-after-delete test; BP006 и DATA002–007. NFR009/014,RULE012/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-007"
+          }
+        ],
+        "text": "### HP-ARC-009\n\n**Обязательство жизненного цикла данных:** expiring raw/envelope/content/history и lifetime minimal safety физически разделены. Дубликат/чтение не продлевает content retention и не удаляет возможный эффект. Deletion overlay применяется до восстановления ingress/egress; внешние Stripe/ClickUp объекты не удаляются HitPipe purge. **Критерий:** controlled-clock expiry, surface inventory и restore-after-delete test; BP006 и DATA002–007. NFR009/014,RULE012/013."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-009"
+      ],
+      "relations": [],
+      "title": "HP-ARC-009 — Обязательство жизненного цикла данных"
+    },
+    "HP-ARC-010": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "recovery tests наблюдают destination, acknowledged receipts и реальные gates; BP006. RPO0 относится только к явно заданному controlled fault contour; сайт, все копии и внешние системы не становятся бесконечной гарантией. NFR001/014; ADR008.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-010\n\n**Обязательство безопасного восстановления:** до допуска restored runtime закрыты ingress/action gates; schema/version, deletion/revocation overlay и актуальность safety ledger проверены. Потерянный/сомнительный state даёт quarantine/Unknown, а не replay create. **Критерий:** recovery tests наблюдают destination, acknowledged receipts и реальные gates; BP006. RPO0 относится только к явно заданному controlled fault contour; сайт, все копии и внешние системы не становятся бесконечной гарантией. NFR001/014; ADR008."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-010\n\n**Обязательство безопасного восстановления:** до допуска restored runtime закрыты ingress/action gates; schema/version, deletion/revocation overlay и актуальность safety ledger проверены. Потерянный/сомнительный state даёт quarantine/Unknown, а не replay create. **Критерий:** recovery tests наблюдают destination, acknowledged receipts и реальные gates; BP006. RPO0 относится только к явно заданному controlled fault contour; сайт, все копии и внешние системы не становятся бесконечной гарантией. NFR001/014; ADR008.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "text": "### HP-ARC-010\n\n**Обязательство безопасного восстановления:** до допуска restored runtime закрыты ingress/action gates; schema/version, deletion/revocation overlay и актуальность safety ledger проверены. Потерянный/сомнительный state даёт quarantine/Unknown, а не replay create. **Критерий:** recovery tests наблюдают destination, acknowledged receipts и реальные gates; BP006. RPO0 относится только к явно заданному controlled fault contour; сайт, все копии и внешние системы не становятся бесконечной гарантией. NFR001/014; ADR008."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-010"
+      ],
+      "relations": [],
+      "title": "HP-ARC-010 — Обязательство безопасного восстановления"
+    },
+    "HP-ARC-011": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "реконструкция полученного/unknown/gap/closed case по фактам и negative leak tests; BP003/005/006,NFR008/013.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-011\n\n**Обязательство observability:** любой case имеет наблюдаемое состояние, ответственного, причину/следующее действие и bounded history; технические queue/dispatch/health факты не маскируются как business success. Metrics/traces используют низкокардинальные безопасные labels; реальные credentials/context не оказываются в них. **Критерий:** реконструкция полученного/unknown/gap/closed case по фактам и negative leak tests; BP003/005/006,NFR008/013."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-011\n\n**Обязательство observability:** любой case имеет наблюдаемое состояние, ответственного, причину/следующее действие и bounded history; технические queue/dispatch/health факты не маскируются как business success. Metrics/traces используют низкокардинальные безопасные labels; реальные credentials/context не оказываются в них. **Критерий:** реконструкция полученного/unknown/gap/closed case по фактам и negative leak tests; BP003/005/006,NFR008/013.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-ARC-011\n\n**Обязательство observability:** любой case имеет наблюдаемое состояние, ответственного, причину/следующее действие и bounded history; технические queue/dispatch/health факты не маскируются как business success. Metrics/traces используют низкокардинальные безопасные labels; реальные credentials/context не оказываются в них. **Критерий:** реконструкция полученного/unknown/gap/closed case по фактам и negative leak tests; BP003/005/006,NFR008/013."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-011"
+      ],
+      "relations": [],
+      "title": "HP-ARC-011 — Обязательство observability"
+    },
+    "HP-ARC-012": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "producer/consumer previous-current fixture matrix и staged migration/rollback; BP007, ADR005/009. RULE004,FR302–306,NFR001/014.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-012\n\n**Обязательство версии/изменения:** wire, DB migration, accepted business config, provider API pin и документный source revision — разные версии. Совместимый rollout поддерживает действующие pins/outbox messages; breaking change не включается частичным deploy. **Критерий:** producer/consumer previous-current fixture matrix и staged migration/rollback; BP007, ADR005/009. RULE004,FR302–306,NFR001/014."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-012\n\n**Обязательство версии/изменения:** wire, DB migration, accepted business config, provider API pin и документный source revision — разные версии. Совместимый rollout поддерживает действующие pins/outbox messages; breaking change не включается частичным deploy. **Критерий:** producer/consumer previous-current fixture matrix и staged migration/rollback; BP007, ADR005/009. RULE004,FR302–306,NFR001/014.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          }
+        ],
+        "text": "### HP-ARC-012\n\n**Обязательство версии/изменения:** wire, DB migration, accepted business config, provider API pin и документный source revision — разные версии. Совместимый rollout поддерживает действующие pins/outbox messages; breaking change не включается частичным deploy. **Критерий:** producer/consumer previous-current fixture matrix и staged migration/rollback; BP007, ADR005/009. RULE004,FR302–306,NFR001/014."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-012"
+      ],
+      "relations": [],
+      "title": "HP-ARC-012 — Обязательство версии/изменения"
+    },
+    "HP-ARC-013": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "BP005 matrix и NFR011/012; один browser smoke не доказывает весь путь. ADR007.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-013\n\n**Обязательство UX:** Next показывает понятие дела/операции и подтверждённое знание, не только список technical runs. Защищённые данные не попадают в shared cache/prerender/client secrets. Клавиатура/reader/320px/200%/contrast проверяются на целых путях, с безопасным explicit acceptance и structured fallback при AI outage. **Критерий:** BP005 matrix и NFR011/012; один browser smoke не доказывает весь путь. ADR007."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-013\n\n**Обязательство UX:** Next показывает понятие дела/операции и подтверждённое знание, не только список technical runs. Защищённые данные не попадают в shared cache/prerender/client secrets. Клавиатура/reader/320px/200%/contrast проверяются на целых путях, с безопасным explicit acceptance и structured fallback при AI outage. **Критерий:** BP005 matrix и NFR011/012; один browser smoke не доказывает весь путь. ADR007.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "### HP-ARC-013\n\n**Обязательство UX:** Next показывает понятие дела/операции и подтверждённое знание, не только список technical runs. Защищённые данные не попадают в shared cache/prerender/client secrets. Клавиатура/reader/320px/200%/contrast проверяются на целых путях, с безопасным explicit acceptance и structured fallback при AI outage. **Критерий:** BP005 matrix и NFR011/012; один browser smoke не доказывает весь путь. ADR007."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-013"
+      ],
+      "relations": [],
+      "title": "HP-ARC-013 — Обязательство UX"
+    },
+    "HP-ARC-014": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "188-row coverage, full source/formal closure, independent reverse review и unchanged PCF validation; BP007/manifest. ADR009.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-014\n\n**Обязательство комплекта:** все нормы выбранного upstream имеют действующий технический владелец и проверяемый method. Derived JSON Schema — проекция canonical OAS, не альтернативный wire authority. Незакрытый существенный normative/formal конфликт удерживает затронутый scope, не скрывается completeness=true. **Критерий:** 188-row coverage, full source/formal closure, independent reverse review и unchanged PCF validation; BP007/manifest. ADR009."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-014\n\n**Обязательство комплекта:** все нормы выбранного upstream имеют действующий технический владелец и проверяемый method. Derived JSON Schema — проекция canonical OAS, не альтернативный wire authority. Незакрытый существенный normative/formal конфликт удерживает затронутый scope, не скрывается completeness=true. **Критерий:** 188-row coverage, full source/formal closure, independent reverse review и unchanged PCF validation; BP007/manifest. ADR009.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "text": "### HP-ARC-014\n\n**Обязательство комплекта:** все нормы выбранного upstream имеют действующий технический владелец и проверяемый method. Derived JSON Schema — проекция canonical OAS, не альтернативный wire authority. Незакрытый существенный normative/formal конфликт удерживает затронутый scope, не скрывается completeness=true. **Критерий:** 188-row coverage, full source/formal closure, independent reverse review и unchanged PCF validation; BP007/manifest. ADR009."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-014"
+      ],
+      "relations": [],
+      "title": "HP-ARC-014 — Обязательство комплекта"
+    },
+    "HP-ARC-015": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "Product gates+BP006 qualification checklist; отрицательный gate остаётся блокирующим именно live use, не отменяет содержательный выбор архитектуры. POL001/003/005,NFR010/013, Product gates.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-015\n\n**Обязательство live admission:** до live конкретные account/mode/List/assignee/write-readback rights, privacy/provider recipient и system conformance подтверждаются реальными разрешёнными тестами. Документ, успешная сборка, synthetic rehearsal и архитектурная готовность не являются таким evidence. **Критерий:** Product gates+BP006 qualification checklist; отрицательный gate остаётся блокирующим именно live use, не отменяет содержательный выбор архитектуры. POL001/003/005,NFR010/013, Product gates."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-015\n\n**Обязательство live admission:** до live конкретные account/mode/List/assignee/write-readback rights, privacy/provider recipient и system conformance подтверждаются реальными разрешёнными тестами. Документ, успешная сборка, synthetic rehearsal и архитектурная готовность не являются таким evidence. **Критерий:** Product gates+BP006 qualification checklist; отрицательный gate остаётся блокирующим именно live use, не отменяет содержательный выбор архитектуры. POL001/003/005,NFR010/013, Product gates.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "text": "### HP-ARC-015\n\n**Обязательство live admission:** до live конкретные account/mode/List/assignee/write-readback rights, privacy/provider recipient и system conformance подтверждаются реальными разрешёнными тестами. Документ, успешная сборка, synthetic rehearsal и архитектурная готовность не являются таким evidence. **Критерий:** Product gates+BP006 qualification checklist; отрицательный gate остаётся блокирующим именно live use, не отменяет содержательный выбор архитектуры. POL001/003/005,NFR010/013, Product gates."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-015"
+      ],
+      "relations": [],
+      "title": "HP-ARC-015 — Обязательство live admission"
+    },
+    "HP-ARC-016": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "integration sequence и owner matrix BP006/007; общий completeness scope полный, не пять ложных partial grants. Основания все глобальные POL/NFR, VER001.",
+        "exceptions": [],
+        "guarantees": [
+          "### HP-ARC-016\n\n**Обязательство independent work:** разработчики могут отдельно реализовать сервисы по точным IF/schema/mocks после фиксации общей формы, однако не объявляют общие safety/security/resources независимыми. Мердж затрагивающего shared invariant требует cross-review и совместного conformance test. **Критерий:** integration sequence и owner matrix BP006/007; общий completeness scope полный, не пять ложных partial grants. Основания все глобальные POL/NFR, VER001."
+        ],
+        "preconditions": [
+          {
+            "criterion": "Применимость и условия данного полного source clause: ### HP-ARC-016\n\n**Обязательство independent work:** разработчики могут отдельно реализовать сервисы по точным IF/schema/mocks после фиксации общей формы, однако не объявляют общие safety/security/resources независимыми. Мердж затрагивающего shared invariant требует cross-review и совместного conformance test. **Критерий:** integration sequence и owner matrix BP006/007; общий completeness scope полный, не пять ложных partial grants. Основания все глобальные POL/NFR, VER001.",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "text": "### HP-ARC-016\n\n**Обязательство independent work:** разработчики могут отдельно реализовать сервисы по точным IF/schema/mocks после фиксации общей формы, однако не объявляют общие safety/security/resources независимыми. Мердж затрагивающего shared invariant требует cross-review и совместного conformance test. **Критерий:** integration sequence и owner matrix BP006/007; общий completeness scope полный, не пять ложных partial grants. Основания все глобальные POL/NFR, VER001."
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-ARC-016"
+      ],
+      "relations": [],
+      "title": "HP-ARC-016 — Обязательство independent work"
+    },
+    "HP-CTX-ARCH-001": {
+      "body": {
+        "assumption_refs": [],
+        "boundary": "## 1. Применимый контекст и архитектурный scope\n\nПроектируется HitPipe Managed Business Operations: от явно принятого намерения до проверенного результата либо сопровождаемого исключения. Основание — точный кандидат Product Contract `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, выбранный HP-VER-001; Discovery импортирован только транзитивно через Product. Manifest фиксирует исходные revisions, целиком воспроизводимый source set и formal assets. Смешение latest Product с другим Architecture запрещено.\n\nНормативный scope: все 42 выбранных FR, их 96 AC, 14 NFR, 15 RULE, 6 gates, 10 strategic dependencies и 5 POL — 188 обязательств замыкания. Полный scope будущих TEAM/следующих версий остаётся в Product; поля расширения не активируют его. Здесь задаётся архитектура MVP SINGLE, с проверяемым маршрутом роста без объявления будущих функций реализованными.\n\nПервая операция: поддерживаемая разовая положительная оплата Stripe Checkout/Payment Link → задача в выбранном ClickUp List с обязательным assignee/контекстом и фактическим readback. Точный pack, восемь состояний и условия исключения принадлежат Shared/CAP. Программируемый arbitrary workflow, платёжные действия, P2P/MCP, любые внешние адреса, самостоятельное принятие AI и непрерывная универсальная сверка не входят в MVP.\n\nДрайверы: невозможность гарантировать exactly-once без внешнего контракта; опасность неизвестного исхода; прежняя конфигурация дела; осмысленное AI-native начало без LLM в цикле исполнения; права/отзыв за 5s; честная очередь/retention/recovery; пять параллельных направлений разработки. Код legacy — контекст, не новая норма.",
+        "external_actors": [
+          "Workspace owner",
+          "Stripe",
+          "ClickUp",
+          "Keycloak identity provider",
+          "Authorized support participant",
+          "Explicitly selected AI recipient"
+        ],
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-VER-001"
+          }
+        ],
+        "text": "## 1. Применимый контекст и архитектурный scope\n\nПроектируется HitPipe Managed Business Operations: от явно принятого намерения до проверенного результата либо сопровождаемого исключения. Основание — точный кандидат Product Contract `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`, выбранный HP-VER-001; Discovery импортирован только транзитивно через Product. Manifest фиксирует исходные revisions, целиком воспроизводимый source set и formal assets. Смешение latest Product с другим Architecture запрещено.\n\nНормативный scope: все 42 выбранных FR, их 96 AC, 14 NFR, 15 RULE, 6 gates, 10 strategic dependencies и 5 POL — 188 обязательств замыкания. Полный scope будущих TEAM/следующих версий остаётся в Product; поля расширения не активируют его. Здесь задаётся архитектура MVP SINGLE, с проверяемым маршрутом роста без объявления будущих функций реализованными.\n\nПервая операция: поддерживаемая разовая положительная оплата Stripe Checkout/Payment Link → задача в выбранном ClickUp List с обязательным assignee/контекстом и фактическим readback. Точный pack, восемь состояний и условия исключения принадлежат Shared/CAP. Программируемый arbitrary workflow, платёжные действия, P2P/MCP, любые внешние адреса, самостоятельное принятие AI и непрерывная универсальная сверка не входят в MVP.\n\nДрайверы: невозможность гарантировать exactly-once без внешнего контракта; опасность неизвестного исхода; прежняя конфигурация дела; осмысленное AI-native начало без LLM в цикле исполнения; права/отзыв за 5s; честная очередь/retention/recovery; пять параллельных направлений разработки. Код legacy — контекст, не новая норма.\n\n## 2. Системный контекст и распределение ответственности\n\nПользователь работает с Next.js Web/BFF в одном origin. IAM устанавливает личность через Keycloak и проверяет актуальные права. Processing единолично владеет принятой конфигурацией и делом. Intake принимает подписанный Stripe webhook и получает финансовые факты; Delivery единолично начинает ClickUp-вызовы и сохраняет след возможного эффекта. Python AI участвует только в явной подготовке предложения; потеря LLM не останавливает принятые операции. Между владельцами — долговечные сообщения через HTTP с outbox/inbox, не общая SQL-модель.\n\n```text\nПользователь → Edge → Next Web/BFF → IAM ↔ Keycloak\n                          ├──────→ Processing ───command──→ Delivery → ClickUp\n                          │             ↑                       │\n                          │        normalized                observation\n                          │             │                       ↓\nStripe ──signed webhook──→ Intake ←─source read──────── Processing\n                          └─ Stripe API\nNext BFF ──explicit minimized request──→ Python AI ──allowlisted model provider\nКаждый Go-владелец → только собственная БД PostgreSQL; AI не имеет бизнес-БД.\nIAM → actual-start barriers всех зарегистрированных runtime; revoke не eventual cache.\n```\n\n| Внешний участник | Граница и предпосылка |\n| --- | --- |\n| Owner/workspace | Принимает конкретную конфигурацию/ответственность; session не даёт права другого workspace |\n| Stripe | Подпись доказывает источник события, не своевременность/полноту оплаты; факты дочитываются по pinned account/mode |\n| ClickUp | Разрешённое создание и GET; отсутствие опубликованной idempotency гарантии означает conservative unknown |\n| Keycloak | Аутентификация/password/MFA/recovery; бизнес-роли принадлежат IAM, не ID token |\n| Model provider | Получает только явно отправленный ограниченный текст/aliases/synthetic samples; не реальные дела/credentials |\n| Обслуживающий оператор | Только явный ограниченный support grant с действием/сроком/audit; нет скрытого staff bypass |\n\n### Архитектурные части\n\n| ID | Ответственность и authority | Границы/обеспечение |\n| --- | --- | --- |\n| HP-PART-001 · Go IAM/Profile | DATA001/007: profile, workspace, membership, opaque sessions, binding reservation, epochs, runtime registry, revoke/deletion coordination | IF002/010; BP001; не владеет case/payment/task truth |\n| HP-PART-002 · Go Intake | DATA002/005: Stripe signed ingress, durable receipt/held input, verified account, source read adapter | IF003/004/005/011; BP002; не решает final case state |\n| HP-PART-003 · Go Processing | DATA003/006: draft/readiness/rehearsal, immutable configs, operation lifecycle, unique case, episode, history, responsibility, notifications/export | IF004/005/006/007/008; BP003; единственный business-state writer |\n| HP-PART-004 · Go Delivery | DATA004/005: ClickUp secret, actual HTTP start, durable effect lineage, attempts/readback/quota | IF006/007/011; BP004; не создаёт вторую case state machine |\n| HP-PART-005 · Python AI Interaction | Без долговечного business state: strict proposal из минимального разрешённого входа | IF009; BP005; нет production connectors, raw intake, activation или tools |\n| HP-PART-006 · Next.js UX/BFF | Same-origin user journeys, session proxy, CSRF, accessible presentation, bounded AI request | IF001/002/008/009/010; BP005; business authority остаётся Go |\n| HP-PART-007 · PostgreSQL | Один cluster допустим, отдельные IAM/Intake/Processing/Delivery/Keycloak databases+roles; миграции принадлежат владельцу | IF012; BP006/007; никаких cross-service SQL reads, shared tables/FK |\n| HP-PART-008 · Keycloak | Самостоятельная IdP boundary с отдельной БД/issuer; приложение не получает realm-admin | BP001; сбой не превращает старый JWT в разрешение |\n| HP-PART-009 · Edge/TLS | Разрешённые маршруты, TLS, request-size/deadline, internal/private boundaries | BP006/007; никогда не повторяет provider writes и не заменяет authorization |\n\nЭто части системы, а не Product Capabilities/Jira Epics. Пять workstreams: IAM+platform; Intake+Stripe; Processing/core; Delivery+ClickUp; UX/BFF+Python AI. Это слоты ответственности без вымышленных персональных назначений. Один integrator владеет совместимостью и замороженной общей формой; service owners владеют своими миграциями/адаптерами. Processing требует обязательного cross-review Intake/Delivery.",
+        "trust_boundaries": [
+          "Browser same-origin/opaque session/CSRF",
+          "Public signed raw Stripe ingress",
+          "Private mutualTLS service identity plus current business authority",
+          "Service-specific SQL roles/content volumes",
+          "Bounded connector API egress",
+          "Minimized model provider egress"
+        ]
+      },
+      "content_role": "specification",
+      "kind": "system_context",
+      "origin_refs": [
+        "origin:HP-CTX-ARCH-001"
+      ],
+      "relations": [],
+      "title": "HitPipe selected Product architecture context"
+    },
+    "HP-DATA-001": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-001"
+        },
+        "consistency": "ARC001/006; no secret in session view; last-owner continuity",
+        "create_change_read": "IAM: user/subject/profile/workspace/membership/session/epochs; revoke before access loss confirmation",
+        "formal_refs": [],
+        "lifecycle": "IAM: user/subject/profile/workspace/membership/session/epochs; revoke before access loss confirmation; BP001; formal/sql/iam.sql",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-001 | IAM: user/subject/profile/workspace/membership/session/epochs; revoke before access loss confirmation | ARC001/006; no secret in session view; last-owner continuity | BP001; formal/sql/iam.sql |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-001"
+      ],
+      "relations": [],
+      "title": "HP-DATA-001 data authority/lifecycle"
+    },
+    "HP-DATA-002": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-002"
+        },
+        "consistency": "ARC002/008/009; no raw body in ordinary persistence",
+        "create_change_read": "Intake: durable receipts/normalized held input/source observations; first-received TTL bounded",
+        "formal_refs": [],
+        "lifecycle": "Intake: durable receipts/normalized held input/source observations; first-received TTL bounded; BP002; formal/sql/intake.sql",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-002 | Intake: durable receipts/normalized held input/source observations; first-received TTL bounded | ARC002/008/009; no raw body in ordinary persistence | BP002; formal/sql/intake.sql |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-002"
+      ],
+      "relations": [],
+      "title": "HP-DATA-002 data authority/lifecycle"
+    },
+    "HP-DATA-003": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-003"
+        },
+        "consistency": "ARC003/005/008; no rebinding old case",
+        "create_change_read": "Processing: immutable accepted config, operation lifecycle, unique case/minimal identity, durable episodes/timers",
+        "formal_refs": [],
+        "lifecycle": "Processing: immutable accepted config, operation lifecycle, unique case/minimal identity, durable episodes/timers; BP003; formal/sql/processing.sql",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-003 | Processing: immutable accepted config, operation lifecycle, unique case/minimal identity, durable episodes/timers | ARC003/005/008; no rebinding old case | BP003; formal/sql/processing.sql |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-003"
+      ],
+      "relations": [],
+      "title": "HP-DATA-003 data authority/lifecycle"
+    },
+    "HP-DATA-004": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-004"
+        },
+        "consistency": "ARC004/005/010; possible-effect fence survives age/restart",
+        "create_change_read": "Delivery: unique effect lineage, immutable attempt facts, observations/quota counters",
+        "formal_refs": [],
+        "lifecycle": "Delivery: unique effect lineage, immutable attempt facts, observations/quota counters; BP004; formal/sql/delivery.sql",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-004 | Delivery: unique effect lineage, immutable attempt facts, observations/quota counters | ARC004/005/010; possible-effect fence survives age/restart | BP004; formal/sql/delivery.sql |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-004"
+      ],
+      "relations": [],
+      "title": "HP-DATA-004 data authority/lifecycle"
+    },
+    "HP-DATA-005/ClickUp": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-004"
+        },
+        "consistency": "ARC006/009; access only adapter's process/role; secret deletion does not erase case facts",
+        "create_change_read": "Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret Только ClickUp credential family, единственный owner Delivery.",
+        "formal_refs": [],
+        "lifecycle": "Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret; BP001/002/004/006",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-005 | Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret | ARC006/009; access only adapter's process/role; secret deletion does not erase case facts | BP001/002/004/006 |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof. Только ClickUp credential family, единственный owner Delivery."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-005/ClickUp"
+      ],
+      "relations": [],
+      "title": "HP-DATA-005/ClickUp data authority/lifecycle"
+    },
+    "HP-DATA-005/Stripe": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-002"
+        },
+        "consistency": "ARC006/009; access only adapter's process/role; secret deletion does not erase case facts",
+        "create_change_read": "Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret Только Stripe credential family, единственный owner Intake.",
+        "formal_refs": [],
+        "lifecycle": "Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret; BP001/002/004/006",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-005 | Connector-owned encrypted secret FILE volume; SQL только opaque ref+keyID+epoch; IAM has opaque grant/binding, не secret | ARC006/009; access only adapter's process/role; secret deletion does not erase case facts | BP001/002/004/006 |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof. Только Stripe credential family, единственный owner Intake."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-005/Stripe"
+      ],
+      "relations": [],
+      "title": "HP-DATA-005/Stripe data authority/lifecycle"
+    },
+    "HP-DATA-006": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-003"
+        },
+        "consistency": "ARC009/011; contact/brief not permanent minimal identity",
+        "create_change_read": "Processing content/history/config free text, each independently expires by addition/event time",
+        "formal_refs": [],
+        "lifecycle": "Processing content/history/config free text, each independently expires by addition/event time; BP003/006; corresponding content/history SQL",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-006 | Processing content/history/config free text, each independently expires by addition/event time | ARC009/011; contact/brief not permanent minimal identity | BP003/006; corresponding content/history SQL |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-006"
+      ],
+      "relations": [],
+      "title": "HP-DATA-006 data authority/lifecycle"
+    },
+    "HP-DATA-007": {
+      "body": {
+        "authority_ref": {
+          "object_id": "HP-PART-001"
+        },
+        "consistency": "ARC006/009/010; restore applies latest overlay before serving; old backups have finite outer expiry",
+        "create_change_read": "IAM deletion/revocation overlay + platform backup inventory with separate recovery protection",
+        "formal_refs": [],
+        "lifecycle": "IAM deletion/revocation overlay + platform backup inventory with separate recovery protection; BP001/006; formal/sql/iam.sql and recovery protocol",
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          }
+        ],
+        "text": "| HP-DATA-007 | IAM deletion/revocation overlay + platform backup inventory with separate recovery protection | ARC006/009/010; restore applies latest overlay before serving; old backups have finite outer expiry | BP001/006; formal/sql/iam.sql and recovery protocol |\n\nWire fields and SQL columns/types/indices are deliberately not copied here. Content/raw/source-fact/readback/free-history payloads are not stored in PostgreSQL or WAL: service-owned fsync durable content volumes hold them with exact expiry; SQL has only opaque references/digests/minimal metadata. Logical backups contain only approved minimal safety/config/deletion records; no physical full-cluster PITR, content snapshots or historical content backups in MVP. BP006 defines write-before-reference/expiry/orphan/restore behavior. This is an explicit retention and recovery choice, not a claim of disk-forensic erasure. Within each service `(workspace_id,id)` constraints prevent cross-workspace relations; API role nonowner/NOBYPASSRLS; worker global job locator contains only minimal opaque IDs then opens scoped TX. Secret-store keys are outside DB/backups. Actual SQL role/transaction tests must verify claims; architecture description alone is not proof."
+      },
+      "content_role": "specification",
+      "kind": "data_domain",
+      "origin_refs": [
+        "origin:HP-DATA-007"
+      ],
+      "relations": [],
+      "title": "HP-DATA-007 data authority/lifecycle"
+    },
+    "HP-DELEG-001": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "bounds": [
+          "Local function names/internal package factoring/index addition with same locking/tenant behavior; finite connection-pool tuning1–10 per Go service in PILOT, total budget BP006; CSS component extraction without UX/safety change"
+        ],
+        "classes": [
+          "AUTO"
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "preserved_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-007"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-ARC-013"
+          },
+          {
+            "object_id": "HP-ARC-014"
+          },
+          {
+            "object_id": "HP-ARC-015"
+          }
+        ],
+        "text": "| HP-DELEG-001 · AUTO | Local function names/internal package factoring/index addition with same locking/tenant behavior; finite connection-pool tuning1–10 per Go service in PILOT, total budget BP006; CSS component extraction without UX/safety change | service owner; PR with invariant tests, locked versions and query plan/resources as applicable |",
+        "value_source": "service owner; PR with invariant tests, locked versions and query plan/resources as applicable",
+        "verification": "service owner; PR with invariant tests, locked versions and query plan/resources as applicable"
+      },
+      "content_role": "obligation",
+      "kind": "delegation_policy",
+      "origin_refs": [
+        "origin:HP-DELEG-001"
+      ],
+      "relations": [],
+      "title": "HP-DELEG-001 · AUTO"
+    },
+    "HP-DELEG-002": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "bounds": [
+          "New service/database authority, new provider/path/wire field meaning/state, retry/no-effect rule, scope/limits/retention change, capacity/recovery/fencing contour or breaking dependencies"
+        ],
+        "classes": [
+          "ESCALATE"
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "preserved_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-007"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-ARC-013"
+          },
+          {
+            "object_id": "HP-ARC-014"
+          },
+          {
+            "object_id": "HP-ARC-015"
+          }
+        ],
+        "text": "| HP-DELEG-002 · ESCALATE | New service/database authority, new provider/path/wire field meaning/state, retry/no-effect rule, scope/limits/retention change, capacity/recovery/fencing contour or breaking dependencies | integrator resolves AD/ADR/BP/formal change and affected tests together, no user micro-approval needed within delegated scope |",
+        "value_source": "integrator resolves AD/ADR/BP/formal change and affected tests together, no user micro-approval needed within delegated scope",
+        "verification": "integrator resolves AD/ADR/BP/formal change and affected tests together, no user micro-approval needed within delegated scope"
+      },
+      "content_role": "obligation",
+      "kind": "delegation_policy",
+      "origin_refs": [
+        "origin:HP-DELEG-002"
+      ],
+      "relations": [],
+      "title": "HP-DELEG-002 · ESCALATE"
+    },
+    "HP-DELEG-003": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "bounds": [
+          "Unsupported live write, blind retry after possible effect, hidden grant/shared tenant cache, raw/secret to AI/log, fabricated human acceptance, unverified source pin"
+        ],
+        "classes": [
+          "DENY"
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "preserved_refs": [
+          {
+            "object_id": "HP-ARC-001"
+          },
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-007"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-ARC-010"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-ARC-013"
+          },
+          {
+            "object_id": "HP-ARC-014"
+          },
+          {
+            "object_id": "HP-ARC-015"
+          }
+        ],
+        "text": "| HP-DELEG-003 · DENY | Unsupported live write, blind retry after possible effect, hidden grant/shared tenant cache, raw/secret to AI/log, fabricated human acceptance, unverified source pin | worker refuses unsafe action, preserves facts and records incident; cannot locally waive normative invariant |",
+        "value_source": "worker refuses unsafe action, preserves facts and records incident; cannot locally waive normative invariant",
+        "verification": "worker refuses unsafe action, preserves facts and records incident; cannot locally waive normative invariant"
+      },
+      "content_role": "obligation",
+      "kind": "delegation_policy",
+      "origin_refs": [
+        "origin:HP-DELEG-003"
+      ],
+      "relations": [],
+      "title": "HP-DELEG-003 · DENY"
+    },
+    "HP-IF-001": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Session"
+            },
+            "purpose": "GET /api/v1/session [getSession]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Session payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Revocation"
+            },
+            "purpose": "DELETE /api/v1/session [logoutSession]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Revocation payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Profile"
+            },
+            "purpose": "GET /api/v1/profile [getProfile]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Profile payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ProfileUpdate"
+            },
+            "purpose": "PATCH /api/v1/profile [updateProfile]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ProfileUpdate payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Workspaces"
+            },
+            "purpose": "GET /api/v1/workspaces [listWorkspaces]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Workspaces payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/WorkspaceCreate"
+            },
+            "purpose": "POST /api/v1/workspaces [createWorkspace]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only WorkspaceCreate payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/MembershipCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/memberships [changeMembership]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only MembershipCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/SupportGrantCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/support-grants [grantScopedSupport]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only SupportGrantCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RevokeCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/revocations [requestRevocation]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RevokeCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Revocation"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/revocations/{revocation_id} [getRevocation]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Revocation payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DeletionRequest"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/deletion [requestWorkspaceDeletion]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DeletionRequest payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DeletionStatus"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/deletion [getWorkspaceDeletion]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DeletionStatus payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ConnectorCreate"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/connections [connectService]; behavioral owner HP-BP-002; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ConnectorCreate payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Connections"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/connections [listConnections]; behavioral owner HP-BP-002; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Connections payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Options"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/connections/{connection_id}/options [listConnectionOptions]; behavioral owner HP-BP-002; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Options payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Operations"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations [listOperations]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Operations payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DraftWrite"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/drafts [saveDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DraftWrite payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DraftConfig"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/drafts/{draft_id} [getDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DraftConfig payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CommandMeta"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/drafts/{draft_id}/readiness [checkDraftReadiness]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CommandMeta payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RehearsalRequest"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/rehearsals [rehearseDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RehearsalRequest payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ActivationCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/activate [activateOperation]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ActivationCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/LifecycleCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/{operation_id}/lifecycle [changeOperationLifecycle]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only LifecycleCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ConfigDiff"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration-diff [getConfigurationDiff]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ConfigDiff payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ChangeConfigCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration [acceptConfigurationChange]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ChangeConfigCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ResumeSnapshot"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations/{operation_id}/resume-snapshot [getResumeSnapshot]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ResumeSnapshot payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Cases"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases [listCases]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Cases payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CaseDetail"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases/{case_id} [getCase]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CaseDetail payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ContextCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/cases/{case_id}/context [addCaseContext]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ContextCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CommandMeta"
+            },
+            "purpose": "DELETE /api/v1/workspaces/{workspace_id}/cases/{case_id}/context [deleteCaseContent]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CommandMeta payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RecoveryCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/cases/{case_id}/recovery [recoverCase]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RecoveryCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ObservationEvidence"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases/{case_id}/evidence/{observation_id} [getObservationEvidence]; behavioral owner HP-BP-004; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ObservationEvidence payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/History"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases/{case_id}/history [getCaseHistory]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only History payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Notifications"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/notifications [listNotifications]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Notifications payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AckCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/notifications/ack [ackNotification]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AckCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AdmissionGaps"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/admission-gaps [getAdmissionGaps]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AdmissionGaps payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ExportCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/exports [createExport]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ExportCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Export"
+            },
+            "purpose": "GET /api/v1/exports/{export_id} [getExport]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Export payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AIRequest"
+            },
+            "purpose": "POST /api/v1/ai/proposals [prepareAIProposal]; behavioral owner HP-BP-005; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AIRequest payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "| HP-IF-001 | Browser↔NextBFF; same-origin authorized UX commands/reads | OAS `/api/v1/*`; BP005/007, IAM cookie/CSRF BP001 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-001"
+      ],
+      "relations": [],
+      "title": "HP-IF-001 Browser↔NextBFF; same-origin authorized UX commands/reads"
+    },
+    "HP-IF-002": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Error"
+            },
+            "purpose": "GET /auth/login [beginOIDC]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Error payload view. Only the actual Error JSON response is projected; redirect/no-body/binary success semantics remain exclusively in canonical OAS/BP and are not validated by this payload pointer."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Error"
+            },
+            "purpose": "GET /auth/callback [finishOIDC]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Error payload view. Only the actual Error JSON response is projected; redirect/no-body/binary success semantics remain exclusively in canonical OAS/BP and are not validated by this payload pointer."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AuthorizeRequest"
+            },
+            "purpose": "POST /internal/v1/authorize [authorizeAction]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AuthorizeRequest payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-008"
+          }
+        ],
+        "text": "| HP-IF-002 | BFF/Go→IAM + IAM↔Keycloak OIDC | OAS `/auth/*`, `/internal/v1/authorize`; BP001 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-002"
+      ],
+      "relations": [],
+      "title": "HP-IF-002 BFF/Go→IAM + IAM↔Keycloak OIDC"
+    },
+    "HP-IF-003": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "Проверить весь exact native canonical source OAS `/webhooks/stripe/{endpoint_id}`; BP002 signature/ACK semantics. PCF payload JSONschema не доказывает provider/SQL protocol conformance.",
+        "exceptions": [],
+        "guarantees": [
+          "OAS `/webhooks/stripe/{endpoint_id}`; BP002 signature/ACK semantics"
+        ],
+        "preconditions": [
+          {
+            "criterion": "Stripe→Intake signed raw webhook",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-002"
+          }
+        ],
+        "text": "| HP-IF-003 | Stripe→Intake signed raw webhook | OAS `/webhooks/stripe/{endpoint_id}`; BP002 signature/ACK semantics |"
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-IF-003"
+      ],
+      "relations": [],
+      "title": "HP-IF-003 physical boundary (non-JSON normative projection)"
+    },
+    "HP-IF-004": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-002"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/NormalizedSignal"
+            },
+            "purpose": "POST /internal/v1/intake-signals [receiveNormalizedSignal]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only NormalizedSignal payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "| HP-IF-004 | Intake→Processing durable normalized signal | OAS `receiveNormalizedSignal`; BP002/003/007 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-004"
+      ],
+      "relations": [],
+      "title": "HP-IF-004 Intake→Processing durable normalized signal"
+    },
+    "HP-IF-005": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/SourceReadRequest"
+            },
+            "purpose": "POST /internal/v1/source-facts/read [readSourceFacts]; behavioral owner HP-BP-002; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only SourceReadRequest payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-002"
+          }
+        ],
+        "text": "| HP-IF-005 | Processing→Intake bounded source-facts read | OAS `readSourceFacts`; BP002/003 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-005"
+      ],
+      "relations": [],
+      "title": "HP-IF-005 Processing→Intake bounded source-facts read"
+    },
+    "HP-IF-006": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DeliveryIntent"
+            },
+            "purpose": "POST /internal/v1/delivery-intents [acceptDeliveryIntent]; behavioral owner HP-BP-004; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DeliveryIntent payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DeliveryQuery"
+            },
+            "purpose": "POST /internal/v1/delivery-query [queryKnownTask]; behavioral owner HP-BP-004; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DeliveryQuery payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "| HP-IF-006 | Processing→Delivery durable intent/explicit query | OAS `acceptDeliveryIntent`,`queryKnownTask`; BP004 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-006"
+      ],
+      "relations": [],
+      "title": "HP-IF-006 Processing→Delivery durable intent/explicit query"
+    },
+    "HP-IF-007": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/TaskObservation"
+            },
+            "purpose": "POST /internal/v1/delivery-observations [applyTaskObservation]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only TaskObservation payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "| HP-IF-007 | Delivery→Processing durable task observation | OAS `applyTaskObservation`; BP003/004/007 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-007"
+      ],
+      "relations": [],
+      "title": "HP-IF-007 Delivery→Processing durable task observation"
+    },
+    "HP-IF-008": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Error"
+            },
+            "purpose": "GET /api/v1/exports/{export_id}/content [downloadExport]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Error payload view. Only the actual Error JSON response is projected; redirect/no-body/binary success semantics remain exclusively in canonical OAS/BP and are not validated by this payload pointer."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Operations"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations [listOperations]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Operations payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DraftWrite"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/drafts [saveDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DraftWrite payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/DraftConfig"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/drafts/{draft_id} [getDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only DraftConfig payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CommandMeta"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/drafts/{draft_id}/readiness [checkDraftReadiness]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CommandMeta payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RehearsalRequest"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/rehearsals [rehearseDraft]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RehearsalRequest payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ActivationCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/activate [activateOperation]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ActivationCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/LifecycleCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/{operation_id}/lifecycle [changeOperationLifecycle]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only LifecycleCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ConfigDiff"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration-diff [getConfigurationDiff]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ConfigDiff payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ChangeConfigCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/operations/{operation_id}/configuration [acceptConfigurationChange]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ChangeConfigCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ResumeSnapshot"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/operations/{operation_id}/resume-snapshot [getResumeSnapshot]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ResumeSnapshot payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Cases"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases [listCases]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Cases payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CaseDetail"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases/{case_id} [getCase]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CaseDetail payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ContextCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/cases/{case_id}/context [addCaseContext]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ContextCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/CommandMeta"
+            },
+            "purpose": "DELETE /api/v1/workspaces/{workspace_id}/cases/{case_id}/context [deleteCaseContent]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only CommandMeta payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RecoveryCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/cases/{case_id}/recovery [recoverCase]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RecoveryCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/History"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/cases/{case_id}/history [getCaseHistory]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only History payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Notifications"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/notifications [listNotifications]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Notifications payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AckCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/notifications/ack [ackNotification]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AckCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AdmissionGaps"
+            },
+            "purpose": "GET /api/v1/workspaces/{workspace_id}/admission-gaps [getAdmissionGaps]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AdmissionGaps payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/ExportCommand"
+            },
+            "purpose": "POST /api/v1/workspaces/{workspace_id}/exports [createExport]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only ExportCommand payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/Export"
+            },
+            "purpose": "GET /api/v1/exports/{export_id} [getExport]; behavioral owner HP-BP-003; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only Export payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-003"
+          }
+        ],
+        "text": "| HP-IF-008 | BFF→Processing user domain API | OAS owner PROCESSING operations; BP003/005 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-008"
+      ],
+      "relations": [],
+      "title": "HP-IF-008 BFF→Processing user domain API"
+    },
+    "HP-IF-009": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/AuthorizedAIRequest"
+            },
+            "purpose": "POST /internal/v1/ai/proposals [generateAIProposal]; behavioral owner HP-BP-005; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only AuthorizedAIRequest payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-005"
+          }
+        ],
+        "text": "| HP-IF-009 | BFF→PythonAI explicit proposal | OAS `generateAIProposal`; BP005 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-009"
+      ],
+      "relations": [],
+      "title": "HP-IF-009 BFF→PythonAI explicit proposal"
+    },
+    "HP-IF-010": {
+      "body": {
+        "consumer_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-012"
+          },
+          {
+            "object_id": "HP-BP-007/T/005"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/010"
+          },
+          {
+            "object_id": "HP-BP-007/T/011"
+          }
+        ],
+        "operations": [
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/RuntimeRegistration"
+            },
+            "purpose": "POST /internal/v1/runtime/register [registerRuntime]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only RuntimeRegistration payload view."
+          },
+          {
+            "formal_ref": {
+              "asset_id": "HP-ASSET-PAYLOADS-001",
+              "pointer": "/$defs/BarrierCommand"
+            },
+            "purpose": "POST /internal/v1/runtime/barrier [applyRevocationBarrier]; behavioral owner HP-BP-001; canonical full OAS preserves headers/status/security/request+response semantics. This pointer validates only BarrierCommand payload view."
+          }
+        ],
+        "provider_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "| HP-IF-010 | IAM↔registered runtime actual-start barrier | OAS `registerRuntime`,`applyRevocationBarrier`; BP001/007 |",
+        "version_semantics": "Полные canonical OAS bytes и HP-BP-007/T/011 определяют version/security/status; generated JSONschema pointer — только payload projection, не полная HTTP валидация."
+      },
+      "content_role": "specification",
+      "kind": "interface",
+      "origin_refs": [
+        "origin:HP-IF-010"
+      ],
+      "relations": [],
+      "title": "HP-IF-010 IAM↔registered runtime actual-start barrier"
+    },
+    "HP-IF-011": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "Проверить весь exact native canonical source fixed providers/versions/fields and no retry in BP002/004/007. PCF payload JSONschema не доказывает provider/SQL protocol conformance.",
+        "exceptions": [],
+        "guarantees": [
+          "fixed providers/versions/fields and no retry in BP002/004/007"
+        ],
+        "preconditions": [
+          {
+            "criterion": "Intake→Stripe / Delivery→ClickUp",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "| HP-IF-011 | Intake→Stripe / Delivery→ClickUp | fixed providers/versions/fields and no retry in BP002/004/007 |"
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-IF-011"
+      ],
+      "relations": [],
+      "title": "HP-IF-011 physical boundary (non-JSON normative projection)"
+    },
+    "HP-IF-012": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "Проверить весь exact native canonical source canonical SQL; BP006/007; pgx transaction behavior. PCF payload JSONschema не доказывает provider/SQL protocol conformance.",
+        "exceptions": [],
+        "guarantees": [
+          "canonical SQL; BP006/007; pgx transaction behavior"
+        ],
+        "preconditions": [
+          {
+            "criterion": "Each owner→own DB only",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          }
+        ],
+        "text": "| HP-IF-012 | Each owner→own DB only | canonical SQL; BP006/007; pgx transaction behavior |"
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-IF-012"
+      ],
+      "relations": [],
+      "title": "HP-IF-012 physical boundary (non-JSON normative projection)"
+    },
+    "HP-IF-013": {
+      "applicability": {
+        "material": true,
+        "scope": "global",
+        "targets": [],
+        "when": {
+          "op": "constant",
+          "value": true
+        }
+      },
+      "body": {
+        "conformance": "Проверить весь exact native canonical source OAS health operations; BP006; not product outcome proof. PCF payload JSONschema не доказывает provider/SQL protocol conformance.",
+        "exceptions": [],
+        "guarantees": [
+          "OAS health operations; BP006; not product outcome proof"
+        ],
+        "preconditions": [
+          {
+            "criterion": "Platform→health/metrics, nonpublic",
+            "op": "semantic"
+          }
+        ],
+        "subject_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          }
+        ],
+        "text": "| HP-IF-013 | Platform→health/metrics, nonpublic | OAS health operations; BP006; not product outcome proof |"
+      },
+      "content_role": "obligation",
+      "kind": "architectural_obligation",
+      "origin_refs": [
+        "origin:HP-IF-013"
+      ],
+      "relations": [],
+      "title": "HP-IF-013 physical boundary (non-JSON normative projection)"
+    },
+    "HP-PART-001": {
+      "body": {
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-001"
+          },
+          {
+            "object_id": "HP-DATA-007"
+          }
+        ],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF002/010; BP001; не владеет case/payment/task truth",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "DATA001/007: profile, workspace, membership, opaque sessions, binding reservation, epochs, runtime registry, revoke/deletion coordination",
+        "text": "| HP-PART-001 · Go IAM/Profile | DATA001/007: profile, workspace, membership, opaque sessions, binding reservation, epochs, runtime registry, revoke/deletion coordination | IF002/010; BP001; не владеет case/payment/task truth |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-001"
+      ],
+      "relations": [],
+      "title": "HP-PART-001 · Go IAM/Profile"
+    },
+    "HP-PART-002": {
+      "body": {
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-002"
+          },
+          {
+            "object_id": "HP-DATA-005/Stripe"
+          }
+        ],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-004"
+          },
+          {
+            "object_id": "HP-IF-005"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF003/004/005/011; BP002; не решает final case state",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "DATA002/005: Stripe signed ingress, durable receipt/held input, verified account, source read adapter",
+        "text": "| HP-PART-002 · Go Intake | DATA002/005: Stripe signed ingress, durable receipt/held input, verified account, source read adapter | IF003/004/005/011; BP002; не решает final case state |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-002"
+      ],
+      "relations": [],
+      "title": "HP-PART-002 · Go Intake"
+    },
+    "HP-PART-003": {
+      "body": {
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-003"
+          },
+          {
+            "object_id": "HP-DATA-006"
+          }
+        ],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-004"
+          },
+          {
+            "object_id": "HP-IF-005"
+          },
+          {
+            "object_id": "HP-IF-006"
+          },
+          {
+            "object_id": "HP-IF-007"
+          },
+          {
+            "object_id": "HP-IF-008"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF004/005/006/007/008; BP003; единственный business-state writer",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "DATA003/006: draft/readiness/rehearsal, immutable configs, operation lifecycle, unique case, episode, history, responsibility, notifications/export",
+        "text": "| HP-PART-003 · Go Processing | DATA003/006: draft/readiness/rehearsal, immutable configs, operation lifecycle, unique case, episode, history, responsibility, notifications/export | IF004/005/006/007/008; BP003; единственный business-state writer |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-003"
+      ],
+      "relations": [],
+      "title": "HP-PART-003 · Go Processing"
+    },
+    "HP-PART-004": {
+      "body": {
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-004"
+          },
+          {
+            "object_id": "HP-DATA-005/ClickUp"
+          }
+        ],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-006"
+          },
+          {
+            "object_id": "HP-IF-007"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF006/007/011; BP004; не создаёт вторую case state machine",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "DATA004/005: ClickUp secret, actual HTTP start, durable effect lineage, attempts/readback/quota",
+        "text": "| HP-PART-004 · Go Delivery | DATA004/005: ClickUp secret, actual HTTP start, durable effect lineage, attempts/readback/quota | IF006/007/011; BP004; не создаёт вторую case state machine |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-004"
+      ],
+      "relations": [],
+      "title": "HP-PART-004 · Go Delivery"
+    },
+    "HP-PART-005": {
+      "body": {
+        "data_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-009"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF009; BP005; нет production connectors, raw intake, activation или tools",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "Без долговечного business state: strict proposal из минимального разрешённого входа",
+        "text": "| HP-PART-005 · Python AI Interaction | Без долговечного business state: strict proposal из минимального разрешённого входа | IF009; BP005; нет production connectors, raw intake, activation или tools |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-005"
+      ],
+      "relations": [],
+      "title": "HP-PART-005 · Python AI Interaction"
+    },
+    "HP-PART-006": {
+      "body": {
+        "data_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-001"
+          },
+          {
+            "object_id": "HP-IF-002"
+          },
+          {
+            "object_id": "HP-IF-008"
+          },
+          {
+            "object_id": "HP-IF-009"
+          },
+          {
+            "object_id": "HP-IF-010"
+          }
+        ],
+        "outside_scope": "IF001/002/008/009/010; BP005; business authority остаётся Go",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "Same-origin user journeys, session proxy, CSRF, accessible presentation, bounded AI request",
+        "text": "| HP-PART-006 · Next.js UX/BFF | Same-origin user journeys, session proxy, CSRF, accessible presentation, bounded AI request | IF001/002/008/009/010; BP005; business authority остаётся Go |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-006"
+      ],
+      "relations": [],
+      "title": "HP-PART-006 · Next.js UX/BFF"
+    },
+    "HP-PART-007": {
+      "body": {
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-001"
+          },
+          {
+            "object_id": "HP-DATA-002"
+          },
+          {
+            "object_id": "HP-DATA-003"
+          },
+          {
+            "object_id": "HP-DATA-004"
+          },
+          {
+            "object_id": "HP-DATA-007"
+          },
+          {
+            "object_id": "HP-DATA-005/Stripe"
+          },
+          {
+            "object_id": "HP-DATA-005/ClickUp"
+          }
+        ],
+        "interface_refs": [],
+        "outside_scope": "IF012; BP006/007; никаких cross-service SQL reads, shared tables/FK",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "Один cluster допустим, отдельные IAM/Intake/Processing/Delivery/Keycloak databases+roles; миграции принадлежат владельцу",
+        "text": "| HP-PART-007 · PostgreSQL | Один cluster допустим, отдельные IAM/Intake/Processing/Delivery/Keycloak databases+roles; миграции принадлежат владельцу | IF012; BP006/007; никаких cross-service SQL reads, shared tables/FK |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-007"
+      ],
+      "relations": [],
+      "title": "HP-PART-007 · PostgreSQL"
+    },
+    "HP-PART-008": {
+      "body": {
+        "data_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-002"
+          }
+        ],
+        "outside_scope": "BP001; сбой не превращает старый JWT в разрешение",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "Самостоятельная IdP boundary с отдельной БД/issuer; приложение не получает realm-admin",
+        "text": "| HP-PART-008 · Keycloak | Самостоятельная IdP boundary с отдельной БД/issuer; приложение не получает realm-admin | BP001; сбой не превращает старый JWT в разрешение |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-008"
+      ],
+      "relations": [],
+      "title": "HP-PART-008 · Keycloak"
+    },
+    "HP-PART-009": {
+      "body": {
+        "data_refs": [],
+        "interface_refs": [
+          {
+            "object_id": "HP-IF-001"
+          },
+          {
+            "object_id": "HP-IF-002"
+          }
+        ],
+        "outside_scope": "BP006/007; никогда не повторяет provider writes и не заменяет authorization",
+        "product_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-CAP-004"
+          }
+        ],
+        "responsibility": "Разрешённые маршруты, TLS, request-size/deadline, internal/private boundaries",
+        "text": "| HP-PART-009 · Edge/TLS | Разрешённые маршруты, TLS, request-size/deadline, internal/private boundaries | BP006/007; никогда не повторяет provider writes и не заменяет authorization |"
+      },
+      "content_role": "specification",
+      "kind": "architectural_part",
+      "origin_refs": [
+        "origin:HP-PART-009"
+      ],
+      "relations": [],
+      "title": "HP-PART-009 · Edge/TLS"
+    },
+    "HP-READY-ARCH-001": {
+      "body": {
+        "context": "Technical specification readiness of exact selected42FR/188obligations only. Entire common security/data/resource closure retained; no partial independence claim. Upstream/source formal acceptance and Development execution authority absent.",
+        "does_not_authorize_work": true,
+        "full_product_scope_ref": {
+          "dependency": "product",
+          "object_id": "HP-VER-001"
+        },
+        "held_refs": [],
+        "independence_refs": [],
+        "ready_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-001"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-002"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-003"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-004"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-005"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-006"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-007"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-008"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-009"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-010"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-101"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-102"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-103"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-104"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-105"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-106"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-107"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-108"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-109"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-110"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-201"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-202"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-203"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-204"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-205"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-206"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-207"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-208"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-209"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-210"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-211"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-212"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-301"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-302"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-303"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-304"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-305"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-306"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-307"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-308"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-309"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-FR-310"
+          }
+        ],
+        "text": "## 10. Пробелы, полнота и допуск\n\nАдресуемые projection roots: HP-CTX-ARCH-001 — контекст §1–2; HP-SCN-ARCH-001 — последовательность §5; HP-DEPLOY-ARCH-001/HP-SEC-ARCH-001/HP-REC-ARCH-001 — модели §7 и точные нормы BP001/006/007; HP-READY-ARCH-001 — готовность настоящего §10. Это стабильные локаторы существующего содержания, не новые гарантии.\n\nСущественные технические варианты выбранного MVP определены. Реализация, нагрузка, complete platform fault tests, live provider rights, usability and operational observation windows ещё не выполнены: это конкретные verification/admission gates, не пробелы нормативного поведения. Compatibility spikes подтверждают только собственную указанную область.\n\nТехническая спецификационная готовность — весь HP-VER-001, все 42 FR; частичных независимых grants нет, общие security/data/IF dependencies явно сохранены. Формальная upstream/source acceptance не получена. `authority_ready=false`, `execution_authorized=false`, grant=none. Комплект может быть входом к поддерживаемой последующей разработке после законной процедуры admission; самостоятельные chat/PR/page статусы её не подделывают."
+      },
+      "content_role": "specification",
+      "kind": "readiness",
+      "origin_refs": [
+        "origin:HP-READY-ARCH-001"
+      ],
+      "relations": [],
+      "title": "Full selected HP-VER-001 technical specification readiness"
+    },
+    "HP-SCN-ARCH-001": {
+      "body": {
+        "failure_refs": [
+          {
+            "object_id": "HP-REC-ARCH-001"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-002"
+          },
+          {
+            "object_id": "HP-ARC-003"
+          },
+          {
+            "object_id": "HP-ARC-004"
+          },
+          {
+            "object_id": "HP-ARC-005"
+          },
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-008"
+          },
+          {
+            "object_id": "HP-ARC-011"
+          }
+        ],
+        "part_refs": [
+          {
+            "object_id": "HP-PART-001"
+          },
+          {
+            "object_id": "HP-PART-002"
+          },
+          {
+            "object_id": "HP-PART-003"
+          },
+          {
+            "object_id": "HP-PART-004"
+          },
+          {
+            "object_id": "HP-PART-005"
+          },
+          {
+            "object_id": "HP-PART-006"
+          },
+          {
+            "object_id": "HP-PART-007"
+          },
+          {
+            "object_id": "HP-PART-008"
+          },
+          {
+            "object_id": "HP-PART-009"
+          }
+        ],
+        "product_scenario_refs": [
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-101"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-102"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-103"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-104"
+          },
+          {
+            "dependency": "product",
+            "object_id": "HP-SCN-105"
+          }
+        ],
+        "steps": [
+          "Signed durable ingress; no ACK before durable receipt.",
+          "Stable normalized outbox/inbox; Processing admits one Session case with immutable config.",
+          "Read all mandatory current source facts and accepted business context; hold missing/unknown/ineligible cases.",
+          "One authorized durable possible-effect fence; one-shot fixed ClickUp create only if safe.",
+          "Concrete target GET and complete comparison; Processing records Confirmed or honest Waiting/Unknown/Attention.",
+          "Owner continuation/recheck/link/close preserves identity, history and prior possible effect."
+        ],
+        "text": "## 5. Взаимодействия и интерфейсы\n\n| ID | Стороны/назначение | Canonical source |\n| --- | --- | --- |\n| HP-IF-001 | Browser↔NextBFF; same-origin authorized UX commands/reads | OAS `/api/v1/*`; BP005/007, IAM cookie/CSRF BP001 |\n| HP-IF-002 | BFF/Go→IAM + IAM↔Keycloak OIDC | OAS `/auth/*`, `/internal/v1/authorize`; BP001 |\n| HP-IF-003 | Stripe→Intake signed raw webhook | OAS `/webhooks/stripe/{endpoint_id}`; BP002 signature/ACK semantics |\n| HP-IF-004 | Intake→Processing durable normalized signal | OAS `receiveNormalizedSignal`; BP002/003/007 |\n| HP-IF-005 | Processing→Intake bounded source-facts read | OAS `readSourceFacts`; BP002/003 |\n| HP-IF-006 | Processing→Delivery durable intent/explicit query | OAS `acceptDeliveryIntent`,`queryKnownTask`; BP004 |\n| HP-IF-007 | Delivery→Processing durable task observation | OAS `applyTaskObservation`; BP003/004/007 |\n| HP-IF-008 | BFF→Processing user domain API | OAS owner PROCESSING operations; BP003/005 |\n| HP-IF-009 | BFF→PythonAI explicit proposal | OAS `generateAIProposal`; BP005 |\n| HP-IF-010 | IAM↔registered runtime actual-start barrier | OAS `registerRuntime`,`applyRevocationBarrier`; BP001/007 |\n| HP-IF-011 | Intake→Stripe / Delivery→ClickUp | fixed providers/versions/fields and no retry in BP002/004/007 |\n| HP-IF-012 | Each owner→own DB only | canonical SQL; BP006/007; pgx transaction behavior |\n| HP-IF-013 | Platform→health/metrics, nonpublic | OAS health operations; BP006; not product outcome proof |\n\nОсновной SCN: durable webhook→normalized outbox/inbox→case+config pin→complete recent source facts→allowed accepted context→one durable effect fence→ClickUp create→specific GET/full match→Processing Confirmed. Missing context→WaitingData; unknown send→Unknown; known mismatch→Attention. Эпизод/TTL/пауза не создают разрешение на новое unsafe действие. Конкретные ветви/доказательства — BP002–004 и Shared, не стрелки диаграммы."
+      },
+      "content_role": "specification",
+      "kind": "system_scenario",
+      "origin_refs": [
+        "origin:HP-SCN-ARCH-001"
+      ],
+      "relations": [],
+      "title": "Paid order to bounded verified handoff"
+    },
+    "HP-SEC-ARCH-001": {
+      "body": {
+        "authority": "IAM owns current membership/epochs and whole-scope synchronous barriers. Physical protected read/send starts synchronize; missing gate never yields positive confirmation. >5s is always NFR violation.",
+        "data_refs": [
+          {
+            "object_id": "HP-DATA-001"
+          },
+          {
+            "object_id": "HP-DATA-002"
+          },
+          {
+            "object_id": "HP-DATA-003"
+          },
+          {
+            "object_id": "HP-DATA-004"
+          },
+          {
+            "object_id": "HP-DATA-006"
+          },
+          {
+            "object_id": "HP-DATA-007"
+          },
+          {
+            "object_id": "HP-DATA-005/Stripe"
+          },
+          {
+            "object_id": "HP-DATA-005/ClickUp"
+          }
+        ],
+        "norm_refs": [
+          {
+            "object_id": "HP-ARC-006"
+          },
+          {
+            "object_id": "HP-ARC-007"
+          },
+          {
+            "object_id": "HP-ARC-009"
+          },
+          {
+            "object_id": "HP-BP-001/T/003"
+          },
+          {
+            "object_id": "HP-BP-001/T/009"
+          },
+          {
+            "object_id": "HP-BP-001/T/010"
+          },
+          {
+            "object_id": "HP-BP-001/T/011"
+          },
+          {
+            "object_id": "HP-BP-001/T/012"
+          },
+          {
+            "object_id": "HP-BP-007/T/006"
+          },
+          {
+            "object_id": "HP-BP-007/T/007"
+          },
+          {
+            "object_id": "HP-BP-007/T/008"
+          },
+          {
+            "object_id": "HP-BP-007/T/009"
+          }
+        ],
+        "text": "## 7. Безопасность, надёжность и эксплуатация\n\nTrust boundaries: public webhook (HMAC raw bytes), browser (session+CSRF), private interservice mTLS+service allowlist, own DB roles, IdP and external account, minimized model egress. Caller service identity не заменяет user/workspace scope. Управляемый PILOT onboarding с owner-confirmation; secrets вводятся в отдельном credential UI, не AI. Конкретная PKI/session/CSP/secret handling — BP001/005/006/007.\n\nFailure classes: duplicate/reorder/lost ACK; process kill at every commit/send boundary; partial partitions/runtime suspension; database restart/primary loss; revoked provider; rate limit; corrupt/missing/old backup; content expiry/deletion; clock uncertainty; LLM unavailability/malicious proposal. Только подтверждённые внешние причины допускают Product METHOD/HEALTH исключения; внутренняя очередь/unknown/error остаётся в метрике. Arbitrary simultaneous loss of all durable copies is outside declared RPO0 contour and handled as disaster+hold, not concealed success.\n\nDeployment: separate development/staging/live environments and identities; OCI containers, Compose/systemd on dedicated hosts initially, no Kubernetes prerequisite. Current ProjectOS VPS is not the HitPipe environment. Development minimum8GiB RAM/4vCPU/80GiB SSD; live topology/capacity/routing/fencing/storage exact profiles owned BP006. Это проектные начальные границы, не измеренное capacity evidence и не заказ инфраструктуры. Подготовка базы данных/ключей/backup/fencing must precede enabling ingress/external effects. Stage and approved sandbox tests precede live; five service teams can use synthetic adapters first.",
+        "threats": [
+          "Cross-tenant URL/cache/confused-deputy",
+          "Stale session/JWT/authority after revoke",
+          "Paused runtime resumes after positive confirmation",
+          "Provider POST replay/redirect/SSRF",
+          "PII/secrets in AI/log/export/support",
+          "Deleted content resurrected by restore"
+        ],
+        "trust_boundaries": [
+          "Opaque browser session/CSRF",
+          "Private TLS1.3 service certs plus current business authorization",
+          "Per-service SQL role/RLS",
+          "Connector credentials and fixed provider origins",
+          "Untrusted minimized AI response"
+        ],
+        "verification": "Full negative tenant/role/support/CSRF/cache/SSRF/secret matrix, revoke/start concurrent/suspended/partitioned/new-generation tests and actual infrastructure fence. Implementation proof not claimed."
+      },
+      "content_role": "specification",
+      "kind": "security_model",
+      "origin_refs": [
+        "origin:HP-SEC-ARCH-001"
+      ],
+      "relations": [],
+      "title": "Current scope, actual-start revocation and minimized trust"
+    }
+  }
+}
