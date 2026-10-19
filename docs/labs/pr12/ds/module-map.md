@@ -7,9 +7,11 @@ Status: candidate / manual laboratory. Owner: Дмитрий Стацюк.
 | internal/domain/readback | domain | pure exact comparison and typed outcomes | standard library + x/text normalization | implemented, checks PASS |
 | internal/application/verifytarget | application | VerifyTarget orchestration and TargetReader port | domain/readback | implemented, checks PASS |
 | internal/adapters/fixtures/targetreader | adapter | file-backed saved-observation read | application port + domain DTO | implemented, checks PASS |
-| cmd/delivery-contractcheck | composition/diagnostic | synthetic fixture entrypoint | application/domain | implemented, release smoke PASS |
+| cmd/delivery-contractcheck | composition/diagnostic | synthetic fixture entrypoint and fixture TargetReader binding | application/verifytarget → domain/readback | implemented; outside-checkout smoke PASS |
 
 The comparator has no provider, database, network, retry, state-transition, or durable-message
-dependency. The adapter returns observation provenance; the application preserves it and maps
-read errors to unknown. This map is local implementation evidence, not a change to canonical
+dependency. The adapter validates saved target identity and strict provenance; the application
+preserves it and maps read errors/incomplete evidence to unknown. Both FileReader and the
+synthetic double are exercised through the same VerifyTarget consumer for normal, boundary and
+error cases; the six distinct adapter scenarios are recorded in `di_contract_test.go`. This map is local implementation evidence, not a change to canonical
 Architecture/Product contracts.

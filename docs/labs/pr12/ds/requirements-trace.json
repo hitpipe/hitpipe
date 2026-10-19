@@ -1,0 +1,18 @@
+{
+  "status": "DESK_RESEARCH_BASELINE_CANDIDATE",
+  "source_sha": "84249ff3ba611358232294c46f6022f030ea223d",
+  "sources": ["HP-VER-001", "HP-RULE-007", "HP-RULE-008", "HP-BP-004/T/007", "HP-BP-004/T/008", "HP-BP-004/T/013", "DeliveryIntent", "ObservedTaskAttributes", "TaskObservation"],
+  "records": [
+    {"id":"FR-1","requirement":"compare pinned destination attributes","implementation":"services/delivery/internal/domain/readback/readback.go","tests":["TestCompareMatchWithExtraAssignee","TestCompareMismatchEachRequiredField"]},
+    {"id":"FR-2","requirement":"canonical v1 handoff and budgets","implementation":"services/delivery/internal/domain/readback/readback.go","tests":["TestReviewComparatorNormalizesLoneCRWithoutChangingSpaces","TestC3FalseConfirmationGuards"]},
+    {"id":"FR-3","requirement":"target/provenance binding","implementation":"services/delivery/internal/adapters/fixtures/targetreader/file_reader.go","tests":["TestFileReaderAndDoubleShareVerifyTargetContract"]},
+    {"id":"FR-4","requirement":"strict JSON boundary","implementation":"services/delivery/internal/domain/readback/fixtures.go","tests":["TestReviewJSONBoundaryRejectsAliasesAndMalformedUnicode"]},
+    {"id":"NFR-1","requirement":"NFC and CR/CRLF normalization without whitespace collapse","implementation":"readback.normalize","tests":["TestReviewComparatorNormalizesLoneCRWithoutChangingSpaces"]},
+    {"id":"NFR-2","requirement":"32 KiB context and 36 KiB complete block bounds","implementation":"readback.Compare","tests":["TestCompareBoundaries"]},
+    {"id":"NFR-3","requirement":"no provider side effects","implementation":"domain/application package imports and VerifyTarget","tests":["TestVerifierDoesNotConvertReadErrorToNoEffect"]},
+    {"id":"AC-1","requirement":"outcome precedence","implementation":"readback.Compare","tests":["TestCompareIncompleteAndUnknownPrecedence"]},
+    {"id":"AC-2","requirement":"same consumer substitution","implementation":"verifytarget.VerifyTarget","tests":["TestFileReaderAndDoubleShareVerifyTargetContract"]},
+    {"id":"AC-3","requirement":"reproducible evidence","implementation":"docs/labs/pr12/ds/evidence/index.json","tests":["go test ./...","go vet ./..."]}
+  ],
+  "limitations": ["No interview, live provider GET/permissions, other-student review, opposition, screenshots or human acceptance is claimed."]
+}

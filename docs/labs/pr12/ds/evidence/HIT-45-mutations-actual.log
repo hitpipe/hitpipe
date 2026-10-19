@@ -1,0 +1,49 @@
+baseline source_sha=7e815aa790e0ebba58e453e786bda45b9266161d file_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+M1 remove retrieval guard mutated_sha256=45051ea02ff4ac79cf463d7bb691899b05f0b7bd28887c614a9b43c6037166f1 command=go test ./internal/domain/readback -run TestCompareIncompleteAndUnknownPrecedence -count=1 exit=1
+--- FAIL: TestCompareIncompleteAndUnknownPrecedence (0.00s)
+    readback_test.go:62: got readback.Result{Outcome:"match", Reason:"all expected readback attributes match"}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.010s
+FAIL
+restored_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2 expected=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+M2 change malformed handoff outcome mutated_sha256=c2ded93825e0af08dc44ecd70b59dff431df9a0737569b5e5df5bfc8207cf25b command=go test ./internal/domain/readback -run TestCompareIncompleteAndUnknownPrecedence -count=1 exit=1
+--- FAIL: TestCompareIncompleteAndUnknownPrecedence (0.00s)
+    readback_test.go:72: got readback.Result{Outcome:"mismatch", Reason:"handoff block must be one canonical v1 block"}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.012s
+FAIL
+restored_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2 expected=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+M3 remove title mismatch guard mutated_sha256=d8917a5ba099541929d4329f3c068dbde9eb06b59e5185b6ebde56438ecfbb25 command=go test ./internal/domain/readback -run TestCompareMismatchEachRequiredField/title -count=1 exit=1
+--- FAIL: TestCompareMismatchEachRequiredField (0.00s)
+    --- FAIL: TestCompareMismatchEachRequiredField/title (0.00s)
+        readback_test.go:52: got readback.Result{Outcome:"match", Reason:"all expected readback attributes match"} want mismatch
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.010s
+FAIL
+restored_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2 expected=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+M4 skip title UTF-8 validation mutated_sha256=1cbb45f67782e697a419eb00f02893c9e4114750312dd66e49d6514d4795379e command=go test ./internal/domain/readback -run TestReviewComparatorRejectsInvalidTitleAndRetrievalError -count=1 exit=1
+--- FAIL: TestReviewComparatorRejectsInvalidTitleAndRetrievalError (0.00s)
+    review_regressions_test.go:84: invalid title matched: readback.Result{Outcome:"match", Reason:"all expected readback attributes match"}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.010s
+FAIL
+restored_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2 expected=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+M5 remove assignee comparison mutated_sha256=27e6a724763fddd750bd4f446b94c59d3bfa583f9d719ba9adbc97dcd6f0de45 command=go test ./internal/domain/readback -run TestC3FalseConfirmationGuards/missing_assignee -count=1 exit=1
+--- FAIL: TestC3FalseConfirmationGuards (0.00s)
+    --- FAIL: TestC3FalseConfirmationGuards/missing_assignee_is_mismatch (0.00s)
+        c3_defects_test.go:25: got readback.Result{Outcome:"match", Reason:"all expected readback attributes match"} want mismatch
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.009s
+FAIL
+restored_sha256=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2 expected=73831827aa6d53425104a30d194b3772e0237e726be56b760ffe5131b4b4e1e2
+
+FINAL restored test command=go test ./... -count=1 exit=0
+?   	github.com/hitpipe/hitpipe/services/delivery/cmd/delivery-contractcheck	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/delivery/internal/adapters/fixtures/targetreader	0.016s
+ok  	github.com/hitpipe/hitpipe/services/delivery/internal/application/verifytarget	0.012s
+ok  	github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback	0.012s

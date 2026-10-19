@@ -1,16 +1,16 @@
 # HIT-45 defect and mutation matrix
 
-Status: candidate evidence. This matrix records the intended behavioral guards and the
-actual baseline test status. It does not claim mutation survivors or retests until the
-mutated source is compiled and executed.
+Status: actual executed evidence. Source baseline `7e815aa790e0ebba58e453e786bda45b9266161d`;
+full log: `HIT-45-mutations-actual.log`. Each mutation compiled, its named assertion failed,
+and the source was restored to SHA-256 `ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688`.
 
 | ID | Behavioral defect | Guard | Actual status |
 |---|---|---|---|
-| M1 | missing retrieval treated as success | retrieval missing -> unknown | baseline test added; mutation run pending |
-| M2 | duplicate handoff marker accepted | duplicate marker -> incomplete | baseline test added; mutation run pending |
-| M3 | changed title accepted | title mismatch -> mismatch | baseline test added; mutation run pending |
-| M4 | malformed UTF-8 accepted | invalid bytes -> unknown | baseline test added; mutation run pending |
-| M5 | missing assignee accepted | no configured assignee -> mismatch | baseline test added; mutation run pending |
+| M1 | missing retrieval treated as success | `TestCompareIncompleteAndUnknownPrecedence` | compiled, exit 1 assertion; restored |
+| M2 | malformed handoff classified as mismatch | `TestCompareIncompleteAndUnknownPrecedence` | compiled, exit 1 assertion; restored |
+| M3 | changed title accepted | `TestCompareMismatchEachRequiredField/title` | compiled, exit 1 assertion; restored |
+| M4 | malformed UTF-8 title accepted | `TestReviewComparatorRejectsInvalidTitleAndRetrievalError` | compiled, exit 1 assertion; restored |
+| M5 | missing assignee accepted | `TestC3FalseConfirmationGuards/missing_assignee` | compiled, exit 1 assertion; restored |
 
 No provider writes, retry, state transition, or customer data are involved. A complete
 mutation record must include exact mutated diff, command, exit, survivor/retest result,
