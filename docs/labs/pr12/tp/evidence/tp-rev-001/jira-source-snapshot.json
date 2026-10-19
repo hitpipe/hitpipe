@@ -1,0 +1,130 @@
+{
+  "read_date": "2026-10-19",
+  "issues": [
+    {
+      "key": "HIT-12",
+      "status": {
+        "name": "В процессе проверки"
+      },
+      "updated": "2026-10-18T23:16:45.737+0300",
+      "source": "https://hitpipe.atlassian.net/browse/HIT-12",
+      "comments_complete": true,
+      "comments": [
+        {
+          "id": "10373",
+          "body": "PROJECT OS · ATTENTION\n\nReady Gate requires human/configuration input: missing contract sections: WHY, CAPABILITY, DOD, CONTEXT",
+          "author": "ProjectOS",
+          "created": "2026-10-17T17:36:38.318+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-12?focusedCommentId=10373"
+        },
+        {
+          "id": "10456",
+          "body": "MANUAL_LAB_PR12 · Делегированное review Lead, остановка перед пунктом 8.\n\nТехнический review существующего пакета Тимофея завершён. В GitHub опубликованы APPROVE на PR #3, #4, #6, #7, #8, #9 в пределах их проверенного технического содержания; это не закрытие эмпирических или человеческих DoD. PR #5 — REQUEST_CHANGES: TP-REV-001, строгий JSON parser допускает aliases и перекрытие refund; исправление и собственный PR делает Тимофей. PR #10 — COMMENT, финальная сдача не принималась. Мой исправляющий PR #11 закрыт без слияния по указанию Lead, ветки автора не менялись.\n\nПункт 2 оформлен отдельно в HIT-25/HIT-26: реального пользователя пока нет, интервью не проводилось; по трём финансовым сценариям расхождений трактовок не обнаружено; единственное найденное обязательное замечание вынесено в HIT-27. Протокол не выдаётся за личные действия другого студента.\n\nОстаются реальные внешние действия: авторское исправление TP-REV-001; approval другим участником для защищённой bootstrap PR #2; неподтверждённые student peer/opposition gates. Merge ни одной PR в ходе этого review не выполнялся. До пункта 8 остановлено: отчёты/скриншоты/теги и закрытие Jira не делались. После авторского исправления нужен повторный review фактического нового SHA.",
+          "author": "Dmitriy Karacheban",
+          "created": "2026-10-18T23:16:45.737+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-12?focusedCommentId=10456"
+        }
+      ]
+    },
+    {
+      "key": "HIT-25",
+      "status": {
+        "name": "В работе"
+      },
+      "updated": "2026-10-18T23:16:42.028+0300",
+      "source": "https://hitpipe.atlassian.net/browse/HIT-25",
+      "comments_complete": true,
+      "comments": [
+        {
+          "id": "10444",
+          "body": "PROJECT OS · ATTENTION\n\nRejected unauthorized/unguarded transition: human review requires a current AI verdict",
+          "author": "ProjectOS",
+          "created": "2026-10-18T22:47:03.103+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-25?focusedCommentId=10444"
+        },
+        {
+          "id": "10452",
+          "body": "MANUAL_LAB_PR12 · Делегированное техническое review, 18.10.2026. Исполнитель проверки — Codex по поручению Lead Дмитрия Карачебана; чужие человеческие действия не имитировались.\n\nПункт 2.1 — обследование: «Реального пользователя на данном этапе опросить нельзя: пользователь пока не найден». Статус интервью NOT CONDUCTED / BLOCKED_NO_USER. Ответы, имя респондента и дата разговора отсутствуют; подготовленные вопросы и гипотезы сохраняются. Это ограничение эмпирической проверки, а не дефект, который можно закрыть выдуманным протоколом.\n\nПроверенное техническое содержание требований одобрено в https://github.com/hitpipe/hitpipe/pull/3#pullrequestreview-5564753482 . Автору при следующем обновлении interview.md записать приведённое основание, сохранив честный статус. Jira DoD/задача этим комментарием не закрываются.",
+          "author": "Dmitriy Karacheban",
+          "created": "2026-10-18T23:16:42.028+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-25?focusedCommentId=10452"
+        }
+      ]
+    },
+    {
+      "key": "HIT-26",
+      "status": {
+        "name": "В работе"
+      },
+      "updated": "2026-10-18T23:16:43.028+0300",
+      "source": "https://hitpipe.atlassian.net/browse/HIT-26",
+      "comments_complete": true,
+      "comments": [
+        {
+          "id": "10445",
+          "body": "PROJECT OS · ATTENTION\n\nRejected unauthorized/unguarded transition: human review requires a current AI verdict",
+          "author": "ProjectOS",
+          "created": "2026-10-18T22:47:42.661+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-26?focusedCommentId=10445"
+        },
+        {
+          "id": "10453",
+          "body": "MANUAL_LAB_PR12 · Пункт 2.2–2.3 делегированного review.\n\nПоверхностная сверка требований и реализации: по трём проверенным финансовым сценариям расхождений трактовок не обнаружено. Фактические результаты CLI полного submitted stack adfbfc33bf20cb0b0641e49e48c0502d2f5d108d: (1) полные подходящие данные — VALID / FINANCIAL_ELIGIBILITY_ONLY; (2) amount_refunded=null вместе с истёкшим proof — INCOMPLETE / UNKNOWN_FACT; (3) session_created_at=activation_at допустимо, now=valid_until — REFRESH_REQUIRED / PROOF_EXPIRED. Уточнение приоритета причин технически одобрено: https://github.com/hitpipe/hitpipe/pull/4#pullrequestreview-5564753576 .\n\nПроверку выполнил Codex по поручению Lead; это не слепая проверка, лично выполненная другим студентом. Дополнительных изменений финансовой трактовки по этим сценариям не требуется. Отдельно найден дефект строгого JSON-ввода TP-REV-001, отнесён к HIT-27 / PR #5 и оставлен автору на исправление. Не записывать общий результат как «замечаний вообще нет».",
+          "author": "Dmitriy Karacheban",
+          "created": "2026-10-18T23:16:43.028+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-26?focusedCommentId=10453"
+        }
+      ]
+    },
+    {
+      "key": "HIT-27",
+      "status": {
+        "name": "В работе"
+      },
+      "updated": "2026-10-18T23:16:43.917+0300",
+      "source": "https://hitpipe.atlassian.net/browse/HIT-27",
+      "comments_complete": true,
+      "comments": [
+        {
+          "id": "10446",
+          "body": "PROJECT OS · ATTENTION\n\nRejected unauthorized/unguarded transition: human review requires a current AI verdict",
+          "author": "ProjectOS",
+          "created": "2026-10-18T22:48:03.243+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-27?focusedCommentId=10446"
+        },
+        {
+          "id": "10454",
+          "body": "MANUAL_LAB_PR12 · TP-REV-001 \\[P2\\] · Требуется авторское исправление.\n\nВ PR https://github.com/hitpipe/hitpipe/pull/5 оставлен Request changes: StrictDecode допускает имена JSON-полей в другом регистре. amount_refunded: 1, за которым следует AMOUNT_REFUNDED: 0, перекрывает значение; исходная CLI на полной valid fixture выдала VALID с exit 0 вместо отклонения неоднозначного ввода. Область — offline synthetic fixture parser, без заявления о production vulnerability.\n\nКритерии исправления подробно записаны в review: точные канонические имена, aliases/shadowing в обоих порядках, регрессионные тесты top-level/nested, сохранение known zero и остальных строгих проверок, повторный check/smoke и CI с новым SHA. Решение реализует Тимофей и сам создаёт собственный PR; текущая замеченная версия не одобрена.\n\nReviewer проверил возможное исправление в изолированной ветке, но его PR https://github.com/hitpipe/hitpipe/pull/11 ЗАКРЫТ БЕЗ MERGE по прямому указанию Lead. Ветки Тимофея не изменялись. Закрытый PR не засчитывается как работа автора или устранение замечания. Ни task, ни итоговая сдача сейчас не закрываются.",
+          "author": "Dmitriy Karacheban",
+          "created": "2026-10-18T23:16:43.917+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-27?focusedCommentId=10454"
+        }
+      ]
+    },
+    {
+      "key": "HIT-31",
+      "status": {
+        "name": "В работе"
+      },
+      "updated": "2026-10-18T23:16:44.935+0300",
+      "source": "https://hitpipe.atlassian.net/browse/HIT-31",
+      "comments_complete": true,
+      "comments": [
+        {
+          "id": "10450",
+          "body": "PROJECT OS · ATTENTION\n\nRejected unauthorized/unguarded transition: human review requires a current AI verdict",
+          "author": "ProjectOS",
+          "created": "2026-10-18T22:49:22.681+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-31?focusedCommentId=10450"
+        },
+        {
+          "id": "10455",
+          "body": "MANUAL_LAB_PR12 · Итог доступной части review до пункта 8.\n\nПроверку выполнил Codex по прямой делегации Lead. Технические reviews опубликованы в PR #3/#4/#6/#7/#8/#9; PR #5 требует исправления TP-REV-001 автором. PR #11 reviewer-а закрыт без merge. По трём проверенным финансовым сценариям различий трактовок нет. Интервью провести нельзя: реальный пользователь ещё не найден; NOT CONDUCTED / BLOCKED_NO_USER.\n\nАвтоматизированно проверены воспроизведение из отдельного клона, Processing check/smoke, race, consumer/reader и граничные/error-сценарии. Эти действия не подменяют личную взаимную проверку студентов. Реальная исходящая проверка UX и opposition другого проекта не подтверждены: соответствующие HUMAN_PENDING/BLOCKED статусы сохраняются. Native GitHub approval другого участника для bootstrap PR #2 также пока отсутствует; main protection не менялась.\n\nОдобрен состав подготовленного handoff package в PR #9, а не факт выполнения перечисленных human gates: https://github.com/hitpipe/hitpipe/pull/9#pullrequestreview-5564753874 . Пункт 8 не начат: DOCX/снимки/теги сдачи/закрытие задач и Feature не выполнялись.",
+          "author": "Dmitriy Karacheban",
+          "created": "2026-10-18T23:16:44.935+0300",
+          "url": "https://hitpipe.atlassian.net/browse/HIT-31?focusedCommentId=10455"
+        }
+      ]
+    }
+  ]
+}

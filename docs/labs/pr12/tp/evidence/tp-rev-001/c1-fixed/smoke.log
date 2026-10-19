@@ -1,0 +1,20 @@
+STDOUT
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=55fba39a6e50b05f27f37960e655f5bb9bae94b3 -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/tp-rev001-fix/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-2ktcevcg/processing-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-2ktcevcg/processing-contractcheck --fixture /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-2ktcevcg/positive_fixture.json --format json
+{"component": "processing", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=55fba39a6e50b05f27f37960e655f5bb9bae94b3 -X main.dirty=false -X main.buildMode=release -trimpath -o /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/tp-rev001-fix/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-7x9npzju/processing-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-7x9npzju/processing-contractcheck --fixture /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/pr12-outside-checkout-7x9npzju/positive_fixture.json --format json
+{"component": "processing", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+
+STDERR
+
+ACTUAL_EXIT=0

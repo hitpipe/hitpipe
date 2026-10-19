@@ -1,0 +1,13 @@
+diff --git a/services/processing/internal/domain/eligibility/eligibility.go b/services/processing/internal/domain/eligibility/eligibility.go
+index a62aeb9..0598836 100644
+--- a/services/processing/internal/domain/eligibility/eligibility.go
++++ b/services/processing/internal/domain/eligibility/eligibility.go
+@@ -138,7 +138,7 @@ func Evaluate(p Policy, f Facts, now time.Time) Result {
+ 		{*f.AmountReceived == *f.AmountTotal, "AMOUNT_RECEIVED"},
+ 		{*f.AmountCaptured == *f.AmountTotal, "AMOUNT_CAPTURED"},
+ 		{*f.AmountRefunded == 0, "REFUND"},
+-		{!*f.Disputed, "DISPUTE"},
++		{*f.Disputed, "DISPUTE"},
+ 		{*f.AllCurrenciesEqual, "CURRENCY"},
+ 	}
+ 	for _, c := range checks {
