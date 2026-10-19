@@ -1,20 +1,23 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 	"runtime"
 	"runtime/debug"
+	"time"
 
+	"github.com/hitpipe/hitpipe/services/delivery/internal/application/verifytarget"
 	"github.com/hitpipe/hitpipe/services/delivery/internal/domain/readback"
 )
 
 var (
-	version = "dev"
-	commit = "unknown"
-	dirty = "unknown"
+	version   = "dev"
+	commit    = "unknown"
+	dirty     = "unknown"
 	buildMode = "dev"
 )
 
@@ -45,11 +48,13 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
-	result, err := readback.EvaluateFixture(data)
+	fixture, err := readback.ParseFixture(data)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
+	fixture.Observation.TargetID = "fixture-target"
+	result := verifytarget.New(fixtureReader{observation: fixture.Observation}).VerifyTarget(context.Background(), "fixture-target", fixture.Expected).Comparison
 	encoded, _ := json.Marshal(result)
 	fmt.Println(string(encoded))
 	if result.Outcome != readback.Match {
@@ -58,4 +63,10 @@ func main() {
 	if info, ok := debug.ReadBuildInfo(); ok && info == nil {
 		os.Exit(2)
 	}
+}
+
+type fixtureReader struct{ observation readback.Observation }
+
+func (r fixtureReader) Read(context.Context, string) (readback.Observation, verifytarget.Provenance, error) {
+	return r.observation, verifytarget.Provenance{ObservedAt: time.Unix(1, 0).UTC(), Source: "synthetic-fixture"}, nil
 }
