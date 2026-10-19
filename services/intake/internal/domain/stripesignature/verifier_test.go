@@ -30,6 +30,11 @@ func TestSignatureRawBytesAndTolerance(t *testing.T) {
 	if got := Verify([]byte(`{"a":1}`), signFixture([]byte(`{"a":1}`), testSecret, 1700000000), []byte(testSecret), 1700000001); got.Status != Verified {
 		t.Fatalf("same bytes should verify: %+v", got)
 	}
+	invalidUTF8 := []byte{'{', 0xff, 0xc3, 0x28, '}'}
+	invalidSignature := signFixture(invalidUTF8, testSecret, 1700000000)
+	if got := Verify(invalidUTF8, invalidSignature, []byte(testSecret), 1700000000); got.Status != Verified {
+		t.Fatalf("invalid UTF-8 bytes must remain opaque: %+v", got)
+	}
 	for _, tc := range []struct {
 		name string
 		now  int64
@@ -54,6 +59,36 @@ func TestSignatureRawBytesAndTolerance(t *testing.T) {
 	header := "t=1700000000,v1=" + first[len("t=1700000000,v1="):] + ",v1=" + second[len("t=1700000000,v1="):]
 	if got := Verify([]byte(`{"a":1}`), header, []byte(testSecret), 1700000000); got.Status != Verified {
 		t.Fatalf("rotation candidates: %+v", got)
+	}
+}
+
+func TestReviewTimestampParserRejectsOverflow(t *testing.T) {
+	if parsed, ok := parseUnix("23000000000000000000"); ok || parsed != 0 {
+		t.Fatalf("overflow timestamp accepted: parsed=%d ok=%v", parsed, ok)
+	}
+}
+
+func TestReviewOverflowHeaderReportsMalformed(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	valid := signFixture(body, testSecret, 1700000000)
+	mac := valid[len("t=1700000000,v1="):]
+	got := Verify(body, "t=23000000000000000000,v1="+mac, []byte(testSecret), 1700000000)
+	if got.Status != Rejected || got.Reason != ReasonTimestampMalformed {
+		t.Fatalf("overflow header: %+v", got)
+	}
+}
+
+func TestReviewAbsoluteDistanceCannotWrap(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	timestamp := int64(^uint64(0) >> 1)
+	header := signFixture(body, testSecret, timestamp)
+	got := Verify(body, header, []byte(testSecret), -1<<63)
+	if got.Status != Rejected || got.Reason != ReasonClockUnavailable {
+		t.Fatalf("invalid MinInt64 clock must fail closed: %+v", got)
+	}
+	got = Verify(body, header, []byte(testSecret), 1)
+	if got.Status != Rejected || got.Reason != ReasonTimestampStale {
+		t.Fatalf("MaxInt64 timestamp must be stale, not verified: %+v", got)
 	}
 }
 
