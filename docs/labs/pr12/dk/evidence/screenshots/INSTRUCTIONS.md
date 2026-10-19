@@ -1,6 +1,8 @@
 # DK — 21 человеческий снимок, агент изображения не создаёт
 
-Ниже точные версии существующих артефактов. Предварительный код-кандидат не является итоговым submission tag. После human merge/source rewrite использовать новый фактический submission-record и заново снять затронутые результаты; не переносить старый SHA молча. Pending human gate не превращается в PASS наличием placeholder.
+Текущее назначение от 19.10.2026: Тимофей Патрушев проверяет Дмитрия. Запись review/reviewer-assignment.json; пошаговая инструкция review/TIMOFEY_REVIEW_GUIDE_RU.md. Старые immutable SHA относятся к своим историческим артефактам, не к новому человеческому review.
+
+После human merge/source rewrite использовать новый фактический submission-record и заново снять затронутые результаты; не переносить старый SHA молча. Pending human gate не превращается в PASS наличием placeholder.
 
 ## 0302-pz01-01 — Рисунок 1 — Требование, задача и значимый запрос на слияние
 
@@ -274,7 +276,7 @@
 
 Каталог: Отдельный чистый clone hitpipe/hitpipe, корень репозитория. Не переключать и не сбрасывать рабочую копию с незакоммиченными изменениями.
 
-Действия: Дмитрий лично клонирует TP exact candidate в чистую среду и выполняет validate/check processing/smoke processing по H1. После реального выполнения заполнить reviewer/date/env/fullSHA/argv/exit/remarks/retest в review/peer-protocol.json и показать свой terminal+protocol. Агент этого student action не выполнял. Для обратной стороны NB проверяет DK2cd7c03... отдельно.
+Действия: Дмитрий лично клонирует TP exact candidate в чистую среду и выполняет validate/check processing/smoke processing по H1. После реального выполнения заполнить reviewer/date/env/fullSHA/argv/exit/remarks/retest в review/peer-protocol.json и показать свой terminal+protocol. Агент этого student action не выполнял. Для обратной стороны Тимофей Патрушев проверяет DK в отдельном чистом checkout текущего head PR #19 и фиксирует actual SHA по review/TIMOFEY_REVIEW_GUIDE_RU.md.
 
 В кадре: кто реально проверял; чужой Processing component; полный TP SHA; чистая среда; actual commands/result/remarks/retest
 
@@ -414,7 +416,7 @@
 
 Каталог: Отдельный чистый clone hitpipe/hitpipe, корень репозитория. Не переключать и не сбрасывать рабочую копию с незакоммиченными изменениями.
 
-Действия: Дмитрий лично проверяет чужой Processing contract/consumer/substitution/map и выполняет его реальные normal/error/boundary commands из TP README на adfbfc33...; сохраняет actual protocol. NB отдельно выполняет такую проверку IAM на2cd7c03. После действий показать module protocol с reviewer/date/commit/commands/remarks/retest. Сейчас NOT PERFORMED; не создавать изображение с выдуманным результатом.
+Действия: Дмитрий лично проверяет чужой Processing contract/consumer/substitution/map и выполняет его реальные normal/error/boundary commands из TP README на adfbfc33...; сохраняет actual protocol. Тимофей Патрушев отдельно проверяет IAM на текущем head PR #19, фиксируя actual full SHA по review/TIMOFEY_REVIEW_GUIDE_RU.md. После действий показать module protocol с reviewer/date/commit/commands/remarks/retest. Сейчас NOT PERFORMED; не создавать изображение с выдуманным результатом.
 
 В кадре: реальный проверяющий; чужой module; полный SHA; contract/substitution/map; команды/результаты/замечания/повтор
 

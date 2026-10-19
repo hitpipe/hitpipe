@@ -1,0 +1,299 @@
+{
+  "checked_at": "2026-10-19T10:35:19.280459+00:00",
+  "reviewer_github": {
+    "login": "Tim1hik",
+    "name": "Tima"
+  },
+  "main_branch": {
+    "name": "main",
+    "protected": true
+  },
+  "rulesets": [
+    {
+      "id": 23012646,
+      "name": "main ruleset",
+      "target": "branch",
+      "source_type": "Repository",
+      "source": "hitpipe/hitpipe",
+      "enforcement": "active",
+      "node_id": "RRS_lACqUmVwb3NpdG9yec4_mAXFzgFfJSY",
+      "_links": {
+        "self": {
+          "href": "https://api.github.com/repos/hitpipe/hitpipe/rulesets/23012646"
+        },
+        "html": {
+          "href": "https://github.com/hitpipe/hitpipe/rules/23012646"
+        }
+      },
+      "created_at": "2026-09-12T05:35:27.600Z",
+      "updated_at": "2026-10-19T08:11:24.374Z"
+    },
+    {
+      "id": 25383459,
+      "name": "main: required CI and history protection",
+      "target": "branch",
+      "source_type": "Repository",
+      "source": "hitpipe/hitpipe",
+      "enforcement": "active",
+      "node_id": "RRS_lACqUmVwb3NpdG9yec4_mAXFzgGDUiM",
+      "_links": {
+        "self": {
+          "href": "https://api.github.com/repos/hitpipe/hitpipe/rulesets/25383459"
+        },
+        "html": {
+          "href": "https://github.com/hitpipe/hitpipe/rules/25383459"
+        }
+      },
+      "created_at": "2026-10-19T08:04:46.130Z",
+      "updated_at": "2026-10-19T08:11:24.909Z"
+    }
+  ],
+  "applied_rules": [
+    {
+      "type": "deletion",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 23012646
+    },
+    {
+      "type": "non_fast_forward",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 23012646
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "required_reviewers": [],
+        "require_code_owner_review": false,
+        "dismissal_restriction": {
+          "enabled": false,
+          "allowed_actors": []
+        },
+        "require_last_push_approval": true,
+        "required_review_thread_resolution": true,
+        "require_extra_approval_for_unattributed_changes": true,
+        "allowed_merge_methods": [
+          "merge",
+          "squash",
+          "rebase"
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 23012646
+    },
+    {
+      "type": "creation",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 23012646
+    },
+    {
+      "type": "update",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 23012646
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "pr12-iam"
+          },
+          {
+            "context": "pr12-intake"
+          },
+          {
+            "context": "pr12-processing"
+          },
+          {
+            "context": "pr12-delivery"
+          }
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 25383459
+    },
+    {
+      "type": "non_fast_forward",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 25383459
+    },
+    {
+      "type": "deletion",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 25383459
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "required_reviewers": [],
+        "require_code_owner_review": false,
+        "dismissal_restriction": {
+          "enabled": false,
+          "allowed_actors": []
+        },
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": true,
+        "require_extra_approval_for_unattributed_changes": false,
+        "allowed_merge_methods": [
+          "merge",
+          "squash",
+          "rebase"
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "hitpipe/hitpipe",
+      "ruleset_id": 25383459
+    }
+  ],
+  "pull_requests": [
+    {
+      "number": 19,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/19",
+      "author": "dkar-dev",
+      "base": "codex/HIT-23-dk-human-review-package",
+      "head": "9a06ca2b45aaf874144d1084e33d8a381fbd2941"
+    },
+    {
+      "number": 18,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/18",
+      "author": "dkar-dev",
+      "base": "codex/HIT-22-dk-module-documentation",
+      "head": "efa7d1860f09bf8b28ec239896780257fbfe559a"
+    },
+    {
+      "number": 17,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/17",
+      "author": "dkar-dev",
+      "base": "codex/HIT-21-dk-security-regression",
+      "head": "9a8a59cbc762c10b15abf5d119435e08ecc2c752"
+    },
+    {
+      "number": 16,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/16",
+      "author": "dkar-dev",
+      "base": "codex/HIT-20-dk-authenticate-session",
+      "head": "2cd7c032e8ede98c75181599b440e97657bff197"
+    },
+    {
+      "number": 15,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/15",
+      "author": "dkar-dev",
+      "base": "codex/HIT-19-dk-session-policy",
+      "head": "d859ad1a48177c5d843d89a7f7de8e7c7c785d8f"
+    },
+    {
+      "number": 14,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/14",
+      "author": "dkar-dev",
+      "base": "codex/HIT-18-dk-session-contract",
+      "head": "0ead65c2a7bd767841659c0f26f66edd7d763cfb"
+    },
+    {
+      "number": 13,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/13",
+      "author": "dkar-dev",
+      "base": "codex/HIT-17-dk-requirements",
+      "head": "9d7c37151606656e9dc2f2f65876b8bd93b397cd"
+    },
+    {
+      "number": 12,
+      "state": "open",
+      "merged_at": null,
+      "url": "https://github.com/hitpipe/hitpipe/pull/12",
+      "author": "dkar-dev",
+      "base": "work/HIT-16-pr12-agent-workspace",
+      "head": "0661a3ea64bd9f5243a9a7f5b3e1195c31eef152"
+    },
+    {
+      "number": 2,
+      "state": "closed",
+      "merged_at": "2026-10-19T09:04:00Z",
+      "url": "https://github.com/hitpipe/hitpipe/pull/2",
+      "author": "dkar-dev",
+      "base": "main",
+      "head": "94b78199c202a31bcb63326ae7f2a4748aa29360"
+    }
+  ],
+  "final_pr_checks": {
+    "headRefOid": "9a06ca2b45aaf874144d1084e33d8a381fbd2941",
+    "number": 19,
+    "reviewDecision": "",
+    "reviews": [],
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-18T23:51:50Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/39178253212/job/117825324762",
+        "name": "pr12-delivery",
+        "startedAt": "2026-10-18T23:51:41Z",
+        "status": "COMPLETED",
+        "workflowName": "PR12 delivery — bootstrap or submitted component checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-18T23:52:43Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/39178253186/job/117825324587",
+        "name": "pr12-iam",
+        "startedAt": "2026-10-18T23:51:41Z",
+        "status": "COMPLETED",
+        "workflowName": "PR12 iam — bootstrap or submitted component checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-18T23:51:49Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/39178253211/job/117825325203",
+        "name": "pr12-intake",
+        "startedAt": "2026-10-18T23:51:41Z",
+        "status": "COMPLETED",
+        "workflowName": "PR12 intake — bootstrap or submitted component checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-18T23:51:47Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/39178253082/job/117825324404",
+        "name": "pr12-processing",
+        "startedAt": "2026-10-18T23:51:41Z",
+        "status": "COMPLETED",
+        "workflowName": "PR12 processing — bootstrap or submitted component checks"
+      }
+    ],
+    "url": "https://github.com/hitpipe/hitpipe/pull/19"
+  },
+  "reviewer_repository_permission": {
+    "login": "Tim1hik",
+    "permission": "admin",
+    "role_name": "admin"
+  },
+  "boundary": "Live pre-update readiness readback; not an actual human review or acceptance. Branch classic protection404 is superseded by active applied rulesets."
+}
