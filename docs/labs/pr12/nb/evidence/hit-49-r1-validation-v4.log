@@ -1,0 +1,39 @@
+TASK=HIT-49
+MODE=MANUAL_LAB_PR12
+DATE_MSK=2026-10-19T16:32:47+03:00
+UTC=2026-10-19T13:32:47+00:00
+CWD=/Users/nic_piter/code/hitpipe
+SHA=d44b48d9da1a2b1c4dcc46008de23b78bea766d9
+GIT=git version 2.51.2
+PYTHON=Python 3.14.6
+
+[1] git diff --check
+[2] JSON parse
+[3] package source hash audit from docs/labs/pr12
+source_audit missing=0 mismatch=0
+[4] required R1 files
+[5] status markers in authored files
+docs/labs/pr12/nb/interview.md:3:Status: `NOT_CONDUCTED` (2026-10-19 Europe/Moscow). This file is a prepared
+docs/labs/pr12/nb/interview.md:5:invented. The human gate belongs to `HIT-55`.
+docs/labs/pr12/nb/security-baseline.md:4:provider validation are `NOT_CONDUCTED`/`NOT_RUN`.
+docs/labs/pr12/nb/requirements.md:32:Канонический Product/Architecture статус по lock: `Candidate/In Review`,
+docs/labs/pr12/nb/requirements.md:43:| `upstream/architecture/HP-BP-002.md` | T/001: webhook signature до parsing; v1; HMAC-SHA256; `timestamp.raw-body`; constant-time compare; absolute 300 s; reject unknown/contradictory inputs | Candidate/In Review |
+docs/labs/pr12/nb/requirements.md:44:| `upstream/architecture/HP-BP-007.md` | boundary errors, safe diagnostics, unknown не превращается в разрешение, raw Stripe bytes не заменяются JCS | Candidate/In Review |
+docs/labs/pr12/nb/requirements.md:45:| `upstream/product/HP-DOC-PVL-001.md` | место в полном single-operation пути; этот модуль не равен полной операции | Candidate/In Review |
+docs/labs/pr12/nb/requirements.md:46:| `upstream/product/HP-DOC-NFR-001.md` | измерения и эксплуатационные NFR не объявляются локальным unit-test результатом | Candidate/In Review |
+docs/labs/pr12/nb/requirements.md:47:| formal input pin | `NormalizedSignal` и `/webhooks/stripe/{endpoint_id}` из указанного OpenAPI пути | Candidate/In Review; native file pinned but not re-authenticated here |
+docs/labs/pr12/nb/requirements.md:57:`NOT_CONDUCTED` на момент этой фиксации. Реальные ответы пользователя или
+docs/labs/pr12/nb/requirements.md:84:| Факт источника | Intake владеет webhook receipt/Stripe adapter/secret boundary | HP-BP-002, Candidate/In Review |
+docs/labs/pr12/nb/requirements.md:182:| known HMAC vector | `VERIFIED` | HIT-51/HIT-53 | `PLANNED` |
+docs/labs/pr12/nb/requirements.md:183:| one-byte body alteration | `REJECTED` | HIT-51/HIT-53 | `PLANNED` |
+docs/labs/pr12/nb/requirements.md:184:| 299/300/301 past/future | 299/300 accepted by freshness, 301 rejected | HIT-51/HIT-53 | `PLANNED` |
+docs/labs/pr12/nb/requirements.md:185:| malformed/missing/conflicting header | `REJECTED`, safe reason | HIT-51/HIT-53 | `PLANNED` |
+docs/labs/pr12/nb/requirements.md:186:| unavailable secret/clock | `REJECTED`, no sensitive output | HIT-52/HIT-53 | `PLANNED` |
+docs/labs/pr12/nb/requirements-trace.json:18:  "source_status": "Candidate/In Review; grant=none",
+docs/labs/pr12/nb/requirements-trace.json:26:      "status": "PLANNED"
+docs/labs/pr12/nb/requirements-trace.json:34:      "status": "PLANNED"
+docs/labs/pr12/nb/requirements-trace.json:42:      "status": "PLANNED"
+docs/labs/pr12/nb/requirements-trace.json:50:      "status": "PLANNED"
+docs/labs/pr12/nb/requirements-trace.json:58:      "status": "PLANNED"
+docs/labs/pr12/nb/requirements-trace.json:66:      "status": "PLANNED"
+RESULT=PASS
