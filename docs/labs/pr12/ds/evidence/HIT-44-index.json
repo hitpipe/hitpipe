@@ -1,0 +1,25 @@
+{
+  "task": "HIT-44",
+  "status": "CANDIDATE_IN_REVIEW",
+  "branch": "work/HIT-44-ds-verifytarget-reader",
+  "head_sha": "242df427ad1424d14d719b5135cea1725d044eb5",
+  "pr": "https://github.com/hitpipe/hitpipe/pull/25",
+  "checks": [
+    {
+      "name": "go test ./...",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "go vet ./...",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "go test -race ./...",
+      "status": "NOT_RUN",
+      "reason": "gcc unavailable"
+    }
+  ],
+  "evidence_log": "docs/labs/pr12/ds/evidence/HIT-44-checks-20261019.log"
+}

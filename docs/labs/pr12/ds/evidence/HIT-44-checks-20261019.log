@@ -1,0 +1,19 @@
+HIT-44 evidence log
+Date: 2026-10-19 Europe/Moscow
+Repository: hitpipe/hitpipe
+Branch: work/HIT-44-ds-verifytarget-reader
+Head tested: 242df427ad1424d14d719b5135cea1725d044eb5
+Stacked base: work/HIT-43-ds-readback-comparator @ 6c3a6ff5740d2b195ef92dcac0a98666ff5b3387
+Cwd: <workspace>\work\hitpipe-c2-20261019\services\delivery
+Go: C:\Program Files\Go\bin\go.exe, go1.27.2 windows/amd64
+
+Commands:
+- go test ./... — exit 0
+- go vet ./... — exit 0
+- go test -race ./... — NOT RUN; gcc unavailable (inherited C1 limitation)
+
+Checks cover the VerifyTarget application consumer, provenance preservation, read-error -> unknown,
+file-backed TargetReader, and synthetic test-double substitution. No provider token, URL fetch,
+POST, retry, state transition, or durable message was used.
+
+Human gates: CI, review, merge, and live provider validation remain pending.
