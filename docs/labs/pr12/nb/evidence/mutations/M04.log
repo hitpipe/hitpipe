@@ -1,0 +1,35 @@
+MUTATION_ID=M04
+DESCRIPTION=reject inclusive 300-second boundary
+BASELINE_SHA=835bbb1bc565e9b2786d5ed1a2cac166f816f7a8
+BASELINE_SOURCE_SHA256=c48c08bece0cc13e11e8409dd0ad5a58eff47551d84eb7959957eb5c24052510
+MUTATED_SOURCE_SHA256=0b1a9e0abd995bffa691b33ad56fdbc3e32f0abf9c1ca7b4503cc0fccb016a9c
+PATCH_SHA256=05b4a8d56a0ee17291876ae858c9131969e12b40e91dd15e2c5c99af18b912dc
+TEMP_CWD=/var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.6XXp7wP58q/intake
+GO_ROOT=/tmp/hitpipe-go-1.27.2/go
+go version go1.27.2 darwin/arm64
+--- COMPILE ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.368s [no tests to run]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.698s [no tests to run]
+COMPILE_EXIT=0
+--- TEST ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+--- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble (0.00s)
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.458s
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    --- FAIL: TestSignatureRawBytesAndTolerance/past300 (0.00s)
+        verifier_test.go:48: got={Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} want pass=true
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.256s
+FAIL
+TEST_EXIT=1
+RESULT=KILLED

@@ -1,0 +1,11 @@
+--- /Users/nic_piter/code/hitpipe/services/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:34:55
++++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.rM87RZLevE/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:40:14
+@@ -80,7 +80,7 @@
+ 	message := make([]byte, 0, 20+1+len(rawBody))
+ 	message = append(message, []byte(formatUnix(timestamp))...)
+ 	message = append(message, '.')
+-	message = append(message, rawBody...)
++	message = append(message, []byte("{}")...)
+ 	digest := hmac.New(sha256.New, secret)
+ 	_, _ = digest.Write(message)
+ 	expected := digest.Sum(nil)

@@ -1,0 +1,11 @@
+--- /Users/nic_piter/code/hitpipe/services/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:34:55
++++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.7ms7gK0dto/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:40:20
+@@ -126,7 +126,7 @@
+ 			if !ok {
+ 				return 0, nil, ReasonTimestampMalformed
+ 			}
+-			if timestampSet && timestamp != parsed {
++			if timestampSet && timestamp == parsed {
+ 				return 0, nil, ReasonTimestampConflict
+ 			}
+ 			timestamp = parsed

@@ -1,0 +1,11 @@
+--- /Users/nic_piter/code/hitpipe/services/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:34:55
++++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.6XXp7wP58q/intake/internal/domain/stripesignature/verifier.go	2026-10-19 16:40:18
+@@ -73,7 +73,7 @@
+ 		return rejected(reason)
+ 	}
+ 	delta := nowUnix - timestamp
+-	if delta > ToleranceSeconds || delta < -ToleranceSeconds {
++	if delta >= ToleranceSeconds || delta < -ToleranceSeconds {
+ 		return Outcome{Status: Rejected, Reason: ReasonTimestampStale, Version: Version, Timestamp: timestamp}
+ 	}
+ 
