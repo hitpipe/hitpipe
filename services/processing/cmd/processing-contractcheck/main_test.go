@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -27,6 +28,18 @@ func TestCLIConfiguration(t *testing.T) {
 		}
 		if strings.Contains(diag.String(), "acct_synthetic") || strings.Contains(diag.String(), "12000") {
 			t.Fatal("raw input leaked")
+		}
+	}
+}
+
+type failedWriter struct{}
+
+func (failedWriter) Write(p []byte) (int, error) { return 0, fmt.Errorf("output unavailable") }
+func TestOutputFailure(t *testing.T) {
+	for _, args := range [][]string{{"--version"}, {"--fixture", "../../testdata/valid.json", "--format", "text"}, {"--fixture", "../../testdata/valid.json", "--format", "json"}} {
+		var diag bytes.Buffer
+		if exit := run(args, failedWriter{}, &diag); exit != 3 {
+			t.Errorf("args=%v got exit=%d want 3", args, exit)
 		}
 	}
 }

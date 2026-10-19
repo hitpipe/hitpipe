@@ -31,7 +31,9 @@ func run(args []string, out, diagnostics io.Writer) int {
 		return 2
 	}
 	if *showVersion {
-		fmt.Fprintf(out, "version=%s commit=%s dirty=%s buildmode=%s\n", version, commit, dirty, buildMode)
+		if _, err := fmt.Fprintf(out, "version=%s commit=%s dirty=%s buildmode=%s\n", version, commit, dirty, buildMode); err != nil {
+			return 3
+		}
 		return 0
 	}
 	if *fixture == "" || (*format != "json" && *format != "text") {
@@ -54,7 +56,9 @@ func run(args []string, out, diagnostics io.Writer) int {
 			return 3
 		}
 	} else {
-		fmt.Fprintf(out, "%s %s\n", r.Status, r.Reason)
+		if _, err := fmt.Fprintf(out, "%s %s\n", r.Status, r.Reason); err != nil {
+			return 3
+		}
 	}
 	fmt.Fprintf(diagnostics, "result status=%s reason=%s\n", r.Status, r.Reason)
 	return 0

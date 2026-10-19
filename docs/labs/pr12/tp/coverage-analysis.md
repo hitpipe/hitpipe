@@ -1,0 +1,11 @@
+# Анализ фактического покрытия
+
+HIT-29, source SHA 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0, Go1.27.2 darwin/arm64. Команды/cwd/UTC/exit/versions/digests — evidence/c3/record.json. Вид: statement instrumentation go test -coverprofile, не branch coverage.
+
+Domain eligibility: все функции 100.0% statements. Application EvaluatePaidOrder: 100.0%. Весь module 92.3%. Это не доказательство реальных Stripe facts, корректности provenance/digest, TLS, revoke или atomic cross-service truth. Отдельный столбец OAS provenance ещё не реализован; будущий authenticated adapter получает собственные tests.
+
+Конкретные непроверенные участки: main обёртка os.Exit не покрыта unit instrumentation (0%), но actual executable успешно исполнялся outside checkout в smoke. File.Read post-read cancellation не вызван детерминированно (87.5%); pre-read cancel, missing file и обычное чтение проверены. Решение: не добавлять sleep/flaky race ради процента, будущий injected file reader/IO-control тест нужен при расширении adapter. input.walk 79.2%: некоторые malformed nested EOF ветви/array traversal не исчерпаны; безопасность ограничена 1MiB offline JSON, strict decoding и duplicate/unknown/trailing tests. Реальный protocol parser не объявлен квалифицированным.
+
+При self-review TestOutputFailure воспроизвёл естественный defect: text/version output failure возвращал exit0. Исправлено в HIT-29; red.log, reproducing-test.patch и record.json сохранены в evidence/natural-defect. Финальный check включает успешный TestOutputFailure. Natural count=1 (реальная наблюдаемая ошибка), не число mutations. Первоначальная ошибочная команда из legacy root была setup failure и не посчитана дефектом продукта.
+
+Mutation summary: шесть compiled behavioural mutants по одному; все 6 KILLED, survivors0, invalid0, retest для survivors не требовался. Каждая запись содержит actual diff digest, source SHA, build/test exit, failing test. После всех восстановлены original bytes, clean=true, restored tests PASS. Negative gate тем же CI wrapper на M01 вернул nonzero. Базовый и финальный тесты есть отдельно. По этим шести заранее выбранным ошибкам нельзя оценить полноту реальных defects или принимать весь продукт. Hidden suite не предоставлен/не запускался.
