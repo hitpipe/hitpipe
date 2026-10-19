@@ -15,7 +15,7 @@ merge or final submission.
 | HIT-53 C3 | `work/HIT-53-nb-verification` | `2186a00ca9c441645c99f82fd45b34241864ac6a` | baseline, sensitivity, five mutations PASS; CI success | PR/review/merge pending |
 | HIT-54 D1 | `work/HIT-54-nb-docs` | `a74a5e1a8ada1147b5755503fd01fd458b8a4706` | toolchain/document checks PASS | [Actions run](https://github.com/hitpipe/hitpipe/actions/runs/39262425665) success; review pending |
 | HIT-55 H1 | `work/HIT-55-nb-human-gates` | `78a4ecb` | protocols prepared | all human gates pending |
-| HIT-56 REPORT | `work/HIT-56-nb-reports` | `[record after final report commit]` | four DOCX rendered/inspected; 29-criterion crosswalk; 21 instructions | Lead must review package |
+| HIT-56 REPORT | `work/HIT-56-nb-reports` | `47807726acbcbfcbae048c6afc2bcb062df192cb` | four DOCX rendered/inspected; 29-criterion crosswalk; 21 instructions; Actions job success | Lead must review package |
 
 Three code branches are pushed and ready for separate PR creation. No PR has
 been created by this package yet. The GitHub “create PR here” links emitted by
@@ -41,6 +41,9 @@ push are not PRs and are not recorded as PR URLs.
 - Verified documentation Actions: run
   `https://github.com/hitpipe/hitpipe/actions/runs/39262425665`, SHA
   `a74a5e1a8ada1147b5755503fd01fd458b8a4706`, conclusion `success`.
+- Verified report-package Actions job `118096896666` in run
+  `https://github.com/hitpipe/hitpipe/actions/runs/39263470537`, SHA
+  `47807726acbcbfcbae048c6afc2bcb062df192cb`, conclusion `success`.
 
 ## Human actions required
 
