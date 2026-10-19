@@ -1,0 +1,29 @@
+MUTATION_ID=M03
+DESCRIPTION=check timestamp only in positive direction
+BASELINE_SHA=835bbb1bc565e9b2786d5ed1a2cac166f816f7a8
+BASELINE_SOURCE_SHA256=c48c08bece0cc13e11e8409dd0ad5a58eff47551d84eb7959957eb5c24052510
+MUTATED_SOURCE_SHA256=e858e93f85d7bc998f19981d35cf5b3490c4029d3bc037fc165471ff77048c93
+PATCH_SHA256=3d14dc924d139fdbe9c5ff141796d841160725749136a376f52f43aa19c10667
+TEMP_CWD=/var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.7qM1MfE8KE/intake
+GO_ROOT=/tmp/hitpipe-go-1.27.2/go
+go version go1.27.2 darwin/arm64
+--- COMPILE ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.804s [no tests to run]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.362s [no tests to run]
+COMPILE_EXIT=0
+--- TEST ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.443s
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    --- FAIL: TestSignatureRawBytesAndTolerance/future301 (0.00s)
+        verifier_test.go:48: got={Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} want pass=false
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.231s
+FAIL
+TEST_EXIT=1
+RESULT=KILLED

@@ -1,0 +1,42 @@
+MUTATION_ID=M01
+DESCRIPTION=hash transformed body instead of exact raw bytes
+BASELINE_SHA=835bbb1bc565e9b2786d5ed1a2cac166f816f7a8
+BASELINE_SOURCE_SHA256=c48c08bece0cc13e11e8409dd0ad5a58eff47551d84eb7959957eb5c24052510
+MUTATED_SOURCE_SHA256=ed6b518530989a65a8808a315ca4e79a1a2324473628a1d2f7e16d7d7f1f5818
+PATCH_SHA256=71c24554cdafaea924769264141e30d454180e15d87dd29fa1480586ab7b1deb
+TEMP_CWD=/var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.rM87RZLevE/intake
+GO_ROOT=/tmp/hitpipe-go-1.27.2/go
+go version go1.27.2 darwin/arm64
+--- COMPILE ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.942s [no tests to run]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.608s [no tests to run]
+COMPILE_EXIT=0
+--- TEST ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+--- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble (0.00s)
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/normal (0.00s)
+        authenticate_test.go:68: result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/normal (0.00s)
+        authenticate_test.go:68: result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+--- FAIL: TestAuthenticateWebhookRejectsRepeatWithoutSignature (0.00s)
+    authenticate_test.go:105: first={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>} second={Outcome:{Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.473s
+--- FAIL: TestSignatureKnownVector (0.00s)
+    verifier_test.go:17: known vector: {Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000}
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    verifier_test.go:25: non-UTF-8 raw bytes: {Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000000}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.260s
+FAIL
+TEST_EXIT=1
+RESULT=KILLED

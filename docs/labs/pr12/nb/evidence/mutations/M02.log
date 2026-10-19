@@ -1,0 +1,36 @@
+MUTATION_ID=M02
+DESCRIPTION=bypass constant-time MAC comparison by comparing expected MAC with itself
+BASELINE_SHA=835bbb1bc565e9b2786d5ed1a2cac166f816f7a8
+BASELINE_SOURCE_SHA256=c48c08bece0cc13e11e8409dd0ad5a58eff47551d84eb7959957eb5c24052510
+MUTATED_SOURCE_SHA256=8d08fde9443449e3e46b7f749bdfefdd50a5deb73ff9d568a759c345558f0c32
+PATCH_SHA256=7dd3df025b106ecce78d6e2457aeb3c0694e071c8ff59dbaa1020a2912a91dcc
+TEMP_CWD=/var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.FVp4POBEeR/intake
+GO_ROOT=/tmp/hitpipe-go-1.27.2/go
+go version go1.27.2 darwin/arm64
+--- COMPILE ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.690s [no tests to run]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.361s [no tests to run]
+COMPILE_EXIT=0
+--- TEST ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+--- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble (0.00s)
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/error (0.00s)
+        authenticate_test.go:90: error result={Outcome:{Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} Webhook:0x6a2f76700ac0}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/error (0.00s)
+        authenticate_test.go:90: error result={Outcome:{Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} Webhook:0x6a2f76700bc0}
+--- FAIL: TestAuthenticateWebhookRejectsRepeatWithoutSignature (0.00s)
+    authenticate_test.go:105: first={Outcome:{Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} Webhook:0x6a2f76700c40} second={Outcome:{Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} Webhook:0x6a2f76700c80}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.477s
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    verifier_test.go:28: reserialized body must reject: {Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000}
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.253s
+FAIL
+TEST_EXIT=1
+RESULT=KILLED

@@ -1,0 +1,29 @@
+MUTATION_ID=M05
+DESCRIPTION=accept conflicting duplicate timestamp
+BASELINE_SHA=835bbb1bc565e9b2786d5ed1a2cac166f816f7a8
+BASELINE_SOURCE_SHA256=c48c08bece0cc13e11e8409dd0ad5a58eff47551d84eb7959957eb5c24052510
+MUTATED_SOURCE_SHA256=a01309d565cd1192162c4371db8fe94143e7af1727469e0c157a95861be654da
+PATCH_SHA256=22b8525d30ebc157a8195b1cde5fcdebc9cf4a8cb9827350995021fc97473351
+TEMP_CWD=/var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/tmp.7ms7gK0dto/intake
+GO_ROOT=/tmp/hitpipe-go-1.27.2/go
+go version go1.27.2 darwin/arm64
+--- COMPILE ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.372s [no tests to run]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.699s [no tests to run]
+COMPILE_EXIT=0
+--- TEST ---
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system	[no test files]
+?   	github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook	0.259s
+--- FAIL: TestSignatureRejectsMalformedHeaders (0.00s)
+    --- FAIL: TestSignatureRejectsMalformedHeaders/conflicting_timestamp (0.00s)
+        verifier_test.go:79: got={Status:REJECTED Reason:signature_mismatch Version:stripe-signature-v1 Timestamp:1700000001} want reason=timestamp_conflict
+FAIL
+FAIL	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	0.451s
+FAIL
+TEST_EXIT=1
+RESULT=KILLED
