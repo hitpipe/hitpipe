@@ -31,9 +31,14 @@ jobs:
           cache: false
       - name: Run actual named tests when module exists
         run: python3 tools/pr12/workspace.py check intake
+        env:
+          PR12_RACE: '1'
       - name: Run declared diagnostic smoke in both modes
         if: hashFiles('services/intake/lab-component.json') != ''
         run: python3 tools/pr12/workspace.py smoke intake --require
+      - name: Inspect release artifact
+        if: hashFiles('services/intake/lab-component.json') != ''
+        run: python3 tools/pr12/workspace.py inspect intake --mode release
       - name: Scope of this job
         if: always()
         run: |
