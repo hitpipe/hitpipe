@@ -53,6 +53,24 @@ if outcome.Status != stripesignature.Verified {
 // A later consumer may parse/normalize only after this proof.
 ```
 
+## Application consumer boundary (HIT-52)
+
+`authenticatewebhook.Consumer` owns the orchestration around this pure policy. It
+resolves an installation-scoped secret through `SecretResolver`, obtains trusted
+Unix seconds through `Clock`, then calls `stripesignature.Verify` with the exact
+bytes. The same consumer is exercised with a file-backed synthetic resolver and
+an in-memory double; swapping either dependency does not change consumer code.
+
+On success it returns `VerifiedWebhook{installation_id,event_id,raw_body,timestamp}`
+to the next typed consumer. That next consumer may perform the separately specified
+strict parse/whitelist normalization. This slice does not invent a second schema,
+persist a receipt or emit an HTTP response. Repeated event IDs are never used as a
+shortcut: each call authenticates its bytes before any future deduplication.
+
+Dependency failure precedence is safe and bounded: missing/unknown installation
+maps to `secret_unavailable`; clock failure maps to `clock_unavailable`; underlying
+file/secret/clock error text is not returned to callers.
+
 ## Deliberate limits
 
 The production secret adapter, trusted clock port, strict business parsing,
