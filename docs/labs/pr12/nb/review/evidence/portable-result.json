@@ -1,0 +1,32 @@
+{
+  "reviewed_source_sha": "b23001983b511999d815fbc7f77063e763516bc2",
+  "checkout_head": "b23001983b511999d815fbc7f77063e763516bc2",
+  "started_at": "2026-10-19T14:41:38.169455+00:00",
+  "argv": [
+    "go",
+    "test",
+    "-count=1",
+    "-json",
+    "-overlay=/home/deploy/.local/share/hitpipe-nb-review-20261019/reproduction-validation/overlay.json",
+    "-run",
+    "^TestReview",
+    "./internal/domain/stripesignature"
+  ],
+  "toolchain": "go version go1.27.2 linux/amd64",
+  "exit_code": 1,
+  "failed": [
+    "TestReviewTimestampParserRejectsOverflow",
+    "TestReviewOverflowHeaderReportsMalformed",
+    "TestReviewAbsoluteDistanceCannotWrap"
+  ],
+  "passed": [
+    "TestReviewIndependentHMACVectors/normal",
+    "TestReviewIndependentHMACVectors/raw_invalid_utf8",
+    "TestReviewIndependentHMACVectors/large_positive_unix",
+    "TestReviewIndependentHMACVectors/max_int64",
+    "TestReviewIndependentHMACVectors"
+  ],
+  "source_unchanged": true,
+  "log_sha256": "d9918fd656477e2a70fcab60ac04e3fb1f225e3d69f92ce45c333d973e28e71e",
+  "meaning": "Original integer-boundary defects reproduced; not a positive acceptance."
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "normal",
+    "body_hex": "7b226964223a226576745f696e646570656e64656e74227d",
+    "timestamp": 1700000000,
+    "now_unix": 1700000000,
+    "header": "t=1700000000,v1=613289e3cb4815b9a2e9a2a6e1bb52e9a81fa16b9609028e3a88e2e168418ccc",
+    "expected": "VERIFIED",
+    "oracle": "Python hashlib/hmac, generated independently from Go format/parser/test helpers"
+  },
+  {
+    "name": "raw_invalid_utf8",
+    "body_hex": "ff00800a",
+    "timestamp": 1700000000,
+    "now_unix": 1700000000,
+    "header": "t=1700000000,v1=fb474cdf30d2b46df02a38d94fe2eee2a994e7ecaf28b51117320768de544041",
+    "expected": "VERIFIED",
+    "oracle": "Python hashlib/hmac, generated independently from Go format/parser/test helpers"
+  },
+  {
+    "name": "large_positive_unix",
+    "body_hex": "7b226964223a226576745f667574757265227d",
+    "timestamp": 4294967296,
+    "now_unix": 4294967296,
+    "header": "t=4294967296,v1=5af56a776210472c2201eb92fafddfe248a08f2f0066b702f339342e154fec5f",
+    "expected": "VERIFIED",
+    "oracle": "Python hashlib/hmac, generated independently from Go format/parser/test helpers"
+  },
+  {
+    "name": "max_int64",
+    "body_hex": "7b7d",
+    "timestamp": 9223372036854775807,
+    "now_unix": 9223372036854775807,
+    "header": "t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",
+    "expected": "VERIFIED",
+    "oracle": "Python hashlib/hmac, generated independently from Go format/parser/test helpers"
+  }
+]
