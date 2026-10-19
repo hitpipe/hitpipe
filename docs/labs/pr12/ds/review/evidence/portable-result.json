@@ -1,0 +1,43 @@
+{
+  "reviewed_source_sha": "0a6f2ef3a5cd6db30ff4cef5efbefd185fc47b00",
+  "checkout_head": "0a6f2ef3a5cd6db30ff4cef5efbefd185fc47b00",
+  "started_at": "2026-10-19T14:03:18.454577+00:00",
+  "toolchain": "go version go1.27.2 linux/amd64",
+  "argv": [
+    "go",
+    "test",
+    "-count=1",
+    "-json",
+    "-overlay=/home/deploy/.local/share/hitpipe-ds-review-20261019/reproduction-validation/overlay.json",
+    "-run",
+    "^TestReview",
+    "./internal/..."
+  ],
+  "cwd": "/home/deploy/.local/share/hitpipe-ds-review-20261019/worktree/services/delivery",
+  "exit_code": 1,
+  "ran": [
+    "TestReviewNoProvenanceCannotMatch",
+    "TestReviewSavedObservationCannotBeRelabelled",
+    "TestReviewCanonicalHandoffMatches",
+    "TestReviewLoneCRNormalization",
+    "TestReviewMalformedTitleCannotMatch",
+    "TestReviewRetrievalErrorCannotMatch",
+    "TestReviewJSONAliasCannotPromoteRetrieval",
+    "TestReviewJSONMalformedBytesCannotMatch",
+    "TestReviewJSONLoneSurrogateCannotMatch"
+  ],
+  "failed": [
+    "TestReviewNoProvenanceCannotMatch",
+    "TestReviewSavedObservationCannotBeRelabelled",
+    "TestReviewCanonicalHandoffMatches",
+    "TestReviewLoneCRNormalization",
+    "TestReviewMalformedTitleCannotMatch",
+    "TestReviewRetrievalErrorCannotMatch",
+    "TestReviewJSONAliasCannotPromoteRetrieval",
+    "TestReviewJSONMalformedBytesCannotMatch",
+    "TestReviewJSONLoneSurrogateCannotMatch"
+  ],
+  "source_unchanged": true,
+  "log_sha256": "bd9ab486c929922ccea7ea3e5d1e1d0c4e2d7cc8dd961f8a1517d9766717ccdd",
+  "meaning": "Observed original defects; these tests are not a successful acceptance."
+}

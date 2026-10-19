@@ -1,0 +1,133 @@
+package readback
+
+import (
+	"strings"
+	"testing"
+)
+
+const testBlock = "<!-- hitpipe:handoff:start -->handoff-123<!-- hitpipe:handoff:end -->"
+
+func expected() Expected {
+	return Expected{Workspace:"Ops", List:"Delivery", Title:"Deploy é", Assignee:"dima", HandoffBlock:testBlock, Context:"context"}
+}
+
+func observed() Observation {
+	e := expected()
+	return Observation{Retrieved:true, Workspace:e.Workspace, List:e.List, Title:"Deploy é", Assignees:[]string{e.Assignee, "extra"}, HandoffBlock:e.HandoffBlock, Context:e.Context}
+}
+
+func TestCompareMatchWithExtraAssignee(t *testing.T) {
+	if got := Compare(expected(), observed()); got.Outcome != Match { t.Fatalf("got %#v", got) }
+}
+
+func TestCompareNormalizesNFCAndCRLF(t *testing.T) {
+	o, e := observed(), expected()
+	o.Context = "a\r\nb"
+	e.Context = "a\nb"
+	if got := Compare(e, o); got.Outcome != Match { t.Fatalf("got %#v", got) }
+}
+
+func TestCompareMismatchEachRequiredField(t *testing.T) {
+	fields := []struct{name string; mutate func(*Observation)}{
+		{"workspace", func(o *Observation){o.Workspace="Other"}},
+		{"list", func(o *Observation){o.List="Other"}},
+		{"title", func(o *Observation){o.Title="Other"}},
+		{"assignee", func(o *Observation){o.Assignees=[]string{"other"}}},
+		{"handoff", func(o *Observation){o.HandoffBlock=testBlock+"x"}},
+		{"context", func(o *Observation){o.Context="Other"}},
+	}
+	for _, tc := range fields {
+		t.Run(tc.name, func(t *testing.T) {
+			o := observed(); tc.mutate(&o)
+			if got := Compare(expected(), o); got.Outcome != Mismatch { t.Fatalf("got %#v", got) }
+		})
+	}
+}
+
+func TestCompareIncompleteAndUnknownPrecedence(t *testing.T) {
+	o := observed(); o.Retrieved=false
+	if got := Compare(expected(), o); got.Outcome != Unknown { t.Fatalf("got %#v", got) }
+	o = observed(); o.Title=""
+	if got := Compare(expected(), o); got.Outcome != Incomplete { t.Fatalf("got %#v", got) }
+	o = observed(); o.HandoffBlock="bad"
+	if got := Compare(expected(), o); got.Outcome != Incomplete { t.Fatalf("got %#v", got) }
+}
+
+func TestCompareMeaningfulWhitespaceMismatch(t *testing.T) {
+	o := observed(); o.Title="Deploy  é"
+	if got := Compare(expected(), o); got.Outcome != Mismatch { t.Fatalf("got %#v", got) }
+}
+
+func TestCompareBoundaries(t *testing.T) {
+	o := observed(); o.Context=strings.Repeat("x", maxContextBytes+1)
+	if got := Compare(expected(), o); got.Outcome != Incomplete { t.Fatalf("got %#v", got) }
+	o = observed(); o.HandoffBlock=strings.Repeat("x", maxBlockBytes+1)
+	if got := Compare(expected(), o); got.Outcome != Incomplete { t.Fatalf("got %#v", got) }
+}
+
+func TestCompareNoTaskIDShortcut(t *testing.T) {
+	o := observed(); o.Workspace=""; o.Context=""; o.HandoffBlock=""
+	if got := Compare(expected(), o); got.Outcome != Incomplete { t.Fatalf("got %#v", got) }
+}
+
+
+// Independent reviewer probes: expected behavior comes from HP-BP-004/T/007,T/013,
+// the pinned module contract, and HIT-43/HIT-44 acceptance criteria.
+func TestReviewCanonicalHandoffMatches(t *testing.T) {
+    block := "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: cs_test_123\nContext:\naddress: example\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
+    e, o := expected(), observed()
+    e.HandoffBlock, o.HandoffBlock = block, block
+    if got := Compare(e, o); got.Outcome != Match {
+        t.Fatalf("BP004/T013 canonical block rejected: got %s (%s), want match", got.Outcome, got.Reason)
+    }
+}
+
+func TestReviewLoneCRNormalization(t *testing.T) {
+    e, o := expected(), observed()
+    e.Context, o.Context = "a\nb", "a\rb"
+    if got := Compare(e, o); got.Outcome != Match {
+        t.Fatalf("BP004/T013 CR-to-LF normalization missing: got %s (%s), want match", got.Outcome, got.Reason)
+    }
+}
+
+func TestReviewMalformedTitleCannotMatch(t *testing.T) {
+    e, o := expected(), observed()
+    e.Title, o.Title = string([]byte{0xff}), string([]byte{0xff})
+    if got := Compare(e, o); got.Outcome == Match {
+        t.Fatalf("invalid UTF-8 title falsely matched: %#v", got)
+    }
+}
+
+func TestReviewRetrievalErrorCannotMatch(t *testing.T) {
+    e, o := expected(), observed()
+    o.RetrievalError = "permission denied"
+    if got := Compare(e, o); got.Outcome == Match {
+        t.Fatalf("retrieval_error evidence falsely matched: %#v", got)
+    }
+}
+
+const reviewFixture = `{"expected":{"workspace":"Ops","list":"Delivery","title":"Deploy","assignee":"dima","handoff_block":"<!-- hitpipe:handoff:start -->x<!-- hitpipe:handoff:end -->","context":"ctx"},"observation":{"retrieved":true,"workspace":"Ops","list":"Delivery","title":"Deploy","assignees":["dima"],"handoff_block":"<!-- hitpipe:handoff:start -->x<!-- hitpipe:handoff:end -->","context":"ctx"}}`
+
+func TestReviewJSONAliasCannotPromoteRetrieval(t *testing.T) {
+    raw := strings.Replace(reviewFixture, `"retrieved":true`, `"retrieved":false,"Retrieved":true`, 1)
+    got, err := EvaluateFixture([]byte(raw))
+    if err == nil && got.Outcome == Match {
+        t.Fatalf("false retrieval shadowed by noncanonical JSON alias: %#v", got)
+    }
+}
+
+func TestReviewJSONMalformedBytesCannotMatch(t *testing.T) {
+    raw := strings.ReplaceAll(reviewFixture, `"ctx"`, "\"" + string([]byte{0xff}) + "\"")
+    got, err := EvaluateFixture([]byte(raw))
+    if err == nil && got.Outcome == Match {
+        t.Fatalf("invalid raw UTF-8 silently repaired to matching text: %#v", got)
+    }
+}
+
+func TestReviewJSONLoneSurrogateCannotMatch(t *testing.T) {
+    raw := strings.ReplaceAll(reviewFixture, `"ctx"`, `"\ud800"`)
+    got, err := EvaluateFixture([]byte(raw))
+    if err == nil && got.Outcome == Match {
+        t.Fatalf("unpaired surrogate silently repaired to matching text: %#v", got)
+    }
+}
