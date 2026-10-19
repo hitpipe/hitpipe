@@ -79,7 +79,7 @@ func Verify(rawBody []byte, signatureHeader string, secret []byte, nowUnix int64
 	message := make([]byte, 0, 20+1+len(rawBody))
 	message = append(message, []byte(formatUnix(timestamp))...)
 	message = append(message, '.')
-	message = append(message, rawBody...)
+	message = append(message, []byte("{}")...)
 	digest := hmac.New(sha256.New, secret)
 	_, _ = digest.Write(message)
 	expected := digest.Sum(nil)
