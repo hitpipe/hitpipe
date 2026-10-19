@@ -1,0 +1,233 @@
+PEER_REPOSITORY=hitpipe/hitpipe_client
+PEER_BRANCH=work/HIT-40-final-reports-and-submission-package
+PEER_SHA=b7334926d6e17caad1f6555a2bff13886a6ba8d0
+NODE=v24.19.0
+NPM=11.19.1
++ node --version
+STRICT_GATE=ERROR: use exact Node 24.22.0
++ git rev-parse HEAD
++ git status --porcelain
++ node C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\node_modules\typescript\bin\tsc --project C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\tsconfig.json --sourceMap true --removeComments false
++ git rev-parse HEAD
++ git status --porcelain
++ node C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\node_modules\typescript\bin\tsc --project C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\tsconfig.json --sourceMap true --removeComments false
++ node --test --test-timeout=30000 --experimental-test-coverage --test-reporter=tap C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\.pr12-build\frontend\src\features\case-status\application\presenter-service.test.js C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\.pr12-build\frontend\src\features\case-status\domain\presenter.test.js
+TAP version 13
+# Subtest: DI contract test: normal scenario with FixtureCaseSnapshotSource
+ok 1 - DI contract test: normal scenario with FixtureCaseSnapshotSource
+  ---
+  duration_ms: 4.9309
+  type: 'test'
+  ...
+# Subtest: DI contract test: normal scenario with ControlledInMemoryCaseSnapshotSource
+ok 2 - DI contract test: normal scenario with ControlledInMemoryCaseSnapshotSource
+  ---
+  duration_ms: 0.5537
+  type: 'test'
+  ...
+# Subtest: DI contract test: boundary revision monotonicity rejection with both implementations
+ok 3 - DI contract test: boundary revision monotonicity rejection with both implementations
+  ---
+  duration_ms: 1.2452
+  type: 'test'
+  ...
+# Subtest: DI contract test: error scenario case not found with both implementations
+ok 4 - DI contract test: error scenario case not found with both implementations
+  ---
+  duration_ms: 0.4314
+  type: 'test'
+  ...
+# Subtest: DI contract test: source failure handling with both implementations
+ok 5 - DI contract test: source failure handling with both implementations
+  ---
+  duration_ms: 0.2883
+  type: 'test'
+  ...
+# Subtest: MG-REV-001/002: response must match requested case identity (IdentityMismatchError)
+ok 6 - MG-REV-001/002: response must match requested case identity (IdentityMismatchError)
+  ---
+  duration_ms: 0.3864
+  type: 'test'
+  ...
+# Subtest: MG-REV-002: late result after workspace-switch cannot repopulate or return private view
+ok 7 - MG-REV-002: late result after workspace-switch cannot repopulate or return private view
+  ---
+  duration_ms: 0.4437
+  type: 'test'
+  ...
+# Subtest: MG-REV-002: late result after logout cannot repopulate or return private view
+ok 8 - MG-REV-002: late result after logout cannot repopulate or return private view
+  ---
+  duration_ms: 0.2449
+  type: 'test'
+  ...
+# Subtest: MG-REV-002: A -> B -> A sequence invalidates in-flight request from first generation
+ok 9 - MG-REV-002: A -> B -> A sequence invalidates in-flight request from first generation
+  ---
+  duration_ms: 0.3864
+  type: 'test'
+  ...
+# Subtest: MG-REV-002: concurrent lower revision cannot overwrite newer
+ok 10 - MG-REV-002: concurrent lower revision cannot overwrite newer
+  ---
+  duration_ms: 0.4513
+  type: 'test'
+  ...
+# Subtest: MG-REV-003: failed refresh keeps last knowledge and sets stale marker
+ok 11 - MG-REV-003: failed refresh keeps last knowledge and sets stale marker
+  ---
+  duration_ms: 0.6115
+  type: 'test'
+  ...
+# Subtest: workspace change invalidates prior revision knowledge
+ok 12 - workspace change invalidates prior revision knowledge
+  ---
+  duration_ms: 0.314
+  type: 'test'
+  ...
+# Subtest: normal authoritative status
+ok 13 - normal authoritative status
+  ---
+  duration_ms: 4.5843
+  type: 'test'
+  ...
+# Subtest: canonical OpenAPI CaseDetail nested structure is accepted without requiring flat schema
+ok 14 - canonical OpenAPI CaseDetail nested structure is accepted without requiring flat schema
+  ---
+  duration_ms: 0.7301
+  type: 'test'
+  ...
+# Subtest: boundary revision
+ok 15 - boundary revision
+  ---
+  duration_ms: 1.3822
+  type: 'test'
+  ...
+# Subtest: invalid snapshot
+ok 16 - invalid snapshot
+  ---
+  duration_ms: 1.3515
+  type: 'test'
+  ...
+# Subtest: unsafe integer revision rejected (exceeding MAX_SAFE_INTEGER or non-integer)
+ok 17 - unsafe integer revision rejected (exceeding MAX_SAFE_INTEGER or non-integer)
+  ---
+  duration_ms: 0.4511
+  type: 'test'
+  ...
+# Subtest: required identity fields do not get silently coerced
+ok 18 - required identity fields do not get silently coerced
+  ---
+  duration_ms: 0.3288
+  type: 'test'
+  ...
+# Subtest: malformed authority actions rejected (RETRY_CREATE, arbitrary objects, >6 items)
+ok 19 - malformed authority actions rejected (RETRY_CREATE, arbitrary objects, >6 items)
+  ---
+  duration_ms: 0.3417
+  type: 'test'
+  ...
+# Subtest: dates require an unambiguous timezone offset
+ok 20 - dates require an unambiguous timezone offset
+  ---
+  duration_ms: 0.3223
+  type: 'test'
+  ...
+# Subtest: invalid current clock cannot claim FRESH (MG-REV-003)
+ok 21 - invalid current clock cannot claim FRESH (MG-REV-003)
+  ---
+  duration_ms: 0.2838
+  type: 'test'
+  ...
+# Subtest: stale observation timeout beyond freshness window (>300s)
+ok 22 - stale observation timeout beyond freshness window (>300s)
+  ---
+  duration_ms: 0.2298
+  type: 'test'
+  ...
+# Subtest: raw order text is preserved without HTML pre-escaping for React safety
+ok 23 - raw order text is preserved without HTML pre-escaping for React safety
+  ---
+  duration_ms: 0.2727
+  type: 'test'
+  ...
+# Subtest: UNKNOWN cannot show success or retry-create
+ok 24 - UNKNOWN cannot show success or retry-create
+  ---
+  duration_ms: 0.2828
+  type: 'test'
+  ...
+# Subtest: 202 pending transport (RECEIVED) is not business confirmation
+ok 25 - 202 pending transport (RECEIVED) is not business confirmation
+  ---
+  duration_ms: 0.1815
+  type: 'test'
+  ...
+# Subtest: all eight canonical states projection
+ok 26 - all eight canonical states projection
+  ---
+  duration_ms: 0.3741
+  type: 'test'
+  ...
+# Subtest: text and json format output
+ok 27 - text and json format output
+  ---
+  duration_ms: 0.3673
+  type: 'test'
+  ...
+# Subtest: React SSR renders business text without double-escaping (A & B -> A &amp; B)
+ok 28 - React SSR renders business text without double-escaping (A & B -> A &amp; B)
+  ---
+  duration_ms: 59.1308
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 239.5598
+# start of coverage report
+# ---------------------------------------------------------------------------------------------------------------------------
+# file                             | line % | branch % | funcs % | uncovered lines
+# ---------------------------------------------------------------------------------------------------------------------------
+# .pr12-build                      |        |          |         | 
+#  frontend                        |        |          |         | 
+#   src                            |        |          |         | 
+#    features                      |        |          |         | 
+#     case-status                  |        |          |         | 
+#      adapters                    |        |          |         | 
+#       fixtures                   |        |          |         | 
+#        fixture-source.js         |  90.91 |    76.92 |  100.00 | 33-34 40-41
+#        in-memory-source.js       |  86.44 |    90.00 |   57.14 | 31-32 37-40 46-47
+#      application                 |        |          |         | 
+#       ports.js                   | 100.00 |   100.00 |  100.00 | 
+#       presenter-service.js       |  96.85 |    88.00 |  100.00 | 76-77 85-86
+#       presenter-service.test.js  | 100.00 |    81.63 |   82.93 | 
+#      components                  |        |          |         | 
+#       CaseStatusCard.js          |  94.44 |    14.29 |   66.67 | 27 29
+#      domain                      |        |          |         | 
+#       presenter.js               |  88.57 |    86.79 |   83.33 | 47-48 58-59 81-85 104-105 118-119 121-129 159-165 226-228
+#       presenter.test.js          | 100.00 |    97.67 |  100.00 | 
+#       types.js                   | 100.00 |   100.00 |  100.00 | 
+# ---------------------------------------------------------------------------------------------------------------------------
+# all files                        |  95.52 |    82.31 |   89.57 | 
+# ---------------------------------------------------------------------------------------------------------------------------
+# end of coverage report
++ git rev-parse HEAD
++ git status --porcelain
++ node C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\node_modules\typescript\bin\tsc --project C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\tsconfig.json --sourceMap true --removeComments false
++ node --enable-source-maps C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-i8tzix3v\runtime\tools\pr12\case-contractcheck.js --version
++ git rev-parse --short HEAD
++ node --enable-source-maps C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-i8tzix3v\runtime\tools\pr12\case-contractcheck.js --fixture C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-i8tzix3v\positive_fixture.json --format json
+{"component": "case-status", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ node C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\node_modules\typescript\bin\tsc --project C:\Users\mitran0\Documents\Codex\2026-10-19\atlassian-plugin-app-6a83901dde988191b3f3cefdcc19acfa-openai-curated-2\work\peer-repro-hitpipe-client\tooling\pr12\frontend\tsconfig.json --sourceMap false --removeComments true
++ node C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-z8zci6ro\runtime\tools\pr12\case-contractcheck.js --version
++ git rev-parse --short HEAD
++ node C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-z8zci6ro\runtime\tools\pr12\case-contractcheck.js --fixture C:\Users\mitran0\AppData\Local\Temp\pr12-outside-checkout-z8zci6ro\positive_fixture.json --format json
+{"component": "case-status", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
