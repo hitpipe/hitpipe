@@ -61,7 +61,7 @@ func Verify(rawBody []byte, signatureHeader string, secret []byte, nowUnix int64
 	if len(secret) == 0 {
 		return rejected(ReasonSecretUnavailable)
 	}
-	if nowUnix == 0 {
+	if !validUnixSeconds(nowUnix) {
 		return rejected(ReasonClockUnavailable)
 	}
 	if len(rawBody) == 0 {
@@ -72,8 +72,7 @@ func Verify(rawBody []byte, signatureHeader string, secret []byte, nowUnix int64
 	if reason != "" {
 		return rejected(reason)
 	}
-	delta := nowUnix - timestamp
-	if delta > ToleranceSeconds || delta < -ToleranceSeconds {
+	if outsideTolerance(nowUnix, timestamp) {
 		return Outcome{Status: Rejected, Reason: ReasonTimestampStale, Version: Version, Timestamp: timestamp}
 	}
 
@@ -157,17 +156,31 @@ func parseHeader(header string) (int64, [][]byte, Reason) {
 
 func parseUnix(value string) (int64, bool) {
 	var parsed int64
+	if value == "" {
+		return 0, false
+	}
 	for _, r := range value {
 		if r < '0' || r > '9' {
 			return 0, false
 		}
-		next := parsed*10 + int64(r-'0')
-		if next < parsed {
+		digit := int64(r - '0')
+		if parsed > (int64(^uint64(0)>>1)-digit)/10 {
 			return 0, false
 		}
-		parsed = next
+		parsed = parsed*10 + digit
 	}
-	return parsed, value != ""
+	return parsed, parsed > 0
+}
+
+func validUnixSeconds(value int64) bool {
+	return value > 0
+}
+
+func outsideTolerance(nowUnix, timestamp int64) bool {
+	if nowUnix >= timestamp {
+		return nowUnix-timestamp > ToleranceSeconds
+	}
+	return timestamp-nowUnix > ToleranceSeconds
 }
 
 func formatUnix(value int64) string {
