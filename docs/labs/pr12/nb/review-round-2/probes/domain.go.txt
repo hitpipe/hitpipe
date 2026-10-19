@@ -1,0 +1,249 @@
+package stripesignature
+
+import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"testing"
+)
+
+const testSecret = "whsec_test_secret"
+
+func TestSignatureKnownVector(t *testing.T) {
+	body := []byte(`{"id":"evt_test_webhook","object":"event"}`)
+	header := "t=1700000000,v1=d95c6b7477fbd7e9f90b1b0ef5f9c7ac25abca5382460e0d988c2b2a5b71b990"
+	outcome := Verify(body, header, []byte(testSecret), 1700000000)
+	if outcome.Status != Verified || outcome.Reason != ReasonVerified {
+		t.Fatalf("known vector: %+v", outcome)
+	}
+}
+
+func TestSignatureRawBytesAndTolerance(t *testing.T) {
+	body := []byte{'{', 0, '}', '\n'}
+	signature := signFixture(body, testSecret, 1700000000)
+	if got := Verify(body, signature, []byte(testSecret), 1700000000); got.Status != Verified {
+		t.Fatalf("non-UTF-8 raw bytes: %+v", got)
+	}
+	if got := Verify([]byte(`{"a":1}`), signature, []byte(testSecret), 1700000000); got.Status != Rejected {
+		t.Fatalf("reserialized body must reject: %+v", got)
+	}
+	if got := Verify([]byte(`{"a":1}`), signFixture([]byte(`{"a":1}`), testSecret, 1700000000), []byte(testSecret), 1700000001); got.Status != Verified {
+		t.Fatalf("same bytes should verify: %+v", got)
+	}
+	invalidUTF8 := []byte{'{', 0xff, 0xc3, 0x28, '}'}
+	invalidSignature := signFixture(invalidUTF8, testSecret, 1700000000)
+	if got := Verify(invalidUTF8, invalidSignature, []byte(testSecret), 1700000000); got.Status != Verified {
+		t.Fatalf("invalid UTF-8 bytes must remain opaque: %+v", got)
+	}
+	for _, tc := range []struct {
+		name string
+		now  int64
+		pass bool
+	}{
+		{name: "past299", now: 1700000000 + 299, pass: true},
+		{name: "past300", now: 1700000000 + 300, pass: true},
+		{name: "past301", now: 1700000000 + 301, pass: false},
+		{name: "future299", now: 1700000000 - 299, pass: true},
+		{name: "future300", now: 1700000000 - 300, pass: true},
+		{name: "future301", now: 1700000000 - 301, pass: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := Verify([]byte(`{"a":1}`), signFixture([]byte(`{"a":1}`), testSecret, 1700000000), []byte(testSecret), tc.now)
+			if (got.Status == Verified) != tc.pass {
+				t.Fatalf("got=%+v want pass=%v", got, tc.pass)
+			}
+		})
+	}
+	first := signFixture([]byte(`{"a":1}`), "old_secret", 1700000000)
+	second := signFixture([]byte(`{"a":1}`), testSecret, 1700000000)
+	header := "t=1700000000,v1=" + first[len("t=1700000000,v1="):] + ",v1=" + second[len("t=1700000000,v1="):]
+	if got := Verify([]byte(`{"a":1}`), header, []byte(testSecret), 1700000000); got.Status != Verified {
+		t.Fatalf("rotation candidates: %+v", got)
+	}
+}
+
+func TestReviewTimestampParserRejectsOverflow(t *testing.T) {
+	if parsed, ok := parseUnix("23000000000000000000"); ok || parsed != 0 {
+		t.Fatalf("overflow timestamp accepted: parsed=%d ok=%v", parsed, ok)
+	}
+}
+
+func TestReviewOverflowHeaderReportsMalformed(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	valid := signFixture(body, testSecret, 1700000000)
+	mac := valid[len("t=1700000000,v1="):]
+	got := Verify(body, "t=23000000000000000000,v1="+mac, []byte(testSecret), 1700000000)
+	if got.Status != Rejected || got.Reason != ReasonTimestampMalformed {
+		t.Fatalf("overflow header: %+v", got)
+	}
+}
+
+func TestReviewAbsoluteDistanceCannotWrap(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	timestamp := int64(^uint64(0) >> 1)
+	header := signFixture(body, testSecret, timestamp)
+	got := Verify(body, header, []byte(testSecret), -1<<63)
+	if got.Status != Rejected || got.Reason != ReasonClockUnavailable {
+		t.Fatalf("invalid MinInt64 clock must fail closed: %+v", got)
+	}
+	got = Verify(body, header, []byte(testSecret), 1)
+	if got.Status != Rejected || got.Reason != ReasonTimestampStale {
+		t.Fatalf("MaxInt64 timestamp must be stale, not verified: %+v", got)
+	}
+}
+
+func TestSignatureRejectsMalformedHeaders(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	valid := signFixture(body, testSecret, 1700000000)
+	for _, tc := range []struct {
+		name   string
+		header string
+		reason Reason
+	}{
+		{name: "missing timestamp", header: "v1=" + valid[len("t=1700000000,v1="):], reason: ReasonTimestampMissing},
+		{name: "missing v1", header: "t=1700000000", reason: ReasonV1Missing},
+		{name: "empty v1", header: "t=1700000000,v1=", reason: ReasonV1Malformed},
+		{name: "conflicting timestamp", header: valid + ",t=1700000001", reason: ReasonTimestampConflict},
+		{name: "v0 only", header: "t=1700000000,v0=" + valid[len("t=1700000000,v1="):], reason: ReasonV1Missing},
+		{name: "unknown key", header: valid + ",x=1", reason: ReasonUnsupportedHeaderKey},
+		{name: "malformed token", header: valid + ",broken", reason: ReasonHeaderMalformed},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := Verify(body, tc.header, []byte(testSecret), 1700000000)
+			if got.Status != Rejected || got.Reason != tc.reason {
+				t.Fatalf("got=%+v want reason=%s", got, tc.reason)
+			}
+		})
+	}
+}
+
+func TestSignatureFailsClosedAndSafe(t *testing.T) {
+	body := []byte(`{"a":1}`)
+	valid := signFixture(body, testSecret, 1700000000)
+	checks := []struct {
+		name   string
+		body   []byte
+		header string
+		secret []byte
+		now    int64
+		reason Reason
+	}{
+		{name: "empty body", body: nil, header: valid, secret: []byte(testSecret), now: 1700000000, reason: ReasonEmptyBody},
+		{name: "missing secret", body: body, header: valid, secret: nil, now: 1700000000, reason: ReasonSecretUnavailable},
+		{name: "missing clock", body: body, header: valid, secret: []byte(testSecret), now: 0, reason: ReasonClockUnavailable},
+	}
+	for _, tc := range checks {
+		t.Run(tc.name, func(t *testing.T) {
+			got := Verify(tc.body, tc.header, tc.secret, tc.now)
+			if got.Status != Rejected || got.Reason != tc.reason || got.Version != Version {
+				t.Fatalf("got=%+v", got)
+			}
+		})
+	}
+}
+
+func signFixture(body []byte, secret string, timestamp int64) string {
+	message := []byte(formatUnix(timestamp) + ".")
+	message = append(message, body...)
+	hash := hmac.New(sha256.New, []byte(secret))
+	_, _ = hash.Write(message)
+	return "t=" + formatUnix(timestamp) + ",v1=" + hex.EncodeToString(hash.Sum(nil))
+}
+
+// Independent original review oracles; these are not the author's mutation experiments.
+func TestRereviewTimestampParserRejectsOverflow(t *testing.T) {
+    const text = "23000000000000000000"
+    timestamp, ok := parseUnix(text)
+    if ok {
+        t.Fatalf("out-of-range decimal silently wrapped to %d; must reject malformed int64 timestamp", timestamp)
+    }
+}
+
+func TestRereviewOverflowHeaderReportsMalformed(t *testing.T) {
+    got := Verify([]byte("{}"), "t=23000000000000000000,v1=0000000000000000000000000000000000000000000000000000000000000000", []byte(testSecret), 1700000000)
+    if got.Status != Rejected || got.Reason != ReasonTimestampMalformed {
+        t.Fatalf("overflowing header became a different timestamp instead of malformed: %+v", got)
+    }
+}
+
+func TestRereviewAbsoluteDistanceCannotWrap(t *testing.T) {
+    got := Verify([]byte("{}"), "t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666", []byte(testSecret), int64(-9223372036854775808))
+    if got.Status == Verified {
+        t.Fatalf("mathematical timestamp distance far above 300 wrapped to 1 and verified: %+v", got)
+    }
+}
+
+func TestRereviewIndependentHMACVectors(t *testing.T) {
+    for _, tc := range []struct{name string;body []byte;header string;now int64}{
+        {name:"normal",body:[]byte{123,34,105,100,34,58,34,101,118,116,95,105,110,100,101,112,101,110,100,101,110,116,34,125},header:"t=1700000000,v1=613289e3cb4815b9a2e9a2a6e1bb52e9a81fa16b9609028e3a88e2e168418ccc",now:1700000000},
+        {name:"raw_invalid_utf8",body:[]byte{255,0,128,10},header:"t=1700000000,v1=fb474cdf30d2b46df02a38d94fe2eee2a994e7ecaf28b51117320768de544041",now:1700000000},
+        {name:"large_positive_unix",body:[]byte{123,34,105,100,34,58,34,101,118,116,95,102,117,116,117,114,101,34,125},header:"t=4294967296,v1=5af56a776210472c2201eb92fafddfe248a08f2f0066b702f339342e154fec5f",now:4294967296},
+        {name:"max_int64",body:[]byte{123,125},header:"t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",now:9223372036854775807},
+    } {
+        t.Run(tc.name,func(t *testing.T) {
+            got:=Verify(tc.body,tc.header,[]byte(testSecret),tc.now)
+            if got.Status != Verified { t.Fatalf("independent vector: %+v",got) }
+            altered:=append([]byte(nil),tc.body...)
+            altered[0]^=1
+            got=Verify(altered,tc.header,[]byte(testSecret),tc.now)
+            if got.Status != Rejected { t.Fatalf("altered independent vector verified: %+v",got) }
+        })
+    }
+}
+
+func TestRereviewIndependentFreshnessMatrix(t *testing.T) {
+ for _,tc := range []struct{timestamp int64;now int64;header string;reason Reason}{
+{timestamp:1,now:-300,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonClockUnavailable},
+{timestamp:1,now:-299,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonClockUnavailable},
+{timestamp:1,now:-298,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonClockUnavailable},
+{timestamp:1,now:1,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonVerified},
+{timestamp:1,now:300,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonVerified},
+{timestamp:1,now:301,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonVerified},
+{timestamp:1,now:302,header:"t=1,v1=5bf3deb7e4bfc9899b179a53c4675ef3ab9ca8c5cd0df9e0ed182c5d798cfbb2",reason:ReasonTimestampStale},
+{timestamp:300,now:-1,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonClockUnavailable},
+{timestamp:300,now:0,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonClockUnavailable},
+{timestamp:300,now:1,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonVerified},
+{timestamp:300,now:300,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonVerified},
+{timestamp:300,now:599,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonVerified},
+{timestamp:300,now:600,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonVerified},
+{timestamp:300,now:601,header:"t=300,v1=25fafd8b3fe53761c23fe8db3f82ca09fb85f06bce6a4d85325add6f24ec4ec3",reason:ReasonTimestampStale},
+{timestamp:301,now:0,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonClockUnavailable},
+{timestamp:301,now:1,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonVerified},
+{timestamp:301,now:2,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonVerified},
+{timestamp:301,now:301,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonVerified},
+{timestamp:301,now:600,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonVerified},
+{timestamp:301,now:601,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonVerified},
+{timestamp:301,now:602,header:"t=301,v1=8ee0285c98d16201a6a92f188180f7a05ecc3c8e5917047b52c7479ccf4a5440",reason:ReasonTimestampStale},
+{timestamp:1700000000,now:1699999699,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonTimestampStale},
+{timestamp:1700000000,now:1699999700,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonVerified},
+{timestamp:1700000000,now:1699999701,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonVerified},
+{timestamp:1700000000,now:1700000000,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonVerified},
+{timestamp:1700000000,now:1700000299,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonVerified},
+{timestamp:1700000000,now:1700000300,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonVerified},
+{timestamp:1700000000,now:1700000301,header:"t=1700000000,v1=ceb8863f7208fa249a6cd8f951e993c7563412aca65866f6272283debe143ab3",reason:ReasonTimestampStale},
+{timestamp:9223372036854775506,now:9223372036854775205,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonTimestampStale},
+{timestamp:9223372036854775506,now:9223372036854775206,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonVerified},
+{timestamp:9223372036854775506,now:9223372036854775207,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonVerified},
+{timestamp:9223372036854775506,now:9223372036854775506,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonVerified},
+{timestamp:9223372036854775506,now:9223372036854775805,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonVerified},
+{timestamp:9223372036854775506,now:9223372036854775806,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonVerified},
+{timestamp:9223372036854775506,now:9223372036854775807,header:"t=9223372036854775506,v1=91254d991bc8b341e44853bb22124581e840829eb3df61f51e8cf7d88b95288a",reason:ReasonTimestampStale},
+{timestamp:9223372036854775507,now:9223372036854775206,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonTimestampStale},
+{timestamp:9223372036854775507,now:9223372036854775207,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonVerified},
+{timestamp:9223372036854775507,now:9223372036854775208,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonVerified},
+{timestamp:9223372036854775507,now:9223372036854775507,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonVerified},
+{timestamp:9223372036854775507,now:9223372036854775806,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonVerified},
+{timestamp:9223372036854775507,now:9223372036854775807,header:"t=9223372036854775507,v1=ce9ea0041c005538857a05850bdba6778ecc68e79b53e927c93839aec2de8d4a",reason:ReasonVerified},
+{timestamp:9223372036854775806,now:9223372036854775505,header:"t=9223372036854775806,v1=9917e05552e7e9fbcc1d54b79fce47a221fb3e26481eecc869e63c4f34f14d60",reason:ReasonTimestampStale},
+{timestamp:9223372036854775806,now:9223372036854775506,header:"t=9223372036854775806,v1=9917e05552e7e9fbcc1d54b79fce47a221fb3e26481eecc869e63c4f34f14d60",reason:ReasonVerified},
+{timestamp:9223372036854775806,now:9223372036854775507,header:"t=9223372036854775806,v1=9917e05552e7e9fbcc1d54b79fce47a221fb3e26481eecc869e63c4f34f14d60",reason:ReasonVerified},
+{timestamp:9223372036854775806,now:9223372036854775806,header:"t=9223372036854775806,v1=9917e05552e7e9fbcc1d54b79fce47a221fb3e26481eecc869e63c4f34f14d60",reason:ReasonVerified},
+{timestamp:9223372036854775807,now:9223372036854775506,header:"t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",reason:ReasonTimestampStale},
+{timestamp:9223372036854775807,now:9223372036854775507,header:"t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",reason:ReasonVerified},
+{timestamp:9223372036854775807,now:9223372036854775508,header:"t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",reason:ReasonVerified},
+{timestamp:9223372036854775807,now:9223372036854775807,header:"t=9223372036854775807,v1=03c14563745fcaab74ff7c8d99a00974019f2c4660b2dba236222276c2511666",reason:ReasonVerified},
+ } {
+  got:=Verify([]byte("{}"),tc.header,[]byte(testSecret),tc.now)
+  if got.Reason!=tc.reason || ((got.Status==Verified)!=(tc.reason==ReasonVerified)) {t.Fatalf("timestamp=%d now=%d got=%+v wantReason=%s",tc.timestamp,tc.now,got,tc.reason)}
+ }
+}

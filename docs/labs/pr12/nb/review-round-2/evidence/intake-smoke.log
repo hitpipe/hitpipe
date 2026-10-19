@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=3fdd78828a69bf788b7a2da9aa3acf58a5e1531a -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/deploy/.local/share/hitpipe-nb-rereview-20261019/worktree/.pr12-build/intake/dev/intake-contractcheck ./cmd/intake-contractcheck
++ /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-e65hdwrn/intake-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-e65hdwrn/intake-contractcheck --fixture /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-e65hdwrn/positive_fixture.json --format json
+{"component": "intake", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=3fdd78828a69bf788b7a2da9aa3acf58a5e1531a -X main.dirty=false -X main.buildMode=release -trimpath -o /home/deploy/.local/share/hitpipe-nb-rereview-20261019/worktree/.pr12-build/intake/release/intake-contractcheck ./cmd/intake-contractcheck
++ /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-goq40_ra/intake-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-goq40_ra/intake-contractcheck --fixture /dev/shm/hitpipe-nb-rereview-20261019/pr12-outside-checkout-goq40_ra/positive_fixture.json --format json
+{"component": "intake", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
