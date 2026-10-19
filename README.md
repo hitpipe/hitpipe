@@ -1,5 +1,5 @@
 # HitPipe
-A centralized webhook handler
+A centralized webhook handler.
 
 ## Project OS — agent onboarding
 
