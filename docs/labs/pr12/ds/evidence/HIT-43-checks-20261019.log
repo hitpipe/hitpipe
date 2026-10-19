@@ -1,0 +1,36 @@
+HIT-43 evidence log
+Date: 2026-10-19 Europe/Moscow
+Repository: hitpipe/hitpipe
+Branch: work/HIT-43-ds-readback-comparator
+Source head tested: d5051c9d5f8ea4c7e7f843a02d7fcce7b226d55d1
+Baseline: 94b78199c202a31bcb63326ae7f2a4748aa29360
+Stacked base: work/HIT-42-ds-readback-contract @ 2bff32f3841a039e59924c4c9f32e05f9bbdd0d1
+
+Environment:
+- Windows PowerShell
+- cwd for Go checks: <workspace>\work\hitpipe-c1-20261019\services\delivery
+- Go executable: C:\Program Files\Go\bin\go.exe
+- go version: go1.27.2 windows/amd64
+- dependency: golang.org/x/text v0.28.0
+- gcc: not found
+
+Commands and exits:
+1. go mod tidy — exit 0; generated go.sum.
+2. go test ./... — exit 0.
+3. go vet ./... — exit 0.
+4. go build -ldflags "-X main.version=pr12 -X main.commit=d5051c9d5f8ea4c7e7f843a02d7fcce7b226d55d1 -X main.dirty=false -X main.buildMode=release" -trimpath -o .pr12-build\delivery-contractcheck ./cmd/delivery-contractcheck — exit 0.
+5. go test -race ./... with CGO_ENABLED=1 — NOT RUN / exit nonzero: cgo: C compiler "gcc" not found.
+6. Smoke cwd: <workspace>\work\hitpipe-c1-20261019\c1-smoke-20261019
+   - delivery-contractcheck.exe -version — exit 0
+   - -fixture match.json — exit 0, outcome match
+   - -fixture mismatch.json — exit 1, outcome mismatch/title mismatch
+   - -fixture incomplete.json — exit 1, outcome incomplete/missing title
+
+Artifact:
+- release binary created locally at services/delivery/.pr12-build/delivery-contractcheck.exe
+- smoke copy executed outside checkout; binary identity reported version=pr12, commit=d5051c9..., dirty=false, buildmode=release.
+- No provider token, URL fetch, POST, retry, state transition, customer data, or production deployment used.
+
+Limitations:
+- race check requires a C compiler and remains NOT RUN.
+- CI and human review/merge are still pending.
