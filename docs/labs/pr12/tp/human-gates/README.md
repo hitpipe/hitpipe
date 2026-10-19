@@ -4,7 +4,7 @@ HIT-31, Feature HIT-12, Тимофей Патрушев. PREPARED_FOR_HUMAN_ACTI
 
 | Gate | Реальный исполнитель | Материал и следующее действие | Фактический статус |
 |---|---|---|---|
-| Интервью | Пользователь/представитель, согласованный преподавателем | interview.md: организовать разговор, внести настоящие дату/роли/ответы, отделить facts/hypotheses | NOT CONDUCTED |
+| Интервью | Пользователь/представитель, согласованный преподавателем | interview.md: пользователь пока не найден; Lead сначала находит пользователя, затем организует разговор | NOT CONDUCTED / BLOCKED_NO_USER |
 | Clarity входящий | Исполнитель HIT-11 | clarity.md и pinned requirements; дать свои ответы до сравнения с oracle автора | HUMAN_PENDING |
 | Clean-room входящий | Исполнитель HIT-11, не готовивший scaffold | peer-scaffold-in.md; fresh environment и README | HUMAN_PENDING |
 | Module review входящий | Исполнитель HIT-11 | peer-module-in.md, same consumer two readers | HUMAN_PENDING |
@@ -14,3 +14,5 @@ HIT-31, Feature HIT-12, Тимофей Патрушев. PREPARED_FOR_HUMAN_ACTI
 | Снимки, личные данные, защита, теги | Участник/преподаватель/уполномоченный человек | Полные screenshot instructions + handoff; защита самим студентом без generative AI | HUMAN_PENDING |
 
 Авторские local runs, CI и controlled mutation experiments подтверждают только собственный technical scope. Они не заменяют эти действия. Реальные замечания возвращаются в соответствующий PR, relevant checks повторяются, исходный протокол сохраняется. Feature/Epic закрывает Lead после полного DOD.
+
+Уточнение 19.10.2026 по [HIT-26](https://hitpipe.atlassian.net/browse/HIT-26?focusedCommentId=10453) и [HIT-31](https://hitpipe.atlassian.net/browse/HIT-31?focusedCommentId=10455): Codex по поручению Lead проверил три финансовых сценария, расхождений трактовок не обнаружено. Это отдельная техническая запись в clarity.md, не личная слепая проверка другого студента. TP-REV-001 отдельно воспроизведён и исправлен в собственном [PR №20](https://github.com/hitpipe/hitpipe/pull/20); собственные retests не заменяют повторный verdict reviewer-а. Состояние и порядок интеграции — [новый handoff](../tp-rev-001-handoff.md). Документы/DOCX прежнего пакета не пересобирались; остановка перед пунктом 8 сохраняется.
