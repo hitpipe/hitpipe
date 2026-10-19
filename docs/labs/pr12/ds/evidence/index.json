@@ -1,0 +1,48 @@
+{
+  "task": "HIT-43",
+  "status": "CANDIDATE_IN_REVIEW",
+  "branch": "work/HIT-43-ds-readback-comparator",
+  "head_sha": "d5051c9d5f8ea4c7e7f843a02d7fcce7b226d55d1",
+  "pr": "https://github.com/hitpipe/hitpipe/pull/24",
+  "generated_at": "2026-10-19T15:00:00+03:00",
+  "checks": [
+    {
+      "name": "go mod tidy",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "go test ./...",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "go vet ./...",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "release build",
+      "status": "PASS",
+      "exit": 0
+    },
+    {
+      "name": "synthetic smoke",
+      "status": "PASS",
+      "exit": 0,
+      "notes": "match=0; mismatch=1; incomplete=1"
+    },
+    {
+      "name": "go test -race ./...",
+      "status": "NOT_RUN",
+      "reason": "gcc unavailable"
+    }
+  ],
+  "human_gates": [
+    "CI",
+    "human review",
+    "merge",
+    "live provider validation"
+  ],
+  "evidence_log": "docs/labs/pr12/ds/evidence/HIT-43-checks-20261019.log"
+}
