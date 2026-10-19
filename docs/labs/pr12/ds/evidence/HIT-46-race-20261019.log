@@ -1,0 +1,22 @@
+# HIT-46 race evidence — 2026-10-19
+
+Command:
+```powershell
+$env:Path = 'C:\Program Files\Go\bin;C:\msys64\ucrt64\bin;' + $env:Path
+$env:CGO_ENABLED = '1'
+go test -race ./...
+```
+
+Environment:
+- Go: go1.27.2 windows/amd64
+- GCC: MSYS2 UCRT64 gcc.exe 16.2.0
+- Checkout: work/HIT-46-ds-module-adr
+- Tested from: services/delivery
+
+Result: PASS
+
+Packages:
+- internal/adapters/fixtures/targetreader: ok
+- internal/application/verifytarget: ok
+- internal/domain/readback: ok
+- cmd/delivery-contractcheck: no test files
