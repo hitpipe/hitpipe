@@ -1,0 +1,51 @@
+name: PR12 NB mutation r2 (temporary experiment)
+
+on:
+  push:
+    branches: [ 'work/nb-mutation-r2-*' ]
+    paths:
+      - 'services/intake/**'
+      - '.github/workflows/pr12-nb-mutation-r2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  mutation:
+    name: compile and detect seeded mutant
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+          cache: false
+      - name: Record experiment identity
+        run: |
+          date -u +%Y-%m-%dT%H:%M:%SZ
+          pwd
+          git rev-parse HEAD
+          git status --short
+          go version
+        working-directory: services/intake
+      - name: Compile without running tests
+        run: |
+          set +e
+          go test -run '^$' ./... 2>&1 | tee "$RUNNER_TEMP/compile.log"
+          code=${PIPESTATUS[0]}
+          echo "COMPILE_EXIT=$code"
+          test "$code" -eq 0
+        working-directory: services/intake
+      - name: Run behavioral suite and require detection
+        run: |
+          set +e
+          go test -count=1 ./... 2>&1 | tee "$RUNNER_TEMP/behavior.log"
+          code=${PIPESTATUS[0]}
+          echo "TEST_EXIT=$code"
+          test "$code" -eq 1
+        working-directory: services/intake
+      - name: Record expected mutation result
+        run: |
+          echo 'RESULT=KILLED'
+          echo 'HIDDEN_SUITE=NOT_PROVIDED'
