@@ -1,18 +1,49 @@
 {
   "effective_date": "2026-10-19",
-  "authority": "Direct instruction from work owner Dmitry Karacheban in the current conversation: Timofey Patrushev will review his work.",
+  "authority": "Direct owner instruction from Dmitry Karacheban on 2026-10-19: replace the prior manual-heavy Timofey guide with delegated Codex technical/conceptual/code/document review, automatic checks and GitHub review publication from the reviewer's own authorized session.",
   "feature": "HIT-11",
   "human_gate_task": "HIT-23",
   "owner": "Дмитрий Карачебан",
   "reviewer": "Тимофей Патрушев",
   "reviewer_github": "Tim1hik",
-  "applies_to": ["requirement_clarity", "independent_scaffold_reproduction", "independent_module_check", "human_code_and_document_review"],
-  "supersedes": {"previous_reviewer": "Никита Будыкин", "previous_direction": "NB -> DK", "previous_status": "NOT_PERFORMED"},
+  "applies_to": [
+    "delegated_conceptual_review",
+    "delegated_code_review",
+    "delegated_document_review",
+    "technical_verification",
+    "per_pr_github_review_publication"
+  ],
+  "supersedes": {
+    "previous_reviewer": "Никита Будыкин",
+    "previous_direction": "NB -> DK",
+    "previous_status": "NOT_PERFORMED"
+  },
   "frozen_manifest": "docs/labs/pr12/manifest.json stays unchanged; this is a scoped current owner assignment, not a rewrite of source pins or the global peer ring.",
-  "unchanged_scope": ["DK checks TP as a separate actual action", "external-project opposition requires the teacher's separate assignment", "implementation tasks remain assigned to Dmitry", "no formal Project OS acceptance or runtime verdict"],
-  "actual_review_status": "NOT_PERFORMED",
+  "unchanged_scope": [
+    "DK checks TP as a separate actual action",
+    "external-project opposition requires the teacher's separate assignment",
+    "implementation tasks remain assigned to Dmitry",
+    "no formal Project OS acceptance or runtime verdict"
+  ],
+  "actual_review_status": "NOT_STARTED",
   "approval": null,
   "merge": null,
   "guide": "TIMOFEY_REVIEW_GUIDE_RU.md",
-  "result_form": "TIMOFEY_REVIEW_RESULT_TEMPLATE.md"
+  "result_form": "TIMOFEY_REVIEW_RESULT_TEMPLATE.md",
+  "execution_mode": "CODEX_DELEGATED_BY_TIMOFEY",
+  "technical_reviewer": "Codex operating in Timofey's separate session under his delegation",
+  "agent_review_prompt": "TIMOFEY_AGENT_REVIEW_PROMPT_RU.md",
+  "review_publication": "Permitted by the launcher supplied by Timofey; verify real Tim1hik identity; disclose agent execution; per-PR exact-head decisions only.",
+  "preconditions_for_technical_review": [
+    "Authorized repository read access",
+    "Reviewer identity verified before writes",
+    "Runnable local checks or available GitHub Actions; truthful limitations otherwise"
+  ],
+  "student_personal_gates": "Unchanged, NOT_ATTESTED; personal blind/peer/clean-room/interview/opposition/defense are separate and not prerequisites of delegated technical review.",
+  "owner_source_changes": false,
+  "personal_student_assignment": [
+    "requirement_clarity",
+    "independent_scaffold_reproduction",
+    "independent_module_check"
+  ]
 }

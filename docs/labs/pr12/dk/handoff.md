@@ -18,11 +18,23 @@
 
 Реальные binary observations на C3: dev4622983/release4409836 bytes, static ELF64x86-64, debug_info в обоих, no dynamic section; никаких latency/bottleneck claims. Отчёты прошли ZIP/XML/rels/reopen/21unique placeholders/no-media проверки; визуальный renderer недоступен, пагинация не объявляется проверенной.
 
-## Один следующий человеческий этап
+## Один запуск агента Тимофея
 
-Тимофей проверяет PR/code/requirements/evidence своим аккаунтом. Main защищён active rulesets с approval, last-push approval, разрешением review threads и четырьмя strict checks; агент не может стать отдельным reviewer своей работы. Review не означает поручение массового merge: интеграцию Lead выполняет последовательно с корректным retarget/rebase и новым CI при изменении SHA. Подробные правила — [human-gates](human-gates.md).
+Тимофей передаёт [готовый промпт](review/TIMOFEY_AGENT_REVIEW_PROMPT_RU.md)
+своему Codex. Агент проверяет identity Tim1hik, получает exact PR12–19,
+выполняет анализ/проверки, публикует свои evidence и native GitHub reviews
+с обозначением делегации. До этого личные blind-ответы, ручной clone/тесты
+и нажатия Submit review не требуются. Review пока NOT_STARTED, вердикт не выдан.
+При недоступном локальном toolchain использовать текущий IAM workflow в
+GitHub Actions; при отсутствии Jira — GitHub result и точный jira-update.md.
+Только реальная недоступность login/2FA/разрешений требует вмешательства.
+Главная инструкция — [режим одного поручения](review/TIMOFEY_REVIEW_GUIDE_RU.md).
 
-Нужны реальные interview, TP→DK blind clarity, DK→TP и TP→DK scaffold/module checks, teacher-ring external opposition; правки по настоящим замечаниям. Студент вписывает неизвестные реквизиты, вставляет21реальный снимок, открывает4DOCX в Word/LibreOffice и обновляет TOC. После реального merge/checks фиксирует4immutable submission tags и final SHA/CI; защита лично без ИИ. Ни один из этих результатов не сгенерирован от имени людей. Их отсутствие не мешает начать текущий code/document review, но мешает объявить полную сдачу.
+Проверка из другой сессии/аккаунта остаётся независимой от автора; агентная
+работа не называется личным прохождением студентом учебных процедур.
+Интервью, student peer/clarity/clean-room/module checks, внешнее оппонирование,
+снимки/реквизиты и защита сохраняют действительные pending статусы и не мешают
+техническому review. Merge/tags/Done остаются отдельным последующим действием Lead.
 
 ## Jira и ограничения
 

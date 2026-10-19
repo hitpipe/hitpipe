@@ -1,10 +1,19 @@
 # HIT-23 — один пакет настоящих человеческих действий
 
-Состояние: **PREPARED_FOR_REVIEW / HUMAN_ACTIONS_PENDING**. Владелец Дмитрий Карачебан; агент подготовил код, проверки и материалы. Ниже нет подписей, проведённых интервью, student peer review, cross-project discussion или факта merge. Пользователь прямо остановил агентный scope перед отдельным человеческим review.
+Состояние: **PREPARED_FOR_REVIEW / HUMAN_ACTIONS_PENDING**. Владелец Дмитрий Карачебан; агент подготовил код, проверки и материалы. Ниже нет подписей, проведённых интервью, student peer review, cross-project discussion или факта merge. 19.10.2026 пользователь делегировал командное техническое ревью Codex на стороне назначенного Тимофея. Личные учебные действия по-прежнему не подтверждены; технический review ещё NOT_STARTED.
 
 С 19.10.2026 Дмитрий назначил проверяющим **Тимофея Патрушева (`Tim1hik`)** вместо прежнего NB → DK. Действующее личное назначение — [reviewer-assignment.json](review/reviewer-assignment.json); полная пошаговая [инструкция Тимофею](review/TIMOFEY_REVIEW_GUIDE_RU.md). Остальной frozen peer ring и внешнее преподавательское кольцо этим не изменяются.
 
 ## 1. Review кода и требований
+
+**Текущий режим: один запуск [промпта агенту Тимофея](review/TIMOFEY_AGENT_REVIEW_PROMPT_RU.md).**
+Codex выполняет техническое/концептуальное/document review и публикует native
+reviews из проверенной сессии Tim1hik с явным указанием делегации. Прежний
+запрет агенту публиковать review и требование сначала личных blind-ответов
+заменены только для этого командного review. Его результат не означает
+выполнение разделов2–6; ниже сохранены отдельные реальные учебные процедуры.
+Начальный статус делегированного review NOT_STARTED.
+
 
 Тимофей проверяет своим GitHub account. PR созданы авторизованным dkar-dev, поэтому собственное approval автора не заменяет review. Проверить изменения последовательно: R1 [#12](https://github.com/hitpipe/hitpipe/pull/12), R2 [#13](https://github.com/hitpipe/hitpipe/pull/13), C1 [#14](https://github.com/hitpipe/hitpipe/pull/14), C2 [#15](https://github.com/hitpipe/hitpipe/pull/15), C3 [#16](https://github.com/hitpipe/hitpipe/pull/16), D1 [#17](https://github.com/hitpipe/hitpipe/pull/17), H1 [#18](https://github.com/hitpipe/hitpipe/pull/18), актуальный REPORT [#19](https://github.com/hitpipe/hitpipe/pull/19). Bootstrap [#2](https://github.com/hitpipe/hitpipe/pull/2) уже merged 19.10.2026 09:04 UTC; повторно сливать его не нужно.
 
@@ -18,11 +27,11 @@
 
 Передать реальному пользователю или согласованному представителю восемь вопросов из `interview.md`. Реальный человек фиксирует дату, роль, ответы/источники, факты/предположения/неизвестные и решения. Продуктовые документы не являются выдуманным интервью. Удобство 8h/24h и понятность повторного входа остаются эмпирическими неизвестными. До контакта статус **NOT CONDUCTED**.
 
-## 3. Requirement clarity TP → DK
+## 3. Личная учебная requirement clarity TP → DK (отдельно от агентного review)
 
 Назначенный Дмитрием проверяющий — Тимофей Патрушев (HIT-12), проверяемый — DK (HIT-11). Передать R2 contract на exact `9d7c37151606656e9dc2f2f65876b8bd93b397cd`, `review/blind-scenarios.md`, затем получить личные письменные ответы **до** открытия `review/oracle.md`, тестов и вывода программы. Сравнить, записать замечания, решения и retest после исправлений. Статус **NOT PERFORMED**; назначение не является фактом проведённой проверки.
 
-## 4. Реальное взаимное воспроизведение scaffold/module
+## 4. Личное учебное взаимное воспроизведение scaffold/module (отдельно от агентного review)
 
 DK отдельно проверяет Тимофея Патрушева [HIT-12](https://hitpipe.atlassian.net/browse/HIT-12), ранее подготовленный candidate [PR #10](https://github.com/hitpipe/hitpipe/pull/10) SHA `adfbfc33bf20cb0b0641e49e48c0502d2f5d108d`. Тимофей проверяет DK на **текущем head [PR #19](https://github.com/hitpipe/hitpipe/pull/19)**, который фиксирует один раз перед запуском по инструкции. Последний проверенный до нового назначения package SHA `9a06ca2b45aaf874144d1084e33d8a381fbd2941` — историческое evidence, не выдуманный SHA будущего человеческого прогона. Это входы, а не прошедшие review результаты. При изменении source фактический новый full SHA записывается отдельно.
 

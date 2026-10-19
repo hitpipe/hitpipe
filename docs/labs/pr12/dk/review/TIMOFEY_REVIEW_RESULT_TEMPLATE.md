@@ -1,49 +1,55 @@
-# Форма результата Тимофея — пока NOT PERFORMED
+# Форма итогового делегированного ревью
 
-Это форма для копирования **реальным проверяющим** в GitHub-комментарий, а не готовое заключение. Заполнять фактически выполненными действиями; этот файл в авторской ветке до настоящего review не превращается в PASS.
+Это незаполненная форма, **NOT_STARTED**, а не готовое одобрение.
+Заполняется агентом по фактическому запуску. Назначенный проверяющий —
+Тимофей Патрушев (Tim1hik); исполнитель — Codex по его делегации.
+Собственноручное выполнение команд человеком не утверждается.
 
-## Первый комментарий: blind-ответы в PR #13
+## Источники и авторство
 
-Проверяющий: Тимофей Патрушев / свой GitHub account. Дата/время: не записаны. Прочитанный R2 SHA: `9d7c37151606656e9dc2f2f65876b8bd93b397cd`. Ответы до открытия oracle/tests: **не получены**.
+- Feature HIT-11 / coordination HIT-23; MANUAL_LAB_PR12.
+- Фактическая API identity публикации: NOT_CHECKED.
+- UTC/МСК время: NOT_RECORDED.
+- Full head/base каждого PR12–19 и основной source PR19: NOT_RECORDED.
+- Чистый checkout / среда / версии Git, Go, Python, C compiler: NOT_RECORDED.
+- Local либо новый Actions run: NOT_SELECTED; run ID/attempt/actor/head: NOT_RECORDED.
+- Immutable reviewer artifacts commit/URL: NOT_PUBLISHED.
 
-| Ситуация из blind-scenarios.md | Мой outcome | Мой reason | Что с бизнес-доступом? | Основание в тексте |
-| --- | --- | --- | --- | --- |
-| 1 | не заполнено | не заполнено | не заполнено | не заполнено |
-| 2 | не заполнено | не заполнено | не заполнено | не заполнено |
-| 3 | не заполнено | не заполнено | не заполнено | не заполнено |
-| 4 | не заполнено | не заполнено | не заполнено | не заполнено |
-| 5 | не заполнено | не заполнено | не заполнено | не заполнено |
-| 6 | не заполнено | не заполнено | не заполнено | не заполнено |
+| Проверка | Actual status | SHA / cwd / argv | Exit / log URL |
+| --- | --- | --- | --- |
+| Frozen sources / wrapper | NOT_RUN | — | — |
+| Report package и hashes | NOT_RUN | — | — |
+| IAM tests/vet/race | NOT_RUN | — | — |
+| Dev/release outside-checkout smoke/inspection | NOT_RUN | — | — |
+| Consumer / два adapters / normal-error-boundary | NOT_RUN | — | — |
+| Imports/Godoc/module map | NOT_RUN | — | — |
+| Семь compiling mutants / restoration / final gate | NOT_RUN | — | — |
+| Собственные дополнительные probes при выявленном риске | NOT_RUN | — | — |
+| Четыре DOCX / 29 критериев / 21 инструкция | NOT_RUN | — | — |
+| Visual renderer | NOT_RUN | — | — |
 
-Следующим отдельным комментарием после oracle: фактическое сравнение, реальные расхождения/отсутствие расхождений, решение и повторная проверка. Не заменять первоначальные ответы задним числом.
+PASS/FAIL/BLOCKED/NOT_RUN — фактические результаты; NOT_APPLICABLE требует основания.
+Существующие author CI/evidence отдельно от нового reviewer run.
 
-## Итоговое заключение в PR #19
+## Findings и решения
 
-- Проверяющий / GitHub: не заполнено лично.
-- Фактические дата/время: не записаны.
-- Проверенный **текущий full SHA #19**: не зафиксирован.
-- Просмотренные PR и их head SHA: не перечислены.
-- Среда: ОС/архитектура, Go/Python/C compiler versions, clean checkout — не записаны.
-- Фактическое участие: что я лично прочитал/запустил/проверил; чем помог агент — не записано.
+Для каждого DK-REV-NNN: priority, affected PR/full SHA, файл/строка/критерий,
+основание, actual/expected, repro и evidence, исправление, retest requirement.
+При отсутствии замечаний укажите реально проверенный scope; не сочиняйте дефекты.
 
-| Проверка | Actual PASS/FAIL/BLOCKED/NOT RUN | Команда и cwd | Exit | Ссылка/путь на мой новый журнал |
-| --- | --- | --- | --- | --- |
-| Report/source package | NOT RUN | не записана | не получен | нет |
-| IAM vet/named tests/race | NOT RUN | не записана | не получен | нет |
-| Dev/release outside-checkout smoke/inspection | NOT RUN | не записана | не получен | нет |
-| Один consumer / два adapter contracts | NOT RUN | не записана | не получен | нет |
-| Imports/Godoc/карта | NOT RUN | не записана | не получен | нет |
-| Семь compiling mutants и clean restore | NOT RUN | не записана | не получен | нет |
-| Четыре DOCX/Markdown, реальные границы | NOT RUN | не записана | не получен | нет |
+## Вердикт и публикация
 
-### Реальные замечания
+- Technical/code: NOT_ISSUED (APPROVED_FOR_SCOPE / CHANGES_REQUIRED / LIMITED_ENVIRONMENT).
+- Document preparation: NOT_ISSUED; не равен SUBMISSION_READY.
+- Native review URL / state / commit / account для каждого проверенного PR: NOT_PUBLISHED.
+- Jira comment URL либо jira-update.md URL: NOT_PUBLISHED.
+- Полное поручение авторскому агенту при замечаниях: NOT_PREPARED.
+- Непроверенные свойства, недоступные инструменты и причина: NOT_RECORDED.
+- Actual retest: NOT_PERFORMED; не выдавать будущий план за исполнение.
 
-Для каждого: ID, PR, файл/строка или пункт требования, конкретная проблема/риск, ожидаемый исход, воспроизведение, требуемое исправление, actual retest. Если замечаний нет — перечислить действительно просмотренный scope и результаты, не придумывать дефекты.
+## Личные учебные процедуры
 
-### Мой вердикт
-
-Пока **НЕ ВЫНЕСЕН**. После личной проверки явно выбрать: нужны изменения / ограниченное заключение с непроверенными частями / проверенный code и корректно обозначенная подготовка документов приняты.
-
-Отдельно перечислить остающиеся human gates: настоящее интервью, student clarity/peer если не проведены, внешний проект/opposition, снимки/реквизиты, final merge/tags и личная защита. Одобрение кода не означает «все лабораторные сданы». Здесь не заполняются за преподавателя подпись/оценка.
-
-После этого самостоятельно отправить GitHub review в каждом действительно проверенном PR и дать ссылки в HIT-23. Merge/закрытие Feature не входят в текущую проверку Тимофея.
+Student clarity/peer/clean-room/module checks, интервью, внешнее оппонирование,
+скриншоты, подписи и защита не подтверждаются агентным review. Для каждого
+сохраните реальный самостоятельный статус по источнику; по умолчанию NOT_ATTESTED.
+Merge/tags/Done/формальная phase acceptance этим запуском не выполняются.
