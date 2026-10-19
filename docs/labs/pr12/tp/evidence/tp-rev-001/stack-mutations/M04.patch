@@ -1,0 +1,13 @@
+diff --git a/services/processing/internal/domain/eligibility/eligibility.go b/services/processing/internal/domain/eligibility/eligibility.go
+index a62aeb9..4cef7b7 100644
+--- a/services/processing/internal/domain/eligibility/eligibility.go
++++ b/services/processing/internal/domain/eligibility/eligibility.go
+@@ -125,7 +125,7 @@ func Evaluate(p Policy, f Facts, now time.Time) Result {
+ 		ok     bool
+ 		reason string
+ 	}{
+-		{!f.SessionCreatedAt.Before(p.ActivationAt), "BEFORE_ACTIVATION"},
++		{f.SessionCreatedAt.After(p.ActivationAt), "BEFORE_ACTIVATION"},
+ 		{*f.Mode == "payment", "MODE"},
+ 		{*f.PaymentStatus == "paid", "PAYMENT_STATUS"},
+ 		{*f.AmountTotal > 0, "NON_POSITIVE_TOTAL"},
