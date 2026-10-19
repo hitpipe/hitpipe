@@ -35,7 +35,12 @@ func main() {
 		fmt.Fprintln(os.Stderr, "usage: delivery-contractcheck --fixture PATH")
 		os.Exit(2)
 	}
-	result, err := readback.EvaluateFixture(*fixturePath)
+	data, err := os.ReadFile(*fixturePath)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
+	}
+	result, err := readback.EvaluateFixture(data)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
