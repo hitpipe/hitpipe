@@ -1,0 +1,5 @@
+--- a/services/delivery/internal/domain/readback/readback.go
++++ b/services/delivery/internal/domain/readback/readback.go
+@@ -88 +88 @@
+-		return Result{Outcome: Incomplete, Reason: reason}
++		return Result{Outcome: Mismatch, Reason: reason}

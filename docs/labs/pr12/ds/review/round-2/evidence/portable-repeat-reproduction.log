@@ -1,0 +1,47 @@
+{
+  "recorded_source": "9ebe6373467ded83f32939a849bac31905eed99f",
+  "original_reviewed_source": "9ebe6373467ded83f32939a849bac31905eed99f",
+  "changed_inputs": [],
+  "started_at": "2026-10-19T15:11:29.759003+00:00",
+  "argv": [
+    "go",
+    "test",
+    "-count=1",
+    "-json",
+    "-overlay=/home/deploy/.local/share/hitpipe-ds-rereview-20261019/portable-reproduction/overlay.json",
+    "-run",
+    "^TestRepeat",
+    "./internal/..."
+  ],
+  "cwd": "/home/deploy/.local/share/hitpipe-ds-rereview-20261019/worktree/services/delivery",
+  "exit": 1,
+  "compiled": true,
+  "failed_cases": [
+    "TestRepeatSavedJSONDuplicateRetrieval",
+    "TestRepeatJSONRejectsDuplicateAndAliases/trailing_closer",
+    "TestRepeatJSONRejectsDuplicateAndAliases/duplicate",
+    "TestRepeatJSONRejectsDuplicateAndAliases/mixedcase",
+    "TestRepeatJSONRejectsDuplicateAndAliases/escaped",
+    "TestRepeatJSONAcceptsValidUnicodeEscapes/BMP_D000",
+    "TestRepeatJSONAcceptsValidUnicodeEscapes/supplementary_pair",
+    "TestRepeatHandoffRejectsMalformedCanonicalBlocks/non_uuid",
+    "TestRepeatHandoffRejectsMalformedCanonicalBlocks/missing_open_newline",
+    "TestRepeatHandoffRejectsMalformedCanonicalBlocks/missing_context_label",
+    "TestRepeatHandoffRejectsMalformedCanonicalBlocks/nested_block",
+    "TestRepeatRejectsControlInput",
+    "TestRepeatSerializedContextBudget"
+  ],
+  "passed": [
+    "TestRepeatSavedTargetBinding",
+    "TestRepeatNoProvenanceCannotMatch",
+    "TestRepeatCanonicalHandoffMatches",
+    "TestRepeatLoneCRNormalization",
+    "TestRepeatMalformedTitleCannotMatch",
+    "TestRepeatRetrievalErrorCannotMatch",
+    "TestRepeatJSONOriginalAliasCannotMatch",
+    "TestRepeatJSONMalformedBytesCannotMatch",
+    "TestRepeatJSONLoneSurrogateCannotMatch"
+  ],
+  "original_inputs_and_tests_unchanged": true,
+  "out": "/home/deploy/.local/share/hitpipe-ds-rereview-20261019/portable-reproduction"
+}

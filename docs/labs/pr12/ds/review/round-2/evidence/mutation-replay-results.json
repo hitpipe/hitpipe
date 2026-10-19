@@ -1,0 +1,69 @@
+[
+  {
+    "id": "M1",
+    "description": "remove retrieval guard",
+    "source_sha256": "ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688",
+    "mutated_sha256": "e9c25bbb66ec5f1eecef7f8d1070392597fb6b0a43d8a6a3d608862a81b3cdda",
+    "matches_author_mutated_hash": true,
+    "compiled": true,
+    "failed_assertion_tests": [
+      "TestCompareIncompleteAndUnknownPrecedence"
+    ],
+    "exit": 1,
+    "original_source_unchanged": true
+  },
+  {
+    "id": "M2",
+    "description": "change malformed handoff outcome",
+    "source_sha256": "ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688",
+    "mutated_sha256": "22fc8dbf0afa99978818b8bd0cf82ba866846e4f7504cb935083a71ccb998b7e",
+    "matches_author_mutated_hash": true,
+    "compiled": true,
+    "failed_assertion_tests": [
+      "TestCompareIncompleteAndUnknownPrecedence"
+    ],
+    "exit": 1,
+    "original_source_unchanged": true
+  },
+  {
+    "id": "M3",
+    "description": "remove title mismatch guard",
+    "source_sha256": "ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688",
+    "mutated_sha256": "573b146de4d7c05d2ee41235160e86e4b58263b4314d819258e8bdccae7ed6ad",
+    "matches_author_mutated_hash": true,
+    "compiled": true,
+    "failed_assertion_tests": [
+      "TestCompareMismatchEachRequiredField/title",
+      "TestCompareMismatchEachRequiredField"
+    ],
+    "exit": 1,
+    "original_source_unchanged": true
+  },
+  {
+    "id": "M4",
+    "description": "skip title UTF-8 validation",
+    "source_sha256": "ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688",
+    "mutated_sha256": "3eddf6775eaa83b29ad6ad6b653f4da3d040b3eb2f323ac455a35f277be46be3",
+    "matches_author_mutated_hash": true,
+    "compiled": true,
+    "failed_assertion_tests": [
+      "TestReviewComparatorRejectsInvalidTitleAndRetrievalError"
+    ],
+    "exit": 1,
+    "original_source_unchanged": true
+  },
+  {
+    "id": "M5",
+    "description": "remove assignee comparison",
+    "source_sha256": "ab3d84f890fc099643be134a8ff51e0a7dffcb4a323abfe84f78701d6a615688",
+    "mutated_sha256": "1092c8eee82494d94bf7bcd06952e09cd95e5a84037ad3f9b34713560f06bfcb",
+    "matches_author_mutated_hash": true,
+    "compiled": true,
+    "failed_assertion_tests": [
+      "TestC3FalseConfirmationGuards/missing_assignee_is_mismatch",
+      "TestC3FalseConfirmationGuards"
+    ],
+    "exit": 1,
+    "original_source_unchanged": true
+  }
+]

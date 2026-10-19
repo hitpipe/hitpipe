@@ -1,0 +1,452 @@
+{
+  "meaning": "Independent reviewer audit; not author completion or formal phase acceptance. Labels follow actual frozen methodics, correcting prior reviewer row ordering.",
+  "reviewed_source": "9ebe6373467ded83f32939a849bac31905eed99f",
+  "total": 29,
+  "criteria": [
+    {
+      "id": "0302-pz01/R1",
+      "title": "Обследование по своему участку",
+      "acceptance": "Собственные вопросы и реально полученные ответы; факты/предположения/открытые вопросы отдельно. Разговор с пользователем или согласованным с преподавателем представителем заказчика.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.1–4.2; 6/Р1",
+      "task": "HIT-41",
+      "review_status": "HUMAN_PENDING",
+      "observed_basis": "Interview questions now published; no real interview/answers attested.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/interview.md",
+        "docs/labs/pr12/ds/requirements.md"
+      ],
+      "external_human_gate": "real_interview",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R2",
+      "title": "Проверяемые требования своего участка",
+      "acceptance": "Штатный FR, существенный ошибочный исход, значимый NFR с измеримым критерием; ID, основание, MVP/резерв, критерий приёмки каждого. Целевые числа не выдавать за измеренные.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.5; 6/Р2",
+      "task": "HIT-41",
+      "review_status": "PARTIAL",
+      "observed_basis": "Own FR/NFR/AC now exist; contract/security guarantees must match remaining code failures; report requirements table empty.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/requirements.md",
+        "docs/labs/pr12/ds/requirements-trace.json"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R3",
+      "title": "Место участка в MVP",
+      "acceptance": "Путь к полезному результату и существенный ошибочный исход; конкретная роль участка, обязательное ядро и резерв, выполнимый scope. Менять MVP только явным CR/ADR, не подгонять утверждённый продукт.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.3; 6/Р3",
+      "task": "HIT-41",
+      "review_status": "PARTIAL",
+      "observed_basis": "HP-VER-001 reference and bounded offline role exist; positive/reserve scope/next reusable component context must be completed in main report.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/requirements.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R4",
+      "title": "Исходное состояние и ранняя безопасность",
+      "acceptance": "Воспроизводимые входы/учебные учётные записи/конфигурация; защищаемые ресурсы; недоверенный ввод; доступ; реалистичный ущерб; секреты/запреты логирования. Внешние интеграции в учебном режиме без личных доступов.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.6; 6/Р4",
+      "task": "HIT-41",
+      "review_status": "PARTIAL",
+      "observed_basis": "Five security questions and clean fixtures exist, but no-duplicated-block/no-lossy-evidence guarantees are disproved by current probes.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/security-baseline.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R5",
+      "title": "Собственное значимое изменение по регламенту",
+      "acceptance": "Задача → ветка → PR → реальные применимые проверки → независимое review другим студентом проекта → merge; применён DoD. Защищённая main, прямые записи не допускаются. Рисунки1–2.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.4,4.7; 6/Р5",
+      "task": "HIT-42",
+      "review_status": "CHANGES_REQUESTED",
+      "observed_basis": "Meaningful PR23 and later correction29 exist; current reviewer rejects remaining defects; no real accepted merge/personal student claim.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/requirement-change.md",
+        "docs/labs/pr12/ds/review/correction-record.md"
+      ],
+      "external_human_gate": "independent_student_review_and_merge",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R6",
+      "title": "Оппонирование другого проекта",
+      "acceptance": "Лично разобрать требования другого проекта по назначенному преподавателем кольцу; решения по реальным замечаниям к своим требованиям с обоснованием. Без искусственных замечаний. Рисунок3.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.9; 6/Р6",
+      "task": "HIT-47",
+      "review_status": "HUMAN_PENDING",
+      "observed_basis": "Outside-project opposition has not been attested; no fabricated objections.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/interview.md"
+      ],
+      "external_human_gate": "external_project_opposition",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz01/R7",
+      "title": "Независимая проверка однозначности",
+      "acceptance": "Другой студент своего проекта по одному тексту определяет исходы нескольких ситуаций, включая ошибочную. Фактические ответы и устранённые расхождения. Автор/агент не подсказывает ожидаемые ответы.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.8; 6/Р7",
+      "task": "HIT-47",
+      "review_status": "HUMAN_PENDING",
+      "observed_basis": "No personal blind interpretation protocol. Delegated code review does not attest this student exercise.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/handoff.md"
+      ],
+      "external_human_gate": "other_student_clarity_check",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R1",
+      "title": "Реальный объект и проверяемые правила",
+      "acceptance": "Существующая содержательная функция/модуль своего участка; вход, результат и ошибки, каждый оракул из требования/независимого эталона. Для UX — логика формы/представления/состояний, не вёрстка.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "3,4.1; 6/Р1",
+      "task": "HIT-43",
+      "review_status": "PARTIAL",
+      "observed_basis": "Substantial comparator exists; original9 examples now pass, additional13 cases remain failing.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/requirements.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R2",
+      "title": "Набор минимум двумя техниками",
+      "acceptance": "Не менее двух техник с обоснованием классов/границ/решений/переходов. Есть штатный, ошибочный, граничный случаи. Точное число тестов не нормируется; краткий чек-лист.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.2; 6/Р2",
+      "task": "HIT-45",
+      "review_status": "MISSING_ANALYSIS",
+      "observed_basis": "No completed derivation with at least2 test-design techniques; test-design tables blank.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0302-pz02-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R3",
+      "title": "Чисто воспроизводимые данные",
+      "acceptance": "Фикстуры/фиксированный seed в репозитории, команда из чистого клона, без личных файлов/рабочих ключей/реальных персональных данных. Скрытый набор — «не получен», пока не выдан преподавателем.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.3; 6/Р3",
+      "task": "HIT-45",
+      "review_status": "PARTIAL",
+      "observed_basis": "Synthetic fixtures and explicit hidden-suite boundary exist; positive fixture lacks required Context line and decoder contract remains incomplete.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0302-pz02-ds.docx"
+      ],
+      "external_human_gate": "teacher_hidden_set_if_issued",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R4",
+      "title": "Фактические локальные и CI прогоны",
+      "acceptance": "Содержательные assertions; одна сдаваемая версия; тестовый FAIL ломает CI. Заглушки допустимы с границами вывода. PASS/FAIL/BLOCKED/NOT RUN, успешен только PASS. Рисунки1–2, ссылка pipeline. Отсутствие CI не объективное исключение.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.4–4.5; 6/Р4",
+      "task": "HIT-45",
+      "review_status": "PARTIAL",
+      "observed_basis": "Local tests/vet/race and native CI pass at exact9ebe; independent semantic probes fail.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/evidence/HIT-47-go-test.log",
+        "docs/labs/pr12/ds/evidence/HIT-47-go-race.log"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R5",
+      "title": "Анализ покрытия",
+      "acceptance": "Отчёт покрытия именно своего модуля; непроверенный участок и решение (добавить/обоснованно отложить/не требуется). При100% объяснить непроверяемые свойства. Процент отдельно недостаточен. Рисунок3.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.6; 6/Р5",
+      "task": "HIT-45",
+      "review_status": "MISSING_ANALYSIS",
+      "observed_basis": "Reviewer measured56.9% full-service statements; report coverage/tool/command/gap/decision fields blank.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0302-pz02-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R6",
+      "title": "Не менее пяти отдельных мутаций",
+      "acceptance": "Исправный PASS → каждый из≥5 компилируемых нарушающих правило мутантов по одному → результаты с тем же набором → разбор пропусков, усиление и повтор → восстановленный PASS. Итоги seeded/detected/missed и natural-defect count+issue links. Ошибка компиляции не обнаружение. Мутанты не сливать. Рисунки4–5.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.7; 6/Р6",
+      "task": "HIT-45",
+      "review_status": "EXPERIMENT_VERIFIED_REPORT_PARTIAL",
+      "observed_basis": "All5 original mutations compiled/assertion-failed; hashes match and independent replay passed. Main report still says NOT RUN in results cells.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/evidence/HIT-45-mutations-actual.log",
+        "docs/labs/pr12/ds/evidence/HIT-45-mutation-matrix.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0302-pz02/R7",
+      "title": "Риск-ориентированная система проверок",
+      "acceptance": "Событие, причина, последствие, вероятность, ущерб, основания, матричный приоритет, проверка/частота/решение/остаточный риск. ≥1 риск безопасности. Высокие приоритеты при каждом изменении; реальные внешние проверки с оговорённой частотой.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "2.4,4.8; 6/Р7",
+      "task": "HIT-45",
+      "review_status": "INCOMPLETE_REGISTRY",
+      "observed_basis": "Risk Markdown header4/rows7, no usable exact probability/impact matrix assessment; report risk table blank.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/evidence/HIT-45-risk-matrix.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R1",
+      "title": "Стек и семь позиций инструментального контура",
+      "acceptance": "Общий ADR с автором: контекст, язык/технологии/модель исполнения, причины/альтернатива, последствия. Каждый объясняет применение. Все7 позиций: build,dependencies,tests,static,dynamic,profiling,CI — средство/версия/назначение/маршрут/работает или план+этап. Всё сразу вCI не требуется.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.1–4.2; 6/Р1",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Seven tool positions repeat generic tool/purpose/status; profiling not actually executed and must be marked planned honestly.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz01-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R2",
+      "title": "Своя существенная часть каркаса",
+      "acceptance": "Собственный вклад через задачу, ветку, PR, проверки, независимое review значимого изменения, merge. Не только присвоение общей инфраструктуры. Рисунок1.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.3; 6/Р2",
+      "task": "HIT-43",
+      "review_status": "PARTIAL",
+      "observed_basis": "Own executable module and actual PRs/checks exist; acceptance/merge pending open defects.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/module-map.md"
+      ],
+      "external_human_gate": "independent_student_review_and_merge",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R3",
+      "title": "Минимальный компонент с наблюдаемым поведением",
+      "acceptance": "Конфиг влияет; неверный даёт понятную ошибку; версия→исходники; диагностика безсекретов; успех; остановка/повтор/восстановление. Версии runtime/прямых deps зафиксированы, безопасный configexample. Рисунки4–5.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.4; 6/Р3",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Version/config/format/fixture behavior exists and smoke passes; actual report operation results remain NOT RUN.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz01-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R4",
+      "title": "Действительный путь исполнения и состав артефакта",
+      "acceptance": "Схема исходники→deps/environment→преобразования→запускаемый результат→процесс/runtime, без вымышленных стадий. Реальная команда инспекции по стеку и существенный вывод (Go executable/readelf/go version-m; Node/Python package/bytecode/deps).",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.5; 6/Р4",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Source→runtime text exists; actual artifact inspection observation deferred incorrectly to human screenshot.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz01-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R5",
+      "title": "Наблюдённые dev/release и поставка вне исходников",
+      "acceptance": "На одном сценарии: команды, преобразования, оптимизации,debug/diagnostics,runtimechecks,состав. Объяснить равенство строк если нетразличий. Поставку реально запустить вне исходников/IDE. Без performanceclaim безэксперимента. Рисунки2–3.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.6; 6/Р5",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Reviewer dev/release outside-checkout smoke passed;12 actual comparison cells remain identical NOT RUN/PASS.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz01-ds.docx",
+        "docs/labs/pr12/ds/evidence/HIT-47-workspace-smoke.log"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R6",
+      "title": "Независимая чистая проверка чужой части",
+      "acceptance": "Студент проверяет часть другого студента: чистая машина/VM/container/account, commit, только инструкция, версия/диагностика/результат, замечания и повтор из чистой среды. Протокол проверяющий/дата/env/commit/cmd/result. Запуск автором не заменяет другого человека. Рисунок6.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "3,4.7; 6/Р6",
+      "task": "HIT-47",
+      "review_status": "HUMAN_PENDING",
+      "observed_basis": "No personally performed other-student clean reproduction attested; reviewer run is delegated agent review.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/handoff.md"
+      ],
+      "external_human_gate": "other_student_clean_reproduction",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz01/R7",
+      "title": "Содержательный автоматический gate с отрицательной демонстрацией",
+      "acceptance": "CI подготавливает компонент и проверяет результат сдаваемой версии; нарушенное условие реально даёт failure. Длядолгогопроцесса boundedreadiness+shutdown. СсылкаCI и локальный запуск тойже проверки при нарушенном условии (рисунок7), затем восстановление исправного кода.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.8; 6/Р7",
+      "task": "HIT-46",
+      "review_status": "GATE_VERIFIED_REPORT_PARTIAL",
+      "observed_basis": "Exact-source CI passes; reviewer physically mutated isolated copy and ran same workspace checker: assertion FAIL/exit1. Main report needs actual record with correct provenance.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz01-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R1",
+      "title": "Ответственность содержательного модуля",
+      "acceptance": "Требование→ответственность→публичная операция→реальный потребитель. Отделены внешние обязанности. Один интерфейс/схема/заглушка без логики не подходит.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "3,4.1; 6/Р1",
+      "task": "HIT-43",
+      "review_status": "PARTIAL",
+      "observed_basis": "Substantial responsibility/rules and real consumer exist, but canonical semantics still incomplete.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/requirements.md",
+        "docs/labs/pr12/ds/module-map.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R2",
+      "title": "Поведенческий контракт и документация",
+      "acceptance": "Назначение; допустимые входы; результат/гарантии; категории ошибок и порядок при нескольких нарушениях; владение; состояние/побочные эффекты, явно еслинет. Документация по стеку: GoDoc/TSDoc/docstring, зависимости+пример; рядомскодом до демонстрации. Рисунок2.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "2.2,4.2; 6/Р2",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Some GoDoc added; Fixture/Verifier/ParseFixture/EvaluateFixture/Format docs, projection, strict boundaries and precedence must be complete.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/module-map.md",
+        "docs/labs/pr12/ds/requirements.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R3",
+      "title": "Собственная реализация и интеграция",
+      "acceptance": "Реальное продуктовоеправило вызывается потребителем, не зависящим от внутренних структур. Задача/ветка/PR/checks/independentreview/merge; свойства каркасаПР1 сохранены. Рисунок1.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.3; 6/Р3",
+      "task": "HIT-44",
+      "review_status": "INTEGRATION_VERIFIED_ACCEPTANCE_PENDING",
+      "observed_basis": "CLI now imports/calls VerifyTarget, application owns TargetReader; source design review done, changes/merge pending.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/module-map.md"
+      ],
+      "external_human_gate": "independent_student_review_and_merge",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R4",
+      "title": "Две реализации, неизменный потребитель",
+      "acceptance": "Общий контракт/точка сборки, тотжесценарий сдвумяреализациями либо тестовойподменойзависимости; потребительнепереписан, результаты и ограничения. Одинаковые сигнатуры безсемантики недостаточны. Рисунок3.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "2.3–2.4,4.4; 6/Р4",
+      "task": "HIT-44",
+      "review_status": "PARTIAL",
+      "observed_basis": "FileReader and fake execute same consumer; full equivalent scenario coverage and correct report composition rows incomplete.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/module-map.md",
+        "docs/labs/pr12/ds/reports/0104-pz02-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R5",
+      "title": "Точная общая модульная карта",
+      "acceptance": "Имя/ответственность/контракт/зависимости/путь/статус работает илиплан/авторзаписи. A→B исходная зависимостьA отB; сверить среальнымиимпортами/сборкой, циклыобъяснить. Не показывать будущую архитектуру готовой. Рисунок4.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.5; 6/Р5",
+      "task": "HIT-46",
+      "review_status": "MAP_CORRECTED_REPORT_PARTIAL",
+      "observed_basis": "CLI/application import map corrected. Screenshot map path/report still NOT_CONDUCTED and needs concrete evidence.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/module-map.md"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R6",
+      "title": "Штатный, граничный, ошибочный случаи обеих реализаций",
+      "acceptance": "Три категории×две реализации минимум6 исполненных сценариев (не обязательно6 отдельныхtestfunctions). Фактические ожидаемые/полученные исходы. Рисунок5.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.8; 6/Р6",
+      "task": "HIT-44",
+      "review_status": "INCOMPLETE_SCENARIOS",
+      "observed_basis": "FileReader boundary repeats normal unchanged; error uses different errorReader, not FileReader; genuine3categories×2 implementations missing.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/reports/0104-pz02-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R7",
+      "title": "Взаимная проверка чужого модуля",
+      "acceptance": "Студентполучаетcommitмодуля другогостудента, строитпоинструкции, проверяетконтракт+подмену+карту; протоколимя/дата/commit/cmd/results/comments/retest. Рисунок6.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.8; 6/Р7",
+      "task": "HIT-47",
+      "review_status": "HUMAN_PENDING",
+      "observed_basis": "No personal reciprocal student module-review protocol attested.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/handoff.md"
+      ],
+      "external_human_gate": "other_student_module_review",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    },
+    {
+      "id": "0104-pz02/R8",
+      "title": "Два направления сложности, реальный кандидат, личный ADR",
+      "acceptance": "≥2направления посвоейзоне, каждыйобъект/вопрос/готовность (язык/библиотеканенаправление). Кандидатсуществует, воспроизводимыйвход/отдельнонаблюдаемое поведение; не объявлятьbottleneckбезизмерений. ЛичныйADRсавтором/контекстом/вариантами/решением/последствиями/ценой/проверкой, не копия общегоADR.",
+      "source": "docs/labs/pr12/references/METHODICS_MATRIX.json",
+      "methodic_sections": "4.6–4.7; 6/Р8",
+      "task": "HIT-46",
+      "review_status": "PARTIAL",
+      "observed_basis": "Personal ADR/options/two named directions exist; object/question/readiness/candidate profile incomplete in required report cells.",
+      "evidence_paths": [
+        "docs/labs/pr12/ds/implementation-adr.md",
+        "docs/labs/pr12/ds/reports/0104-pz02-ds.docx"
+      ],
+      "external_human_gate": "none",
+      "review_source": "9ebe6373467ded83f32939a849bac31905eed99f"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+
+const rrBlock = "[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: cs_test_repeat\nContext:\naddress: example\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]"
+const rrJSON = `{"expected":{"workspace":"Ops","list":"Delivery","title":"Deploy — HP-AAAAAAAAABAABAAAAAAAAAAAAE","assignee":"dima","handoff_block":"[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: cs_test_repeat\nContext:\naddress: example\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]","context":"example"},"observation":{"target_id":"target-1","retrieved":true,"workspace":"Ops","list":"Delivery","title":"Deploy — HP-AAAAAAAAABAABAAAAAAAAAAAAE","assignees":["dima"],"handoff_block":"[HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]\nService: Deploy\nOrder: cs_test_repeat\nContext:\naddress: example\n[/HITPIPE-HANDOFF:00000000-0000-4000-8000-000000000001:v1]","context":"example"}}`
+
+func rrPair() (Expected, Observation) {
+ f, err := ParseFixture([]byte(rrJSON)); if err != nil { panic(err) }; return f.Expected, f.Observation
+}
+func TestRepeatCanonicalHandoffMatches(t *testing.T) { e,o:=rrPair(); if r:=Compare(e,o);r.Outcome!=Match {t.Fatalf("canonical: %#v",r)} }
+func TestRepeatLoneCRNormalization(t *testing.T) {e,o:=rrPair();e.Context="a\nb";o.Context="a\rb";if r:=Compare(e,o);r.Outcome!=Match{t.Fatalf("CR: %#v",r)}}
+func TestRepeatMalformedTitleCannotMatch(t *testing.T){e,o:=rrPair();e.Title=string([]byte{0xff});o.Title=e.Title;if r:=Compare(e,o);r.Outcome==Match{t.Fatalf("invalid UTF8: %#v",r)}}
+func TestRepeatRetrievalErrorCannotMatch(t *testing.T){e,o:=rrPair();o.RetrievalError="permission denied";if r:=Compare(e,o);r.Outcome==Match{t.Fatalf("retrieval contradiction: %#v",r)}}
+func TestRepeatJSONOriginalAliasCannotMatch(t *testing.T){raw:=strings.Replace(rrJSON,`"retrieved":true`,`"retrieved":false,"Retrieved":true`,1);r,err:=EvaluateFixture([]byte(raw));if err==nil&&r.Outcome==Match{t.Fatalf("original alias: %#v",r)}}
+func TestRepeatJSONMalformedBytesCannotMatch(t *testing.T){raw:=strings.ReplaceAll(rrJSON,`"example"`,"\""+string([]byte{0xff})+"\"");r,err:=EvaluateFixture([]byte(raw));if err==nil&&r.Outcome==Match{t.Fatalf("invalid bytes: %#v",r)}}
+func TestRepeatJSONLoneSurrogateCannotMatch(t *testing.T){raw:=strings.ReplaceAll(rrJSON,`"example"`,`"\ud800"`);r,err:=EvaluateFixture([]byte(raw));if err==nil&&r.Outcome==Match{t.Fatalf("lone surrogate: %#v",r)}}
+
+func TestRepeatJSONRejectsDuplicateAndAliases(t *testing.T) {
+ for name,raw:= range map[string]string{
+  "duplicate":strings.Replace(rrJSON,`"retrieved":true`,`"retrieved":false,"retrieved":true`,1),
+  "mixedcase":strings.Replace(rrJSON,`"retrieved":true`,`"retrieved":false,"retRieved":true`,1),
+  "escaped":strings.Replace(rrJSON,`"retrieved":true`,`"retrieved":false,"\u0052etrieved":true`,1),
+  "trailing_closer":rrJSON+"}",
+ } {t.Run(name,func(t *testing.T){r,err:=EvaluateFixture([]byte(raw));if err==nil&&r.Outcome==Match{t.Fatalf("invalid JSON boundary returned match: %#v",r)}})}
+}
+func TestRepeatJSONAcceptsValidUnicodeEscapes(t *testing.T){
+ for name,raw:=range map[string]string{
+  "BMP_D000":strings.ReplaceAll(rrJSON,`"example"`,`"\ud000"`),
+  "supplementary_pair":strings.ReplaceAll(rrJSON,`"example"`,`"\ud83d\ude00"`),
+ }{t.Run(name,func(t *testing.T){f,err:=ParseFixture([]byte(raw));want:="\uD000";if name=="supplementary_pair"{want="\U0001F600"};if err!=nil||f.Expected.Context!=want||f.Observation.Context!=want{t.Fatalf("valid Unicode encoding rejected/changed: err=%v expected=%q observed=%q",err,f.Expected.Context,f.Observation.Context)}})}
+}
+func TestRepeatHandoffRejectsMalformedCanonicalBlocks(t *testing.T){
+ for name,b:=range map[string]string{
+  "non_uuid":strings.ReplaceAll(rrBlock,"00000000-0000-4000-8000-000000000001",strings.Repeat("x",36)),
+  "missing_open_newline":strings.Replace(rrBlock,":v1]\n",":v1]X",1),
+  "missing_context_label":strings.Replace(rrBlock,"Context:\n","",1),
+  "nested_block":strings.Replace(rrBlock,"address: example","address: example\n"+rrBlock,1),
+ }{t.Run(name,func(t *testing.T){e,o:=rrPair();e.HandoffBlock=b;o.HandoffBlock=b;if r:=Compare(e,o);r.Outcome==Match{t.Fatalf("malformed canonical block matched: %#v",r)}})}
+}
+func TestRepeatRejectsControlInput(t *testing.T){e,o:=rrPair();e.Title+="\x00";o.Title=e.Title;if r:=Compare(e,o);r.Outcome==Match{t.Fatalf("control input matched: %#v",r)}}
+func TestRepeatSerializedContextBudget(t *testing.T){
+ // One required_context_keys entry address with 20,000 quote scalars:
+ // JCS {"address": value} is 40,014 bytes although raw value <32KiB
+ // and its rendered block <36KiB. See HP-BP-004/T/013 Budget serialization.
+ e,o:=rrPair();v:=strings.Repeat("\"",20000);e.Context=v;o.Context=v
+ e.HandoffBlock=strings.Replace(rrBlock,"address: example","address: "+v,1);o.HandoffBlock=e.HandoffBlock
+ if r:=Compare(e,o);r.Outcome==Match{t.Fatalf("40,014-byte JCS context matched despite 32KiB budget: %#v",r)}
+}

@@ -1,0 +1,74 @@
+{
+  "reviewed_source": "9ebe6373467ded83f32939a849bac31905eed99f",
+  "reviewed_pr": 29,
+  "verdict": "CHANGES_REQUESTED",
+  "closed": [
+    "DS-REV-002",
+    "DS-REV-005"
+  ],
+  "findings": [
+    {
+      "id": "DS-REV-001",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P1",
+      "subject": "Canonical format/budgets",
+      "condition_or_verified_basis": "Validate full T013 including expected input, UUID/lines/labels/single block, projection and JCS budget."
+    },
+    {
+      "id": "DS-REV-002",
+      "status": "CLOSED_FOR_OFFLINE_SLICE",
+      "remaining_priority": null,
+      "subject": "Target/provenance binding",
+      "condition_or_verified_basis": "Target mismatch and missing provenance cannot match; no live-provider authority claimed."
+    },
+    {
+      "id": "DS-REV-003",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P1",
+      "subject": "Strict JSON and Unicode",
+      "condition_or_verified_basis": "Reject duplicate/aliased decoded keys, invalid document/trailing content; accept valid paired/BMP Unicode escapes."
+    },
+    {
+      "id": "DS-REV-004",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P2",
+      "subject": "Input validity",
+      "condition_or_verified_basis": "Malformed UTF8/retrieval contradiction fixed; reject prohibited controls such as NUL."
+    },
+    {
+      "id": "DS-REV-005",
+      "status": "CLOSED",
+      "remaining_priority": null,
+      "subject": "CR/CRLF normalization",
+      "condition_or_verified_basis": "CR and CRLF normalize to LF while spaces remain significant."
+    },
+    {
+      "id": "DS-REV-006",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P2",
+      "subject": "Verification design and risk",
+      "condition_or_verified_basis": "Five original mutations independently reproduced. Finish two-method test design, coverage analysis, exact risk matrix and blob digests."
+    },
+    {
+      "id": "DS-REV-007",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P2",
+      "subject": "R1 and traceability",
+      "condition_or_verified_basis": "R1 exists; finish per-criterion evidence, reconcile stale R2/security and source/implementation projections."
+    },
+    {
+      "id": "DS-REV-008",
+      "status": "OPEN",
+      "remaining_priority": "P2",
+      "subject": "Four finished reports",
+      "condition_or_verified_basis": "Fill required source tables/text and 21 executable human capture instructions; fix premature content-ready status."
+    },
+    {
+      "id": "DS-REV-009",
+      "status": "PARTIALLY_CORRECTED",
+      "remaining_priority": "P2",
+      "subject": "Real dependency substitution/docs",
+      "condition_or_verified_basis": "CLI/map corrected; complete normal/boundary/error for each real implementation, and public GoDoc."
+    }
+  ]
+}
