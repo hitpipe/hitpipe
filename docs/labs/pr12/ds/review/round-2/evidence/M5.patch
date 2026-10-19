@@ -1,11 +1,5 @@
 --- a/services/delivery/internal/domain/readback/readback.go
 +++ b/services/delivery/internal/domain/readback/readback.go
-@@ -96,7 +96,7 @@
- 	if normalize(observed.Title) != normalize(expected.Title) {
- 		return Result{Outcome: Mismatch, Reason: "title mismatch"}
- 	}
+@@ -99 +99 @@
 -	if !containsNormalized(observed.Assignees, expected.Assignee) {
 +	if false {
- 		return Result{Outcome: Mismatch, Reason: "configured assignee absent"}
- 	}
- 	if normalize(observed.HandoffBlock) != normalize(expected.HandoffBlock) {
