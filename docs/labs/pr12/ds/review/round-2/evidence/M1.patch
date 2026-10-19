@@ -1,0 +1,11 @@
+--- a/services/delivery/internal/domain/readback/readback.go
++++ b/services/delivery/internal/domain/readback/readback.go
+@@ -55,7 +55,7 @@
+ 
+ // Compare validates evidence and compares it without trimming, case-folding or collapsing spaces.
+ func Compare(expected Expected, observed Observation) Result {
+-	if !observed.Retrieved {
++	if false {
+ 		if observed.RetrievalError == "" {
+ 			return Result{Outcome: Unknown, Reason: "retrieval evidence is absent"}
+ 		}

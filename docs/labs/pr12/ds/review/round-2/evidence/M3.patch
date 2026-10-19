@@ -1,0 +1,11 @@
+--- a/services/delivery/internal/domain/readback/readback.go
++++ b/services/delivery/internal/domain/readback/readback.go
+@@ -93,7 +93,7 @@
+ 	if normalize(observed.List) != normalize(expected.List) {
+ 		return Result{Outcome: Mismatch, Reason: "list mismatch"}
+ 	}
+-	if normalize(observed.Title) != normalize(expected.Title) {
++	if false {
+ 		return Result{Outcome: Mismatch, Reason: "title mismatch"}
+ 	}
+ 	if !containsNormalized(observed.Assignees, expected.Assignee) {

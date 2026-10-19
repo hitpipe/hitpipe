@@ -1,0 +1,11 @@
+--- a/services/delivery/internal/domain/readback/readback.go
++++ b/services/delivery/internal/domain/readback/readback.go
+@@ -85,7 +85,7 @@
+ 		return Result{Outcome: Incomplete, Reason: "expected assignee is empty"}
+ 	}
+ 	if reason := validateHandoff(observed.HandoffBlock); reason != "" {
+-		return Result{Outcome: Incomplete, Reason: reason}
++		return Result{Outcome: Mismatch, Reason: reason}
+ 	}
+ 	if normalize(observed.Workspace) != normalize(expected.Workspace) {
+ 		return Result{Outcome: Mismatch, Reason: "workspace mismatch"}

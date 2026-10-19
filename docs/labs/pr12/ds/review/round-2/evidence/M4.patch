@@ -1,0 +1,11 @@
+--- a/services/delivery/internal/domain/readback/readback.go
++++ b/services/delivery/internal/domain/readback/readback.go
+@@ -61,7 +61,7 @@
+ 		}
+ 		return Result{Outcome: Unknown, Reason: "retrieval failed"}
+ 	}
+-	if !utf8.ValidString(expected.Workspace) || !utf8.ValidString(expected.List) || !utf8.ValidString(expected.Title) || !utf8.ValidString(expected.Assignee) || !utf8.ValidString(expected.Context) || !utf8.ValidString(expected.HandoffBlock) || !utf8.ValidString(observed.Workspace) || !utf8.ValidString(observed.List) || !utf8.ValidString(observed.Title) || !utf8.ValidString(observed.Context) || !utf8.ValidString(observed.HandoffBlock) {
++	if !utf8.ValidString(expected.Workspace) || !utf8.ValidString(expected.List) || !utf8.ValidString(expected.Assignee) || !utf8.ValidString(expected.Context) || !utf8.ValidString(expected.HandoffBlock) || !utf8.ValidString(observed.Workspace) || !utf8.ValidString(observed.List) || !utf8.ValidString(observed.Context) || !utf8.ValidString(observed.HandoffBlock) {
+ 		return Result{Outcome: Unknown, Reason: "readback contains invalid UTF-8"}
+ 	}
+ 	if observed.RetrievalError != "" {

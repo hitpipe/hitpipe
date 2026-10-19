@@ -1,0 +1,15 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=9ebe6373467ded83f32939a849bac31905eed99f -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/deploy/.local/share/hitpipe-ds-rereview-20261019/worktree/.pr12-build/delivery/dev/delivery-contractcheck ./cmd/delivery-contractcheck
++ /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-_d1ulmsm/delivery-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-_d1ulmsm/delivery-contractcheck --fixture /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-_d1ulmsm/positive_fixture.json --format json
+{"component": "delivery", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=9ebe6373467ded83f32939a849bac31905eed99f -X main.dirty=false -X main.buildMode=release -trimpath -o /home/deploy/.local/share/hitpipe-ds-rereview-20261019/worktree/.pr12-build/delivery/release/delivery-contractcheck ./cmd/delivery-contractcheck
++ /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-eibm9s_v/delivery-contractcheck --version
++ git rev-parse --short HEAD
++ /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-eibm9s_v/delivery-contractcheck --fixture /dev/shm/hitpipe-ds-rereview-20261019/pr12-outside-checkout-eibm9s_v/positive_fixture.json --format json
+{"component": "delivery", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
