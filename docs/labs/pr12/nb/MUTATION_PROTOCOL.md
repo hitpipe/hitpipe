@@ -24,7 +24,8 @@ behavioral suites exited 1; the complete stdout/exit/CWD/tool data is retained
 in the five versioned r2 logs. A compile failure is `INVALID`, not detection. A
 test assertion failure after successful compilation is detection. No survivor
 or retest occurred. The corrected-baseline gate after the series is a separate
-run and remains pending until its native job completes.
+run and PASS: run 39285847846, job 118171472621, SHA
+`d164aebd5b746151da41717f0ffb483eb9b39a63`.
 
 The clean sequence is: corrected baseline gate PASS; fresh copy/branch; apply one
 patch; compile with `go test -run '^$' ./...` and record exit 0; run the same

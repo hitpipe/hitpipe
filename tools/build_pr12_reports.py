@@ -67,7 +67,7 @@ COMMON = {
     "release_evidence": "PASS; docs/labs/pr12/nb/evidence/hit-54-d1-clean.log",
     "example_config": "synthetic fixture paths only; no secrets or environment credentials",
     "route": "workspace wrapper around services/intake; local and GitHub workflow route",
-    "actual_status_stage": "content checks PASS; C1/C2/C3 native jobs and five r2 mutation jobs PASS; post-series corrected-baseline gate pending / human review pending",
+    "actual_status_stage": "content checks PASS; C1/C2/C3 native jobs, five r2 mutation jobs and corrected-baseline restoration gate PASS; human review pending",
     "cmd_commit_log": "see evidence/hit-53-baseline-v2.log and hit-54-d1-clean.log",
     "oracle": "safe bounded outcome and exact exit; no secret/body/header in diagnostics",
     "scaffold_contribution": "offline contractcheck component, build metadata, safe fixtures and CI-sensitive wrapper path",
@@ -326,12 +326,12 @@ def make_0302_pz02():
         70:"Отчёт инструмента: docs/labs/pr12/nb/evidence/hit-53-baseline-v2.cover; new profiles go to ignored .pr12-build; analysis in docs/labs/pr12/nb/coverage-analysis.md.",
         73:"Полное выполнение тестов не доказывает provider behavior, production secret storage, transport, persistence, performance or human independence. CPU/memory pprof is planned and the unit coverage gap is explicit.",
         77:"Воспроизведение: docs/labs/pr12/nb/MUTATION_PROTOCOL.md; historical five patch/log pairs remain under evidence/mutations, and new versioned r2 pairs are under evidence/mutations/r2. Each r2 mutant is a separate temporary branch from corrected baseline d164aeb; none is merged.",
-        81:"Итог r2 series: seeded 5; compile 5; first named-suite detection 5; survivors 0; retest 0. Final corrected-baseline gate after the series is still pending. Hidden suite NOT_PROVIDED.",
+        81:"Итог r2 series: seeded 5; compile 5; first named-suite detection 5; survivors 0; retest 0. Final corrected-baseline gate after the series PASS: run 39285847846, job 118171472621. Hidden suite NOT_PROVIDED.",
         83:"Состояние сдачи: corrected candidate source/test baseline d164aebd5b746151da41717f0ffb483eb9b39a63; all temporary mutants are outside the deliverable branches; five native mutation jobs succeeded at job level. Immutable tag not created; human review/merge required.",
         87:"Общие средства и результаты других участников: none claimed; human module peer check is NOT_CONDUCTED.",
         88:"Полученные замечания и решения: agent self-review fixed wrapper JSON marker mismatch and CLI composition boundary; no human remarks yet.",
         90:"Что обнаруживает разработанный набор: exact-body, MAC, timestamp, parser and consumer dependency regressions; evidence is local logs, mutation patches and GitHub Actions run.",
-        91:"Что показали покрытие и эксперимент: full module statement coverage 55.8%; domain/application historical profiles 87.7%/83.3%; CLI/adapters unit profile 0%; five current compiling mutants were killed; post-series corrected-baseline gate is pending.",
+        91:"Что показали покрытие и эксперимент: full module statement coverage 55.8%; domain/application historical profiles 87.7%/83.3%; CLI/adapters unit profile 0%; five current compiling mutants were killed; post-series corrected-baseline gate PASS (39285847846/118171472621).",
         92:"Границы доказательства и остаточные риски: no live provider/production route, no hidden suite, no human review/merge/opposition/screenshots/defense.",
     }
     for i,t in overrides.items(): set_para(d.paragraphs[i],t)
@@ -368,8 +368,8 @@ def make_0302_pz02():
         set_row(d.tables[6], i, row)
     runrows=[
         ["historical corrected-policy baseline","835bbb1; Go 1.27.2","tests/vet/race/wrapper PASS","PASS","hit-53-baseline-v2.log; historical series only"],
-        ["current corrected C3 chain","d164aeb; PR12_RACE=1","current-head native checks PASS before mutation series; post-series gate pending","PARTIAL","PR #33; current and final-gate CI links in evidence/index.json"],
-        ["current report package","a2eee52 source snapshot; refreshed files in working tree","content/evidence checks and report build PASS locally; report delivery job 118168664445 success, other current-head jobs tracked","PARTIAL","PR #34; current report CI links in evidence/index.json"],
+        ["current corrected C3 chain","d164aeb; PR12_RACE=1","current-head native checks and post-series corrected-baseline gate PASS","PASS","PR #33; final-gate run 39285847846/job 118171472621"],
+        ["current report package","c42820c report head; refreshed files committed","content/evidence checks and report build PASS locally; iam job 118177294111 success, intake job 118177292029 in progress, processing/delivery queued","PARTIAL","PR #34; report-head CI links in evidence/index.json"],
     ]
     set_row(d.tables[7], 0, ["Test / set", "Version and conditions", "Observed result", "Status", "Evidence"])
     for i,row in enumerate(runrows,1):
@@ -378,9 +378,9 @@ def make_0302_pz02():
     for i,row in enumerate(gaps,1):
         set_row(d.tables[8], i, row)
     states=[
-        ["Исходный корректный код","d164aebd5b746151da41717f0ffb483eb9b39a63; Go 1.27.2","baseline PASS before; post-series final gate pending","current C3 native CI and final-gate link"],
+        ["Исходный корректный код","d164aebd5b746151da41717f0ffb483eb9b39a63; Go 1.27.2","baseline PASS before and after mutation series","C3 run 39281598031; final gate 39285847846"],
         ["Код с дефектом","work/nb-mutation-r2-M01..M05; one branch per mutant","all five compile; each named suite exit 1","r2 patch/log pairs and five native jobs"],
-        ["Восстановленный correction code","d164aebd5b746151da41717f0ffb483eb9b39a63","post-series final gate pending","final-gate run 39285847846"],
+        ["Восстановленный correction code","d164aebd5b746151da41717f0ffb483eb9b39a63","post-series final gate PASS; job 118171472621","final-gate run 39285847846"],
     ]
     for i,row in enumerate(states,1):
         set_row(d.tables[9], i, row)
@@ -393,16 +393,16 @@ def make_0302_pz02():
     ]
     for i,row in enumerate(mutrows,1):
         set_row(d.tables[10], i, row)
-    set_row(d.tables[11], 1, ["Технический результат", "Named tests, coverage analysis and five versioned mutation patches/logs are recorded; compile 0 and detection 1 are present for each mutant; post-series corrected-baseline gate is pending.", "See tables above and evidence/index.json; hidden suite NOT_PROVIDED."])
+    set_row(d.tables[11], 1, ["Технический результат", "Named tests, coverage analysis and five versioned mutation patches/logs are recorded; compile 0 and detection 1 are present for each mutant; post-series corrected-baseline gate PASS (39285847846/118171472621).", "See tables above and evidence/index.json; hidden suite NOT_PROVIDED."])
     set_row(d.tables[11], 2, ["Человеческие gates", "Peer review, interview, opposition, screenshots, signatures and defense are not agent-run.", "Explicit NOT_CONDUCTED/PENDING human-gate files; status CONTENT_READY_IMAGES_PENDING."])
     summary={
         1:"МДК.03.02, ПЗ №2, Никита Будыкин",
         2:"[immutable tag after authorized human merge] → d164aebd5b746151da41717f0ffb483eb9b39a63 code snapshot",
         3:"HIT-51/52/53 code chain; FR-SIG-01..04; NFR-SIG-01/02; exact raw bytes, HMAC, freshness and safe failures",
         4:"verifier/application tests; verified.json/tampered.json; native CI wrapper; r2 mutation branches; hidden suite NOT_PROVIDED",
-        5:"PR #33 current chain; current native checks PASS before mutation series; post-series final gate pending; PR #34 report package open",
+        5:"PR #33 current chain; current native checks and post-series final gate PASS; PR #34 report package open with current-head CI tracked",
         6:"coverage 55.8% full module statement; domain/application historical 87.7%/83.3%; CLI/adapters 0%; pprof PLANNED",
-        7:"historical M01-M05 retained; current r2 M01-M05 all compile and are killed; post-series restoration gate pending; no mutant merged",
+        7:"historical M01-M05 retained; current r2 M01-M05 all compile and are killed; post-series restoration gate PASS; no mutant merged",
         8:"synthetic offline candidate only; no production route/provider credentials; no hidden suite or human acceptance",
     }
     for r,v in summary.items(): set_cell(d.tables[12].cell(r,1),v)

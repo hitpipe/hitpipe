@@ -4,7 +4,7 @@ Participant: Никита Будыкин
 Repository: `hitpipe/hitpipe`  
 Mode: `MANUAL_LAB_PR12`  
 Component: `Intake - Source Integrations`  
-Status: `CONTENT_READY_IMAGES_PENDING; NB-REV-007 mutation series PASS; corrected-baseline gate PENDING`
+Status: `CONTENT_READY_IMAGES_PENDING; NB-REV-007 mutation series and corrected-baseline gate PASS`
 
 ## Review input
 
@@ -68,8 +68,9 @@ The temporary workflow is not part of the deliverable branches. Its intended
 success condition is compile exit `0`, behavioral-suite exit `1`, and a final
 `RESULT=KILLED`; the five completed job logs are copied into versioned r2
 evidence files. No survivor or retest occurred. The corrected-baseline gate
-after the series is still queued. Hidden suite remains `NOT_PROVIDED` and
-reviewer probes remain separate from author mutations.
+after the series PASSed in run `39285847846`, job `118171472621`, on corrected
+C3 SHA `d164aebd5b746151da41717f0ffb483eb9b39a63`. Hidden suite remains
+`NOT_PROVIDED` and reviewer probes remain separate from author mutations.
 
 ## Current package
 

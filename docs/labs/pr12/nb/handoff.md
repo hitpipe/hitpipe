@@ -17,7 +17,7 @@ Correction record for the delegated source review: `docs/labs/pr12/nb/correction
 | HIT-53 C3 | `work/HIT-53-nb-verification` | `d164aebd5b746151da41717f0ffb483eb9b39a63` | ordinary no-ff parent merge of C2; corrected policy retained | [PR #33](https://github.com/hitpipe/hitpipe/pull/33); current-head native job 118156796184 success |
 | HIT-54 D1 | `work/HIT-54-nb-docs` | `a74a5e1a8ada1147b5755503fd01fd458b8a4706` | toolchain/document checks PASS | [PR #39](https://github.com/hitpipe/hitpipe/pull/39), base C2; review pending |
 | HIT-55 H1 | `work/HIT-55-nb-human-gates` | `78a4ecb87a50ec79f8979b08a4449fcfd3d77c6b` | protocols prepared | [PR #40](https://github.com/hitpipe/hitpipe/pull/40); all human gates pending |
-| HIT-56 REPORT | `work/HIT-56-nb-reports` | source snapshot `a2eee527180ba5f8456046cd40cdd41a2fd5ff5b`; final commit recorded after commit | four regenerated DOCX, 29-key crosswalk, 21 instructions; r2 CI queue tracked | [PR #34](https://github.com/hitpipe/hitpipe/pull/34); independent repeat review pending |
+| HIT-56 REPORT | `work/HIT-56-nb-reports` | report package commit `c42820c5063822443102e0c085b7d27e433b6780`; code snapshot `d164aebd5b746151da41717f0ffb483eb9b39a63` | four regenerated DOCX, 29-key crosswalk, 21 instructions; r2 series and final baseline gate PASS | [PR #34](https://github.com/hitpipe/hitpipe/pull/34); independent repeat review pending |
 
 Three code PRs remain separate and stacked (#31–#33); R1/R2/D1/H1 each also
 have their own published PR (#37–#40). None is merged into `main`, and no PR
@@ -49,11 +49,11 @@ review or acceptance is claimed by this package.
   `https://github.com/hitpipe/hitpipe/actions/runs/39274386817`, job
   `118134753907`, SHA `df1a7d58179148abfda8e71862654f5ef7fcdbc7`, conclusion
   `success`.
-- Current refreshed report-package Actions runs are tracked in
-  `evidence/index.json`; one delivery job for head `d7973fb` completed
-  successfully while the remaining workflow jobs were still queued or running
-  at the time of this handoff. The previous successful run is historical and
-  does not prove the refreshed report content.
+- Current refreshed report-package Actions runs for head `c42820c` are tracked
+  in `evidence/index.json`; iam job 118177294111 completed successfully,
+  intake job 118177292029 is in progress, and processing/delivery jobs remain
+  queued.
+  The package is not calling the incomplete workflow set PASS.
 
 ## NB-REV-007 temporary mutation series
 
@@ -62,7 +62,8 @@ from corrected C3 and each has a compile-preserving patch plus a temporary nativ
 workflow with separate compile and behavioral exits. All five native jobs
 completed successfully; each compile exited 0 and its named behavioral suite
 exited 1, so each mutant was killed. Full logs are versioned under
-`evidence/mutations/r2/`; the post-series corrected-baseline gate remains queued:
+`evidence/mutations/r2/`; the post-series corrected-baseline gate PASSed in run
+39285847846/job 118171472621:
 
 | ID | branch / full SHA | patch SHA-256 | native run |
 | --- | --- | --- | --- |
