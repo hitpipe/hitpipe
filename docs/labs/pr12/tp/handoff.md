@@ -1,53 +1,32 @@
-# Handoff по HIT-12
+# Handoff HIT-12 / HIT-32 — 19.10.2026
 
-Участник Тимофей Патрушев, Processing — Operations Core, MANUAL_LAB_PR12. Агентная часть подготовлена для человеческого review; отчётный текст CONTENT_READY_IMAGES_PENDING. HUMAN_GATES_PENDING, не SUBMISSION_READY. В Jira на фактическом чтении Feature HIT-12 и восемь Subtasks HIT-25…HIT-32 имеют Backlog; агент не менял статусы и не имитировал official runtime/start/review/freeze/admission/acceptance. Полный per-AC status — task-dod-status.json;29 критериев — criteria-crosswalk.json.
+Тимофей Патрушев / tp, Processing — Operations Core, MANUAL_LAB_PR12. Существующий PR №10: https://github.com/hitpipe/hitpipe/pull/10, ветка work/HIT-32-individual-reports, база main. CONTENT_READY_IMAGES_PENDING, HUMAN_GATES_PENDING, не SUBMISSION_READY. Этот пакет подготовлен Codex по поручению автора; принятие остаётся Lead/его reviewer. /start, /review и обходы Project OS не использовались. Jira statuses не менялись: Feature «В процессе проверки», HIT-25…31 «В работе», HIT-32 «К выполнению» на чтении (jira-current.json).
 
-## Ветки и PR
+## Фактическая интеграция
 
-Все PR явно stacked, ни один не слит агентом. Bootstrap база — refs/tags/pr12-bootstrap-20261017-v2 → 94b78199c202a31bcb63326ae7f2a4748aa29360, открытый PR2. Это точный разрешённый candidate, не merged baseline.
+Принятый main ec0dcba7ca42ea59909489cef9650c6edff12f35; push CI SUCCESS https://github.com/hitpipe/hitpipe/actions/runs/39229206910, Go1.27.2 linux/amd64 Ubuntu24.04. PR №3–9 действительно MERGED в main; №20 (собственный fix) и №22 (протоколы) MERGED в соответствующие parent-ветки и достижимы из main. Точные heads/times/ancestry — evidence/report-refresh-20261019/accepted-pr-state.json. PR №11 CLOSED без merge, его исправление не переносилось. Подтверждение Lead — https://hitpipe.atlassian.net/browse/HIT-12?focusedCommentId=10507. PR №10 остаётся OPEN для review.
 
-| Task | Ветка | PR | Actual head до report commit |
-|---|---|---|---|
-| HIT-25 | work/HIT-25-processing-requirements | https://github.com/hitpipe/hitpipe/pull/3 | 035516461b5f45a37aa1129d6f11cf8bdb89f277 |
-| HIT-26 | work/HIT-26-processing-contract-refinement | https://github.com/hitpipe/hitpipe/pull/4 | 3aba8f611044ed9d62eb22b11120622af39f78ff |
-| HIT-27 | work/HIT-27-paid-order-eligibility | https://github.com/hitpipe/hitpipe/pull/5 | 69b26f496c0e3bf4c837d49252203b70157101f1 |
-| HIT-28 | work/HIT-28-evaluate-paid-order-port | https://github.com/hitpipe/hitpipe/pull/6 | 94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7 |
-| HIT-29 | work/HIT-29-financial-proof-verification | https://github.com/hitpipe/hitpipe/pull/7 | 8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb |
-| HIT-30 | work/HIT-30-processing-engineering-docs | https://github.com/hitpipe/hitpipe/pull/8 | 0d448475e8d3a637190f313975790f56ada3c971 |
-| HIT-31 | work/HIT-31-human-review-package | https://github.com/hitpipe/hitpipe/pull/9 | 4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4 |
-| HIT-32 | work/HIT-32-individual-reports | https://github.com/hitpipe/hitpipe/pull/10 | own SHA фиксируется внешне после commit |
+Ветка отчётов fast-forward с сохранением опубликованной истории до 809c8f77c9a391d3ccdeda9062284e99807b6a9f; уже содержит принятый main. Изменения текущего пакета только docs/labs/pr12/tp. Все 25 Processing files побайтно совпадают с main; сравнение с прежней экспериментальной интеграцией отдельно в accepted-code-equivalence.json. Совпадение кода не подменяет подтверждённый merge.
 
-Полные SHA сверяются actual refs в финальной внешней record; own final report SHA не добавляется самоссылочным report commit. Колонка сверена с actual refs; финальная внешняя record отдельно фиксирует report head после commit.
+## Проверено на принятом коде
 
-## Что сделано и проверено
+Чистый detached checkout work/hit32-accepted-main на ec0dcba7ca42ea59909489cef9650c6edff12f35. Собственные локальные проверки: Go1.27.2 darwin/arm64, Python3.14.2, Git2.52.0. Из корня: `python3 tools/pr12/workspace.py validate`; `python3 tools/pr12/test_workspace.py`; `python3 tools/pr12/workspace.py check processing --require`; `python3 tools/pr12/workspace.py smoke processing --require`. Из services/processing: `go test -race -count=1 ./...`. Все exit0. Exact argv/cwd/env/UTC/MSK/source SHA/digests — evidence/report-refresh-20261019/accepted-main/*.json; Go PATH указан в metadata. Linux CI и отдельный делегированный reviewer retest не выданы за наши Darwin-запуски или личные действия другого студента.
 
-Реализованы один переиспользуемый domain evaluator, production application consumer EvaluatePaidOrder с SourceFactsReader, strict synthetic file adapter и retained CLI. Отдельные C1/C2/C3 PR содержат разные полезные изменения. Чужие modules/root locks/canonical wire/SQL не менялись. Уточнение requirements предшествовало реализации; источники и semantic boundaries сохранены Candidate/In Review. Bundle205 файлов и38 native formal files сверены с actual Git commit.
+Новый coverage profile: domain/application100.0%, service91.2%, StrictDecode100.0%, walk81.0%. Старые92.3% исторические. Пробелы/ограничения — coverage-analysis.md. Dev/release built/inspected и запущены вне source checkout: canonical zero/false → VALID exit0; canonical refund1 → INELIGIBLE/REFUND exit0; malformed/aliases в обоих порядках → INVALID_JSON exit2, пустой stdout. Логи accepted-main-extra и accepted-delivery-outside, сводка delivery-observations.json. Два реальных дефекта: исторический CLI writer exit0→3 и TP-REV-001 parser case-fold/overwriting. Исправление parser принято PR №20, VERIFIED_FIXED, regression retested на main. Область — офлайн синтетические fixtures; доказанной production vulnerability не заявлено.
 
-Source проверки после исправления естественного defect: 4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0. Local named/vet/race/smoke PASS. Statement coverage domain/app100%, service92.3%; coverage-analysis описывает конкретные пробелы и пределы. Шесть отдельно compiled behavioural mutants,6 KILLED,0 missed/invalid; original bytes restored, final clean green. Negative gate тем же CI wrapper nonzero. Natural defects1: text/version output-error exit0 воспроизведён, исправлен на3, regression PASS. Никаких скрытых тестов не предоставлено.
+Существующий mutation runner повторён на принятом SHA с natural-defects2 (отдельная новая запись): 6 seeded/6 compiled/6 KILLED, 0 survivor/invalid; negative gate exit1; baseline/restored exit0, clean=true. Полные patches/build/test/summary — accepted-mutations/, exact запуск — accepted-mutation-run/. Исторический параметр CI natural-defects1 сохранён, не выдан за новый подсчёт. Hidden suite не предоставлен. Код модуля не перерабатывался.
 
-Actual push CI (точный head, без подмены временным merge SHA):
-- HIT-27: https://github.com/hitpipe/hitpipe/actions/runs/39120679043
-- HIT-28: https://github.com/hitpipe/hitpipe/actions/runs/39120787065
-- HIT-29: https://github.com/hitpipe/hitpipe/actions/runs/39121031226
+## Четыре отчёта и QA
 
-Команды из repo root с Go1.27.2 на PATH: python3 tools/pr12/workspace.py check processing --require; python3 tools/pr12/workspace.py smoke processing --require; build processing --mode dev/release; inspect processing --mode release. Из services/processing: go test -race -count=1 ./...; go tool cover -func=../../docs/labs/pr12/tp/evidence/c3/processing.cover. Точные argv/cwd/env/UTC/МСК/exit/fullSHA/artifact digests в evidence/index.json и stage record.json. На этой машине Go установлен локально в task work/go/bin; для команд сначала добавить этот путь в PATH или установить официальный exact Go по README. Обычная system PATH изначально Go не содержала.
+reports/report-content.json + четыре Markdown — редактируемые исходники; build_reports.py сохраняет закреплённые формы. Два основных МДК03.02 и два самостоятельных экспорта МДК01.04 по report-profile. 29 критериев — criteria-crosswalk.json. DOCX hashes/pages — reports/report-manifest.json. ZIP/XML, full source text/table rows/cells, ссылки/внутренние anchors, сохранение форм, 21 slots/no media проверены. Bundled LibreOfficeDev26.8/Poppler реально создали внутренние PDF/page renders; 12/13/17/20 страниц (62 всего) просмотрены, PDF geometry/TOC/no-empty-pages PASS. Per-page hashes/exact commands — evidence/report-refresh-20261019/visual-qa.json и pdf-integrity.json. Это QA вёрстки, не снимки лабораторных проверок. После настоящих снимков нужны повторные pagination/TOC/layout checks.
 
-## Конечные материалы
+Снимков нет. Все 21 место и полные инструкции — evidence/screenshots/INSTRUCTIONS.md и instructions.json: точное место/подпись, программа/URL, cwd/command, SHA/CI, навигация/ожидаемое содержимое/PNG/redaction. Для чужих проверок SHA/команды ещё не получены и честно pending. Не подставлять свой Processing SHA. Исторические журналы сохранены; новые evidence отделены каталогом report-refresh-20261019. Предыдущий handoff сохранён в before/handoff.md.
 
-В docs/labs/pr12/tp/reports: четыре DOCX0104-pz01/pz02-tp и0302-pz01/pz02-tp, четыре editable Markdown, report-content.json, report-manifest.json и воспроизводимый builder. Все четыре методички сохранены,29 результатов mapped. Точные21 human image instructions: evidence/screenshots/INSTRUCTIONS.md и instructions.json. Встроенных/снятых/сгенерированных изображений0; placeholder не evidence PASS. Исходные modules requirements/security/toolchain/map/ADR/complexity/execution/test-design/risks существуют; docs/labs/pr12/tp/evidence содержит реальные журналы и mutation diffs.
+## Оставшиеся реальные действия
 
-DOCX ZIP/XML/таблицы/ссылки/21slots/source-template preservation проверены. Bundled LibreOffice реально конвертировал все четыре в PDF; text/geometry audit0 символов за страницей. По пользовательскому запрету PNG/screenshot не делались, визуальная проверка страниц не заявляется. После вставки изображений человек проверяет окончательную пагинацию/оглавление/содержимое в Word. Неизвестны группа/кафедра; подписи/оценка преподавателя пусты.
+1. Lead/его reviewer рассматривает текущий head PR №10, актуальный CI, DOCX hashes и изменения документов. Текущий report head/CI фиксируется внешне в PR и delivery record после commit/push; собственный SHA в отчёты бесконечно не встраивается. Этот пакет не считается принятым автором.
+2. Интервью: «Реального пользователя на данном этапе опросить нельзя: пользователь пока не найден». NOT CONDUCTED / BLOCKED_NO_USER. По трём финансовым сценариям расхождений трактовок нет — проверка Codex по поручению Lead, не личная слепая проверка студента. Назначенные студентам peer/clean-room/module checks, внешний opposition и личная защита pending/blocked. Нужны реальные участники, даты, чужие SHA/окружения/команды/результаты/замечания/retest; не придумывать их.
+3. Человек делает и вставляет настоящие 21 PNG по инструкциям, заполняет предоставленные personal fields, обновляет оглавление/пагинацию и повторяет QA. Подпись/оценка/согласие преподавателя не получены.
+4. Только после фактического человеческого принятия уполномоченный участник выполняет разрешённую финальную фиксацию: immutable tag → actual commit → actual CI → DOCX hashes внешней записью. Submission tags агент не создавал/не переносил; PR не сливал, задачи/Feature/Epic не закрывал. SUBMISSION_READY возможен после выполнения настоящих human gates.
 
-## Один следующий пакет действий человеку
-
-Lead организует reviewer и реальные контакты из human-gates/README.md. Сначала просмотреть PR2→3→4→5→6→7 и документацию8→9→REPORT, проверить фактические CI/remarks. Reviewer другой реальный студент; автор/Codex не независимые reviewers. После actual parent merge ретаргетировать/rebase только собственные зависимые ветки и повторно проверить CI на новой базе, не объявляя старые stacked commits merged заранее.
-
-Параллельно Lead организует interview с пользователем/согласованным преподавателем представителем; clarity и incoming clean-room/module check от исполнителя HIT-11; Тимофей лично проверяет чужие scaffold/module HIT-13. Требуются настоящие даты/env/SHA/команды/результаты/замечания/retest; current protocols pending. Для opposition нужен настоящий другой проект по кольцу преподавателя; до назначения BLOCKED_HUMAN_ASSIGNMENT. Не подставлять другого участника HitPipe за другой проект.
-
-Далее участник заполняет неизвестные personal fields, вручную делает21 снимок по INSTRUCTIONS, после actual merge/current checks уполномоченный человек создаёт непереносимые0104-pz01-tp-v1,0104-pz02-tp-v1,0302-pz01-tp-v1,0302-pz02-tp-v1. Старые теги не переносить; исправлениеv2. Tag→actualcommit→CI→report hashes записать внешне после tag. После вставки снимков/проверки Word и всех human gates возможен SUBMISSION_READY. Индивидуальную защиту Тимофей выполняет самостоятельно без generative AI; оценка/подпись преподавателем, Feature/Epic closing Lead.
-
-## Продолжение компонентного Epic
-
-Переиспользовать services/processing domain/application/reader contracts/tests/fixtures, все три PR и Jira/evidence history; reparent/link существующую Feature по решению Lead. Не переизобретать финансовую policy. Будущие реальные Intake auth/OAS/digest mapping, actor/epoch/lifecycle/lineage/dispatch/DB/concurrency/full Product E2E остаются отдельной owner-разработкой. Текущая лабораторная не означает реализацию всего HP-VER-001, production/live deployment или acceptance фаз.
-
-Локальные точные source-checkout для ручных снимков уже подготовлены: task work/figure-source (4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0) и work/figure-delivery (8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb). Инструкции указывают их полные cwd и PATH локального exact Go; снимки ещё не выполнялись.
+Для дальнейшей разработки переиспользовать принятые domain/application/reader/tests и историю. Реальные authenticated integrations, lifecycle/lineage/actor/epoch/dispatch/DB/full Product E2E остаются отдельной owner-разработкой; этот пакет не подтверждает full MVP/production acceptance.

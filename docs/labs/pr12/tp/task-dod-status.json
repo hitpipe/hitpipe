@@ -1,14 +1,14 @@
 {
   "feature": "HIT-12",
-  "feature_actual_status": "Backlog",
-  "jira_read_at": "2026-10-18 final actual readback; evidence/jira-final-readback.json",
+  "feature_actual_status": "В процессе проверки",
+  "jira_read_at": "2026-10-19T11:24:42.109649+00:00",
   "official_runtime_active": false,
   "tasks": [
     {
       "task": "HIT-25",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_HUMAN_GATES_PENDING",
       "branch": "work/HIT-25-processing-requirements",
       "known_sha_before_report_commit": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
       "pr": "https://github.com/hitpipe/hitpipe/pull/3",
@@ -16,22 +16,25 @@
         {
           "id": "HIT-25/AC1",
           "criterion": "1. Собственные вопросы обследования подготовлены; дата/участники/current process/реальные ответы с источником, facts/assumptions/open empirical questions разделены. Нет разговора — явно NOT CONDUCTED, human action в H1.",
-          "actual_status": "HUMAN_PENDING",
+          "actual_status": "NOT_CONDUCTED_BLOCKED_NO_USER",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Восемь собственных вопросов подготовлены; интервью NOT CONDUCTED, реальные ответы неизвестны.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "actual_result": "Реального пользователя на данном этапе опросить нельзя: пользователь пока не найден. Ответы и участники отсутствуют.",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-25/AC2",
@@ -43,15 +46,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Место financial subset в полном HP-VER-001 описано, mandatory ядро не вырезано.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-25/AC3",
@@ -63,15 +69,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "TP-FR-01,ERR-01,FR-02,NFR-01 имеют source/oracle/AC; deterministic100-call target реально проверен.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-25/AC4",
@@ -83,15 +92,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Synthetic fixed fixture spec и valid/refunded/invalid files существуют; fresh/reset tests PASS.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-25/AC5",
@@ -103,15 +115,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Все пять security вопросов отвечены и привязаны к risk registry C3.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-25/AC6",
@@ -123,23 +138,31 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Личный вклад, exact inventories и requirements trace записаны; blind package подготовлен.",
-          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirements.md",
             "docs/labs/pr12/tp/interview.md",
             "docs/labs/pr12/tp/security-baseline.md",
             "docs/labs/pr12/tp/requirements-trace.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "f59a09a41388481be984c0c02bd694fbca5ed8dd",
+      "merged_at": "2026-10-19T09:13:33Z"
     },
     {
       "task": "HIT-26",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_HUMAN_GATES_PENDING",
       "branch": "work/HIT-26-processing-contract-refinement",
       "known_sha_before_report_commit": "3aba8f611044ed9d62eb22b11120622af39f78ff",
       "pr": "https://github.com/hitpipe/hitpipe/pull/4",
@@ -154,13 +177,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Реальный gap precedence R1 зафиксирован; before/after следует pinned clauses.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-26/AC2",
@@ -172,31 +198,37 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "PR4 содержит meaning refinement; source205-file validation и actual requirements-only CI PASS.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-26/AC3",
           "criterion": "3. DoD/regulation task→branch→PR→CI→review→merge применены честно; review/merge externalaction вH1, до них In Review, не fakeDone.",
-          "actual_status": "HUMAN_PENDING",
+          "actual_status": "PASS_ENGINEERING_MERGED",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Task/branch/PR/CI существуют; independent review/merge ещё не выполнены.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "actual_result": "PR №4 технически reviewed и фактически merged; actual accepted main/CI сохранены. Студенческая blind проверка — отдельный pending gate.",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-26/AC4",
@@ -208,31 +240,37 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Blind package подготовлен, человеку не отправлен/не выполнен; Lead должен передать HIT-11.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-26/AC5",
           "criterion": "5. Известные содержательные замечания исправлены и relevantchecks повторены; нет известных противоречий source/domainerror. Новые pending human remarks не скрываются.",
-          "actual_status": "PASS_NO_KNOWN_HUMAN_REMARKS",
+          "actual_status": "PASS_KNOWN_REMARKS_RESOLVED",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Полученных human remarks нет; собственный exit defect исправлен, relevant checks повторены.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "actual_result": "Два реальных дефекта writer/parser исправлены; TP-REV-001 VERIFIED_FIXED после повторного review и merge. Нет вымышленных отзывов студентов.",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-26/AC6",
@@ -244,21 +282,29 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Candidate requirements0355… и refinement3aba… доступны code tasks, source status не повышен.",
-          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
           "artifact_paths": [
             "docs/labs/pr12/tp/requirement-change.md",
             "docs/labs/pr12/tp/ambiguity-decisions.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "770ecd9093283d06885b4ba2ce284e791003b1eb",
+      "merged_at": "2026-10-19T09:14:05Z"
     },
     {
       "task": "HIT-27",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_VERIFIED",
       "branch": "work/HIT-27-paid-order-eligibility",
       "known_sha_before_report_commit": "69b26f496c0e3bf4c837d49252203b70157101f1",
       "pr": "https://github.com/hitpipe/hitpipe/pull/5",
@@ -273,13 +319,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Четыре local typed statuses/reasons/precedence реализованы без изменения wire enum.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-27/AC2",
@@ -291,13 +340,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Все required финансовые predicates реализованы; null отдельно false/zero; named tests PASS.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-27/AC3",
@@ -309,13 +361,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Retained processing-contractcheck использует тот же evaluator; no admission/config/case/provider writes.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-27/AC4",
@@ -327,13 +382,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Fixture config меняет output, malformed config exit2; metadata version/fullSHA/dirty/mode, safe diagnostics.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-27/AC5",
@@ -345,13 +403,16 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Dev/release built и outside checkout tested; flags/binary sizes/hashes/dylibs inspected.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-27/AC6",
@@ -363,21 +424,29 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Семь позиций toolchain задокументированы; executed отделено от Delve/profiling planned.",
-          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c1/record.json",
             "docs/labs/pr12/tp/execution-path.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "4c42cd271440ad8cfe3e43a2c849978c32ca4c29",
+      "merged_at": "2026-10-19T09:15:08Z"
     },
     {
       "task": "HIT-28",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_VERIFIED",
       "branch": "work/HIT-28-evaluate-paid-order-port",
       "known_sha_before_report_commit": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
       "pr": "https://github.com/hitpipe/hitpipe/pull/6",
@@ -392,14 +461,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Один immutable-context consumer; File и finite double выполнили normal/error/boundary, consumer unchanged.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-28/AC2",
@@ -411,14 +483,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Config/schema/evaluator/case/Session pins проверяются; read failure INCOMPLETE, не unpaid.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-28/AC3",
@@ -430,14 +505,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Financial-only outcome явно отделён от owner lifecycle/actor/epoch/lineage/dispatch.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-28/AC4",
@@ -449,14 +527,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Контракт purpose/input/output/errors/order/ownership/effects/example и GoDoc заполнен.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-28/AC5",
@@ -468,14 +549,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "DI contract test обеих implementations PASS, one composition point/no retry, limits описаны.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-28/AC6",
@@ -487,22 +571,30 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Owner map сверена imports; два complexity направления и свой ADR с вариантами/ценой/check существуют.",
-          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c2/record.json",
             "docs/labs/pr12/tp/module-map.md",
             "docs/labs/pr12/tp/module-adr.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "3ccb5457ca3d5ee1b75ce2b8c7828a9f7eb99410",
+      "merged_at": "2026-10-19T09:15:58Z"
     },
     {
       "task": "HIT-29",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_VERIFIED",
       "branch": "work/HIT-29-financial-proof-verification",
       "known_sha_before_report_commit": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
       "pr": "https://github.com/hitpipe/hitpipe/pull/7",
@@ -517,15 +609,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Oracle записан до кода; equivalence/boundary/decision table и normal/error cases выполнены.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-29/AC2",
@@ -537,15 +632,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Named tests actual local+push CI exact source8ae5 PASS; final human merge/submission SHA pending.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-29/AC3",
@@ -557,15 +655,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Statement profile получен; domain/app100%, service92.3%; concrete gaps и решения описаны.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-29/AC4",
@@ -577,15 +678,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "6 compiled one-at-a-time mutants KILLED,0 survivors/invalid; restored green/clean; natural output defect1 reproduced/fixed.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-29/AC5",
@@ -597,15 +701,18 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Risk matrix qualitative как в методичке; security risk и frequency every change отражены.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-29/AC6",
@@ -617,23 +724,31 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "21 human screenshot instructions полные; test development/logs уже выполнены агентом, human independent check pending.",
-          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
           "artifact_paths": [
             "docs/labs/pr12/tp/evidence/c3/record.json",
             "docs/labs/pr12/tp/evidence/mutations/summary.json",
             "docs/labs/pr12/tp/coverage-analysis.md",
             "docs/labs/pr12/tp/risk-registry.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "88b3b87753a0ee6c5b4d9c1ea136fb4ef3290b6a",
+      "merged_at": "2026-10-19T09:17:13Z"
     },
     {
       "task": "HIT-30",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "artifact_status": "ENGINEERING_MERGED_VERIFIED",
       "branch": "work/HIT-30-processing-engineering-docs",
       "known_sha_before_report_commit": "0d448475e8d3a637190f313975790f56ada3c971",
       "pr": "https://github.com/hitpipe/hitpipe/pull/8",
@@ -648,14 +763,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Семь позиций exact Go1.27.2 route/status; shared stack decision reused.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-30/AC2",
@@ -667,14 +785,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Фактический full module contract и GoDoc соответствуют существующему consumer.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-30/AC3",
@@ -686,14 +807,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Owner map/import output совпадают, production cycles не выявлены; shared map integration Lead.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-30/AC4",
@@ -705,14 +829,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Два направления, существующий isolated candidate; performance/bottleneck не заявлены.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-30/AC5",
@@ -724,14 +851,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "TP ADR001 имеет автора/context/options/decision/cost/verification; canonical ADR не переавторен.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-30/AC6",
@@ -743,22 +873,30 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Execution route/actual two-mode logs/binary inspection/outside checkout собраны; planned не названо executed.",
-          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
           "artifact_paths": [
             "docs/labs/pr12/tp/toolchain.md",
             "docs/labs/pr12/tp/execution-path.md",
             "docs/labs/pr12/tp/evidence/d1/record.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "2977673f91173de273a92b0d36504e40a90e0e45",
+      "merged_at": "2026-10-19T09:18:18Z"
     },
     {
       "task": "HIT-31",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "В работе",
       "actual_issue_type": "Подзадача",
-      "artifact_status": "PREPARED_FOR_HUMAN_ACTION",
+      "artifact_status": "ENGINEERING_MERGED_HUMAN_GATES_PENDING",
       "branch": "work/HIT-31-human-review-package",
       "known_sha_before_report_commit": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
       "pr": "https://github.com/hitpipe/hitpipe/pull/9",
@@ -766,19 +904,22 @@
         {
           "id": "HIT-31/AC1",
           "criterion": "1. Реальное обследование с пользователем/согласованнымпредставителем записано сдатой/ролью/ответами; Lead организуетконтакт, агент не сочиняетинтервью.",
-          "actual_status": "HUMAN_PENDING",
+          "actual_status": "NOT_CONDUCTED_BLOCKED_NO_USER",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Разговор не состоялся, Lead организует, подготовлены вопросы.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "actual_result": "Реального пользователя на данном этапе опросить нельзя: пользователь пока не найден.",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC2",
@@ -790,12 +931,15 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Другой студент ещё не дал blind ответы; пакет готов.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC3",
@@ -807,12 +951,15 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Исходящая/входящая clean-room проверки ещё не выполнены.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC4",
@@ -824,12 +971,15 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Обе стороны настоящей module peer review ещё не выполнены.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC5",
@@ -841,29 +991,35 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Кольцо другого проекта не получено; BLOCKED_HUMAN_ASSIGNMENT.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC6",
           "criterion": "6. Lead/разрешенныйreviewer реально review-ит significant PRs; замечания исправлены, checksактуальны иmergeдействителен. Pendingreview/merge остаетсяоткрытым.",
-          "actual_status": "HUMAN_PENDING",
+          "actual_status": "PASS_ENGINEERING_REVIEW_MERGE_REPORT_REVIEW_PENDING",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Независимый human review/merge не выполнен; все PR открыты.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "actual_result": "Codex по поручению Lead выполнил технические reviews; инженерные PR №3–9/20/22 merged. PR №10 ожидает отдельного принятия, не личная проверка другого студента.",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-31/AC7",
@@ -875,18 +1031,26 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Независимые code/docs/tests/reports продолжены; false people/approval/images не создавались.",
-          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
           "artifact_paths": [
             "docs/labs/pr12/tp/human-gates/README.md"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "MERGED",
+      "current_pr_head_sha": "84bc1906f026ceb53c76c523ad34b905446ab074",
+      "merged_at": "2026-10-19T09:19:33Z"
     },
     {
       "task": "HIT-32",
-      "actual_jira_status": "Backlog",
+      "actual_jira_status": "К выполнению",
       "actual_issue_type": "Подзадача",
       "artifact_status": "CONTENT_READY_IMAGES_PENDING",
       "branch": "work/HIT-32-individual-reports",
@@ -903,14 +1067,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "29 criteria mapped to task/source/artifact/status; pending human gates не PASS.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC2",
@@ -922,14 +1089,17 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Все четыре DOCX и editable Markdown/JSON собраны с отдельными0104 support sections.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC3",
@@ -940,15 +1110,18 @@
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Минимальные template deviations зафиксированы; six mutations/natural1/hidden not provided отражены.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "actual_result": "Минимальные корректировки шаблонов, 6 compiled mutations, 2 естественных ошибки отдельно; hidden suite не предоставлен.",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC4",
@@ -960,33 +1133,40 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Ровно21 human placeholders с полными bound instructions; images0.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC5",
           "criterion": "5. DOCXZIP/XML/text/tables/link/placeholderintegrity проверены; realrendererеслидоступенсactualboundary, ничего непотеряноприконвертации. Неизвестныегруппа/кафедра/подпись/оценкаостаются явнымиpersonalfields.",
-          "actual_status": "STRUCTURE_AND_PDF_GEOMETRY_PASS_VISUAL_HUMAN_PENDING",
+          "actual_status": "PASS_STRUCTURAL_AND_VISUAL_CURRENT_PLACEHOLDER_EDITION",
           "evidence": [
             "docs/labs/pr12/tp/evidence/index.json",
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "ZIP/XML/table/link/source-preservation PASS; actual PDF render/text geometry PASS; raster visual QA не проводилась по запрету изображений.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "actual_result": "Четыре DOCX: ZIP/XML, полный editable source text/tables, ссылки, TOC/pages и 62 страницы реального bundled LibreOffice/PDF render проверены; PASS. После человеческой вставки снимков требуется повторный layout/TOC QA. Human acceptance pending.",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
-            "docs/labs/pr12/tp/evidence/reports/record.json",
-            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+            "docs/labs/pr12/tp/evidence/report-refresh-20261019/structural-final.json",
+            "docs/labs/pr12/tp/evidence/report-refresh-20261019/pdf-integrity.json",
+            "docs/labs/pr12/tp/evidence/report-refresh-20261019/visual-qa.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC6",
@@ -997,15 +1177,18 @@
             "docs/labs/pr12/tp/criteria-crosswalk.json"
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
-          "actual_result": "Все четыре immutable tag ещё НЕ СОЗДАНЫ; human review/merge/current CI prerequisites pending.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "actual_result": "Четыре submission tags не создавались и не переставлялись. Принятие PR №10, настоящие снимки/человеческие gates и финальная запись остаются за Lead/уполномоченным участником.",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         },
         {
           "id": "HIT-32/AC7",
@@ -1017,16 +1200,25 @@
           ],
           "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
           "actual_result": "Defense notes и единый handoff подготовлены; сама защита не состоялась.",
-          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
           "artifact_paths": [
             "docs/labs/pr12/tp/reports/report-manifest.json",
             "docs/labs/pr12/tp/evidence/reports/record.json",
             "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
           ],
-          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
-          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json",
+          "historical_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "historical_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "current_source_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+          "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+          "current_evidence": "docs/labs/pr12/tp/evidence/report-refresh-20261019/"
         }
-      ]
+      ],
+      "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "current_ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+      "current_pr_state": "OPEN",
+      "current_pr_head_sha": "809c8f77c9a391d3ccdeda9062284e99807b6a9f",
+      "merged_at": null
     }
-  ]
+  ],
+  "jira_evidence": "evidence/report-refresh-20261019/jira-current.json"
 }

@@ -1,0 +1,125 @@
+{
+  "read_date": "2026-10-19",
+  "issues": [
+    {
+      "key": "HIT-12",
+      "fields": {
+        "summary": "ПР 1–2 · Патрушев · Processing — Operations Core",
+        "description": "## Результат и владелец\n\nТимофей Патрушев; компонент Processing - Operations Core. Режим MANUAL_LAB_PR12. Дедлайн: 19.10.2026, Europe/Moscow; точный час преподавателем не задан.\n\n## Быстрый старт\n\n1. Репозиторий: https://github.com/hitpipe/hitpipe.\n2. Закреплённая база: `pr12-bootstrap-20261017-v2` → `94b78199c202a31bcb63326ae7f2a4748aa29360`. [Bootstrap PR](https://github.com/hitpipe/hitpipe/pull/2) ожидает реального review/merge. До merge допустим явно обозначенный stacked PR от указанного exact SHA.\n3. [Персональный мастер-промпт](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/prompts/tp.md) — скопировать блок агенту в открытом репозитории. Все ключи и контекст уже подставлены.\n4. [Общая инструкция](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/AGENT_LAB_WORKFLOW.md), [карта пакета](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/README.md), [точные source pins](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/context-lock.json), [правила структуры](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/IMPLEMENTATION_CONVENTION.md).\n\nЛичный WORK DEST: `services/processing`, `docs/labs/pr12/tp/`; один владелец финальных документов — Тимофей Патрушев. Общими нормами/locks/инструкциями управляет Lead.\n\n## Рабочие карточки\n\n* R1: [HIT-25](https://hitpipe.atlassian.net/browse/HIT-25)\n* R2: [HIT-26](https://hitpipe.atlassian.net/browse/HIT-26)\n* C1: [HIT-27](https://hitpipe.atlassian.net/browse/HIT-27)\n* C2: [HIT-28](https://hitpipe.atlassian.net/browse/HIT-28)\n* C3: [HIT-29](https://hitpipe.atlassian.net/browse/HIT-29)\n* D1: [HIT-30](https://hitpipe.atlassian.net/browse/HIT-30)\n* H1: [HIT-31](https://hitpipe.atlassian.net/browse/HIT-31)\n* REPORT: [HIT-32](https://hitpipe.atlassian.net/browse/HIT-32)\n\nКаждая Task имеет scope, exact источники, проверяемые AC, PRIMARY/ограничения, DOD, evidence и destination. Три C1/C2/C3 — три отдельных полезных code PR. Dependencies отражены реальными Blocks links и manifest DAG. Готовый exact артефакт можно использовать до human merge, сохраняя честный статус candidate; незавершённый human gate не считается Done.\n\n## Конечный комплект\n\nДва основных отчёта `0302-pz01-tp.docx` и `0302-pz02-tp.docx`; материалы 01.04 приложениями и два отдельных экспорта `0104-pz01-tp.docx`/`0104-pz02-tp.docx`. Все 29 результатов четырёх методичек обязательны. [Четыре адаптированных формы](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/templates), [матрица критериев](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/references/METHODICS_MATRIX.md). Не предполагается согласие преподавателя на сдачу всего двумя объединёнными файлами.\n\nАгент исполняет тесты/CI/сборку/пять отдельных компилируемых мутаций и negative gate, сохраняет настоящие журналы. Скриншоты НЕ делает: 21 подробный human placeholder с URL/командой/кадром/версией/подписью. До снимков CONTENT_READY_IMAGES_PENDING; пустые формы TEMPLATE_UNFILLED. Теги 0104/0302-pz01/pz02-tp-v1 фиксируются после настоящего merge/check; исправления v2, старые теги не переносить.\n\n## Реальные человеческие шаги\n\nВы проверяете чужую Feature [HIT-13](https://hitpipe.atlassian.net/browse/HIT-13), ваш участок проверяет исполнитель [HIT-11](https://hitpipe.atlassian.net/browse/HIT-11). Это назначение, не выполненная проверка. Обязательны обе стороны clarity/clean-room/module checks, интервью и оппонирование другому проекту по кольцу преподавателя. Lead организует review/merge и внешние контакты; агент готовит пакет и исправляет реальные замечания. [Human actions](https://github.com/hitpipe/hitpipe/blob/pr12-bootstrap-20261017-v2/docs/labs/pr12/shared/human-actions.md).\n\n## Границы и продолжение\n\nСтуденческие задачи ещё не выполнены. Все фазовые контракты Candidate/In Review, grant=none; official Project OS /start/freeze/acceptance не имитируется. Backend main защищён; private frontend protection BLOCKED_HUMAN_GITHUB_PLAN (HTTP403 текущего тарифа), нужна настройка владельца. CI и чистый remote clone bootstrap v2 прошли, это не student PASS.\n\nБудущий компонентный Epic переиспользует существующие issue keys, код, PR, tests и evidence; не создавать заново выполненные задачи. Feature/Epic закрывает Lead по действительному полному DOD.",
+        "status": {
+          "name": "В процессе проверки"
+        },
+        "updated": "2026-10-19T12:21:58.558+0300"
+      },
+      "comments": [
+        {
+          "id": "10373",
+          "body": "PROJECT OS · ATTENTION\n\nReady Gate requires human/configuration input: missing contract sections: WHY, CAPABILITY, DOD, CONTEXT",
+          "created": "2026-10-17T17:36:38.318+0300",
+          "author": "ProjectOS"
+        },
+        {
+          "id": "10456",
+          "body": "MANUAL_LAB_PR12 · Делегированное review Lead, остановка перед пунктом 8.\n\nТехнический review существующего пакета Тимофея завершён. В GitHub опубликованы APPROVE на PR #3, #4, #6, #7, #8, #9 в пределах их проверенного технического содержания; это не закрытие эмпирических или человеческих DoD. PR #5 — REQUEST_CHANGES: TP-REV-001, строгий JSON parser допускает aliases и перекрытие refund; исправление и собственный PR делает Тимофей. PR #10 — COMMENT, финальная сдача не принималась. Мой исправляющий PR #11 закрыт без слияния по указанию Lead, ветки автора не менялись.\n\nПункт 2 оформлен отдельно в HIT-25/HIT-26: реального пользователя пока нет, интервью не проводилось; по трём финансовым сценариям расхождений трактовок не обнаружено; единственное найденное обязательное замечание вынесено в HIT-27. Протокол не выдаётся за личные действия другого студента.\n\nОстаются реальные внешние действия: авторское исправление TP-REV-001; approval другим участником для защищённой bootstrap PR #2; неподтверждённые student peer/opposition gates. Merge ни одной PR в ходе этого review не выполнялся. До пункта 8 остановлено: отчёты/скриншоты/теги и закрытие Jira не делались. После авторского исправления нужен повторный review фактического нового SHA.",
+          "created": "2026-10-18T23:16:45.737+0300",
+          "author": "Dmitriy Karacheban"
+        },
+        {
+          "id": "10507",
+          "body": "MANUAL_LAB_PR12 · Техническая интеграция завершена 19.10.2026; STOP BEFORE 8.\n\nПосле пользовательского merge bootstrap PR #2 выполнено повторное делегированное review авторских PR #20 (TP-REV-001 fix) и #22 (протоколы): APPROVE, оба merged в свои родительские ветки. Затем PR #3–9 последовательно перенаправлены в main, обновлены обычными parent/main merge без force-push, повторно проверены и слиты после зелёного CI. Ошибка TP-REV-001 VERIFIED_FIXED. Человеческие действия не имитировались.\n\nПринятый main: ec0dcba7ca42ea59909489cef9650c6edff12f35. Его четыре обязательных CI job success. Содержимое всех 25 Processing files совпадает с проверенной авторской интеграцией; независимый Linux retest на Go 1.27.2 и четыре CLI проверки пройдены.\n\nЕдинственный оставленный открытым PR отчётного пакета: https://github.com/hitpipe/hitpipe/pull/10 . Его база теперь main, head 809c8f77c9a391d3ccdeda9062284e99807b6a9f, CI success. Все 13 файлов reports/ сохранены побайтно относительно прежней авторской версии: отчёты НЕ финализировались и PR #10 НЕ принят/НЕ слит. Скриншоты, теги сдачи и закрытие Jira/Feature/Epic не выполнялись.\n\nСледующий этап, пока не запущенный из-за явной остановки Lead перед пунктом 8: Тимофей актуализирует существующий отчётный пакет и submission-record по фактическому принятому коду/CI, исправлению TP-REV-001 и настоящим merge; проверяет DOCX/вёрстку/manifest, оставляет предусмотренные места и полные инструкции для снимков. Старые tested_code_source_sha/tested_ci_head_sha указывают на версию до исправления, их нельзя выдавать за новый baseline. Непроведённые интервью/peer/opposition сохраняют честные pending/blocked статусы. Готовый PR #10 возвращается Lead на финальное review; полная сдача сейчас не объявляется завершённой.",
+          "created": "2026-10-19T12:21:58.558+0300",
+          "author": "Dmitriy Karacheban"
+        }
+      ]
+    },
+    {
+      "key": "HIT-25",
+      "fields": {
+        "summary": "[TP/R1] Зафиксировать источники, обследование и проверяемые требования участка",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T23:16:42.028+0300"
+      }
+    },
+    {
+      "key": "HIT-26",
+      "fields": {
+        "summary": "[TP/R2] Уточнить требования значимым PR и устранить неоднозначности",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T23:16:43.028+0300"
+      }
+    },
+    {
+      "key": "HIT-27",
+      "fields": {
+        "summary": "[TP/C1] Processing: реализовать deterministic paid-order eligibility evaluator",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-19T12:21:57.186+0300"
+      }
+    },
+    {
+      "key": "HIT-28",
+      "fields": {
+        "summary": "[TP/C2] Processing: подключить evaluator к EvaluatePaidOrder через SourceFactsReader",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T22:48:22.801+0300"
+      }
+    },
+    {
+      "key": "HIT-29",
+      "fields": {
+        "summary": "[TP/C3] Processing: проверить financial decision table, границы proof и seeded defects",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T22:48:42.790+0300"
+      }
+    },
+    {
+      "key": "HIT-30",
+      "fields": {
+        "summary": "[TP/D1] Согласовать инструментальный контур, module map и личный ADR",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T22:49:02.739+0300"
+      }
+    },
+    {
+      "key": "HIT-31",
+      "fields": {
+        "summary": "[TP/H1] Выполнить реальные взаимные проверки, review и внешние учебные gates",
+        "status": {
+          "name": "В работе"
+        },
+        "updated": "2026-10-18T23:16:44.935+0300"
+      }
+    },
+    {
+      "key": "HIT-32",
+      "fields": {
+        "summary": "[TP/REPORT] Собрать два основных отчета,0104экспорты и submissionpackage",
+        "description": "## MODE / OUTCOME\n\nMANUAL_LAB_PR12  \nСобрать два основных отчета,0104экспорты и submissionpackage\n\n## SCOPE\n\nФинальный owner личного комплекта: два законченных по содержанию0302DOCXс0104support и дваотдельных0104DOCX; не заменять незавершенныепроверки красивымтекстом.\n\n## SOURCE / CONTEXT\n\nMODE: MANUAL_LAB_PR12. Отдельная ручная учебная подготовка по прямому поручению Lead; official Project OS runtime, /start, /review, FORCE и service-token bridge не вызывать.\n\nТочные design inputs: Architecture Candidate `sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b`; Product Candidate `sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71`; HP-VER-001; Discovery транзитивно из Product. Source status Candidate/In Review, НЕ Accepted/admitted/implemented. Formal native assets в `hitpipe/project-os` commit `84249ff3ba611358232294c46f6022f030ea223d`, root `contracts/hitpipe/architecture-2026-10-16/formal/`. Проверять полный immutable context-lock, а не independently latest Confluence.\n\nОбщий workflow `docs/labs/pr12/AGENT_LAB_WORKFLOW.md`, master prompt `docs/labs/pr12/MASTER_PROMPT_TEMPLATE.md`, source index/context lock и четыре актуальные методички поставляются общей Platform-карточкой. Имеющиеся AGENTS.md и AGENT_MASTER_PROMPT.md читать; этот marker ограниченно применяет ручной процесс, не меняет правила остального проекта.\n\nИсточник учебных критериев: четыре методички МДК01.04 ПР1 Инструментальный контур; МДК01.04 ПР2 Модульная архитектура; МДК03.02 ПР1 Требования и регламент; МДК03.02 ПР2 Система проверок. Все29 обязательных результатов сохраняются. Матрица и SHA исходных DOCX — versioned package.\n\nВсе команды, тесты, логи, coverage и mutations выполняет агент в разрешенной среде, фиксируя exact SHA/argv/exit/toolversions. Скриншоты агент НЕ делает: только human placeholder + точные шаги/подпись/команда/expected visible evidence. Ничего не выдумывать: interviews, other-student review, other-project opposition, merge и screenshots только реальные.\n\nЗапреты: чужие service/domain/DB, изменение canonical wire/state/trust/retention, live external writes, productAI calls, secrets/customer data; shared root CI/lock/config изменяет только Lead. Локальные обратимые module boundaries — HP-DELEG-001 AUTO, стратегия не пересматривается.\n\nСобственные нормы: HP-RULE-006, HP-BP-002/T/004, HP-BP-003/T/002, HP-BP-003/T/006, HP-BP-007/T/005.\n\nКанонический BP: https://hitpipe.atlassian.net/wiki/spaces/HPDRAFTS/pages/15269889; AD15368193v2; BP00715138835v3.\n\nExact formal inputs: `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/SourceFacts`; `contracts/hitpipe/architecture-2026-10-16/formal/openapi/hitpipe.v1.json#/components/schemas/DraftConfig`; `contracts/hitpipe/architecture-2026-10-16/formal/sql/processing.sql`.\n\nМодуль: PaidOrderEligibility; собственные направления: Хранение и обработка данных: null/false/zero и exact financial predicates; Межкомпонентное взаимодействие: bounded source snapshot freshness/completeness.\n\n## ACCEPTANCE CRITERIA\n\n1. Все29обязательныхрезультатов изчетырехметодичек имеют exacttask/Jirakey→source→artifact→actualevidence/status. Матрицаполная и неclaimPАSSдляNOTRUN/HUMAN_PENDING.\n2. Основные`0302-pz01-tp.docx`и`0302-pz02-tp.docx` заполнены всемсодержаниемиограничениями;0104ПР1/ПР2support/appendixвыделеныясно. Дваотдельных`0104-pz01-tp.docx`/`0104-pz02-tp.docx`такжесобраны, безclaimсогласованияпреподавателемобъединеннойсдачи.\n3. Минимальныекорректировкистарыхформзафиксированывtemplate-adjustments;не менее5компилируемыхdefectsвместоодного, matrixrisks/survivors/retests/naturalcount/hiddennotprovidedчестны.\n4. Ровно21humanimageplaceholderсlabel/insertlocation/caption/exactsource/command/cwd/SHA/mustvisible/targetfilename/redactioninstructions; агент негенерируетинеcaptureизображения. Отчетныйтекстcontentreadyтолько`CONTENT_READY_IMAGES_PENDING`.\n5. DOCXZIP/XML/text/tables/link/placeholderintegrity проверены; realrendererеслидоступенсactualboundary, ничего непотеряноприконвертации. Неизвестныегруппа/кафедра/подпись/оценкаостаются явнымиpersonalfields.\n6. После реальныхreview/merge/checks подготовлены4непереносимыхtag:0104-pz01-tp-v1,0104-pz02-tp-v1,0302-pz01-tp-v1,0302-pz02-tp-v1. Теги→actualcommit→CIrecord; старыйtagнепереставлять,v2дляпеределки.\n7. Краткаяиндивидуальнаяdefenseпамяткапоказываетсвоиrules/DI/build/test/mutation/risk; студентобъясняетсамбезгенеративногоИИназащите. Handoffясноотделяетсделанноеиpendinghumanactions; FeaturecloseLead.\n\n## WORK RESULT / WORK DEST\n\nRepo`hitpipe/hitpipe`; finalowner:Тимофей Патрушев. `docs/labs/pr12/tp/reports/`4DOCX+editableMD/JSON,`evidence/index.json`,`evidence/screenshots/INSTRUCTIONS.md`,`criteria-crosswalk.json`,`submission-record.json`,`handoff.md`.\n\n## DEFINITION OF DONE\n\n* Артефакт соответствует реальным текущим input/status. Pending externalgate нельзя заменить текстовымclaim.\n* Task key → отдельная branch → PR с scope/checks/limitations. Значимое изменение остается In Review до настоящего human review/merge; fakeDone запрещен.\n* Нужный dependency artifact может быть использован как exact candidate в manual mode до завершения всех human gates; source SHA/PR/status указан, acceptance не повышается.\n* Фактический результат, paths, команды, fullSHA, UTC/МСК время, exit status и evidence pointers доступны. PASS/FAIL/BLOCKED/NOT RUN различаются; текущий план ничего не объявляет выполненным.\n* Code tasks: агент реально исполняет checks и исправляет найденные defects. Human screenshot placeholders не требуют от человека вместо агента выполнять тестовую разработку.\n* Один владелец final document; чужой draft не перезаписывается. Handoff перечисляет реальные external gates и следующий артефакт; независимую работу продолжать без лишних запросов.\n* Report text-only completion называется только CONTENT_READY_IMAGES_PENDING; финальная сдача/защита/все human actions не имитируются.\n\n## ACTUAL JIRA / ПОРЯДОК\n\nFeature: HIT-12; зависимости артефактов: TP-R1: HIT-25, TP-R2: HIT-26, TP-C1: HIT-27, TP-C2: HIT-28, TP-C3: HIT-29, TP-D1: HIT-30, TP-H1: HIT-31. Готовый exact candidate можно использовать до human merge в явно stacked PR; pending human gate не считается Done. Полные exports и manifest: docs/labs/pr12/.",
+        "status": {
+          "name": "К выполнению"
+        },
+        "updated": "2026-10-18T22:49:53.617+0300"
+      },
+      "comments": [
+        {
+          "id": "10451",
+          "body": "PROJECT OS · ATTENTION\n\nRejected unauthorized/unguarded transition: /start human confirmation missing",
+          "created": "2026-10-18T22:49:53.580+0300",
+          "author": "ProjectOS"
+        }
+      ]
+    }
+  ]
+}
