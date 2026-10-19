@@ -1,0 +1,52 @@
+NB-REV-007 / r2 / M03
+STATUS=KILLED
+MUTATION=replace current outsideTolerance with a one-sided past-only check
+BASELINE_SHA=d164aebd5b746151da41717f0ffb483eb9b39a63
+BASELINE_VERIFIER_SHA256=0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640
+MUTANT_SHA=5a8929b141f2b75774418114cfac1bbb7d8a01dd
+PATCH_SHA256=ae02bb56e32c1b8f933aec90dde742da67d0dd5d73a9bada5393608008eaa050
+BRANCH=work/nb-mutation-r2-M03
+RUN=https://github.com/hitpipe/hitpipe/actions/runs/39282909976
+JOB=https://github.com/hitpipe/hitpipe/actions/runs/39282909976/job/118160734812
+RUN_ID=39282909976
+JOB_ID=118160734812
+RUNNER=ubuntu-24.04
+STARTED_AT=2026-10-19T16:07:00Z
+FINISHED_AT=2026-10-19T16:24:17Z
+CWD=/home/runner/work/hitpipe/hitpipe/services/intake
+GIT_VERSION=git version 2.55.0
+GO_VERSION=go version go1.27.2 linux/amd64
+ARGV_COMPILE=go test -run '^$' ./...
+COMPILE_EXIT=0
+COMPILE_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.002s [no tests to run]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.002s [no tests to run]
+COMPILE_STDOUT_END
+ARGV_TEST=go test -count=1 ./...
+TEST_EXIT=1
+TEST_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.002s
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    --- FAIL: TestSignatureRawBytesAndTolerance/future301 (0.00s)
+        verifier_test.go:53: got={Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:1700000000} want pass=false
+--- FAIL: TestReviewAbsoluteDistanceCannotWrap (0.00s)
+    verifier_test.go:91: MaxInt64 timestamp must be stale, not verified: {Status:VERIFIED Reason:verified Version:stripe-signature-v1 Timestamp:9223372036854775807}
+FAIL
+FAIL github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.002s
+FAIL
+TEST_STDOUT_END
+DETECTION_ORACLE=real behavioral assertions failed after successful compilation
+RESULT=KILLED
+SURVIVOR=0
+RETEST=NOT_APPLICABLE
+BASELINE_BEFORE=PASS: corrected C3 run 39281598031, current source head d164aebd5b746151da41717f0ffb483eb9b39a63
+RESTORATION=temporary mutant branch remains unmerged; post-series corrected-baseline gate pending
+FINAL_GATE=PASS before series; after-series rerun pending
+HIDDEN_SUITE=NOT_PROVIDED
+LIMITATION=The workflow is an author-controlled temporary experiment branch; it is not a PR, merge, acceptance or production check. Full step output is retained in the linked native GitHub Actions job log.

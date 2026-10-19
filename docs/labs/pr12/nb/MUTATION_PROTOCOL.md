@@ -1,27 +1,35 @@
-# HIT-53 / NB-C3 — mutation protocol
+# HIT-53 / NB-C3 mutation protocol
 
-The clean baseline is built and tested first. Each mutant is applied to a fresh
-temporary copy of `services/intake`, never to the branch. The same named test
-command is used for the mutant; a compile failure is `INVALID`, not a killed
-behavior. After a survivor, the missing assertion is added to the real test suite,
-the survivor is rerun, and both runs are retained. The source is restored before
-the next case and after the final case.
+This document retains the original M01–M05 experiment as historical evidence and
+defines a separate versioned `r2` series after the numerical policy correction.
+The r2 source/test baseline is the corrected C3 chain
+`d164aebd5b746151da41717f0ffb483eb9b39a63`; its verifier policy digest and each
+patch/source digest are recorded in the versioned r2 logs under
+`evidence/mutations/r2/`.
 
-The final table is filled from actual logs:
+Each r2 mutant is an independent compile-preserving change to the current source:
 
-| ID | Behavioral change | Compile | First test result | Detected? | Survivor/retest | Patch/log/digest |
-| --- | --- | --- | --- | --- | --- | --- |
-| M01 | transformed body instead of exact raw bytes | 0 | 1 | yes — raw-byte and known-vector assertions failed | none | `mutations/M01.patch`, `mutations/M01.log`; patch SHA-256 `71c24554cdafaea924769264141e30d454180e15d87dd29fa1480586ab7b1deb` |
-| M02 | MAC compare bypass (`expected` compared with itself) | 0 | 1 | yes — altered-body and repeat-without-signature assertions failed | none | `mutations/M02.patch`, `mutations/M02.log`; patch SHA-256 `7dd3df025b106ecce78d6e2457aeb3c0694e071c8ff59dbaa1020a2912a91dcc` |
-| M03 | signed timestamp delta checked only in positive direction | 0 | 1 | yes — `future301` failed | none | `mutations/M03.patch`, `mutations/M03.log`; patch SHA-256 `3d14dc924d139fdbe9c5ff141796d841160725749136a376f52f43aa19c10667` |
-| M04 | reject inclusive 300-second boundary | 0 | 1 | yes — `past300` failed | none | `mutations/M04.patch`, `mutations/M04.log`; patch SHA-256 `05b4a8d56a0ee17291876ae858c9131969e12b40e91dd15e2c5c99af18b912dc` |
-| M05 | conflicting timestamp accepted | 0 | 1 | yes — conflicting-timestamp reason assertion failed | none | `mutations/M05.patch`, `mutations/M05.log`; patch SHA-256 `22b8525d30ebc157a8195b1cde5fcdebc9cf4a8cb9827350995021fc97473351` |
+| ID | Current rule changed | Detection oracle | Branch and native CI |
+| --- | --- | --- | --- |
+| M01 | exact raw bytes replaced by constant bytes | known-vector/raw-byte assertions exit 1 | `work/nb-mutation-r2-M01` at `4606e78f350b85717ef56d9b3766c5fd8bd4af4f`, job 118160603037 success, run 39282875566 |
+| M02 | constant-time candidate comparison bypassed | altered-body/repeat assertions exit 1 | `work/nb-mutation-r2-M02` at `b835a7eb3fbd4512396ef44ec8b693d6a5bf0c18`, job 118160720826 success, run 39282905596 |
+| M03 | current `outsideTolerance` ignores timestamps in the past | past301 freshness assertion exit 1 | `work/nb-mutation-r2-M03` at `5a8929b141f2b75774418114cfac1bbb7d8a01dd`, job 118160734812 success, run 39282909976 |
+| M04 | current inclusive 300-second boundary becomes stale | past300/future300 boundary assertion exit 1 | `work/nb-mutation-r2-M04` at `3cc2a0d5ef75a55283802152b7295b2bb244cc83`, job 118160751628 success, run 39282914689 |
+| M05 | current conflicting timestamp comparison is inverted | timestamp-conflict assertion exit 1 | `work/nb-mutation-r2-M05` at `90cc9ab91ce0d24a157fa451c9f4efe71a725286`, job 118160771432 success, run 39282919252 |
 
-Natural defect count is `0` unless a real issue/PR link exists. Hidden suite is
-`NOT_PROVIDED`. Mutation evidence does not represent a failed main branch or CI
-acceptance; it is a temporary controlled experiment.
+The five branches are temporary experiment branches, not code PRs and not merged
+into C1/C2/C3/main. The historical files under `evidence/mutations/M01–M05.*`
+are not overwritten. The five r2 jobs compiled successfully and their named
+behavioral suites exited 1; the complete stdout/exit/CWD/tool data is retained
+in the five versioned r2 logs. A compile failure is `INVALID`, not detection. A
+test assertion failure after successful compilation is detection. No survivor
+or retest occurred. The corrected-baseline gate after the series is a separate
+run and PASS: run 39285847846, job 118171472621, SHA
+`d164aebd5b746151da41717f0ffb483eb9b39a63`.
 
-All five mutants compiled successfully and were killed by the named test suite.
-No survivor or retest exists. The experiment used baseline SHA
-`835bbb1bc565e9b2786d5ed1a2cac166f816f7a8`; each log records a separate
-temporary-copy path, source digest, command, cwd, Go version and exit codes.
+The clean sequence is: corrected baseline gate PASS; fresh copy/branch; apply one
+patch; compile with `go test -run '^$' ./...` and record exit 0; run the same
+named suite and record exit 1; restore/discard that copy; verify the corrected
+baseline gate PASS before the next mutant and after M05. Hidden suite remains
+`NOT_PROVIDED`; reviewer probes are not author mutations. The mutation result is
+controlled evidence, not production acceptance.

@@ -12,7 +12,7 @@ high priority, while high probability + small impact is medium.
 | Secret scope confusion | wrong installation lookup | cross-account verification | low | severe | high | DI error tests and review each change | fail closed; secure-store integration not proven |
 | Diagnostic leakage | body/header/secret in output | provider/customer data disclosure | medium | serious | high | forbidden-marker scan every diagnostic change | safe reasons only; no live data |
 | Repeat-ID shortcut | dedupe before signature | altered repeat bypasses proof | medium | serious | high | repeated-ID negative test every change | authenticate each delivery; durable receipt absent |
-| CI assertion removed | workflow only reports status | false green submission | low | serious | high | local negative same-check + required CI | workflow owned by nb; branch protection readback human |
+| CI assertion removed | workflow only reports status | false green submission | low | serious | medium | local negative same-check + required CI | workflow owned by nb; branch protection readback human |
 | Unsupported provider shape | schema drift/unknown event | unsafe normalization or hold loss | medium | serious | high | explicit reject tests; provider integration deferred | do not coerce; formal/provider contract pending |
 
 High-priority risks select local assertions and mutation checks on every submission;

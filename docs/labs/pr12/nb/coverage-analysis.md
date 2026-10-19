@@ -13,12 +13,13 @@ The unit coverage report gives:
 
 | bounded area | statement coverage | interpretation |
 | --- | ---: | --- |
-| `internal/domain/stripesignature` | 87.7% | parser, raw-byte, timestamp-boundary, rotation and fail-closed paths are exercised; overflow/format helper edges remain outside the current fixture set |
+| `internal/domain/stripesignature` | 87.7% on original baseline | parser, raw-byte, timestamp-boundary, rotation and fail-closed paths were exercised; the correction adds checked-overflow and invalid-clock regressions, with updated coverage pending CI |
 | `internal/application/authenticatewebhook` | 83.3% | normal path, dependency errors, repeat event and fixed-clock/file-secret composition are exercised; the defensive nil-input branch remains outside the current fixture set |
 | CLI/adapters | 0.0% unit profile | exercised by wrapper dev/release smoke and CLI evidence, but not instrumented by package unit tests; this is an explicit coverage limitation, not an inferred PASS |
 
 The remaining CLI/adapter unit-coverage gap is bounded by the actual smoke
 checks and is listed as follow-up work rather than silently counted as unit
-coverage. The five behavioral mutations in `MUTATION_PROTOCOL.md` were all
+coverage. The five original behavioral mutations in `MUTATION_PROTOCOL.md` were
 compiled and killed, providing sensitivity evidence for the highest-risk
-signature and timestamp rules.
+signature and timestamp rules. CPU/memory profiling was not run; a Go `pprof`
+route is planned only for a separately bounded performance experiment.

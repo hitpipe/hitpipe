@@ -1,0 +1,58 @@
+NB-REV-007 / r2 / M04
+STATUS=KILLED
+MUTATION=change current inclusive 300-second boundary comparisons from > to >=
+BASELINE_SHA=d164aebd5b746151da41717f0ffb483eb9b39a63
+BASELINE_VERIFIER_SHA256=0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640
+MUTANT_SHA=3cc2a0d5ef75a55283802152b7295b2bb244cc83
+PATCH_SHA256=462b7897cf1f55a84bca439a9ce86c0246b1127267647566780f11079b728ace
+BRANCH=work/nb-mutation-r2-M04
+RUN=https://github.com/hitpipe/hitpipe/actions/runs/39282914689
+JOB=https://github.com/hitpipe/hitpipe/actions/runs/39282914689/job/118160751628
+RUN_ID=39282914689
+JOB_ID=118160751628
+RUNNER=ubuntu-24.04
+STARTED_AT=2026-10-19T16:07:12Z
+FINISHED_AT=2026-10-19T16:07:25Z
+CWD=/home/runner/work/hitpipe/hitpipe/services/intake
+GIT_VERSION=git version 2.55.0
+GO_VERSION=go version go1.27.2 linux/amd64
+ARGV_COMPILE=go test -run '^$' ./...
+COMPILE_EXIT=0
+COMPILE_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.002s [no tests to run]
+ok   github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.002s [no tests to run]
+COMPILE_STDOUT_END
+ARGV_TEST=go test -count=1 ./...
+TEST_EXIT=1
+TEST_STDOUT_BEGIN
+?    github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/clock/system [no test files]
+?    github.com/hitpipe/hitpipe/services/intake/internal/adapters/fixtures/signingsecrets [no test files]
+--- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble (0.00s)
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/file-fixture/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+    --- FAIL: TestAuthenticateWebhookContractWithFixtureAndDouble/in-memory-double/boundary (0.00s)
+        authenticate_test.go:78: boundary result={Outcome:{Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} Webhook:<nil>}
+FAIL
+FAIL github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook 0.004s
+--- FAIL: TestSignatureRawBytesAndTolerance (0.00s)
+    --- FAIL: TestSignatureRawBytesAndTolerance/past300 (0.00s)
+        verifier_test.go:53: got={Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} want pass=true
+    --- FAIL: TestSignatureRawBytesAndTolerance/future300 (0.00s)
+        verifier_test.go:53: got={Status:REJECTED Reason:timestamp_outside_tolerance Version:stripe-signature-v1 Timestamp:1700000000} want pass=true
+FAIL
+FAIL github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature 0.003s
+FAIL
+TEST_STDOUT_END
+DETECTION_ORACLE=real behavioral assertions failed after successful compilation
+RESULT=KILLED
+SURVIVOR=0
+RETEST=NOT_APPLICABLE
+BASELINE_BEFORE=PASS: corrected C3 run 39281598031, current source head d164aebd5b746151da41717f0ffb483eb9b39a63
+RESTORATION=temporary mutant branch remains unmerged; post-series corrected-baseline gate pending
+FINAL_GATE=PASS before series; after-series rerun pending
+HIDDEN_SUITE=NOT_PROVIDED
+LIMITATION=The workflow is an author-controlled temporary experiment branch; it is not a PR, merge, acceptance or production check. Full step output is retained in the linked native GitHub Actions job log.
