@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 
+	"github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook"
 	"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature"
 )
 
@@ -67,12 +69,31 @@ func main() {
 	if err != nil {
 		fail(*format, "fixture_body_invalid")
 	}
-	outcome := stripesignature.Verify(rawBody, input.Signature, []byte(input.Secret), input.NowUnix)
+	consumer, err := authenticatewebhook.New(fixtureSecretResolver{secret: []byte(input.Secret)}, fixtureClock{now: input.NowUnix})
+	if err != nil {
+		fail(*format, "consumer_unavailable")
+	}
+	result := consumer.Authenticate(context.Background(), authenticatewebhook.Input{
+		InstallationID: "fixture-installation",
+		RawBody:        rawBody,
+		Signature:      input.Signature,
+	})
+	outcome := result.Outcome
 	printDiagnostic(*format, diagnostic{Module: "intake-contractcheck", Status: string(outcome.Status), Reason: string(outcome.Reason), Version: outcome.Version, Commit: commit, Dirty: dirty, BuildMode: buildMode})
 	if outcome.Status != stripesignature.Verified {
 		os.Exit(1)
 	}
 }
+
+type fixtureSecretResolver struct{ secret []byte }
+
+func (r fixtureSecretResolver) Resolve(context.Context, string) ([]byte, error) {
+	return r.secret, nil
+}
+
+type fixtureClock struct{ now int64 }
+
+func (c fixtureClock) NowUnix(context.Context) (int64, error) { return c.now, nil }
 
 func printDiagnostic(format string, value diagnostic) {
 	if format == "json" {
