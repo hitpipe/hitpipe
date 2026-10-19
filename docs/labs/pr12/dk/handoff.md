@@ -1,6 +1,6 @@
-# HIT-11 — итоговый пакет до отдельного human review
+# HIT-11 — пакет после технического ревью Тимофея и авторских исправлений
 
-Владелец Дмитрий Карачебан. Режим MANUAL_LAB_PR12. Агентная часть R1/R2/C1/C2/C3/D1/REPORT подготовлена, реальные code checks выполнены; H1 — подготовленный пакет, сами человеческие действия отсутствуют. Собственные PR #12–19 не merged/Done/Accepted, submission tags не созданы. Общий bootstrap #2 уже merged 19.10.2026 09:04 UTC.
+Владелец Дмитрий Карачебан. Режим MANUAL_LAB_PR12. Агентная часть R1/R2/C1/C2/C3/D1/REPORT подготовлена, реальные code checks выполнены; H1 — подготовленный пакет, сами человеческие действия отсутствуют. Техническое ревью Tim1hik уже опубликовано: код #12–18 APPROVED_FOR_SCOPE, отчёты #19 получили DK-REV-001/002. Данная редакция содержит авторские исправления; владелец разрешил интеграцию без повторного approval после успешных проверок. Фактический merge устанавливается по GitHub PR #19; личная сдача, Done всей Feature, Accepted и submission tags этим не объявляются. Общий bootstrap #2 уже merged 19.10.2026 09:04 UTC.
 
 Проверяющий с 19.10.2026 — **Тимофей Патрушев (`Tim1hik`)**. Передать ему [полную инструкцию](review/TIMOFEY_REVIEW_GUIDE_RU.md) и [форму настоящего заключения](review/TIMOFEY_REVIEW_RESULT_TEMPLATE.md). Новое личное назначение зафиксировано в [reviewer-assignment.json](review/reviewer-assignment.json); прежнее NB → DK заменено без переписывания frozen источников.
 
@@ -16,7 +16,7 @@
 
 205 frozen source files validated; actual IAM vet/named tests/race, dev/release outside-checkout smoke PASS; [CI pr12-iam на exact C3 head](https://github.com/hitpipe/hitpipe/actions/runs/39177171258/job/117822118583) SUCCESS. Cross-package statement coverage94.5%, Evaluate/Execute100% statements; gaps/непроверенные свойства описаны. Все7seeded behavioral mutants компилируются: первый набор6обнаружил/1пропустил, после нового mixed Decision test M07 обнаружен, CI повторил все7; исходники восстановлены. Natural defect1 JSON key case реально найден/исправлен, не смешан с seeded/hidden.
 
-Реальные binary observations на C3: dev4622983/release4409836 bytes, static ELF64x86-64, debug_info в обоих, no dynamic section; никаких latency/bottleneck claims. Отчёты прошли ZIP/XML/rels/reopen/21unique placeholders/no-media проверки; визуальный renderer недоступен, пагинация не объявляется проверенной.
+Реальные binary observations на C3: dev4622983/release4409836 bytes, static ELF64x86-64, debug_info в обоих, no dynamic section; никаких latency/bottleneck claims. Отчёты прошли ZIP/XML/rels/reopen/21unique placeholders/no-media проверки; выполнен реальный LibreOffice/Poppler rendering и отдельный авторский просмотр страниц; точные DOCX/PDF digests и результат — [в журнале исправлений](review/corrections-20261019/README.md). После настоящих снимков пагинацию нужно проверить снова.
 
 ## Один запуск агента Тимофея
 
@@ -24,7 +24,7 @@
 своему Codex. Агент проверяет identity Tim1hik, получает exact PR12–19,
 выполняет анализ/проверки, публикует свои evidence и native GitHub reviews
 с обозначением делегации. До этого личные blind-ответы, ручной clone/тесты
-и нажатия Submit review не требуются. Review пока NOT_STARTED, вердикт не выдан.
+и нажатия Submit review не требуются. Этот запуск уже состоялся: [заключение Tim1hik](https://github.com/hitpipe/hitpipe/pull/19#issuecomment-6271215905). Повторный запуск после авторских исправлений владелец явно отменил. Подробности — [журнал исправлений](review/corrections-20261019/README.md).
 При недоступном локальном toolchain использовать текущий IAM workflow в
 GitHub Actions; при отсутствии Jira — GitHub result и точный jira-update.md.
 Только реальная недоступность login/2FA/разрешений требует вмешательства.
@@ -34,7 +34,7 @@ GitHub Actions; при отсутствии Jira — GitHub result и точны
 работа не называется личным прохождением студентом учебных процедур.
 Интервью, student peer/clarity/clean-room/module checks, внешнее оппонирование,
 снимки/реквизиты и защита сохраняют действительные pending статусы и не мешают
-техническому review. Merge/tags/Done остаются отдельным последующим действием Lead.
+техническому review. Интеграция разрешена Lead с bypass повторного approval; CI и история сохраняются. Личные tags/сдача/защита и закрытие всех human gates остаются отдельными действительными действиями.
 
 ## Jira и ограничения
 

@@ -1,0 +1,493 @@
+                                          ГУАП
+
+
+                               КАФЕДРА № [ВПИСАТЬ КАФЕДРУ]
+
+
+
+
+ОТЧЕТ
+ЗАЩИЩЕН С ОЦЕНКОЙ
+ПРЕПОДАВАТЕЛЬ
+
+
+
+   должность, уч. степень, звание          подпись, дата     инициалы, фамилия
+
+
+
+
+                ОТЧЕТ О ПРАКТИЧЕСКОЙ РАБОТЕ № 1
+       Инструментальный контур и воспроизводимое                   исполнение
+минимального программного компонента
+       по МДК.01.04 «Системное программирование»
+
+
+
+
+РАБОТУ ВЫПОЛНИЛ
+Студент гр. №
+[ВПИСАТЬ
+ГРУППУ]
+                                           подпись, дата      Д. Карачебан
+
+
+
+
+                                      Санкт-Петербург
+                                               2026
+                                 ВВЕДЕНИЕ
+
+     Цель — подготовить собственную исполняемую часть HitPipe, описать
+полный инструментальный маршрут, наблюдать отличия dev/release и
+доказать содержательный автоматический gate. Component IAM содержит
+настоящую reusable policy и diagnostic root; одноразовой отдельной учебной
+программы с копией правил нет.
+     19.10.2026 Tim1hik опубликовал ревью с пометкой «Codex по делегации
+Тимофея Патрушева»: код APPROVED_FOR_SCOPE (PR12–18), отчёты
+CHANGES_REQUIRED         (PR19).   Данная       редакция   исправляет   DK-
+REV-001/002;     авторская    проверка      и     точные    хеши    —     в
+review/corrections-20261019. По прямому решению Дмитрия повторный
+approval не требуется; merge допускается владельцем после проверок. Это не
+личная учебная взаимопроверка, не сдача и не формальная приёмка Project OS.
+
+
+
+
+                                    2
+                        1 СВЕДЕНИЯ О РАБОТЕ И ПРОЕКТЕ
+
+Поле                     Фактическое значение
+Автор участка            Дмитрий Карачебан; код, проверки и текст подготовлены Codex по
+                         поручению. Независимое техническое ревью выполнено Codex по
+                         делегации Тимофея; личные учебные проверки отдельно не
+                         засвидетельствованы
+Личные реквизиты         Группа и кафедра неизвестны: вписывает студент; подпись, преподаватель
+                         и оценка не заполнены агентом
+Проект / роль            HitPipe, project lead; IAM — Identity & Access, services/iam; Feature HIT-11
+Режим                    MANUAL_LAB_PR12; не официальный /start, admission, acceptance или
+                         /review Project OS
+Исходный baseline        pr12-bootstrap-20261017-v2 →
+                         94b78199c202a31bcb63326ae7f2a4748aa29360; bootstrap PR #2 merged
+                         19.10.2026 09:04 UTC
+Design input             Discovery/Product/Architecture Candidate/In Review; context-lock и exact
+                         formal source84249ff3ba611358232294c46f6022f030ea223d; grant=none
+Проверенный code         2cd7c032e8ede98c75181599b440e97657bff197; локальный detailed suite
+candidate                5b14ab92d1ca2a68f46fd3bda783b188549fbf5a, Go files идентичны;
+                         CI39177171258 проверил exact candidate
+Документация и H1        D1 9a8a59cbc762c10b15abf5d119435e08ecc2c752; H1
+                         efa7d1860f09bf8b28ec239896780257fbfe559a; существенный contract R2
+                         9d7c37151606656e9dc2f2f65876b8bd93b397cd создан до C1
+Теги сдачи               Не созданы: сначала настоящий human review/merge и итоговые checks;
+                         затем четыре immutable -dk-v1 tags и внешняя submission record
+Статус текста / сдачи    CONTENT_READY_IMAGES_PENDING, PREPARED_FOR_REVIEW;
+                         человеческие gates pending, SUBMISSION_READY=false
+Время работы             18 октября2026 UTC / ночь19октября Europe/Moscow; фактические
+                         timestamps в evidence JSON
+
+        Source-of-truth: точные upstream copies и module contract; этот отчёт —
+описание результата, не второй нормативный источник. Локальные DK-ID не
+меняют HP requirements. Feature HIT-11, код и evidence, CI pr12-iam.
+
+
+
+
+                                               3
+                         2 ЦЕЛЬ, ПРОЕКТ И СОБСТВЕННАЯ ЧАСТЬ
+
+          IAM проверяет существующий session snapshot как предварительное
+условие работы оператора. Services/iam имеет свой Go module; legacy root и
+чужие services не мигрировали. CLI принимает fixture path/format/adapter
+selection, выдаёт version/source metadata и fixed-code diagnostics; broken input
+даёт2, unavailable dependencies3, корректный denied0. Запуск read-only, без
+БД/LLM/аккаунта и production эффектов. Краткий источник решения — LAB-
+STACK-001, конкретные локальные варианты — DK-ADR-001.
+          2.1 Все семь позиций инструментального контура
+Все 7 позиций              Средство и назначение              Маршрут на участке            Фактический статус
+1 Build/transformation     Go1.27.2 compiler/linker;          root → workspace.py           WORKS: C1/C2/C3/D1
+                           Python wrapper                     build iam --mode              actual smoke
+                                                              dev/release → module
+                                                              cmd → ELF
+2 Dependency               Go modules1.27.2                   собственный                   WORKS: d1-imports;
+management                                                    services/iam/go.mod; go       никаких private
+                                                              list -json ./...; no third-   credentials
+                                                              party modules
+3 Tests                    go test1.27.2, testing/fuzz,       named tests, fixtures, DI     WORKS: c3-final-check,
+                           coverage                           contracts, mutation runner    fuzz, cross coverage,
+                                                                                            mutation protocols
+4 Static analysis          go vet1.27.2 + existing            wrapper check:                WORKS: local/CI; не
+                           source import guard                domain/application            SAST proof/security
+                                                              boundaries, vet ./...         certification
+5 Dynamic analysis         Go race detector1.27.2 +           PR12_RACE=1 wrapper;          WORKS на linux/amd64
+                           external diagnostic smoke          реальный binary               с C compiler; ограничен
+                                                              dev/release вне checkout      выполненными путями
+6 Profiling                Go1.27.2                           будущий measured              PLANNED / NOT RUN.
+                           pprof/benchmark/trace              production-authority          Профиль CPU/alloc не
+                                                              workload, отдельная           снимался; bottleneck и
+                                                              задача после реального        latency цифры не
+                                                              adapter                       заявляются
+7 CI                       GitHub Actions                     .github/workflows/pr12-       WORKS
+                           ubuntu24.04,                       dk.yml: exact                 подтверждается
+                           checkout@v4, setup-                head→sources→vet/tests/       конкретными CI runs в
+                           go@v5, upload-                     race→smoke→coverage           финальном index; hosted
+                           artifact@v4                        →mutations→artifacts          action major refs
+                                                                                            унаследованы, это не
+                                                                                            immutable toolchain
+                                                                                            digests
+
+          Фактическая локальная среда: Linux amd64, Go1.27.2, Python3.14.4,
+Git2.53.0, gh2.46.0, GNU readelf2.46; exact outputs в evidence. Прямых внешних
+Go modules0, no go.sum по причине stdlib-only, implicit latest dependency нет.
+                                                          4
+Profiling/pprof/trace   NOT   RUN/PLANNED,   bottleneck/throughput   не
+объявляются. Reports создаются отдельным python-docx1.2.0 tooling, не
+runtime dependency сервиса.
+
+
+
+
+                                   5
+                                   3 ХОД РАБОТЫ
+
+         3.1 Своя часть каркаса и маршрут PR
+
+         HIT-19 → codex/HIT-19-dk-session-policy → PR14 → actual checks;
+HIT-20/21 добавляют consumer/tests в отдельных PR15/16. На момент
+подготовки 18/19 октября общий bootstrap PR #2 уже merged, а собственные
+PR были stacked и unmerged. Текущее техническое ревью и решение об
+интеграции приведены во введении; фактический merge устанавливается по
+GitHub, а не по этому историческому снимку. Все source pins Candidate, не
+официальное Project OS admission. В main действуют approval, last-push
+approval и четыре strict checks. Владелец отдельно разрешил bypass повторного
+approval после авторского исправления замечаний; обязательные CI не
+обходятся.
+
+Рисунок 1 — Собственная часть исполняемого каркаса
+         [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-01]
+         Куда вставить: 0104 ПР1 §3.1 после маршрута PR; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+         Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+         Навигация: https://github.com/hitpipe/hitpipe/pull/14 → Files changed →
+services/iam/cmd/iam-contractcheck/main.go;               current         module
+https://github.com/hitpipe/hitpipe/tree/2cd7c032e8ede98c75181599b440e97657bff
+197/services/iam
+         Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+         Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+         Команды / действия: Показать C1 PR #14, scope собственного module и
+actual     current   entrypoint.   Через       вкладку   Commits    сверить   C1
+
+
+
+                                           6
+0ead65c2a7bd767841659c0f26f66edd7d763cfb; позже C2 consumer wiring
+существует на 2cd7c032e8ede98c75181599b440e97657bff197.
+        Что должно быть видно: Task HIT-19; отдельный PR; свой entrypoint;
+реальный code; состояние review pending
+        Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-01.png
+        Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+        3.2 Путь исполнения и состав артефакта
+
+        Go     source       +     per-service           go.mod/std        library        →       Go1.27.2
+typecheck/compile/link → linux-amd64 ELF с Go runtime → OS/runtime/main/run
+→ Decode fixture/composition root → Execute Lookup→Clock→Evaluate →
+state/reason/exit. JSON input отдельно, Python/Git/gh/build tools для runtime не
+нужны. Binary содержит compiled Go/runtime/stdlib, а не interpreter/LLM
+dependency.
+        Actual file, go version -m, readelf -S/-d подтверждают статический ELF x86-
+64,     .debug_info     и       отсутствие         dynamic         section     в    обеих        сборках.
+CGO_ENABLED1 из build metadata не означает, что конкретный бинарник
+динамически связан. Сетевые библиотеки/authority/SQL в этом executable
+отсутствуют; cross-platform compatibility не измерялась.
+        3.3 Сравнение одного сценария dev/release
+
+        Одинаковые                source2cd7c032e8ede98c75181599b440e97657bff197,
+dirty=false, fixture valid.json, ожидаемый результат session_valid. Native
+observations сохранены в binary-inspection.json и d1-build-smoke.log.
+Свойство                           Dev                                   Release
+Флаги                              -gcflags=all=-N -l; linker metadata   -trimpath; linker metadata
+Размер данного build               4622983 bytes                         4409836 bytes
+Тип                                static ELF64 x86-64                   static ELF64 x86-64
+Debug info / symbols               .debug_info есть, не stripped         .debug_info есть, не stripped
+
+                                                    7
+Свойство                         Dev                                    Release
+--version                        commit2cd7c032e8ede98c7518159          тот же commit/dirty, mode=release
+                                 9b440e97657bff197, dirty=false,
+                                 mode=dev
+Штатный/ошибочный fixture        фактически PASS                        фактически PASS
+Поставка вне checkout            copied binary+fixtures, запуск         тот же протокол PASS
+                                 temporary directory
+
+       Разница размера — наблюдение, не доказательство ускорения. Release
+не обязан удалять debug symbols. Smoke действительно запустил отдельную
+копию binary вне исходников, не go run. На совместимом host нужны
+binary+fixture; third-party runtime libraries не обнаружены ELF inspection.
+Независимый student clean-room запуск остаётся отдельным gate.
+
+Рисунок 2 — Подготовка одного компонента dev/release
+       [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-02]
+       Куда вставить: 0104 ПР1 §3.3 после сравнения режимов; заменить
+только выделенное место этой фигуры реальным снимком, подпись сохранить.
+       Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+       Навигация:              Терминал                    →             отдельный                 clone
+2cd7c032e8ede98c75181599b440e97657bff197, root.
+       Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+       Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+       Команды / действия: git rev-parse HEAD; go version; python3
+tools/pr12/workspace.py         build          iam        --mode    dev        --require;       python3
+tools/pr12/workspace.py              build          iam        --mode         release          --require;
+.pr12-build/iam/dev/iam-contractcheck                --version;    .pr12-build/iam/release/iam-
+contractcheck           --version;           file         .pr12-build/iam/dev/iam-contractcheck
+.pr12-build/iam/release/iam-contractcheck. Зафиксировать actual размеры своего
+нового build отдельно от сохранённого observation.
+
+
+
+                                                     8
+     Что должно быть видно: тот же SHA/input; -N -l и -trimpath; оба binary
+paths; mode/dirty metadata; ELF тип
+     Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-02.png
+     Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+
+Рисунок 3 — Поставка запущена вне исходников
+     [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-03]
+     Куда вставить: 0104 ПР1 §3.3 после outside-checkout результата;
+заменить только выделенное место этой фигуры реальным снимком, подпись
+сохранить.
+     Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+     Навигация:           Терминал            root         clean          clone
+2cd7c032e8ede98c75181599b440e97657bff197.
+     Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+     Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+     Команды / действия: git rev-parse HEAD; python3 tools/pr12/workspace.py
+smoke iam --require; printf "exit=%s\n" "$?". В журнале показать pr12-outside-
+checkout temporary path, --version, fixture и PASS обоих режимов. Wrapper
+реально копирует binary+fixtures, не запускает go run из checkout.
+     Что должно быть видно: outside-checkout path; copied executable; версия;
+positive input; оба режима PASS; exit0
+     Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-03.png
+     Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+                                         9
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+
+
+
+
+                                     10
+                                              4 РЕЗУЛЬТАТЫ
+
+        4.1 Проверки компонента
+ Случай                                 Expected                            Actual / evidence
+ --version                              source/version/dirty/buildMode      PASS в dev/release outside smoke
+ valid.json text/json                   session_valid, exit0, start/end     PASS local tests+binary smoke
+                                        diagnostics
+ idle-equal.json                        denied/idle_expired, exit0          PASS boundary tests; denied не
+                                                                            ошибка конфигурации
+ malformed.json / invalid format        bounded invalid_config, exit2       PASS smoke/CLItests, input не
+                                                                            печатается
+ --lookup file/fixed                    один consumer, одинаковое           PASS DI/CLI tests
+                                        решение
+ --clock system без real health probe   unavailable/clock_unavailable,      PASS; host time не назван trusted
+                                        exit3                               без evidence
+ Безопасный вывод                       нет canary/profile/secret/fixture   PASS actual negative tests
+                                        body
+
+Рисунок 4 — Штатный диагностический запуск
+        [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-04]
+        Куда вставить: 0104 ПР1 §4.1 после таблицы component checks; заменить
+только выделенное место этой фигуры реальным снимком, подпись сохранить.
+        Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+        Навигация:                      Терминал                     root           clean                clone
+2cd7c032e8ede98c75181599b440e97657bff197 после release build.
+        Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+        Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+        Команды           /     действия:          .pr12-build/iam/release/iam-contractcheck                    --
+version;                      .pr12-build/iam/release/iam-contractcheck                              --fixture
+services/iam/testdata/valid.json --format json; printf "exit=%s\n" "$?".
+        Что должно быть видно: source SHA; synthetic fixture path;
+event=start/end; state valid/reason session_valid; exit0
+        Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-04.png
+
+
+                                                         11
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+
+Рисунок 5 — Неверная конфигурация и безопасная диагностика
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-05]
+      Куда вставить: 0104 ПР1 §4.1 после ошибочного случая; заменить
+только выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+      Навигация:         Терминал         того        же        release      build
+2cd7c032e8ede98c75181599b440e97657bff197.
+      Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды / действия: .pr12-build/iam/release/iam-contractcheck --fixture
+services/iam/testdata/malformed.json --format json; printf "exit=%s\n" "$?"; .pr12-
+build/iam/release/iam-contractcheck --fixture services/iam/testdata/valid.json --
+format invalid; printf "exit=%s\n" "$?". Без set -e, иначе shell остановится до
+вывода exit.
+      Что должно быть видно: оба неверных ввода; invalid_config; exit2; нет
+содержимого fixture/секретов
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-05.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+                                        12
+      4.2 Независимое воспроизведение чужой части
+
+      DK      должен       лично      проверить       TP      Processing      на
+candidateadfbfc33bf20cb0b0641e49e48c0502d2f5d108d          (PR10),    Тимофей
+Патрушев — DK на текущем head PR #19 с обязательной записью actual full
+SHA перед запуском. Environment/fullSHA/commands/results/remarks/retest в
+review/peer-protocol.json. Сейчас NOT PERFORMED. Agent smoke и hosted CI
+выполнены, но не называются настоящим другим студентом; protocol не
+содержит выдуманных имён/действий.
+
+Рисунок 6 — Реальное независимое воспроизведение чужой части
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-06]
+      Куда вставить: 0104 ПР1 §4.2 после статуса peer gate; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: HUMAN_ACTION_PENDING: до реального действия снимок не
+доказывает результат; запрещено фотографировать незаполненный протокол
+как PASS.
+      Навигация: https://github.com/hitpipe/hitpipe/pull/10 → TP candidate
+adfbfc33bf20cb0b0641e49e48c0502d2f5d108d;               H1           instructions
+https://github.com/hitpipe/hitpipe/blob/efa7d1860f09bf8b28ec239896780257fbfe5
+59a/docs/labs/pr12/dk/human-gates.md → §4.
+      Точная исходная версия: adfbfc33bf20cb0b0641e49e48c0502d2f5d108d
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды / действия: Дмитрий лично клонирует TP exact candidate в
+чистую среду и выполняет validate/check processing/smoke processing по H1.
+После              реального               выполнения                заполнить
+reviewer/date/env/fullSHA/argv/exit/remarks/retest в review/peer-protocol.json и
+показать свой terminal+protocol. Агент этого student action не выполнял. Для
+обратной стороны Тимофей Патрушев проверяет DK в отдельном чистом
+
+                                      13
+checkout      текущего   head   PR   #19     и   фиксирует   actual   SHA     по
+review/TIMOFEY_REVIEW_GUIDE_RU.md.
+        Что должно быть видно: кто реально проверял; чужой Processing
+component; полный TP SHA; чистая среда; actual commands/result/remarks/retest
+        Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-06.png
+        Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+        4.3 Содержательный автоматический gate
+
+        CI pr12-iam на2cd7c032e8ede98c75181599b440e97657bff197 фактически
+SUCCESS: source validate, wrapper boundaries, actual nonzero named tests, race,
+both-mode outside smoke, cross-package coverage, seven compiling mutants и
+uploaded artifacts. M01 меняет idle equality, go build0; та же CI command wrapper
+check даёт1 с assertion, после восстановления0. Это actual локальный negative
+gate;    не   изображает    отдельный      намеренно   красный    GitHub     run.
+Исходный/конечный код чистый, mutations по одному во временной ветке.
+
+Рисунок 7 — Та же команда CI отвергает нарушенное условие
+        [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz01-07]
+        Куда вставить: 0104 ПР1 §4.3 после отрицательного gate; заменить
+только выделенное место этой фигуры реальным снимком, подпись сохранить.
+        Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+        Навигация: Сохранённые M01-build.log, M01-check.log, protocol.json и
+final-clean.log на 2cd7c032e8ede98c75181599b440e97657bff197.
+        Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+
+
+
+
+                                        14
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды    /   действия:    Открыть      .github/workflows/pr12-dk.yml     и
+protocol.json   рядом.     Показать          одинаковую         команду   python3
+tools/pr12/workspace.py   check   iam    --require,   build0,    нарушенный    idle
+equality→test1, затем восстановленный0. Это настоящий локальный negative
+gate с CI command, не поддельный красный CI run.
+      Что должно быть видно: одна и та же command; компилируемый M01;
+незелёный assertion; восстановленный PASS; exact source
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz01-07.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+
+
+
+
+                                        15
+               5 ЗАКЛЮЧЕНИЕ И ИНДИВИДУАЛЬНЫЙ ВКЛАД
+
+     Реально подготовлены собственный module/CLI, source metadata,
+configuration/error diagnostics, два режима и executable inspection;7toolchain
+positions имеют working/planned status. Код переиспользуется будущим IAM,
+чужие services не затронуты. Отдельный человек review, собственное student
+воспроизведение чужой части и защита не выполнены агентом; text/images
+status честен. Семь позиций не означают, что profiling запускался;
+состав/размер не объявлены latency измерением.
+
+
+
+
+                                     16
+                 СПИСОК ИСПОЛЬЗОВАННЫХ МАТЕРИАЛОВ
+
+      1. Четыре актуальные методички и исходные DOCX; точные
+имена/SHA256: docs/labs/pr12/source-files.json, manifest.json. Персональная
+матрица29результатов: criteria-crosswalk.json.
+      2. Shared charter/MVP/regulation/LAB-STACK-001 и frozen Project OS
+agent master prompt; pins в context-lock.json. Документы Candidate, не
+формальное принятие.
+      3.     HP-BP-001/T/002–003/013;            HP-BP-007/T/005;       canonical
+Session/Authorization OAS и IAM SQL, без локального изменения схем.
+      4. Собственные PR12–18, GitSHA/CI/logs/digests из evidence/index.json.
+Участок owner Дмитрий Карачебан; агентное исполнение Codex; техническое
+ревью Tim1hik проведено с объявленной делегацией, личные учебные
+действия не засвидетельствованы.
+      5.        Module          source,          actual       CI,        личные
+toolchain/module-map/module-adr/execution-path/test-design/test-results/risk-
+registry. Не использованы выдуманные интервью, измерения или чужие
+approval.
+
+
+
+
+                                          17
+

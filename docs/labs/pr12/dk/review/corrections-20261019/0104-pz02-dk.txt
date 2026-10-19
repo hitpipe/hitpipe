@@ -1,0 +1,481 @@
+                                          ГУАП
+
+
+                               КАФЕДРА № [ВПИСАТЬ КАФЕДРУ]
+
+
+
+
+ОТЧЕТ
+ЗАЩИЩЕН С ОЦЕНКОЙ
+ПРЕПОДАВАТЕЛЬ
+
+
+
+   должность, уч. степень, звание          подпись, дата     инициалы, фамилия
+
+
+
+
+                ОТЧЕТ О ПРАКТИЧЕСКОЙ РАБОТЕ № 2
+       Модульная архитектура и контракт программного модуля
+       по МДК.01.04 «Системное программирование»
+
+
+
+
+РАБОТУ ВЫПОЛНИЛ
+Студент гр. №
+[ВПИСАТЬ
+ГРУППУ]
+                                           подпись, дата      Д. Карачебан
+
+
+
+
+                                      Санкт-Петербург
+                                               2026
+                                ВВЕДЕНИЕ
+
+     Цель — выделить связную ответственность собственного IAM module,
+описать контракт до демонстрации реализации, подключить реального
+потребителя и доказать замену двух реализаций без изменения consumer. Итог
+— переиспользуемая product-oriented логика, локальный ADR/карта/профиль
+сложности и пакет настоящей человеческой проверки.
+     19.10.2026 Tim1hik опубликовал ревью с пометкой «Codex по делегации
+Тимофея Патрушева»: код APPROVED_FOR_SCOPE (PR12–18), отчёты
+CHANGES_REQUIRED         (PR19).   Данная       редакция   исправляет   DK-
+REV-001/002;     авторская    проверка      и     точные    хеши    —     в
+review/corrections-20261019. По прямому решению Дмитрия повторный
+approval не требуется; merge допускается владельцем после проверок. Это не
+личная учебная взаимопроверка, не сдача и не формальная приёмка Project OS.
+
+
+
+
+                                    2
+                        1 СВЕДЕНИЯ О РАБОТЕ И ПРОЕКТЕ
+
+Поле                     Фактическое значение
+Автор участка            Дмитрий Карачебан; код, проверки и текст подготовлены Codex по
+                         поручению. Независимое техническое ревью выполнено Codex по
+                         делегации Тимофея; личные учебные проверки отдельно не
+                         засвидетельствованы
+Личные реквизиты         Группа и кафедра неизвестны: вписывает студент; подпись, преподаватель
+                         и оценка не заполнены агентом
+Проект / роль            HitPipe, project lead; IAM — Identity & Access, services/iam; Feature HIT-11
+Режим                    MANUAL_LAB_PR12; не официальный /start, admission, acceptance или
+                         /review Project OS
+Исходный baseline        pr12-bootstrap-20261017-v2 →
+                         94b78199c202a31bcb63326ae7f2a4748aa29360; bootstrap PR #2 merged
+                         19.10.2026 09:04 UTC
+Design input             Discovery/Product/Architecture Candidate/In Review; context-lock и exact
+                         formal source84249ff3ba611358232294c46f6022f030ea223d; grant=none
+Проверенный code         2cd7c032e8ede98c75181599b440e97657bff197; локальный detailed suite
+candidate                5b14ab92d1ca2a68f46fd3bda783b188549fbf5a, Go files идентичны;
+                         CI39177171258 проверил exact candidate
+Документация и H1        D1 9a8a59cbc762c10b15abf5d119435e08ecc2c752; H1
+                         efa7d1860f09bf8b28ec239896780257fbfe559a; существенный contract R2
+                         9d7c37151606656e9dc2f2f65876b8bd93b397cd создан до C1
+Теги сдачи               Не созданы: сначала настоящий human review/merge и итоговые checks;
+                         затем четыре immutable -dk-v1 tags и внешняя submission record
+Статус текста / сдачи    CONTENT_READY_IMAGES_PENDING, PREPARED_FOR_REVIEW;
+                         человеческие gates pending, SUBMISSION_READY=false
+Время работы             18 октября2026 UTC / ночь19октября Europe/Moscow; фактические
+                         timestamps в evidence JSON
+
+        Source-of-truth: точные upstream copies и module contract; этот отчёт —
+описание результата, не второй нормативный источник. Локальные DK-ID не
+меняют HP requirements. Feature HIT-11, код и evidence, CI pr12-iam.
+
+
+
+
+                                               3
+                     2 ЦЕЛЬ, ПРОЕКТ И МЕСТО МОДУЛЯ
+
+     Цепочка:    HP-BP-001/T/002–003     +   DK-FR01–03        →    пригодность
+существующей прикладной сессии → Evaluate(snapshot,observation) Decision
+→ AuthenticateSession.Service.Execute(ctx,reference)     Result    → diagnostic
+composition   root   и   будущий   IAM   transport.     Внешние     обязанности
+OIDC/SQL/membership/renewal/start/revoke     barriers     не      выдаются   за
+реализованные внутри policy.
+
+
+
+
+                                     4
+                                       3 ХОД РАБОТЫ
+
+          3.1 Контракт и Go-документация до реализации
+
+          R2   contract9d7c37151606656e9dc2f2f65876b8bd93b397cd                              создан        до
+C10ead65c2a7bd767841659c0f26f66edd7d763cfb.                            Canonical            local         file
+services/iam/docs/module-contract.md, прежний personal path — указатель.
+Wire/SQL не менялись. Godoc описывает purpose/ownership/errors и public
+types, реальные go doc outputs сохранены.
+Часть контракта           Точное поведение
+Inputs                    Snapshot values Found/Revoked/CreatedAt/ExpiresAt/IdleExpiresAt; explicit
+                          Observation At/Trusted. Reference1..128ASCII, first alnum, then alnum/_/-; не
+                          cookie/wire Session UUID
+Valid times               Nonzero UTC-representable years1..9999, created<idle<=absolute,
+                          created<absolute, absolute-created<=24h, now>=created
+Expiry                    now>=deadline истёк; no grace; renewed idle authority-owned, нельзя
+                          ограничить created+8h при отсутствии lastActivity
+Precedence                clock→unknown→revoked→malformed→future creation→absolute
+                          expired→idle expired→valid
+Ports                     SessionLookup.Lookup(ctx,ref) snapshot/error; Clock.Now(ctx)
+                          observation/error; consumer-owned interfaces
+Application errors        nil/typednil dependencies rejected; zero service unavailable; invalid ref/nilctx
+                          denied; cancelled/unavailable lookup/clock unavailable; no old success fallback
+Freshness                 После успешного Lookup читается Clock; snapshot freshness обязан доказать
+                          реальный authority adapter
+Ownership/lifetime        Inputs/results values; no mutable pointer escape; Service stateless, injected deps
+                          caller-owned/concurrency-safe for workload
+Effects                   Domain noIO/time.Now/env/mutation; consumer no session renewal/business
+                          write; diagnostic only synthetic file read
+Safe output               bounded state/reason, raw adapter/parser error/reference/profile/secret не
+                          печатаются; valid не business permission
+
+          Пример:    created00:00Z/idle08:00Z/absoluteследующие00:00Z;                                 trusted
+now07:59:59.999999999Z→valid, ровно08:00Z→denied/idle_expired. Оба срока
+истекли→absolute_expired.            Lookup           error→unavailable/lookup_unavailable;
+Clock error→unavailable/clock_unavailable. No dependency default allow.
+
+Рисунок 2 — Документация модуля по стандарту Go
+          [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-02]
+          Куда вставить: 0104 ПР2 §3.1 после контракта; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+
+
+                                                  5
+      Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+      Навигация: Терминал → корень отдельного чистого clone hitpipe/hitpipe
+на 2cd7c032e8ede98c75181599b440e97657bff197. Go-команды явно выбирают
+services/iam через -C; файл контракта открывать от корня.
+      Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды         /      действия:        go        -C       services/iam           doc
+./internal/domain/sessionpolicy;         go        -C          services/iam             doc
+./internal/application/authenticatesession;   открыть        services/iam/docs/module-
+contract.md.   Показать     purpose/input/output/errors/ownership/side        effects    и
+пример, не только список сигнатур.
+      Что должно быть видно: source SHA; Go package docs; публичные
+типы/операции; контракт и example
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-02.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+      3.2 Реализация и интеграция
+
+      C1 PR14 pure SessionPolicy + safe diagnostic; C2 PR15 real application
+consumer and adapters; C3 PR16 verification. Исходная подготовка использовала
+stacked branches; техническое ревью проведено по делегации Тимофея,
+текущее решение об интеграции приведено во введении. main protected с
+approval/checks; Task не Done. Pure domain imports only time, application owns
+interfaces and invokes Evaluate, cmd wires actual Execute. Это один product
+module, не одноразовая отдельная учебная копия.
+                                    6
+Рисунок 1 — Публичный контракт и существенная реализация
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-01]
+      Куда вставить: 0104 ПР2 §3.2 после реализации; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+      Навигация:
+https://github.com/hitpipe/hitpipe/blob/2cd7c032e8ede98c75181599b440e97657bf
+f197/services/iam/internal/domain/sessionpolicy/policy.go                      и
+/services/iam/internal/application/authenticatesession/service.go.
+      Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды / действия: Открыть Evaluate и Service.Execute, затем CLI call-
+site. Показать pure values, idle/absolute equality, ports и реальное подключение.
+Рядом PR14/15 с отдельными Task keys.
+      Что должно быть видно: Evaluate; Execute; портовая граница; реальная
+ветвящаяся логика; вызов consumer
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-01.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+      3.3 Подмена за одной границей без изменения consumer
+
+      Один Service.Execute принимает SessionLookup. NewFile перечитывает
+строго синтетический JSON на Lookup, NewFixed хранит immutable value copy
+без IO; выбор в cmd, Execute unchanged. Оба adapter instances содержат один
+synthetic snapshot и игнорируют internal reference — они не multi-session
+                                         7
+production authority. FixedClock construction-time synthetic observation; file
+snapshot change не доказывает freshness этой clock. SystemClock с explicit
+HealthProbe отдельно; nil/false probe unavailable, CLI не вставляет fake true.
+
+Рисунок 3 — Один consumer и две подключаемые реализации
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-03]
+      Куда вставить: 0104 ПР2 §3.3 после substitution; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+      Навигация:
+https://github.com/hitpipe/hitpipe/blob/2cd7c032e8ede98c75181599b440e97657bf
+f197/services/iam/cmd/iam-contractcheck/main.go                                  и
+internal/adapters/fixtures/sessionlookup/adapters.go.
+      Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды           /      действия:         Показать       var        lookup
+authenticatesession.SessionLookup,     выбор      NewFile/NewFixed     и    один
+service.Execute без case внутри consumer. Затем release CLI с --lookup file и --
+lookup fixed на valid fixture; оба результата session_valid. Ограничения synthetic
+reference и frozen clock оставить видимыми в README.
+      Что должно быть видно: один Execute; две реализации; одна composition
+root; одинаковые результаты; ограничения подмены
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-03.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+                                         8
+       3.4 Карта модулей
+Package / путь под services/iam   Ответственность / публичный          Прямые внутренние imports
+                                  контракт
+internal/domain/sessionpolicy     Проверить переданные значения:       Нет, stdlib time
+                                  Evaluate, Snapshot, Observation,
+                                  Decision
+internal/application/             Оркестрация                          domain/sessionpolicy
+authenticatesession               New/Service.Execute; consumer-
+                                  owned SessionLookup/Clock;
+                                  Result
+internal/adapters/fixtures/       Строго Decode,                       application/authenticatesession,
+sessionlookup                     NewFile/NewFixed,                    domain/sessionpolicy
+                                  NewFixedClock; синтетическая
+                                  замена, value ownership
+internal/adapters/clock/system    Host Clock.Now через явно            application/authenticatesession,
+                                  заданный HealthProbe; без probe      domain/sessionpolicy
+                                  unavailable
+cmd/iam-contractcheck             Составить зависимости, выбрать       оба adapters и
+                                  File/Fixed и fixture/system Clock,   application/authenticatesession
+                                  выполнить один Execute,
+                                  безопасный вывод/exit
+
+       Стрелка A→B означает source package A импортирует B, не runtime call
+direction. CMD→application и оба adapters; adapters→application/domain;
+application→domain; domain→stdlib time. В коде нет импортного cycle и cross-
+service internals; Go list и wrapper guard проверены. Все package
+ownerДмитрийКарачебан,                            агентное                       исполнениеCodex,
+statusIMPLEMENTED/SELF_CHECKED/HUMAN_REVIEW_PENDING,                                                      не
+Accepted/deployed.
+
+Рисунок 4 — Модульная карта с импортами, автором и статусами
+       [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-04]
+       Куда вставить: 0104 ПР2 §3.4 после карты; заменить только выделенное
+место этой фигуры реальным снимком, подпись сохранить.
+       Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+       Навигация:
+https://github.com/hitpipe/hitpipe/blob/9a8a59cbc762c10b15abf5d119435e08ecc2
+c752/docs/labs/pr12/dk/module-map.md → render Mermaid и таблица.
+       Точная исходная версия: 9a8a59cbc762c10b15abf5d119435e08ecc2c752
+                                                  9
+       Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+       Команды / действия: Открыть module-map.md в GitHub (не Raw),
+показать схему, legend A imports B, owner и HUMAN_REVIEW_PENDING.
+Сверить с cd services/iam && go list -json ./... на CODE2cd7c03. Не путать import
+arrows с runtime call flow.
+       Что должно быть видно: 5 packages; верные стрелки; легенда;
+автор/статус; source pin
+       Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-04.png
+       Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+       3.5 Профиль сложности, существующий кандидат и личный ADR
+ Направление            Конкретный объект и        Наличие / готовность         Воспроизводимая
+                        вопрос                                                  проверка и следующий
+                                                                                шаг
+ Межкомпонентное        Lookup latency/error +     Narrow ports и consumer      TestClockReadAfterLook
+ взаимодействие         Clock freshness: не        реализованы;                 upAndCancellation + оба
+                        остаётся ли прежний        delayed/error/cancel tests   DI adapters. Далее
+                        now после ожидания, не     PASS; real authority         production authority
+                        маскируется ли             отсутствует                  adapter с
+                        недоступность успехом?                                  timeout/freshness
+                                                                                contract, integration fault
+                                                                                injection и актуальными
+                                                                                бизнес-полномочиями;
+                                                                                этот пакет этого не
+                                                                                доказывает
+ Хранение и обработка   Minimal                    Pure domain реализован,      TestEvaluateIdleBoundar
+ данных                 snapshot/idle/absolute:    100% statements и            y/AbsoluteBoundary/
+                        сохраняются ли value       границы/decision             InvalidChronology/
+                        ownership, порядок         table/race; SQL              DeterministicImmutable;
+                        причин и точная equality   durability/RLS не            fixture fixed 2026-10-18.
+                        без overflow?              реализованы                  Далее owner SQL
+                                                                                consistency/epoch/renewa
+                                                                                l testing по exact
+                                                                                architecture; canonical
+                                                                                schema здесь не
+                                                                                меняется
+
+                                               10
+ Направление            Конкретный объект и        Наличие / готовность   Воспроизводимая
+                        вопрос                                            проверка и следующий
+                                                                          шаг
+ Организация            Стоимость копирования      Реализуемый объект     После representative
+ вычислений и памяти,   time values/JSON parser    есть, profile НЕ       workload — benchmark,
+ перспективно           под реальным workload:     СНИМАЛСЯ; bottleneck   pprof CPU/alloc, trace с
+                        есть ли причина            неизвестен             warmup/seed/env/varianc
+                        оптимизировать?                                   e. Нельзя выводить
+                                                                          latency/throughput из
+                                                                          размера двух binary
+
+       Личный              DK-ADR-001                    author-ownerДмитрийКарачебан,
+подготовкаCodex:               варианты(1)inlineCLI+time.Now,(2)сразуSQL/OIDC,
+(3)purepolicy+ports/adapters. Выбран3: reusable deterministic logic и bounded
+slice. Цена — интерфейсы/reflectnil check/будущие настоящие adapters;
+synthetic proof не заменяет authority health/integration. Проверка — actual
+graph/no cycles, contract tests, boundaries/error/cancel/freshness, race, compiling
+mutations. Не создан второй HP-ADR-001 и не изменён phase contract.
+
+
+
+
+                                                  11
+                                  4 РЕЗУЛЬТАТЫ
+
+      4.1 Проверки обеих реализаций
+
+      TestSameConsumerContractWithBothAdapters            запускает   идентичный
+consumer: File/Fixed×normal, idle_equal, unknown, revoked, error. Oracle:
+valid/session_valid только normal; остальные denied правильной причины или
+unavailable/lookup_unavailable.              Actual        local+CI           PASS,
+typed-nil/default/cancel/clock    tests   тоже    PASS.   File   reload   и   Fixed
+caller-copy/32read concurrency проверены, race actual PASS. Статический
+interface assertion — дополнительная совместимость, а не замена behavioral
+checks.
+
+Рисунок 5 — Штатный, ошибочный и граничный случай обеих реализаций
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-05]
+      Куда вставить: 0104 ПР2 §4.1 после результатов; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: IMAGE_PENDING: фактическое текстовое evidence уже
+существует; снимок делает человек.
+      Навигация: Терминал → корень отдельного чистого clone hitpipe/hitpipe
+на 2cd7c032e8ede98c75181599b440e97657bff197. Go-команды явно выбирают
+services/iam через -C; файл контракта открывать от корня.
+      Точная исходная версия: 2cd7c032e8ede98c75181599b440e97657bff197
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+      Команды / действия: git rev-parse HEAD; go -C services/iam test
+./internal/adapters/fixtures/sessionlookup                                     -run
+TestSameConsumerContractWithBothAdapters -v -count=1; printf "exit=%s\n"
+"$?". Показать file/fixed normal,error,idle_equal,unknown,revoked — это
+реальные subtests одного consumer.
+
+
+
+                                          12
+      Что должно быть видно: полный SHA; file и fixed; normal/error/boundary
+names; PASS; exit0
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-05.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+      4.2 Реальная взаимная проверка чужого модуля
+
+      DK→TP candidatePR10/adfbfc33...; TP→DK: текущий head PR #19,
+который        проверяющий          фиксирует      перед       запуском       по
+review/TIMOFEY_REVIEW_GUIDE_RU.md. Переданы конкретные steps
+contract/substitution/map/build/normal/error/boundary и protocol fields. Реальные
+student checks пока NOT PERFORMED. Свой агент и CI не выдаются за
+независимого    студента,    чужие    комментарии/подписи      не   придуманы.
+Замечания после реального review исправляются с actual retest.
+
+Рисунок 6 — Реальная взаимная проверка чужого модуля
+      [МЕСТО ДЛЯ СКРИНШОТА: 0104-pz02-06]
+      Куда вставить: 0104 ПР2 §4.2 после human boundary; заменить только
+выделенное место этой фигуры реальным снимком, подпись сохранить.
+      Статус: HUMAN_ACTION_PENDING: до реального действия снимок не
+доказывает результат; запрещено фотографировать незаполненный протокол
+как PASS.
+      Навигация: https://github.com/hitpipe/hitpipe/pull/10 → pinned TP source;
+H1 §4; review/peer-protocol.json.
+      Точная исходная версия: adfbfc33bf20cb0b0641e49e48c0502d2f5d108d
+      Рабочий каталог: Отдельный чистый clone hitpipe/hitpipe, корень
+репозитория. Не переключать и не сбрасывать рабочую копию с
+незакоммиченными изменениями.
+
+                                       13
+      Команды / действия: Дмитрий лично проверяет чужой Processing
+contract/consumer/substitution/map       и     выполняет          его     реальные
+normal/error/boundary commands из TP README на adfbfc33...; сохраняет
+actual protocol. Тимофей Патрушев отдельно проверяет IAM на текущем head
+PR         #19,          фиксируя         actual       full         SHA        по
+review/TIMOFEY_REVIEW_GUIDE_RU.md. После действий показать module
+protocol   с      reviewer/date/commit/commands/remarks/retest.     Сейчас   NOT
+PERFORMED; не создавать изображение с выдуманным результатом.
+      Что должно быть видно: реальный проверяющий; чужой module; полный
+SHA; contract/substitution/map; команды/результаты/замечания/повтор
+      Имя файла: docs/labs/pr12/dk/evidence/screenshots/0104-pz02-06.png
+      Что скрыть: Скрыть cookies, tokens, SSH/private keys, лишние
+email/персональные вкладки. Синтетические fixture и безопасные reason codes
+оставить. Не обрезать команду, SHA, имя теста/участника, итог и exit. Если не
+помещается — последовательные кадры с тем же номером и суффиксами a,b;
+лог не редактировать.
+
+
+
+
+                                        14
+              5 ЗАКЛЮЧЕНИЕ И ИНДИВИДУАЛЬНЫЙ ВКЛАД
+
+     Модуль имеет согласованный контракт, существенную проверяемую
+реализацию, production-oriented consumer и заменяемые synthetic adapters.
+Imports/ownership/effects/ошибки определены; две направления сложности и
+личный ADR позволяют продолжать IAM без переписывания этой порции.
+Код и документация готовы human review, полная сдача/приёмка/peer/защита
+не утверждаются. Профилирование и production integration явно остаются
+будущей работой.
+
+
+
+
+                                   15
+                 СПИСОК ИСПОЛЬЗОВАННЫХ МАТЕРИАЛОВ
+
+      1. Четыре актуальные методички и исходные DOCX; точные
+имена/SHA256: docs/labs/pr12/source-files.json, manifest.json. Персональная
+матрица29результатов: criteria-crosswalk.json.
+      2. Shared charter/MVP/regulation/LAB-STACK-001 и frozen Project OS
+agent master prompt; pins в context-lock.json. Документы Candidate, не
+формальное принятие.
+      3.     HP-BP-001/T/002–003/013;            HP-BP-007/T/005;       canonical
+Session/Authorization OAS и IAM SQL, без локального изменения схем.
+      4. Собственные PR12–18, GitSHA/CI/logs/digests из evidence/index.json.
+Участок owner Дмитрий Карачебан; агентное исполнение Codex; техническое
+ревью Tim1hik проведено с объявленной делегацией, личные учебные
+действия не засвидетельствованы.
+      5.        Module          source,          actual       CI,        личные
+toolchain/module-map/module-adr/execution-path/test-design/test-results/risk-
+registry. Не использованы выдуманные интервью, измерения или чужие
+approval.
+
+
+
+
+                                          16
+

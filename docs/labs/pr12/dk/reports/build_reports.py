@@ -41,6 +41,57 @@ def inline(paragraph,text):
 def paragraph(document,text,style=None):
     p=document.add_paragraph(style=style);inline(p,text);return p
 
+def write_figure_instructions():
+    """Keep the human guide and the DOCX slots on the same source of truth."""
+    lines=['# DK — 21 человеческий снимок, агент изображения не создаёт\n',
+           'Ниже точные версии существующих артефактов. Предварительный код-кандидат не является итоговым submission tag. После human merge/source rewrite использовать новый фактический submission-record и заново снять затронутые результаты; не переносить старый SHA молча. Pending human gate не превращается в PASS наличием placeholder.\n']
+    fields=[('insert_location','Место'),('state','Статус'),('navigation','Навигация'),
+            ('source_sha','Версия'),('cwd','Каталог'),('command','Действия'),
+            ('must_be_visible','В кадре'),('target_file','Файл'),('redaction','Редакция')]
+    for identity,figure in FIGURES.items():
+        lines.append('## '+identity+' — '+figure['caption']+'\n')
+        for key,label in fields:
+            value=figure[key]
+            lines.append(label+': '+('; '.join(value) if isinstance(value,list) else value)+'\n')
+    (HERE.parent/'evidence/screenshots/INSTRUCTIONS.md').write_text('\n'.join(lines))
+
+def format_table(document,table,rows):
+    """Keep complete records together and repeat context on every table page.
+
+    Widths use the current printable area; no font shrinking or text removal.
+    Teacher cover tables are retained verbatim and do not pass through here.
+    """
+    section=document.sections[-1]
+    available=section.page_width-section.left_margin-section.right_margin
+    count=len(table.columns)
+    if count==2:
+        ratios=[0.28,0.72]
+    elif count==6:
+        ratios=[0.125,0.255,0.17,0.10,0.11,0.24]
+    elif rows[0][0]=='№':
+        ratios=[0.07,0.45,0.48]
+    elif rows[0][0]=='Mutant / правило':
+        ratios=[0.28,0.07,0.32,0.33]
+    else:
+        ratios=[1/count]*count
+    widths=[int(available*ratio) for ratio in ratios]
+    table.autofit=False
+    for column,width in zip(table.columns,widths):column.width=width
+    for n,row in enumerate(table.rows):
+        properties=row._tr.get_or_add_trPr()
+        properties.append(OxmlElement('w:cantSplit'))
+        if n==0:properties.append(OxmlElement('w:tblHeader'))
+        for cell,width in zip(row.cells,widths):
+            cell.width=width
+            for p in cell.paragraphs:
+                p.alignment=WD_ALIGN_PARAGRAPH.LEFT
+                p.paragraph_format.first_line_indent=Pt(0)
+                p.paragraph_format.left_indent=Pt(0)
+                p.paragraph_format.right_indent=Pt(0)
+                p.paragraph_format.space_before=Pt(0)
+                p.paragraph_format.space_after=Pt(3)
+                p.paragraph_format.line_spacing=1.1
+
 def render_figure(document,identity):
     f=FIGURES[identity]
     document.add_paragraph(f['caption'],style='Caption')
@@ -81,6 +132,7 @@ def render_markdown(document,text):
                     inline(cell.paragraphs[0],value)
                     for p in cell.paragraphs:
                         for r in p.runs:r.font.size=Pt(10);r.bold=n==0
+            format_table(document,table,rows)
             continue
         if line.startswith('- '):paragraph(document,line[2:],style='List Bullet');continue
         paragraph(document,line)
@@ -118,9 +170,10 @@ def build(name):
     document.add_paragraph('2026').alignment=WD_ALIGN_PARAGRAPH.CENTER
     document.add_page_break()
     if name.startswith('0302'):
-        document.add_heading('СОДЕРЖАНИЕ',level=1)
-        p=document.add_paragraph();field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'TOC \\o "1-3" \\h \\z \\u');p._p.append(field)
-        paragraph(document,'Оглавление обновляется в Word/LibreOffice после вставки реальных снимков; номера страниц до визуальной проверки не утверждаются.')
+        document.add_paragraph('СОДЕРЖАНИЕ',style='Title')
+        p=document.add_paragraph();field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'TOC \\o "1-3" \\h \\z \\u')
+        run=OxmlElement('w:r');text=OxmlElement('w:t');text.text='[ОГЛАВЛЕНИЕ: ОБНОВИТЬ ЧЕРЕЗ render_reports.py]';run.append(text);field.append(run);p._p.append(field)
+        paragraph(document,'При пересборке обновить оглавление через render_reports.py или Word/LibreOffice. После вставки реальных снимков обновить его снова и повторно проверить страницы.')
         document.add_page_break()
     render_markdown(document,(HERE/(name+'-dk.md')).read_text())
     settings=document.settings.element
@@ -154,10 +207,11 @@ def validate(records):
     if len(seen)!=21 or len(set(seen))!=21 or set(seen)!=set(FIGURES):raise ValueError('Expected exactly 21 unique figure slots')
     return {'status':'PASS','checks':['ZIP integrity','all XML/rels parse','python-docx reopen','21 unique resolved image placeholders','no captured/generated media','no unresolved template tokens'],
             'python_docx_version':docx.__version__,'reports':records,
-            'rendering':'NOT RUN: no Word/LibreOffice renderer available; visual pagination/TOC and human fields require the student.',
+            'rendering':'NOT_RUN_BY_BUILDER: run render_reports.py with a real LibreOffice/UNO renderer; see visual-validation.json for the checked DOCX hashes. Revalidate pagination after inserting real screenshots.',
             'submission_ready':False}
 
 if __name__=='__main__':
+    write_figure_instructions()
     records=[build(name) for name in ['0302-pz01','0302-pz02','0104-pz01','0104-pz02']]
     result=validate(records);(HERE/'validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps(result,ensure_ascii=False,indent=2))

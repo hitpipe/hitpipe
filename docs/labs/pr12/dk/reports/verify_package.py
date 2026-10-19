@@ -34,6 +34,14 @@ def verify():
                 if n.endswith(('.xml','.rels')):E.fromstring(z.read(n))
             assert not any(n.startswith('word/media/') for n in z.namelist())
             tree=E.fromstring(z.read('word/document.xml'))
+            # Three retained cover tables precede the generated report tables.
+            # Verify pagination rules independently of the generator/renderer.
+            for table in tree.findall('.//w:tbl',NS)[3:]:
+                rows=table.findall('w:tr',NS)
+                assert rows[0].find('w:trPr/w:tblHeader',NS) is not None
+                for row in rows:
+                    flag=row.find('w:trPr/w:cantSplit',NS)
+                    assert flag is not None and flag.get('{'+NS['w']+'}val','true') not in ('false','0')
             text='\n'.join(t.text or '' for t in tree.findall('.//w:t',NS))
             assert '{{' not in text and 'TEMPLATE_UNFILLED' not in text
             assert 'Д. Карачебан' in text and 'ВПИСАТЬ ГРУППУ' in text
@@ -75,6 +83,18 @@ def verify():
     assert ci['final_clean']['exit_code']==0 and ci['restored_worktree_clean']
     initial=json.loads((BASE/'evidence/mutations-initial/protocol.json').read_text())
     assert len(initial['mutations'])==7 and sum(m['result']=='SURVIVED' for m in initial['mutations'])==1
-    return {'status':'PASS','reports':4,'mandatory_results':29,'unique_screenshot_placeholders':21,'verified_evidence_files':len(index['entries']),'external_docx_links':links,'submitted_or_human_accepted':False,'rendering':'NOT_RUN_NO_RENDERER'}
+    rendering='NOT_RUN: no current visual-validation.json'
+    visual_path=HERE/'visual-validation.json'
+    if visual_path.exists():
+        visual=json.loads(visual_path.read_text())
+        assert visual['status']=='PASS_AUTHOR_LAYOUT_CHECK'
+        assert not visual['independent_reapproval_claimed'] and not visual['student_personal_gates_attested']
+        assert {r['file'] for r in visual['reports']}=={r['file'] for r in validation['reports']}
+        for report in visual['reports']:
+            assert hashlib.sha256((HERE/report['file']).read_bytes()).hexdigest()==report['docx_sha256']
+            assert hashlib.sha256((ROOT/report['pdf_path']).read_bytes()).hexdigest()==report['pdf_sha256']
+            assert report['visually_checked_pages']==list(range(1,report['pages']+1))
+        rendering='PASS_AUTHOR_LAYOUT_CHECK; real LibreOffice/Poppler pages, exact DOCX/PDF hashes verified'
+    return {'status':'PASS','reports':4,'mandatory_results':29,'unique_screenshot_placeholders':21,'verified_evidence_files':len(index['entries']),'external_docx_links':links,'submitted_or_human_accepted':False,'rendering':rendering}
 
 if __name__=='__main__':print(json.dumps(verify(),ensure_ascii=False,indent=2))

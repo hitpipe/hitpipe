@@ -1,8 +1,6 @@
 # DK — 21 человеческий снимок, агент изображения не создаёт
 
-Текущее назначение от 19.10.2026: Тимофей Патрушев проверяет Дмитрия. Запись review/reviewer-assignment.json; пошаговая инструкция review/TIMOFEY_REVIEW_GUIDE_RU.md. Старые immutable SHA относятся к своим историческим артефактам, не к новому человеческому review.
-
-После human merge/source rewrite использовать новый фактический submission-record и заново снять затронутые результаты; не переносить старый SHA молча. Pending human gate не превращается в PASS наличием placeholder.
+Ниже точные версии существующих артефактов. Предварительный код-кандидат не является итоговым submission tag. После human merge/source rewrite использовать новый фактический submission-record и заново снять затронутые результаты; не переносить старый SHA молча. Pending human gate не превращается в PASS наличием placeholder.
 
 ## 0302-pz01-01 — Рисунок 1 — Требование, задача и значимый запрос на слияние
 
@@ -330,13 +328,13 @@
 
 Статус: IMAGE_PENDING: фактическое текстовое evidence уже существует; снимок делает человек.
 
-Навигация: Терминал → services/iam на 2cd7c032e8ede98c75181599b440e97657bff197; module-contract.md.
+Навигация: Терминал → корень отдельного чистого clone hitpipe/hitpipe на 2cd7c032e8ede98c75181599b440e97657bff197. Go-команды явно выбирают services/iam через -C; файл контракта открывать от корня.
 
 Версия: 2cd7c032e8ede98c75181599b440e97657bff197
 
 Каталог: Отдельный чистый clone hitpipe/hitpipe, корень репозитория. Не переключать и не сбрасывать рабочую копию с незакоммиченными изменениями.
 
-Действия: go doc ./internal/domain/sessionpolicy; go doc ./internal/application/authenticatesession; открыть services/iam/docs/module-contract.md. Показать purpose/input/output/errors/ownership/side effects и пример, не только список сигнатур.
+Действия: go -C services/iam doc ./internal/domain/sessionpolicy; go -C services/iam doc ./internal/application/authenticatesession; открыть services/iam/docs/module-contract.md. Показать purpose/input/output/errors/ownership/side effects и пример, не только список сигнатур.
 
 В кадре: source SHA; Go package docs; публичные типы/операции; контракт и example
 
@@ -390,13 +388,13 @@
 
 Статус: IMAGE_PENDING: фактическое текстовое evidence уже существует; снимок делает человек.
 
-Навигация: Терминал → services/iam на 2cd7c032e8ede98c75181599b440e97657bff197.
+Навигация: Терминал → корень отдельного чистого clone hitpipe/hitpipe на 2cd7c032e8ede98c75181599b440e97657bff197. Go-команды явно выбирают services/iam через -C; файл контракта открывать от корня.
 
 Версия: 2cd7c032e8ede98c75181599b440e97657bff197
 
 Каталог: Отдельный чистый clone hitpipe/hitpipe, корень репозитория. Не переключать и не сбрасывать рабочую копию с незакоммиченными изменениями.
 
-Действия: git rev-parse HEAD; go test ./internal/adapters/fixtures/sessionlookup -run TestSameConsumerContractWithBothAdapters -v -count=1; printf "exit=%s\n" "$?". Показать file/fixed normal,error,idle_equal,unknown,revoked — это реальные subtests одного consumer.
+Действия: git rev-parse HEAD; go -C services/iam test ./internal/adapters/fixtures/sessionlookup -run TestSameConsumerContractWithBothAdapters -v -count=1; printf "exit=%s\n" "$?". Показать file/fixed normal,error,idle_equal,unknown,revoked — это реальные subtests одного consumer.
 
 В кадре: полный SHA; file и fixed; normal/error/boundary names; PASS; exit0
 
