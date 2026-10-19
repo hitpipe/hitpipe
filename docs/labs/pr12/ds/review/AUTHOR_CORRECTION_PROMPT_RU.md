@@ -11,6 +11,14 @@ REVIEW_RESULTS_RU.md и criteria-audit.json. Проверяющий со сто�
 должен самостоятельно анализировать концепцию или код: это уже сделано,
 вердикт CHANGES REQUESTED, DS-REV-001–009 открыты.
 
+Если review/ ещё нет в твоей рабочей ветке, пакет уже опубликован в
+https://github.com/hitpipe/hitpipe/pull/28, ветка codex/HIT-47-ds-delegated-review.
+Получить его можно без изменения своей ветки: git fetch origin codex/HIT-47-ds-delegated-review,
+затем читать файлы командой git show origin/codex/HIT-47-ds-delegated-review:docs/labs/pr12/ds/review/REVIEW_RESULTS_RU.md
+и аналогично reviewer-assignment.json, criteria-audit.json и остальные review artifacts.
+Первоначальный неизменяемый review package: 119cfa83dafc5666cae502e56c85fc32d05eff86.
+Не сбрасывай свою ветку к reviewer branch; её назначение — контекст и воспроизведение.
+
 1. Сначала восстанови текущие remote heads и свои локальные незапушенные изменения.
    Не сбрасывай их. Найди свой R1 commit 0fb84594b18d1f8855f38761331b2ce79d16a97e
    и опубликуй реальный R1 отдельной веткой/PR. Во время ревью у lasarc уже был
