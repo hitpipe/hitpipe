@@ -1,0 +1,20 @@
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=fb470da3f7dd572605e24d35ae44b19245f916fe -X main.dirty=false -X main.buildMode=release -trimpath -o /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck
++ go version -m /Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck
+/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck: go1.27.2
+	path	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck
+	mod	github.com/hitpipe/hitpipe/services/processing	(devel)	
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-trimpath=true
+	build	CGO_ENABLED=1
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
+	build	vcs=git
+	build	vcs.revision=fb470da3f7dd572605e24d35ae44b19245f916fe
+	build	vcs.time=2026-10-18T10:47:37Z
+	build	vcs.modified=false
+readelf NOT_AVAILABLE; install binutils for detailed ELF inspection.

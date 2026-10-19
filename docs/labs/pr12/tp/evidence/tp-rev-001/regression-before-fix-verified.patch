@@ -1,0 +1,258 @@
+diff --git a/services/processing/cmd/processing-contractcheck/canonical_names_test.go b/services/processing/cmd/processing-contractcheck/canonical_names_test.go
+new file mode 100644
+index 0000000..32a145e
+--- /dev/null
++++ b/services/processing/cmd/processing-contractcheck/canonical_names_test.go
+@@ -0,0 +1,19 @@
++package main
++
++import (
++	"bytes"
++	"strings"
++	"testing"
++)
++
++func TestCLIRejectsRefundShadowing(t *testing.T) {
++	for _, fixture := range []string{"refund-shadowed.json", "refund-shadowed-reverse.json"} {
++		t.Run(fixture, func(t *testing.T) {
++			var out, diagnostics bytes.Buffer
++			exit := run([]string{"--fixture", "../../testdata/" + fixture, "--format", "json"}, &out, &diagnostics)
++			if exit != 2 || out.Len() != 0 || !strings.Contains(diagnostics.String(), "INVALID_JSON") {
++				t.Fatalf("ambiguous input: exit=%d stdout=%q diagnostics=%q", exit, out.String(), diagnostics.String())
++			}
++		})
++	}
++}
+diff --git a/services/processing/internal/adapters/fixtures/input/canonical_names_test.go b/services/processing/internal/adapters/fixtures/input/canonical_names_test.go
+new file mode 100644
+index 0000000..1b66f78
+--- /dev/null
++++ b/services/processing/internal/adapters/fixtures/input/canonical_names_test.go
+@@ -0,0 +1,131 @@
++package input
++
++import (
++	"encoding/json"
++	"fmt"
++	"os"
++	"strings"
++	"testing"
++)
++
++func validJSON(t *testing.T) []byte {
++	t.Helper()
++	b, err := os.ReadFile("../../../../testdata/valid.json")
++	if err != nil {
++		t.Fatal(err)
++	}
++	return b
++}
++
++func TestCanonicalFieldNames(t *testing.T) {
++	original := validJSON(t)
++	var envelope map[string]json.RawMessage
++	if err := json.Unmarshal(original, &envelope); err != nil {
++		t.Fatal(err)
++	}
++	// Exercise every declared canonical name at the envelope and both nested objects.
++	// A single case alias is invalid even without a colliding canonical key.
++	for _, scope := range []string{"", "policy", "facts"} {
++		fields := envelope
++		if scope != "" {
++			fields = map[string]json.RawMessage{}
++			if err := json.Unmarshal(envelope[scope], &fields); err != nil {
++				t.Fatal(err)
++			}
++		}
++		for name, value := range fields {
++			for _, alias := range []string{strings.ToUpper(name), strings.ToUpper(name[:1]) + name[1:]} {
++				t.Run(scope+"/"+alias, func(t *testing.T) {
++					changed := map[string]json.RawMessage{}
++					for k, v := range fields {
++						if k != name {
++							changed[k] = v
++						}
++					}
++					changed[alias] = value
++					b, err := json.Marshal(changed)
++					if err != nil {
++						t.Fatal(err)
++					}
++					if scope != "" {
++						full := map[string]json.RawMessage{}
++						for k, v := range envelope {
++							full[k] = v
++						}
++						full[scope] = b
++						b, err = json.Marshal(full)
++						if err != nil {
++							t.Fatal(err)
++						}
++					}
++					var s Scenario
++					if err := StrictDecode(b, &s); err == nil {
++						t.Fatalf("accepted noncanonical name %q at %q", alias, scope)
++					}
++				})
++			}
++		}
++	}
++}
++
++func TestConflictingAliasesBothOrders(t *testing.T) {
++	original := string(validJSON(t))
++	var envelope map[string]json.RawMessage
++	if err := json.Unmarshal([]byte(original), &envelope); err != nil {
++		t.Fatal(err)
++	}
++	refunded := strings.Replace(string(envelope["facts"]), `"amount_refunded": 0`, `"amount_refunded": 1`, 1)
++	if refunded == string(envelope["facts"]) {
++		t.Fatal("refund precondition changed")
++	}
++	cases := map[string]string{
++		"nested_canonical_first": strings.Replace(original, `"amount_refunded": 0`, `"amount_refunded": 1, "AMOUNT_REFUNDED": 0`, 1),
++		"nested_alias_first":     strings.Replace(original, `"amount_refunded": 0`, `"AMOUNT_REFUNDED": 0, "amount_refunded": 1`, 1),
++		"policy_canonical_first": strings.Replace(original, `"config_id": "config_synthetic"`, `"config_id": "config_synthetic", "CONFIG_ID": "other"`, 1),
++		"policy_alias_first":     strings.Replace(original, `"config_id": "config_synthetic"`, `"CONFIG_ID": "other", "config_id": "config_synthetic"`, 1),
++		"top_canonical_first":    fmt.Sprintf(`{"policy":%s,"facts":%s,"FACTS":%s,"now":%s}`, envelope["policy"], refunded, envelope["facts"], envelope["now"]),
++		"top_alias_first":        fmt.Sprintf(`{"policy":%s,"FACTS":%s,"facts":%s,"now":%s}`, envelope["policy"], envelope["facts"], refunded, envelope["now"]),
++		"unicode_fold_alias":     strings.Replace(original, `"facts"`, `"factſ"`, 1),
++	}
++	for name, b := range cases {
++		t.Run(name, func(t *testing.T) {
++			var s Scenario
++			if err := StrictDecode([]byte(b), &s); err == nil {
++				t.Fatal("ambiguous fixture accepted")
++			}
++		})
++	}
++}
++
++func TestCanonicalZeroAndStrictRejections(t *testing.T) {
++	original := validJSON(t)
++	for _, b := range [][]byte{original, []byte(strings.Replace(string(original), `"amount_refunded"`, `"\u0061mount_refunded"`, 1))} {
++		var s Scenario
++		if err := StrictDecode(b, &s); err != nil {
++			t.Fatalf("canonical input: %v", err)
++		}
++		if s.Facts.AmountRefunded == nil || *s.Facts.AmountRefunded != 0 || s.Policy.LiveMode == nil || *s.Policy.LiveMode {
++			t.Fatal("known zero/false was lost")
++		}
++	}
++	cases := map[string]string{
++		"exact_duplicate":   strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 1, "amount_refunded": 0`, 1),
++		"escaped_duplicate": strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 1, "\u0061mount_refunded": 0`, 1),
++		"unknown_nested":    strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 0, "unknown": 0`, 1),
++		"unknown_top":       strings.Replace(string(original), `"policy":`, `"unknown": 0, "policy":`, 1),
++		"trailing_document": string(original) + " {}",
++		"fraction":          strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 0.5`, 1),
++		"exponent":          strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 0e0`, 1),
++		"integer_overflow":  strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": 9223372036854775808`, 1),
++		"number_string":     strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": "0"`, 1),
++		"nonfinite":         strings.Replace(string(original), `"amount_refunded": 0`, `"amount_refunded": NaN`, 1),
++	}
++	for name, b := range cases {
++		t.Run(name, func(t *testing.T) {
++			var s Scenario
++			if err := StrictDecode([]byte(b), &s); err == nil {
++				t.Fatal("strict rejection regressed")
++			}
++		})
++	}
++}
+diff --git a/services/processing/testdata/refund-shadowed-reverse.json b/services/processing/testdata/refund-shadowed-reverse.json
+new file mode 100644
+index 0000000..e40583d
+--- /dev/null
++++ b/services/processing/testdata/refund-shadowed-reverse.json
+@@ -0,0 +1,42 @@
++{
++  "policy": {
++    "config_id": "config_synthetic",
++    "schema_version": "1.0",
++    "evaluator_version": "paid-order-v1",
++    "account_id": "acct_synthetic",
++    "connection_id": "connection_synthetic",
++    "livemode": false,
++    "price_id": "price_fixed",
++    "activation_at": "2026-10-17T12:00:00Z"
++  },
++  "facts": {
++    "case_id": "case_synthetic",
++    "session_id": "cs_synthetic",
++    "account_id": "acct_synthetic",
++    "connection_id": "connection_synthetic",
++    "livemode": false,
++    "session_created_at": "2026-10-18T09:00:00Z",
++    "mode": "payment",
++    "payment_status": "paid",
++    "currency": "usd",
++    "amount_total": 12000,
++    "line_items_complete": true,
++    "line_item_count": 1,
++    "price_id": "price_fixed",
++    "quantity": 1,
++    "payment_intent_status": "succeeded",
++    "amount_received": 12000,
++    "charge_succeeded": true,
++    "charge_captured": true,
++    "amount_captured": 12000,
++    "AMOUNT_REFUNDED": 0,
++    "amount_refunded": 1,
++    "disputed": false,
++    "all_currencies_equal": true,
++    "complete": true,
++    "oldest_observed_at": "2026-10-18T10:00:00Z",
++    "completed_at": "2026-10-18T10:00:01Z",
++    "valid_until": "2026-10-18T10:00:10Z"
++  },
++  "now": "2026-10-18T10:00:05Z"
++}
+diff --git a/services/processing/testdata/refund-shadowed.json b/services/processing/testdata/refund-shadowed.json
+new file mode 100644
+index 0000000..9e974a6
+--- /dev/null
++++ b/services/processing/testdata/refund-shadowed.json
+@@ -0,0 +1,42 @@
++{
++  "policy": {
++    "config_id": "config_synthetic",
++    "schema_version": "1.0",
++    "evaluator_version": "paid-order-v1",
++    "account_id": "acct_synthetic",
++    "connection_id": "connection_synthetic",
++    "livemode": false,
++    "price_id": "price_fixed",
++    "activation_at": "2026-10-17T12:00:00Z"
++  },
++  "facts": {
++    "case_id": "case_synthetic",
++    "session_id": "cs_synthetic",
++    "account_id": "acct_synthetic",
++    "connection_id": "connection_synthetic",
++    "livemode": false,
++    "session_created_at": "2026-10-18T09:00:00Z",
++    "mode": "payment",
++    "payment_status": "paid",
++    "currency": "usd",
++    "amount_total": 12000,
++    "line_items_complete": true,
++    "line_item_count": 1,
++    "price_id": "price_fixed",
++    "quantity": 1,
++    "payment_intent_status": "succeeded",
++    "amount_received": 12000,
++    "charge_succeeded": true,
++    "charge_captured": true,
++    "amount_captured": 12000,
++    "amount_refunded": 1,
++    "AMOUNT_REFUNDED": 0,
++    "disputed": false,
++    "all_currencies_equal": true,
++    "complete": true,
++    "oldest_observed_at": "2026-10-18T10:00:00Z",
++    "completed_at": "2026-10-18T10:00:01Z",
++    "valid_until": "2026-10-18T10:00:10Z"
++  },
++  "now": "2026-10-18T10:00:05Z"
++}
