@@ -25,6 +25,27 @@ class BootstrapBoundaryTests(unittest.TestCase):
         workspace.ROOT, workspace.CFG = self.old_root, self.old_cfg
         self.temp.cleanup()
 
+    def test_current_project_os_pointers_do_not_require_retired_manual_route(self):
+        entries = {
+            'AGENTS.md': 'https://github.com/hitpipe/project-os/blob/main/AGENT_MASTER_PROMPT.md',
+            'GEMINI.md': '@./AGENTS.md',
+            '.hermes.md': 'Read AGENTS.md',
+            '.agents/rules/project-os.md': 'Read AGENTS.md',
+        }
+        for relative, content in entries.items():
+            path = workspace.ROOT / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content)
+        workspace.validate_loaders()
+        with (workspace.ROOT / 'AGENTS.md').open('a') as stream:
+            stream.write('\n## Explicit manual laboratory route')
+        with self.assertRaisesRegex(SystemExit, 'retired laboratory'):
+            workspace.validate_loaders()
+        (workspace.ROOT / 'AGENTS.md').write_text(entries['AGENTS.md'])
+        (workspace.ROOT / '.hermes.md').unlink()
+        with self.assertRaisesRegex(SystemExit, 'entry absent'):
+            workspace.validate_loaders()
+
     def test_absent_module_reports_not_implemented_not_pass(self):
         output=io.StringIO()
         with contextlib.redirect_stdout(output):

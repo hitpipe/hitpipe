@@ -80,6 +80,21 @@ def check_versions():
             die('use exact npm ' + CFG['npm_version'])
 
 
+def validate_loaders():
+    entries = {
+        'AGENTS.md': 'https://github.com/hitpipe/project-os/blob/main/AGENT_MASTER_PROMPT.md',
+        'GEMINI.md': '@./AGENTS.md',
+        '.hermes.md': 'AGENTS.md',
+        '.agents/rules/project-os.md': 'AGENTS.md',
+    }
+    for relative, pointer in entries.items():
+        path = ROOT / relative
+        if not path.is_file() or pointer not in path.read_text():
+            die('current Project OS entry absent: ' + relative)
+        if '## Explicit manual laboratory route' in path.read_text():
+            die('retired laboratory route is still active: ' + relative)
+
+
 def validate():
     docs = ROOT / 'docs/labs/pr12'
     for name in ('AGENT_LAB_WORKFLOW.md', 'MASTER_PROMPT_TEMPLATE.md', 'IMPLEMENTATION_CONVENTION.md', 'context-lock.json'):
@@ -100,10 +115,7 @@ def validate():
         for name in ('package.json', 'package-lock.json'):
             if (ROOT / 'tooling/pr12/frontend' / name).read_bytes() != (upstream / 'frontend' / name).read_bytes():
                 die('active isolated frontend lock differs from frozen source: ' + name)
-    for relative in ('AGENTS.md', 'GEMINI.md', '.hermes.md', '.agents/rules/project-os.md'):
-        path = ROOT / relative
-        if path.exists() and 'MANUAL_LAB_PR12' not in path.read_text():
-            die('manual loader route absent: ' + relative)
+    validate_loaders()
     execute([sys.executable, ROOT / 'tools/pr12/validate_bundle.py'])
     print(json.dumps({'status': 'BOOTSTRAP_VALIDATION_PASS', 'verified_frozen_files': verified,
                       'student_implementation': 'NOT_ASSESSED', 'human_gates': 'NOT_ASSESSED'}))
