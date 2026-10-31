@@ -1,0 +1,153 @@
+pr12-processing	Set up job	﻿2026-10-18T10:44:09.8304433Z Current runner version: '2.337.0'
+pr12-processing	Set up job	2026-10-18T10:44:09.8320399Z ##[group]Runner Image Provisioner
+pr12-processing	Set up job	2026-10-18T10:44:09.8321092Z Hosted Compute Agent
+pr12-processing	Set up job	2026-10-18T10:44:09.8321580Z Version: 20261012.601
+pr12-processing	Set up job	2026-10-18T10:44:09.8321997Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+pr12-processing	Set up job	2026-10-18T10:44:09.8322673Z Build Date: 2026-10-12T17:48:21Z
+pr12-processing	Set up job	2026-10-18T10:44:09.8323142Z Worker ID: {05e7d469-b4e9-49cf-9206-fabd83d09d29}
+pr12-processing	Set up job	2026-10-18T10:44:09.8323616Z Region: centralus
+pr12-processing	Set up job	2026-10-18T10:44:09.8324013Z Cloud: Azure
+pr12-processing	Set up job	2026-10-18T10:44:09.8324370Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:44:09.8325341Z ##[group]Operating System
+pr12-processing	Set up job	2026-10-18T10:44:09.8325818Z Ubuntu
+pr12-processing	Set up job	2026-10-18T10:44:09.8326184Z 24.04.5
+pr12-processing	Set up job	2026-10-18T10:44:09.8326538Z LTS
+pr12-processing	Set up job	2026-10-18T10:44:09.8326879Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:44:09.8327230Z ##[group]Runner Image
+pr12-processing	Set up job	2026-10-18T10:44:09.8327642Z Image: ubuntu-24.04
+pr12-processing	Set up job	2026-10-18T10:44:09.8328013Z Version: 20261012.334.1
+pr12-processing	Set up job	2026-10-18T10:44:09.8328728Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+pr12-processing	Set up job	2026-10-18T10:44:09.8330115Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+pr12-processing	Set up job	2026-10-18T10:44:09.8330817Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:44:09.8331615Z ##[group]GITHUB_TOKEN Permissions
+pr12-processing	Set up job	2026-10-18T10:44:09.8333404Z Contents: read
+pr12-processing	Set up job	2026-10-18T10:44:09.8333800Z Metadata: read
+pr12-processing	Set up job	2026-10-18T10:44:09.8334179Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:44:09.8335638Z Secret source: Actions
+pr12-processing	Set up job	2026-10-18T10:44:09.8336245Z Cache mode: write
+pr12-processing	Set up job	2026-10-18T10:44:09.8336703Z Prepare workflow directory
+pr12-processing	Set up job	2026-10-18T10:44:09.8585641Z Prepare all required actions
+pr12-processing	Set up job	2026-10-18T10:44:09.8627626Z Getting action download info
+pr12-processing	Set up job	2026-10-18T10:44:10.0863371Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+pr12-processing	Set up job	2026-10-18T10:44:10.1906095Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+pr12-processing	Set up job	2026-10-18T10:44:10.8687233Z Complete job name: pr12-processing
+pr12-processing	Run actions/checkout@v4	﻿2026-10-18T10:44:10.9201568Z ##[group]Run actions/checkout@v4
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9202430Z with:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9202915Z   repository: hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9206142Z   token: ***
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9206532Z   ssh-strict: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9206947Z   ssh-user: git
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9207347Z   persist-credentials: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9207770Z   clean: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9208247Z   sparse-checkout-cone-mode: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9208708Z   fetch-depth: 1
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9209112Z   fetch-tags: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9209507Z   show-progress: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9209900Z   lfs: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9210326Z   submodules: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9210791Z   set-safe-directory: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9211245Z   allow-unsafe-pr-checkout: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9211846Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9931205Z Syncing repository: hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9933920Z ##[group]Getting Git version info
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9934874Z Working directory is '/home/runner/work/hitpipe/hitpipe'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9936391Z [command]/usr/bin/git version
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9971016Z git version 2.55.0
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9984569Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9992705Z Temporarily overriding HOME='/home/runner/work/_temp/4ff2fee4-a3e0-45dc-8344-1aa1a1f8461f' before making global git config changes
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9994900Z Adding repository directory to the temporary git global config as a safe directory
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:10.9996497Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0036925Z Deleting the contents of '/home/runner/work/hitpipe/hitpipe'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0041030Z ##[group]Initializing the repository
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0044286Z [command]/usr/bin/git init /home/runner/work/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0127218Z hint: Using 'master' as the name for the initial branch. This default branch name
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0135632Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0136717Z hint: to use in all of your new repositories, which will suppress this warning,
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0137469Z hint: call:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0137883Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0138420Z hint: 	git config --global init.defaultBranch <name>
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0138959Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0139453Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0140201Z hint: 'development'. The just-created branch can be renamed via this command:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0140836Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0141209Z hint: 	git branch -m <name>
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0141644Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0142391Z hint: Disable this message with "git config set advice.defaultBranchName false"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0143372Z Initialized empty Git repository in /home/runner/work/hitpipe/hitpipe/.git/
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0144841Z [command]/usr/bin/git remote add origin https://github.com/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0183558Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0184547Z ##[group]Disabling automatic garbage collection
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0185537Z [command]/usr/bin/git config --local gc.auto 0
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0208533Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0209517Z ##[group]Setting up auth
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0213452Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0235269Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0500396Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0523945Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0665938Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0688082Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0822914Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0849738Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0850622Z ##[group]Fetching the repository
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.0856656Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +035516461b5f45a37aa1129d6f11cf8bdb89f277:refs/remotes/origin/work/HIT-25-processing-requirements
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6484397Z From https://github.com/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6486602Z  * [new ref]         035516461b5f45a37aa1129d6f11cf8bdb89f277 -> origin/work/HIT-25-processing-requirements
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6490136Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6491555Z ##[group]Determining the checkout info
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6493154Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6494918Z [command]/usr/bin/git sparse-checkout disable
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6538423Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6561893Z ##[group]Checking out the ref
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6565501Z [command]/usr/bin/git checkout --progress --force -B work/HIT-25-processing-requirements refs/remotes/origin/work/HIT-25-processing-requirements
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6820833Z Switched to a new branch 'work/HIT-25-processing-requirements'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6825314Z branch 'work/HIT-25-processing-requirements' set up to track 'origin/work/HIT-25-processing-requirements'.
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6828579Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6854051Z [command]/usr/bin/git log -1 --format=%H
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:44:11.6869842Z 035516461b5f45a37aa1129d6f11cf8bdb89f277
+pr12-processing	Verify bootstrap documentation and frozen copies	﻿2026-10-18T10:44:11.7060522Z ##[group]Run python3 tools/pr12/workspace.py validate
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.7061815Z [36;1mpython3 tools/pr12/workspace.py validate[0m
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.7223679Z shell: /usr/bin/bash -e {0}
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.7224606Z ##[endgroup]
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.7577679Z + /usr/bin/python3 /home/runner/work/hitpipe/hitpipe/tools/pr12/validate_bundle.py
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.8087372Z {"status": "PORTABLE_PACKAGE_VALIDATION_PASS", "verified_files": 205, "features": 5, "tasks": 41, "criteria_links": 145, "templates": 4, "student_work": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:44:11.8216495Z {"status": "BOOTSTRAP_VALIDATION_PASS", "verified_frozen_files": 6, "student_implementation": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	﻿2026-10-18T10:44:11.8340186Z ##[group]Run python3 tools/pr12/test_workspace.py
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.8341298Z [36;1mpython3 tools/pr12/test_workspace.py[0m
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.8372605Z shell: /usr/bin/bash -e {0}
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.8373458Z ##[endgroup]
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9071260Z + tool
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9120574Z .................
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9121795Z ----------------------------------------------------------------------
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9123152Z Ran 17 tests in 0.005s
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9123647Z 
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:44:11.9123906Z OK
+pr12-processing	Report actual implementation state	﻿2026-10-18T10:44:11.9272796Z ##[group]Run python3 tools/pr12/workspace.py status processing
+pr12-processing	Report actual implementation state	2026-10-18T10:44:11.9274105Z [36;1mpython3 tools/pr12/workspace.py status processing[0m
+pr12-processing	Report actual implementation state	2026-10-18T10:44:11.9304447Z shell: /usr/bin/bash -e {0}
+pr12-processing	Report actual implementation state	2026-10-18T10:44:11.9305265Z ##[endgroup]
+pr12-processing	Report actual implementation state	2026-10-18T10:44:11.9609614Z {"component": "processing", "status": "NOT_IMPLEMENTED", "student_checks": "NOT_RUN", "reason": "No module has been submitted."}
+pr12-processing	Run actual named tests when module exists	﻿2026-10-18T10:44:12.0129254Z ##[group]Run python3 tools/pr12/workspace.py check processing
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:44:12.0130491Z [36;1mpython3 tools/pr12/workspace.py check processing[0m
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:44:12.0160252Z shell: /usr/bin/bash -e {0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:44:12.0161082Z ##[endgroup]
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:44:12.0485537Z {"component": "processing", "status": "NOT_IMPLEMENTED", "student_checks": "NOT_RUN", "reason": "No module has been submitted."}
+pr12-processing	Scope of this job	﻿2026-10-18T10:44:12.0920646Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"
+pr12-processing	Scope of this job	2026-10-18T10:44:12.0924176Z [36;1mecho 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"[0m
+pr12-processing	Scope of this job	2026-10-18T10:44:12.0957555Z shell: /usr/bin/bash -e {0}
+pr12-processing	Scope of this job	2026-10-18T10:44:12.0958425Z ##[endgroup]
+pr12-processing	Post Run actions/checkout@v4	﻿2026-10-18T10:44:12.1186595Z Post job cleanup.
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1798835Z [command]/usr/bin/git version
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1824566Z git version 2.55.0
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1851690Z Temporarily overriding HOME='/home/runner/work/_temp/e119a4f7-b048-4430-a844-c6ae9c365d4b' before making global git config changes
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1854811Z Adding repository directory to the temporary git global config as a safe directory
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1857018Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1882804Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.1906270Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2062846Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2080905Z http.https://github.com/.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2089197Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2113807Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2278087Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:44:12.2299889Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-processing	Complete job	﻿2026-10-18T10:44:12.2564215Z Cleaning up orphan processes
+pr12-processing	Complete job	2026-10-18T10:44:12.2807190Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

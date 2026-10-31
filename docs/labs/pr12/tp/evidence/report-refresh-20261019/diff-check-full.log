@@ -1,0 +1,84 @@
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-dev.log:9: trailing whitespace.
++	mod	github.com/hitpipe/hitpipe/services/processing	(devel)	
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-release.log:9: trailing whitespace.
++	mod	github.com/hitpipe/hitpipe/services/processing	(devel)	
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:6: space before tab in indent.
++ 		{*f.ChargeCaptured, "NOT_CAPTURED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:7: space before tab in indent.
++ 		{*f.AmountReceived == *f.AmountTotal, "AMOUNT_RECEIVED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:8: space before tab in indent.
++ 		{*f.AmountCaptured == *f.AmountTotal, "AMOUNT_CAPTURED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:11: space before tab in indent.
++ 		{!*f.Disputed, "DISPUTE"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:12: space before tab in indent.
++ 		{*f.AllCurrenciesEqual, "CURRENCY"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M01.patch:13: space before tab in indent.
++ 	}
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:6: space before tab in indent.
++ 		{*f.ChargeSucceeded, "CHARGE_FAILED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:7: space before tab in indent.
++ 		{*f.ChargeCaptured, "NOT_CAPTURED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:8: space before tab in indent.
++ 		{*f.AmountReceived == *f.AmountTotal, "AMOUNT_RECEIVED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:11: space before tab in indent.
++ 		{*f.AmountRefunded == 0, "REFUND"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:12: space before tab in indent.
++ 		{!*f.Disputed, "DISPUTE"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M02.patch:13: space before tab in indent.
++ 		{*f.AllCurrenciesEqual, "CURRENCY"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:6: space before tab in indent.
++ 		{*f.PaymentStatus == "paid", "PAYMENT_STATUS"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:7: space before tab in indent.
++ 		{*f.AmountTotal > 0, "NON_POSITIVE_TOTAL"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:8: space before tab in indent.
++ 		{*f.LineItemCount == 1, "LINE_ITEM_COUNT"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:11: space before tab in indent.
++ 		{*f.PriceID == p.PriceID, "PRICE"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:12: space before tab in indent.
++ 		{*f.PaymentIntentStatus == "succeeded", "PAYMENT_INTENT"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M03.patch:13: space before tab in indent.
++ 		{*f.ChargeSucceeded, "CHARGE_FAILED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:6: space before tab in indent.
++ 		ok     bool
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:7: space before tab in indent.
++ 		reason string
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:8: space before tab in indent.
++ 	}{
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:11: space before tab in indent.
++ 		{*f.Mode == "payment", "MODE"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:12: space before tab in indent.
++ 		{*f.PaymentStatus == "paid", "PAYMENT_STATUS"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M04.patch:13: space before tab in indent.
++ 		{*f.AmountTotal > 0, "NON_POSITIVE_TOTAL"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:6: space before tab in indent.
++ 		f.AccountID == "" || f.ConnectionID == "" || f.LiveMode == nil {
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:7: space before tab in indent.
++ 		return result(Incomplete, "INVALID_INPUT")
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:8: space before tab in indent.
++ 	}
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:11: space before tab in indent.
++ 		return result(Ineligible, "SOURCE_SCOPE")
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:12: space before tab in indent.
++ 	}
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M05.patch:13: space before tab in indent.
++ 	if f.Complete == nil || !*f.Complete || f.LineItemsComplete == nil || !*f.LineItemsComplete ||
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:6: space before tab in indent.
++ 		{*f.AmountReceived == *f.AmountTotal, "AMOUNT_RECEIVED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:7: space before tab in indent.
++ 		{*f.AmountCaptured == *f.AmountTotal, "AMOUNT_CAPTURED"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:8: space before tab in indent.
++ 		{*f.AmountRefunded == 0, "REFUND"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:11: space before tab in indent.
++ 		{*f.AllCurrenciesEqual, "CURRENCY"},
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:12: space before tab in indent.
++ 	}
+docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/M06.patch:13: space before tab in indent.
++ 	for _, c := range checks {
+docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.log:123: trailing whitespace.
++pr12-processing	UNKNOWN STEP	2026-10-19T09:19:40.5452541Z 
+docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.log:151: trailing whitespace.
++pr12-processing	UNKNOWN STEP	2026-10-19T09:19:48.7429822Z 
+docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.log:200: trailing whitespace.
++pr12-processing	UNKNOWN STEP	2026-10-19T09:19:48.8613774Z 
+docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.log:1083: trailing whitespace.
++pr12-processing	UNKNOWN STEP	

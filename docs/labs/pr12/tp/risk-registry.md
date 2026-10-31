@@ -14,3 +14,7 @@ HIT-29. Использована матрица методички 03.02 ПР2 �
 | R08 | Долгое объяснение/документация неудобны | Высокая: много критериев и команд | Небольшой | Средний | Реальный student clarity/clean-room и индивидуальная защита HIT-31; пока HUMAN_PENDING |
 
 Для всех высоких локально проверяемых рисков automation runs every change. Real TLS/current authority/revoke/lineage/DB/live endpoints/high load требуют будущих integration/environment tests и human admission; их отсутствие не записано как PASS лабораторного consumer.
+
+## Уточнение риска офлайн ввода после TP-REV-001
+
+19.10.2026, принятый main ec0dcba7ca42ea59909489cef9650c6edff12f35. Case aliases в synthetic fixture могли перекрыть refund и исказить диагностический результат. Вероятность — средняя (качественная инженерная оценка, не измеренная частота), ущерб — значимый, приоритет — высокий. Это не доказанная production vulnerability. Меры: exact JSON names до decode; aliases top-level/nested и оба порядка конфликтов отвергаются; canonical zero/false и прежние строгие guards сохраняются. Набор regression tests и actual CLI exits проверяются при каждом связанном изменении. PR №20 принят и merged; evidence/tp-rev-001/ и report-refresh-20261019/ сохраняют red/fix/green. Два реальных дефекта и шесть seeded mutants считаются раздельно. Human review source authenticity/real integration по-прежнему отдельно.
