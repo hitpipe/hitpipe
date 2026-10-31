@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "component": "intake",
+  "positive_fixture": "testdata/verified.json",
+  "negative_fixture": "testdata/tampered.json",
+  "positive_output_contains": [
+    "\"status\":\"VERIFIED\"",
+    "\"reason\":\"verified\"",
+    "\"module\":\"intake-contractcheck\""
+  ],
+  "expected_test_names": [
+    "TestSignatureKnownVector",
+    "TestSignatureRawBytesAndTolerance",
+    "TestSignatureRejectsMalformedHeaders",
+    "TestSignatureFailsClosedAndSafe"
+  ]
+}
