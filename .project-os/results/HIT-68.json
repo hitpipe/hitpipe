@@ -55,6 +55,11 @@
       "path": "services/iam/tools/check_postgres_session_lookup.py",
       "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
       "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/tools/check_postgres_session_lookup.py"
+    },
+    {
+      "path": ".github/workflows/pr12-dk.yml",
+      "version": "556f4efda270e934d587aefa9dfe9f31c83a96da",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/556f4efda270e934d587aefa9dfe9f31c83a96da/.github/workflows/pr12-dk.yml"
     }
   ],
   "verification": {
@@ -100,12 +105,24 @@
       "Конкурентные чтения возвращают независимые значения."
     ],
     "reproduce": "python3 services/iam/tools/check_postgres_session_lookup.py",
-    "sandbox_cleanup": "Созданные этим прогоном контейнер и сеть удалены."
+    "sandbox_cleanup": "Созданные этим прогоном контейнер и сеть удалены.",
+    "source_tree_sha256": "740bd85ab690f7a239808ab5a0dc705d972377abef696137f07f0296b864b312",
+    "github_actions": {
+      "run_id": 43151006002,
+      "ref": "https://github.com/hitpipe/hitpipe/actions/runs/43151006002",
+      "checked_revision": "556f4efda270e934d587aefa9dfe9f31c83a96da",
+      "conclusion": "success",
+      "postgres_cases_passed": 9,
+      "source_tree_sha256": "740bd85ab690f7a239808ab5a0dc705d972377abef696137f07f0296b864b312",
+      "artifact_sha256_verified": true,
+      "scope": "Тот же текущий IAM и полная схема PostgreSQL; обычные тесты, race, vet и build. Это независимый запуск CI, не вердикт Project OS Reviewer."
+    }
   },
   "deviations": {
-    "scope_changes": "Нет: изменения реализации находятся в services/iam; legacy root module, Keycloak, другие сервисы и рабочие данные не менялись. Это новая реализация существующего порта, а не повтор закрытого исследования HIT-62.",
+    "scope_changes": "Адаптер и его проверки находятся в services/iam; legacy root module, Keycloak, другие сервисы, рабочие данные и исторические отчёты не менялись. Для проверки текущей реализации также исправлен только .github/workflows/pr12-dk.yml.",
     "known_release_input": "У принятого Go 1.27.2 есть зарегистрированные Go advisories GO-2026-6859 (net/http) и GO-2026-6809 (crypto/x509). Закреплённый cohort не менялся; перед рабочим развёртыванием требуется штатно разрешить его обновление. В этой задаче HTTP-сервер и TLS рабочего соединения не подключены; анализ достижимости уязвимых функций и security qualification не заявляются.",
-    "security_note_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/security-note.json"
+    "security_note_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/security-note.json",
+    "ci_archive_conflict": "Прежняя активная CI требовала точного совпадения текущего IAM с module_files закрытого лабораторного отчёта и отвергала любое дальнейшее развитие. Архивные отчёты сохранены. Теперь IAM job выполняет настоящий одноразовый PostgreSQL/race/vet/build сценарий текущего сервиса; идентификатор check pr12-iam сохранён для защиты ветки. Другие workflow не менялись."
   },
   "limitations": [
     "Тесты подтверждают отдельный адаптер на настоящей изолированной PostgreSQL. Они не подтверждают работающий вход/OIDC, бизнес-полномочия, доверенный источник времени, общий протокол отзыва и start gate, рабочий TLS или развёртывание.",
