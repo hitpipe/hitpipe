@@ -1,0 +1,21 @@
+{
+  "checked_at_utc": "2026-11-12T03:39:15Z",
+  "source": "https://vuln.go.dev/",
+  "toolchain_used": "go1.27.2",
+  "findings": [
+    {
+      "id": "GO-2026-6859",
+      "fixed_in_same_series": "1.27.4",
+      "surface": "net/http HTTP/1 server MaxBytesReader/MaxBytesHandler race",
+      "source": "https://vuln.go.dev/ID/GO-2026-6859.json"
+    },
+    {
+      "id": "GO-2026-6809",
+      "fixed_in_same_series": "1.27.3",
+      "surface": "crypto/x509 Certificate.Verify intermediate certificate distrust",
+      "source": "https://vuln.go.dev/ID/GO-2026-6809.json"
+    }
+  ],
+  "scope": "Known toolchain advisories recorded; no symbol-level vulnerability scan or live TLS/HTTP qualification is claimed. This task does not wire an HTTP server or production database connection. Resolve the shared cohort before deployment; pins were not silently changed.",
+  "dependency_lock": "All services/iam/go.sum lines are contained in the accepted 84249ff3 stack lock."
+}
