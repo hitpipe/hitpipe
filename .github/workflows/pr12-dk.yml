@@ -16,8 +16,6 @@ jobs:
     name: pr12-iam
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    env:
-      HIT68_CI_EVIDENCE: ${{ runner.temp }}/iam-postgres-checks
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,12 +25,12 @@ jobs:
           go-version: '1.27.2'
           cache: false
       - name: Проверить текущий IAM, PostgreSQL, гонки и сборку
-        run: python3 services/iam/tools/check_postgres_session_lookup.py --evidence-dir "$HIT68_CI_EVIDENCE"
+        run: python3 services/iam/tools/check_postgres_session_lookup.py --evidence-dir "$RUNNER_TEMP/iam-postgres-checks"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: iam-postgres-${{ github.event.pull_request.head.sha || github.sha }}
-          path: ${{ env.HIT68_CI_EVIDENCE }}
+          path: ${{ runner.temp }}/iam-postgres-checks
           if-no-files-found: error
       - name: Область проверки
         if: always()
