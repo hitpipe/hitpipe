@@ -1,0 +1,38 @@
+{
+  "subject": "HIT-72",
+  "materialized_result": {
+    "summary": "Преобразование уже полученного принятого SourceFacts в локальную финансовую проекцию; без сети/записи и разрешения действия.",
+    "base_sha": "dd726339b5b9f5e62cb2150d801a40d05c319294",
+    "tested_code_sha": "fa7d49d315a8a6dfc767c600085b9ee680d8582c",
+    "code_url": "https://github.com/hitpipe/hitpipe/tree/fa7d49d315a8a6dfc767c600085b9ee680d8582c/services/processing/internal/adapters/intake/sourcefacts",
+    "schema_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "schema_sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/intake/sourcefacts/README.md",
+    "services/processing/internal/adapters/intake/sourcefacts/projection.go",
+    "services/processing/internal/adapters/intake/sourcefacts/projection_test.go",
+    "services/processing/internal/adapters/intake/sourcefacts/schema_generated.go",
+    "services/processing/internal/adapters/intake/sourcefacts/testdata/valid.json",
+    "services/processing/tools/sourcefacts/generate.py"
+  ],
+  "verification": {
+    "environment": "Go 1.27.2 darwin/arm64, GOTOOLCHAIN=local; synthetic data only",
+    "commands": "services/processing/docs/HIT-72/verification/commands.json",
+    "logs": [
+      "services/processing/docs/HIT-72/verification/race.stdout",
+      "services/processing/docs/HIT-72/verification/vet.stdout",
+      "services/processing/docs/HIT-72/verification/source-audit.json"
+    ],
+    "results": "go test -race -count=1 -json ./...: exit 0, 6 packages, 289 passing test/subtest events; go vet ./... exit 0; generation and diff exit 0.",
+    "coverage": "Required-field removal/null/wrong-shape across all 28 fields; canonical zero/false; unknowns; enums/formats/numbers; duplicate/case aliases; both refund-shadow orders; all expected identity/mode mismatches; independent domain fixture comparison; no shared pointers; exact provenance times. Composition VALID, INELIGIBLE/REFUND, INCOMPLETE, REFRESH_REQUIRED; error/cancellation no retry."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Не подтверждены подлинность отправителя, корректность digest, полномочия, workspace/epoch/start guards или действующий Intake.",
+    "Не подключено к серверу; синтетические примеры не являются сквозной интеграцией. VALID — только финансовое знание.",
+    "Нет новых внешних Go-зависимостей, финансовые правила и существующий consumer не изменены.",
+    "Независимое review и человеческая приёмка ещё не выполнены."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
