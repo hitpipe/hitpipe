@@ -1,0 +1,10 @@
+-- Test cluster only: no passwords, host networking, or production databases.
+CREATE ROLE hp_intake_migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+CREATE ROLE hp_intake_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+CREATE ROLE hp_intake_worker LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+CREATE ROLE hp_intake_purge LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+CREATE DATABASE intake_test OWNER hp_intake_migrator;
+REVOKE ALL ON DATABASE intake_test FROM PUBLIC;
+GRANT CONNECT ON DATABASE intake_test TO hp_intake_app,hp_intake_worker,hp_intake_purge;
+\connect intake_test
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
