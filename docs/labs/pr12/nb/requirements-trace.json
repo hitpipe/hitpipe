@@ -1,0 +1,82 @@
+{
+  "task": "HIT-49",
+  "feature": "HIT-15",
+  "mode": "MANUAL_LAB_PR12",
+  "person": "Никита Будыкин",
+  "component": "Intake - Source Integrations",
+  "repository": "hitpipe/hitpipe",
+  "base_ref": "refs/tags/pr12-bootstrap-20261017-v2",
+  "base_commit": "94b78199c202a31bcb63326ae7f2a4748aa29360",
+  "context_lock": {
+    "architecture_package": "sha256:18f94e1cfb6ba4f98cdd0c09133e798ad619d8fa83a74af13c017ca1f0ee418b",
+    "product_package": "sha256:e2a5ab63b35ce807c4de7bd79b30858fa0e54161eae252d022882fc8ceb7cd71",
+    "discovery_package": "sha256:39e8087611b4a01605a773c958023ff1ab10abdddb6e1b65669ebc68185276fd",
+    "formal_git_commit": "84249ff3ba611358232294c46f6022f030ea223d",
+    "status": "CANDIDATE_MANUAL_LAB_INPUT",
+    "runtime_authorization": false
+  },
+  "source_status": "Candidate/In Review; grant=none",
+  "records": [
+    {
+      "id": "FR-SIG-01",
+      "source": "upstream/architecture/HP-BP-002.md:T/001",
+      "requirement": "Verify HMAC-SHA256 over timestamp + dot + exact raw bytes with v1 and constant-time comparison.",
+      "acceptance_oracle": "Known offline vector verifies; one byte change or reserialization rejects.",
+      "planned_check": "HIT-51/HIT-53 signature and raw-byte tests",
+      "status": "PLANNED"
+    },
+    {
+      "id": "FR-SIG-02",
+      "source": "upstream/architecture/HP-BP-002.md:T/001",
+      "requirement": "Reject malformed/missing/contradictory timestamp, v0-only, unsupported signature shape; apply absolute 300-second freshness.",
+      "acceptance_oracle": "299/300-second values pass freshness; 301 and conflicts reject.",
+      "planned_check": "HIT-51/HIT-53 boundary and decision-table tests",
+      "status": "PLANNED"
+    },
+    {
+      "id": "FR-SIG-03",
+      "source": "upstream/architecture/HP-BP-007.md:T/010; HIT-51 AC3",
+      "requirement": "Unavailable secret/clock and unsupported input fail closed with safe diagnostics.",
+      "acceptance_oracle": "Nonzero/safe reason; no secret, raw body or header in output.",
+      "planned_check": "HIT-52/HIT-53 dependency and diagnostic tests",
+      "status": "PLANNED"
+    },
+    {
+      "id": "FR-SIG-04",
+      "source": "upstream/architecture/HP-BP-002.md:T/001,T/002",
+      "requirement": "Verification cannot itself create a receipt, paid admission or 2xx.",
+      "acceptance_oracle": "Consumer returns typed verification result; no route/receipt/outbox in this slice.",
+      "planned_check": "HIT-51/HIT-52 import and consumer checks",
+      "status": "PLANNED"
+    },
+    {
+      "id": "NFR-SIG-01",
+      "source": "upstream/architecture/HP-BP-002.md:T/003; HP-BP-007.md:T/010",
+      "requirement": "Minimize diagnostic data and keep provider/customer secrets out of logs and fixtures.",
+      "acceptance_oracle": "Forbidden-marker assertions pass on safe stdout/stderr/log fields.",
+      "planned_check": "HIT-51/HIT-53 log inspection",
+      "status": "PLANNED"
+    },
+    {
+      "id": "NFR-SIG-02",
+      "source": "upstream/product/HP-DOC-NFR-001.md; HIT-51 AC5",
+      "requirement": "Use deterministic synthetic checks and report actual evidence without unsupported performance claims.",
+      "acceptance_oracle": "Same fixed fixture/clock gives same result; command, SHA, tool versions and exit recorded.",
+      "planned_check": "HIT-51/HIT-53 local and CI evidence",
+      "status": "PLANNED"
+    }
+  ],
+  "human_gates": [
+    "real interview and source confirmation",
+    "blind clarity check by another student",
+    "Lead review/merge",
+    "cross-project opposition",
+    "human screenshots and personal defence"
+  ],
+  "limitations": [
+    "No live Stripe deliveries or credentials",
+    "No durable receipt/outbox/admission/2xx",
+    "No financial eligibility or source-read proof",
+    "No formal Project OS start/review/acceptance"
+  ]
+}
