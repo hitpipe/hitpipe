@@ -19,6 +19,7 @@ type Query struct {
 type Snapshot struct {
 	ConfigID, SchemaVersion, EvaluatorVersion string
 	Facts                                     eligibility.Facts
+	Proof                                     *SourceProof
 }
 
 // SourceFactsReader owns source access. Return immutable values valid for the
