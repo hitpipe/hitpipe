@@ -3,10 +3,13 @@
 `NewReader(origin, localPolicy, callerContext, transport, boundary, maxResponseBytes)`
 создаёт клиент для единственного POST /internal/v1/source-facts/read. Он реализует
 прежний SourceFactsReader без изменения Query, оценщика или финансовых правил.
+В локальный Snapshot добавлено совместимое необязательное поле Proof; существующие
+fixture readers оставляют его nil. HTTP-reader сохраняет в нём source provenance,
+так что она не теряется при вызове через прежний application-порт.
 `ReadProjection` возвращает тот же read плюс Provenance из Decode HIT-72; `Read`
-возвращает Snapshot существующему финансовому consumer. Общего изменяемого
-«последнего результата» нет. Для сохранения provenance вызывающая композиция
-использует ReadProjection; EvaluatePaidOrder по-прежнему возвращает финансовое знание.
+возвращает Snapshot с Proof существующему финансовому consumer. Общего изменяемого
+«последнего результата» нет. Provenance доступна в обоих способах чтения; EvaluatePaidOrder по-прежнему возвращает
+только финансовое знание и не меняет своих правил.
 
 Источник wire-формы: project-os@fedbe40bb597e25f66aeb1172af3ff7459c81b40,
 contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json,

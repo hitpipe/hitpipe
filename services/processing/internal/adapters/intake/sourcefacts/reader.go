@@ -202,6 +202,7 @@ func (r *Reader) ReadProjection(ctx context.Context, q evaluatepaidorder.Query) 
 	if ctx.Err() != nil {
 		return fail(failure("CANCELED"))
 	}
+	p.Snapshot.Proof = &evaluatepaidorder.SourceProof{FactsID: p.Provenance.FactsID, Digest: p.Provenance.Digest, SessionCreatedAt: p.Provenance.SessionCreatedAt, OldestObservedAt: p.Provenance.OldestObservedAt, CompletedAt: p.Provenance.CompletedAt, ValidUntil: p.Provenance.ValidUntil}
 	return p, nil
 }
 

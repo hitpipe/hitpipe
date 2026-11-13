@@ -601,3 +601,24 @@ func TestTransportRetainsExplicitDialerAndRejectsUnsafeTLS(t *testing.T) {
 		}
 	}
 }
+
+func TestExistingApplicationPortRetainsSourceProof(t *testing.T) {
+	b, e, p, _ := inputs(t)
+	f := certificates(t)
+	s := f.server(t, func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(b)
+	})
+	r := newReader(t, s, f, caller(e), p, &fixtureBoundary{}, 4096)
+	snapshot, err := r.Read(context.Background(), query(e, p))
+	if err != nil {
+		t.Fatal(err)
+	}
+	proof := snapshot.Proof
+	if proof == nil || proof.FactsID != "33333333-3333-4333-8333-333333333333" || proof.Digest != "sha256:"+strings.Repeat("a", 64) || proof.OldestObservedAt != "2026-10-18T10:00:00Z" || proof.CompletedAt != "2026-10-18T10:00:01Z" || proof.ValidUntil != "2026-10-18T10:00:10Z" || proof.SessionCreatedAt == nil || *proof.SessionCreatedAt != "2026-10-18T09:00:00Z" {
+		t.Fatalf("lost source proof: %+v", proof)
+	}
+	if snapshot.ConfigID != p.ConfigID || snapshot.SchemaVersion != p.SchemaVersion || snapshot.EvaluatorVersion != p.EvaluatorVersion {
+		t.Fatal("local pins changed")
+	}
+}
