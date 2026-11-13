@@ -13,7 +13,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-IMAGE = 'docker.io/library/postgres@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873'
+IMAGE = 'docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73'
 CONTAINER = 'hit71-' + uuid.uuid4().hex[:12]
 WS = '00000000-0000-4000-8000-000000000001'
 OTHER = '00000000-0000-4000-8000-000000000002'
@@ -254,7 +254,7 @@ def main():
             raise AssertionError('test database did not start')
         version = require(sql('postgres','SHOW server_version', 'postgres'))
         print('server_version=' + version, flush=True)
-        assert version.startswith('18.6'), version
+        assert version == '18.7', version
         require(sql('postgres', (ROOT/'tests/postgres/bootstrap.sql').read_text(), 'postgres'))
         require(sql('hp_intake_migrator', migration.read_text()))
         print('migration applied by hp_intake_migrator', flush=True)
