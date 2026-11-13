@@ -1,0 +1,50 @@
+{
+  "subject": "HIT-77",
+  "materialized_result": {
+    "summary": "Processing SourceFactsReader для принятого внутреннего POST, с явными transport/start-boundary зависимостями и reuse Decode HIT-72.",
+    "base_main_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "204fabc518dbb403a84ef945da215ed26a0b1e89",
+    "pr44": {
+      "headRefOid": "047642704cb6fbe8c3e990ced41110ebb3b6db10",
+      "mergeCommit": {
+        "oid": "20adc01a037148d20ea8da6c281f52d25cb2d9e3"
+      },
+      "mergedAt": "2026-11-13T09:05:54Z",
+      "state": "MERGED"
+    },
+    "code": "https://github.com/hitpipe/hitpipe/tree/204fabc518dbb403a84ef945da215ed26a0b1e89/services/processing/internal/adapters/intake/sourcefacts",
+    "contract": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "contract_sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/intake/sourcefacts/HTTP_READER_RU.md",
+    "services/processing/internal/adapters/intake/sourcefacts/reader.go",
+    "services/processing/internal/adapters/intake/sourcefacts/reader_test.go",
+    "services/processing/internal/adapters/intake/sourcefacts/request_generated.go",
+    "services/processing/internal/application/evaluatepaidorder/evaluate.go",
+    "services/processing/internal/application/evaluatepaidorder/source_proof.go",
+    "services/processing/tools/sourcefacts/generate_request.py"
+  ],
+  "verification": {
+    "commands": "services/processing/docs/HIT-77/verification/commands.json",
+    "events": "services/processing/docs/HIT-77/verification/go-race.stdout",
+    "summary": {
+      "tested_source_sha": "204fabc518dbb403a84ef945da215ed26a0b1e89",
+      "packages_passed": 6,
+      "test_subtest_pass_events": 332,
+      "failure_events": 0,
+      "scope": "Controlled loopback HTTPS/mTLS fixture, not real IAM/Intake/Stripe or runtime gate qualification."
+    },
+    "source_audit": "services/processing/docs/HIT-77/source-audit.json",
+    "result": "race6packages PASS; vet/generation/generation-diff exit0. Real loopback HTTPS/mTLS test listener, not fake RoundTripper. Tests cover exact request/context, TLS/cert/SAN/actual socket start, errors/no replay, controlled bounds/cancellation/joins, financial composition and proof preservation."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Нет настоящей интеграции IAM/Intake/Stripe, проверки финансовой подлинности или digest verification. Fixture gate не является production runtime coordinator.",
+    "Production caller должен предоставить уже установленные scope/epoch/deadline, проверенный transport/credentials/origin и общий actual-start boundary; разрешающего default нет.",
+    "OAS не задаёт общий байтовый максимум SourceFacts. Обязательный частный bound буфера в стенде — тестовая transport-настройка; новый продуктовый порог не выбирался. Production настройка остаётся входом отдельной композиции.",
+    "Нет case/outbox writes, активации, live provider или гарантии готового MVP; VALID означает только финансовое знание.",
+    "Независимый Reviewer и человеческая приёмка не выполнены."
+  ],
+  "authorship": "Codex по поручению Тимофея Патрушева / Tim1hik"
+}
