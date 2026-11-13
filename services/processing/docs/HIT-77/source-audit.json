@@ -1,0 +1,41 @@
+{
+  "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_code_sha": "204fabc518dbb403a84ef945da215ed26a0b1e89",
+  "pr44_recheck": {
+    "headRefOid": "047642704cb6fbe8c3e990ced41110ebb3b6db10",
+    "mergeCommit": {
+      "oid": "20adc01a037148d20ea8da6c281f52d25cb2d9e3"
+    },
+    "mergedAt": "2026-11-13T09:05:54Z",
+    "state": "MERGED"
+  },
+  "checked_at": "2026-11-13T14:08:43.806149+00:00",
+  "changed_paths": [
+    "services/processing/internal/adapters/intake/sourcefacts/HTTP_READER_RU.md",
+    "services/processing/internal/adapters/intake/sourcefacts/reader.go",
+    "services/processing/internal/adapters/intake/sourcefacts/reader_test.go",
+    "services/processing/internal/adapters/intake/sourcefacts/request_generated.go",
+    "services/processing/internal/application/evaluatepaidorder/evaluate.go",
+    "services/processing/internal/application/evaluatepaidorder/source_proof.go",
+    "services/processing/tools/sourcefacts/generate_request.py"
+  ],
+  "reused_unchanged": [
+    "services/processing/internal/adapters/intake/sourcefacts/projection.go",
+    "services/processing/internal/adapters/intake/sourcefacts/projection_test.go",
+    "services/processing/internal/adapters/intake/sourcefacts/schema_generated.go",
+    "services/processing/internal/adapters/intake/sourcefacts/testdata/valid.json",
+    "services/processing/internal/domain/eligibility/eligibility.go"
+  ],
+  "financial_function_unchanged": true,
+  "application_port_change": "Only backward-compatible optional Snapshot.Proof plus neutral SourceProof data; Query and financial function unchanged.",
+  "private_transport_bound": "OAS defines field bounds, not total response byte cap. No production cap/default invented: mandatory transport buffer parameter is supplied by the controlled fixture; production configuration and actual runtime guard remain dependencies outside this task.",
+  "file_sha256": {
+    "services/processing/internal/adapters/intake/sourcefacts/HTTP_READER_RU.md": "f9e2bb8be478a6d1479e59b1d22c43561ef53aab8e99adfa244fda55614274a4",
+    "services/processing/internal/adapters/intake/sourcefacts/reader.go": "c343c6d4cd3e859f386d1b2ec83c927b9fcae7f521bfc83cdd00747e3affb92c",
+    "services/processing/internal/adapters/intake/sourcefacts/reader_test.go": "a99012f6d4b5ac026da5a50b4fc20da243d561a26735d0d556fb7fbcdcdf29bb",
+    "services/processing/internal/adapters/intake/sourcefacts/request_generated.go": "3c44cdc2f480efcae52480f840a624f4eac284ffc06f23f61a6d112e54ff5e4c",
+    "services/processing/internal/application/evaluatepaidorder/evaluate.go": "ff2f0eea2616d9c7650d83c66a19535be126ec5519e98682c4792f7c7fe42264",
+    "services/processing/internal/application/evaluatepaidorder/source_proof.go": "3f9f59cfc731e90481d0c1dd51d023fb3b17081568b554963a57a6117fb64b5e",
+    "services/processing/tools/sourcefacts/generate_request.py": "ab47b2e6069fbdc9fda02d2da3b24faf36a1554a170df86328658c17393208ca"
+  }
+}
