@@ -1,0 +1,35 @@
+{
+  "tested_code_sha": "e809cc7713e827a7bb82efeb384f65e15624c7a5",
+  "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "python": "3.12.6",
+  "host": "macOS-26.5-arm64-arm-64bit",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "services/intake/tools/check_postgres.py"
+      ],
+      "started_utc": "2026-11-13T13:18:40.847445+00:00",
+      "duration_seconds": 27.72275695897406,
+      "exit_code": 0,
+      "stdout": "services/intake/docs/HIT-71/verification/postgres.stdout",
+      "stderr": "services/intake/docs/HIT-71/verification/postgres.stderr",
+      "stdout_sha256": "6d7b9d51704c3f293a0514167d0cdd8038c0dc89d049fe1936a2ff8f40a61127",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_utc": "2026-11-13T13:19:08.569128+00:00",
+      "duration_seconds": 0.04361870902357623,
+      "exit_code": 0,
+      "stdout": "services/intake/docs/HIT-71/verification/diff-check.stdout",
+      "stderr": "services/intake/docs/HIT-71/verification/diff-check.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

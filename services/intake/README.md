@@ -1,5 +1,11 @@
 # Intake: схема PostgreSQL
 
+**HIT-71 удержана до решения по закреплённой версии PostgreSQL.** 12 ноября 2026
+опубликована CVE-2026-120154 (обход RLS при определённых ON CONFLICT запросах),
+затрагивающая 18.6. Исправление — 18.7. Существующие положительные тесты ниже
+не воспроизводят этот дефект и не доказывают безопасность версии.
+См. `docs/HIT-71/README.md`. Версия и схема самостоятельно не изменены.
+
 `migrations/0001_intake.sql` — точные SQL bytes раздела HP-MVP-SQL-INTAKE
 из `hitpipe/project-os` на `fedbe40bb597e25f66aeb1172af3ff7459c81b40`,
 `contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md`.
