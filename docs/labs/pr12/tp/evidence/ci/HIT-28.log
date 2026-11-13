@@ -1,0 +1,417 @@
+pr12-processing	Set up job	﻿2026-10-18T10:49:48.9464469Z Current runner version: '2.337.0'
+pr12-processing	Set up job	2026-10-18T10:49:48.9487464Z ##[group]Runner Image Provisioner
+pr12-processing	Set up job	2026-10-18T10:49:48.9488335Z Hosted Compute Agent
+pr12-processing	Set up job	2026-10-18T10:49:48.9488867Z Version: 20261012.601
+pr12-processing	Set up job	2026-10-18T10:49:48.9489515Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+pr12-processing	Set up job	2026-10-18T10:49:48.9490183Z Build Date: 2026-10-12T17:48:21Z
+pr12-processing	Set up job	2026-10-18T10:49:48.9490831Z Worker ID: {a56ca6d8-8ad5-4adc-8b3c-3cd5f69a3100}
+pr12-processing	Set up job	2026-10-18T10:49:48.9491799Z Region: centralus
+pr12-processing	Set up job	2026-10-18T10:49:48.9492517Z Cloud: Azure
+pr12-processing	Set up job	2026-10-18T10:49:48.9493040Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:49:48.9494488Z ##[group]Operating System
+pr12-processing	Set up job	2026-10-18T10:49:48.9495066Z Ubuntu
+pr12-processing	Set up job	2026-10-18T10:49:48.9495643Z 24.04.5
+pr12-processing	Set up job	2026-10-18T10:49:48.9496258Z LTS
+pr12-processing	Set up job	2026-10-18T10:49:48.9496883Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:49:48.9497399Z ##[group]Runner Image
+pr12-processing	Set up job	2026-10-18T10:49:48.9498237Z Image: ubuntu-24.04
+pr12-processing	Set up job	2026-10-18T10:49:48.9498856Z Version: 20261012.334.1
+pr12-processing	Set up job	2026-10-18T10:49:48.9499835Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+pr12-processing	Set up job	2026-10-18T10:49:48.9501563Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+pr12-processing	Set up job	2026-10-18T10:49:48.9502470Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:49:48.9503574Z ##[group]GITHUB_TOKEN Permissions
+pr12-processing	Set up job	2026-10-18T10:49:48.9505709Z Contents: read
+pr12-processing	Set up job	2026-10-18T10:49:48.9506308Z Metadata: read
+pr12-processing	Set up job	2026-10-18T10:49:48.9506854Z ##[endgroup]
+pr12-processing	Set up job	2026-10-18T10:49:48.9508808Z Secret source: Actions
+pr12-processing	Set up job	2026-10-18T10:49:48.9509648Z Cache mode: write
+pr12-processing	Set up job	2026-10-18T10:49:48.9510466Z Prepare workflow directory
+pr12-processing	Set up job	2026-10-18T10:49:48.9853649Z Prepare all required actions
+pr12-processing	Set up job	2026-10-18T10:49:48.9905597Z Getting action download info
+pr12-processing	Set up job	2026-10-18T10:49:49.2385649Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+pr12-processing	Set up job	2026-10-18T10:49:49.3384811Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+pr12-processing	Set up job	2026-10-18T10:49:50.0563322Z Complete job name: pr12-processing
+pr12-processing	Run actions/checkout@v4	﻿2026-10-18T10:49:50.1267798Z ##[group]Run actions/checkout@v4
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1268741Z with:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1269359Z   repository: hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1274205Z   token: ***
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1274761Z   ssh-strict: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1275360Z   ssh-user: git
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1275965Z   persist-credentials: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1276577Z   clean: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1277151Z   sparse-checkout-cone-mode: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1277762Z   fetch-depth: 1
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1278339Z   fetch-tags: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1278888Z   show-progress: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1279438Z   lfs: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1279997Z   submodules: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1280573Z   set-safe-directory: true
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1281208Z   allow-unsafe-pr-checkout: false
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.1282387Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2238579Z Syncing repository: hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2240626Z ##[group]Getting Git version info
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2241724Z Working directory is '/home/runner/work/hitpipe/hitpipe'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2243312Z [command]/usr/bin/git version
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2308700Z git version 2.55.0
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2326972Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2350102Z Temporarily overriding HOME='/home/runner/work/_temp/9ee5815c-d2be-4c77-9f83-1a482695d862' before making global git config changes
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2352932Z Adding repository directory to the temporary git global config as a safe directory
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2355244Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2406996Z Deleting the contents of '/home/runner/work/hitpipe/hitpipe'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2412032Z ##[group]Initializing the repository
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2416693Z [command]/usr/bin/git init /home/runner/work/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2519343Z hint: Using 'master' as the name for the initial branch. This default branch name
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2521662Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2524182Z hint: to use in all of your new repositories, which will suppress this warning,
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2526001Z hint: call:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2527011Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2528146Z hint: 	git config --global init.defaultBranch <name>
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2529594Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2530814Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2533347Z hint: 'development'. The just-created branch can be renamed via this command:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2534930Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2535854Z hint: 	git branch -m <name>
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2537400Z hint:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2538767Z hint: Disable this message with "git config set advice.defaultBranchName false"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2540704Z Initialized empty Git repository in /home/runner/work/hitpipe/hitpipe/.git/
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2544390Z [command]/usr/bin/git remote add origin https://github.com/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2581439Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2583198Z ##[group]Disabling automatic garbage collection
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2584988Z [command]/usr/bin/git config --local gc.auto 0
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2614948Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2616217Z ##[group]Setting up auth
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2622704Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2648337Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.2987718Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3019514Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3220887Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3251131Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3428386Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3467595Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3468727Z ##[group]Fetching the repository
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:50.3477040Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7:refs/remotes/origin/work/HIT-28-evaluate-paid-order-port
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0273680Z From https://github.com/hitpipe/hitpipe
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0276642Z  * [new ref]         94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7 -> origin/work/HIT-28-evaluate-paid-order-port
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0281761Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0283790Z ##[group]Determining the checkout info
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0286016Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0287366Z [command]/usr/bin/git sparse-checkout disable
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0337931Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0368025Z ##[group]Checking out the ref
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0372701Z [command]/usr/bin/git checkout --progress --force -B work/HIT-28-evaluate-paid-order-port refs/remotes/origin/work/HIT-28-evaluate-paid-order-port
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0742849Z Switched to a new branch 'work/HIT-28-evaluate-paid-order-port'
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0749612Z branch 'work/HIT-28-evaluate-paid-order-port' set up to track 'origin/work/HIT-28-evaluate-paid-order-port'.
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0758490Z ##[endgroup]
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0798769Z [command]/usr/bin/git log -1 --format=%H
+pr12-processing	Run actions/checkout@v4	2026-10-18T10:49:51.0822802Z 94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7
+pr12-processing	Verify bootstrap documentation and frozen copies	﻿2026-10-18T10:49:51.1097541Z ##[group]Run python3 tools/pr12/workspace.py validate
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.1099491Z [36;1mpython3 tools/pr12/workspace.py validate[0m
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.1372440Z shell: /usr/bin/bash -e {0}
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.1374210Z ##[endgroup]
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.1856458Z + /usr/bin/python3 /home/runner/work/hitpipe/hitpipe/tools/pr12/validate_bundle.py
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.2646912Z {"status": "PORTABLE_PACKAGE_VALIDATION_PASS", "verified_files": 205, "features": 5, "tasks": 41, "criteria_links": 145, "templates": 4, "student_work": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-processing	Verify bootstrap documentation and frozen copies	2026-10-18T10:49:51.2998322Z {"status": "BOOTSTRAP_VALIDATION_PASS", "verified_frozen_files": 6, "student_implementation": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	﻿2026-10-18T10:49:51.3148333Z ##[group]Run python3 tools/pr12/test_workspace.py
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.3149949Z [36;1mpython3 tools/pr12/test_workspace.py[0m
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.3200459Z shell: /usr/bin/bash -e {0}
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.3201865Z ##[endgroup]
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4162613Z + tool
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4227176Z .................
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4228785Z ----------------------------------------------------------------------
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4230490Z Ran 17 tests in 0.007s
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4231293Z 
+pr12-processing	Verify bootstrap wrapper boundaries (not student tests)	2026-10-18T10:49:51.4231882Z OK
+pr12-processing	Report actual implementation state	﻿2026-10-18T10:49:51.4443689Z ##[group]Run python3 tools/pr12/workspace.py status processing
+pr12-processing	Report actual implementation state	2026-10-18T10:49:51.4445647Z [36;1mpython3 tools/pr12/workspace.py status processing[0m
+pr12-processing	Report actual implementation state	2026-10-18T10:49:51.4499210Z shell: /usr/bin/bash -e {0}
+pr12-processing	Report actual implementation state	2026-10-18T10:49:51.4500430Z ##[endgroup]
+pr12-processing	Report actual implementation state	2026-10-18T10:49:51.4952981Z {"component": "processing", "status": "IMPLEMENTATION_DECLARED_NOT_CHECKED"}
+pr12-processing	Run actions/setup-go@v5	﻿2026-10-18T10:49:51.5750018Z ##[group]Run actions/setup-go@v5
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5751271Z with:
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5752408Z   go-version: 1.27.2
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5753468Z   cache: false
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5754418Z   check-latest: false
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5763882Z   token: ***
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.5764923Z ##[endgroup]
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.7028155Z Setup go version spec 1.27.2
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.7039517Z Attempting to download 1.27.2...
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.7150545Z (node:2319) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:51.7155054Z (Use `node --trace-deprecation ...` to show where the warning was created)
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:52.4830346Z matching 1.27.2...
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:52.4855350Z Acquiring 1.27.2 from https://github.com/actions/go-versions/releases/download/1.27.2-37875086547/go-1.27.2-linux-x64.tar.gz
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:53.0173708Z Extracting Go...
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:53.0266134Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/fbee12e2-7086-44fa-a3b6-f0a0120fc23d -f /home/runner/work/_temp/e4ee9231-870c-46f4-be7c-82c6c5cc1077
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:54.7124967Z Successfully extracted go to /home/runner/work/_temp/fbee12e2-7086-44fa-a3b6-f0a0120fc23d
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:49:54.7126125Z Adding to the cache ...
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.7853281Z Successfully cached go to /opt/hostedtoolcache/go/1.27.2/x64
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.7854527Z Added go to the path
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.7857846Z Successfully set up Go version 1.27.2
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.8062115Z go version go1.27.2 linux/amd64
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.8062619Z 
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.8063110Z ##[group]go env
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9330306Z AR='ar'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9331030Z CC='gcc'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9331654Z CGO_CFLAGS='-O2 -g'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9332254Z CGO_CPPFLAGS=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9332694Z CGO_CXXFLAGS='-O2 -g'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9333154Z CGO_ENABLED='1'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9333527Z CGO_FFLAGS='-O2 -g'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9333926Z CGO_LDFLAGS='-O2 -g'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9334394Z CXX='g++'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9334735Z GCCGO='gccgo'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9335197Z GO111MODULE=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9335618Z GOAMD64='v1'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9336042Z GOARCH='amd64'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9336442Z GOAUTH='netrc'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9336918Z GOBIN='/home/runner/go/bin'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9337424Z GOCACHE='/home/runner/.cache/go-build'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9337978Z GOCACHEPROG=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9338387Z GODEBUG=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9338828Z GOENV='/home/runner/.config/go/env'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9339341Z GOEXE=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9340014Z GOEXPERIMENT=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9340441Z GOFIPS140='off'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9340868Z GOFLAGS=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9342148Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2900781172=/tmp/go-build -gno-record-gcc-switches'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9343260Z GOHOSTARCH='amd64'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9343658Z GOHOSTOS='linux'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9344080Z GOINSECURE=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9344532Z GOMOD='/home/runner/work/hitpipe/hitpipe/go.mod'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9345071Z GOMODCACHE='/home/runner/go/pkg/mod'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9345559Z GONOPROXY=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9345971Z GONOSUMDB=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9346404Z GOOS='linux'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9346790Z GOPACKAGESDRIVER=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9347166Z GOPATH='/home/runner/go'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9347612Z GOPRIVATE=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9348084Z GOPROXY='https://proxy.golang.org,direct'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9348613Z GOROOT='/opt/hostedtoolcache/go/1.27.2/x64'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9349124Z GOSUMDB='sum.golang.org'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9349528Z GOTELEMETRY='local'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9350000Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9350552Z GOTMPDIR=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9350986Z GOTOOLCHAIN='auto'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9351761Z GOTOOLDIR='/opt/hostedtoolcache/go/1.27.2/x64/pkg/tool/linux_amd64'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9352382Z GOVCS=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9352809Z GOVERSION='go1.27.2'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9353198Z GOWORK=''
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9353771Z PKG_CONFIG='pkg-config'
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9354061Z 
+pr12-processing	Run actions/setup-go@v5	2026-10-18T10:50:05.9354705Z ##[endgroup]
+pr12-processing	Run actual named tests when module exists	﻿2026-10-18T10:50:05.9513783Z ##[group]Run python3 tools/pr12/workspace.py check processing
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:05.9514354Z [36;1mpython3 tools/pr12/workspace.py check processing[0m
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:05.9557250Z shell: /usr/bin/bash -e {0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:05.9557778Z ##[endgroup]
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:05.9992202Z + go version
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:06.0050053Z + go vet ./...
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:12.2352072Z + go test -count=1 -json -coverprofile=/home/runner/work/hitpipe/hitpipe/.pr12-build/processing.cover ./...
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4346001Z {"Time":"2026-10-18T10:50:15.005741607Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4348439Z {"Time":"2026-10-18T10:50:15.005875907Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4350136Z {"Time":"2026-10-18T10:50:15.005921587Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4352003Z {"Time":"2026-10-18T10:50:15.005952135Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4353711Z {"Time":"2026-10-18T10:50:15.010349323Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Test":"TestCLIConfiguration"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4355809Z {"Time":"2026-10-18T10:50:15.010395775Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Test":"TestCLIConfiguration","Output":"=== RUN   TestCLIConfiguration\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4358365Z {"Time":"2026-10-18T10:50:15.010422917Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Test":"TestCLIConfiguration","Output":"--- PASS: TestCLIConfiguration (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4361080Z {"Time":"2026-10-18T10:50:15.010427671Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Test":"TestCLIConfiguration","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4363711Z {"Time":"2026-10-18T10:50:15.010434927Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Output":"PASS\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4365845Z {"Time":"2026-10-18T10:50:15.010438203Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Output":"coverage: 86.7% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4368912Z {"Time":"2026-10-18T10:50:15.01052673Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck\t0.004s\tcoverage: 86.7% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4371262Z {"Time":"2026-10-18T10:50:15.010543755Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck","Elapsed":0.005}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4373382Z {"Time":"2026-10-18T10:50:15.011840216Z","Action":"start","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4375335Z {"Time":"2026-10-18T10:50:15.01284629Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestStrictFixture"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4377619Z {"Time":"2026-10-18T10:50:15.012888499Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestStrictFixture","Output":"=== RUN   TestStrictFixture\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4380214Z {"Time":"2026-10-18T10:50:15.012899425Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestStrictFixture","Output":"--- PASS: TestStrictFixture (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4382557Z {"Time":"2026-10-18T10:50:15.012904857Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestStrictFixture","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4384769Z {"Time":"2026-10-18T10:50:15.012910128Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestReadFailure"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4386847Z {"Time":"2026-10-18T10:50:15.012914091Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestReadFailure","Output":"=== RUN   TestReadFailure\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4389360Z {"Time":"2026-10-18T10:50:15.012918852Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestReadFailure","Output":"--- PASS: TestReadFailure (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4392000Z {"Time":"2026-10-18T10:50:15.012922251Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Test":"TestReadFailure","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4394161Z {"Time":"2026-10-18T10:50:15.012925036Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Output":"PASS\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4396338Z {"Time":"2026-10-18T10:50:15.012928197Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Output":"coverage: 86.7% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4399128Z {"Time":"2026-10-18T10:50:15.013008932Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input\t0.007s\tcoverage: 86.7% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4401944Z {"Time":"2026-10-18T10:50:15.013025115Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input","Elapsed":0.007}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4403974Z {"Time":"2026-10-18T10:50:15.013318419Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4406294Z {"Time":"2026-10-18T10:50:15.013353587Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution","Output":"=== RUN   TestReaderSubstitution\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4408914Z {"Time":"2026-10-18T10:50:15.013362113Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/normal"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4411757Z {"Time":"2026-10-18T10:50:15.013365432Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/normal","Output":"=== RUN   TestReaderSubstitution/file/normal\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4414532Z {"Time":"2026-10-18T10:50:15.013371336Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/normal","Output":"--- PASS: TestReaderSubstitution/file/normal (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4416712Z {"Time":"2026-10-18T10:50:15.013376844Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/normal","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4418598Z {"Time":"2026-10-18T10:50:15.013381377Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/boundary"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4421134Z {"Time":"2026-10-18T10:50:15.013384334Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/boundary","Output":"=== RUN   TestReaderSubstitution/file/boundary\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4424214Z {"Time":"2026-10-18T10:50:15.013390904Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/boundary","Output":"--- PASS: TestReaderSubstitution/file/boundary (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4425874Z {"Time":"2026-10-18T10:50:15.013395223Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/boundary","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4427772Z {"Time":"2026-10-18T10:50:15.013397615Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/error_unknown"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4429565Z {"Time":"2026-10-18T10:50:15.013399941Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/error_unknown","Output":"=== RUN   TestReaderSubstitution/file/error_unknown\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4431580Z {"Time":"2026-10-18T10:50:15.013403676Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/error_unknown","Output":"--- PASS: TestReaderSubstitution/file/error_unknown (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4433297Z {"Time":"2026-10-18T10:50:15.013406728Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/error_unknown","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4434612Z {"Time":"2026-10-18T10:50:15.013409707Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/denied"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4436071Z {"Time":"2026-10-18T10:50:15.01341234Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/denied","Output":"=== RUN   TestReaderSubstitution/file/denied\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4437740Z {"Time":"2026-10-18T10:50:15.013416142Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/denied","Output":"--- PASS: TestReaderSubstitution/file/denied (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4439330Z {"Time":"2026-10-18T10:50:15.013419231Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/denied","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4440647Z {"Time":"2026-10-18T10:50:15.013421722Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/reader_failure"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4442373Z {"Time":"2026-10-18T10:50:15.01342422Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/reader_failure","Output":"=== RUN   TestReaderSubstitution/file/reader_failure\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4444173Z {"Time":"2026-10-18T10:50:15.013436594Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/reader_failure","Output":"--- PASS: TestReaderSubstitution/file/reader_failure (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4445797Z {"Time":"2026-10-18T10:50:15.013439668Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/file/reader_failure","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4447134Z {"Time":"2026-10-18T10:50:15.013443229Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/normal"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4448610Z {"Time":"2026-10-18T10:50:15.013445709Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/normal","Output":"=== RUN   TestReaderSubstitution/double/normal\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4450340Z {"Time":"2026-10-18T10:50:15.013450346Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/normal","Output":"--- PASS: TestReaderSubstitution/double/normal (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4452088Z {"Time":"2026-10-18T10:50:15.013453195Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/normal","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4453404Z {"Time":"2026-10-18T10:50:15.013455812Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/boundary"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4454943Z {"Time":"2026-10-18T10:50:15.013458326Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/boundary","Output":"=== RUN   TestReaderSubstitution/double/boundary\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4456761Z {"Time":"2026-10-18T10:50:15.01346269Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/boundary","Output":"--- PASS: TestReaderSubstitution/double/boundary (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4458369Z {"Time":"2026-10-18T10:50:15.013465943Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/boundary","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4459714Z {"Time":"2026-10-18T10:50:15.013468552Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/error_unknown"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4461385Z {"Time":"2026-10-18T10:50:15.01347115Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/error_unknown","Output":"=== RUN   TestReaderSubstitution/double/error_unknown\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4463424Z {"Time":"2026-10-18T10:50:15.013475264Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/error_unknown","Output":"--- PASS: TestReaderSubstitution/double/error_unknown (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4465054Z {"Time":"2026-10-18T10:50:15.013478283Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/error_unknown","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4466326Z {"Time":"2026-10-18T10:50:15.013481277Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/denied"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4467827Z {"Time":"2026-10-18T10:50:15.01348365Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/denied","Output":"=== RUN   TestReaderSubstitution/double/denied\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4469549Z {"Time":"2026-10-18T10:50:15.013487222Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/denied","Output":"--- PASS: TestReaderSubstitution/double/denied (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4471120Z {"Time":"2026-10-18T10:50:15.013490197Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/denied","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4472682Z {"Time":"2026-10-18T10:50:15.01349282Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/reader_failure"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4474210Z {"Time":"2026-10-18T10:50:15.013495247Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/reader_failure","Output":"=== RUN   TestReaderSubstitution/double/reader_failure\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4476232Z {"Time":"2026-10-18T10:50:15.013500047Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/reader_failure","Output":"--- PASS: TestReaderSubstitution/double/reader_failure (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4477845Z {"Time":"2026-10-18T10:50:15.013503096Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution/double/reader_failure","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4479325Z {"Time":"2026-10-18T10:50:15.013506606Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution","Output":"--- PASS: TestReaderSubstitution (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4480742Z {"Time":"2026-10-18T10:50:15.013509831Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestReaderSubstitution","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4482019Z {"Time":"2026-10-18T10:50:15.013512882Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4483334Z {"Time":"2026-10-18T10:50:15.013515276Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins","Output":"=== RUN   TestContextPins\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4484679Z {"Time":"2026-10-18T10:50:15.013518231Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/config"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4486061Z {"Time":"2026-10-18T10:50:15.01352078Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/config","Output":"=== RUN   TestContextPins/config\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4487570Z {"Time":"2026-10-18T10:50:15.013524478Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/config","Output":"--- PASS: TestContextPins/config (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4488982Z {"Time":"2026-10-18T10:50:15.013527562Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/config","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4490165Z {"Time":"2026-10-18T10:50:15.013530408Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/schema"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4491597Z {"Time":"2026-10-18T10:50:15.013533128Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/schema","Output":"=== RUN   TestContextPins/schema\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4493185Z {"Time":"2026-10-18T10:50:15.013536857Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/schema","Output":"--- PASS: TestContextPins/schema (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4494636Z {"Time":"2026-10-18T10:50:15.013539862Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/schema","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4495820Z {"Time":"2026-10-18T10:50:15.013542199Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/evaluator"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4497318Z {"Time":"2026-10-18T10:50:15.013544734Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/evaluator","Output":"=== RUN   TestContextPins/evaluator\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4498872Z {"Time":"2026-10-18T10:50:15.01354858Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/evaluator","Output":"--- PASS: TestContextPins/evaluator (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4500314Z {"Time":"2026-10-18T10:50:15.013552237Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/evaluator","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4501605Z {"Time":"2026-10-18T10:50:15.013557004Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/case"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4502981Z {"Time":"2026-10-18T10:50:15.013561534Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/case","Output":"=== RUN   TestContextPins/case\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4504491Z {"Time":"2026-10-18T10:50:15.013565454Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/case","Output":"--- PASS: TestContextPins/case (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4505861Z {"Time":"2026-10-18T10:50:15.013568192Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/case","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4507212Z {"Time":"2026-10-18T10:50:15.013570294Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/session"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4508668Z {"Time":"2026-10-18T10:50:15.013572732Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/session","Output":"=== RUN   TestContextPins/session\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4510283Z {"Time":"2026-10-18T10:50:15.013575887Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/session","Output":"--- PASS: TestContextPins/session (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4511855Z {"Time":"2026-10-18T10:50:15.013578852Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins/session","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4513269Z {"Time":"2026-10-18T10:50:15.013581862Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins","Output":"--- PASS: TestContextPins (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4514714Z {"Time":"2026-10-18T10:50:15.013584694Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestContextPins","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4515963Z {"Time":"2026-10-18T10:50:15.013587864Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestCanceledAndInvalidContext"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4517522Z {"Time":"2026-10-18T10:50:15.013590413Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestCanceledAndInvalidContext","Output":"=== RUN   TestCanceledAndInvalidContext\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4519239Z {"Time":"2026-10-18T10:50:15.013593845Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestCanceledAndInvalidContext","Output":"--- PASS: TestCanceledAndInvalidContext (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4521221Z {"Time":"2026-10-18T10:50:15.013596614Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestCanceledAndInvalidContext","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4522604Z {"Time":"2026-10-18T10:50:15.013599134Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestFinancialScope"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4523936Z {"Time":"2026-10-18T10:50:15.01360151Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestFinancialScope","Output":"=== RUN   TestFinancialScope\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4525486Z {"Time":"2026-10-18T10:50:15.013606039Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestFinancialScope","Output":"--- PASS: TestFinancialScope (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4526835Z {"Time":"2026-10-18T10:50:15.013608958Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Test":"TestFinancialScope","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4528072Z {"Time":"2026-10-18T10:50:15.013611396Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Output":"PASS\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4529295Z {"Time":"2026-10-18T10:50:15.013614453Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Output":"coverage: 100.0% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4530979Z {"Time":"2026-10-18T10:50:15.013698316Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder\t0.007s\tcoverage: 100.0% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4532592Z {"Time":"2026-10-18T10:50:15.013709922Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder","Elapsed":0.008}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4533641Z {"Time":"2026-10-18T10:50:15.014761055Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestNormal"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4534820Z {"Time":"2026-10-18T10:50:15.014793576Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestNormal","Output":"=== RUN   TestNormal\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4536168Z {"Time":"2026-10-18T10:50:15.014802061Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestNormal","Output":"--- PASS: TestNormal (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4537387Z {"Time":"2026-10-18T10:50:15.014806472Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestNormal","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4538466Z {"Time":"2026-10-18T10:50:15.014812041Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestUnknownAndZero"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4539943Z {"Time":"2026-10-18T10:50:15.01481644Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestUnknownAndZero","Output":"=== RUN   TestUnknownAndZero\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4541363Z {"Time":"2026-10-18T10:50:15.014821481Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestUnknownAndZero","Output":"--- PASS: TestUnknownAndZero (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4542766Z {"Time":"2026-10-18T10:50:15.014825327Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestUnknownAndZero","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4543862Z {"Time":"2026-10-18T10:50:15.014828654Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestProofBoundary"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4545159Z {"Time":"2026-10-18T10:50:15.014831606Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestProofBoundary","Output":"=== RUN   TestProofBoundary\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4546593Z {"Time":"2026-10-18T10:50:15.014835895Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestProofBoundary","Output":"--- PASS: TestProofBoundary (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4547905Z {"Time":"2026-10-18T10:50:15.014838971Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestProofBoundary","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4548993Z {"Time":"2026-10-18T10:50:15.014841844Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4550213Z {"Time":"2026-10-18T10:50:15.014843931Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial","Output":"=== RUN   TestFinancialDenial\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4551599Z {"Time":"2026-10-18T10:50:15.014846753Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/refund"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4553003Z {"Time":"2026-10-18T10:50:15.014849257Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/refund","Output":"=== RUN   TestFinancialDenial/refund\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4554562Z {"Time":"2026-10-18T10:50:15.014852999Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/refund","Output":"--- PASS: TestFinancialDenial/refund (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4555919Z {"Time":"2026-10-18T10:50:15.014857481Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/refund","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4557026Z {"Time":"2026-10-18T10:50:15.014861075Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/capture"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4558371Z {"Time":"2026-10-18T10:50:15.014863746Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/capture","Output":"=== RUN   TestFinancialDenial/capture\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4559904Z {"Time":"2026-10-18T10:50:15.014867487Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/capture","Output":"--- PASS: TestFinancialDenial/capture (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4561258Z {"Time":"2026-10-18T10:50:15.014870851Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/capture","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4562540Z {"Time":"2026-10-18T10:50:15.014873949Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/received"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4563828Z {"Time":"2026-10-18T10:50:15.014876252Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/received","Output":"=== RUN   TestFinancialDenial/received\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4565465Z {"Time":"2026-10-18T10:50:15.014886038Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/received","Output":"--- PASS: TestFinancialDenial/received (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4566820Z {"Time":"2026-10-18T10:50:15.014889067Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/received","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4568017Z {"Time":"2026-10-18T10:50:15.014891898Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/partial_capture"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4569382Z {"Time":"2026-10-18T10:50:15.014894495Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/partial_capture","Output":"=== RUN   TestFinancialDenial/partial_capture\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4571037Z {"Time":"2026-10-18T10:50:15.01489863Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/partial_capture","Output":"--- PASS: TestFinancialDenial/partial_capture (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4572602Z {"Time":"2026-10-18T10:50:15.014901588Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/partial_capture","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4573770Z {"Time":"2026-10-18T10:50:15.014904112Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/dispute"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4575199Z {"Time":"2026-10-18T10:50:15.014906277Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/dispute","Output":"=== RUN   TestFinancialDenial/dispute\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4576711Z {"Time":"2026-10-18T10:50:15.014909831Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/dispute","Output":"--- PASS: TestFinancialDenial/dispute (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4578100Z {"Time":"2026-10-18T10:50:15.014912355Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/dispute","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4579240Z {"Time":"2026-10-18T10:50:15.0149148Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/currency"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4580551Z {"Time":"2026-10-18T10:50:15.014917278Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/currency","Output":"=== RUN   TestFinancialDenial/currency\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4582221Z {"Time":"2026-10-18T10:50:15.014921358Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/currency","Output":"--- PASS: TestFinancialDenial/currency (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4583594Z {"Time":"2026-10-18T10:50:15.014925644Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/currency","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4584819Z {"Time":"2026-10-18T10:50:15.014928405Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/quantity"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4586168Z {"Time":"2026-10-18T10:50:15.014930985Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/quantity","Output":"=== RUN   TestFinancialDenial/quantity\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4587747Z {"Time":"2026-10-18T10:50:15.014934867Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/quantity","Output":"--- PASS: TestFinancialDenial/quantity (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4589200Z {"Time":"2026-10-18T10:50:15.014942912Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/quantity","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4590404Z {"Time":"2026-10-18T10:50:15.014945767Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/price"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4591960Z {"Time":"2026-10-18T10:50:15.014948176Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/price","Output":"=== RUN   TestFinancialDenial/price\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4593546Z {"Time":"2026-10-18T10:50:15.014952345Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/price","Output":"--- PASS: TestFinancialDenial/price (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4594915Z {"Time":"2026-10-18T10:50:15.01495543Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial/price","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4596324Z {"Time":"2026-10-18T10:50:15.014958364Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial","Output":"--- PASS: TestFinancialDenial (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4597778Z {"Time":"2026-10-18T10:50:15.014960953Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestFinancialDenial","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4598911Z {"Time":"2026-10-18T10:50:15.014963261Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestPrecedence"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4600154Z {"Time":"2026-10-18T10:50:15.014965597Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestPrecedence","Output":"=== RUN   TestPrecedence\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4601649Z {"Time":"2026-10-18T10:50:15.014968685Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestPrecedence","Output":"--- PASS: TestPrecedence (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4602971Z {"Time":"2026-10-18T10:50:15.014971592Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestPrecedence","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4604103Z {"Time":"2026-10-18T10:50:15.014974109Z","Action":"run","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestInvalidPolicy"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4605343Z {"Time":"2026-10-18T10:50:15.014976379Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestInvalidPolicy","Output":"=== RUN   TestInvalidPolicy\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4606795Z {"Time":"2026-10-18T10:50:15.014979824Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestInvalidPolicy","Output":"--- PASS: TestInvalidPolicy (0.00s)\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4608165Z {"Time":"2026-10-18T10:50:15.014983459Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Test":"TestInvalidPolicy","Elapsed":0}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4609409Z {"Time":"2026-10-18T10:50:15.014987166Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Output":"PASS\n","OutputType":"frame"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4610576Z {"Time":"2026-10-18T10:50:15.015324124Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Output":"coverage: 84.4% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4612154Z {"Time":"2026-10-18T10:50:15.015693862Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility\t0.004s\tcoverage: 84.4% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4613520Z {"Time":"2026-10-18T10:50:15.01573762Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility","Elapsed":0.004}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4614976Z {"Time":"2026-10-18T10:50:15.37859684Z","Action":"output","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts","Output":"\tgithub.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts\t\tcoverage: 0.0% of statements\n"}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4616427Z {"Time":"2026-10-18T10:50:15.420253415Z","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts","Elapsed":0.414}
+pr12-processing	Run actual named tests when module exists	2026-10-18T10:50:15.4617247Z Race check NOT_RUN; use PR12_RACE=1 where supported and report scope honestly.
+pr12-processing	Run declared diagnostic smoke in both modes	﻿2026-10-18T10:50:15.5162243Z ##[group]Run python3 tools/pr12/workspace.py smoke processing --require
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5163228Z [36;1mpython3 tools/pr12/workspace.py smoke processing --require[0m
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5203637Z shell: /usr/bin/bash -e {0}
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5204158Z ##[endgroup]
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5634693Z + go version
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5664163Z + git rev-parse HEAD
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5678563Z + git status --porcelain
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:15.5960609Z + go build -ldflags -X main.version=pr12 -X main.commit=94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7 -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2433388Z + /tmp/pr12-outside-checkout-6tku_pa8/processing-contractcheck --version
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2455419Z + git rev-parse --short HEAD
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2471220Z + /tmp/pr12-outside-checkout-6tku_pa8/processing-contractcheck --fixture /tmp/pr12-outside-checkout-6tku_pa8/positive_fixture.json --format json
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2532316Z {"component": "processing", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2532923Z + git rev-parse HEAD
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2545670Z + git status --porcelain
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:19.2576667Z + go build -ldflags -X main.version=pr12 -X main.commit=94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7 -X main.dirty=false -X main.buildMode=release -trimpath -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:24.3559527Z + /tmp/pr12-outside-checkout-n423viln/processing-contractcheck --version
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:24.3577611Z + git rev-parse --short HEAD
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:24.3593707Z + /tmp/pr12-outside-checkout-n423viln/processing-contractcheck --fixture /tmp/pr12-outside-checkout-n423viln/positive_fixture.json --format json
+pr12-processing	Run declared diagnostic smoke in both modes	2026-10-18T10:50:24.3644208Z {"component": "processing", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+pr12-processing	Scope of this job	﻿2026-10-18T10:50:24.3747498Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"
+pr12-processing	Scope of this job	2026-10-18T10:50:24.3748711Z [36;1mecho 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> "$GITHUB_STEP_SUMMARY"[0m
+pr12-processing	Scope of this job	2026-10-18T10:50:24.3789014Z shell: /usr/bin/bash -e {0}
+pr12-processing	Scope of this job	2026-10-18T10:50:24.3789402Z ##[endgroup]
+pr12-processing	Post Run actions/setup-go@v5	﻿2026-10-18T10:50:24.3948805Z Post job cleanup.
+pr12-processing	Post Run actions/setup-go@v5	2026-10-18T10:50:24.5115248Z (node:6463) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+pr12-processing	Post Run actions/setup-go@v5	2026-10-18T10:50:24.5116487Z (Use `node --trace-deprecation ...` to show where the warning was created)
+pr12-processing	Post Run actions/checkout@v4	﻿2026-10-18T10:50:24.5304623Z Post job cleanup.
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6142203Z [command]/usr/bin/git version
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6177421Z git version 2.55.0
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6211264Z Temporarily overriding HOME='/home/runner/work/_temp/f2bbad2a-149e-4ca9-bdb4-7f511f040a86' before making global git config changes
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6212858Z Adding repository directory to the temporary git global config as a safe directory
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6217234Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/hitpipe/hitpipe
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6253629Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6285923Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6502384Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6525787Z http.https://github.com/.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6536610Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6571885Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6810181Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+pr12-processing	Post Run actions/checkout@v4	2026-10-18T10:50:24.6851212Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+pr12-processing	Complete job	﻿2026-10-18T10:50:24.7319927Z Cleaning up orphan processes
+pr12-processing	Complete job	2026-10-18T10:50:24.7568174Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

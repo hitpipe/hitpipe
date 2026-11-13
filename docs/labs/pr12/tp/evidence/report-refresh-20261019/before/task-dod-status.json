@@ -1,0 +1,1032 @@
+{
+  "feature": "HIT-12",
+  "feature_actual_status": "Backlog",
+  "jira_read_at": "2026-10-18 final actual readback; evidence/jira-final-readback.json",
+  "official_runtime_active": false,
+  "tasks": [
+    {
+      "task": "HIT-25",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-25-processing-requirements",
+      "known_sha_before_report_commit": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/3",
+      "dod": [
+        {
+          "id": "HIT-25/AC1",
+          "criterion": "1. Собственные вопросы обследования подготовлены; дата/участники/current process/реальные ответы с источником, facts/assumptions/open empirical questions разделены. Нет разговора — явно NOT CONDUCTED, human action в H1.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Восемь собственных вопросов подготовлены; интервью NOT CONDUCTED, реальные ответы неизвестны.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-25/AC2",
+          "criterion": "2. Связка scenario/MVP/reserve и место участка согласованы с HP-VER-001; учебный модуль не переопределяет продукт и не вырезает mandatoryscope.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Место financial subset в полном HP-VER-001 описано, mandatory ядро не вырезано.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-25/AC3",
+          "criterion": "3. Для своего модуля сформулированы normalFR, существенный error outcome и meaningful measurableNFR, каждый с source/clause и Given/When/Then/expected oracle; числовые измерения не выдуманы.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "TP-FR-01,ERR-01,FR-02,NFR-01 имеют source/oracle/AC; deterministic100-call target реально проверен.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-25/AC4",
+          "criterion": "4. Подготовлены воспроизводимые synthetic исходные данные/контрольные inputs/reset/seed; baseline path+revision фиксированы до проверки, без customer data/secrets.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Synthetic fixed fixture spec и valid/refunded/invalid files существуют; fresh/reset tests PASS.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-25/AC5",
+          "criterion": "5. Ранний анализ безопасности отвечает на все пять вопросов п.4.6: (1) какие данные/ресурсы защищать; (2) откуда недоверенный ввод; (3) кто имеет доступ к существенным действиям; (4) реалистичный ущерб; (5) где хранятся секреты и что запрещено логировать. Ответы конкретны для своего модуля и прослеживаются к C3.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Все пять security вопросов отвечены и привязаны к risk registry C3.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-25/AC6",
+          "criterion": "6. Личный вклад атрибутирован; общий charter/MVP/regulation цитируются точной версией. Матрица source→FR/error/NFR→AC→plannedcheck и blind clarity package существуют.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Личный вклад, exact inventories и requirements trace записаны; blind package подготовлен.",
+          "known_source_sha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirements.md",
+            "docs/labs/pr12/tp/interview.md",
+            "docs/labs/pr12/tp/security-baseline.md",
+            "docs/labs/pr12/tp/requirements-trace.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-26",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-26-processing-contract-refinement",
+      "known_sha_before_report_commit": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/4",
+      "dod": [
+        {
+          "id": "HIT-26/AC1",
+          "criterion": "1. Выбран реальный существенный пробел local requirement/contract изR1; before/after и rationale записаны. Canonical upstream не изменяется тайно; conflict направляется Lead с exactclause.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Реальный gap precedence R1 зафиксирован; before/after следует pinned clauses.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-26/AC2",
+          "criterion": "2. Свой PR содержит meaningful requirement/contract refinement, проверяемые AC и actual applicablecheck; branch/commit/task/PR/author traceability существуют.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "PR4 содержит meaning refinement; source205-file validation и actual requirements-only CI PASS.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-26/AC3",
+          "criterion": "3. DoD/regulation task→branch→PR→CI→review→merge применены честно; review/merge externalaction вH1, до них In Review, не fakeDone.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Task/branch/PR/CI существуют; independent review/merge ещё не выполнены.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-26/AC4",
+          "criterion": "4. Blind normal/error/boundary scenarios переданы другому студенту вH1; реальные несовпадения понимания и решения возвращены вrefinement без придуманныхremarks.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Blind package подготовлен, человеку не отправлен/не выполнен; Lead должен передать HIT-11.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-26/AC5",
+          "criterion": "5. Известные содержательные замечания исправлены и relevantchecks повторены; нет известных противоречий source/domainerror. Новые pending human remarks не скрываются.",
+          "actual_status": "PASS_NO_KNOWN_HUMAN_REMARKS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Полученных human remarks нет; собственный exit defect исправлен, relevant checks повторены.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-26/AC6",
+          "criterion": "6. Candidate exact refinement input доступенC1/C2 при manualmode доmerge с явнымиSHA/PR/status; human approval не объявлен.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Candidate requirements0355… и refinement3aba… доступны code tasks, source status не повышен.",
+          "known_source_sha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/requirement-change.md",
+            "docs/labs/pr12/tp/ambiguity-decisions.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-27",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-27-paid-order-eligibility",
+      "known_sha_before_report_commit": "69b26f496c0e3bf4c837d49252203b70157101f1",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/5",
+      "dod": [
+        {
+          "id": "HIT-27/AC1",
+          "criterion": "1. Публичный контракт фиксирует VALID/INELIGIBLE/INCOMPLETE/REFRESH_REQUIRED либо эквивалентные local typed results без изменения wire enum; reason codes и порядок ошибок однозначны.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Четыре local typed statuses/reasons/precedence реализованы без изменения wire enum.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-27/AC2",
+          "criterion": "2. Все нормативные paid/capture/receive/refund/dispute/currency/qty/price/account/mode predicates присутствуют, null/unknown остаются отдельным случаем.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Все required финансовые predicates реализованы; null отдельно false/zero; named tests PASS.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-27/AC3",
+          "criterion": "3. CLI processing-contractcheck исполняет тот же evaluator по synthetic files; accepted config read-only, нет admission, новой config, записи case или внешнего effect.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Retained processing-contractcheck использует тот же evaluator; no admission/config/case/provider writes.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-27/AC4",
+          "criterion": "4. Минимальный компонент: конфигурация влияет на вывод/выбор fixture; неверная config → явная ошибка/nonzero; --version показывает version+commit+dirty+buildmode; старт/исход диагностируются без входных данных.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Fixture config меняет output, malformed config exit2; metadata version/fullSHA/dirty/mode, safe diagnostics.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-27/AC5",
+          "criterion": "5. Dev/release builds реально сравниваются на одном scenario; release artifact запускается из каталога вне checkout с явно перечисленными dependencies; binary/module inspection фиксирует факты.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Dev/release built и outside checkout tested; flags/binary sizes/hashes/dylibs inspected.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-27/AC6",
+          "criterion": "6. Семь позиций контура описаны с actual работает/запланировано и маршрутом: build/deps/test/static/dynamic/profiling/CI. Общий stackADR переиспользуется, студент объясняет свой участок.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Семь позиций toolchain задокументированы; executed отделено от Delve/profiling planned.",
+          "known_source_sha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c1/record.json",
+            "docs/labs/pr12/tp/execution-path.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-28",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-28-evaluate-paid-order-port",
+      "known_sha_before_report_commit": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/6",
+      "dod": [
+        {
+          "id": "HIT-28/AC1",
+          "criterion": "1. Application consumer получает immutable context+SourceFactsReader; file fixture adapter и test double воспроизводят один consumer scenario без изменения consumer.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Один immutable-context consumer; File и finite double выполнили normal/error/boundary, consumer unchanged.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-28/AC2",
+          "criterion": "2. Принятый snapshot/config identity сверяется; несовместимая или неполная версия удерживает действие; exception reader не считается unpaid/zero.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Config/schema/evaluator/case/Session pins проверяются; read failure INCOMPLETE, не unpaid.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-28/AC3",
+          "criterion": "3. Result прямо обозначает только financial eligibility: case lifecycle/actor/epoch/lineage/fresh dispatch проверяются будущим owner-path, в этой задаче не симулируются PASS.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Financial-only outcome явно отделён от owner lifecycle/actor/epoch/lineage/dispatch.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-28/AC4",
+          "criterion": "4. Документация module contract описывает purpose/input/output/errors/ownership/side-effects/error precedence и пример; Godoc либо TSDoc соответствует выбранному стеку.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Контракт purpose/input/output/errors/order/ownership/effects/example и GoDoc заполнен.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-28/AC5",
+          "criterion": "5. DI contract test запускает штатный, ошибочный и граничный сценарий с обеими реализациями; одна точка сборки, consumer unchanged; ограничения подмены указаны явно.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "DI contract test обеих implementations PASS, one composition point/no retry, limits описаны.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-28/AC6",
+          "criterion": "6. Запись собственного модуля в карте с фактическими import arrows, статусом и автором; две системные сложности, существующий module-candidate и собственный local implementation ADR с options/cost/check; не создавать второй HP-ADR-001.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Owner map сверена imports; два complexity направления и свой ADR с вариантами/ценой/check существуют.",
+          "known_source_sha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c2/record.json",
+            "docs/labs/pr12/tp/module-map.md",
+            "docs/labs/pr12/tp/module-adr.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-29",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-29-financial-proof-verification",
+      "known_sha_before_report_commit": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/7",
+      "dod": [
+        {
+          "id": "HIT-29/AC1",
+          "criterion": "1. Test oracle записан до запуска из указанных правил, а не скопирован из actual output. Не менее двух техник: equivalence classes+boundary; decision/state table по объекту. Включены normal/error/boundary cases.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Oracle записан до кода; equivalence/boundary/decision table и normal/error cases выполнены.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-29/AC2",
+          "criterion": "2. Реальные local+CI прогоны exact submission commit; CI запускает собственные названные тесты и падает при нарушении assertion. Dataset synthetic/fixed seed, clean-clone command без secret/private fixture.",
+          "actual_status": "PASS_RECORDED_SHA_FINAL_SUBMISSION_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Named tests actual local+push CI exact source8ae5 PASS; final human merge/submission SHA pending.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-29/AC3",
+          "criterion": "3. Coverage получен для собственного module, выявлен конкретный missed branch либо непроверяемое свойство и принято решение; одного процента недостаточно.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Statement profile получен; domain/app100%, service92.3%; concrete gaps и решения описаны.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-29/AC4",
+          "criterion": "4. Не менее5 compiling seeded defects поодиночке с actual protocol; missed → explanation+new test+rerun; исходный и финальный clean runsPASS, естественные defects учтены честно.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "6 compiled one-at-a-time mutants KILLED,0 survivors/invalid; restored green/clean; natural output defect1 reproduced/fixed.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-29/AC5",
+          "criterion": "5. Risk registry qualitative probability×impact с rationale и security risk меняет selection/frequency/manual/deferred checks; fake fullE2E/provider/acceptance claims отсутствуют.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Risk matrix qualitative как в методичке; security risk и frequency every change отражены.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-29/AC6",
+          "criterion": "6. Human screenshot placeholders содержат exact command/revision/expected visible evidence; агент исполняет проверки и сохраняет журналы, человек делает только реальные снимки. Human review и чистое independent reproduction остаются явным gate.",
+          "actual_status": "PASS_INSTRUCTIONS_HUMAN_CAPTURE_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "21 human screenshot instructions полные; test development/logs уже выполнены агентом, human independent check pending.",
+          "known_source_sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/evidence/c3/record.json",
+            "docs/labs/pr12/tp/evidence/mutations/summary.json",
+            "docs/labs/pr12/tp/coverage-analysis.md",
+            "docs/labs/pr12/tp/risk-registry.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-30",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_REVIEW",
+      "branch": "work/HIT-30-processing-engineering-docs",
+      "known_sha_before_report_commit": "0d448475e8d3a637190f313975790f56ada3c971",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/8",
+      "dod": [
+        {
+          "id": "HIT-30/AC1",
+          "criterion": "1. Семь позиций toolchain имеют конкретные pinnedtools, purpose/route/status работает либо plannedstage:build,deps,test,static,dynamic,profiling,CI. СсылкинаобщийstackADR+свояприменимость.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Семь позиций exact Go1.27.2 route/status; shared stack decision reused.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-30/AC2",
+          "criterion": "2. Modulecontract полный:purpose,inputs/results/errors/errorprecedence,ownership/lifetime,sideeffects/deps/example; Godoc/TSDoc вкоде соответствует actual consumer.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Фактический full module contract и GoDoc соответствуют существующему consumer.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-30/AC3",
+          "criterion": "3. Modulemap указывает ответственность/publiccontract/path/deps/status/author; import arrows означают зависимости исходников и сверены реальнымиimports, циклы объяснены/устранены.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Owner map/import output совпадают, production cycles не выявлены; shared map integration Lead.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-30/AC4",
+          "criterion": "4. Не менее2направлений системнойсложности своего участка с object/question/readiness; существующий modulecandidate воспроизводим отдельно, bottleneck доизмерений не заявляется.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Два направления, существующий isolated candidate; performance/bottleneck не заявлены.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-30/AC5",
+          "criterion": "5. Свой implementationADR имеет author/context/options/decision/rationale/cost/verification; не занимаетcanonicalHP-ADR-ID и не меняетphasecontract.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "TP ADR001 имеет автора/context/options/decision/cost/verification; canonical ADR не переавторен.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-30/AC6",
+          "criterion": "6. Source→dependency→compile/transformation→artifact→runtime diagram, dev/release same-scenario actualobservations/artifactinspection/outsidecheckoutrun изC1 собраны точно; plannedtools не названыexecuted.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Execution route/actual two-mode logs/binary inspection/outside checkout собраны; planned не названо executed.",
+          "known_source_sha": "0d448475e8d3a637190f313975790f56ada3c971",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/toolchain.md",
+            "docs/labs/pr12/tp/execution-path.md",
+            "docs/labs/pr12/tp/evidence/d1/record.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-31",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "PREPARED_FOR_HUMAN_ACTION",
+      "branch": "work/HIT-31-human-review-package",
+      "known_sha_before_report_commit": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/9",
+      "dod": [
+        {
+          "id": "HIT-31/AC1",
+          "criterion": "1. Реальное обследование с пользователем/согласованнымпредставителем записано сдатой/ролью/ответами; Lead организуетконтакт, агент не сочиняетинтервью.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Разговор не состоялся, Lead организует, подготовлены вопросы.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC2",
+          "criterion": "2. Другой реальный студент проверил однозначность своихFR/AC поblindnormal/error/boundary; сравнениеожиданий/фактическихответов/решений иперепроверка имеются.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Другой студент ещё не дал blind ответы; пакет готов.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC3",
+          "criterion": "3. Студент лично проверил ЧУЖОЙ scaffold вcleanenvironment, который не готовил: environment/fullSHA/commands/results/remarks/retest; свойscaffold реально независимо воспроизвелдругойстудент.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Исходящая/входящая clean-room проверки ещё не выполнены.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC4",
+          "criterion": "4. Студент лично проверил ЧУЖОЙmodule(contract/substitution/map/build/normal/error/boundary), а другойстудент проверилегоmodule; обаactualprotocol сauthor/date/commit/commands/results/remarks/retest.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Обе стороны настоящей module peer review ещё не выполнены.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC5",
+          "criterion": "5. Cross-project opposition проводится с другимпроектом поteacher-assignedring: свойразборчужихтребований, реальноеобсуждение, замечанияк своим ирешения. Leadтого же проекта не выдается за внешнийпроект.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Кольцо другого проекта не получено; BLOCKED_HUMAN_ASSIGNMENT.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC6",
+          "criterion": "6. Lead/разрешенныйreviewer реально review-ит significant PRs; замечания исправлены, checksактуальны иmergeдействителен. Pendingreview/merge остаетсяоткрытым.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Независимый human review/merge не выполнен; все PR открыты.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-31/AC7",
+          "criterion": "7. Агент продолжает независимые code/test/docs артефакты, пока externalgatepending. Human evidence несодержит фиктивныхподписей/фальшивыхscreenshots/пройденнойзащиты.",
+          "actual_status": "PASS_CONTINUED_AGENT_WORK",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Независимые code/docs/tests/reports продолжены; false people/approval/images не создавались.",
+          "known_source_sha": "4d142cb5dee60ee6ee9fe8845abcfc5890db4cc4",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/human-gates/README.md"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    },
+    {
+      "task": "HIT-32",
+      "actual_jira_status": "Backlog",
+      "actual_issue_type": "Подзадача",
+      "artifact_status": "CONTENT_READY_IMAGES_PENDING",
+      "branch": "work/HIT-32-individual-reports",
+      "known_sha_before_report_commit": "4d2a9b755b376e3e03c159632fa1034db1113849",
+      "pr": "https://github.com/hitpipe/hitpipe/pull/10",
+      "dod": [
+        {
+          "id": "HIT-32/AC1",
+          "criterion": "1. Все29обязательныхрезультатов изчетырехметодичек имеют exacttask/Jirakey→source→artifact→actualevidence/status. Матрицаполная и неclaimPАSSдляNOTRUN/HUMAN_PENDING.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "29 criteria mapped to task/source/artifact/status; pending human gates не PASS.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC2",
+          "criterion": "2. Основные`0302-pz01-tp.docx`и`0302-pz02-tp.docx` заполнены всемсодержаниемиограничениями;0104ПР1/ПР2support/appendixвыделеныясно. Дваотдельных`0104-pz01-tp.docx`/`0104-pz02-tp.docx`такжесобраны, безclaimсогласованияпреподавателемобъединеннойсдачи.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Все четыре DOCX и editable Markdown/JSON собраны с отдельными0104 support sections.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC3",
+          "criterion": "3. Минимальныекорректировкистарыхформзафиксированывtemplate-adjustments;не менее5компилируемыхdefectsвместоодного, matrixrisks/survivors/retests/naturalcount/hiddennotprovidedчестны.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Минимальные template deviations зафиксированы; six mutations/natural1/hidden not provided отражены.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC4",
+          "criterion": "4. Ровно21humanimageplaceholderсlabel/insertlocation/caption/exactsource/command/cwd/SHA/mustvisible/targetfilename/redactioninstructions; агент негенерируетинеcaptureизображения. Отчетныйтекстcontentreadyтолько`CONTENT_READY_IMAGES_PENDING`.",
+          "actual_status": "PASS",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Ровно21 human placeholders с полными bound instructions; images0.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC5",
+          "criterion": "5. DOCXZIP/XML/text/tables/link/placeholderintegrity проверены; realrendererеслидоступенсactualboundary, ничего непотеряноприконвертации. Неизвестныегруппа/кафедра/подпись/оценкаостаются явнымиpersonalfields.",
+          "actual_status": "STRUCTURE_AND_PDF_GEOMETRY_PASS_VISUAL_HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "ZIP/XML/table/link/source-preservation PASS; actual PDF render/text geometry PASS; raster visual QA не проводилась по запрету изображений.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC6",
+          "criterion": "6. После реальныхreview/merge/checks подготовлены4непереносимыхtag:0104-pz01-tp-v1,0104-pz02-tp-v1,0302-pz01-tp-v1,0302-pz02-tp-v1. Теги→actualcommit→CIrecord; старыйtagнепереставлять,v2дляпеределки.",
+          "actual_status": "HUMAN_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Все четыре immutable tag ещё НЕ СОЗДАНЫ; human review/merge/current CI prerequisites pending.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        },
+        {
+          "id": "HIT-32/AC7",
+          "criterion": "7. Краткаяиндивидуальнаяdefenseпамяткапоказываетсвоиrules/DI/build/test/mutation/risk; студентобъясняетсамбезгенеративногоИИназащите. Handoffясноотделяетсделанноеиpendinghumanactions; FeaturecloseLead.",
+          "actual_status": "PASS_DEFENSE_PACKAGE_HUMAN_DEFENSE_PENDING",
+          "evidence": [
+            "docs/labs/pr12/tp/evidence/index.json",
+            "docs/labs/pr12/tp/criteria-crosswalk.json"
+          ],
+          "limitations": "Required human review/merge/interview/opposition is not performed by agent.",
+          "actual_result": "Defense notes и единый handoff подготовлены; сама защита не состоялась.",
+          "known_source_sha": "4d2a9b755b376e3e03c159632fa1034db1113849",
+          "artifact_paths": [
+            "docs/labs/pr12/tp/reports/report-manifest.json",
+            "docs/labs/pr12/tp/evidence/reports/record.json",
+            "docs/labs/pr12/tp/evidence/screenshots/instructions.json"
+          ],
+          "ci_url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226",
+          "commands_environment_dates_exits_and_digests": "docs/labs/pr12/tp/evidence/index.json"
+        }
+      ]
+    }
+  ]
+}

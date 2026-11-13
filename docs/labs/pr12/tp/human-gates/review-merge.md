@@ -1,5 +1,7 @@
 # Человеческий review и merge
 
+Актуализация 19.10.2026 после интеграции: PR №2–9, №20 и №22 фактически MERGED; принятый main `ec0dcba7ca42ea59909489cef9650c6edff12f35`, CI https://github.com/hitpipe/hitpipe/actions/runs/39229206910 success. TP-REV-001 VERIFIED_FIXED после повторного review Codex по поручению Lead. Основание: HIT-12/10507. PR №10 OPEN к main, отчётный пакет ещё не принят. Ни student peer/opposition, ни интервью этим не пройдены. Снимки/теги/защита pending. Ниже сохранён исторический протокол ДО интеграции; его OPEN/AWAITING статусы не являются текущими. Актуальный handoff — ../handoff.md.
+
 Состояние проверено 19.10.2026 в GitHub и по [HIT-31, комментарий 10455](https://hitpipe.atlassian.net/browse/HIT-31?focusedCommentId=10455). **HUMAN_PENDING** относится к настоящим human gates/merge, а не к отсутствию технических reviews.
 
 Техническое review выполнил **Codex по поручению Lead Дмитрия Карачебана**. Это не личная слепая проверка другого студента. По трём проверенным финансовым сценариям расхождений трактовок не обнаружено; точные результаты и исходный SHA зафиксированы в [clarity.md](clarity.md) по [HIT-26](https://hitpipe.atlassian.net/browse/HIT-26?focusedCommentId=10453).

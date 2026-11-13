@@ -1,0 +1,13 @@
+diff --git a/services/processing/internal/domain/eligibility/eligibility.go b/services/processing/internal/domain/eligibility/eligibility.go
+index a62aeb9..417e5b5 100644
+--- a/services/processing/internal/domain/eligibility/eligibility.go
++++ b/services/processing/internal/domain/eligibility/eligibility.go
+@@ -130,7 +130,7 @@ func Evaluate(p Policy, f Facts, now time.Time) Result {
+ 		{*f.PaymentStatus == "paid", "PAYMENT_STATUS"},
+ 		{*f.AmountTotal > 0, "NON_POSITIVE_TOTAL"},
+ 		{*f.LineItemCount == 1, "LINE_ITEM_COUNT"},
+-		{*f.Quantity == 1, "QUANTITY"},
++		{*f.Quantity >= 1, "QUANTITY"},
+ 		{*f.PriceID == p.PriceID, "PRICE"},
+ 		{*f.PaymentIntentStatus == "succeeded", "PAYMENT_INTENT"},
+ 		{*f.ChargeSucceeded, "CHARGE_FAILED"},

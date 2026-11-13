@@ -13,3 +13,7 @@ HIT-30. Общий выбор LAB-STACK-001 ../shared/stack-decision.md и HP-AD
 | CI | GitHub Actions Ubuntu24.04, setup-go1.27.2, owner pr12-tp.yml; pull_request и work/** push | C1/C2 actual PASS; C3 run readback/index содержит действительный итог. Upload named test log, coverage, mutation protocols; review/merge отдельно |
 
 Локальная установка Go arm64 в task work/go после сверки официальной JSON release checksum: 76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5. Личные access tokens/service credentials не читались и не помещались в код. Существующая авторизация gh использовалась для repo/PR/CI, не как личность независимого проверяющего. Cwd, tool versions, даты, exits и digests каждого прогона в evidence/*/record.json.
+
+## Актуализация после принятия инженерных изменений 19.10.2026
+
+Числа и SHA в первоначальных таблицах выше — исторические наблюдения 18.10.2026. Текущий принятый main ec0dcba7ca42ea59909489cef9650c6edff12f35 содержит TP-REV-001 fix. Новый Darwin/arm64 build: dev 3948434 bytes, release 3909890 bytes; Go 1.27.2, dirty=false, те же dev -N -l и release -trimpath. Exact flags и metadata в evidence/report-refresh-20261019/accepted-main-extra/inspect-*.log, новые бинарные digests/наблюдения — delivery-observations.json. CI main https://github.com/hitpipe/hitpipe/actions/runs/39229206910 success на Linux/amd64; это отдельный прогон. Тесты/vet/race/smoke работают; Delve и profiling не запускались и остаются PLANNED. Никакого нового решения по общему стеку не принималось.

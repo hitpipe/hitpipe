@@ -1,0 +1,2161 @@
+{
+  "feature": "HIT-12",
+  "generated_at_utc": "2026-10-18T11:12:31.734863+00:00",
+  "generated_at_msk": "2026-10-18T14:12:31.734863+03:00",
+  "local_runs": [
+    {
+      "id": "c1-check",
+      "sha": "fb470da3f7dd572605e24d35ae44b19245f916fe",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "check",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:47:37.106326+00:00",
+      "finished_at_utc": "2026-10-18T10:47:37.492660+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c1/check.log",
+      "sha256": "3cb9a2b364b3e8401f89c40c02315836a518589688a682986ad4bf16f56cd385",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "8e60afc3230f35987b221fe4d147814dac1f7dab",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:47:37.106326+03:00"
+    },
+    {
+      "id": "c1-smoke",
+      "sha": "fb470da3f7dd572605e24d35ae44b19245f916fe",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "smoke",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:47:37.492826+00:00",
+      "finished_at_utc": "2026-10-18T10:47:41.347234+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c1/smoke.log",
+      "sha256": "471249b47c9c1ebddad9f140b85340cf65fa34fd8fa0103154bc91c2aa977bf7",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "8e60afc3230f35987b221fe4d147814dac1f7dab",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:47:37.492826+03:00"
+    },
+    {
+      "id": "c1-inspect",
+      "sha": "fb470da3f7dd572605e24d35ae44b19245f916fe",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "inspect",
+        "processing",
+        "--mode",
+        "release",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:47:41.347624+00:00",
+      "finished_at_utc": "2026-10-18T10:47:41.501356+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c1/inspect.log",
+      "sha256": "0ce8e7864d382043f073636206601e7708114de6c41082988c85da6c29703ac9",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "8e60afc3230f35987b221fe4d147814dac1f7dab",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:47:41.347624+03:00"
+    },
+    {
+      "id": "c1-macho",
+      "sha": "fb470da3f7dd572605e24d35ae44b19245f916fe",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "otool",
+        "-L",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck"
+      ],
+      "started_at_utc": "2026-10-18T10:47:41.501451+00:00",
+      "finished_at_utc": "2026-10-18T10:47:41.657586+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c1/macho.log",
+      "sha256": "3da8a58e98e726011a4d649e8f21b4fa19b4046766b6d5799788fc7e8b3c2afb",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "8e60afc3230f35987b221fe4d147814dac1f7dab",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:47:41.501451+03:00"
+    },
+    {
+      "id": "c1-sections",
+      "sha": "fb470da3f7dd572605e24d35ae44b19245f916fe",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "otool",
+        "-l",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/dev/processing-contractcheck"
+      ],
+      "started_at_utc": "2026-10-18T10:47:41.657741+00:00",
+      "finished_at_utc": "2026-10-18T10:47:41.672398+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c1/sections.log",
+      "sha256": "30483ac14080a8612d6fdbaf94ac6fd274e44fa6612201ea31378345c80f7e45",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "8e60afc3230f35987b221fe4d147814dac1f7dab",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:47:41.657741+03:00"
+    },
+    {
+      "id": "c2-check",
+      "sha": "7ee6b126c3ce126bfb6cbe6d9a1797c4ba562d8b",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "check",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:49:28.581584+00:00",
+      "finished_at_utc": "2026-10-18T10:49:29.210779+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c2/check.log",
+      "sha256": "e1a17e0e20870a33ec19249bc727d8f2ff101b39c62d209d23d30c5ed63f2457",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "7a57b7d1a7ccae9c6944b7d2996bd22ff850c5cd",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:49:28.581584+03:00"
+    },
+    {
+      "id": "c2-smoke",
+      "sha": "7ee6b126c3ce126bfb6cbe6d9a1797c4ba562d8b",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "smoke",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:49:29.210941+00:00",
+      "finished_at_utc": "2026-10-18T10:49:30.412857+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c2/smoke.log",
+      "sha256": "dc18f77140815343af95b0f6f3bf277898a7e0a4f69ee8c8d250c0b7a56a5a69",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "7a57b7d1a7ccae9c6944b7d2996bd22ff850c5cd",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:49:29.210941+03:00"
+    },
+    {
+      "id": "c3-check",
+      "sha": "4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "check",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:52:22.563348+00:00",
+      "finished_at_utc": "2026-10-18T10:52:23.154732+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c3/check.log",
+      "sha256": "92ed5be15693449ed1ccf7f14387ed1d198930ad2be26d85dbd4cadc7cb7b245",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "0df2e31ed6a398429fedf9d7d0189ca3797b1423",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:52:22.563348+03:00"
+    },
+    {
+      "id": "c3-race",
+      "sha": "4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing",
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "./..."
+      ],
+      "started_at_utc": "2026-10-18T10:52:23.154916+00:00",
+      "finished_at_utc": "2026-10-18T10:52:24.604196+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c3/race.log",
+      "sha256": "94606f177ad5f03dbd28908105764ca248f104a43584f51eb3c8806402d810e5",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "0df2e31ed6a398429fedf9d7d0189ca3797b1423",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:52:23.154916+03:00"
+    },
+    {
+      "id": "c3-smoke",
+      "sha": "4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "smoke",
+        "processing",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:52:24.604452+00:00",
+      "finished_at_utc": "2026-10-18T10:52:25.556048+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c3/smoke.log",
+      "sha256": "09ddc3d8d1f2b878e30319b43eec7a52ee484724558c9f2c183ac008296380ad",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "0df2e31ed6a398429fedf9d7d0189ca3797b1423",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:52:24.604452+03:00"
+    },
+    {
+      "id": "c3-coverage",
+      "sha": "4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing",
+      "argv": [
+        "go",
+        "tool",
+        "cover",
+        "-func",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing.cover"
+      ],
+      "started_at_utc": "2026-10-18T10:52:25.556163+00:00",
+      "finished_at_utc": "2026-10-18T10:52:25.629582+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c3/coverage.log",
+      "sha256": "a5fbae8b971d5719aef173638692703e4d92152a94a1599f961b88104b487ca6",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "0df2e31ed6a398429fedf9d7d0189ca3797b1423",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:52:25.556163+03:00"
+    },
+    {
+      "id": "c3-imports",
+      "sha": "4a2bfcdd9bf7656a8d5c55963750b8aecf186fb0",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/services/processing",
+      "argv": [
+        "go",
+        "list",
+        "-f",
+        "{{.ImportPath}} => {{join .Imports \" \"}}",
+        "./..."
+      ],
+      "started_at_utc": "2026-10-18T10:52:25.629660+00:00",
+      "finished_at_utc": "2026-10-18T10:52:25.663656+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/c3/imports.log",
+      "sha256": "4898553971bf249533bbc688dd2dbcaec38745363c5cfd305499347e7984ff91",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "0df2e31ed6a398429fedf9d7d0189ca3797b1423",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:52:25.629660+03:00"
+    },
+    {
+      "id": "d1-build-dev",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "build",
+        "processing",
+        "--mode",
+        "dev",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.289621+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.525171+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/d1/build-dev.log",
+      "sha256": "c0e5ff9f7f924ec43011505c87ae783eaaa525358d97bdacf303e407b60aad09",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "81eb934df79878072f24c506f410ebd0009bf554",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:53:36.289621+03:00"
+    },
+    {
+      "id": "d1-build-release",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "build",
+        "processing",
+        "--mode",
+        "release",
+        "--require"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.525308+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.761445+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/d1/build-release.log",
+      "sha256": "a3497e74cdcd706f8fc1fad80e75dccdfb3443a1647f020732f01595ac19e289",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "81eb934df79878072f24c506f410ebd0009bf554",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:53:36.525308+03:00"
+    },
+    {
+      "id": "d1-inspect-release",
+      "sha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "argv": [
+        "otool",
+        "-l",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe/.pr12-build/processing/release/processing-contractcheck"
+      ],
+      "started_at_utc": "2026-10-18T10:53:36.761542+00:00",
+      "finished_at_utc": "2026-10-18T10:53:36.771418+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "log": "docs/labs/pr12/tp/evidence/d1/inspect-release.log",
+      "sha256": "a0476043215ed9b4f708c2198773f1e861cd30bc63318e4097cc6f66cb3cf57e",
+      "limitations": "Offline synthetic module only; not source acceptance, human review or live qualification.",
+      "environment": {
+        "os": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "go": "go version go1.27.2 darwin/arm64",
+        "python": "3.14.2",
+        "git": "git version 2.52.0",
+        "go_archive_sha256": "76812b213b1b2302c978d28fa52fa92d541704b9e7d9d5db8002c50e4018c4c5"
+      },
+      "component_tree": "81eb934df79878072f24c506f410ebd0009bf554",
+      "dirty": false,
+      "started_at_msk": "2026-10-18T13:53:36.761542+03:00"
+    }
+  ],
+  "ci": [
+    {
+      "task": "HIT-25",
+      "branch": "work/HIT-25-processing-requirements",
+      "observed_at_utc": "2026-10-18T11:03:34.197403+00:00",
+      "runs": [
+        {
+          "conclusion": "success",
+          "databaseId": 39120417631,
+          "event": "push",
+          "headSha": "035516461b5f45a37aa1129d6f11cf8bdb89f277",
+          "status": "completed",
+          "url": "https://github.com/hitpipe/hitpipe/actions/runs/39120417631"
+        }
+      ],
+      "log_exit": 0
+    },
+    {
+      "task": "HIT-26",
+      "branch": "work/HIT-26-processing-contract-refinement",
+      "observed_at_utc": "2026-10-18T11:03:37.795137+00:00",
+      "runs": [
+        {
+          "conclusion": "success",
+          "databaseId": 39120467832,
+          "event": "push",
+          "headSha": "3aba8f611044ed9d62eb22b11120622af39f78ff",
+          "status": "completed",
+          "url": "https://github.com/hitpipe/hitpipe/actions/runs/39120467832"
+        }
+      ],
+      "log_exit": 0
+    },
+    {
+      "task": "HIT-27",
+      "branch": "work/HIT-27-paid-order-eligibility",
+      "observed_at_utc": "2026-10-18T11:03:41.205134+00:00",
+      "runs": [
+        {
+          "conclusion": "success",
+          "databaseId": 39120679043,
+          "event": "push",
+          "headSha": "69b26f496c0e3bf4c837d49252203b70157101f1",
+          "status": "completed",
+          "url": "https://github.com/hitpipe/hitpipe/actions/runs/39120679043"
+        }
+      ],
+      "log_exit": 0
+    },
+    {
+      "task": "HIT-28",
+      "branch": "work/HIT-28-evaluate-paid-order-port",
+      "observed_at_utc": "2026-10-18T11:03:44.852116+00:00",
+      "runs": [
+        {
+          "conclusion": "success",
+          "databaseId": 39120787065,
+          "event": "push",
+          "headSha": "94ce7bd4680bc0ea77f52cdaaa054cfaf1f056a7",
+          "status": "completed",
+          "url": "https://github.com/hitpipe/hitpipe/actions/runs/39120787065"
+        }
+      ],
+      "log_exit": 0
+    },
+    {
+      "task": "HIT-29",
+      "branch": "work/HIT-29-financial-proof-verification",
+      "observed_at_utc": "2026-10-18T11:03:48.546327+00:00",
+      "runs": [
+        {
+          "conclusion": "success",
+          "databaseId": 39121031226,
+          "event": "push",
+          "headSha": "8ae5d67b9eb0f4ffc729a270c2ee14e1c052b0cb",
+          "status": "completed",
+          "url": "https://github.com/hitpipe/hitpipe/actions/runs/39121031226"
+        }
+      ],
+      "log_exit": 0
+    }
+  ],
+  "mutations": "docs/labs/pr12/tp/evidence/mutations/summary.json",
+  "natural_defects": "docs/labs/pr12/tp/evidence/natural-defect/record.json",
+  "files": [
+    {
+      "path": "docs/labs/pr12/tp/evidence/code-equivalence.json",
+      "bytes": 8104,
+      "sha256": "d90b2d5aac18880cdebb6f3b031e630d7974e1a49ef3376abc0703c98edbe417"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/jira-readback.json",
+      "bytes": 91773,
+      "sha256": "51e0dea117615c365856a3b70772909f01583058edf80b20d29a23d44c44542d"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/bootstrap-validation.log",
+      "bytes": 200,
+      "sha256": "64641c2df8ddf33e86efeb25fb4776a0667c9a8a8836de648ae528b7ca619447"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/formal-native-readback.json",
+      "bytes": 6607,
+      "sha256": "f15d696c26ac07c7f93a8c1aa970cb2d636ccbdfab76b83a67403a94421d066b"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/jira-final-readback.json",
+      "bytes": 3128,
+      "sha256": "6c3a701ca26930d8c27fe9b4b06bd08686e4e37f5e45cda7c5a4683c87abc4e0"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/screenshots/instructions.json",
+      "bytes": 61228,
+      "sha256": "ab34a873c3574f147fc86db33211c5dfd5a2bc691bfdda4d77edb4a8478072e6"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/screenshots/INSTRUCTIONS.md",
+      "bytes": 57260,
+      "sha256": "13ddcf1d95729e849af0d83c80c708d549855a854e645fe72af1d795121eb3b5"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/release-normal.log",
+      "bytes": 158,
+      "sha256": "d09c31a285ad3b3bf43ff31a0cc975ee226493c110316c1d82c0b3860cdac78e"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/release-invalid-config.log",
+      "bytes": 60,
+      "sha256": "b95d743d76600300e109fe91fd41e9ac9195fef1458fa158c2bd6e8bec16716d"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/record.json",
+      "bytes": 2775,
+      "sha256": "3618985c4ab6bdbc8a3f98c40d90cd87d7dec2767735cec8af308084e4227970"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/release-changed-config.log",
+      "bytes": 128,
+      "sha256": "018752700dc049eef4128d09296a7dc8386284096319006df7b48ee4c2a59966"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/dev-normal.log",
+      "bytes": 158,
+      "sha256": "d09c31a285ad3b3bf43ff31a0cc975ee226493c110316c1d82c0b3860cdac78e"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/delivery-observations.json",
+      "bytes": 5520,
+      "sha256": "91c1ba61550995961cc378d2b80196dac17ced0b798c75c349dabab50aae1c44"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/dev-invalid-config.log",
+      "bytes": 60,
+      "sha256": "b95d743d76600300e109fe91fd41e9ac9195fef1458fa158c2bd6e8bec16716d"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/build-release.log",
+      "bytes": 546,
+      "sha256": "a3497e74cdcd706f8fc1fad80e75dccdfb3443a1647f020732f01595ac19e289"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/dev-version.log",
+      "bytes": 95,
+      "sha256": "fa2bbf404880eddaefd5df100f4139ca36c5e2bc81adc0edece6f7ed2e3b55f8"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/inspect-release.log",
+      "bytes": 8177,
+      "sha256": "a0476043215ed9b4f708c2198773f1e861cd30bc63318e4097cc6f66cb3cf57e"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/release-version.log",
+      "bytes": 99,
+      "sha256": "5312d5334e9c4d916c6cbf8d1cdf034ccc2f4691b6d6ad49a368c05f7e32fdd8"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/build-dev.log",
+      "bytes": 543,
+      "sha256": "c0e5ff9f7f924ec43011505c87ae783eaaa525358d97bdacf303e407b60aad09"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/d1/dev-changed-config.log",
+      "bytes": 128,
+      "sha256": "018752700dc049eef4128d09296a7dc8386284096319006df7b48ee4c2a59966"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/HIT-29.log",
+      "bytes": 178600,
+      "sha256": "58b60f31d21fbb31e26a51d696c0e2a4f445693e0d87f47158ea354bb59f6966"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/HIT-28.log",
+      "bytes": 82350,
+      "sha256": "bc9b7515043bce834990d319f4962640a6a7384dba04a2489e130afdaf60607b"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/HIT-26.log",
+      "bytes": 19176,
+      "sha256": "7d1b7af1a34e2fe137b709a7e069b1ba2cc9b7da298c7fa34e280bdbfd4a8bc5"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/HIT-27.log",
+      "bytes": 55138,
+      "sha256": "cd1de93f6250f161b5642eb6888ad25c5d31535b7c108c8de117019a970618f2"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/HIT-25.log",
+      "bytes": 19127,
+      "sha256": "7edae0f9f5ff8b0f69480202afcdeabd1ebf2513549dd0be6ca826723adf8334"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/ci/runs.json",
+      "bytes": 2324,
+      "sha256": "421659ef8ce7c98dda4aeb95dcf78a42d1808d3830325369659ad04097e3d414"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M04-test.log",
+      "bytes": 10899,
+      "sha256": "8f6c7903ce4e8dd55622822205281780da8b2d27a64b7d38bfbdb5253e56ff5e"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M05-test.log",
+      "bytes": 10995,
+      "sha256": "b538a0bde249f0a9fc9ef8f7546f70721008f5fb17d8e1dc3106137fbf817659"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/summary.json",
+      "bytes": 13323,
+      "sha256": "1c745e714c5a3ed7cffeb6c042eb384dd83743e6f058cc47a32a3ffa6b4ab934"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M02-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M05.patch",
+      "bytes": 827,
+      "sha256": "872f21af23833472982f802c61143b22c10617307eaf102240ae7c668ee89ab2"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M01.patch",
+      "bytes": 700,
+      "sha256": "8d872438785acb8f94e4ac669f3749e9b8800942d93734d6a59cfd406581bcfa"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/negative-gate.log",
+      "bytes": 106517,
+      "sha256": "9441cf7f44a95d9fb95c160530af91927472dc73227d571c602c8aebf61d6ade"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M04-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M03.patch",
+      "bytes": 744,
+      "sha256": "59ef9ad58c39e11f19e910b5a411bfd6da71ac1a66077011e3164924af5c6199"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M04.patch",
+      "bytes": 694,
+      "sha256": "dc3f6aaa2863a7fcfee7b94bc0a46d2243fde9f5309c1972e74eac8a883fce89"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M06.patch",
+      "bytes": 679,
+      "sha256": "9f39c4b3dae588d726c8e73bc1b82d4cccefad41a887f085e14cae764ebcddcd"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M03-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M03-test.log",
+      "bytes": 10893,
+      "sha256": "29120abae87ab169d853c773e000191fad01d7cfc82378bb8bff73f36c20c947"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M02.patch",
+      "bytes": 747,
+      "sha256": "1e61c6451291c25293dd401ab4fe7cde09185313131f21762d4574aadd509923"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M02-test.log",
+      "bytes": 11010,
+      "sha256": "d83b48b7277c15dde46f2919d34d243433d25d20396f8b959abaf8a0db28a288"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M05-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/baseline.log",
+      "bytes": 10782,
+      "sha256": "e2456a29227e8d36178651191ff9057f6ff54b6221f54d268ab26e43823ea63c"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M06-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M06-test.log",
+      "bytes": 12070,
+      "sha256": "0630571c6fd4dcfcb47fa3f530ae1720ef806760ac472e478b8fe2c016d0a244"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/restored.log",
+      "bytes": 10782,
+      "sha256": "cc0820a38bc97c638f277edce6b039a594229f00dc727adf26fc65ef2797c721"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M01-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/mutations/M01-test.log",
+      "bytes": 11418,
+      "sha256": "3e0d5f3ac139f6eba8cc1f58e4d4d3e4d457d9e2ed2b499d32cfb50eafaa20c2"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/record.json",
+      "bytes": 4211,
+      "sha256": "07164c72e6679a3aa1171a789917da6a4338977a20a8c79c6ce84fdccb181d65"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/smoke.log",
+      "bytes": 1756,
+      "sha256": "471249b47c9c1ebddad9f140b85340cf65fa34fd8fa0103154bc91c2aa977bf7"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/sections.log",
+      "bytes": 8172,
+      "sha256": "30483ac14080a8612d6fdbaf94ac6fd274e44fa6612201ea31378345c80f7e45"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/inspect.log",
+      "bytes": 1190,
+      "sha256": "0ce8e7864d382043f073636206601e7708114de6c41082988c85da6c29703ac9"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/check.log",
+      "bytes": 18077,
+      "sha256": "3cb9a2b364b3e8401f89c40c02315836a518589688a682986ad4bf16f56cd385"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c1/macho.log",
+      "bytes": 304,
+      "sha256": "3da8a58e98e726011a4d649e8f21b4fa19b4046766b6d5799788fc7e8b3c2afb"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/natural-defect/record.json",
+      "bytes": 874,
+      "sha256": "4dda2bd9fee94aae954e802fca5f7eae28b0f565442f6b7fdf12616df7377c8e"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/natural-defect/red.log",
+      "bytes": 314,
+      "sha256": "779ec28c0d31ae37bc3ac02fb950cd98ba8988e4c01ac9349142099c03d57a9a"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/natural-defect/reproducing-test.patch",
+      "bytes": 964,
+      "sha256": "224cb415c83a9c1446f4845f52ab22ffafbdba481ae9c143607c5b136daac72a"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/coverage.log",
+      "bytes": 1486,
+      "sha256": "a5fbae8b971d5719aef173638692703e4d92152a94a1599f961b88104b487ca6"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/record.json",
+      "bytes": 4142,
+      "sha256": "8cfe4788ed47ee7dbf7a23d0f961620f387a5b1dbc2798e4bfa5f23f916f65b8"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/processing.cover",
+      "bytes": 10499,
+      "sha256": "f2a4651d55b9033442645cf9946dc73a031bca9ce5e3136c73622d5e842fa615"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/smoke.log",
+      "bytes": 1756,
+      "sha256": "09ddc3d8d1f2b878e30319b43eec7a52ee484724558c9f2c183ac008296380ad"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/imports.log",
+      "bytes": 1162,
+      "sha256": "4898553971bf249533bbc688dd2dbcaec38745363c5cfd305499347e7984ff91"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/race.log",
+      "bytes": 463,
+      "sha256": "94606f177ad5f03dbd28908105764ca248f104a43584f51eb3c8806402d810e5"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c3/check.log",
+      "bytes": 104402,
+      "sha256": "92ed5be15693449ed1ccf7f14387ed1d198930ad2be26d85dbd4cadc7cb7b245"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c2/record.json",
+      "bytes": 1874,
+      "sha256": "b91bf5c816fad997ba0aa113ea958e59a1e1de1645aa02aee839e86d51a63bd4"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c2/smoke.log",
+      "bytes": 1756,
+      "sha256": "dc18f77140815343af95b0f6f3bf277898a7e0a4f69ee8c8d250c0b7a56a5a69"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/c2/check.log",
+      "bytes": 38140,
+      "sha256": "e1a17e0e20870a33ec19249bc727d8f2ff101b39c62d209d23d30c5ed63f2457"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/reports/geometry.json",
+      "bytes": 414,
+      "sha256": "bb13385b0bfca37201a23ddcebd8f6d680788f4ec7ae11fad9d4bcb12306d576"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/reports/render.log",
+      "bytes": 1929,
+      "sha256": "e2bc21611b3edf5a75788d647ecf69f3e4d489f35a88144b76e8fd884488f1ad"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/reports/record.json",
+      "bytes": 1698,
+      "sha256": "04695ba0602bedbd8f7341f140522b377ce81d4c84985f50300d853990bf6921"
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/reports/structural-validation.json",
+      "bytes": 1883,
+      "sha256": "5526f494b39a29df69683eb551f14e9def9d0c7aa9357db861d093240948c13e"
+    }
+  ],
+  "images_created": 0,
+  "formal_acceptance": false,
+  "final_submission_ready": false,
+  "historical_index_generated_at_utc": "2026-10-18T11:12:31.734863+00:00",
+  "updated_at_utc": "2026-10-19T11:47:02.856344+00:00",
+  "current_baseline": {
+    "accepted_main_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+    "ci": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+    "processing_tree": "6d0985dac0dc9f30276e8c905d0236e2d1c1b01d",
+    "tp_rev_001": "VERIFIED_FIXED",
+    "engineering_prs_merged": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      20,
+      22
+    ],
+    "report_pr_open": 10
+  },
+  "current_local_runs": [
+    {
+      "id": "check",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "check",
+        "processing",
+        "--require"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:17:47.273917+00:00",
+      "started_at_msk": "2026-10-19T14:17:47.273917+03:00",
+      "finished_at_utc": "2026-10-19T11:17:48.720928+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/check.log",
+      "log_sha256": "4497b9492f797627139f2de987bd51c70b8eb60119d34de7b4b319885153a98b",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/check.json"
+    },
+    {
+      "id": "race",
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "./..."
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main/services/processing",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:17:50.040868+00:00",
+      "started_at_msk": "2026-10-19T14:17:50.040868+03:00",
+      "finished_at_utc": "2026-10-19T11:17:51.812813+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/race.log",
+      "log_sha256": "b2bc5f571024e1dc11db0af0ecf8593c5243a2001701c751473d72ce6fffe29f",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/race.json"
+    },
+    {
+      "id": "smoke",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "smoke",
+        "processing",
+        "--require"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:17:48.766527+00:00",
+      "started_at_msk": "2026-10-19T14:17:48.766527+03:00",
+      "finished_at_utc": "2026-10-19T11:17:50.008063+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/smoke.log",
+      "log_sha256": "ea7a74d308dad96072bb07993f29ba96bc679beba5d1a1dbb35898c19cad72d5",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/smoke.json"
+    },
+    {
+      "id": "validate",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "validate"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:17:46.771930+00:00",
+      "started_at_msk": "2026-10-19T14:17:46.771930+03:00",
+      "finished_at_utc": "2026-10-19T11:17:46.980635+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/validate.log",
+      "log_sha256": "24ad2610861564b16ae4ffbe029f662b4ec18a95aa60c49d51eb89c86602c524",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/validate.json"
+    },
+    {
+      "id": "wrapper",
+      "argv": [
+        "python3",
+        "tools/pr12/test_workspace.py"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:17:47.062825+00:00",
+      "started_at_msk": "2026-10-19T14:17:47.062825+03:00",
+      "finished_at_utc": "2026-10-19T11:17:47.236223+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/wrapper.log",
+      "log_sha256": "5a2c52648f5b924af97d71de9174012e12a40992d375ea11bf264bb7aa9e5ba4",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main/wrapper.json"
+    },
+    {
+      "id": "coverage",
+      "argv": [
+        "go",
+        "tool",
+        "cover",
+        "-func=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main/.pr12-build/processing.cover"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main/services/processing",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:33.483662+00:00",
+      "started_at_msk": "2026-10-19T14:18:33.483662+03:00",
+      "finished_at_utc": "2026-10-19T11:18:33.554691+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/coverage.log",
+      "log_sha256": "410772d8fdee2f3972fb12de2b385504bcde618111b90e2d9f1bf82e75383645",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/coverage.json"
+    },
+    {
+      "id": "dev-bad-format",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/valid.json",
+        "--format",
+        "invalid"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.418558+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.418558+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.421535+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-bad-format.log",
+      "log_sha256": "45bf17cd9080760f75fb787732ea54cd2e6f8fdc57b464fa93e409db57ee994c",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-bad-format.json"
+    },
+    {
+      "id": "dev-invalid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/invalid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.325296+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.325296+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.328727+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-invalid.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-invalid.json"
+    },
+    {
+      "id": "dev-refund",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.292226+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.292226+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.296089+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-refund.log",
+      "log_sha256": "cdf12c7fe074b0669fba2e71f8869920769841ecdfc4fb6d6d41621ad7167d76",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-refund.json"
+    },
+    {
+      "id": "dev-reverse",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund-shadowed-reverse.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.388617+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.388617+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.391847+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-reverse.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-reverse.json"
+    },
+    {
+      "id": "dev-shadow",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund-shadowed.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.356548+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.356548+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.360112+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-shadow.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-shadow.json"
+    },
+    {
+      "id": "dev-valid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/valid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.255555+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.255555+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.260143+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-valid.log",
+      "log_sha256": "6c5359b16e2a32456aff400c7cd3a98658ff02f9cff6452f574744f0100e5fcd",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-valid.json"
+    },
+    {
+      "id": "dev-version",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:33.920573+00:00",
+      "started_at_msk": "2026-10-19T14:18:33.920573+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.202165+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-version.log",
+      "log_sha256": "4d4fdecb1d397653c3cbf25c77d251a1bb61585f14bc6f1a2de028a1f1302fa2",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/dev-version.json"
+    },
+    {
+      "id": "imports",
+      "argv": [
+        "go",
+        "list",
+        "-f",
+        "{{.ImportPath}} => {{join .Imports \" \"}}",
+        "./..."
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main/services/processing",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:22:42.275803+00:00",
+      "started_at_msk": "2026-10-19T14:22:42.275803+03:00",
+      "finished_at_utc": "2026-10-19T11:22:42.312416+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/imports.log",
+      "log_sha256": "a7e0f2127e7bac65e56ff6196e0b32fe15a283db8c6cacb928a694cc052b5153",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/imports.json"
+    },
+    {
+      "id": "inspect-dev",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "inspect",
+        "processing",
+        "--mode",
+        "dev",
+        "--require"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:33.591394+00:00",
+      "started_at_msk": "2026-10-19T14:18:33.591394+03:00",
+      "finished_at_utc": "2026-10-19T11:18:33.729620+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-dev.log",
+      "log_sha256": "232db4bb0f7f3443860f55c57147e4c775dbdd36f181e89156cd7430b9e3b422",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-dev.json"
+    },
+    {
+      "id": "inspect-release",
+      "argv": [
+        "python3",
+        "tools/pr12/workspace.py",
+        "inspect",
+        "processing",
+        "--mode",
+        "release",
+        "--require"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:33.756624+00:00",
+      "started_at_msk": "2026-10-19T14:18:33.756624+03:00",
+      "finished_at_utc": "2026-10-19T11:18:33.890669+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-release.log",
+      "log_sha256": "37ae50d693a73d40844e9790f7f557c6755ee0aff39c142b506e106fc79de527",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/inspect-release.json"
+    },
+    {
+      "id": "libraries",
+      "argv": [
+        "/usr/bin/otool",
+        "-L",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:22:42.344015+00:00",
+      "started_at_msk": "2026-10-19T14:22:42.344015+03:00",
+      "finished_at_utc": "2026-10-19T11:22:42.351703+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/libraries.log",
+      "log_sha256": "fc75e55344e53465d4c4eeef3d4b128259e37233fe3735c59a617f05a243b9c0",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/libraries.json"
+    },
+    {
+      "id": "release-bad-format",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/valid.json",
+        "--format",
+        "invalid"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.728944+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.728944+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.731853+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-bad-format.log",
+      "log_sha256": "45bf17cd9080760f75fb787732ea54cd2e6f8fdc57b464fa93e409db57ee994c",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-bad-format.json"
+    },
+    {
+      "id": "release-invalid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/invalid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.641872+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.641872+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.645015+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-invalid.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-invalid.json"
+    },
+    {
+      "id": "release-refund",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.612810+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.612810+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.616148+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-refund.log",
+      "log_sha256": "cdf12c7fe074b0669fba2e71f8869920769841ecdfc4fb6d6d41621ad7167d76",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-refund.json"
+    },
+    {
+      "id": "release-reverse",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund-shadowed-reverse.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.700129+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.700129+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.702996+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-reverse.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-reverse.json"
+    },
+    {
+      "id": "release-shadow",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/refund-shadowed.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.670798+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.670798+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.673719+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-shadow.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-shadow.json"
+    },
+    {
+      "id": "release-valid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/valid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.582364+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.582364+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.585864+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-valid.log",
+      "log_sha256": "6c5359b16e2a32456aff400c7cd3a98658ff02f9cff6452f574744f0100e5fcd",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-valid.json"
+    },
+    {
+      "id": "release-version",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:34.452721+00:00",
+      "started_at_msk": "2026-10-19T14:18:34.452721+03:00",
+      "finished_at_utc": "2026-10-19T11:18:34.546650+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-version.log",
+      "log_sha256": "9c2a5be20e215f6be68d82d5ee64c98e1f778dfbcc63f3657d4f1378837964d9",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-main-extra/release-version.json"
+    },
+    {
+      "id": "dev-bad-format",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "valid.json",
+        "--format",
+        "invalid"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.723478+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.723478+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.726247+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-bad-format.log",
+      "log_sha256": "45bf17cd9080760f75fb787732ea54cd2e6f8fdc57b464fa93e409db57ee994c",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-bad-format.json"
+    },
+    {
+      "id": "dev-invalid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "invalid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.617728+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.617728+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.620820+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-invalid.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-invalid.json"
+    },
+    {
+      "id": "dev-refund",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "refund.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.580698+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.580698+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.584725+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-refund.log",
+      "log_sha256": "cdf12c7fe074b0669fba2e71f8869920769841ecdfc4fb6d6d41621ad7167d76",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-refund.json"
+    },
+    {
+      "id": "dev-reverse",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "refund-shadowed-reverse.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.688736+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.688736+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.691832+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-reverse.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-reverse.json"
+    },
+    {
+      "id": "dev-shadow",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "refund-shadowed.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.653034+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.653034+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.655985+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-shadow.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-shadow.json"
+    },
+    {
+      "id": "dev-valid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--fixture",
+        "valid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.540075+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.540075+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.543412+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-valid.log",
+      "log_sha256": "6c5359b16e2a32456aff400c7cd3a98658ff02f9cff6452f574744f0100e5fcd",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-valid.json"
+    },
+    {
+      "id": "dev-version",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-dev",
+        "--version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.498348+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.498348+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.501420+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-version.log",
+      "log_sha256": "4d4fdecb1d397653c3cbf25c77d251a1bb61585f14bc6f1a2de028a1f1302fa2",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/dev-version.json"
+    },
+    {
+      "id": "release-bad-format",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "valid.json",
+        "--format",
+        "invalid"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.972258+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.972258+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.975251+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-bad-format.log",
+      "log_sha256": "45bf17cd9080760f75fb787732ea54cd2e6f8fdc57b464fa93e409db57ee994c",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-bad-format.json"
+    },
+    {
+      "id": "release-invalid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "invalid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.866714+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.866714+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.869621+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-invalid.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-invalid.json"
+    },
+    {
+      "id": "release-refund",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "refund.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.831977+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.831977+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.834968+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-refund.log",
+      "log_sha256": "cdf12c7fe074b0669fba2e71f8869920769841ecdfc4fb6d6d41621ad7167d76",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-refund.json"
+    },
+    {
+      "id": "release-reverse",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "refund-shadowed-reverse.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.936699+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.936699+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.939566+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-reverse.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-reverse.json"
+    },
+    {
+      "id": "release-shadow",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "refund-shadowed.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.902080+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.902080+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.904884+00:00",
+      "exit": 2,
+      "expected_exit": 2,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-shadow.log",
+      "log_sha256": "ce11a4e748a4c8ba13bf30bb215e17991387a19e8ed89a7917fd0362ec5d1af7",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-shadow.json"
+    },
+    {
+      "id": "release-valid",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--fixture",
+        "valid.json",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.795742+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.795742+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.799049+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-valid.log",
+      "log_sha256": "6c5359b16e2a32456aff400c7cd3a98658ff02f9cff6452f574744f0100e5fcd",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-valid.json"
+    },
+    {
+      "id": "release-version",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside/processing-release",
+        "--version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/delivery-outside",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:18:56.759933+00:00",
+      "started_at_msk": "2026-10-19T14:18:56.759933+03:00",
+      "finished_at_utc": "2026-10-19T11:18:56.762971+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-version.log",
+      "log_sha256": "9c2a5be20e215f6be68d82d5ee64c98e1f778dfbcc63f3657d4f1378837964d9",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-delivery-outside/release-version.json"
+    },
+    {
+      "id": "mutation",
+      "argv": [
+        "python3",
+        "services/processing/tools/mutations/run.py",
+        "--output",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-report-evidence/accepted-mutations",
+        "--natural-defects",
+        "2",
+        "--natural-defect-task",
+        "https://hitpipe.atlassian.net/browse/HIT-29",
+        "--natural-defect-task",
+        "https://hitpipe.atlassian.net/browse/HIT-27"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit32-accepted-main",
+      "sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+      "dirty": false,
+      "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at_utc": "2026-10-19T11:20:43.947228+00:00",
+      "started_at_msk": "2026-10-19T14:20:43.947228+03:00",
+      "finished_at_utc": "2026-10-19T11:20:49.513185+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "expectation_met": true,
+      "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutation-run/mutation.log",
+      "log_sha256": "66e2ab77e9b383af703a7950a0391ffe8097fb423bcaf2e7f70323b2eec78fc3",
+      "environment": {
+        "go": "go version go1.27.2 darwin/arm64",
+        "git": "git version 2.52.0",
+        "python": "3.14.2",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      },
+      "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutation-run/mutation.json"
+    }
+  ],
+  "current_ci": {
+    "source": "GitHub native push workflow; collected, not a local Linux run",
+    "record": "docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.json",
+    "log": "docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci.log",
+    "url": "https://github.com/hitpipe/hitpipe/actions/runs/39229206910",
+    "head_sha": "ec0dcba7ca42ea59909489cef9650c6edff12f35",
+    "mutation_summary": "docs/labs/pr12/tp/evidence/report-refresh-20261019/main-ci-mutation-summary.json"
+  },
+  "current_mutations": "docs/labs/pr12/tp/evidence/report-refresh-20261019/accepted-mutations/summary.json",
+  "current_natural_defects": {
+    "count": 2,
+    "writer": "docs/labs/pr12/tp/evidence/natural-defect/record.json",
+    "parser": "docs/labs/pr12/tp/evidence/tp-rev-001/baseline-verified/reproduction.json",
+    "accepted_fix": "https://github.com/hitpipe/hitpipe/pull/20"
+  },
+  "qa_page_renders": "Internal document renders counted separately from report screenshot slots",
+  "current_reports": {
+    "manifest": "docs/labs/pr12/tp/reports/report-manifest.json",
+    "structural": "docs/labs/pr12/tp/evidence/report-refresh-20261019/structural-final.json",
+    "pdf_integrity": "docs/labs/pr12/tp/evidence/report-refresh-20261019/pdf-integrity.json",
+    "visual_qa": "docs/labs/pr12/tp/evidence/report-refresh-20261019/visual-qa.json",
+    "status": "PASS_CURRENT_PLACEHOLDER_EDITION",
+    "pages": 62,
+    "report_screenshots": 0,
+    "slots": 21,
+    "final_report_head_ci": "Recorded externally after actual commit/push; no self-referential commit"
+  },
+  "historical_sections": {
+    "local_runs": "Historical 2026-10-18; use current_local_runs for accepted main",
+    "ci": "Historical 2026-10-18; use current_ci for accepted main",
+    "mutations": "Historical experiment; use current_mutations",
+    "natural_defects": "Historical writer only; use current_natural_defects count2",
+    "files": "Legacy inventory, unchanged files retained; two updated screenshot instruction digests refreshed. Original full index preserved under report-refresh-20261019/before/evidence-index.json."
+  },
+  "current_files": [
+    {
+      "path": "docs/labs/pr12/tp/criteria-crosswalk.json",
+      "sha256": "8054f8f0cee0de95d0b375c3b6c749a133684199bb37f1d97c2e5f7e8568bbd6",
+      "bytes": 28793
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/screenshots/INSTRUCTIONS.md",
+      "sha256": "13ddcf1d95729e849af0d83c80c708d549855a854e645fe72af1d795121eb3b5",
+      "bytes": 57260
+    },
+    {
+      "path": "docs/labs/pr12/tp/evidence/screenshots/instructions.json",
+      "sha256": "ab34a873c3574f147fc86db33211c5dfd5a2bc691bfdda4d77edb4a8478072e6",
+      "bytes": 61228
+    },
+    {
+      "path": "docs/labs/pr12/tp/handoff.md",
+      "sha256": "b7c753ca84130b104e56eda55c18569feb18e3583a3496c2b5bcd0499a4de7ee",
+      "bytes": 8932
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0104-pz01-tp.docx",
+      "sha256": "eb3bead7c3d56043382d083ca7e81f1890f22cf09c756a9977aebc326f214a21",
+      "bytes": 30564
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0104-pz01-tp.md",
+      "sha256": "a6515c61d2410f09a728477bab3a999af4e2398725fd7b8a56c64a5f644ebc14",
+      "bytes": 30438
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0104-pz02-tp.docx",
+      "sha256": "4cce5d73f270849506ef1a11b591eda980f62af2d30fb7e7b054a548b0cfb1e8",
+      "bytes": 30106
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0104-pz02-tp.md",
+      "sha256": "370dcabf2a9b1fb924f2c90b7206de8e9bcd4fdd36685548b199acda1522cd4d",
+      "bytes": 27287
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0302-pz01-tp.docx",
+      "sha256": "b9d2cdc44b7fcd2139540590ce47873d2e3e1e0d3da9817cc834135883efeeaa",
+      "bytes": 35016
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0302-pz01-tp.md",
+      "sha256": "1b274a3304116947f713de1e4fc3a12feed88144f2124beec80f0ea7727e14c1",
+      "bytes": 29927
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0302-pz02-tp.docx",
+      "sha256": "e9b7f3733af912de404414f20f8ebe868f5e4089c9115bd2631015b87ad9f4aa",
+      "bytes": 38886
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/0302-pz02-tp.md",
+      "sha256": "6aa6b81528ebfd5b345a05cbb8fc5813d0890b90865b04c775866c463d6b7ce1",
+      "bytes": 41895
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/artifact-template-contract.md",
+      "sha256": "47e1c7c0b9f0b879302fa1e926f6f483203ea4fe193bb32d6b614c0b4c6e2243",
+      "bytes": 2035
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/build_reports.py",
+      "sha256": "2700a93279a8a8ece4999b8a128f23bac4dc39b090ce2434bfa7f0293e2383bb",
+      "bytes": 11177
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/report-content.json",
+      "sha256": "a6f86e576dac61aed6b06516dfa71d7459df48b3238b2c87fb0178c89864eac8",
+      "bytes": 69747
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/report-manifest.json",
+      "sha256": "a235845be83cb9bd59739925eeccd2e8cf0c607359aa34b3ef64424295c9f7f5",
+      "bytes": 4514
+    },
+    {
+      "path": "docs/labs/pr12/tp/reports/validate_reports.py",
+      "sha256": "5f7691d4a5684e259ed26a138e790a46d7de588904fcb95d9b33ee3db1e12897",
+      "bytes": 5096
+    },
+    {
+      "path": "docs/labs/pr12/tp/submission-record.json",
+      "sha256": "23cdef5e055f3f175c4db3d028aeb19948e83e8b8f3e1f5e99d68dcc3620255d",
+      "bytes": 5651
+    },
+    {
+      "path": "docs/labs/pr12/tp/task-dod-status.json",
+      "sha256": "f9800acb35f1965a339e802e1bea4b27f13576467c9a7e3133fcce8d891bb833",
+      "bytes": 81702
+    }
+  ],
+  "current_raw_evidence_digests": "docs/labs/pr12/tp/evidence/report-refresh-20261019/SHA256SUMS.json",
+  "current_file_digest_rule": "Self excluded. Report head/CI recorded externally after commit/push. Before snapshot retains original historical inventory."
+}

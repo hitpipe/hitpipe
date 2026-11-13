@@ -1,0 +1,32 @@
+{
+  "runs": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "exit": 2,
+      "at_utc": "2026-10-19T11:45:21.882849+00:00",
+      "log": "diff-check-full.log"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "--",
+        "docs/labs/pr12/tp",
+        ":(exclude)docs/labs/pr12/tp/evidence/report-refresh-20261019"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hitpipe",
+      "exit": 0,
+      "at_utc": "2026-10-19T11:45:21.892096+00:00",
+      "log": "diff-check-authored-documents.log"
+    }
+  ],
+  "interpretation": "Full check reports original Go build metadata trailing tab and unified patch context space+tab in immutable raw evidence. Authored document/source changes pass. Actual logs and patches retained byte-for-byte; no CI/config exception introduced."
+}
