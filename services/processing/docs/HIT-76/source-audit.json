@@ -1,0 +1,45 @@
+{
+  "base_sha": "20adc01a037148d20ea8da6c281f52d25cb2d9e3",
+  "tested_implementation_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+  "changed_paths": [
+    "services/processing/scripts/migrations/001_processing.sql",
+    "services/processing/scripts/migrations/README.md",
+    "services/processing/scripts/migrations/apply.sql",
+    "services/processing/scripts/migrations/roles.sql",
+    "services/processing/scripts/postgres/README.md",
+    "services/processing/scripts/postgres/verify.py"
+  ],
+  "unchanged": [
+    "services/processing/internal",
+    "services/processing/cmd",
+    "services/processing/go.mod",
+    "all other services/client and shared CI"
+  ],
+  "search": {
+    "argv": [
+      "git",
+      "grep",
+      "-n",
+      "-E",
+      "CREATE SCHEMA hp_processing|CREATE TABLE.*case_identity|hp_processing_owner",
+      "20adc01a037148d20ea8da6c281f52d25cb2d9e3",
+      "--",
+      "services/processing"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "started_at": "2026-11-13T09:49:02.012096+00:00",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "result": "No preexisting Processing migration/owner-role implementation found in scoped main search."
+  },
+  "files": {
+    "services/processing/scripts/migrations/001_processing.sql": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+    "services/processing/scripts/migrations/README.md": "987a16fe7b33bd3413cc38f5a06dfda1363942a991ce4e0533478692daf450ff",
+    "services/processing/scripts/migrations/apply.sql": "479ec38158091d1c7454d1eb63207b8dc22f218fcfbad7381f6a56bab79ba4e5",
+    "services/processing/scripts/migrations/roles.sql": "801c0fb147cd3822a3c7916bc2b72102e5926bbec6ac31f43734504c3376a07f",
+    "services/processing/scripts/postgres/README.md": "ecc5e1ba5652419dcd06404f2a4c434f95f7d047d7549cff7ca4568ecc70907d",
+    "services/processing/scripts/postgres/verify.py": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa"
+  },
+  "development_history": "A preliminary local test runner used a not-yet-created database for its settings query and failed (exit 1); its own container was removed. Corrected before implementation commit. Old logs remain locally in research/HIT-76-20261113/initial-failed-probe. A subsequent dirty-tree development run passed; neither is presented as verification of this committed version."
+}

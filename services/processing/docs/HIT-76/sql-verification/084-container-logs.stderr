@@ -1,0 +1,98 @@
+********************************************************************************
+WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
+         anyone with access to the Postgres port to access your database without
+         a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
+         documentation about "trust":
+         https://www.postgresql.org/docs/current/auth-trust.html
+         In Docker's default configuration, this is effectively any other
+         container on the same system.
+
+         It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
+         it with "-e POSTGRES_PASSWORD=password" instead to set a password in
+         "docker run".
+********************************************************************************
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-11-13 09:47:56.273 UTC [1] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+2026-11-13 09:47:56.273 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-13 09:47:56.274 UTC [80] LOG:  database system was shut down at 2026-11-13 09:47:56 UTC
+2026-11-13 09:47:56.276 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 09:47:58.457 UTC [288] ERROR:  new row violates row-level security policy for table "operations"
+2026-11-13 09:47:58.457 UTC [288] STATEMENT:  INSERT INTO operations(workspace_id,operation_id,owner_user_id,revision,state) VALUES('22222222-2222-4222-8222-222222222222','77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888',1,'DRAFT');
+2026-11-13 09:47:58.516 UTC [295] ERROR:  new row violates row-level security policy for table "operations"
+2026-11-13 09:47:58.516 UTC [295] STATEMENT:  INSERT INTO hp_processing.operations(workspace_id,operation_id,owner_user_id,revision,state) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888',1,'DRAFT');
+2026-11-13 09:47:58.578 UTC [302] ERROR:  permission denied to set role "hp_processing_owner"
+2026-11-13 09:47:58.578 UTC [302] STATEMENT:  SET ROLE hp_processing_owner;
+2026-11-13 09:47:58.642 UTC [309] ERROR:  permission denied for table accepted_configs
+2026-11-13 09:47:58.642 UTC [309] STATEMENT:  UPDATE accepted_configs SET evaluator_version='replacement' WHERE config_id='44444444-4444-4444-8444-444444444444';
+2026-11-13 09:47:59.636 UTC [413] ERROR:  new row violates row-level security policy for table "operations"
+2026-11-13 09:47:59.636 UTC [413] STATEMENT:  INSERT INTO operations(workspace_id,operation_id,owner_user_id,revision,state) VALUES('22222222-2222-4222-8222-222222222222','77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888',1,'DRAFT');
+2026-11-13 09:47:59.688 UTC [420] ERROR:  new row violates row-level security policy for table "operations"
+2026-11-13 09:47:59.688 UTC [420] STATEMENT:  INSERT INTO hp_processing.operations(workspace_id,operation_id,owner_user_id,revision,state) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888',1,'DRAFT');
+2026-11-13 09:47:59.746 UTC [427] ERROR:  permission denied to set role "hp_processing_owner"
+2026-11-13 09:47:59.746 UTC [427] STATEMENT:  SET ROLE hp_processing_owner;
+2026-11-13 09:47:59.807 UTC [434] ERROR:  permission denied for table accepted_configs
+2026-11-13 09:47:59.807 UTC [434] STATEMENT:  UPDATE accepted_configs SET evaluator_version='replacement' WHERE config_id='44444444-4444-4444-8444-444444444444';
+2026-11-13 09:47:59.873 UTC [441] ERROR:  permission denied for table job_index
+2026-11-13 09:47:59.873 UTC [441] STATEMENT:  SELECT * FROM hp_processing.job_index;
+2026-11-13 09:48:00.012 UTC [455] ERROR:  duplicate key value violates unique constraint "case_identity_workspace_id_source_account_id_livemode_sessi_key"
+2026-11-13 09:48:00.012 UTC [455] STATEMENT:  INSERT INTO case_identity(workspace_id,case_id,operation_id,config_id,source_account_id,livemode,session_id,admitted_at,owner_user_id,state,revision,outcome_knowledge) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','33333333-3333-4333-8333-333333333333','44444444-4444-4444-8444-444444444444','acct_synthetic',false,'cs_synthetic',now(),'88888888-8888-4888-8888-888888888888','RECEIVED',1,'UNESTABLISHED');
+2026-11-13 09:48:00.090 UTC [462] ERROR:  duplicate key value violates unique constraint "one_single_active"
+2026-11-13 09:48:00.090 UTC [462] STATEMENT:  INSERT INTO operations(workspace_id,operation_id,owner_user_id,revision,state) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888',1,'ACTIVE');
+2026-11-13 09:48:00.160 UTC [469] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.160 UTC [469] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.160 UTC [469] STATEMENT:  UPDATE case_identity SET workspace_id='22222222-2222-4222-8222-222222222222' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.225 UTC [476] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.225 UTC [476] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.225 UTC [476] STATEMENT:  UPDATE case_identity SET case_id='77777777-7777-4777-8777-777777777777' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.303 UTC [483] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.303 UTC [483] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.303 UTC [483] STATEMENT:  UPDATE case_identity SET operation_id='77777777-7777-4777-8777-777777777777' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.378 UTC [490] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.378 UTC [490] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.378 UTC [490] STATEMENT:  UPDATE case_identity SET config_id='77777777-7777-4777-8777-777777777777' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.451 UTC [497] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.451 UTC [497] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.451 UTC [497] STATEMENT:  UPDATE case_identity SET source_account_id='other' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.514 UTC [504] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.514 UTC [504] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.514 UTC [504] STATEMENT:  UPDATE case_identity SET livemode=true WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.578 UTC [511] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.578 UTC [511] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.578 UTC [511] STATEMENT:  UPDATE case_identity SET session_id='other' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.643 UTC [518] ERROR:  pinned case/safety identity immutable
+2026-11-13 09:48:00.643 UTC [518] CONTEXT:  PL/pgSQL function protect_case_identity() line 2 at RAISE
+2026-11-13 09:48:00.643 UTC [518] STATEMENT:  UPDATE case_identity SET admitted_at='2026-11-14T00:00:00Z' WHERE case_id='55555555-5555-4555-8555-555555555555';
+2026-11-13 09:48:00.704 UTC [525] ERROR:  initial activation boundary immutable
+2026-11-13 09:48:00.704 UTC [525] CONTEXT:  PL/pgSQL function protect_operation_boundary() line 2 at RAISE
+2026-11-13 09:48:00.704 UTC [525] STATEMENT:  UPDATE operations SET first_activation_at=NULL WHERE operation_id='33333333-3333-4333-8333-333333333333';
+2026-11-13 09:48:00.761 UTC [532] ERROR:  initial activation boundary immutable
+2026-11-13 09:48:00.761 UTC [532] CONTEXT:  PL/pgSQL function protect_operation_boundary() line 2 at RAISE
+2026-11-13 09:48:00.761 UTC [532] STATEMENT:  UPDATE operations SET first_activation_at='2026-11-14T00:00:00Z' WHERE operation_id='33333333-3333-4333-8333-333333333333';
+2026-11-13 09:48:00.818 UTC [539] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:00.818 UTC [539] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:00.818 UTC [539] STATEMENT:  UPDATE episodes SET workspace_id='22222222-2222-4222-8222-222222222222' WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:00.876 UTC [546] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:00.876 UTC [546] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:00.876 UTC [546] STATEMENT:  UPDATE episodes SET episode_id='77777777-7777-4777-8777-777777777777' WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:00.940 UTC [553] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:00.940 UTC [553] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:00.940 UTC [553] STATEMENT:  UPDATE episodes SET case_id='77777777-7777-4777-8777-777777777777' WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:01.006 UTC [560] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:01.006 UTC [560] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:01.006 UTC [560] STATEMENT:  UPDATE episodes SET started_at='2026-11-13T00:02:00Z' WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:01.071 UTC [567] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:01.071 UTC [567] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:01.071 UTC [567] STATEMENT:  UPDATE episodes SET deadline_at='2026-11-13T00:07:00Z' WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:01.141 UTC [574] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:01.141 UTC [574] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:01.141 UTC [574] STATEMENT:  UPDATE episodes SET automatic_writes=0 WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:01.207 UTC [581] ERROR:  new row for relation "episodes" violates check constraint "episodes_automatic_writes_check"
+2026-11-13 09:48:01.207 UTC [581] STATEMENT:  UPDATE episodes SET automatic_writes=4 WHERE episode_id='66666666-6666-4666-8666-666666666666';
+2026-11-13 09:48:01.276 UTC [588] ERROR:  new row for relation "episodes" violates check constraint "episodes_check"
+2026-11-13 09:48:01.276 UTC [588] STATEMENT:  INSERT INTO episodes(workspace_id,episode_id,case_id,started_at,deadline_at) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','55555555-5555-4555-8555-555555555555','2026-11-13T00:01:00Z','2026-11-13T00:06:01Z');
+2026-11-13 09:48:01.350 UTC [595] ERROR:  new row for relation "outbox" violates check constraint "outbox_check"
+2026-11-13 09:48:01.350 UTC [595] STATEMENT:  INSERT INTO outbox(workspace_id,message_id,kind,payload_ref,payload_sha256,payload_bytes,digest,expires_at) VALUES('11111111-1111-4111-8111-111111111111','77777777-7777-4777-8777-777777777777','synthetic','99999999-9999-4999-8999-999999999999','sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',1,'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',now()-interval '1second');
+2026-11-13 09:48:01.604 UTC [623] ERROR:  episode clock/attempt count cannot reset
+2026-11-13 09:48:01.604 UTC [623] CONTEXT:  PL/pgSQL function protect_episode_clock() line 2 at RAISE
+2026-11-13 09:48:01.604 UTC [623] STATEMENT:  UPDATE episodes SET automatic_writes=0 WHERE episode_id='66666666-6666-4666-8666-666666666666';
