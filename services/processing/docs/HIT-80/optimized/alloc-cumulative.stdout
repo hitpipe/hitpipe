@@ -1,0 +1,47 @@
+File: sourcefacts.test
+Type: alloc_space
+Time: 2026-11-15 00:59:34 MSK
+Showing nodes accounting for 1795.59MB, 98.80% of 1817.39MB total
+Dropped 34 nodes (cum <= 9.09MB)
+Showing top 40 nodes out of 50
+      flat  flat%   sum%        cum   cum%
+         0     0%     0%  1814.59MB 99.85%  testing.(*B).runN
+         0     0%     0%  1812.59MB 99.74%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.BenchmarkDecode.func1
+  483.12MB 26.58% 26.58%  1812.59MB 99.74%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.Decode
+         0     0% 26.58%  1812.59MB 99.74%  testing.(*B).launch
+  365.30MB 20.10% 46.68%  1038.39MB 57.14%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.decodeFields
+      76MB  4.18% 50.87%   281.56MB 15.49%  encoding/json.(*Decoder).Token
+         0     0% 50.87%   203.08MB 11.17%  encoding/json.Marshal (inline)
+         0     0% 50.87%   203.08MB 11.17%  encoding/json/v2.Marshal
+         0     0% 50.87%   179.01MB  9.85%  encoding/json/v2.Unmarshal
+         0     0% 50.87%   179.01MB  9.85%  encoding/json/v2.unmarshalDecode
+  167.06MB  9.19% 60.06%   170.06MB  9.36%  encoding/json/jsontext.(*decoderState).fetch
+   36.50MB  2.01% 62.07%      148MB  8.14%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.integer
+         0     0% 62.07%   147.06MB  8.09%  encoding/json/jsontext.(*Decoder).ReadToken (inline)
+         0     0% 62.07%   147.06MB  8.09%  encoding/json/jsontext.(*decoderState).ReadToken
+      50MB  2.75% 64.82%      144MB  7.92%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.fieldRule.valid
+         0     0% 64.82%   136.55MB  7.51%  encoding/json/jsontext.(*decoderState).consumeString
+  128.50MB  7.07% 71.89%   128.50MB  7.07%  reflect.unsafe_New
+  107.58MB  5.92% 77.81%   107.58MB  5.92%  bytes.Clone (inline)
+         0     0% 77.81%   105.50MB  5.81%  math/big.(*Rat).SetString
+         0     0% 77.81%    96.50MB  5.31%  encoding/json.Unmarshal (inline)
+         0     0% 77.81%    95.50MB  5.25%  encoding/json/v2.marshalEncode
+         0     0% 77.81%       95MB  5.23%  encoding/json/v2.makeMapArshaler.func2
+         0     0% 77.81%    88.50MB  4.87%  reflect.Value.MapIndex
+         0     0% 77.81%    88.50MB  4.87%  reflect.copyVal
+         0     0% 77.81%    85.50MB  4.70%  encoding/json.(*Decoder).Decode
+      83MB  4.57% 82.37%       83MB  4.57%  encoding/json/jsontext.(*Value).UnmarshalJSON
+         0     0% 82.37%       83MB  4.57%  encoding/json/v2.makeMethodArshaler.func6
+   58.50MB  3.22% 85.59%    58.50MB  3.22%  encoding/json/jsontext.Token.String (inline)
+      57MB  3.14% 88.73%       57MB  3.14%  math/big.nat.make (inline)
+   56.50MB  3.11% 91.84%    56.50MB  3.11%  encoding/json/v2.makeString
+         0     0% 91.84%    56.50MB  3.11%  encoding/json/v2.makeStringArshaler.func2
+    6.50MB  0.36% 92.20%    54.51MB  3.00%  encoding/json.NewDecoder
+   48.50MB  2.67% 94.87%    48.50MB  2.67%  strings.NewReader (inline)
+   48.01MB  2.64% 97.51%    48.01MB  2.64%  encoding/json/jsontext.NewDecoder (inline)
+         0     0% 97.51%    47.50MB  2.61%  encoding/json/v2.makeStructArshaler.func3
+   23.50MB  1.29% 98.80%    41.50MB  2.28%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.Decode.func2 (inline)
+         0     0% 98.80%       40MB  2.20%  reflect.New
+         0     0% 98.80%    33.50MB  1.84%  encoding/json/jsontext.(*decoderState).consumeWhitespace
+         0     0% 98.80%       33MB  1.82%  encoding/json/v2.makePointerArshaler.func3
+         0     0% 98.80%       31MB  1.71%  math/big.(*Int).Set (inline)

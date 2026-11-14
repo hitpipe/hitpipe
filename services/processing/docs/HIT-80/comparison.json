@@ -1,0 +1,2159 @@
+{
+  "old_sha": "30a28b9a904da27c1c1ebd52b0df09846fe38efb",
+  "new_sha": "f54907c0cb5b95f1f7e389c4bbf5d806cf8b0370",
+  "environment": {
+    "label": "baseline",
+    "go": "go version go1.27.2 darwin/arm64",
+    "go_env": {
+      "CGO_ENABLED": "1",
+      "GOARCH": "arm64",
+      "GOEXPERIMENT": "",
+      "GOFLAGS": "",
+      "GOOS": "darwin",
+      "GOVERSION": "go1.27.2"
+    },
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "uname": [
+      "Darwin",
+      "MacBook-Air-Tima.local",
+      "27.0.0",
+      "Darwin Kernel Version 27.0.0: Tue Aug 11 21:02:57 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T8132",
+      "arm64",
+      "arm"
+    ],
+    "source_sha": "30a28b9a904da27c1c1ebd52b0df09846fe38efb",
+    "tracked_status": "",
+    "cpu": "Apple M4",
+    "logical_cpu_count": 10,
+    "note": "Local full Decode microbenchmark; no end-to-end or provider integration claim. One OS process, GOMAXPROCS=1, no race/profile instrumentation in timing run. No samples discarded."
+  },
+  "corpus_records": 309,
+  "corpus_equal": true,
+  "corpus_sha256": "61e9a1602ddbe3565346af916eb4566631bcf9e52bf3884a03b77f13dc1ea4b7",
+  "rows": [
+    {
+      "name": "alias_order_0",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 10691.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10640.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10337.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10319.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10454.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10429.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10417.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10573.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10440.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10461.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 9152.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9272.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9266.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9244.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9317.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9219.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9214.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9351.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9261.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9313.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 10447.0,
+            "mean": 10476.1,
+            "min": 10319.0,
+            "max": 10691.0,
+            "stdev": 122.10874024591543
+          },
+          "new": {
+            "median": 9263.5,
+            "mean": 9260.9,
+            "min": 9152.0,
+            "max": 9351.0,
+            "stdev": 57.95486749761979
+          },
+          "median_change_percent": -11.328611084521867
+        },
+        "B/op": {
+          "old": {
+            "median": 8456.0,
+            "mean": 8456.0,
+            "min": 8456.0,
+            "max": 8456.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 5776.0,
+            "mean": 5776.0,
+            "min": 5776.0,
+            "max": 5776.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -31.693472090823082
+        },
+        "allocs/op": {
+          "old": {
+            "median": 251.0,
+            "mean": 251.0,
+            "min": 251.0,
+            "max": 251.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 215.0,
+            "mean": 215.0,
+            "min": 215.0,
+            "max": 215.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -14.342629482071711
+        }
+      }
+    },
+    {
+      "name": "alias_order_1",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 9914.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9784.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9832.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9767.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9847.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9835.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9734.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9808.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9880.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          },
+          {
+            "ns/op": 9898.0,
+            "B/op": 8208.0,
+            "allocs/op": 232.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 8633.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8638.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8577.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 12300.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8664.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8669.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8650.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8689.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8732.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          },
+          {
+            "ns/op": 8702.0,
+            "B/op": 5528.0,
+            "allocs/op": 196.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 9833.5,
+            "mean": 9829.9,
+            "min": 9734.0,
+            "max": 9914.0,
+            "stdev": 58.006608818880856
+          },
+          "new": {
+            "median": 8666.5,
+            "mean": 9025.4,
+            "min": 8577.0,
+            "max": 12300.0,
+            "stdev": 1151.3526537657058
+          },
+          "median_change_percent": -11.86759546448365
+        },
+        "B/op": {
+          "old": {
+            "median": 8208.0,
+            "mean": 8208.0,
+            "min": 8208.0,
+            "max": 8208.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 5528.0,
+            "mean": 5528.0,
+            "min": 5528.0,
+            "max": 5528.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -32.65107212475633
+        },
+        "allocs/op": {
+          "old": {
+            "median": 232.0,
+            "mean": 232.0,
+            "min": 232.0,
+            "max": 232.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 196.0,
+            "mean": 196.0,
+            "min": 196.0,
+            "max": 196.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -15.517241379310342
+        }
+      }
+    },
+    {
+      "name": "boundary_max",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30543.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30571.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30485.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30637.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30663.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30487.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30545.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30660.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30971.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30765.0,
+            "B/op": 33079.0,
+            "allocs/op": 541.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 22387.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22282.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22454.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22274.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22015.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22509.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22566.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22183.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22483.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22085.0,
+            "B/op": 11618.0,
+            "allocs/op": 315.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30604.0,
+            "mean": 30632.7,
+            "min": 30485.0,
+            "max": 30971.0,
+            "stdev": 147.6557934296292
+          },
+          "new": {
+            "median": 22334.5,
+            "mean": 22323.8,
+            "min": 22015.0,
+            "max": 22566.0,
+            "stdev": 187.2863523532288
+          },
+          "median_change_percent": -27.020977649980395
+        },
+        "B/op": {
+          "old": {
+            "median": 33079.0,
+            "mean": 33079.0,
+            "min": 33079.0,
+            "max": 33079.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11618.0,
+            "mean": 11618.0,
+            "min": 11618.0,
+            "max": 11618.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -64.87801928716104
+        },
+        "allocs/op": {
+          "old": {
+            "median": 541.0,
+            "mean": 541.0,
+            "min": 541.0,
+            "max": 541.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 315.0,
+            "mean": 315.0,
+            "min": 315.0,
+            "max": 315.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.774491682070234
+        }
+      }
+    },
+    {
+      "name": "boundary_over",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 3010.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2999.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2990.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2993.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2988.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2994.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2980.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2984.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 3025.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2977.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 2988.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2950.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2952.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2963.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2944.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2961.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2947.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2959.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2944.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          },
+          {
+            "ns/op": 2963.0,
+            "B/op": 2920.0,
+            "allocs/op": 80.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 2991.5,
+            "mean": 2994.0,
+            "min": 2977.0,
+            "max": 3025.0,
+            "stdev": 14.452988925785867
+          },
+          "new": {
+            "median": 2955.5,
+            "mean": 2957.1,
+            "min": 2944.0,
+            "max": 2988.0,
+            "stdev": 13.186272323055436
+          },
+          "median_change_percent": -1.2034096607053346
+        },
+        "B/op": {
+          "old": {
+            "median": 2920.0,
+            "mean": 2920.0,
+            "min": 2920.0,
+            "max": 2920.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 2920.0,
+            "mean": 2920.0,
+            "min": 2920.0,
+            "max": 2920.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": 0.0
+        },
+        "allocs/op": {
+          "old": {
+            "median": 80.0,
+            "mean": 80.0,
+            "min": 80.0,
+            "max": 80.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 80.0,
+            "mean": 80.0,
+            "min": 80.0,
+            "max": 80.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": 0.0
+        }
+      }
+    },
+    {
+      "name": "duplicate",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 10639.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10633.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10641.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10602.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10604.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10639.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10632.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10668.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10716.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          },
+          {
+            "ns/op": 10625.0,
+            "B/op": 8456.0,
+            "allocs/op": 251.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 9143.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9205.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9210.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9206.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9238.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9203.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9211.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9076.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9127.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          },
+          {
+            "ns/op": 9146.0,
+            "B/op": 5776.0,
+            "allocs/op": 215.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 10636.0,
+            "mean": 10639.9,
+            "min": 10602.0,
+            "max": 10716.0,
+            "stdev": 32.72936160561509
+          },
+          "new": {
+            "median": 9204.0,
+            "mean": 9176.5,
+            "min": 9076.0,
+            "max": 9238.0,
+            "stdev": 50.64308661823667
+          },
+          "median_change_percent": -13.463708160962772
+        },
+        "B/op": {
+          "old": {
+            "median": 8456.0,
+            "mean": 8456.0,
+            "min": 8456.0,
+            "max": 8456.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 5776.0,
+            "mean": 5776.0,
+            "min": 5776.0,
+            "max": 5776.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -31.693472090823082
+        },
+        "allocs/op": {
+          "old": {
+            "median": 251.0,
+            "mean": 251.0,
+            "min": 251.0,
+            "max": 251.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 215.0,
+            "mean": 215.0,
+            "min": 215.0,
+            "max": 215.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -14.342629482071711
+        }
+      }
+    },
+    {
+      "name": "fraction",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 3217.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3217.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3227.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3311.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3247.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3222.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3225.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3219.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3238.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3217.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 3183.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3187.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3199.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3175.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3183.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3169.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3168.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3188.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3175.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          },
+          {
+            "ns/op": 3202.0,
+            "B/op": 3056.0,
+            "allocs/op": 87.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 3223.5,
+            "mean": 3234.0,
+            "min": 3217.0,
+            "max": 3311.0,
+            "stdev": 28.82899774725287
+          },
+          "new": {
+            "median": 3183.0,
+            "mean": 3182.9,
+            "min": 3168.0,
+            "max": 3202.0,
+            "stdev": 11.58015543937127
+          },
+          "median_change_percent": -1.2563983248022326
+        },
+        "B/op": {
+          "old": {
+            "median": 3056.0,
+            "mean": 3056.0,
+            "min": 3056.0,
+            "max": 3056.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 3056.0,
+            "mean": 3056.0,
+            "min": 3056.0,
+            "max": 3056.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": 0.0
+        },
+        "allocs/op": {
+          "old": {
+            "median": 87.0,
+            "mean": 87.0,
+            "min": 87.0,
+            "max": 87.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 87.0,
+            "mean": 87.0,
+            "min": 87.0,
+            "max": 87.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": 0.0
+        }
+      }
+    },
+    {
+      "name": "integer_decimal",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30675.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 31039.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 31310.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30909.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30617.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30561.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30783.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30451.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30670.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30709.0,
+            "B/op": 33127.0,
+            "allocs/op": 547.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 22362.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22078.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22249.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22211.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22353.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22251.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22407.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22340.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22376.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22160.0,
+            "B/op": 11666.0,
+            "allocs/op": 321.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30692.0,
+            "mean": 30772.4,
+            "min": 30451.0,
+            "max": 31310.0,
+            "stdev": 252.76040477539638
+          },
+          "new": {
+            "median": 22295.5,
+            "mean": 22278.7,
+            "min": 22078.0,
+            "max": 22407.0,
+            "stdev": 106.84781493112321
+          },
+          "median_change_percent": -27.35729180242409
+        },
+        "B/op": {
+          "old": {
+            "median": 33127.0,
+            "mean": 33127.0,
+            "min": 33127.0,
+            "max": 33127.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11666.0,
+            "mean": 11666.0,
+            "min": 11666.0,
+            "max": 11666.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -64.78401304072207
+        },
+        "allocs/op": {
+          "old": {
+            "median": 547.0,
+            "mean": 547.0,
+            "min": 547.0,
+            "max": 547.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 321.0,
+            "mean": 321.0,
+            "min": 321.0,
+            "max": 321.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.31627056672761
+        }
+      }
+    },
+    {
+      "name": "integer_exponent",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30778.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30700.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30428.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30758.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30746.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30655.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30545.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30618.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30664.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          },
+          {
+            "ns/op": 30785.0,
+            "B/op": 33047.0,
+            "allocs/op": 547.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 22206.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22285.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22265.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22170.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22148.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22111.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22113.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22243.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22242.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          },
+          {
+            "ns/op": 22213.0,
+            "B/op": 11586.0,
+            "allocs/op": 321.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30682.0,
+            "mean": 30667.7,
+            "min": 30428.0,
+            "max": 30785.0,
+            "stdev": 113.72974789190187
+          },
+          "new": {
+            "median": 22209.5,
+            "mean": 22199.6,
+            "min": 22111.0,
+            "max": 22285.0,
+            "stdev": 61.788528241270015
+          },
+          "median_change_percent": -27.613910436086307
+        },
+        "B/op": {
+          "old": {
+            "median": 33047.0,
+            "mean": 33047.0,
+            "min": 33047.0,
+            "max": 33047.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11586.0,
+            "mean": 11586.0,
+            "min": 11586.0,
+            "max": 11586.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -64.94084183133113
+        },
+        "allocs/op": {
+          "old": {
+            "median": 547.0,
+            "mean": 547.0,
+            "min": 547.0,
+            "max": 547.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 321.0,
+            "mean": 321.0,
+            "min": 321.0,
+            "max": 321.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.31627056672761
+        }
+      }
+    },
+    {
+      "name": "known_false",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30370.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30423.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30502.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30550.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30360.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30847.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30748.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30604.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30464.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30715.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 21775.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22053.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 21974.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 21853.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22008.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 21848.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 21993.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 21985.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22016.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22162.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30526.0,
+            "mean": 30558.3,
+            "min": 30360.0,
+            "max": 30847.0,
+            "stdev": 167.06422584011082
+          },
+          "new": {
+            "median": 21989.0,
+            "mean": 21966.7,
+            "min": 21775.0,
+            "max": 22162.0,
+            "stdev": 112.82833568449608
+          },
+          "median_change_percent": -27.966323789556448
+        },
+        "B/op": {
+          "old": {
+            "median": 33015.0,
+            "mean": 33015.0,
+            "min": 33015.0,
+            "max": 33015.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11554.0,
+            "mean": 11554.0,
+            "min": 11554.0,
+            "max": 11554.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -65.00378615780707
+        },
+        "allocs/op": {
+          "old": {
+            "median": 541.0,
+            "mean": 541.0,
+            "min": 541.0,
+            "max": 541.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 315.0,
+            "mean": 315.0,
+            "min": 315.0,
+            "max": 315.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.774491682070234
+        }
+      }
+    },
+    {
+      "name": "known_zero",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30763.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30586.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30838.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30776.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30611.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30772.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30297.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30390.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30691.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30460.0,
+            "B/op": 33015.0,
+            "allocs/op": 541.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 22022.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22139.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22226.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22176.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22087.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22223.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22173.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22138.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22054.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22025.0,
+            "B/op": 11554.0,
+            "allocs/op": 315.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30651.0,
+            "mean": 30618.4,
+            "min": 30297.0,
+            "max": 30838.0,
+            "stdev": 183.936704088964
+          },
+          "new": {
+            "median": 22138.5,
+            "mean": 22126.3,
+            "min": 22022.0,
+            "max": 22226.0,
+            "stdev": 76.12278093828272
+          },
+          "median_change_percent": -27.77234021728492
+        },
+        "B/op": {
+          "old": {
+            "median": 33015.0,
+            "mean": 33015.0,
+            "min": 33015.0,
+            "max": 33015.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11554.0,
+            "mean": 11554.0,
+            "min": 11554.0,
+            "max": 11554.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -65.00378615780707
+        },
+        "allocs/op": {
+          "old": {
+            "median": 541.0,
+            "mean": 541.0,
+            "min": 541.0,
+            "max": 541.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 315.0,
+            "mean": 315.0,
+            "min": 315.0,
+            "max": 315.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.774491682070234
+        }
+      }
+    },
+    {
+      "name": "nullable",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 28845.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28841.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28618.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28837.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 29017.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28741.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28900.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28731.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28822.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          },
+          {
+            "ns/op": 28770.0,
+            "B/op": 30302.0,
+            "allocs/op": 503.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 21826.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21755.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21837.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21796.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21732.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21750.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21768.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21735.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21778.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          },
+          {
+            "ns/op": 21685.0,
+            "B/op": 11522.0,
+            "allocs/op": 313.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 28829.5,
+            "mean": 28812.2,
+            "min": 28618.0,
+            "max": 29017.0,
+            "stdev": 107.19950248640771
+          },
+          "new": {
+            "median": 21761.5,
+            "mean": 21766.2,
+            "min": 21685.0,
+            "max": 21837.0,
+            "stdev": 45.635755961989084
+          },
+          "median_change_percent": -24.516554223971976
+        },
+        "B/op": {
+          "old": {
+            "median": 30302.0,
+            "mean": 30302.0,
+            "min": 30302.0,
+            "max": 30302.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11522.0,
+            "mean": 11522.0,
+            "min": 11522.0,
+            "max": 11522.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -61.97610718764438
+        },
+        "allocs/op": {
+          "old": {
+            "median": 503.0,
+            "mean": 503.0,
+            "min": 503.0,
+            "max": 503.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 313.0,
+            "mean": 313.0,
+            "min": 313.0,
+            "max": 313.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -37.77335984095428
+        }
+      }
+    },
+    {
+      "name": "unknown",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 20899.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20755.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20760.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20847.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20869.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20714.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20949.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20858.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20762.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          },
+          {
+            "ns/op": 20779.0,
+            "B/op": 27915.0,
+            "allocs/op": 470.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 12337.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12303.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12193.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12303.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12378.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12316.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12328.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12306.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12375.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          },
+          {
+            "ns/op": 12340.0,
+            "B/op": 6456.0,
+            "allocs/op": 244.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 20813.0,
+            "mean": 20819.2,
+            "min": 20714.0,
+            "max": 20949.0,
+            "stdev": 75.68619424967805
+          },
+          "new": {
+            "median": 12322.0,
+            "mean": 12317.9,
+            "min": 12193.0,
+            "max": 12378.0,
+            "stdev": 51.6579562550092
+          },
+          "median_change_percent": -40.796617498678714
+        },
+        "B/op": {
+          "old": {
+            "median": 27915.0,
+            "mean": 27915.0,
+            "min": 27915.0,
+            "max": 27915.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 6456.0,
+            "mean": 6456.0,
+            "min": 6456.0,
+            "max": 6456.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -76.8726491133799
+        },
+        "allocs/op": {
+          "old": {
+            "median": 470.0,
+            "mean": 470.0,
+            "min": 470.0,
+            "max": 470.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 244.0,
+            "mean": 244.0,
+            "min": 244.0,
+            "max": 244.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -48.08510638297873
+        }
+      }
+    },
+    {
+      "name": "valid",
+      "sample_count": 10,
+      "raw_samples": {
+        "old": [
+          {
+            "ns/op": 30734.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30633.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30695.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30656.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30831.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30823.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30840.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30835.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30744.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          },
+          {
+            "ns/op": 30702.0,
+            "B/op": 32983.0,
+            "allocs/op": 541.0
+          }
+        ],
+        "new": [
+          {
+            "ns/op": 21865.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22166.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22122.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22294.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22118.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22088.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22174.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22039.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22041.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          },
+          {
+            "ns/op": 22100.0,
+            "B/op": 11506.0,
+            "allocs/op": 315.0
+          }
+        ]
+      },
+      "metrics": {
+        "ns/op": {
+          "old": {
+            "median": 30739.0,
+            "mean": 30749.3,
+            "min": 30633.0,
+            "max": 30840.0,
+            "stdev": 78.42625694101292
+          },
+          "new": {
+            "median": 22109.0,
+            "mean": 22100.7,
+            "min": 21865.0,
+            "max": 22294.0,
+            "stdev": 110.9765240440017
+          },
+          "median_change_percent": -28.075083769803832
+        },
+        "B/op": {
+          "old": {
+            "median": 32983.0,
+            "mean": 32983.0,
+            "min": 32983.0,
+            "max": 32983.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 11506.0,
+            "mean": 11506.0,
+            "min": 11506.0,
+            "max": 11506.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -65.1153624594488
+        },
+        "allocs/op": {
+          "old": {
+            "median": 541.0,
+            "mean": 541.0,
+            "min": 541.0,
+            "max": 541.0,
+            "stdev": 0.0
+          },
+          "new": {
+            "median": 315.0,
+            "mean": 315.0,
+            "min": 315.0,
+            "max": 315.0,
+            "stdev": 0.0
+          },
+          "median_change_percent": -41.774491682070234
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Descriptive local microbenchmarks, ten samples each; no statistical significance or end-to-end claim.",
+    "Sequential old then new runs on the same machine; CPU affinity/governor/background load are not controlled.",
+    "CPU/alloc profiles are diagnostics and excluded from timing samples. Every sample retained."
+  ]
+}

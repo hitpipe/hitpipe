@@ -83,7 +83,8 @@ func Decode(data []byte, expected Expected, policy eligibility.Policy) (Projecti
 type fieldRule struct {
 	kind                 string
 	nullable             bool
-	format, pattern      string
+	format               string
+	pattern              *regexp.Regexp
 	choices              []string
 	minLength, maxLength int
 	minimum, maximum     int64
@@ -155,7 +156,7 @@ func (r fieldRule) valid(raw json.RawMessage) bool {
 		if n < r.minLength || (r.maxLength > 0 && n > r.maxLength) || (len(r.choices) > 0 && !slices.Contains(r.choices, v)) {
 			return false
 		}
-		if r.pattern != "" && !regexp.MustCompile(r.pattern).MatchString(v) {
+		if r.pattern != nil && !r.pattern.MatchString(v) {
 			return false
 		}
 		if r.format == "uuid" && !uuid.MatchString(v) {

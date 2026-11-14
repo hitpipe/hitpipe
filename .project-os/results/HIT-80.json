@@ -1,0 +1,49 @@
+{
+  "subject": "HIT-80",
+  "materialized_result": {
+    "summary": "Профилированная оптимизация строгого SourceFacts Decode: неизменные OAS regex компилируются однократно; сохранены full old/new измерения и совместимость.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "baseline_sha": "30a28b9a904da27c1c1ebd52b0df09846fe38efb",
+    "tested_code_sha": "f54907c0cb5b95f1f7e389c4bbf5d806cf8b0370",
+    "code_url": "https://github.com/hitpipe/hitpipe/tree/f54907c0cb5b95f1f7e389c4bbf5d806cf8b0370/services/processing/internal/adapters/intake/sourcefacts",
+    "baseline_correctness": "production Decode/schema/prior tests unchanged from accepted main; PR44 actually merged",
+    "schema_sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/intake/sourcefacts/projection.go",
+    "services/processing/internal/adapters/intake/sourcefacts/schema_generated.go",
+    "services/processing/tools/sourcefacts/generate.py",
+    "services/processing/internal/adapters/intake/sourcefacts/measurement_test.go",
+    "services/processing/tools/sourcefacts/measure.py",
+    "services/processing/tools/sourcefacts/compare.py",
+    "services/processing/docs/HIT-80"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-80/README.md",
+    "old_commands": "services/processing/docs/HIT-80/baseline/commands.json",
+    "new_commands": "services/processing/docs/HIT-80/optimized/commands.json",
+    "supplemental_commands": "services/processing/docs/HIT-80/supplemental/commands.json",
+    "comparison": "services/processing/docs/HIT-80/comparison.json",
+    "source_audit": "services/processing/docs/HIT-80/source-audit.json",
+    "digests": "services/processing/docs/HIT-80/evidence-digests.json",
+    "result": "18 runner commands and7 supplemental commands exit0;10 samples x13 scenarios per version;309 full differential records identical; full module race/vet on both revisions PASS",
+    "measured_valid": {
+      "old_ns_per_op_median": 30739,
+      "new_ns_per_op_median": 22109,
+      "old_bytes_per_op": 32983,
+      "new_bytes_per_op": 11506,
+      "old_allocs_per_op": 541,
+      "new_allocs_per_op": 315
+    },
+    "environment": "Go1.27.2 darwin/arm64, Apple M4, GOMAXPROCS=1, CGO_ENABLED=1; synthetic corpus only"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Local full Decode microbenchmarks, no end-to-end or production integration/performance claim.",
+    "Sequential old then new; background load, affinity/governor and thermal conditions not controlled; no statistical significance claim.",
+    "CPU profile has substantial runtime/GC samples; allocation profile selected the optimization; profiled timing excluded from samples.",
+    "Startup cost not measured; map-to-JSON-to-Facts unchanged, no discarded experiment invented.",
+    "Independent review/human acceptance pending; PR not merged by agent."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
