@@ -9,10 +9,15 @@
 Нужны Docker с Linux-контейнерами и Python 3 (только стандартная библиотека; Python используется для тестового запуска). Из корня репозитория на Windows:
 
 ```powershell
-py -3 services/delivery/tests/check_schema.py --report services/delivery/evidence/postgresql.json
+py -3 services/delivery/tests/check_schema.py --report services/delivery/evidence/postgresql-18.7.json
 ```
 
-На Linux та же команда начинается с `python3`. Используется точный PostgreSQL 18.6 `linux/amd64` из [закреплённого stack-mvp.json](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json), digest образа: `sha256:d8703cd7fba306b9fec9268ecedfa8a966846c053036a60e3635791957eb2f66`. Материалы зависимостей: `hitpipe/stack-artifacts@84249ff3ba611358232294c46f6022f030ea223d`.
+На Linux та же команда начинается с `python3`. Используется точный PostgreSQL 18.7 Alpine `linux/amd64` по поправке безопасности `HP-CCR-POSTGRES-20261114` к [закреплённому stack-mvp.json](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json), digest образа: `sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366`. Материалы зависимостей: `hitpipe/stack-artifacts@84249ff3ba611358232294c46f6022f030ea223d`.
+
+Версия сервера отдельно проверяется по `server_version_num = 180007`. Старый
+протокол `evidence/postgresql.json` относится к первоначальному запуску 18.6 и
+сохраняется как история; новый запуск использует отдельный файл. Обновление кода
+стенда само по себе не означает, что новый SQL-прогон уже выполнен.
 
 Тест создаёт временный контейнер с `--network none`, без опубликованных портов и host volumes, отдельные базу и роли. Локальная trust-аутентификация действует только в этом одноразовом контейнере. Данные синтетические. Миграция применяется через `SET ROLE hp_delivery_migrator`; обычные запросы проверяются через рабочие роли, администратор используется только для подготовки fixtures и чтения каталогов. Контейнер удаляется в `finally`; неуспех прерывает запуск и не создаёт положительный отчёт.
 

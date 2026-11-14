@@ -5,7 +5,7 @@ parser.add_argument('--report', type=pathlib.Path, help='Save the actual success
 args = parser.parse_args()
 started_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-IMAGE = "postgres@sha256:d8703cd7fba306b9fec9268ecedfa8a966846c053036a60e3635791957eb2f66"
+IMAGE = "postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366"
 NAME = "hit70-" + uuid.uuid4().hex[:12]
 checks = []
 def run(args, data=None):
@@ -66,6 +66,7 @@ try:
         bootstrap += f"CREATE ROLE {role} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;"
     bootstrap += "CREATE DATABASE delivery OWNER hp_delivery_migrator;"
     run(["docker","exec","-i",NAME,"psql","-X","-v","ON_ERROR_STOP=1","-U","postgres"],bootstrap)
+    check("server version is exact approved PostgreSQL 18.7",lambda:eq(sql("SHOW server_version_num"),"180007"))
     migration = (ROOT/"migrations/001_delivery.sql").read_text(encoding="utf-8")
     check("migration matches pinned HP-MVP-SQL-DELIVERY",lambda:eq(hashlib.sha256(migration.encode()).hexdigest(),"9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e"))
     run(["docker","exec","-i",NAME,"psql","-X","-v","ON_ERROR_STOP=1","-U","postgres","-d","delivery"],
