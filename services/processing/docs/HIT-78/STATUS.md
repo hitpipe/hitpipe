@@ -33,7 +33,9 @@ first_activation_at; replay does not alter that boundary or any case pin.
 
 ## Composition and transaction boundary
 
-Application entry: `admission.Admit(ctx, raw, establishedContext, store)`.
+Application entry: `admission.Admit(ctx, raw, establishedContext, decoder, store)`.
+Concrete strict Decoder is composed from `internal/adapters/postgres/normalizedsignal`;
+application depends only on its Decoder port, never the JCS package.
 Mandatory EstablishedContext comes from previously verified caller authority,
 installed source binding and accepted operation revision. No defaults/resolver,
 HTTP handler, activation, IAM/Intake authentication or financial decision is added.
@@ -61,9 +63,9 @@ payload JSON, Stripe raw payload, business text or history contents are persiste
 
 ## Verification, exact current code
 
-Tested source: `2a2a4824ad387c243844f3344e1ee629f70c2629`, clean tree.
+Tested source: `79a0407f8d0e1d9f71b4817b50bae44e510013a4`, clean tree.
 Full argv/cwd/time/environment/exit/stdout/stderr/hash records:
-`admission-verification-06/commands.json`; final scope in `summary.json`;
+`admission-verification-08/commands.json`; final scope in `summary.json`;
 file digests in `digests.json`, Linux test-binary digest in `test-binary.json`.
 
 From repository root (requires local Docker):
@@ -98,7 +100,7 @@ nonzero codes. No claim of crash/power-loss or production deployment qualificati
 
 Earlier parser/storage logs keep their original SHAs. Local run04 failed a test
 fixture compilation; run05 exposed unkeyed cross-package receipt literals via vet.
-Both are retained in research/HIT-78-20261114 and superseded by successful run06,
+Both are retained in research/HIT-78-20261114 and superseded by successful run08,
 not relabelled as passes. Earlier storage runs01–03 are also historical.
 
 ## Remaining human/server steps
@@ -108,3 +110,9 @@ required before inviting In Review. Independent Reviewer and human acceptance
 remain pending. No runtime IAM/Intake/Stripe, financial evaluation, outbox/Delivery
 or external write is implemented or claimed. Lead integrates PR45 and this dependent
 PR through ordinary review/protected merge; main integration/CI must then be checked.
+
+Initial CI at 9bb79fb failed application concrete dependency rules. The decoder
+was moved behind an application port inside the scoped postgres adapter; no CI
+rule was changed. Run07 passed after the port change; run08 passed after final
+placement within the task scope. Prior run06 remains an actual historical result.
+Current CI status is reported externally on PR50, avoiding self-SHA commit cycles.
