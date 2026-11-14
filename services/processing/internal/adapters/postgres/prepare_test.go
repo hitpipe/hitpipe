@@ -57,6 +57,7 @@ type fixtureReaders struct {
 	after     func()
 	origin    string
 	transport *http.Transport
+	boundary  preparecase.Boundary
 }
 type fixtureReader struct {
 	snapshot evaluatepaidorder.Snapshot
@@ -70,14 +71,6 @@ func (r fixtureReader) Read(ctx context.Context, q evaluatepaidorder.Query) (eva
 	return r.snapshot, ctx.Err()
 }
 
-type sourceBoundary struct{ epoch int64 }
-
-func (g sourceBoundary) Start(ctx context.Context, c sourcefacts.CallerContext, work func() error) error {
-	if c.ExpectedEpoch != g.epoch || ctx.Err() != nil {
-		return preparecase.ErrHold
-	}
-	return work()
-}
 func sourceWire(t *testing.T, c preparecase.Case, change func(map[string]any)) []byte {
 	t.Helper()
 	b := append([]byte{}, paidFixture...)
@@ -108,8 +101,9 @@ func sourceWire(t *testing.T, c preparecase.Case, change func(map[string]any)) [
 }
 func (f fixtureReaders) ForCase(ctx context.Context, c preparecase.Case, r preparecase.Request) (evaluatepaidorder.SourceFactsReader, error) {
 	if f.origin != "" {
-		return sourcefacts.NewReader(f.origin, c.Policy, sourcefacts.CallerContext{WorkspaceID: c.WorkspaceID, CaseID: c.CaseID, SessionID: c.SessionID, ConnectionID: c.Mapping.SourceConnectionID, AccountID: c.AccountID, RequestID: c.CaseID, ExpectedEpoch: r.Epoch, DeadlineAt: time.Now().Add(2 * time.Second), LiveMode: &c.Live}, f.transport, sourceBoundary{r.Epoch}, 1<<20)
+		return (intent.Readers{Origin: f.origin, Transport: f.transport, Boundary: f.boundary, Clock: testClock{time.Now}, ReadDeadline: 2 * time.Second, MaxResponseBytes: 1 << 20}).ForCase(ctx, c, r)
 	}
+
 	// Actual SourceFacts decoding is reused even for the labelled owner fixture.
 	b := append([]byte{}, paidFixture...)
 	var m map[string]any
@@ -481,7 +475,7 @@ func TestPreparationActualReaderNoNetworkUnderRowLock(t *testing.T) {
 	roots := x509.NewCertPool()
 	roots.AddCert(server.Certificate())
 	transport := &http.Transport{TLSClientConfig: &tls.Config{RootCAs: roots, Certificates: server.TLS.Certificates, MinVersion: tls.VersionTLS13}}
-	f.service.Readers = fixtureReaders{origin: server.URL, transport: transport}
+	f.service.Readers = fixtureReaders{origin: server.URL, transport: transport, boundary: f.gate}
 	result, e := f.service.Prepare(ctx, f.request)
 	mu.Lock()
 	defer mu.Unlock()

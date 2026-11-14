@@ -47,6 +47,9 @@ func TestDurableContentAndRestart(t *testing.T) {
 	if want := []string{"write", "file-fsync", "rename", "directory-fsync"}; fmtJSON(steps) != fmtJSON(want) {
 		t.Fatal(steps)
 	}
+	if ref.ExpiresAt.Nanosecond()%1000 != 0 {
+		t.Fatal("expiry incompatible with SQL precision")
+	}
 	info, e := os.Stat(filepath.Join(p, ref.ID))
 	if e != nil || info.Mode().Perm() != 0600 {
 		t.Fatal("unsafe file permissions")

@@ -98,6 +98,9 @@ func validClass(c string) bool {
 }
 func (s *Store) Write(ctx context.Context, b []byte, class string, expiry, now time.Time) (preparecase.Ref, error) {
 	zero := preparecase.Ref{}
+	// Persist exactly the precision representable by PostgreSQL timestamptz.
+	// Round down, never extend a caller's hard expiry or a source-proof deadline.
+	expiry = expiry.UTC().Truncate(time.Microsecond)
 	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || !validClass(class) || len(b) < 1 || len(b) > maxBody || now.IsZero() || !expiry.After(now) || expiry.After(now.Add(90*24*time.Hour)) {
 		return zero, preparecase.ErrContent
 	}
