@@ -1,0 +1,1687 @@
+{
+  "source_commit": "ff160a2ebdaa21a43d89ac5c352a2430b0b46edc",
+  "started_at": "2026-11-14T08:32:14.383954+00:00",
+  "finished_at": "2026-11-14T08:33:07.229576+00:00",
+  "command": [
+    "C:\\Users\\mitran0\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "services/delivery/tests/check_schema.py",
+    "--report",
+    "services/delivery/evidence/postgresql.json"
+  ],
+  "python": "3.12.3",
+  "host": "Windows-10-10.0.19045-SP0",
+  "docker": "Docker version 29.3.1, build c2be9cc",
+  "isolation": {
+    "network": "none",
+    "published_ports": [],
+    "host_volumes": []
+  },
+  "runner_sha256": "33d570771046f54f6b5b83f65f15c4f642bcc53dabe9e92da44bab530aa01d8f",
+  "image": "postgres@sha256:d8703cd7fba306b9fec9268ecedfa8a966846c053036a60e3635791957eb2f66",
+  "server": "PostgreSQL 18.6 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "migration_sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+  "checks": [
+    {
+      "check": "migration matches pinned HP-MVP-SQL-DELIVERY",
+      "status": "PASS"
+    },
+    {
+      "check": "migration applies",
+      "status": "PASS"
+    },
+    {
+      "check": "all 12 tables owned by migrator",
+      "status": "PASS"
+    },
+    {
+      "check": "exact tenant RLS policies and FORCE",
+      "status": "PASS"
+    },
+    {
+      "check": "trigger and function installed",
+      "status": "PASS"
+    },
+    {
+      "check": "schema owned by migrator",
+      "status": "PASS"
+    },
+    {
+      "check": "fence function owned by migrator",
+      "status": "PASS"
+    },
+    {
+      "check": "roles cannot bypass RLS or inherit purge",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app not table owner",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app no DDL",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app schema USAGE only",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cannot execute fence function directly",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own tenant read",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app other tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app unset tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant update rejected destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant update rejected connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant update rejected attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant update rejected inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app own row outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app foreign row hidden outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant update rejected outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant destination_connections MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant connection_secrets MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_lineage MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant attempts MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant effect_observations MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant observation_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant intent_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant inbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant outbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant schema_version MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant credential_budget MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app grant job_index MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cross-tenant insert rejected",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker not table owner",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker no DDL",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker schema USAGE only",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cannot execute fence function directly",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own tenant read",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker other tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker unset tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant update rejected destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant update rejected connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant update rejected attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant update rejected inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker own row outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker foreign row hidden outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant update rejected outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant destination_connections MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant connection_secrets MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_lineage MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant attempts MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant effect_observations MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant observation_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant intent_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant inbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant outbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant schema_version MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant credential_budget MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker grant job_index MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cross-tenant insert rejected",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge not table owner",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge no DDL",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge schema USAGE only",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cannot execute fence function directly",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own tenant read",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge other tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge unset tenant invisible",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant update rejected destination_connections",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant update rejected connection_secrets",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden effect_lineage",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant update rejected attempts",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant update rejected inbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge own row outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge foreign row hidden outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant update rejected outbox",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant destination_connections MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant connection_secrets MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_lineage MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant attempts MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant effect_observations MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant observation_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant intent_content MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant inbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant outbox MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant schema_version MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant credential_budget MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index SELECT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index INSERT",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index UPDATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index DELETE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index TRUNCATE",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index REFERENCES",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index TRIGGER",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge grant job_index MAINTAIN",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_purge cross-tenant insert rejected",
+      "status": "PASS"
+    },
+    {
+      "check": "app cannot read global job index",
+      "status": "PASS"
+    },
+    {
+      "check": "app cannot read credential budget",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app cannot delete",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app immutable effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app immutable observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app immutable intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_app no purge membership",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker cannot delete",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker immutable effect_observations",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker immutable observation_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker immutable intent_content",
+      "status": "PASS"
+    },
+    {
+      "check": "hp_delivery_worker no purge membership",
+      "status": "PASS"
+    },
+    {
+      "check": "lineage unique per case/effect",
+      "status": "PASS"
+    },
+    {
+      "check": "attempt command unique",
+      "status": "PASS"
+    },
+    {
+      "check": "inbox message unique",
+      "status": "PASS"
+    },
+    {
+      "check": "outbox message unique",
+      "status": "PASS"
+    },
+    {
+      "check": "KNOWN_NO_EFFECT requires proof",
+      "status": "PASS"
+    },
+    {
+      "check": "KNOWN_NO_EFFECT with proof allowed",
+      "status": "PASS"
+    },
+    {
+      "check": "dispatch sets permanent fence",
+      "status": "PASS"
+    },
+    {
+      "check": "fence cannot clear",
+      "status": "PASS"
+    },
+    {
+      "check": "DISPATCHING cannot reset",
+      "status": "PASS"
+    },
+    {
+      "check": "AMBIGUOUS cannot reset",
+      "status": "PASS"
+    },
+    {
+      "check": "RESULT_ID_OBSERVED cannot reset",
+      "status": "PASS"
+    },
+    {
+      "check": "TARGET_OBSERVED cannot reset",
+      "status": "PASS"
+    },
+    {
+      "check": "lineage identity immutable",
+      "status": "PASS"
+    }
+  ],
+  "limits": [
+    "isolated SQL only",
+    "no external provider",
+    "RLS is not user authorization",
+    "no deployment or full revocation protocol"
+  ]
+}

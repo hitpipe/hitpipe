@@ -1,0 +1,23 @@
+{
+  "subject": "HIT-70",
+  "repository": "hitpipe/hitpipe",
+  "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "main_rechecked": "2026-11-14",
+  "searches": [
+    {"command": "git ls-tree -r --name-only ce771d37505e7770003d0796ae932556d06b7bab services/delivery", "stdout": "", "meaning": "Область services/delivery отсутствует на исходном main."},
+    {"command": "git grep -n -i 'CREATE SCHEMA hp_delivery\\|CREATE TABLE effect_lineage' ce771d37505e7770003d0796ae932556d06b7bab -- ':!docs/labs'", "stdout": "", "exit_code": 1, "meaning": "Соответствующая схема вне исторических учебных материалов не найдена."}
+  ],
+  "historical_source": "docs/labs/pr12/upstream/architecture/formal/sql/delivery.sql",
+  "historical_source_status": "Выведенная учебная очередь; не принятая исполняемая миграция текущего сервиса.",
+  "existing_delivery_tests": "На исходном main отсутствуют, поскольку services/delivery отсутствует. Тесты других сервисов не используются как доказательство Delivery.",
+  "previous_research": "https://hitpipe.atlassian.net/browse/HIT-59?focusedCommentId=11098",
+  "reuse_decision": "HIT-59 — исследование read-only TargetReader/VerifyTarget на исторических PR, а не существующая миграция. Код открытых PR не использован, их текущая готовность не утверждается.",
+  "architecture_registry": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+  "sql_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+  "sql_section": "HP-MVP-SQL-DELIVERY",
+  "sql_source_sha256_lf": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+  "sql_changes": [],
+  "stack_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+  "stack_materials": "hitpipe/stack-artifacts@84249ff3ba611358232294c46f6022f030ea223d",
+  "scope": "Только SQL-схема Delivery, изолированный PostgreSQL и код/доказательства в PRIMARY. Рабочие базы, provider IO, другие сервисы и старые PR не изменены."
+}
