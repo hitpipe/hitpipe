@@ -144,6 +144,16 @@ func TestRecordCommitRepeatConflictAndReconnect(t *testing.T) {
 	next.WorkspaceID = ws2
 	apply(t, next)
 	counts(t, ws2, 1, 1, 1)
+	next.WorkspaceID = ws
+	next.SessionID = "cs_synthetic"
+	next.MessageID, _ = newID()
+	next.Live = true
+	apply(t, next)
+	next.MessageID, _ = newID()
+	next.Live = false
+	next.AccountID = "acct_other_synthetic"
+	apply(t, next)
+	counts(t, ws, 5, 4, 4)
 }
 func TestRecordRollbackAndCommitFailure(t *testing.T) {
 	for _, mode := range []string{"rollback", "commit_failure", "history_failure"} {
