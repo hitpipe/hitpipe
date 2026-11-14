@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-11-14T22:02:23.934135+00:00",
+  "task": "HIT-80",
+  "contract_revision": 2,
+  "protocol_sha": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "baseline_sha": "30a28b9a904da27c1c1ebd52b0df09846fe38efb",
+  "optimized_tested_code_sha": "f54907c0cb5b95f1f7e389c4bbf5d806cf8b0370",
+  "baseline_production_identical_to_main": true,
+  "schema": {
+    "url": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e",
+    "regeneration_and_clean_diff": "supplemental/commands.json steps2,3"
+  },
+  "financial_application_dependencies_ci_unchanged": "supplemental/commands.json step5",
+  "production_changes": [
+    "services/processing/internal/adapters/intake/sourcefacts/projection.go",
+    "services/processing/internal/adapters/intake/sourcefacts/schema_generated.go"
+  ],
+  "support_changes": [
+    "services/processing/tools/sourcefacts/generate.py",
+    "services/processing/internal/adapters/intake/sourcefacts/measurement_test.go",
+    "services/processing/tools/sourcefacts/measure.py",
+    "services/processing/tools/sourcefacts/compare.py"
+  ],
+  "reused_original_tests": "projection_test.go unchanged; required/null/wrong shape/scalars/duplicate/case/scope/provenance/ownership/composition",
+  "new_test_difference": "The benchmark and differential workload are identical on old/new; optimized commit additionally has a parallel shared-regexp and returned-pointer isolation race regression. It is excluded from benchmark and corpus-only commands.",
+  "omitted_local_executables": {
+    "baseline": "c8bc91f956f3820ce05cd4e90ed585f9452621b94146c023cd8c34ad48342da5",
+    "optimized": "d7c2720cfc10117cf06435d5179de5eda019f241987e2972fb11bb8ef6e2e770"
+  },
+  "omission_reason": "Test executables are rebuildable from exact source SHA with go test -c; retained locally, not checked into source control. Profiles, all stdout/stderr and commands are published.",
+  "postgres": "No PostgreSQL code/tests on this main-based slice; approved18.7 patch does not require unrelated SQL qualification.",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}

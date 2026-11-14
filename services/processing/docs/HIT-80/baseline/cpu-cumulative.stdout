@@ -1,0 +1,48 @@
+File: sourcefacts.test
+Type: cpu
+Time: 2026-11-15 00:58:04 MSK
+Duration: 3.96s, Total samples = 3.57s (90.18%)
+Showing nodes accounting for 3.02s, 84.59% of 3.57s total
+Dropped 108 nodes (cum <= 0.02s)
+Showing top 40 nodes out of 106
+      flat  flat%   sum%        cum   cum%
+         0     0%     0%      3.09s 86.55%  runtime.systemstack
+     2.74s 76.75% 76.75%      2.74s 76.75%  runtime.kevent
+         0     0% 76.75%      2.74s 76.75%  runtime.netpoll
+         0     0% 76.75%      2.74s 76.75%  runtime.startTheWorldWithSema
+         0     0% 76.75%      1.43s 40.06%  runtime.gcStart.func4
+         0     0% 76.75%      1.31s 36.69%  runtime.gcMarkTermination.func3
+         0     0% 76.75%      0.54s 15.13%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.BenchmarkDecode.func1
+         0     0% 76.75%      0.54s 15.13%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.Decode
+         0     0% 76.75%      0.54s 15.13%  testing.(*B).launch
+         0     0% 76.75%      0.54s 15.13%  testing.(*B).runN
+     0.01s  0.28% 77.03%      0.37s 10.36%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.decodeFields
+         0     0% 77.03%      0.23s  6.44%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.fieldRule.valid
+         0     0% 77.03%      0.23s  6.44%  runtime.(*mheap).alloc.func1
+         0     0% 77.03%      0.23s  6.44%  runtime.(*mheap).allocSpan
+     0.23s  6.44% 83.47%      0.23s  6.44%  runtime.madvise
+         0     0% 83.47%      0.23s  6.44%  runtime.sysUsed (inline)
+         0     0% 83.47%      0.23s  6.44%  runtime.sysUsedOS (inline)
+         0     0% 83.47%      0.16s  4.48%  runtime.mallocgc
+         0     0% 83.47%      0.14s  3.92%  encoding/json/v2.Unmarshal
+         0     0% 83.47%      0.12s  3.36%  encoding/json/v2.unmarshalDecode
+         0     0% 83.47%      0.12s  3.36%  regexp.Compile (inline)
+         0     0% 83.47%      0.12s  3.36%  regexp.MustCompile
+         0     0% 83.47%      0.12s  3.36%  regexp.compile
+         0     0% 83.47%      0.11s  3.08%  encoding/json.Unmarshal (inline)
+         0     0% 83.47%      0.07s  1.96%  regexp.compileOnePass
+     0.01s  0.28% 83.75%      0.07s  1.96%  runtime.growslice
+         0     0% 83.75%      0.06s  1.68%  encoding/json.Marshal (inline)
+         0     0% 83.75%      0.06s  1.68%  encoding/json/v2.Marshal
+         0     0% 83.75%      0.06s  1.68%  encoding/json/v2.makeMapArshaler.func2
+         0     0% 83.75%      0.06s  1.68%  encoding/json/v2.makeStructArshaler.func3
+         0     0% 83.75%      0.06s  1.68%  encoding/json/v2.marshalEncode
+         0     0% 83.75%      0.06s  1.68%  runtime.wbBufFlush
+         0     0% 83.75%      0.06s  1.68%  runtime.wbBufFlush.func1
+     0.01s  0.28% 84.03%      0.06s  1.68%  runtime.wbBufFlush1
+         0     0% 84.03%      0.05s  1.40%  regexp.makeOnePass
+         0     0% 84.03%      0.05s  1.40%  runtime.mProf_Malloc
+     0.02s  0.56% 84.59%      0.05s  1.40%  runtime.mallocgcTinySC2
+         0     0% 84.59%      0.05s  1.40%  runtime.profilealloc
+         0     0% 84.59%      0.04s  1.12%  encoding/json.(*Decoder).Decode
+         0     0% 84.59%      0.04s  1.12%  github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts.integer
