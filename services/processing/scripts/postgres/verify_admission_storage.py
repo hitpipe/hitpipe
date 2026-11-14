@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""HIT-78 private storage qualification, reusing isolated HIT-76 PG lifecycle.
-No existing database/DSN is accepted. Not an activation-boundary qualification.
+"""HIT-78 durable admission qualification, reusing isolated HIT-76 PG lifecycle.
+No existing database/DSN is accepted. Includes Lead decision 12171 activation-boundary scenarios.
 """
 import argparse
 import hashlib
@@ -43,7 +43,7 @@ class Run(verify.Run):
   finally:
    self.binary_dir.cleanup()
   p=self.output/'summary.json';s=json.loads(p.read_text())
-  s['scope']='HIT-76 migration regression plus HIT-78 PRIVATE storage on real isolated PostgreSQL; host Go race/vet. Linux test binary CGO=0, no race there. No public admission, authority/binding or activation-boundary qualification.'
+  s['scope']='HIT-76 migration regression plus HIT-78 local admission and storage on real isolated PostgreSQL; host Go race/vet. Linux test binary CGO=0, no race there. Established caller/binding context is a synthetic composition input, not runtime IAM/Intake qualification.'
   s['task']='HIT-78'
   p.write_text(json.dumps(s,indent=2)+'\n')
 

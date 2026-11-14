@@ -4,17 +4,16 @@ package postgres
 import (
 	"context"
 	"crypto/rand"
-	"errors"
 	"fmt"
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
 	"github.com/jackc/pgx/v5"
 )
 
-var errConflict = errors.New("message ID digest conflict")
+var errConflict = admission.ErrConflict
 
-// recordResult is available only inside this adapter. No public admission API is
-// exposed until source binding/authority and Session.created are resolved.
+// recordResult is staged, private state. Only Store.Accept may acknowledge it
+// after successful commit and checks of the established context/local operation.
 type recordResult struct{ Disposition, RecordID string }
 
 func newID() (string, error) {
