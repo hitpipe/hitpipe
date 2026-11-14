@@ -1,0 +1,37 @@
+{
+  "subject": "HIT-70",
+  "materialized_result": "Исполняемая миграция HP-MVP-SQL-DELIVERY без изменения принятого SQL и воспроизводимые изолированные проверки PostgreSQL 18.6.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/README.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/migrations/001_delivery.sql",
+    "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/tests/check_schema.py",
+    "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/README.md",
+    "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/evidence/source-audit.json",
+    "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/evidence/postgresql.json"
+  ],
+  "verification": {
+    "code_commit": "ff160a2ebdaa21a43d89ac5c352a2430b0b46edc",
+    "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "command": "py -3 services/delivery/tests/check_schema.py --report services/delivery/evidence/postgresql.json",
+    "exit_code": 0,
+    "checks_passed": 414,
+    "source_audit": "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/evidence/source-audit.json",
+    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/86180f6f08ad8f02712ccb73392626bc3e230f0c/services/delivery/evidence/postgresql.json",
+    "coverage": [
+      "12 таблиц, владелец, функция, триггер и 9 FORCE RLS policies",
+      "RLS всех tenant-таблиц для app/worker/purge, отрицательные записи, отделённый migrator",
+      "8 SQL-привилегий на каждой таблице, права схемы и функции",
+      "уникальность lineage/command/inbox/outbox; KNOWN_NO_EFFECT требует proof",
+      "неизменность identity/fence; возможный эффект нельзя вернуть в PREPARED"
+    ],
+    "existing_checks": "На исходном main services/delivery отсутствует; существующих применимых проверок Delivery нет.",
+    "environment": "Windows, Python 3.12, Docker; PostgreSQL 18.6 linux/amd64 pinned digest. Временный контейнер --network none, без ports/host volumes, синтетические данные."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Только изолированное SQL-доказательство; RLS не заменяет авторизацию пользователя и проверку scope.",
+    "Не проверены ClickUp, сетевой путь, полный протокол отзыва, файловое хранилище payload и рабочее развёртывание.",
+    "Открытые исторические PR не использованы и не изменены.",
+    "Регистрация Project OS и готовность к независимому ревью устанавливаются отдельными официальными ответами сервиса."
+  ]
+}
