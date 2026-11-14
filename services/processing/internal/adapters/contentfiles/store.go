@@ -197,7 +197,7 @@ func (s *Store) read(id string) (header, []byte, error) {
 	return h, b, nil
 }
 func (s *Store) Read(ctx context.Context, ref preparecase.Ref, now time.Time) ([]byte, error) {
-	if ctx == nil || ctx.Err() != nil || now.IsZero() {
+	if ctx == nil || ctx.Err() != nil || now.IsZero() || !idPattern.MatchString(ref.ID) {
 		return nil, preparecase.ErrContent
 	}
 	h, b, e := s.read(ref.ID)

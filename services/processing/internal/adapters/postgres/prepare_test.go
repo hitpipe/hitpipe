@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sync"
 	"testing"
@@ -584,4 +585,66 @@ func TestPreparationContentAvailabilityAndGuards(t *testing.T) {
 			}
 		})
 	}
+}
+
+type exitAfterSQLCommit struct{ preparecase.Repository }
+
+func (e exitAfterSQLCommit) Commit(ctx context.Context, c preparecase.Case, d preparecase.Decision, now time.Time) (preparecase.Result, error) {
+	r, err := e.Repository.Commit(ctx, c, d, now)
+	if err == nil && r.MessageID != "" {
+		os.Exit(23)
+	}
+	return r, err
+}
+func TestPreparationProcessCrashAfterSQLCommit(t *testing.T) {
+	if os.Getenv("HIT79_PREPARE_HELPER") == "1" {
+		root := os.Getenv("HIT79_FILE_ROOT")
+		files, e := contentfiles.New(root)
+		if e != nil {
+			os.Exit(41)
+		}
+		request := preparecase.Request{WorkspaceID: os.Getenv("HIT79_WORKSPACE"), CaseID: os.Getenv("HIT79_CASE"), ExpectedRevision: 1, Epoch: 7}
+		service := preparecase.Service{Repository: exitAfterSQLCommit{DecisionStore{connect(t), files}}, Content: files, Readers: fixtureReaders{}, Renderer: intent.Renderer{}, Boundary: &testBoundary{open: true, epoch: 7}, Clock: testClock{time.Now}}
+		_, _ = service.Prepare(ctx, request)
+		os.Exit(42)
+	}
+	f := prepared(t, []string{})
+	exe, e := os.Executable()
+	if e != nil {
+		t.Fatal(e)
+	}
+	command := exec.Command(exe, "-test.run=^TestPreparationProcessCrashAfterSQLCommit$")
+	command.Env = append(os.Environ(), "HIT79_PREPARE_HELPER=1", "HIT79_FILE_ROOT="+f.path, "HIT79_WORKSPACE="+f.request.WorkspaceID, "HIT79_CASE="+f.request.CaseID)
+	output, e := command.CombinedOutput()
+	var exit *exec.ExitError
+	if !errors.As(e, &exit) || exit.ExitCode() != 23 {
+		t.Fatalf("commit/crash not reached: %v %s", e, output)
+	}
+	decisionCounts(t, f.request.WorkspaceID, 1, 2, 1)
+	reopened, e := contentfiles.New(f.path)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer reopened.Close()
+	repository := DecisionStore{connect(t), reopened}
+	saved, e := repository.Load(ctx, f.request)
+	if e != nil || saved.OutboxRef == nil {
+		t.Fatal("durable outbox lost", e)
+	}
+	old, e := reopened.Read(ctx, *saved.OutboxRef, time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	f.service.Repository = repository
+	f.service.Content = reopened
+	f.service.Readers = fixtureReaders{after: func() { t.Error("restart created a new evaluation") }}
+	result, e := f.service.Prepare(ctx, f.request)
+	if e != nil || result.MessageID != saved.MessageID || result.Revision != saved.Revision {
+		t.Fatal("restart changed intent", result, e)
+	}
+	again, e := reopened.Read(ctx, *saved.OutboxRef, time.Now())
+	if e != nil || string(old) != string(again) {
+		t.Fatal("restart mutated payload", e)
+	}
+	decisionCounts(t, f.request.WorkspaceID, 1, 2, 1)
 }

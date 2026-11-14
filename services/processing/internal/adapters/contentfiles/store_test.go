@@ -190,3 +190,49 @@ func TestContentProcessRestart(t *testing.T) {
 		t.Fatal("process restart lost content", e)
 	}
 }
+
+func TestCrashBetweenFileSteps(t *testing.T) {
+	if step := os.Getenv("HIT79_CRASH_STEP"); step != "" {
+		s, e := New(os.Getenv("HIT79_FILE_ROOT"))
+		if e != nil {
+			os.Exit(41)
+		}
+		s.Step = func(n string) error {
+			if n == step {
+				os.Exit(23)
+			}
+			return nil
+		}
+		now := time.Now()
+		_, _ = s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", now.Add(time.Minute), now)
+		os.Exit(42)
+	}
+	for _, step := range []string{"write", "file-fsync", "rename", "directory-fsync"} {
+		t.Run(step, func(t *testing.T) {
+			p := private(t)
+			exe, e := os.Executable()
+			if e != nil {
+				t.Fatal(e)
+			}
+			cmd := exec.Command(exe, "-test.run=^TestCrashBetweenFileSteps$")
+			cmd.Env = append(os.Environ(), "HIT79_CRASH_STEP="+step, "HIT79_FILE_ROOT="+p)
+			e = cmd.Run()
+			var exit *exec.ExitError
+			if !errors.As(e, &exit) || exit.ExitCode() != 23 {
+				t.Fatal("target process crash not reached", e)
+			}
+			files, e := os.ReadDir(p)
+			if e != nil || len(files) != 1 {
+				t.Fatal("unacknowledged crash file missing", files, e)
+			}
+			s := open(t, p)
+			if e = s.PurgeExpired(time.Now().Add(2 * time.Minute)); e != nil {
+				t.Fatal(e)
+			}
+			files, _ = os.ReadDir(p)
+			if len(files) != 0 {
+				t.Fatal("orphan survived hard expiry")
+			}
+		})
+	}
+}
