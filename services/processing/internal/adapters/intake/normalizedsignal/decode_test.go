@@ -1,4 +1,4 @@
-package admission
+package normalizedsignal
 
 import (
 	"crypto/sha256"
@@ -86,3 +86,5 @@ func TestRejectInvalidSignal(t *testing.T) {
 		})
 	}
 }
+
+func Decode(raw []byte) (Signal, error) { return (Decoder{}).Decode(raw) }

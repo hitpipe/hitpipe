@@ -3,7 +3,10 @@ package admission
 import (
 	"context"
 	"errors"
+	"regexp"
 )
+
+var uuidPattern = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
 
 var ErrNotAuthorized = errors.New("established admission context required")
 var ErrNotAdmissible = errors.New("operation does not permit new admission")
@@ -31,14 +34,19 @@ func (c EstablishedContext) Check(s Signal) error {
 // Receipt is returned only after a successful durable commit. Revision is omitted
 // because the accepted inbox schema does not retain an original result revision.
 type Receipt struct{ MessageID, Disposition, RecordID string }
+type Decoder interface{ Decode([]byte) (Signal, error) }
+
 type Store interface {
 	Accept(context.Context, Signal, EstablishedContext) (Receipt, error)
 }
 
 // Admit has no network or authority discovery side effects. The supplied context
 // is a mandatory trusted composition input; unknown authority never becomes true.
-func Admit(ctx context.Context, raw []byte, established EstablishedContext, store Store) (Receipt, error) {
-	s, e := Decode(raw)
+func Admit(ctx context.Context, raw []byte, established EstablishedContext, decoder Decoder, store Store) (Receipt, error) {
+	if decoder == nil {
+		return Receipt{}, ErrInvalidSignal
+	}
+	s, e := decoder.Decode(raw)
 	if e != nil {
 		return Receipt{}, e
 	}

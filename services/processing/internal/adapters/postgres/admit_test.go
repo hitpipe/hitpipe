@@ -10,6 +10,7 @@ import (
 
 	"context"
 	"github.com/gowebpki/jcs"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/normalizedsignal"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
 	"github.com/jackc/pgx/v5"
 )
@@ -46,7 +47,7 @@ func TestAdmissionActivationBoundary(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ws := workspace(t)
 			raw := wire(t, ws, tc.created, tc.event)
-			r, e := admission.Admit(ctx, raw, established(ws), Store{connect(t)})
+			r, e := admission.Admit(ctx, raw, established(ws), normalizedsignal.Decoder{}, Store{connect(t)})
 			if tc.ok {
 				if e != nil || r.Disposition != "APPLIED" {
 					t.Fatalf("%v %v", r, e)
@@ -129,7 +130,7 @@ func TestAdmissionRejectsContextAndLocalState(t *testing.T) {
 					t.Fatal(e)
 				}
 			}
-			r, e := admission.Admit(ctx, raw, c, Store{db})
+			r, e := admission.Admit(ctx, raw, c, normalizedsignal.Decoder{}, Store{db})
 			if e == nil || r != (admission.Receipt{}) {
 				t.Fatalf("rejected input acknowledged: %v %v", r, e)
 			}
@@ -141,7 +142,7 @@ func TestAdmissionReplayAfterLifecycleAndNewConnection(t *testing.T) {
 	ws := workspace(t)
 	raw := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.completed")
 	c := established(ws)
-	first, e := admission.Admit(ctx, raw, c, Store{connect(t)})
+	first, e := admission.Admit(ctx, raw, c, normalizedsignal.Decoder{}, Store{connect(t)})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -153,7 +154,7 @@ func TestAdmissionReplayAfterLifecycleAndNewConnection(t *testing.T) {
 	if e = tx.Commit(ctx); e != nil {
 		t.Fatal(e)
 	}
-	again, e := admission.Admit(ctx, raw, c, Store{connect(t)})
+	again, e := admission.Admit(ctx, raw, c, normalizedsignal.Decoder{}, Store{connect(t)})
 	if e != nil || first != again {
 		t.Fatalf("replay: %v %v", again, e)
 	}
@@ -187,7 +188,7 @@ func (b badCommitTx) Commit(ctx context.Context) error {
 func TestAdmissionCommitFailureNeverAcknowledges(t *testing.T) {
 	ws := workspace(t)
 	raw := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.completed")
-	r, e := admission.Admit(ctx, raw, established(ws), Store{badCommitDB{connect(t), ws}})
+	r, e := admission.Admit(ctx, raw, established(ws), normalizedsignal.Decoder{}, Store{badCommitDB{connect(t), ws}})
 	if e == nil || r != (admission.Receipt{}) {
 		t.Fatal("failed commit acknowledged")
 	}
@@ -197,7 +198,7 @@ func TestAdmissionTwoSignalsOnePinnedCase(t *testing.T) {
 	ws := workspace(t)
 	c := established(ws)
 	raw := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.completed")
-	first, e := admission.Admit(ctx, raw, c, Store{connect(t)})
+	first, e := admission.Admit(ctx, raw, c, normalizedsignal.Decoder{}, Store{connect(t)})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -210,7 +211,7 @@ func TestAdmissionTwoSignalsOnePinnedCase(t *testing.T) {
 		t.Fatal(e)
 	}
 	c.ExpectedRevision = 2
-	second, e := admission.Admit(ctx, wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.async_payment_succeeded"), c, Store{connect(t)})
+	second, e := admission.Admit(ctx, wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.async_payment_succeeded"), c, normalizedsignal.Decoder{}, Store{connect(t)})
 	if e != nil || second.RecordID != first.RecordID {
 		t.Fatalf("identity split: %v", e)
 	}
@@ -242,7 +243,7 @@ func TestAdmissionConcurrentAndDigestConflict(t *testing.T) {
 		go func(raw []byte, db *pgx.Conn) {
 			defer wg.Done()
 			<-start
-			r, e := admission.Admit(ctx, raw, c, Store{db})
+			r, e := admission.Admit(ctx, raw, c, normalizedsignal.Decoder{}, Store{db})
 			results <- r
 			errs <- e
 		}(raw, []*pgx.Conn{db1, db2}[i])
@@ -271,7 +272,7 @@ func TestAdmissionConcurrentAndDigestConflict(t *testing.T) {
 	sum := sha256.Sum256(canonical)
 	m["message_digest"] = "sha256:" + hex.EncodeToString(sum[:])
 	conflict, _ := json.Marshal(m)
-	r, e := admission.Admit(ctx, conflict, c, Store{connect(t)})
+	r, e := admission.Admit(ctx, conflict, c, normalizedsignal.Decoder{}, Store{connect(t)})
 	if !errors.Is(e, admission.ErrConflict) || r != (admission.Receipt{}) {
 		t.Fatalf("conflict acknowledged %v %v", r, e)
 	}
