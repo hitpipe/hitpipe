@@ -1,0 +1,22 @@
+TASK=HIT-51
+CHECK=C1_CLI_SAFE_DIAGNOSTICS
+DATE_MSK=2026-10-19T16:35:56+03:00
+CWD=/Users/nic_piter/code/hitpipe
+SHA=c969aa5d3e8829ecdd61ffaa06524411bc52eeb0
+GO=go version go1.27.2 darwin/arm64
+DIST=/tmp/hitpipe-c1-dist.Y5IJU3
+
+[1] start without input
+module=intake-contractcheck status=READY reason=startup version=pr12 commit=c969aa5d3e8829ecdd61ffaa06524411bc52eeb0 dirty=false buildmode=release
+[2] version
+module=intake-contractcheck version=pr12 commit=c969aa5d3e8829ecdd61ffaa06524411bc52eeb0 dirty=false buildmode=release
+[3] verified fixture
+{"module":"intake-contractcheck","status":"VERIFIED","reason":"verified","version":"stripe-signature-v1","commit":"c969aa5d3e8829ecdd61ffaa06524411bc52eeb0","dirty":"false","buildmode":"release"}
+[4] tampered fixture expected exit=1
+{"module":"intake-contractcheck","status":"REJECTED","reason":"signature_mismatch","version":"stripe-signature-v1","commit":"c969aa5d3e8829ecdd61ffaa06524411bc52eeb0","dirty":"false","buildmode":"release"}
+tampered_exit=1
+[5] invalid config expected exit=2
+module=intake-contractcheck status=REJECTED reason=format_invalid version=stripe-signature-v1 commit=c969aa5d3e8829ecdd61ffaa06524411bc52eeb0 dirty=false buildmode=release
+invalid_config_exit=2
+[6] safe output scan
+RESULT=PASS

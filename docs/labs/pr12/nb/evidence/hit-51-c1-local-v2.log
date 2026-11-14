@@ -1,0 +1,148 @@
+TASK=HIT-51
+MODE=MANUAL_LAB_PR12
+DATE_MSK=2026-10-19T16:35:31+03:00
+UTC=2026-10-19T13:35:31+00:00
+CWD=/Users/nic_piter/code/hitpipe
+SHA=9659c39ad0010e1329bfe3e3bc92c9edd84982bb
+GIT=git version 2.51.2
+GO=go version go1.27.2 darwin/arm64
+PYTHON=Python 3.14.6
+
+[1] gofmt check
+[2] wrapper validate
++ /opt/homebrew/opt/python@3.14/bin/python3.14 /Users/nic_piter/code/hitpipe/tools/pr12/validate_bundle.py
+{"status": "PORTABLE_PACKAGE_VALIDATION_PASS", "verified_files": 205, "features": 5, "tasks": 41, "criteria_links": 145, "templates": 4, "student_work": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+{"status": "BOOTSTRAP_VALIDATION_PASS", "verified_frozen_files": 6, "student_implementation": "NOT_ASSESSED", "human_gates": "NOT_ASSESSED"}
+[3] wrapper check with race
++ go version
++ go vet ./...
++ go test -count=1 -json -coverprofile=/Users/nic_piter/code/hitpipe/.pr12-build/intake.cover ./...
+{"Time":"2026-10-19T16:35:32.281148+03:00","Action":"start","Package":"github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck"}
+{"Time":"2026-10-19T16:35:32.362754+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck","Output":"\tgithub.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck\t\tcoverage: 0.0% of statements\n"}
+{"Time":"2026-10-19T16:35:32.429672+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck","Elapsed":0.149}
+{"Time":"2026-10-19T16:35:32.660604+03:00","Action":"start","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature"}
+{"Time":"2026-10-19T16:35:32.927156+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureKnownVector"}
+{"Time":"2026-10-19T16:35:32.927204+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureKnownVector","Output":"=== RUN   TestSignatureKnownVector\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927223+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureKnownVector","Output":"--- PASS: TestSignatureKnownVector (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927233+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureKnownVector","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.92724+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance"}
+{"Time":"2026-10-19T16:35:32.927242+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance","Output":"=== RUN   TestSignatureRawBytesAndTolerance\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927245+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past299"}
+{"Time":"2026-10-19T16:35:32.927247+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past299","Output":"=== RUN   TestSignatureRawBytesAndTolerance/past299\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927252+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past299","Output":"--- PASS: TestSignatureRawBytesAndTolerance/past299 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927259+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past299","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927265+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past300"}
+{"Time":"2026-10-19T16:35:32.927266+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past300","Output":"=== RUN   TestSignatureRawBytesAndTolerance/past300\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.92727+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past300","Output":"--- PASS: TestSignatureRawBytesAndTolerance/past300 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927271+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past300","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927273+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past301"}
+{"Time":"2026-10-19T16:35:32.927274+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past301","Output":"=== RUN   TestSignatureRawBytesAndTolerance/past301\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927276+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past301","Output":"--- PASS: TestSignatureRawBytesAndTolerance/past301 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927278+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/past301","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927279+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future299"}
+{"Time":"2026-10-19T16:35:32.927281+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future299","Output":"=== RUN   TestSignatureRawBytesAndTolerance/future299\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927289+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future299","Output":"--- PASS: TestSignatureRawBytesAndTolerance/future299 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.92729+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future299","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927292+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future300"}
+{"Time":"2026-10-19T16:35:32.927293+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future300","Output":"=== RUN   TestSignatureRawBytesAndTolerance/future300\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927295+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future300","Output":"--- PASS: TestSignatureRawBytesAndTolerance/future300 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927296+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future300","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927304+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future301"}
+{"Time":"2026-10-19T16:35:32.927306+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future301","Output":"=== RUN   TestSignatureRawBytesAndTolerance/future301\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927308+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future301","Output":"--- PASS: TestSignatureRawBytesAndTolerance/future301 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.92731+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance/future301","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927312+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance","Output":"--- PASS: TestSignatureRawBytesAndTolerance (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927313+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRawBytesAndTolerance","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927315+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders"}
+{"Time":"2026-10-19T16:35:32.927316+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders","Output":"=== RUN   TestSignatureRejectsMalformedHeaders\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927323+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_timestamp"}
+{"Time":"2026-10-19T16:35:32.927326+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_timestamp","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/missing_timestamp\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927329+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_timestamp","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/missing_timestamp (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927331+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_timestamp","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927334+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_v1"}
+{"Time":"2026-10-19T16:35:32.927335+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_v1","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/missing_v1\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927346+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_v1","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/missing_v1 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927353+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/missing_v1","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927356+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/empty_v1"}
+{"Time":"2026-10-19T16:35:32.927357+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/empty_v1","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/empty_v1\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.92736+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/empty_v1","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/empty_v1 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927361+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/empty_v1","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927363+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/conflicting_timestamp"}
+{"Time":"2026-10-19T16:35:32.927364+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/conflicting_timestamp","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/conflicting_timestamp\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927368+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/conflicting_timestamp","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/conflicting_timestamp (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927375+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/conflicting_timestamp","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927377+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/v0_only"}
+{"Time":"2026-10-19T16:35:32.927378+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/v0_only","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/v0_only\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927381+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/v0_only","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/v0_only (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927382+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/v0_only","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927384+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/unknown_key"}
+{"Time":"2026-10-19T16:35:32.927385+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/unknown_key","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/unknown_key\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927387+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/unknown_key","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/unknown_key (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927388+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/unknown_key","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.92739+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/malformed_token"}
+{"Time":"2026-10-19T16:35:32.927391+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/malformed_token","Output":"=== RUN   TestSignatureRejectsMalformedHeaders/malformed_token\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927393+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/malformed_token","Output":"--- PASS: TestSignatureRejectsMalformedHeaders/malformed_token (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927395+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders/malformed_token","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927396+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders","Output":"--- PASS: TestSignatureRejectsMalformedHeaders (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927398+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureRejectsMalformedHeaders","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927399+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe"}
+{"Time":"2026-10-19T16:35:32.9274+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe","Output":"=== RUN   TestSignatureFailsClosedAndSafe\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927402+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/empty_body"}
+{"Time":"2026-10-19T16:35:32.927403+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/empty_body","Output":"=== RUN   TestSignatureFailsClosedAndSafe/empty_body\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927427+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/empty_body","Output":"--- PASS: TestSignatureFailsClosedAndSafe/empty_body (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927431+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/empty_body","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927433+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_secret"}
+{"Time":"2026-10-19T16:35:32.927435+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_secret","Output":"=== RUN   TestSignatureFailsClosedAndSafe/missing_secret\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927436+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_secret","Output":"--- PASS: TestSignatureFailsClosedAndSafe/missing_secret (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927438+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_secret","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.92744+03:00","Action":"run","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_clock"}
+{"Time":"2026-10-19T16:35:32.927441+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_clock","Output":"=== RUN   TestSignatureFailsClosedAndSafe/missing_clock\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927452+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_clock","Output":"--- PASS: TestSignatureFailsClosedAndSafe/missing_clock (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927453+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe/missing_clock","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927455+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe","Output":"--- PASS: TestSignatureFailsClosedAndSafe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.927457+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Test":"TestSignatureFailsClosedAndSafe","Elapsed":0}
+{"Time":"2026-10-19T16:35:32.927458+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-19T16:35:32.928453+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Output":"coverage: 87.7% of statements\n"}
+{"Time":"2026-10-19T16:35:32.929028+03:00","Action":"output","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Output":"ok  \tgithub.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature\t0.268s\tcoverage: 87.7% of statements\n"}
+{"Time":"2026-10-19T16:35:32.929036+03:00","Action":"pass","Package":"github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature","Elapsed":0.268}
++ go test -race -count=1 ./...
+?   	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature	1.265s
+[4] wrapper smoke dev/release outside checkout
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=9659c39ad0010e1329bfe3e3bc92c9edd84982bb -X main.dirty=true -X main.buildMode=dev -gcflags=all=-N -l -o /Users/nic_piter/code/hitpipe/.pr12-build/intake/dev/intake-contractcheck ./cmd/intake-contractcheck
++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-vxzyamnc/intake-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-vxzyamnc/intake-contractcheck --fixture /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-vxzyamnc/positive_fixture.json --format json
+{"component": "intake", "mode": "dev", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=9659c39ad0010e1329bfe3e3bc92c9edd84982bb -X main.dirty=true -X main.buildMode=release -trimpath -o /Users/nic_piter/code/hitpipe/.pr12-build/intake/release/intake-contractcheck ./cmd/intake-contractcheck
++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-c57t9m7b/intake-contractcheck --version
++ git rev-parse --short HEAD
++ /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-c57t9m7b/intake-contractcheck --fixture /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/pr12-outside-checkout-c57t9m7b/positive_fixture.json --format json
+{"component": "intake", "mode": "release", "diagnostic_smoke": "PASS", "scope": "declared synthetic fixtures only"}
+[5] wrapper inspect release build
++ go version
++ git rev-parse HEAD
++ git status --porcelain
++ go build -ldflags -X main.version=pr12 -X main.commit=9659c39ad0010e1329bfe3e3bc92c9edd84982bb -X main.dirty=true -X main.buildMode=release -trimpath -o /Users/nic_piter/code/hitpipe/.pr12-build/intake/release/intake-contractcheck ./cmd/intake-contractcheck
++ go version -m /Users/nic_piter/code/hitpipe/.pr12-build/intake/release/intake-contractcheck
+/Users/nic_piter/code/hitpipe/.pr12-build/intake/release/intake-contractcheck: go1.27.2
+	path	github.com/hitpipe/hitpipe/services/intake/cmd/intake-contractcheck
+	mod	github.com/hitpipe/hitpipe/services/intake	(devel)	
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-trimpath=true
+	build	CGO_ENABLED=1
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
+	build	vcs=git
+	build	vcs.revision=9659c39ad0010e1329bfe3e3bc92c9edd84982bb
+	build	vcs.time=2026-10-19T13:32:51Z
+	build	vcs.modified=true
+readelf NOT_AVAILABLE; install binutils for detailed ELF inspection.
+RESULT=PASS
