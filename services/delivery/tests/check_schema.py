@@ -80,6 +80,8 @@ try:
     for role in ["hp_delivery_app","hp_delivery_worker","hp_delivery_purge"]:
         check(role+" not table owner",lambda role=role:eq(sql(f"SELECT count(*) FROM pg_tables WHERE schemaname='hp_delivery' AND tableowner='{role}'"),"0"))
         check(role+" no DDL",lambda role=role:sql("CREATE TABLE hp_delivery.forbidden(x int)",role,"permission denied"))
+        check(role+" schema USAGE only",lambda role=role:eq(sql(f"SELECT has_schema_privilege('{role}','hp_delivery','USAGE') AND NOT has_schema_privilege('{role}','hp_delivery','CREATE')"),"t"))
+        check(role+" cannot execute fence function directly",lambda role=role:eq(sql(f"SELECT has_function_privilege('{role}','hp_delivery.protect_effect_fence()','EXECUTE')"),"f"))
         check(role+" own tenant read",lambda role=role:eq(sql(connection+f";SET LOCAL ROLE {role};SET LOCAL hp.workspace_id='{W}';SELECT count(*) FROM hp_delivery.destination_connections"),"1"))
         check(role+" other tenant invisible",lambda role=role:eq(sql(connection+f";SET LOCAL ROLE {role};SET LOCAL hp.workspace_id='{OTHER}';SELECT count(*) FROM hp_delivery.destination_connections"),"0"))
         check(role+" unset tenant invisible",lambda role=role:eq(sql(connection+f";SET LOCAL ROLE {role};SELECT count(*) FROM hp_delivery.destination_connections"),"0"))
@@ -100,7 +102,7 @@ try:
             elif table == "credential_budget":
                 allowed = set() if role == "hp_delivery_app" else {"SELECT","INSERT","UPDATE"}
                 if role == "hp_delivery_purge": allowed.add("DELETE")
-            for privilege in ["SELECT","INSERT","UPDATE","DELETE","TRUNCATE","REFERENCES","TRIGGER"]:
+            for privilege in ["SELECT","INSERT","UPDATE","DELETE","TRUNCATE","REFERENCES","TRIGGER","MAINTAIN"]:
                 check(role+" grant "+table+" "+privilege,lambda role=role,table=table,privilege=privilege,allowed=allowed:eq(sql(f"SELECT has_table_privilege('{role}','hp_delivery.{table}','{privilege}')"),"t" if privilege in allowed else "f"))
         check(role+" cross-tenant insert rejected",lambda role=role:sql(f"SET LOCAL hp.workspace_id='{OTHER}';"+connection,role,"row-level security"))
     check("app cannot read global job index",lambda:sql("SELECT * FROM hp_delivery.job_index","hp_delivery_app","permission denied"))
