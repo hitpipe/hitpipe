@@ -1,118 +1,121 @@
-# HIT-78 — local durable admission, prepared for independent review
+# HIT-78 — надёжное локальное принятие NormalizedSignal
 
-Codex по поручению Тимофея Патрушева / Tim1hik. Human consent «Подтверждаю»
-and Jira In Progress verified. This document describes implementation/testing,
-not independent acceptance or Project OS readiness.
+Реализация подготовлена Codex по поручению Тимофея Патрушева / Tim1hik.
+14 ноября по поручению руководителя повторены полные проверки на PostgreSQL 18.7
+и обновлены доказательства. Этот отчёт описывает реализацию и тесты. Проверка
+готовности, независимое ревью и личная приёмка — отдельные следующие шаги.
 
-Accepted base HIT-76: `15e684e1c3f78bb7851bc1d4335c9a9f883f5dc1` (PR45 OPEN).
-Observed main: `ce771d37505e7770003d0796ae932556d06b7bab` does not contain PR45.
-This is a dependent branch targeting `work/HIT-76-processing-postgres`; no merge,
-retarget, force push or change to the accepted SQL is performed.
+## Что сделано и что переиспользовано
 
-## Resolved source-time decision
+Использована схема HIT-76 из `15e684e1c3f78bb7851bc1d4335c9a9f883f5dc1`.
+[PR45](https://github.com/hitpipe/hitpipe/pull/45) открыт; проверенная основная ветка
+`ce771d37505e7770003d0796ae932556d06b7bab` его не содержит.
+[PR50](https://github.com/hitpipe/hitpipe/pull/50) зависит от
+`work/HIT-76-processing-postgres`. Схема заново не реализовывалась:
+SHA256 миграции сохранён — `a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93`.
+Слияние этих PR в основную ветку ещё предстоит.
 
-[Lead decision HIT-78 comment 12171](https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171)
-and [Intake clarification HIT-73 comment 12172](https://hitpipe.atlassian.net/browse/HIT-73?focusedCommentId=12172)
-were read with matching author/updateAuthor Dmitriy Karacheban
-`712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1`. Exact HTML/metadata in
-`lead-decision.json`. This resolves the earlier question, not implementation acceptance.
+Пути изменений HIT-78: `internal/application/admission/`,
+`internal/adapters/postgres/`, `scripts/postgres/verify_admission_storage.py`,
+`go.mod`, `go.sum` и документация Processing.
 
-`source_created_at` is Session.created from signed Event.data.object.created,
-not Event.created or receipt/current time. Processing accepts `Session.created >=
-operations.first_activation_at`. No new wire field, readSourceFacts call or SQL column.
-The original Session creation time is neither overwritten nor synthesized; the
-schema does not store this timestamp in case_identity. Each input is checked against
-first_activation_at; replay does not alter that boundary or any case pin.
+## Принятое правило времени события
 
-| Real PostgreSQL test | Expected | Actual |
-|---|---|---|
-| Session before first activation | reject, no rows/receipt | passed |
-| Session exactly at first activation | admit if other checks pass | passed |
-| Session after first activation | admit if other checks pass | passed |
-| Old Session, late async_payment_succeeded | reject despite late receipt/new event | passed |
+[Решение руководителя 12171](https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171)
+и [уточнение Intake 12172](https://hitpipe.atlassian.net/browse/HIT-73?focusedCommentId=12172)
+сохранены с авторами и метаданными в `lead-decision.json`.
 
-## Composition and transaction boundary
+`source_created_at` — исходное `Session.created` из подписанного
+`Event.data.object.created`, не время Event или получения сообщения.
+Новое дело допускается при `Session.created >= operations.first_activation_at`.
+Новое поле протокола, вызов readSourceFacts и SQL-колонка не добавлены.
+Время Session не подменяется и не синтезируется. Каждый вход проверяется
+относительно первой активации; повтор не меняет эту границу и закреплённые данные.
+На настоящем PostgreSQL проверены до/точно/после активации и старая Session с поздним
+`async_payment_succeeded`: позднее получение события не разрешает старую Session.
 
-Application entry: `admission.Admit(ctx, raw, establishedContext, decoder, store)`.
-Concrete strict Decoder is composed from `internal/adapters/postgres/normalizedsignal`;
-application depends only on its Decoder port, never the JCS package.
-Mandatory EstablishedContext comes from previously verified caller authority,
-installed source binding and accepted operation revision. No defaults/resolver,
-HTTP handler, activation, IAM/Intake authentication or financial decision is added.
-Tests explicitly supply synthetic established context and previously accepted DB state.
-`AuthorityVerified` is a trusted internal composition assertion, never a request field.
-The context cannot be reconstructed from NormalizedSignal; unknown/absent values fail.
+## Границы реализации
 
-`postgres.Store{DB: explicitly configured application-role connection source}`
-checks context again, uses READ COMMITTED + transaction-local workspace RLS,
-locks the operation against lifecycle/CAS changes, checks ACTIVE state/revision,
-selected accepted config and original activation boundary. Config/owner come from DB.
-Strict raw validation occurs in the application entry before invoking the store;
-the Store port accepts an already validated Signal, not raw external input.
+Точка входа — `admission.Admit(ctx, raw, establishedContext, decoder, store)`.
+Декодер из `internal/adapters/postgres/normalizedsignal` подключён через порт
+приложения; приложение не зависит от библиотеки JCS напрямую. Проверенные полномочия
+вызывающего, привязка источника и принятая редакция операции обязательны.
+`AuthorityVerified` — доверенное внутреннее утверждение, не поле запроса.
+Контекст нельзя восстановить из NormalizedSignal или заполнить по умолчанию.
 
-A local transaction stages inbox, unique case identity and minimal safety history.
-A committed message ID+digest returns its original receipt (including after pause);
-different digest conflicts. New messages for a known Session retain case/config/owner
-and revision. Receipt contains message/disposition/record ID; optional revision omitted
-because accepted inbox does not retain original result revision. No result is returned
-on commit error; a lost commit acknowledgment is an error/unknown outcome, not APPLIED.
-A retry resolves through the durable inbox. No retries or external effects here.
+`postgres.Store` повторно проверяет контекст; использует READ COMMITTED,
+транзакционную RLS-изоляцию рабочего пространства и блокировку операции от смены
+состояния/редакции. ACTIVE, конфигурация, владелец и граница первой активации берутся
+из локальной БД. Сырой сигнал проверяется до вызова хранилища.
 
-SQL stores only opaque identifiers, digest and bounded safety codes; no normalized
-payload JSON, Stripe raw payload, business text or history contents are persisted/logged.
+В одной транзакции записываются inbox, уникальная идентичность дела и минимальная
+история безопасности. Повтор message_id с тем же digest возвращает исходную
+квитанцию, в том числе после паузы; другой digest даёт конфликт. Новые сообщения
+известной Session сохраняют дело, конфигурацию, владельца и редакцию. Ошибка commit
+не возвращает APPLIED. Потерянное подтверждение commit означает неизвестный исход;
+повтор разрешается через сохранённый inbox. Внешних эффектов и повторов здесь нет.
 
-## Verification, exact current code
+SQL хранит непрозрачные идентификаторы, digest и ограниченные коды безопасности,
+без содержимого NormalizedSignal, сырого Stripe payload и бизнес-текста.
+Необязательная revision в квитанции опущена: принятый inbox не хранит редакцию
+исходного результата. Принятая SQL-схема не менялась.
 
-Tested source: `79a0407f8d0e1d9f71b4817b50bae44e510013a4`, clean tree.
-Full argv/cwd/time/environment/exit/stdout/stderr/hash records:
-`admission-verification-08/commands.json`; final scope in `summary.json`;
-file digests in `digests.json`, Linux test-binary digest in `test-binary.json`.
+## Полная актуальная проверка на PostgreSQL 18.7
 
-From repository root (requires local Docker):
+Измеренный исходный commit — `fa05c7dfd848ba576d2e9be054c9eb791ac96584`;
+рабочее дерево перед прогоном чистое. Commit с публикацией журналов не выдаётся
+за измеренный исходный код.
+Обновление среды согласовано в [HP-CCR-POSTGRES-20261114](https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=12229)
+и описано в [HP-ADR-010](https://hitpipe.atlassian.net/wiki/spaces/Hitpipe/pages/24608769).
+
+Образ — `postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f`,
+linux/amd64, фактический `server_version_num=180007`.
+Прогон завершён 14 ноября в 13:10 UTC.
+[Компактный протокол](admission-verification-pg187-20261114/verification.json)
+содержит конкретные команды, итоги, ссылки и SHA256 полных исходных файлов.
+Полные argv/cwd/время/коды/stdout/stderr сохранены рядом; `commands.json` не сокращён.
+
+Воспроизведение из корня репозитория с Docker:
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 services/processing/scripts/postgres/verify_admission_storage.py --go /absolute/path/to/pinned/go --output /new/output/directory
 ```
 
-Runner reuses the entire HIT-76 isolated PostgreSQL lifecycle and SQL regressions.
-It accepts no existing DB/DSN, exposes no network ports, uses pinned PostgreSQL18.6
-Linux/arm64 image and private socket, application role without SUPERUSER/BYPASSRLS,
-fsync/full_page_writes/synchronous_commit ON, and removes its container in finally.
-Migration SHA256 remains `a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93`.
+Итог: 95 команд, в том числе 75 SQL-команд; 31 ожидаемый отказ проверен по SQLSTATE.
+Go 1.27.2 linux/amd64: `go test -race -count=1 -v ./...` и `go vet ./...` — успешно.
+Все 11 групп/35 случаев тестов хранилища и принятия отдельно выполнены внутри
+настоящего PostgreSQL без пропусков. Отдельный контейнерный двоичный файл собран
+с CGO=0 и не инструментирован race. Пропуски DB-тестов на хосте не считаются
+их выполнением: они покрыты отдельным настоящим контейнерным прогоном.
 
-Go1.27.2 darwin/arm64: module-wide `go test -race -count=1 -v ./...` and `go vet ./...`
-exit 0. Host PostgreSQL tests skip explicitly; they are separately executed (not
-skipped) as a Go1.27.2 linux/arm64 CGO=0 test binary inside real PG container.
-The Linux DB run is not a Go race run. All required commands exit 0; expected
-SQLSTATE rejection commands and missing-container cleanup probe have verified
-nonzero codes. No claim of crash/power-loss or production deployment qualification.
+Стенд принимает только собственную временную БД, без существующего DSN и сетевых
+портов. Прикладная роль без SUPERUSER/BYPASSRLS; fsync/full_page_writes/
+synchronous_commit включены. Контейнер удалён, результат очистки сохранён.
+Неожиданных ненулевых кодов завершения нет.
 
-| DoD | Concrete verification |
+| Критерий задачи | Конкретное доказательство |
 |---|---|
-| Reuse / scope | source-audit.json; unchanged migration hash; base PR45 explicit |
-| Strict schema/digest | TestCanonicalAndJCS, TestRejectInvalidSignal; full entry rejects malformed wire/missing/invalid time with no rows |
-| Atomicity/no premature APPLIED | TestAdmissionCommitFailureNeverAcknowledges, TestRecordRollbackAndCommitFailure; real deferred constraint commit failure |
-| Replay/conflict | TestAdmissionReplayAfterLifecycleAndNewConnection, TestAdmissionConcurrentAndDigestConflict, TestRecordCommitRepeatConflictAndReconnect |
-| One concurrent Session identity | TestAdmissionConcurrentAndDigestConflict, TestRecordConcurrentIdentityAndMessage; distinct Session/workspace/account/mode isolation |
-| Context/local state/boundary | TestAdmissionRejectsContextAndLocalState, TestAdmissionActivationBoundary, TestAdmissionTwoSignalsOnePinnedCase |
-| New connection/RLS/CAS/regressions | reconnect tests, stale revision test, full HIT-76 SQL regressions + module-wide race/vet |
-| Explicit limitations | composition and limitations in this file and result JSON |
+| Переиспользование HIT-76 и пути изменений | Исходный SHA, сохранённый хеш миграции, пути и зависимость PR45 выше; исходный source-audit.json сохранён |
+| Строгая схема и digest | TestCanonicalAndJCS, TestRejectInvalidSignal; некорректные поля/время отклоняются без записи |
+| Атомарность, отсутствие преждевременного APPLIED | TestAdmissionCommitFailureNeverAcknowledges, TestRecordRollbackAndCommitFailure; настоящий отказ отложенного ограничения при commit |
+| Повтор и конфликт digest | TestAdmissionReplayAfterLifecycleAndNewConnection, TestAdmissionConcurrentAndDigestConflict, TestRecordCommitRepeatConflictAndReconnect |
+| Одно дело для Session при конкуренции | TestAdmissionConcurrentAndDigestConflict, TestRecordConcurrentIdentityAndMessage; изоляция Session/workspace/account/mode |
+| Контекст, состояние и время активации | TestAdmissionRejectsContextAndLocalState, TestAdmissionActivationBoundary, TestAdmissionTwoSignalsOnePinnedCase |
+| Новое соединение, RLS, CAS, регрессии | Переподключение, старая редакция, SQL-регрессии HIT-76, общий Go race/vet |
+| Явные ограничения | Следующий раздел и .project-os/results/HIT-78.json |
 
-Earlier parser/storage logs keep their original SHAs. Local run04 failed a test
-fixture compilation; run05 exposed unkeyed cross-package receipt literals via vet.
-Both are retained in research/HIT-78-20261114 and superseded by successful run08,
-not relabelled as passes. Earlier storage runs01–03 are also historical.
+## Ограничения и следующие действия
 
-## Remaining human/server steps
+Проверены надёжное локальное принятие и тестовая композиция с ранее установленным
+контекстом. В тестах этот контекст синтетический. Работающие подключения
+IAM/Intake/Stripe, HTTP-сервер, финансовое решение, outbox, Delivery и внешняя
+запись этой задачей не реализуются. Испытания потери питания, промышленного
+развёртывания и восстановления копий не проводились. Отдельная эксплуатация CVE
+не воспроизводилась; новая версия проверена на совместимость.
 
-Register materialized external result/evidence; successful handoff-preflight is
-required before inviting In Review. Independent Reviewer and human acceptance
-remain pending. No runtime IAM/Intake/Stripe, financial evaluation, outbox/Delivery
-or external write is implemented or claimed. Lead integrates PR45 and this dependent
-PR through ordinary review/protected merge; main integration/CI must then be checked.
-
-Initial CI at 9bb79fb failed application concrete dependency rules. The decoder
-was moved behind an application port inside the scoped postgres adapter; no CI
-rule was changed. Run07 passed after the port change; run08 passed after final
-placement within the task scope. Prior run06 remains an actual historical result.
-Current CI status is reported externally on PR50, avoiding self-SHA commit cycles.
+Старые проверки на 18.6 и прежние редакции остаются историей. Неудачная компиляция
+run04, замечание vet run05 и прежний CI-отказ на зависимость приложения не
+переименованы в успешные. Декодер исправлен через порт приложения; правила CI не
+менялись. Актуальный CI публикуется в PR50 отдельно, без ссылки отчёта на собственный
+ещё не созданный commit. После регистрации результата и READY участник лично
+переносит карточку в In Review; независимое ревью остаётся следующим шагом.

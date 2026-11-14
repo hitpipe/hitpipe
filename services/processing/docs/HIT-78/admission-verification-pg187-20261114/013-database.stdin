@@ -1,0 +1,3 @@
+CREATE DATABASE hit78 OWNER hp_processing_owner;
+REVOKE ALL ON DATABASE hit78 FROM PUBLIC;
+GRANT CONNECT ON DATABASE hit78 TO hp_processing_migrator,hp_processing_app,hp_processing_worker,hp_processing_purge;
