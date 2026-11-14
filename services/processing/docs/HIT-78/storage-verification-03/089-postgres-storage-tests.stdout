@@ -1,0 +1,22 @@
+=== RUN   TestRecordCommitRepeatConflictAndReconnect
+--- PASS: TestRecordCommitRepeatConflictAndReconnect (0.04s)
+=== RUN   TestRecordRollbackAndCommitFailure
+=== RUN   TestRecordRollbackAndCommitFailure/rollback
+=== RUN   TestRecordRollbackAndCommitFailure/commit_failure
+=== RUN   TestRecordRollbackAndCommitFailure/history_failure
+--- PASS: TestRecordRollbackAndCommitFailure (0.02s)
+    --- PASS: TestRecordRollbackAndCommitFailure/rollback (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/commit_failure (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/history_failure (0.01s)
+=== RUN   TestRecordConcurrentIdentityAndMessage
+=== RUN   TestRecordConcurrentIdentityAndMessage/two_messages
+=== RUN   TestRecordConcurrentIdentityAndMessage/same_message
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.02s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/two_messages (0.01s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/same_message (0.01s)
+=== RUN   TestRecordRLSRejectsForeignWorkspace
+--- PASS: TestRecordRLSRejectsForeignWorkspace (0.01s)
+=== RUN   TestEnvironment
+    record_test.go:265: go1.27.2 linux arm64 isolated_pg=1
+--- PASS: TestEnvironment (0.00s)
+PASS
