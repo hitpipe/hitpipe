@@ -1,0 +1,1 @@
+SELECT count(*) FROM pg_class c JOIN pg_namespace n ON c.relnamespace=n.oid WHERE n.nspname='hp_processing' AND c.relkind='r' AND c.relname NOT IN ('job_index','schema_version') AND c.relrowsecurity AND c.relforcerowsecurity AND c.relowner='hp_processing_owner'::regrole;

@@ -1,0 +1,72 @@
+=== RUN   TestAdmissionActivationBoundary
+=== RUN   TestAdmissionActivationBoundary/before
+=== RUN   TestAdmissionActivationBoundary/exact
+=== RUN   TestAdmissionActivationBoundary/after
+=== RUN   TestAdmissionActivationBoundary/old_session_late_payment
+--- PASS: TestAdmissionActivationBoundary (0.03s)
+    --- PASS: TestAdmissionActivationBoundary/before (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/exact (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/after (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/old_session_late_payment (0.01s)
+=== RUN   TestAdmissionRejectsContextAndLocalState
+=== RUN   TestAdmissionRejectsContextAndLocalState/authority
+=== RUN   TestAdmissionRejectsContextAndLocalState/binding
+=== RUN   TestAdmissionRejectsContextAndLocalState/connection
+=== RUN   TestAdmissionRejectsContextAndLocalState/account
+=== RUN   TestAdmissionRejectsContextAndLocalState/livemode
+=== RUN   TestAdmissionRejectsContextAndLocalState/workspace
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_operation
+=== RUN   TestAdmissionRejectsContextAndLocalState/paused
+=== RUN   TestAdmissionRejectsContextAndLocalState/draft
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_config
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_activation
+=== RUN   TestAdmissionRejectsContextAndLocalState/stale_revision
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_time
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.08s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/paused (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/draft (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_config (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_activation (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/stale_revision (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
+=== RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
+--- PASS: TestAdmissionReplayAfterLifecycleAndNewConnection (0.01s)
+=== RUN   TestAdmissionCommitFailureNeverAcknowledges
+--- PASS: TestAdmissionCommitFailureNeverAcknowledges (0.01s)
+=== RUN   TestAdmissionTwoSignalsOnePinnedCase
+--- PASS: TestAdmissionTwoSignalsOnePinnedCase (0.01s)
+=== RUN   TestAdmissionConcurrentAndDigestConflict
+--- PASS: TestAdmissionConcurrentAndDigestConflict (0.01s)
+=== RUN   TestRecordCommitRepeatConflictAndReconnect
+--- PASS: TestRecordCommitRepeatConflictAndReconnect (0.02s)
+=== RUN   TestRecordRollbackAndCommitFailure
+=== RUN   TestRecordRollbackAndCommitFailure/rollback
+=== RUN   TestRecordRollbackAndCommitFailure/commit_failure
+=== RUN   TestRecordRollbackAndCommitFailure/history_failure
+--- PASS: TestRecordRollbackAndCommitFailure (0.02s)
+    --- PASS: TestRecordRollbackAndCommitFailure/rollback (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/commit_failure (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/history_failure (0.01s)
+=== RUN   TestRecordConcurrentIdentityAndMessage
+=== RUN   TestRecordConcurrentIdentityAndMessage/two_messages
+=== RUN   TestRecordConcurrentIdentityAndMessage/same_message
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.01s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/two_messages (0.01s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/same_message (0.01s)
+=== RUN   TestRecordRLSRejectsForeignWorkspace
+--- PASS: TestRecordRLSRejectsForeignWorkspace (0.01s)
+=== RUN   TestEnvironment
+    record_test.go:265: go1.27.2 linux arm64 isolated_pg=1
+--- PASS: TestEnvironment (0.00s)
+PASS
