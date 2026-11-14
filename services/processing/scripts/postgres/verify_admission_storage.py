@@ -16,9 +16,12 @@ class Run(verify.Run):
   self.name='hit78-'+uuid.uuid4().hex
   self.db='hit78'
   self.go=str(go.resolve())
+  self.binary_dir=tempfile.TemporaryDirectory(prefix='hit78-test-')
   self.script_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
  def command(self,label,args,*a,**kw):
   args=['hitpipe.task=HIT-78' if x=='hitpipe.task=HIT-76' else x for x in args]
+  if label=='container-create':
+   args[2:2]=['--mount','type=bind,source='+self.binary_dir.name+',target=/test,readonly']
   return super().command(label,args,*a,**kw)
  def checks(self):
   # Preserve the full existing migration/RLS/CAS/rollback qualification.
@@ -29,14 +32,16 @@ class Run(verify.Run):
   self.command('go-vet',[self.go,'-C',module,'vet','./...'])
   arch=self.command('container-arch',['docker','exec',self.container,'uname','-m']).stdout.decode().strip()
   target={'aarch64':'arm64','x86_64':'amd64'}[arch]
-  with tempfile.TemporaryDirectory(prefix='hit78-test-') as tmp:
-   binary=pathlib.Path(tmp)/'storage.test'
+  if True:
+   binary=pathlib.Path(self.binary_dir.name)/'storage.test'
    self.command('compile-linux-test',['env','GOOS=linux','GOARCH='+target,'CGO_ENABLED=0',self.go,'-C',module,'test','-c','-o',str(binary),'./internal/adapters/postgres'])
    (self.output/'test-binary.json').write_text(json.dumps({'sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'GOOS':'linux','GOARCH':target,'CGO_ENABLED':'0'},indent=2)+'\n')
-   self.command('copy-linux-test',['docker','cp',str(binary),self.container+':/tmp/storage.test'])
-   self.command('postgres-storage-tests',['docker','exec','-e','HIT78_ISOLATED_PG=1',self.container,'/tmp/storage.test','-test.v','-test.count=1','-test.timeout=60s'])
+   self.command('postgres-storage-tests',['docker','exec','-e','HIT78_ISOLATED_PG=1',self.container,'/test/storage.test','-test.v','-test.count=1','-test.timeout=60s'])
  def main(self):
-  super().main()
+  try:
+   super().main()
+  finally:
+   self.binary_dir.cleanup()
   p=self.output/'summary.json';s=json.loads(p.read_text())
   s['scope']='HIT-76 migration regression plus HIT-78 PRIVATE storage on real isolated PostgreSQL; host Go race/vet. Linux test binary CGO=0, no race there. No public admission, authority/binding or activation-boundary qualification.'
   s['task']='HIT-78'
