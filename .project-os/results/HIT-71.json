@@ -1,0 +1,48 @@
+{
+  "subject": "HIT-71",
+  "materialized_result": {
+    "summary": "Точная миграция схемы Intake и изолированные SQL-проверки PostgreSQL 18.7; без рабочего сервера и внешних интеграций.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "1b9ea201f7ec64cd240f08e887ab643c5a112f38",
+    "code_url": "https://github.com/hitpipe/hitpipe/tree/1b9ea201f7ec64cd240f08e887ab643c5a112f38/services/intake",
+    "schema_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+    "schema_section": "HP-MVP-SQL-INTAKE",
+    "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+    "security_patch": {
+      "identifier": "HP-CCR-POSTGRES-20261114",
+      "ref": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md",
+      "adoption_comment": "https://hitpipe.atlassian.net/browse/HIT-71?focusedCommentId=12235",
+      "instructions_comment": "https://hitpipe.atlassian.net/browse/HIT-71?focusedCommentId=12239",
+      "contract_revision": 2,
+      "scope": "PostgreSQL version/image only; SQL/API/DOD unchanged",
+      "index_digest": "sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73"
+    },
+    "report": "services/intake/docs/HIT-71/RESULT_RU.md"
+  },
+  "changed_artifacts": [
+    "services/intake/migrations/0001_intake.sql",
+    "services/intake/tests/postgres/bootstrap.sql",
+    "services/intake/tools/check_postgres.py",
+    "services/intake/README.md",
+    "services/intake/docs/HIT-71/source-audit.json"
+  ],
+  "verification": {
+    "environment": "PostgreSQL 18.7 Alpine linux/arm64 in disposable Docker container; Python 3.12.6 on macOS arm64; network none, tmpfs, synthetic data only",
+    "commands": "services/intake/docs/HIT-71/verification-18.7/commands.json",
+    "logs": [
+      "services/intake/docs/HIT-71/verification-18.7/postgres.stdout",
+      "services/intake/docs/HIT-71/verification-18.7/postgres.stderr"
+    ],
+    "results": "377 bounded SQL assertions passed, exit 0; server_version=18.7; git diff --check exit 0. Saved log hashes reverified on 2026-11-14; executable SQL/test code unchanged since tested SHA.",
+    "coverage": "Objects, complete table grant matrix, constrained roles/ownership, forced RLS and scoped reads, denied writes/role escalation, receipt uniqueness/immutable identity and first age, 72h expiry bound, 1000-count and 16MiB quotas, release/resize, concurrent quota and duplicate insert.",
+    "cve_regression": "NOT EXECUTED: no dedicated reproduction of CVE-2026-120154; upgrading to upstream fixed version and ordinary RLS checks do not prove exploit coverage."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Не проверены полномочия пользователя, актуальные IAM grants или scope validation; SET LOCAL проверяет только SQL-изоляцию строк.",
+    "Не проверены подпись webhook, надёжность файлов, HTTP ACK, внешние сервисы или рабочее развёртывание.",
+    "Специальная регрессия CVE-2026-120154 не выполнялась; ограничение явно сохранено согласно принятой поправке.",
+    "Прогон относится к Alpine arm64, не Bookworm/amd64 и не другим сервисам.",
+    "Независимый Reviewer и человеческая приёмка ещё не выполнены."
+  ]
+}
