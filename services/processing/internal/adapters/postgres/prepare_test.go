@@ -523,7 +523,7 @@ func TestPreparationContentAvailabilityAndGuards(t *testing.T) {
 			if mode == "short_context" {
 				expiry = now.Add(5 * time.Second)
 			}
-			ref, e := f.files.Write(ctx, payload, "CASE_CONTEXT", expiry, now)
+			ref, e := f.files.Write(ctx, payload, "CASE_CONTEXT", preparecase.Origin{WorkspaceID: f.request.WorkspaceID, CaseID: f.request.CaseID, Revision: 1}, expiry, now)
 			if e != nil {
 				t.Fatal(e)
 			}

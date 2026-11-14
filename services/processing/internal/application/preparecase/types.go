@@ -35,8 +35,15 @@ type Ref struct {
 	Bytes             int
 	ExpiresAt         time.Time
 }
+
+// Origin is non-authorizing, opaque causal metadata for orphan/unknown-commit recovery.
+type Origin struct {
+	WorkspaceID, CaseID string
+	Revision            int64
+}
+
 type Content interface {
-	Write(context.Context, []byte, string, time.Time, time.Time) (Ref, error)
+	Write(context.Context, []byte, string, Origin, time.Time, time.Time) (Ref, error)
 	Read(context.Context, Ref, time.Time) ([]byte, error)
 }
 type ContextRef struct {

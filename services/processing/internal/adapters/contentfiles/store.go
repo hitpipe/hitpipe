@@ -35,8 +35,9 @@ type Store struct {
 	Step func(string) error
 }
 type header struct {
-	Version int             `json:"version"`
-	Ref     preparecase.Ref `json:"ref"`
+	Origin  preparecase.Origin `json:"origin"`
+	Version int                `json:"version"`
+	Ref     preparecase.Ref    `json:"ref"`
 }
 
 func New(path string) (*Store, error) {
@@ -96,12 +97,12 @@ func (s *Store) syncDir() error {
 func validClass(c string) bool {
 	return c == "DELIVERY_INTENT" || c == "HISTORY" || c == "CASE_CONTEXT"
 }
-func (s *Store) Write(ctx context.Context, b []byte, class string, expiry, now time.Time) (preparecase.Ref, error) {
+func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (preparecase.Ref, error) {
 	zero := preparecase.Ref{}
 	// Persist exactly the precision representable by PostgreSQL timestamptz.
 	// Round down, never extend a caller's hard expiry or a source-proof deadline.
 	expiry = expiry.UTC().Truncate(time.Microsecond)
-	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || !validClass(class) || len(b) < 1 || len(b) > maxBody || now.IsZero() || !expiry.After(now) || expiry.After(now.Add(90*24*time.Hour)) {
+	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || !validClass(class) || !validOrigin(origin) || len(b) < 1 || len(b) > maxBody || now.IsZero() || !expiry.After(now) || expiry.After(now.Add(90*24*time.Hour)) {
 		return zero, preparecase.ErrContent
 	}
 	s.mu.Lock()
@@ -114,7 +115,7 @@ func (s *Store) Write(ctx context.Context, b []byte, class string, expiry, now t
 		return zero, preparecase.ErrContent
 	}
 	ref := preparecase.Ref{ID: id, Digest: hash(b), Class: class, Bytes: len(b), ExpiresAt: expiry.UTC()}
-	h, e := json.Marshal(header{1, ref})
+	h, e := json.Marshal(header{Origin: origin, Version: 1, Ref: ref})
 	if e != nil {
 		return zero, e
 	}
@@ -187,7 +188,7 @@ func (s *Store) read(id string) (header, []byte, error) {
 	var h header
 	d := json.NewDecoder(bytes.NewReader(raw[:n]))
 	d.DisallowUnknownFields()
-	if d.Decode(&h) != nil || h.Version != 1 || h.Ref.ID != strings.TrimSuffix(id, ".pending") || !validClass(h.Ref.Class) || h.Ref.ExpiresAt.IsZero() {
+	if d.Decode(&h) != nil || h.Version != 1 || !validOrigin(h.Origin) || h.Ref.ID != strings.TrimSuffix(id, ".pending") || !validClass(h.Ref.Class) || h.Ref.ExpiresAt.IsZero() {
 		return zero, nil, preparecase.ErrContent
 	}
 	b := raw[n+1:]
@@ -257,4 +258,10 @@ func (s *Store) PurgeExpired(now time.Time) error {
 		result = errors.Join(result, s.syncDir())
 	}
 	return result
+}
+
+var originID = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
+
+func validOrigin(o preparecase.Origin) bool {
+	return originID.MatchString(o.WorkspaceID) && originID.MatchString(o.CaseID) && o.Revision > 0
 }

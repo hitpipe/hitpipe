@@ -40,7 +40,7 @@ func TestDurableContentAndRestart(t *testing.T) {
 	now := time.Now().UTC()
 	var steps []string
 	s.Step = func(name string) error { steps = append(steps, name); return nil }
-	ref, e := s.Write(context.Background(), []byte(`{"synthetic":true}`), "DELIVERY_INTENT", now.Add(time.Minute), now)
+	ref, e := s.Write(context.Background(), []byte(`{"synthetic":true}`), "DELIVERY_INTENT", fixtureOrigin(), now.Add(time.Minute), now)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -72,7 +72,7 @@ func TestFaultStepsNeverReturnAcceptedRef(t *testing.T) {
 				}
 				return nil
 			}
-			ref, e := s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", now.Add(time.Second), now)
+			ref, e := s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", fixtureOrigin(), now.Add(time.Second), now)
 			if e == nil || ref != (preparecase.Ref{}) {
 				t.Fatal("fault positively acknowledged")
 			}
@@ -92,7 +92,7 @@ func TestExpiryCorruptionTraversalAndSymlink(t *testing.T) {
 	s := open(t, p)
 	now := time.Now()
 	ctx := context.Background()
-	ref, e := s.Write(ctx, []byte(`"synthetic"`), "CASE_CONTEXT", now.Add(time.Minute), now)
+	ref, e := s.Write(ctx, []byte(`"synthetic"`), "CASE_CONTEXT", fixtureOrigin(), now.Add(time.Minute), now)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -109,7 +109,7 @@ func TestExpiryCorruptionTraversalAndSymlink(t *testing.T) {
 		t.Fatal("symlink followed")
 	}
 	os.Remove(filepath.Join(p, ref.ID))
-	ref, e = s.Write(ctx, []byte(`"synthetic"`), "CASE_CONTEXT", now.Add(time.Minute), now)
+	ref, e = s.Write(ctx, []byte(`"synthetic"`), "CASE_CONTEXT", fixtureOrigin(), now.Add(time.Minute), now)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -124,7 +124,7 @@ func TestExpiryCorruptionTraversalAndSymlink(t *testing.T) {
 	if _, e = os.Stat(filepath.Join(p, ref.ID)); !os.IsNotExist(e) {
 		t.Fatal("expired corrupt body retained")
 	}
-	ref, e = s.Write(ctx, []byte("x"), "DELIVERY_INTENT", now.Add(time.Second), now)
+	ref, e = s.Write(ctx, []byte("x"), "DELIVERY_INTENT", fixtureOrigin(), now.Add(time.Second), now)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -145,7 +145,7 @@ func TestUncertainCommitOrphanRetainedUntilExpiry(t *testing.T) {
 	p := private(t)
 	s := open(t, p)
 	now := time.Now()
-	ref, e := s.Write(context.Background(), []byte("x"), "DELIVERY_INTENT", now.Add(time.Minute), now)
+	ref, e := s.Write(context.Background(), []byte("x"), "DELIVERY_INTENT", fixtureOrigin(), now.Add(time.Minute), now)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -163,7 +163,7 @@ func TestContentProcessRestart(t *testing.T) {
 			os.Exit(2)
 		}
 		now := time.Now()
-		r, e := s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", now.Add(time.Minute), now)
+		r, e := s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", fixtureOrigin(), now.Add(time.Minute), now)
 		if e != nil {
 			os.Exit(3)
 		}
@@ -204,7 +204,7 @@ func TestCrashBetweenFileSteps(t *testing.T) {
 			return nil
 		}
 		now := time.Now()
-		_, _ = s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", now.Add(time.Minute), now)
+		_, _ = s.Write(context.Background(), []byte(`"synthetic"`), "HISTORY", fixtureOrigin(), now.Add(time.Minute), now)
 		os.Exit(42)
 	}
 	for _, step := range []string{"write", "file-fsync", "rename", "directory-fsync"} {
@@ -235,4 +235,8 @@ func TestCrashBetweenFileSteps(t *testing.T) {
 			}
 		})
 	}
+}
+
+func fixtureOrigin() preparecase.Origin {
+	return preparecase.Origin{WorkspaceID: "11111111-1111-4111-8111-111111111111", CaseID: "22222222-2222-4222-8222-222222222222", Revision: 1}
 }

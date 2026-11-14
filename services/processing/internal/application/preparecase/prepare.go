@@ -137,7 +137,7 @@ func (s Service) Prepare(ctx context.Context, r Request) (Result, error) {
 						expiry = f.ExpiresAt
 					}
 				}
-				ref, e := s.Content.Write(ctx, payload.Body, "DELIVERY_INTENT", expiry, d.At)
+				ref, e := s.Content.Write(ctx, payload.Body, "DELIVERY_INTENT", Origin{c.WorkspaceID, c.CaseID, c.Revision}, expiry, d.At)
 				if e != nil {
 					return zero, e
 				}
@@ -164,7 +164,7 @@ func (s Service) Prepare(ctx context.Context, r Request) (Result, error) {
 	if e != nil {
 		return zero, e
 	}
-	d.Evidence, e = s.Content.Write(ctx, evidence, "HISTORY", d.At.Add(90*24*time.Hour), d.At)
+	d.Evidence, e = s.Content.Write(ctx, evidence, "HISTORY", Origin{c.WorkspaceID, c.CaseID, c.Revision}, d.At.Add(90*24*time.Hour), d.At)
 	if e != nil {
 		return zero, e
 	}
