@@ -194,3 +194,28 @@ func TestDecodeDifferentialCorpus(t *testing.T) {
 	}
 	t.Logf("%d deterministic synthetic records; full values, provenance, financial outcomes, and zero-on-error", len(records))
 }
+
+// The optimized rules share compiled regexes. Exercise simultaneous reads under
+// -race and independently mutate returned facts to catch shared output storage.
+func TestDecodeConcurrentIsolatedProjections(t *testing.T) {
+	cases := measurementCases(t)
+	var valid measuredCase
+	for _, c := range cases {
+		if c.name == "valid" {
+			valid = c
+			break
+		}
+	}
+	for worker := 0; worker < 32; worker++ {
+		t.Run(fmt.Sprint(worker), func(t *testing.T) {
+			t.Parallel()
+			for i := 0; i < 20; i++ {
+				p, err := Decode(valid.raw, valid.expected, valid.policy)
+				if err != nil || p.Snapshot.Facts.AmountRefunded == nil || *p.Snapshot.Facts.AmountRefunded != 0 {
+					t.Fatalf("shared or invalid projection: %v", err)
+				}
+				*p.Snapshot.Facts.AmountRefunded = int64(i + 1)
+			}
+		})
+	}
+}

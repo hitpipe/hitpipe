@@ -3,6 +3,9 @@
 // contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json#/components/schemas/SourceFacts
 package sourcefacts
 
+import "regexp"
+
+// Immutable OAS patterns are compiled once, not per decoded message.
 var wireFields = map[string]fieldRule{
 	"all_currencies_equal":  {kind: "boolean", nullable: true},
 	"amount_captured":       {kind: "integer", nullable: true, minimum: 0},
@@ -15,8 +18,8 @@ var wireFields = map[string]fieldRule{
 	"complete":              {kind: "boolean", nullable: false},
 	"completed_at":          {kind: "string", nullable: false, format: "date-time"},
 	"connection_id":         {kind: "string", nullable: false, format: "uuid"},
-	"currency":              {kind: "string", nullable: true, pattern: "^[a-z]{3}$"},
-	"digest":                {kind: "string", nullable: false, pattern: "^sha256:[0-9a-f]{64}$"},
+	"currency":              {kind: "string", nullable: true, pattern: regexp.MustCompile("^[a-z]{3}$")},
+	"digest":                {kind: "string", nullable: false, pattern: regexp.MustCompile("^sha256:[0-9a-f]{64}$")},
 	"disputed":              {kind: "boolean", nullable: true},
 	"facts_id":              {kind: "string", nullable: false, format: "uuid"},
 	"line_item_count":       {kind: "integer", nullable: true, minimum: 0},
