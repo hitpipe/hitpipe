@@ -4,6 +4,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
+	"sync"
 	"testing"
 
 	"context"
@@ -60,7 +62,7 @@ func TestAdmissionActivationBoundary(t *testing.T) {
 	}
 }
 func TestAdmissionRejectsContextAndLocalState(t *testing.T) {
-	for _, mode := range []string{"authority", "connection", "account", "livemode", "workspace", "missing_operation", "paused", "draft", "missing_config", "missing_activation", "stale_revision", "invalid_wire", "missing_time", "invalid_time"} {
+	for _, mode := range []string{"authority", "binding", "connection", "account", "livemode", "workspace", "missing_operation", "paused", "draft", "missing_config", "missing_activation", "stale_revision", "invalid_wire", "missing_time", "invalid_time"} {
 		t.Run(mode, func(t *testing.T) {
 			ws := workspace(t)
 			raw := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.completed")
@@ -69,6 +71,8 @@ func TestAdmissionRejectsContextAndLocalState(t *testing.T) {
 			switch mode {
 			case "authority":
 				c.AuthorityVerified = false
+			case "binding":
+				c.ConnectionID = ""
 			case "connection":
 				c.ConnectionID = op
 			case "account":
@@ -78,15 +82,6 @@ func TestAdmissionRejectsContextAndLocalState(t *testing.T) {
 			case "workspace":
 				c.WorkspaceID = owner
 			case "missing_operation":
-
-				_, e = tx.Exec(ctx, `INSERT INTO hp_processing.accepted_configs VALUES($1,$2,$2,'1.0','synthetic','{"pack_id":"synthetic"}','sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',$2,now(),'synthetic')`, ws, owner)
-				if e != nil {
-					t.Fatal(e)
-				}
-				_, e = tx.Exec(ctx, `UPDATE hp_processing.operations SET selected_config_id=$2 WHERE workspace_id=$1 AND operation_id=$2`, ws, owner)
-				if e != nil {
-					t.Fatal(e)
-				}
 				c.OperationID = owner
 			case "stale_revision":
 				c.ExpectedRevision = 2
@@ -229,5 +224,56 @@ func TestAdmissionTwoSignalsOnePinnedCase(t *testing.T) {
 		t.Fatal("case pin or revision overwritten")
 	}
 	tx.Rollback(ctx)
+	counts(t, ws, 2, 1, 1)
+}
+
+func TestAdmissionConcurrentAndDigestConflict(t *testing.T) {
+	ws := workspace(t)
+	c := established(ws)
+	raw1 := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.completed")
+	raw2 := wire(t, ws, "2026-11-14T00:00:00Z", "checkout.session.async_payment_succeeded")
+	db1, db2 := connect(t), connect(t)
+	var wg sync.WaitGroup
+	results := make(chan admission.Receipt, 2)
+	errs := make(chan error, 2)
+	start := make(chan struct{})
+	for i, raw := range [][]byte{raw1, raw2} {
+		wg.Add(1)
+		go func(raw []byte, db *pgx.Conn) {
+			defer wg.Done()
+			<-start
+			r, e := admission.Admit(ctx, raw, c, Store{db})
+			results <- r
+			errs <- e
+		}(raw, []*pgx.Conn{db1, db2}[i])
+	}
+	close(start)
+	wg.Wait()
+	for range 2 {
+		if e := <-errs; e != nil {
+			t.Fatal(e)
+		}
+	}
+	a, b := <-results, <-results
+	if a.RecordID != b.RecordID {
+		t.Fatal("concurrent identities split")
+	}
+	counts(t, ws, 2, 1, 1)
+	var m map[string]any
+	json.Unmarshal(raw1, &m)
+	delete(m, "message_digest")
+	m["event_id"] = "evt_conflicting"
+	payload, _ := json.Marshal(m)
+	canonical, e := jcs.Transform(payload)
+	if e != nil {
+		t.Fatal(e)
+	}
+	sum := sha256.Sum256(canonical)
+	m["message_digest"] = "sha256:" + hex.EncodeToString(sum[:])
+	conflict, _ := json.Marshal(m)
+	r, e := admission.Admit(ctx, conflict, c, Store{connect(t)})
+	if !errors.Is(e, admission.ErrConflict) || r != (admission.Receipt{}) {
+		t.Fatalf("conflict acknowledged %v %v", r, e)
+	}
 	counts(t, ws, 2, 1, 1)
 }
