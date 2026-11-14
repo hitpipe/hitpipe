@@ -1,0 +1,3792 @@
+[
+  {
+    "label": "docker-context",
+    "argv": [
+      "docker",
+      "context",
+      "inspect"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.610545+00:00",
+    "finished_at": "2026-11-13T09:47:55.669005+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "000-docker-context.stdout",
+      "bytes": 812,
+      "sha256": "4a44b17238f923e9598aff55fbe2e9a463bcff3feaf96aece62d03049428b299"
+    },
+    "stderr": {
+      "file": "000-docker-context.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "docker-version",
+    "argv": [
+      "docker",
+      "version",
+      "--format",
+      "{{json .}}"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.669466+00:00",
+    "finished_at": "2026-11-13T09:47:55.693532+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "001-docker-version.stdout",
+      "bytes": 1042,
+      "sha256": "792a658afd583f48031db1ef0940136d5c31e8c5e8ca14787c6e70c5b5609780"
+    },
+    "stderr": {
+      "file": "001-docker-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "image-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "docker.io/library/postgres:18.6-bookworm@sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.693969+00:00",
+    "finished_at": "2026-11-13T09:47:55.732679+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "002-image-inspect.stdout",
+      "bytes": 2888,
+      "sha256": "a8ea401e4e5825a35a00d6d954d1a11e68e544628399a2036beac5a1552ea65a"
+    },
+    "stderr": {
+      "file": "002-image-inspect.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "container-create",
+    "argv": [
+      "docker",
+      "run",
+      "--detach",
+      "--rm",
+      "--name",
+      "hit76-f49cabfc046e4680b3819b081779495d",
+      "--label",
+      "hitpipe.task=HIT-76",
+      "--network",
+      "none",
+      "--read-only",
+      "--tmpfs",
+      "/tmp:rw",
+      "--tmpfs",
+      "/var/run/postgresql:rw",
+      "--tmpfs",
+      "/var/lib/postgresql:rw,size=536870912",
+      "--mount",
+      "type=bind,source=/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres/services/processing/scripts/migrations,target=/migrations,readonly",
+      "-e",
+      "POSTGRES_HOST_AUTH_METHOD=trust",
+      "docker.io/library/postgres:18.6-bookworm@sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c",
+      "postgres",
+      "-c",
+      "listen_addresses=",
+      "-c",
+      "fsync=on",
+      "-c",
+      "full_page_writes=on",
+      "-c",
+      "synchronous_commit=on"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.733188+00:00",
+    "finished_at": "2026-11-13T09:47:55.825429+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "003-container-create.stdout",
+      "bytes": 65,
+      "sha256": "9fe616285b71c89a477546ba9f72e00b80ffed04644c56682cb3dd4d3eb6e4f6"
+    },
+    "stderr": {
+      "file": "003-container-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "pg_isready",
+      "-U",
+      "postgres"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.825996+00:00",
+    "finished_at": "2026-11-13T09:47:55.886842+00:00",
+    "exit_code": 2,
+    "stdout": {
+      "file": "004-ready.stdout",
+      "bytes": 39,
+      "sha256": "7c926b87e40b26ec6ffb4c78f403571ac977ece539b51f52b4a58a6943d143ea"
+    },
+    "stderr": {
+      "file": "004-ready.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "init-readiness",
+    "argv": [
+      "docker",
+      "logs",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:55.887417+00:00",
+    "finished_at": "2026-11-13T09:47:55.905378+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "005-init-readiness.stdout",
+      "bytes": 686,
+      "sha256": "d2304d2772d761fe2cf4d989920f6f1d0e21396f487967eb174e0dc2c48a3591"
+    },
+    "stderr": {
+      "file": "005-init-readiness.stderr",
+      "bytes": 786,
+      "sha256": "09696048480fbbc29881964e67967e3de9025f938b869a9f8f79c8a476aa48ad"
+    }
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "pg_isready",
+      "-U",
+      "postgres"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.411100+00:00",
+    "finished_at": "2026-11-13T09:47:56.528699+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "006-ready.stdout",
+      "bytes": 49,
+      "sha256": "6e168fc3b5a0662104b5e5da92e87b870e8b7c65fec827d267115b5123d18614"
+    },
+    "stderr": {
+      "file": "006-ready.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "init-readiness",
+    "argv": [
+      "docker",
+      "logs",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.530283+00:00",
+    "finished_at": "2026-11-13T09:47:56.559071+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "007-init-readiness.stdout",
+      "bytes": 2383,
+      "sha256": "e3d0464a53f3c85583772dbfdede1cf725f038cda7976829b19de2f25b029b40"
+    },
+    "stderr": {
+      "file": "007-init-readiness.stderr",
+      "bytes": 1457,
+      "sha256": "68022392e6ad7344d740014f0293977e06728edfa43a5686640285d82366eabf"
+    }
+  },
+  {
+    "label": "postgres-version",
+    "argv": [
+      "docker",
+      "exec",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "postgres",
+      "--version"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.559833+00:00",
+    "finished_at": "2026-11-13T09:47:56.620380+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "008-postgres-version.stdout",
+      "bytes": 52,
+      "sha256": "9aece29b28635c507fa0a37f163aa284db4ed62738eca120deea9451c6dc24c4"
+    },
+    "stderr": {
+      "file": "008-postgres-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "postgres-settings",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "postgres",
+      "-d",
+      "postgres"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.621099+00:00",
+    "finished_at": "2026-11-13T09:47:56.686057+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "009-postgres-settings.stdin",
+      "bytes": 180,
+      "sha256": "a5343161d3e0834b964364f6db4846ee7a66aa3c249841c8688cae575e0f9bb8"
+    },
+    "stdout": {
+      "file": "009-postgres-settings.stdout",
+      "bytes": 17,
+      "sha256": "c32129d2eb1a478a9dd77a1d75b486b12d22ab801f4019ec804942053dc112ab"
+    },
+    "stderr": {
+      "file": "009-postgres-settings.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "roles",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "postgres",
+      "-d",
+      "postgres"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.686709+00:00",
+    "finished_at": "2026-11-13T09:47:56.750512+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "010-roles.stdin",
+      "bytes": 25,
+      "sha256": "58cf6452fa6f06b75939fdad4966f66321bfa47a2b9056927b0132e133ca4a29"
+    },
+    "stdout": {
+      "file": "010-roles.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "010-roles.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "database",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "postgres",
+      "-d",
+      "postgres"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.751097+00:00",
+    "finished_at": "2026-11-13T09:47:56.830515+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "011-database.stdin",
+      "bytes": 307,
+      "sha256": "93f6f7093c8a74ab250782da836feb824db4fc9015a8b5963e291ebda4461142"
+    },
+    "stdout": {
+      "file": "011-database.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "011-database.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "migration-first",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_migrator",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.831110+00:00",
+    "finished_at": "2026-11-13T09:47:56.908068+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "012-migration-first.stdin",
+      "bytes": 25,
+      "sha256": "cfdef5e400a89e988c64ac1437361802d2b9d281e2db252be81f24754c6a34fc"
+    },
+    "stdout": {
+      "file": "012-migration-first.stdout",
+      "bytes": 41,
+      "sha256": "db38db3901e06ec87b096f108617e9a01298a7e71b60ce6ce694d433a0df94b3"
+    },
+    "stderr": {
+      "file": "012-migration-first.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "migration-identity-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_migrator",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.908677+00:00",
+    "finished_at": "2026-11-13T09:47:56.974417+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "013-migration-identity-before.stdin",
+      "bytes": 83,
+      "sha256": "f8976af82b746053ea6e6207f6445a5969aa6572edc5d27a958b2e117d9acc7c"
+    },
+    "stdout": {
+      "file": "013-migration-identity-before.stdout",
+      "bytes": 30,
+      "sha256": "c402b2695a4becadfcbb37ca0a4ff8101489eea3be928e137d15b6945d74eb26"
+    },
+    "stderr": {
+      "file": "013-migration-identity-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "migration-again",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_migrator",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:56.975065+00:00",
+    "finished_at": "2026-11-13T09:47:57.043631+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "014-migration-again.stdin",
+      "bytes": 25,
+      "sha256": "cfdef5e400a89e988c64ac1437361802d2b9d281e2db252be81f24754c6a34fc"
+    },
+    "stdout": {
+      "file": "014-migration-again.stdout",
+      "bytes": 49,
+      "sha256": "5d113aa148f3d5e074d8d4d5b146d72d11b3e2c618d79c07e5edcaa7bcd54377"
+    },
+    "stderr": {
+      "file": "014-migration-again.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "migration-identity-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_migrator",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.044916+00:00",
+    "finished_at": "2026-11-13T09:47:57.147846+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "015-migration-identity-after.stdin",
+      "bytes": 83,
+      "sha256": "f8976af82b746053ea6e6207f6445a5969aa6572edc5d27a958b2e117d9acc7c"
+    },
+    "stdout": {
+      "file": "015-migration-identity-after.stdout",
+      "bytes": 30,
+      "sha256": "c402b2695a4becadfcbb37ca0a4ff8101489eea3be928e137d15b6945d74eb26"
+    },
+    "stderr": {
+      "file": "015-migration-identity-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "role-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.148568+00:00",
+    "finished_at": "2026-11-13T09:47:57.226431+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "016-role-hp_processing_app.stdin",
+      "bytes": 446,
+      "sha256": "c02cb3dcbcdd8b12f163093edec1f9eca0a5360565443e058faaa0107089530a"
+    },
+    "stdout": {
+      "file": "016-role-hp_processing_app.stdout",
+      "bytes": 38,
+      "sha256": "ca2a281039c79ebb9460a6d9bb39a2485a876a5817b5443d00340f8b9605ca00"
+    },
+    "stderr": {
+      "file": "016-role-hp_processing_app.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "role-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.227334+00:00",
+    "finished_at": "2026-11-13T09:47:57.300517+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "017-role-hp_processing_worker.stdin",
+      "bytes": 446,
+      "sha256": "c02cb3dcbcdd8b12f163093edec1f9eca0a5360565443e058faaa0107089530a"
+    },
+    "stdout": {
+      "file": "017-role-hp_processing_worker.stdout",
+      "bytes": 41,
+      "sha256": "bea3fc2adff605d73c7772cb7e4fe936df695a90dc60c175048729045ed7d28f"
+    },
+    "stderr": {
+      "file": "017-role-hp_processing_worker.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "owner-and-rls",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "postgres",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.301265+00:00",
+    "finished_at": "2026-11-13T09:47:57.369202+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "018-owner-and-rls.stdin",
+      "bytes": 271,
+      "sha256": "d9e7959a00bbd31c68f837fb46cfd272ce982772199220c51a2364e2026e6283"
+    },
+    "stdout": {
+      "file": "018-owner-and-rls.stdout",
+      "bytes": 3,
+      "sha256": "a1fb50e6c86fae1679ef3351296fd6713411a08cf8dd1790a4fd05fae8688164"
+    },
+    "stderr": {
+      "file": "018-owner-and-rls.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "seed-11111111",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.370190+00:00",
+    "finished_at": "2026-11-13T09:47:57.436276+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "019-seed-11111111.stdin",
+      "bytes": 1547,
+      "sha256": "39c30358daca7b06543a07f285d8078c123ac820be7a70248f1aa995c52beec7"
+    },
+    "stdout": {
+      "file": "019-seed-11111111.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "019-seed-11111111.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "seed-22222222",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.436974+00:00",
+    "finished_at": "2026-11-13T09:47:57.515140+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "020-seed-22222222.stdin",
+      "bytes": 1547,
+      "sha256": "896c7e62ee4dcb40767ff47a495afba681319de5dca3c1a6adf9a74b3f73f6d7"
+    },
+    "stdout": {
+      "file": "020-seed-22222222.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "020-seed-22222222.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-operations",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.515803+00:00",
+    "finished_at": "2026-11-13T09:47:57.576342+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "021-no-scope-hp_processing_app-operations.stdin",
+      "bytes": 46,
+      "sha256": "eebe4886e5ed363a6297af0788aa3cf9ae64e8639b1ab15433dcdc54e5f378ea"
+    },
+    "stdout": {
+      "file": "021-no-scope-hp_processing_app-operations.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "021-no-scope-hp_processing_app-operations.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-drafts",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.577019+00:00",
+    "finished_at": "2026-11-13T09:47:57.635541+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "022-no-scope-hp_processing_app-drafts.stdin",
+      "bytes": 42,
+      "sha256": "7f8802bac3d5946f31c5162de8baa42bf9c0ebf1e4aebccf93bd987157ebbc54"
+    },
+    "stdout": {
+      "file": "022-no-scope-hp_processing_app-drafts.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "022-no-scope-hp_processing_app-drafts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-accepted_configs",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.636351+00:00",
+    "finished_at": "2026-11-13T09:47:57.693825+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "023-no-scope-hp_processing_app-accepted_configs.stdin",
+      "bytes": 52,
+      "sha256": "cb8e2aeba20ee6e42e9b6337f1f6d87ac66ee0dcce912f928971ece11888ee28"
+    },
+    "stdout": {
+      "file": "023-no-scope-hp_processing_app-accepted_configs.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "023-no-scope-hp_processing_app-accepted_configs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-case_identity",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.694545+00:00",
+    "finished_at": "2026-11-13T09:47:57.754761+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "024-no-scope-hp_processing_app-case_identity.stdin",
+      "bytes": 49,
+      "sha256": "1b2389e602121d640c23ecdb53894f34bf0fe24bc6492e8f9714cb938d4c8dde"
+    },
+    "stdout": {
+      "file": "024-no-scope-hp_processing_app-case_identity.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "024-no-scope-hp_processing_app-case_identity.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-episodes",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.755460+00:00",
+    "finished_at": "2026-11-13T09:47:57.826412+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "025-no-scope-hp_processing_app-episodes.stdin",
+      "bytes": 44,
+      "sha256": "a89a4e57063a8136df7ca8fdcff5b785695a799d7087a8cf59c627ce6eecbdc9"
+    },
+    "stdout": {
+      "file": "025-no-scope-hp_processing_app-episodes.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "025-no-scope-hp_processing_app-episodes.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-case_content",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.827085+00:00",
+    "finished_at": "2026-11-13T09:47:57.899539+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "026-no-scope-hp_processing_app-case_content.stdin",
+      "bytes": 48,
+      "sha256": "b3493d563cc4bb2e4fb4be4dcafb8dee22cc97667731bf2b3f5dfbc66b538814"
+    },
+    "stdout": {
+      "file": "026-no-scope-hp_processing_app-case_content.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "026-no-scope-hp_processing_app-case_content.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-safety_history",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.900372+00:00",
+    "finished_at": "2026-11-13T09:47:57.967908+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "027-no-scope-hp_processing_app-safety_history.stdin",
+      "bytes": 50,
+      "sha256": "da42e638c1be3b3e0a7cf2c8413a488f95ce61d73369864bfa15b0509790e801"
+    },
+    "stdout": {
+      "file": "027-no-scope-hp_processing_app-safety_history.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "027-no-scope-hp_processing_app-safety_history.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-history_content",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:57.968580+00:00",
+    "finished_at": "2026-11-13T09:47:58.047926+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "028-no-scope-hp_processing_app-history_content.stdin",
+      "bytes": 51,
+      "sha256": "a157089afddc39551a7066e0c26a496e5408b158df8d95f4db4132941d08f74d"
+    },
+    "stdout": {
+      "file": "028-no-scope-hp_processing_app-history_content.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "028-no-scope-hp_processing_app-history_content.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-user_commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.048770+00:00",
+    "finished_at": "2026-11-13T09:47:58.101813+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "029-no-scope-hp_processing_app-user_commands.stdin",
+      "bytes": 49,
+      "sha256": "a780b930f4bf268bc03dc669f1ec116b711f20bd0d9de9677a88e1a84cc22b8a"
+    },
+    "stdout": {
+      "file": "029-no-scope-hp_processing_app-user_commands.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "029-no-scope-hp_processing_app-user_commands.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-notifications",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.102617+00:00",
+    "finished_at": "2026-11-13T09:47:58.157421+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "030-no-scope-hp_processing_app-notifications.stdin",
+      "bytes": 49,
+      "sha256": "06d48c38e6ea0f4207406a6b1f543aeebf9be115d9d562f4f413623e0702ccc3"
+    },
+    "stdout": {
+      "file": "030-no-scope-hp_processing_app-notifications.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "030-no-scope-hp_processing_app-notifications.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-inbox",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.158133+00:00",
+    "finished_at": "2026-11-13T09:47:58.218153+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "031-no-scope-hp_processing_app-inbox.stdin",
+      "bytes": 41,
+      "sha256": "ec2f81a6dfe488f1e470f36d4037659552872739ec77f026f007b9e8190eee0f"
+    },
+    "stdout": {
+      "file": "031-no-scope-hp_processing_app-inbox.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "031-no-scope-hp_processing_app-inbox.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_app-outbox",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.218857+00:00",
+    "finished_at": "2026-11-13T09:47:58.280096+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "032-no-scope-hp_processing_app-outbox.stdin",
+      "bytes": 42,
+      "sha256": "8a29a6111c768dbf667cf900e82cba2da3aa564004ab7056434c11834f69c561"
+    },
+    "stdout": {
+      "file": "032-no-scope-hp_processing_app-outbox.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "032-no-scope-hp_processing_app-outbox.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "scoped-reset-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.280842+00:00",
+    "finished_at": "2026-11-13T09:47:58.342846+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "033-scoped-reset-hp_processing_app.stdin",
+      "bytes": 223,
+      "sha256": "35d85d351302e2143fb788eccf96e13912bccb2c09040018af8f2b4c816f98c2"
+    },
+    "stdout": {
+      "file": "033-scoped-reset-hp_processing_app.stdout",
+      "bytes": 4,
+      "sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea"
+    },
+    "stderr": {
+      "file": "033-scoped-reset-hp_processing_app.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "own-only-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.343553+00:00",
+    "finished_at": "2026-11-13T09:47:58.403638+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "034-own-only-hp_processing_app.stdin",
+      "bytes": 315,
+      "sha256": "d480197790e9518146796b43e8f0f5c127bc9758a7964a9fb893d740c7a85ae4"
+    },
+    "stdout": {
+      "file": "034-own-only-hp_processing_app.stdout",
+      "bytes": 4,
+      "sha256": "82c1315e6c757f33c4a77ca58b2a184f5a88614470c05ec77f3d28918db6b8ae"
+    },
+    "stderr": {
+      "file": "034-own-only-hp_processing_app.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "foreign-write-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.404499+00:00",
+    "finished_at": "2026-11-13T09:47:58.463675+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "035-foreign-write-hp_processing_app.stdin",
+      "bytes": 335,
+      "sha256": "abae674ada45b805794b63b1899e60e480b15de8385fcfa643c4063eedd483f7"
+    },
+    "stdout": {
+      "file": "035-foreign-write-hp_processing_app.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "035-foreign-write-hp_processing_app.stderr",
+      "bytes": 130,
+      "sha256": "49134c5e3519b5ecb07e9897d13327692d817f96164c3cc5726671c295711f47"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-scope-write-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.464670+00:00",
+    "finished_at": "2026-11-13T09:47:58.521441+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "036-no-scope-write-hp_processing_app.stdin",
+      "bytes": 228,
+      "sha256": "1880512b02a09b84a581bd62f104739aa3c5dbf77cd0da0450f053652e3ec6b2"
+    },
+    "stdout": {
+      "file": "036-no-scope-write-hp_processing_app.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "036-no-scope-write-hp_processing_app.stderr",
+      "bytes": 130,
+      "sha256": "49134c5e3519b5ecb07e9897d13327692d817f96164c3cc5726671c295711f47"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-owner-role-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.522516+00:00",
+    "finished_at": "2026-11-13T09:47:58.586589+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "037-no-owner-role-hp_processing_app.stdin",
+      "bytes": 29,
+      "sha256": "2242579da719511a09886cbc6f5c5110cb85d89a2171831324db0835c1f3c734"
+    },
+    "stdout": {
+      "file": "037-no-owner-role-hp_processing_app.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "037-no-owner-role-hp_processing_app.stderr",
+      "bytes": 113,
+      "sha256": "72ab5f781a527b001fc1b1c7de06c936c9f35f06b12f5fa6499763909ed773d5"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "config-immutable-hp_processing_app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.589338+00:00",
+    "finished_at": "2026-11-13T09:47:58.648533+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "038-config-immutable-hp_processing_app.stdin",
+      "bytes": 236,
+      "sha256": "3707c674b7128848771533ef5bb0da3b238e98dc4c1a47568a94c2f822b31b01"
+    },
+    "stdout": {
+      "file": "038-config-immutable-hp_processing_app.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "038-config-immutable-hp_processing_app.stderr",
+      "bytes": 101,
+      "sha256": "3425b6033c261099ca91b9bdd39b2202b676a2dcf53018aeed1ef1736625b147"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-scope-hp_processing_worker-operations",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.649961+00:00",
+    "finished_at": "2026-11-13T09:47:58.718165+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "039-no-scope-hp_processing_worker-operations.stdin",
+      "bytes": 46,
+      "sha256": "eebe4886e5ed363a6297af0788aa3cf9ae64e8639b1ab15433dcdc54e5f378ea"
+    },
+    "stdout": {
+      "file": "039-no-scope-hp_processing_worker-operations.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "039-no-scope-hp_processing_worker-operations.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-drafts",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.720156+00:00",
+    "finished_at": "2026-11-13T09:47:58.790588+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "040-no-scope-hp_processing_worker-drafts.stdin",
+      "bytes": 42,
+      "sha256": "7f8802bac3d5946f31c5162de8baa42bf9c0ebf1e4aebccf93bd987157ebbc54"
+    },
+    "stdout": {
+      "file": "040-no-scope-hp_processing_worker-drafts.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "040-no-scope-hp_processing_worker-drafts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-accepted_configs",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.792414+00:00",
+    "finished_at": "2026-11-13T09:47:58.850386+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "041-no-scope-hp_processing_worker-accepted_configs.stdin",
+      "bytes": 52,
+      "sha256": "cb8e2aeba20ee6e42e9b6337f1f6d87ac66ee0dcce912f928971ece11888ee28"
+    },
+    "stdout": {
+      "file": "041-no-scope-hp_processing_worker-accepted_configs.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "041-no-scope-hp_processing_worker-accepted_configs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-case_identity",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.852583+00:00",
+    "finished_at": "2026-11-13T09:47:58.915892+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "042-no-scope-hp_processing_worker-case_identity.stdin",
+      "bytes": 49,
+      "sha256": "1b2389e602121d640c23ecdb53894f34bf0fe24bc6492e8f9714cb938d4c8dde"
+    },
+    "stdout": {
+      "file": "042-no-scope-hp_processing_worker-case_identity.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "042-no-scope-hp_processing_worker-case_identity.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-episodes",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.917279+00:00",
+    "finished_at": "2026-11-13T09:47:58.988763+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "043-no-scope-hp_processing_worker-episodes.stdin",
+      "bytes": 44,
+      "sha256": "a89a4e57063a8136df7ca8fdcff5b785695a799d7087a8cf59c627ce6eecbdc9"
+    },
+    "stdout": {
+      "file": "043-no-scope-hp_processing_worker-episodes.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "043-no-scope-hp_processing_worker-episodes.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-case_content",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:58.991007+00:00",
+    "finished_at": "2026-11-13T09:47:59.067667+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "044-no-scope-hp_processing_worker-case_content.stdin",
+      "bytes": 48,
+      "sha256": "b3493d563cc4bb2e4fb4be4dcafb8dee22cc97667731bf2b3f5dfbc66b538814"
+    },
+    "stdout": {
+      "file": "044-no-scope-hp_processing_worker-case_content.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "044-no-scope-hp_processing_worker-case_content.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-safety_history",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.069668+00:00",
+    "finished_at": "2026-11-13T09:47:59.127212+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "045-no-scope-hp_processing_worker-safety_history.stdin",
+      "bytes": 50,
+      "sha256": "da42e638c1be3b3e0a7cf2c8413a488f95ce61d73369864bfa15b0509790e801"
+    },
+    "stdout": {
+      "file": "045-no-scope-hp_processing_worker-safety_history.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "045-no-scope-hp_processing_worker-safety_history.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-history_content",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.127991+00:00",
+    "finished_at": "2026-11-13T09:47:59.190262+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "046-no-scope-hp_processing_worker-history_content.stdin",
+      "bytes": 51,
+      "sha256": "a157089afddc39551a7066e0c26a496e5408b158df8d95f4db4132941d08f74d"
+    },
+    "stdout": {
+      "file": "046-no-scope-hp_processing_worker-history_content.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "046-no-scope-hp_processing_worker-history_content.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-user_commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.191009+00:00",
+    "finished_at": "2026-11-13T09:47:59.259699+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "047-no-scope-hp_processing_worker-user_commands.stdin",
+      "bytes": 49,
+      "sha256": "a780b930f4bf268bc03dc669f1ec116b711f20bd0d9de9677a88e1a84cc22b8a"
+    },
+    "stdout": {
+      "file": "047-no-scope-hp_processing_worker-user_commands.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "047-no-scope-hp_processing_worker-user_commands.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-notifications",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.260447+00:00",
+    "finished_at": "2026-11-13T09:47:59.337639+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "048-no-scope-hp_processing_worker-notifications.stdin",
+      "bytes": 49,
+      "sha256": "06d48c38e6ea0f4207406a6b1f543aeebf9be115d9d562f4f413623e0702ccc3"
+    },
+    "stdout": {
+      "file": "048-no-scope-hp_processing_worker-notifications.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "048-no-scope-hp_processing_worker-notifications.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-inbox",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.338396+00:00",
+    "finished_at": "2026-11-13T09:47:59.405167+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "049-no-scope-hp_processing_worker-inbox.stdin",
+      "bytes": 41,
+      "sha256": "ec2f81a6dfe488f1e470f36d4037659552872739ec77f026f007b9e8190eee0f"
+    },
+    "stdout": {
+      "file": "049-no-scope-hp_processing_worker-inbox.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "049-no-scope-hp_processing_worker-inbox.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "no-scope-hp_processing_worker-outbox",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.406003+00:00",
+    "finished_at": "2026-11-13T09:47:59.460367+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "050-no-scope-hp_processing_worker-outbox.stdin",
+      "bytes": 42,
+      "sha256": "8a29a6111c768dbf667cf900e82cba2da3aa564004ab7056434c11834f69c561"
+    },
+    "stdout": {
+      "file": "050-no-scope-hp_processing_worker-outbox.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "file": "050-no-scope-hp_processing_worker-outbox.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "scoped-reset-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.461190+00:00",
+    "finished_at": "2026-11-13T09:47:59.525485+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "051-scoped-reset-hp_processing_worker.stdin",
+      "bytes": 223,
+      "sha256": "35d85d351302e2143fb788eccf96e13912bccb2c09040018af8f2b4c816f98c2"
+    },
+    "stdout": {
+      "file": "051-scoped-reset-hp_processing_worker.stdout",
+      "bytes": 4,
+      "sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea"
+    },
+    "stderr": {
+      "file": "051-scoped-reset-hp_processing_worker.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "own-only-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.526336+00:00",
+    "finished_at": "2026-11-13T09:47:59.577371+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "052-own-only-hp_processing_worker.stdin",
+      "bytes": 315,
+      "sha256": "d480197790e9518146796b43e8f0f5c127bc9758a7964a9fb893d740c7a85ae4"
+    },
+    "stdout": {
+      "file": "052-own-only-hp_processing_worker.stdout",
+      "bytes": 4,
+      "sha256": "82c1315e6c757f33c4a77ca58b2a184f5a88614470c05ec77f3d28918db6b8ae"
+    },
+    "stderr": {
+      "file": "052-own-only-hp_processing_worker.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "foreign-write-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.578336+00:00",
+    "finished_at": "2026-11-13T09:47:59.642203+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "053-foreign-write-hp_processing_worker.stdin",
+      "bytes": 335,
+      "sha256": "abae674ada45b805794b63b1899e60e480b15de8385fcfa643c4063eedd483f7"
+    },
+    "stdout": {
+      "file": "053-foreign-write-hp_processing_worker.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "053-foreign-write-hp_processing_worker.stderr",
+      "bytes": 130,
+      "sha256": "49134c5e3519b5ecb07e9897d13327692d817f96164c3cc5726671c295711f47"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-scope-write-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.643341+00:00",
+    "finished_at": "2026-11-13T09:47:59.693729+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "054-no-scope-write-hp_processing_worker.stdin",
+      "bytes": 228,
+      "sha256": "1880512b02a09b84a581bd62f104739aa3c5dbf77cd0da0450f053652e3ec6b2"
+    },
+    "stdout": {
+      "file": "054-no-scope-write-hp_processing_worker.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "054-no-scope-write-hp_processing_worker.stderr",
+      "bytes": 130,
+      "sha256": "49134c5e3519b5ecb07e9897d13327692d817f96164c3cc5726671c295711f47"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-owner-role-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.694855+00:00",
+    "finished_at": "2026-11-13T09:47:59.752641+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "055-no-owner-role-hp_processing_worker.stdin",
+      "bytes": 29,
+      "sha256": "2242579da719511a09886cbc6f5c5110cb85d89a2171831324db0835c1f3c734"
+    },
+    "stdout": {
+      "file": "055-no-owner-role-hp_processing_worker.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "055-no-owner-role-hp_processing_worker.stderr",
+      "bytes": 113,
+      "sha256": "72ab5f781a527b001fc1b1c7de06c936c9f35f06b12f5fa6499763909ed773d5"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "config-immutable-hp_processing_worker",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.753819+00:00",
+    "finished_at": "2026-11-13T09:47:59.812700+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "056-config-immutable-hp_processing_worker.stdin",
+      "bytes": 236,
+      "sha256": "3707c674b7128848771533ef5bb0da3b238e98dc4c1a47568a94c2f822b31b01"
+    },
+    "stdout": {
+      "file": "056-config-immutable-hp_processing_worker.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "056-config-immutable-hp_processing_worker.stderr",
+      "bytes": 101,
+      "sha256": "3425b6033c261099ca91b9bdd39b2202b676a2dcf53018aeed1ef1736625b147"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "no-global-index-app",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.814019+00:00",
+    "finished_at": "2026-11-13T09:47:59.879460+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "057-no-global-index-app.stdin",
+      "bytes": 38,
+      "sha256": "7faaa5a0cb15a6271dd6c4c4964e475b86561f809e8e44dc6f484dadede93afc"
+    },
+    "stdout": {
+      "file": "057-no-global-index-app.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "057-no-global-index-app.stderr",
+      "bytes": 94,
+      "sha256": "f0ac08a7478df53a6bcdac26f05146af93db8b2aac329aa7f0dd1db1648c692c"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "42501"
+  },
+  {
+    "label": "worker-index-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_worker",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.880780+00:00",
+    "finished_at": "2026-11-13T09:47:59.952764+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "058-worker-index-metadata.stdin",
+      "bytes": 155,
+      "sha256": "5346a4afd4618f6575ab5f478c456f74e7462ad86a5b79aebca765d326398248"
+    },
+    "stdout": {
+      "file": "058-worker-index-metadata.stdout",
+      "bytes": 56,
+      "sha256": "b91b235f15ea68cd47672a767471e08e6f7bc25b54424aee3af21e9f8f9f1a5f"
+    },
+    "stderr": {
+      "file": "058-worker-index-metadata.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "session-unique",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:47:59.953697+00:00",
+    "finished_at": "2026-11-13T09:48:00.017936+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "059-session-unique.stdin",
+      "bytes": 565,
+      "sha256": "979927b7645c4f9923e74a2794aa3b6520bda3763b250e8c0995af8ab7d35880"
+    },
+    "stdout": {
+      "file": "059-session-unique.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "059-session-unique.stderr",
+      "bytes": 310,
+      "sha256": "a553aa7d18e8891de7cb80b3da9cbe782578abffa35fe7d4e4ab3bd6cbbdf210"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "23505"
+  },
+  {
+    "label": "single-active",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.019019+00:00",
+    "finished_at": "2026-11-13T09:48:00.097534+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "060-single-active.stdin",
+      "bytes": 336,
+      "sha256": "b9a4318ed25ebca9939a2626886f1e0f91d49a4605900748f3e72eae29ac56a5"
+    },
+    "stdout": {
+      "file": "060-single-active.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "060-single-active.stderr",
+      "bytes": 215,
+      "sha256": "a32782f113571db77f83c46b24305810372ea72202bf0e04f4f472975aed4fdc"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "23505"
+  },
+  {
+    "label": "case-pin-workspace_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.100990+00:00",
+    "finished_at": "2026-11-13T09:48:00.165938+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "061-case-pin-workspace_id.stdin",
+      "bytes": 251,
+      "sha256": "28280246ba1fa0b9ebc469fd69c7958821961528855c4b0e65baca92e475379f"
+    },
+    "stdout": {
+      "file": "061-case-pin-workspace_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "061-case-pin-workspace_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-case_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.167417+00:00",
+    "finished_at": "2026-11-13T09:48:00.234239+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "062-case-pin-case_id.stdin",
+      "bytes": 246,
+      "sha256": "436e1b79505efb69b41f4b9d69faadf925aa56f4752278e680083f7f00740b15"
+    },
+    "stdout": {
+      "file": "062-case-pin-case_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "062-case-pin-case_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-operation_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.237072+00:00",
+    "finished_at": "2026-11-13T09:48:00.310568+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "063-case-pin-operation_id.stdin",
+      "bytes": 251,
+      "sha256": "c97002b2ab3e556a4f95908d0a4a56a5ed97f4e8180fe09793e9987d686471d1"
+    },
+    "stdout": {
+      "file": "063-case-pin-operation_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "063-case-pin-operation_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-config_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.312423+00:00",
+    "finished_at": "2026-11-13T09:48:00.385952+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "064-case-pin-config_id.stdin",
+      "bytes": 248,
+      "sha256": "d8748f4ec816ad3e6b3f2244a410b219233a1b4225d8edc4552c0523043f7588"
+    },
+    "stdout": {
+      "file": "064-case-pin-config_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "064-case-pin-config_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-source_account_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.387579+00:00",
+    "finished_at": "2026-11-13T09:48:00.458280+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "065-case-pin-source_account_id.stdin",
+      "bytes": 225,
+      "sha256": "1abba32523fee57d752cf8bad83eb61aa735614a1d5d1e663a4418b5ab6ad83b"
+    },
+    "stdout": {
+      "file": "065-case-pin-source_account_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "065-case-pin-source_account_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-livemode",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.460012+00:00",
+    "finished_at": "2026-11-13T09:48:00.520361+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "066-case-pin-livemode.stdin",
+      "bytes": 213,
+      "sha256": "8cea60cc0b0cda55ab9b22f7b4b188199ec30c8bb7823d119200e5c449231738"
+    },
+    "stdout": {
+      "file": "066-case-pin-livemode.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "066-case-pin-livemode.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-session_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.521790+00:00",
+    "finished_at": "2026-11-13T09:48:00.584433+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "067-case-pin-session_id.stdin",
+      "bytes": 218,
+      "sha256": "e7c00788c0888b809c9eddc4eba627d14b3e4378c8d39948e5ae5f2de6a9fd84"
+    },
+    "stdout": {
+      "file": "067-case-pin-session_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "067-case-pin-session_id.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "case-pin-admitted_at",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.585649+00:00",
+    "finished_at": "2026-11-13T09:48:00.649467+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "068-case-pin-admitted_at.stdin",
+      "bytes": 234,
+      "sha256": "e848fa00331454d9f07b84fd9816e0f47cd9aa486be510abb35ff2f7cb39d42a"
+    },
+    "stdout": {
+      "file": "068-case-pin-admitted_at.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "068-case-pin-admitted_at.stderr",
+      "bytes": 164,
+      "sha256": "50ba795a4617251d092eb3d3db0f5cf74b4eab8de7492e96886c046f021e0b7a"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "activation-pin-null",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.650754+00:00",
+    "finished_at": "2026-11-13T09:48:00.709962+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "069-activation-pin-null.stdin",
+      "bytes": 226,
+      "sha256": "4dbe9eed1dceb4807f30e603467cfb6b02f5fda42d68e6c4ec00f4b54e267aaf"
+    },
+    "stdout": {
+      "file": "069-activation-pin-null.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "069-activation-pin-null.stderr",
+      "bytes": 169,
+      "sha256": "4d81dba074fe9a7bf9bd085a2fd1b20b14b5ec358eeab8428a6b5a47e6bfac98"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "activation-pin-later",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.711181+00:00",
+    "finished_at": "2026-11-13T09:48:00.767373+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "070-activation-pin-later.stdin",
+      "bytes": 244,
+      "sha256": "5418a3da69eafdeefec1301b8f65030d91b0a00a73dc1d7f3e1b52a93a9ccc78"
+    },
+    "stdout": {
+      "file": "070-activation-pin-later.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "070-activation-pin-later.stderr",
+      "bytes": 169,
+      "sha256": "4d81dba074fe9a7bf9bd085a2fd1b20b14b5ec358eeab8428a6b5a47e6bfac98"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-workspace_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.768725+00:00",
+    "finished_at": "2026-11-13T09:48:00.823840+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "071-episode-pin-workspace_id.stdin",
+      "bytes": 249,
+      "sha256": "838e9ee9eb124ff517b75bb518c47264c37d898d00c3c4eb01d2ac09c0b979d9"
+    },
+    "stdout": {
+      "file": "071-episode-pin-workspace_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "071-episode-pin-workspace_id.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-episode_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.825031+00:00",
+    "finished_at": "2026-11-13T09:48:00.882527+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "072-episode-pin-episode_id.stdin",
+      "bytes": 247,
+      "sha256": "90d52eec3658ee6a087a5a87ddf5333b41e357741e83ac9d87759a0afdad6c5a"
+    },
+    "stdout": {
+      "file": "072-episode-pin-episode_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "072-episode-pin-episode_id.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-case_id",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.883947+00:00",
+    "finished_at": "2026-11-13T09:48:00.946464+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "073-episode-pin-case_id.stdin",
+      "bytes": 244,
+      "sha256": "def22c6cef23bc5006df129cf0a6f8641630e1655a47edb99142840c4e9f5af0"
+    },
+    "stdout": {
+      "file": "073-episode-pin-case_id.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "073-episode-pin-case_id.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-started_at",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:00.948365+00:00",
+    "finished_at": "2026-11-13T09:48:01.013261+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "074-episode-pin-started_at.stdin",
+      "bytes": 231,
+      "sha256": "c6e0371d01cffa6154dc6094af974f08d286235f2ea6959c0164a09578ac8b38"
+    },
+    "stdout": {
+      "file": "074-episode-pin-started_at.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "074-episode-pin-started_at.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-deadline_at",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.014865+00:00",
+    "finished_at": "2026-11-13T09:48:01.077196+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "075-episode-pin-deadline_at.stdin",
+      "bytes": 232,
+      "sha256": "e79de4cad157bc59e81f43421e9ee136bdf8cd535dd09707b02d2944b76f06ea"
+    },
+    "stdout": {
+      "file": "075-episode-pin-deadline_at.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "075-episode-pin-deadline_at.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "episode-pin-automatic_writes",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.079180+00:00",
+    "finished_at": "2026-11-13T09:48:01.147590+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "076-episode-pin-automatic_writes.stdin",
+      "bytes": 216,
+      "sha256": "66266ed13acfd6709162b9974d3c399d617a1d0a5ce36480a4c8efa39ee3c5a7"
+    },
+    "stdout": {
+      "file": "076-episode-pin-automatic_writes.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "076-episode-pin-automatic_writes.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "attempt-limit",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.148978+00:00",
+    "finished_at": "2026-11-13T09:48:01.212580+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "077-attempt-limit.stdin",
+      "bytes": 216,
+      "sha256": "b1f8ff257dbdf0d5d98c22cc20fc267e93abfc52629144e13d18db373456cc52"
+    },
+    "stdout": {
+      "file": "077-attempt-limit.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "077-attempt-limit.stderr",
+      "bytes": 251,
+      "sha256": "1aae22909604293ace34e9fbfdcf5f36b81316b511a274d1fb71bfdc1af3c23c"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "23514"
+  },
+  {
+    "label": "episode-duration",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.214240+00:00",
+    "finished_at": "2026-11-13T09:48:01.281286+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "078-episode-duration.stdin",
+      "bytes": 369,
+      "sha256": "5168173120f2ad85d7d1fcec85b13f27cf32a7e8f178de2b83b1deab22c8b143"
+    },
+    "stdout": {
+      "file": "078-episode-duration.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "078-episode-duration.stderr",
+      "bytes": 217,
+      "sha256": "decb2685735765ab86cac27cfeadad4e16f828da2236b0eb0e02ea86e97f11ce"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "23514"
+  },
+  {
+    "label": "atomic-rollback",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.282958+00:00",
+    "finished_at": "2026-11-13T09:48:01.357165+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "079-atomic-rollback.stdin",
+      "bytes": 638,
+      "sha256": "4c01115692f06f4b86833f62111ae54f4927bd306dfac602b9958ab0ec9e3e99"
+    },
+    "stdout": {
+      "file": "079-atomic-rollback.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "079-atomic-rollback.stderr",
+      "bytes": 209,
+      "sha256": "71f8ef7e374c5e7a82d9d463af69738748e66ff170249dee85a025a544e542a6"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "23514"
+  },
+  {
+    "label": "rollback-new-connection",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.359468+00:00",
+    "finished_at": "2026-11-13T09:48:01.426901+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "080-rollback-new-connection.stdin",
+      "bytes": 244,
+      "sha256": "411c8b91e4615002eba2936dc14c797b1d5442ea6e68f15d872b2547a7454697"
+    },
+    "stdout": {
+      "file": "080-rollback-new-connection.stdout",
+      "bytes": 4,
+      "sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea"
+    },
+    "stderr": {
+      "file": "080-rollback-new-connection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "atomic-commit",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.427873+00:00",
+    "finished_at": "2026-11-13T09:48:01.493683+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "081-atomic-commit.stdin",
+      "bytes": 635,
+      "sha256": "5b03f5f77f792e457db646244ddf760d5aed311211e0728fdbd63045e44cbdfc"
+    },
+    "stdout": {
+      "file": "081-atomic-commit.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "081-atomic-commit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "committed-new-connection",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.494705+00:00",
+    "finished_at": "2026-11-13T09:48:01.551251+00:00",
+    "exit_code": 0,
+    "stdin": {
+      "file": "082-committed-new-connection.stdin",
+      "bytes": 456,
+      "sha256": "46b5ca0e68878036c7707ac92b22bc02db3108c1b114039be698e8b93c11e496"
+    },
+    "stdout": {
+      "file": "082-committed-new-connection.stdout",
+      "bytes": 46,
+      "sha256": "2d29df86dc99ec73968f84ab380f9193df5704f102a38790658d49611f70c105"
+    },
+    "stderr": {
+      "file": "082-committed-new-connection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "constraint-after-reconnect",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8",
+      "psql",
+      "-X",
+      "-q",
+      "-A",
+      "-t",
+      "-v",
+      "VERBOSITY=verbose",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-U",
+      "hp_processing_app",
+      "-d",
+      "hit76_73ee437626044c0189d31710061dc645"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.552364+00:00",
+    "finished_at": "2026-11-13T09:48:01.610701+00:00",
+    "exit_code": 3,
+    "stdin": {
+      "file": "083-constraint-after-reconnect.stdin",
+      "bytes": 216,
+      "sha256": "66266ed13acfd6709162b9974d3c399d617a1d0a5ce36480a4c8efa39ee3c5a7"
+    },
+    "stdout": {
+      "file": "083-constraint-after-reconnect.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "083-constraint-after-reconnect.stderr",
+      "bytes": 167,
+      "sha256": "a900b6e397a09119a2fe999a091cb19e049791050f8aaa31e6b0f02bbbfedf5b"
+    },
+    "expected_exit_code": 3,
+    "expected_sqlstate": "P0001"
+  },
+  {
+    "label": "container-logs",
+    "argv": [
+      "docker",
+      "logs",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.612318+00:00",
+    "finished_at": "2026-11-13T09:48:01.628217+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "084-container-logs.stdout",
+      "bytes": 2383,
+      "sha256": "e3d0464a53f3c85583772dbfdede1cf725f038cda7976829b19de2f25b029b40"
+    },
+    "stderr": {
+      "file": "084-container-logs.stderr",
+      "bytes": 12107,
+      "sha256": "7423a52aad7f6215cb14cf6a47217983017ed5086b45d4ee2cbe838563c7a0c3"
+    }
+  },
+  {
+    "label": "cleanup",
+    "argv": [
+      "docker",
+      "rm",
+      "-f",
+      "-v",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.629249+00:00",
+    "finished_at": "2026-11-13T09:48:01.669430+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "085-cleanup.stdout",
+      "bytes": 65,
+      "sha256": "9fe616285b71c89a477546ba9f72e00b80ffed04644c56682cb3dd4d3eb6e4f6"
+    },
+    "stderr": {
+      "file": "085-cleanup.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "cleanup-probe",
+    "argv": [
+      "docker",
+      "container",
+      "inspect",
+      "84aec27eebbcec96d0a748722df4bc91057b815057c45f99071d06b927a57dc8"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit76-processing-postgres",
+    "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+    "source_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "tree_status_at_start": "",
+    "runner_sha256": "0bfce50c1a704c3ded9619ca90f86d5d7e542b063e74bc0a2aadd9b4cff122fa",
+    "started_at": "2026-11-13T09:48:01.670341+00:00",
+    "finished_at": "2026-11-13T09:48:01.683788+00:00",
+    "exit_code": 1,
+    "stdout": {
+      "file": "086-cleanup-probe.stdout",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "stderr": {
+      "file": "086-cleanup-probe.stderr",
+      "bytes": 112,
+      "sha256": "2d5f3f2f272ed1ba8dd9f03c090bdfa1b3eb84c71e028867c35f3dadfeff705a"
+    }
+  }
+]

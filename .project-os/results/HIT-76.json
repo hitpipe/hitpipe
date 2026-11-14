@@ -1,0 +1,38 @@
+{
+  "subject": "HIT-76",
+  "materialized_result": {
+    "summary": "Точная принятая схема Processing, отдельные роли/мигратор, повторяемое применение и реальные PostgreSQL проверки изоляции/ограничений.",
+    "base_sha": "20adc01a037148d20ea8da6c281f52d25cb2d9e3",
+    "tested_implementation_sha": "008a6f1b0d8276fbdfc3f8755989c2ff81abf6de",
+    "code": "https://github.com/hitpipe/hitpipe/tree/008a6f1b0d8276fbdfc3f8755989c2ff81abf6de/services/processing/scripts",
+    "migration_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+    "formal_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql"
+  },
+  "changed_artifacts": [
+    "services/processing/scripts/migrations/001_processing.sql",
+    "services/processing/scripts/migrations/README.md",
+    "services/processing/scripts/migrations/apply.sql",
+    "services/processing/scripts/migrations/roles.sql",
+    "services/processing/scripts/postgres/README.md",
+    "services/processing/scripts/postgres/verify.py"
+  ],
+  "verification": {
+    "sql_commands": "services/processing/docs/HIT-76/sql-verification/commands.json",
+    "sql_summary": "services/processing/docs/HIT-76/sql-verification/summary.json",
+    "go_commands": "services/processing/docs/HIT-76/go-verification/go-commands.json",
+    "source_audit": "services/processing/docs/HIT-76/source-audit.json",
+    "environment": "PostgreSQL18.6 Linux/arm64 Docker pinned image on macOS; Go1.27.2 darwin/arm64 GOTOOLCHAIN=local",
+    "sql_result": "PASS: real migration, idempotent version readback, role ownership/attributes, 12 tenant tables forced RLS, SET LOCAL reset, 31 specific SQL rejection checks, transaction rollback and new-connection state, cleanup. Full commands/stdin/stdout/stderr/exit/SHA256 preserved.",
+    "go_result": "go test -race -count=1 ./... — 6 packages PASS; go vet ./... exit0",
+    "image": "docker.io/library/postgres:18.6-bookworm@sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Только схема/роли/изоляция Processing. Нет приёма событий, runtime authority, HTTP/активации, IAM или Stripe→ClickUp E2E.",
+    "SET LOCAL требует внешней проверки полномочий; сам GUC не является authority.",
+    "job_index — разрешённые worker-only metadata; schema_version — метаданные схемы, не tenant payload.",
+    "Изолированные синтетические тесты в tmpfs не доказывают production authentication, power-loss durability, backup/restore или deployment capacity.",
+    "Независимое review и человеческая приёмка не выполнены."
+  ],
+  "authorship": "Codex по поручению Тимофея Патрушева / Tim1hik"
+}
