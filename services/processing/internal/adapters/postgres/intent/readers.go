@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
@@ -39,7 +40,11 @@ func (f Readers) ForCase(ctx context.Context, c preparecase.Case, r preparecase.
 	if d, ok := ctx.Deadline(); ok && d.Before(deadline) {
 		deadline = d
 	}
-	caller := sourcefacts.CallerContext{WorkspaceID: c.WorkspaceID, CaseID: c.CaseID, SessionID: c.SessionID, ConnectionID: c.Mapping.SourceConnectionID, AccountID: c.AccountID, RequestID: c.CaseID, ExpectedEpoch: r.Epoch, DeadlineAt: deadline, LiveMode: &c.Live}
+	requestID, e := contentfiles.UUID()
+	if e != nil {
+		return nil, e
+	}
+	caller := sourcefacts.CallerContext{WorkspaceID: c.WorkspaceID, CaseID: c.CaseID, SessionID: c.SessionID, ConnectionID: c.Mapping.SourceConnectionID, AccountID: c.AccountID, RequestID: requestID, ExpectedEpoch: r.Epoch, DeadlineAt: deadline, LiveMode: &c.Live}
 	return sourcefacts.NewReader(f.Origin, c.Policy, caller, f.Transport, sharedSourceBoundary{f.Boundary, c.Scope(r), caller}, f.MaxResponseBytes)
 }
 
@@ -51,7 +56,7 @@ type sharedSourceBoundary struct {
 
 func (g sharedSourceBoundary) Start(ctx context.Context, c sourcefacts.CallerContext, start func() error) error {
 	e := g.expected
-	if c.LiveMode == nil || e.LiveMode == nil || c.WorkspaceID != e.WorkspaceID || c.CaseID != e.CaseID || c.SessionID != e.SessionID || c.ConnectionID != e.ConnectionID || c.AccountID != e.AccountID || *c.LiveMode != *e.LiveMode || c.ExpectedEpoch != e.ExpectedEpoch || !c.DeadlineAt.Equal(e.DeadlineAt) {
+	if c.LiveMode == nil || e.LiveMode == nil || c.WorkspaceID != e.WorkspaceID || c.CaseID != e.CaseID || c.SessionID != e.SessionID || c.ConnectionID != e.ConnectionID || c.AccountID != e.AccountID || c.RequestID != e.RequestID || *c.LiveMode != *e.LiveMode || c.ExpectedEpoch != e.ExpectedEpoch || !c.DeadlineAt.Equal(e.DeadlineAt) {
 		return preparecase.ErrHold
 	}
 	called := false

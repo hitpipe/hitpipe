@@ -26,7 +26,11 @@ func (s Service) protected(ctx context.Context, scope Scope, work func(context.C
 			return ErrHold
 		}
 		called = true
-		return work(bounded)
+		workCtx, cancelWork := context.WithCancel(bounded)
+		defer cancelWork()
+		stop := context.AfterFunc(c, cancelWork)
+		defer stop()
+		return work(workCtx)
 	})
 	if e != nil {
 		return e
@@ -128,6 +132,11 @@ func (s Service) Prepare(ctx context.Context, r Request) (Result, error) {
 				if capture.s.Facts.ValidUntil.Before(expiry) {
 					expiry = capture.s.Facts.ValidUntil
 				}
+				for _, f := range fields {
+					if f.ExpiresAt.Before(expiry) {
+						expiry = f.ExpiresAt
+					}
+				}
 				ref, e := s.Content.Write(ctx, payload.Body, "DELIVERY_INTENT", expiry, d.At)
 				if e != nil {
 					return zero, e
@@ -145,11 +154,13 @@ func (s Service) Prepare(ctx context.Context, r Request) (Result, error) {
 	// Detailed decision/proof is expiring owner content, never SQL JSON. These are
 	// recorded observations at At, not a claim that the proof remains fresh later.
 	evidence, e := json.Marshal(struct {
-		CaseID   string
-		Revision int64
-		OldState string
-		Decision Decision
-	}{c.CaseID, c.Revision, c.State, d})
+		CaseID            string
+		Revision          int64
+		OldState          string
+		Scope             Scope
+		OperationRevision int64
+		Decision          Decision
+	}{c.CaseID, c.Revision, c.State, c.Scope(r), c.OperationRevision, d})
 	if e != nil {
 		return zero, e
 	}

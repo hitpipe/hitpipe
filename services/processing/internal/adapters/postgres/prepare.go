@@ -164,6 +164,22 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 			return zero, preparecase.ErrHold
 		}
 	}
+	// Recheck the original required content before entering the SQL transaction.
+	for _, key := range expected.Mapping.RequiredKeys {
+		found := false
+		for _, v := range expected.Context {
+			if v.Key == key {
+				if _, e := db.Content.Read(ctx, v.Ref, now); e != nil && d.Intent != nil {
+					return zero, e
+				}
+				found = true
+				break
+			}
+		}
+		if !found && d.Intent != nil {
+			return zero, preparecase.ErrHold
+		}
+	}
 	tx, e := scoped(ctx, db.DB, expected.WorkspaceID)
 	if e != nil {
 		return zero, e
@@ -187,6 +203,22 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 	// The gate owns current authority/epoch throughout this bounded SQL callback.
 	// Source financial proof is checked again after obtaining the local row lock.
 	if d.Intent != nil {
+		for _, key := range current.Mapping.RequiredKeys {
+			var oldRef, newRef *preparecase.ContextRef
+			for i := range expected.Context {
+				if expected.Context[i].Key == key {
+					oldRef = &expected.Context[i]
+				}
+			}
+			for i := range current.Context {
+				if current.Context[i].Key == key {
+					newRef = &current.Context[i]
+				}
+			}
+			if oldRef == nil || newRef == nil || oldRef.Ref.ID != newRef.Ref.ID || oldRef.Ref.Digest != newRef.Ref.Digest || oldRef.Ref.Bytes != newRef.Ref.Bytes || !oldRef.Ref.ExpiresAt.Equal(newRef.Ref.ExpiresAt) || !oldRef.AddedAt.Equal(newRef.AddedAt) || !dbNow.Before(newRef.Ref.ExpiresAt) {
+				return zero, preparecase.ErrStale
+			}
+		}
 		if eligibility.Evaluate(current.Policy, d.Snapshot.Facts, dbNow).Status != eligibility.Valid || !dbNow.Before(d.Intent.ExpiresAt) || !dbNow.Before(d.DeadlineAt) || !payload.FactsValidUntil.Equal(d.Snapshot.Facts.ValidUntil) || !payload.DeadlineAt.Equal(d.DeadlineAt) {
 			return zero, preparecase.ErrHold
 		}

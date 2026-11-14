@@ -513,12 +513,16 @@ func TestPreparationFileFaultsBeforeSQL(t *testing.T) {
 	}
 }
 func TestPreparationContentAvailabilityAndGuards(t *testing.T) {
-	for _, mode := range []string{"valid_context", "missing", "corrupt", "expired", "possible_effect", "existing_task"} {
+	for _, mode := range []string{"valid_context", "short_context", "missing", "corrupt", "expired", "possible_effect", "existing_task"} {
 		t.Run(mode, func(t *testing.T) {
 			f := prepared(t, []string{"brief"})
 			now := time.Now().UTC()
 			payload, _ := json.Marshal("synthetic brief\nsecond line")
-			ref, e := f.files.Write(ctx, payload, "CASE_CONTEXT", now.Add(time.Hour), now)
+			expiry := now.Add(time.Hour)
+			if mode == "short_context" {
+				expiry = now.Add(5 * time.Second)
+			}
+			ref, e := f.files.Write(ctx, payload, "CASE_CONTEXT", expiry, now)
 			if e != nil {
 				t.Fatal(e)
 			}
@@ -552,11 +556,22 @@ func TestPreparationContentAvailabilityAndGuards(t *testing.T) {
 				f.service.Clock = testClock{func() time.Time { return now.Add(2 * time.Hour) }}
 			}
 			r, e := f.service.Prepare(ctx, f.request)
-			if mode == "valid_context" {
+			if mode == "valid_context" || mode == "short_context" {
 				if e != nil || r.MessageID == "" {
 					t.Fatal("valid required content blocked", r, e)
 				}
 				decisionCounts(t, f.request.WorkspaceID, 1, 2, 1)
+				if mode == "short_context" {
+					db := connect(t)
+					tx := begin(t, db, f.request.WorkspaceID)
+					var stored time.Time
+					if e := tx.QueryRow(ctx, `SELECT expires_at FROM hp_processing.outbox`).Scan(&stored); e != nil {
+						t.Fatal(e)
+					}
+					if stored.After(ref.ExpiresAt) {
+						t.Fatal("intent extended required context expiry")
+					}
+				}
 			} else {
 				if r.MessageID != "" {
 					t.Fatal("unavailable content or known effect produced intent", r, e)

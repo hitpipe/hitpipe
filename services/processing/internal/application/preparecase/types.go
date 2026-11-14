@@ -20,7 +20,7 @@ type Request struct {
 }
 type Scope struct {
 	Request
-	OperationID, ConfigID, SourceConnectionID, DestinationConnectionID string
+	OperationID, ConfigID, SourceConnectionID, DestinationConnectionID, OwnerID string
 }
 
 // Boundary must synchronously run start once under current authority/binding/epoch
@@ -66,7 +66,7 @@ type Case struct {
 }
 
 func (c Case) Scope(r Request) Scope {
-	return Scope{r, c.OperationID, c.ConfigID, c.Mapping.SourceConnectionID, c.Mapping.DestinationConnectionID}
+	return Scope{Request: r, OperationID: c.OperationID, ConfigID: c.ConfigID, SourceConnectionID: c.Mapping.SourceConnectionID, DestinationConnectionID: c.Mapping.DestinationConnectionID, OwnerID: c.OwnerID}
 }
 
 type Decision struct {
