@@ -44,7 +44,7 @@ func (db Store) Accept(ctx context.Context, s admission.Signal, c admission.Esta
 		if e = tx.Commit(ctx); e != nil {
 			return zero, e
 		}
-		return admission.Receipt{s.MessageID, disposition, recordID}, nil
+		return admission.Receipt{MessageID: s.MessageID, Disposition: disposition, RecordID: recordID}, nil
 	}
 	if !errors.Is(e, pgx.ErrNoRows) {
 		return zero, e
@@ -76,5 +76,5 @@ func (db Store) Accept(ctx context.Context, s admission.Signal, c admission.Esta
 	if e = tx.Commit(ctx); e != nil {
 		return zero, e
 	}
-	return admission.Receipt{s.MessageID, r.Disposition, r.RecordID}, nil
+	return admission.Receipt{MessageID: s.MessageID, Disposition: r.Disposition, RecordID: r.RecordID}, nil
 }
