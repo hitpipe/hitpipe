@@ -1,10 +1,15 @@
 # Processing PostgreSQL checks — HIT-76
 
+Поправка `HP-CCR-POSTGRES-20261114` меняет только образ PostgreSQL на 18.7 и
+проверяемый номер сервера. SQL, роли, RLS и параметры надёжного сохранения не
+меняются. Прежние протоколы HIT-76 на 18.6 остаются историей. Новый запуск
+записывается в новый каталог; замена образа не означает уже выполненный прогон.
+
 From repository root, with a running **local** Docker daemon and Python 3.10+:
 
 ```sh
-docker pull docker.io/library/postgres:18.6-bookworm@sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c
-python3 services/processing/scripts/postgres/verify.py --output /tmp/hit76-check-UNIQUE
+docker pull docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f
+python3 services/processing/scripts/postgres/verify.py --output /tmp/processing-pg187-check-UNIQUE
 ```
 
 Output must be a new directory. The runner checks the migration SHA-256, records
@@ -23,11 +28,12 @@ Docker context or DOCKER_HOST override is rejected. Initial image download needs
 network; the PostgreSQL container does not. No provider/service keys or user data
 are used. All identities and payload references are synthetic UUIDs.
 
-PostgreSQL must report server_version_num 180006, fsync/full_page_writes/
-synchronous_commit on. The pinned image is PostgreSQL18.6, with ARM64 child digest
-sha256:67ba68a22dc7d5af3627b7e0f33d10bbefad07562ff9703b3a6c2de247649129
-(AMD64: sha256:9551dd5bf356409a21b31248f49b33bba9bb1877365f3a7e933aecd9af3cf52d).
-Image authority: project-os@fedbe40bb597e25f66aeb1172af3ff7459c81b40,
+PostgreSQL must report server_version_num 180007, fsync/full_page_writes/
+synchronous_commit on. The pinned image is PostgreSQL18.7, with ARM64 child digest
+sha256:34a90b5d3c95c75a8756202996ae03e73db36ddf9c477a41ddc363cb95327d5a
+(AMD64: sha256:a197bcc7150b0a7e35796ef0c110693cba6edd41e92b564cc50b976f17532423).
+Image authority: security amendment `HP-CCR-POSTGRES-20261114` to
+project-os@fedbe40bb597e25f66aeb1172af3ff7459c81b40,
 contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json. No Go driver is introduced;
 psql from the same image executes real PostgreSQL SQL. Existing Go checks use
 Go1.27.2 (`go test -race -count=1 ./...` from services/processing).

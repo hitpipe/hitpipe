@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-78",
+  "status": "PASS",
+  "source_sha": "fa05c7dfd848ba576d2e9be054c9eb791ac96584",
+  "processing_git_tree_sha": "2c9bacfb4e7833a9abe608d855a107d6bccee5e1",
+  "source_tree": {
+    "manifest": {
+      "file": "source-files.json",
+      "bytes": 251186,
+      "sha256": "387cdd61a198c9b2d69aadbe3d5ae67e0065d80f00148e1e52e5d61940b01991"
+    },
+    "tracked_files_checked": 1132,
+    "unchanged_after_run": true
+  },
+  "runner": {
+    "path": "services/processing/scripts/postgres/verify_admission_storage.py",
+    "sha256": "9f3f4f1552e4da014b25336581c3f8b17583c9ad282f2d7fec73fb89519d3ae8"
+  },
+  "imported_lifecycle_runner": {
+    "path": "services/processing/scripts/postgres/verify.py",
+    "sha256": "05c80a1c432aa01dde1f376679c28fa39e189d6830f16089d8e0644e84502a52"
+  },
+  "migration": {
+    "path": "services/processing/scripts/migrations/001_processing.sql",
+    "sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93"
+  },
+  "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "platform": "linux/amd64",
+  "postgres_settings": {
+    "server_version_num": 180007,
+    "fsync": "on",
+    "full_page_writes": "on",
+    "synchronous_commit": "on",
+    "listen_addresses": ""
+  },
+  "command_count": 95,
+  "sql_command_count": 75,
+  "expected_sql_rejection_count": 31,
+  "expected_sqlstate_counts": {
+    "23505": 2,
+    "23514": 3,
+    "42501": 9,
+    "P0001": 17
+  },
+  "expected_sql_rejections": [
+    {
+      "command_index": 37,
+      "label": "foreign-write-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 38,
+      "label": "no-scope-write-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 39,
+      "label": "no-owner-role-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 40,
+      "label": "config-immutable-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 55,
+      "label": "foreign-write-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 56,
+      "label": "no-scope-write-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 57,
+      "label": "no-owner-role-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 58,
+      "label": "config-immutable-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 59,
+      "label": "no-global-index-app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 61,
+      "label": "session-unique",
+      "exit_code": 3,
+      "sqlstate": "23505"
+    },
+    {
+      "command_index": 62,
+      "label": "single-active",
+      "exit_code": 3,
+      "sqlstate": "23505"
+    },
+    {
+      "command_index": 63,
+      "label": "case-pin-workspace_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 64,
+      "label": "case-pin-case_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 65,
+      "label": "case-pin-operation_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 66,
+      "label": "case-pin-config_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 67,
+      "label": "case-pin-source_account_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 68,
+      "label": "case-pin-livemode",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 69,
+      "label": "case-pin-session_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 70,
+      "label": "case-pin-admitted_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 71,
+      "label": "activation-pin-null",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 72,
+      "label": "activation-pin-later",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 73,
+      "label": "episode-pin-workspace_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 74,
+      "label": "episode-pin-episode_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 75,
+      "label": "episode-pin-case_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 76,
+      "label": "episode-pin-started_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 77,
+      "label": "episode-pin-deadline_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 78,
+      "label": "episode-pin-automatic_writes",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 79,
+      "label": "attempt-limit",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 80,
+      "label": "episode-duration",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 81,
+      "label": "atomic-rollback",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 85,
+      "label": "constraint-after-reconnect",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    }
+  ],
+  "expected_non_sql_nonzero_commands": [
+    {
+      "command_index": 4,
+      "label": "ready",
+      "exit_code": 2,
+      "meaning": "Initial readiness probe; later probe succeeded before SQL tests."
+    },
+    {
+      "command_index": 94,
+      "label": "cleanup-probe",
+      "exit_code": 1,
+      "meaning": "Owned container is absent after cleanup."
+    }
+  ],
+  "unexpected_nonzero_commands": [],
+  "command_artifact_hashes_checked": 265,
+  "go_version": {
+    "command_index": 86,
+    "exit_code": 0,
+    "argv": [
+      "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+      "version"
+    ],
+    "stdout": {
+      "file": "086-go-version.stdout",
+      "bytes": 32,
+      "sha256": "ed4307d760c597256afdc696a61d47d13e832615d7741ead11c64966a440b376"
+    },
+    "stderr": {
+      "file": "086-go-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "go_race": {
+    "command_index": 87,
+    "exit_code": 0,
+    "argv": [
+      "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+      "-C",
+      "/home/deploy/hitpipe-pg187-processing-20261114/services/processing",
+      "test",
+      "-race",
+      "-count=1",
+      "-v",
+      "./..."
+    ],
+    "stdout": {
+      "file": "087-go-race.stdout",
+      "bytes": 44947,
+      "sha256": "2cbab060b5e2abe9b90a0bec4f2ef03f4e55b67c95c7506d49c0726915369487"
+    },
+    "stderr": {
+      "file": "087-go-race.stderr",
+      "bytes": 47,
+      "sha256": "69ad2b5204d1a2d1e79bde0edfe55680f2baf0ea53b22fc2aa5febda117854c2"
+    }
+  },
+  "go_vet": {
+    "command_index": 88,
+    "exit_code": 0,
+    "argv": [
+      "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+      "-C",
+      "/home/deploy/hitpipe-pg187-processing-20261114/services/processing",
+      "vet",
+      "./..."
+    ],
+    "stdout": {
+      "file": "088-go-vet.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "088-go-vet.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "compile_linux_storage_tests": {
+    "command_index": 90,
+    "exit_code": 0,
+    "argv": [
+      "env",
+      "GOOS=linux",
+      "GOARCH=amd64",
+      "CGO_ENABLED=0",
+      "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+      "-C",
+      "/home/deploy/hitpipe-pg187-processing-20261114/services/processing",
+      "test",
+      "-c",
+      "-o",
+      "/tmp/hit78-test-vya36z72/storage.test",
+      "./internal/adapters/postgres"
+    ],
+    "stdout": {
+      "file": "090-compile-linux-test.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "090-compile-linux-test.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "real_postgres_storage_tests": {
+    "command_index": 91,
+    "exit_code": 0,
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "HIT78_ISOLATED_PG=1",
+      "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25",
+      "/test/storage.test",
+      "-test.v",
+      "-test.count=1",
+      "-test.timeout=60s"
+    ],
+    "stdout": {
+      "file": "091-postgres-storage-tests.stdout",
+      "bytes": 4392,
+      "sha256": "5ee17708f0378f24fae89581ac83a5dc31b9f6b64ee59ce809f35b1edfae8aa5"
+    },
+    "stderr": {
+      "file": "091-postgres-storage-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "required_top_level_tests": [
+      "TestAdmissionActivationBoundary",
+      "TestAdmissionRejectsContextAndLocalState",
+      "TestAdmissionReplayAfterLifecycleAndNewConnection",
+      "TestAdmissionCommitFailureNeverAcknowledges",
+      "TestAdmissionTwoSignalsOnePinnedCase",
+      "TestAdmissionConcurrentAndDigestConflict",
+      "TestRecordCommitRepeatConflictAndReconnect",
+      "TestRecordRollbackAndCommitFailure",
+      "TestRecordConcurrentIdentityAndMessage",
+      "TestRecordRLSRejectsForeignWorkspace",
+      "TestEnvironment"
+    ],
+    "top_level_pass_count": 11,
+    "all_pass_including_subtests": 35,
+    "skip_count": 0,
+    "activation_boundary_cases": [
+      "before",
+      "exact",
+      "after",
+      "old_session_late_payment"
+    ]
+  },
+  "host_race_skips": {
+    "names": [
+      "TestAdmissionReplayAfterLifecycleAndNewConnection",
+      "TestAdmissionCommitFailureNeverAcknowledges",
+      "TestAdmissionTwoSignalsOnePinnedCase",
+      "TestAdmissionConcurrentAndDigestConflict",
+      "TestRecordCommitRepeatConflictAndReconnect",
+      "TestRecordRLSRejectsForeignWorkspace"
+    ],
+    "meaning": "These PostgreSQL tests intentionally skip on the host; all 11 storage/admission groups ran without skips inside the real PostgreSQL container separately. That CGO=0 container run is not a race run."
+  },
+  "test_binary": {
+    "manifest": {
+      "file": "test-binary.json",
+      "bytes": 145,
+      "sha256": "cad713d8c96d419877a43cb327be516d7c40e3d4d210dd57a45e99542d3a2244"
+    },
+    "sha256": "a8e6c3719b84e64e72c397a2f54d9e94904ab8bbc23261504053a7fc1fb82f2d",
+    "GOOS": "linux",
+    "GOARCH": "amd64",
+    "CGO_ENABLED": "0"
+  },
+  "artifacts": {
+    "summary": {
+      "file": "summary.json",
+      "bytes": 872,
+      "sha256": "cd6061ef4a8e265a3966a9570cf0b1a76237b11ff3f4f0c235b44166104b3885"
+    },
+    "commands": {
+      "file": "commands.json",
+      "bytes": 132491,
+      "sha256": "26f62d5e6ba285e97d6fb50f09d4df50e2b8c66e2523f27914c1f1a661b524e3"
+    },
+    "postgres_settings": {
+      "command_index": 11,
+      "exit_code": 0,
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25",
+        "psql",
+        "-X",
+        "-q",
+        "-A",
+        "-t",
+        "-v",
+        "VERBOSITY=verbose",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "postgres",
+        "-d",
+        "postgres"
+      ],
+      "stdout": {
+        "file": "011-postgres-settings.stdout",
+        "bytes": 17,
+        "sha256": "7ad450c52f1bab5c7f37b83c8bba2ed122e06a1a3e00e706c2ddca3efd95ab08"
+      },
+      "stderr": {
+        "file": "011-postgres-settings.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "cleanup": {
+      "command_index": 93,
+      "exit_code": 0,
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "-v",
+        "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25"
+      ],
+      "stdout": {
+        "file": "093-cleanup.stdout",
+        "bytes": 65,
+        "sha256": "e384249793b8fc17deaac900718470bea1cbcd8ad41ee83c62c212af6a42e12f"
+      },
+      "stderr": {
+        "file": "093-cleanup.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "cleanup_probe": {
+      "command_index": 94,
+      "exit_code": 1,
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25"
+      ],
+      "stdout": {
+        "file": "094-cleanup-probe.stdout",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      "stderr": {
+        "file": "094-cleanup-probe.stderr",
+        "bytes": 112,
+        "sha256": "e4e2c567c8df914a8af1260a2c88d96336ed2cfd2a51728a293bb9f5c4f013b2"
+      }
+    },
+    "operator_cleanup": {
+      "file": "operator-cleanup.json",
+      "bytes": 1556,
+      "sha256": "95bfa6fb657b500e6d041909db13da42de1975235963f55d4da72420c60f61fd"
+    },
+    "execution": {
+      "file": "execution-result.json",
+      "bytes": 902,
+      "sha256": "de92d8f3403c88015b30757f35ae637148350a13a89f9e81dc9b68736436794c"
+    }
+  },
+  "environment_overrides": {
+    "GOCACHE": "/home/deploy/.cache/hit78-pg187-go-build",
+    "GOFLAGS": "-mod=readonly -p=1",
+    "GOMAXPROCS": "2",
+    "GOTOOLCHAIN": "local",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "single_run": true,
+  "minimum_available_disk_bytes": 301961216,
+  "cleanup": {
+    "owned_container_removed": true,
+    "owned_go_cache_removed": true,
+    "own_exact_image_removed": true,
+    "available_bytes_after_cleanup": 1288577024
+  },
+  "limitations": [
+    "Scope is local Processing schema/roles/RLS/constraints/transaction and admission/storage correctness on PostgreSQL18.7.",
+    "Host Go race/vet passed. Separate real PostgreSQL storage test binary uses CGO=0 and has no race instrumentation.",
+    "Established authority/binding is synthetic test composition input; not live IAM, Intake, provider authentication or Stripe→ClickUp E2E.",
+    "No dedicated CVE exploit reproduction or power-loss/deployment qualification is claimed.",
+    "This is test evidence, not a Jira review verdict or human acceptance."
+  ]
+}

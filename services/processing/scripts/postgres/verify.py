@@ -12,7 +12,7 @@ import subprocess
 import time
 import uuid
 
-IMAGE='docker.io/library/postgres:18.6-bookworm@sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c'
+IMAGE='docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f'
 SQL_SHA='a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93'
 MODULE=pathlib.Path(__file__).resolve().parents[2]
 REPO=MODULE.parents[1]
@@ -66,7 +66,7 @@ class Run:
     time.sleep(0.5)
    else:raise RuntimeError('PostgreSQL did not become ready')
    self.command('postgres-version',['docker','exec',self.container,'postgres','--version'])
-   self.expect('postgres-settings',"SELECT current_setting('server_version_num'),current_setting('fsync'),current_setting('full_page_writes'),current_setting('synchronous_commit'),current_setting('listen_addresses');",'180006|on|on|on|',role='postgres',database='postgres')
+   self.expect('postgres-settings',"SELECT current_setting('server_version_num'),current_setting('fsync'),current_setting('full_page_writes'),current_setting('synchronous_commit'),current_setting('listen_addresses');",'180007|on|on|on|',role='postgres',database='postgres')
    self.sql('roles',"\\i /migrations/roles.sql\n",role='postgres',database='postgres')
    self.sql('database',f"CREATE DATABASE {self.db} OWNER hp_processing_owner;\nREVOKE ALL ON DATABASE {self.db} FROM PUBLIC;\nGRANT CONNECT ON DATABASE {self.db} TO hp_processing_migrator,hp_processing_app,hp_processing_worker,hp_processing_purge;",role='postgres',database='postgres')
    self.sql('migration-first',"\\i /migrations/apply.sql\n",role='hp_processing_migrator')

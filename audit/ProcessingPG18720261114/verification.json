@@ -1,0 +1,321 @@
+{
+  "status": "PASS",
+  "source_sha": "88639c80e65daa86b8c6e0fee47a3e9bae191f65",
+  "command_count": 89,
+  "sql_command_count": 75,
+  "expected_sql_rejection_count": 31,
+  "expected_sql_rejections": [
+    {
+      "command_index": 37,
+      "label": "foreign-write-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 38,
+      "label": "no-scope-write-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 39,
+      "label": "no-owner-role-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 40,
+      "label": "config-immutable-hp_processing_app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 55,
+      "label": "foreign-write-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 56,
+      "label": "no-scope-write-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 57,
+      "label": "no-owner-role-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 58,
+      "label": "config-immutable-hp_processing_worker",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 59,
+      "label": "no-global-index-app",
+      "exit_code": 3,
+      "sqlstate": "42501"
+    },
+    {
+      "command_index": 61,
+      "label": "session-unique",
+      "exit_code": 3,
+      "sqlstate": "23505"
+    },
+    {
+      "command_index": 62,
+      "label": "single-active",
+      "exit_code": 3,
+      "sqlstate": "23505"
+    },
+    {
+      "command_index": 63,
+      "label": "case-pin-workspace_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 64,
+      "label": "case-pin-case_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 65,
+      "label": "case-pin-operation_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 66,
+      "label": "case-pin-config_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 67,
+      "label": "case-pin-source_account_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 68,
+      "label": "case-pin-livemode",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 69,
+      "label": "case-pin-session_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 70,
+      "label": "case-pin-admitted_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 71,
+      "label": "activation-pin-null",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 72,
+      "label": "activation-pin-later",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 73,
+      "label": "episode-pin-workspace_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 74,
+      "label": "episode-pin-episode_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 75,
+      "label": "episode-pin-case_id",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 76,
+      "label": "episode-pin-started_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 77,
+      "label": "episode-pin-deadline_at",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 78,
+      "label": "episode-pin-automatic_writes",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    },
+    {
+      "command_index": 79,
+      "label": "attempt-limit",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 80,
+      "label": "episode-duration",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 81,
+      "label": "atomic-rollback",
+      "exit_code": 3,
+      "sqlstate": "23514"
+    },
+    {
+      "command_index": 85,
+      "label": "constraint-after-reconnect",
+      "exit_code": 3,
+      "sqlstate": "P0001"
+    }
+  ],
+  "command_artifact_hashes_checked": 253,
+  "runner_sha256": "05c80a1c432aa01dde1f376679c28fa39e189d6830f16089d8e0644e84502a52",
+  "migration_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+  "commands_sha256": "f9cd5d47d87afa9036972f90a3842c28d6c3ab89a0704d81b778c89fc238f8e5",
+  "image_id": "sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "image_architecture": "amd64",
+  "server_settings": "180007|on|on|on|",
+  "test_container_removed": true,
+  "fresh_cleanup_probe": {
+    "argv": [
+      "docker",
+      "container",
+      "inspect",
+      "ea23fedf4487a3c028fde21deea24deb4afb5bfee7964f2dc93cf678c3246e35"
+    ],
+    "exit_code": 1,
+    "stderr": "Error response from daemon: No such container: ea23fedf4487a3c028fde21deea24deb4afb5bfee7964f2dc93cf678c3246e35\n"
+  },
+  "tracked_source_files_unchanged": true,
+  "models_called": false,
+  "expected_sqlstate_counts": {
+    "23505": 2,
+    "23514": 3,
+    "42501": 9,
+    "P0001": 17
+  },
+  "expected_non_sql_nonzero_commands": [
+    {
+      "command_index": 4,
+      "label": "ready",
+      "exit_code": 2,
+      "reason": "Initial readiness polling; a later readiness command succeeded before SQL tests."
+    },
+    {
+      "command_index": 6,
+      "label": "ready",
+      "exit_code": 2,
+      "reason": "Initial readiness polling; a later readiness command succeeded before SQL tests."
+    },
+    {
+      "command_index": 88,
+      "label": "cleanup-probe",
+      "exit_code": 1,
+      "reason": "Owned test container is absent after successful cleanup."
+    }
+  ],
+  "unexpected_nonzero_commands": [],
+  "artifacts": {
+    "summary": {
+      "file": "summary.json",
+      "bytes": 747,
+      "sha256": "51d21c091232b2add5b0306d2e771493dae1966e2b0ce171a45fb3898a624e71"
+    },
+    "commands": {
+      "file": "commands.json",
+      "bytes": 128087,
+      "sha256": "f9cd5d47d87afa9036972f90a3842c28d6c3ab89a0704d81b778c89fc238f8e5"
+    },
+    "postgres-settings": {
+      "command_index": 11,
+      "exit_code": 0,
+      "stdout": {
+        "file": "011-postgres-settings.stdout",
+        "bytes": 17,
+        "sha256": "7ad450c52f1bab5c7f37b83c8bba2ed122e06a1a3e00e706c2ddca3efd95ab08"
+      },
+      "stderr": {
+        "file": "011-postgres-settings.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "cleanup": {
+      "command_index": 87,
+      "exit_code": 0,
+      "stdout": {
+        "file": "087-cleanup.stdout",
+        "bytes": 65,
+        "sha256": "6be57d2f98c6bbae41beb105db2843258811bcc22f2c1815dfb92413183efd4c"
+      },
+      "stderr": {
+        "file": "087-cleanup.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "cleanup-probe": {
+      "command_index": 88,
+      "exit_code": 1,
+      "stdout": {
+        "file": "088-cleanup-probe.stdout",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      "stderr": {
+        "file": "088-cleanup-probe.stderr",
+        "bytes": 112,
+        "sha256": "c5aa766687857c20a891199eabe3f72d6015ba6dbf97bc11ba6574d8cd312a0e"
+      }
+    },
+    "postgres-version": {
+      "command_index": 10,
+      "exit_code": 0,
+      "stdout": {
+        "file": "010-postgres-version.stdout",
+        "bytes": 52,
+        "sha256": "605b026879b9a291e0d851478a6f4dc23353423fa6f7035ce9e58a1e3a2e9e7a"
+      },
+      "stderr": {
+        "file": "010-postgres-version.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "source_files": {
+    "runner": {
+      "ref": "https://github.com/hitpipe/hitpipe/blob/88639c80e65daa86b8c6e0fee47a3e9bae191f65/services/processing/scripts/postgres/verify.py",
+      "sha256": "05c80a1c432aa01dde1f376679c28fa39e189d6830f16089d8e0644e84502a52"
+    },
+    "migration": {
+      "ref": "https://github.com/hitpipe/hitpipe/blob/88639c80e65daa86b8c6e0fee47a3e9bae191f65/services/processing/scripts/migrations/001_processing.sql",
+      "sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93"
+    }
+  },
+  "qualification_limit": "One real isolated run of existing Processing schema/role/RLS/constraint/transaction tests on PostgreSQL 18.7 Bookworm/linux-amd64. Not a Jira review verdict, production durability qualification, dedicated new CVE regression, IAM/HTTP/provider integration, or E2E."
+}

@@ -1,0 +1,46 @@
+{
+  "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "owned_test_container": "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25",
+  "test_container_cleanup_probe": {
+    "argv": [
+      "docker",
+      "container",
+      "inspect",
+      "c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25"
+    ],
+    "exit_code": 1,
+    "stderr": "Error response from daemon: No such container: c538824bab0cee69979ab5b359b13316c1526dd9568c9c3015c4f1a07f4a6b25\n"
+  },
+  "owned_cache": {
+    "path": "/home/deploy/.cache/hit78-pg187-go-build",
+    "bytes_before_cleanup": 314481069,
+    "created_for_this_run": true,
+    "removed": true
+  },
+  "image_references": {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--filter",
+      "ancestor=docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "stdout": ""
+  },
+  "image_removal": {
+    "argv": [
+      "docker",
+      "image",
+      "rm",
+      "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
+    ],
+    "exit_code": 0,
+    "stdout": "Untagged: postgres@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f\nDeleted: sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f\n",
+    "stderr": ""
+  },
+  "image_removed": true,
+  "available_bytes_after_cleanup": 1288577024
+}

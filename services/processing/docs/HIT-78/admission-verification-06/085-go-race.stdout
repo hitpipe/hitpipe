@@ -1,0 +1,789 @@
+=== RUN   TestCLIRejectsRefundShadowing
+=== RUN   TestCLIRejectsRefundShadowing/refund-shadowed.json
+=== RUN   TestCLIRejectsRefundShadowing/refund-shadowed-reverse.json
+--- PASS: TestCLIRejectsRefundShadowing (0.00s)
+    --- PASS: TestCLIRejectsRefundShadowing/refund-shadowed.json (0.00s)
+    --- PASS: TestCLIRejectsRefundShadowing/refund-shadowed-reverse.json (0.00s)
+=== RUN   TestCLIConfiguration
+--- PASS: TestCLIConfiguration (0.00s)
+=== RUN   TestOutputFailure
+--- PASS: TestOutputFailure (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck	1.125s
+=== RUN   TestCanonicalFieldNames
+=== RUN   TestCanonicalFieldNames//POLICY
+=== RUN   TestCanonicalFieldNames//Policy
+=== RUN   TestCanonicalFieldNames//FACTS
+=== RUN   TestCanonicalFieldNames//Facts
+=== RUN   TestCanonicalFieldNames//NOW
+=== RUN   TestCanonicalFieldNames//Now
+=== RUN   TestCanonicalFieldNames/policy/ACTIVATION_AT
+=== RUN   TestCanonicalFieldNames/policy/Activation_at
+=== RUN   TestCanonicalFieldNames/policy/CONFIG_ID
+=== RUN   TestCanonicalFieldNames/policy/Config_id
+=== RUN   TestCanonicalFieldNames/policy/SCHEMA_VERSION
+=== RUN   TestCanonicalFieldNames/policy/Schema_version
+=== RUN   TestCanonicalFieldNames/policy/EVALUATOR_VERSION
+=== RUN   TestCanonicalFieldNames/policy/Evaluator_version
+=== RUN   TestCanonicalFieldNames/policy/ACCOUNT_ID
+=== RUN   TestCanonicalFieldNames/policy/Account_id
+=== RUN   TestCanonicalFieldNames/policy/CONNECTION_ID
+=== RUN   TestCanonicalFieldNames/policy/Connection_id
+=== RUN   TestCanonicalFieldNames/policy/LIVEMODE
+=== RUN   TestCanonicalFieldNames/policy/Livemode
+=== RUN   TestCanonicalFieldNames/policy/PRICE_ID
+=== RUN   TestCanonicalFieldNames/policy/Price_id
+=== RUN   TestCanonicalFieldNames/facts/ACCOUNT_ID
+=== RUN   TestCanonicalFieldNames/facts/Account_id
+=== RUN   TestCanonicalFieldNames/facts/LIVEMODE
+=== RUN   TestCanonicalFieldNames/facts/Livemode
+=== RUN   TestCanonicalFieldNames/facts/PAYMENT_STATUS
+=== RUN   TestCanonicalFieldNames/facts/Payment_status
+=== RUN   TestCanonicalFieldNames/facts/CURRENCY
+=== RUN   TestCanonicalFieldNames/facts/Currency
+=== RUN   TestCanonicalFieldNames/facts/PRICE_ID
+=== RUN   TestCanonicalFieldNames/facts/Price_id
+=== RUN   TestCanonicalFieldNames/facts/QUANTITY
+=== RUN   TestCanonicalFieldNames/facts/Quantity
+=== RUN   TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED
+=== RUN   TestCanonicalFieldNames/facts/Charge_succeeded
+=== RUN   TestCanonicalFieldNames/facts/COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Complete
+=== RUN   TestCanonicalFieldNames/facts/CASE_ID
+=== RUN   TestCanonicalFieldNames/facts/Case_id
+=== RUN   TestCanonicalFieldNames/facts/SESSION_ID
+=== RUN   TestCanonicalFieldNames/facts/Session_id
+=== RUN   TestCanonicalFieldNames/facts/SESSION_CREATED_AT
+=== RUN   TestCanonicalFieldNames/facts/Session_created_at
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Line_items_complete
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_CAPTURED
+=== RUN   TestCanonicalFieldNames/facts/Amount_captured
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_REFUNDED
+=== RUN   TestCanonicalFieldNames/facts/Amount_refunded
+=== RUN   TestCanonicalFieldNames/facts/DISPUTED
+=== RUN   TestCanonicalFieldNames/facts/Disputed
+=== RUN   TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT
+=== RUN   TestCanonicalFieldNames/facts/Oldest_observed_at
+=== RUN   TestCanonicalFieldNames/facts/CONNECTION_ID
+=== RUN   TestCanonicalFieldNames/facts/Connection_id
+=== RUN   TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS
+=== RUN   TestCanonicalFieldNames/facts/Payment_intent_status
+=== RUN   TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL
+=== RUN   TestCanonicalFieldNames/facts/All_currencies_equal
+=== RUN   TestCanonicalFieldNames/facts/COMPLETED_AT
+=== RUN   TestCanonicalFieldNames/facts/Completed_at
+=== RUN   TestCanonicalFieldNames/facts/VALID_UNTIL
+=== RUN   TestCanonicalFieldNames/facts/Valid_until
+=== RUN   TestCanonicalFieldNames/facts/MODE
+=== RUN   TestCanonicalFieldNames/facts/Mode
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_TOTAL
+=== RUN   TestCanonicalFieldNames/facts/Amount_total
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEM_COUNT
+=== RUN   TestCanonicalFieldNames/facts/Line_item_count
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_RECEIVED
+=== RUN   TestCanonicalFieldNames/facts/Amount_received
+=== RUN   TestCanonicalFieldNames/facts/CHARGE_CAPTURED
+=== RUN   TestCanonicalFieldNames/facts/Charge_captured
+--- PASS: TestCanonicalFieldNames (0.01s)
+    --- PASS: TestCanonicalFieldNames//POLICY (0.00s)
+    --- PASS: TestCanonicalFieldNames//Policy (0.00s)
+    --- PASS: TestCanonicalFieldNames//FACTS (0.00s)
+    --- PASS: TestCanonicalFieldNames//Facts (0.00s)
+    --- PASS: TestCanonicalFieldNames//NOW (0.00s)
+    --- PASS: TestCanonicalFieldNames//Now (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/ACTIVATION_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Activation_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/CONFIG_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Config_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/SCHEMA_VERSION (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Schema_version (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/EVALUATOR_VERSION (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Evaluator_version (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/ACCOUNT_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/CONNECTION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Price_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/ACCOUNT_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_STATUS (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Payment_status (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CURRENCY (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Currency (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Price_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/QUANTITY (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Quantity (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Charge_succeeded (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Complete (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CASE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Case_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_CREATED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_created_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_items_complete (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_CAPTURED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_captured (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_REFUNDED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_refunded (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/DISPUTED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Disputed (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Oldest_observed_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CONNECTION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Payment_intent_status (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/All_currencies_equal (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/COMPLETED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Completed_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/VALID_UNTIL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Valid_until (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/MODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Mode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_TOTAL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_total (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEM_COUNT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_item_count (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_RECEIVED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_received (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CHARGE_CAPTURED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Charge_captured (0.00s)
+=== RUN   TestConflictingAliasesBothOrders
+=== RUN   TestConflictingAliasesBothOrders/nested_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/nested_alias_first
+=== RUN   TestConflictingAliasesBothOrders/policy_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/policy_alias_first
+=== RUN   TestConflictingAliasesBothOrders/top_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/top_alias_first
+=== RUN   TestConflictingAliasesBothOrders/unicode_fold_alias
+--- PASS: TestConflictingAliasesBothOrders (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/nested_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/nested_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/policy_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/policy_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/top_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/top_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/unicode_fold_alias (0.00s)
+=== RUN   TestCanonicalZeroAndStrictRejections
+=== RUN   TestCanonicalZeroAndStrictRejections/integer_overflow
+=== RUN   TestCanonicalZeroAndStrictRejections/nonfinite
+=== RUN   TestCanonicalZeroAndStrictRejections/unknown_nested
+=== RUN   TestCanonicalZeroAndStrictRejections/unknown_top
+=== RUN   TestCanonicalZeroAndStrictRejections/number_string
+=== RUN   TestCanonicalZeroAndStrictRejections/exact_duplicate
+=== RUN   TestCanonicalZeroAndStrictRejections/escaped_duplicate
+=== RUN   TestCanonicalZeroAndStrictRejections/trailing_document
+=== RUN   TestCanonicalZeroAndStrictRejections/fraction
+=== RUN   TestCanonicalZeroAndStrictRejections/exponent
+--- PASS: TestCanonicalZeroAndStrictRejections (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/integer_overflow (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/nonfinite (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_nested (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_top (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/number_string (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exact_duplicate (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/escaped_duplicate (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/trailing_document (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/fraction (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exponent (0.00s)
+=== RUN   TestStrictFixture
+--- PASS: TestStrictFixture (0.00s)
+=== RUN   TestReadFailure
+--- PASS: TestReadFailure (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input	1.144s
+=== RUN   TestFileReaderBoundaries
+--- PASS: TestFileReaderBoundaries (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts	1.128s
+=== RUN   TestProjectionPreservesFactsAndLocalPins
+--- PASS: TestProjectionPreservesFactsAndLocalPins (0.00s)
+=== RUN   TestEveryRequiredFieldAndNullableValue
+=== RUN   TestEveryRequiredFieldAndNullableValue/payment_intent_status
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_captured
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_total
+=== RUN   TestEveryRequiredFieldAndNullableValue/disputed
+=== RUN   TestEveryRequiredFieldAndNullableValue/line_items_complete
+=== RUN   TestEveryRequiredFieldAndNullableValue/price_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/quantity
+=== RUN   TestEveryRequiredFieldAndNullableValue/case_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/completed_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/connection_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/digest
+=== RUN   TestEveryRequiredFieldAndNullableValue/facts_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/oldest_observed_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/mode
+=== RUN   TestEveryRequiredFieldAndNullableValue/payment_status
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_received
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_refunded
+=== RUN   TestEveryRequiredFieldAndNullableValue/charge_succeeded
+=== RUN   TestEveryRequiredFieldAndNullableValue/session_created_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/session_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/stripe_account_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/valid_until
+=== RUN   TestEveryRequiredFieldAndNullableValue/all_currencies_equal
+=== RUN   TestEveryRequiredFieldAndNullableValue/charge_captured
+=== RUN   TestEveryRequiredFieldAndNullableValue/complete
+=== RUN   TestEveryRequiredFieldAndNullableValue/currency
+=== RUN   TestEveryRequiredFieldAndNullableValue/line_item_count
+=== RUN   TestEveryRequiredFieldAndNullableValue/livemode
+--- PASS: TestEveryRequiredFieldAndNullableValue (0.05s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_intent_status (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_captured (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_total (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/disputed (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/line_items_complete (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/price_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/quantity (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/case_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/completed_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/connection_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/digest (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/facts_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/oldest_observed_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/mode (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_status (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_received (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_refunded (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_succeeded (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/session_created_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/session_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/stripe_account_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/valid_until (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/all_currencies_equal (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_captured (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/complete (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/currency (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/line_item_count (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/livemode (0.00s)
+=== RUN   TestInvalidScalars
+=== RUN   TestInvalidScalars/amount_received-1
+=== RUN   TestInvalidScalars/amount_received1.2
+=== RUN   TestInvalidScalars/amount_received1e100
+=== RUN   TestInvalidScalars/amount_received9007199254740992
+=== RUN   TestInvalidScalars/amount_received9223372036854775808
+=== RUN   TestInvalidScalars/amount_receivedtrue
+=== RUN   TestInvalidScalars/amount_received"1"
+=== RUN   TestInvalidScalars/amount_refunded-1
+=== RUN   TestInvalidScalars/amount_refunded1.2
+=== RUN   TestInvalidScalars/amount_refunded1e100
+=== RUN   TestInvalidScalars/amount_refunded9007199254740992
+=== RUN   TestInvalidScalars/amount_refunded9223372036854775808
+=== RUN   TestInvalidScalars/amount_refundedtrue
+=== RUN   TestInvalidScalars/amount_refunded"1"
+=== RUN   TestInvalidScalars/line_item_count-1
+=== RUN   TestInvalidScalars/line_item_count1.2
+=== RUN   TestInvalidScalars/line_item_count1e100
+=== RUN   TestInvalidScalars/line_item_count9007199254740992
+=== RUN   TestInvalidScalars/line_item_count9223372036854775808
+=== RUN   TestInvalidScalars/line_item_counttrue
+=== RUN   TestInvalidScalars/line_item_count"1"
+=== RUN   TestInvalidScalars/amount_captured-1
+=== RUN   TestInvalidScalars/amount_captured1.2
+=== RUN   TestInvalidScalars/amount_captured1e100
+=== RUN   TestInvalidScalars/amount_captured9007199254740992
+=== RUN   TestInvalidScalars/amount_captured9223372036854775808
+=== RUN   TestInvalidScalars/amount_capturedtrue
+=== RUN   TestInvalidScalars/amount_captured"1"
+=== RUN   TestInvalidScalars/amount_total-1
+=== RUN   TestInvalidScalars/amount_total1.2
+=== RUN   TestInvalidScalars/amount_total1e100
+=== RUN   TestInvalidScalars/amount_total9007199254740992
+=== RUN   TestInvalidScalars/amount_total9223372036854775808
+=== RUN   TestInvalidScalars/amount_totaltrue
+=== RUN   TestInvalidScalars/amount_total"1"
+=== RUN   TestInvalidScalars/quantity-1
+=== RUN   TestInvalidScalars/quantity1.2
+=== RUN   TestInvalidScalars/quantity1e100
+=== RUN   TestInvalidScalars/quantity9007199254740992
+=== RUN   TestInvalidScalars/quantity9223372036854775808
+=== RUN   TestInvalidScalars/quantitytrue
+=== RUN   TestInvalidScalars/quantity"1"
+--- PASS: TestInvalidScalars (0.02s)
+    --- PASS: TestInvalidScalars/amount_received-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_receivedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_received"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refundedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded"1" (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count-1 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count1.2 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count1e100 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_counttrue (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_capturedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_total-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_totaltrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_total"1" (0.00s)
+    --- PASS: TestInvalidScalars/quantity-1 (0.00s)
+    --- PASS: TestInvalidScalars/quantity1.2 (0.00s)
+    --- PASS: TestInvalidScalars/quantity1e100 (0.00s)
+    --- PASS: TestInvalidScalars/quantity9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/quantity9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/quantitytrue (0.00s)
+    --- PASS: TestInvalidScalars/quantity"1" (0.00s)
+=== RUN   TestStrictCanonicalJSON
+--- PASS: TestStrictCanonicalJSON (0.01s)
+=== RUN   TestExpectedScopeAndPolicy
+--- PASS: TestExpectedScopeAndPolicy (0.00s)
+=== RUN   TestApplicationComposition
+=== RUN   TestApplicationComposition/normal
+=== RUN   TestApplicationComposition/refund
+=== RUN   TestApplicationComposition/null
+=== RUN   TestApplicationComposition/unknown_enum
+=== RUN   TestApplicationComposition/expiry_boundary
+=== RUN   TestApplicationComposition/absent
+=== RUN   TestApplicationComposition/error
+=== RUN   TestApplicationComposition/cancel-before
+=== RUN   TestApplicationComposition/cancel-during
+--- PASS: TestApplicationComposition (0.00s)
+    --- PASS: TestApplicationComposition/normal (0.00s)
+    --- PASS: TestApplicationComposition/refund (0.00s)
+    --- PASS: TestApplicationComposition/null (0.00s)
+    --- PASS: TestApplicationComposition/unknown_enum (0.00s)
+    --- PASS: TestApplicationComposition/expiry_boundary (0.00s)
+    --- PASS: TestApplicationComposition/absent (0.00s)
+    --- PASS: TestApplicationComposition/error (0.00s)
+    --- PASS: TestApplicationComposition/cancel-before (0.00s)
+    --- PASS: TestApplicationComposition/cancel-during (0.00s)
+=== RUN   TestEquivalentJSONIntegers
+--- PASS: TestEquivalentJSONIntegers (0.00s)
+=== RUN   TestDomainProjectionMatchesIndependentFixture
+--- PASS: TestDomainProjectionMatchesIndependentFixture (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts	1.223s
+=== RUN   TestAdmissionActivationBoundary
+=== RUN   TestAdmissionActivationBoundary/before
+    admit_test.go:47: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/exact
+    admit_test.go:47: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/after
+    admit_test.go:47: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/old_session_late_payment
+    admit_test.go:47: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestAdmissionActivationBoundary (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/before (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/exact (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/after (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/old_session_late_payment (0.00s)
+=== RUN   TestAdmissionRejectsContextAndLocalState
+=== RUN   TestAdmissionRejectsContextAndLocalState/authority
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/binding
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/connection
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/account
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/livemode
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/workspace
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_operation
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/paused
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/draft
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_config
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_activation
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/stale_revision
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_time
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
+    admit_test.go:67: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_operation (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/paused (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/draft (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_config (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_activation (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/stale_revision (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
+=== RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
+    admit_test.go:141: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionReplayAfterLifecycleAndNewConnection (0.00s)
+=== RUN   TestAdmissionCommitFailureNeverAcknowledges
+    admit_test.go:188: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionCommitFailureNeverAcknowledges (0.00s)
+=== RUN   TestAdmissionTwoSignalsOnePinnedCase
+    admit_test.go:197: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionTwoSignalsOnePinnedCase (0.00s)
+=== RUN   TestAdmissionConcurrentAndDigestConflict
+    admit_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionConcurrentAndDigestConflict (0.00s)
+=== RUN   TestRecordCommitRepeatConflictAndReconnect
+    record_test.go:107: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRecordCommitRepeatConflictAndReconnect (0.00s)
+=== RUN   TestRecordRollbackAndCommitFailure
+=== RUN   TestRecordRollbackAndCommitFailure/rollback
+    record_test.go:161: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordRollbackAndCommitFailure/commit_failure
+    record_test.go:161: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordRollbackAndCommitFailure/history_failure
+    record_test.go:161: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestRecordRollbackAndCommitFailure (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/rollback (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/commit_failure (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/history_failure (0.00s)
+=== RUN   TestRecordConcurrentIdentityAndMessage
+=== RUN   TestRecordConcurrentIdentityAndMessage/two_messages
+    record_test.go:197: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordConcurrentIdentityAndMessage/same_message
+    record_test.go:197: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.00s)
+    --- SKIP: TestRecordConcurrentIdentityAndMessage/two_messages (0.00s)
+    --- SKIP: TestRecordConcurrentIdentityAndMessage/same_message (0.00s)
+=== RUN   TestRecordRLSRejectsForeignWorkspace
+    record_test.go:253: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRecordRLSRejectsForeignWorkspace (0.00s)
+=== RUN   TestEnvironment
+    record_test.go:265: go1.27.2 darwin arm64 isolated_pg=
+--- PASS: TestEnvironment (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres	1.179s
+=== RUN   TestCanonicalAndJCS
+--- PASS: TestCanonicalAndJCS (0.00s)
+=== RUN   TestRejectInvalidSignal
+=== RUN   TestRejectInvalidSignal/escaped_duplicate
+=== RUN   TestRejectInvalidSignal/missing_connection_id
+=== RUN   TestRejectInvalidSignal/missing_first_received_at
+=== RUN   TestRejectInvalidSignal/schema_event_id
+=== RUN   TestRejectInvalidSignal/schema_source_created_at
+=== RUN   TestRejectInvalidSignal/schema_livemode
+=== RUN   TestRejectInvalidSignal/null_message_digest
+=== RUN   TestRejectInvalidSignal/null_session_id
+=== RUN   TestRejectInvalidSignal/null_source_created_at
+=== RUN   TestRejectInvalidSignal/schema_schema_version
+=== RUN   TestRejectInvalidSignal/schema_event_type
+=== RUN   TestRejectInvalidSignal/schema_workspace_id
+=== RUN   TestRejectInvalidSignal/digest_mismatch
+=== RUN   TestRejectInvalidSignal/case_last
+=== RUN   TestRejectInvalidSignal/missing_session_id
+=== RUN   TestRejectInvalidSignal/missing_event_type
+=== RUN   TestRejectInvalidSignal/missing_receipt_id
+=== RUN   TestRejectInvalidSignal/null_workspace_id
+=== RUN   TestRejectInvalidSignal/missing_stripe_account_id
+=== RUN   TestRejectInvalidSignal/surrogate
+=== RUN   TestRejectInvalidSignal/missing_schema_version
+=== RUN   TestRejectInvalidSignal/missing_livemode
+=== RUN   TestRejectInvalidSignal/null_livemode
+=== RUN   TestRejectInvalidSignal/null_first_received_at
+=== RUN   TestRejectInvalidSignal/trailing
+=== RUN   TestRejectInvalidSignal/null_expires_at
+=== RUN   TestRejectInvalidSignal/null_event_id
+=== RUN   TestRejectInvalidSignal/null_receipt_id
+=== RUN   TestRejectInvalidSignal/missing_message_id
+=== RUN   TestRejectInvalidSignal/schema_unknown
+=== RUN   TestRejectInvalidSignal/null_schema_version
+=== RUN   TestRejectInvalidSignal/missing_workspace_id
+=== RUN   TestRejectInvalidSignal/array
+=== RUN   TestRejectInvalidSignal/missing_message_digest
+=== RUN   TestRejectInvalidSignal/missing_event_id
+=== RUN   TestRejectInvalidSignal/null_event_type
+=== RUN   TestRejectInvalidSignal/null_message_id
+=== RUN   TestRejectInvalidSignal/exact_duplicate
+=== RUN   TestRejectInvalidSignal/case_first
+=== RUN   TestRejectInvalidSignal/schema_session_id
+=== RUN   TestRejectInvalidSignal/utf8
+=== RUN   TestRejectInvalidSignal/missing_expires_at
+=== RUN   TestRejectInvalidSignal/missing_source_created_at
+=== RUN   TestRejectInvalidSignal/null_connection_id
+=== RUN   TestRejectInvalidSignal/null_stripe_account_id
+--- PASS: TestRejectInvalidSignal (0.01s)
+    --- PASS: TestRejectInvalidSignal/escaped_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_first_received_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/digest_mismatch (0.00s)
+    --- PASS: TestRejectInvalidSignal/case_last (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_stripe_account_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/surrogate (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_first_received_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/trailing (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_unknown (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/array (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_message_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/exact_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/case_first (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/utf8 (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_stripe_account_id (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/admission	1.138s
+=== RUN   TestReaderSubstitution
+=== RUN   TestReaderSubstitution/file/normal
+=== RUN   TestReaderSubstitution/file/boundary
+=== RUN   TestReaderSubstitution/file/error_unknown
+=== RUN   TestReaderSubstitution/file/denied
+=== RUN   TestReaderSubstitution/file/reader_failure
+=== RUN   TestReaderSubstitution/double/normal
+=== RUN   TestReaderSubstitution/double/boundary
+=== RUN   TestReaderSubstitution/double/error_unknown
+=== RUN   TestReaderSubstitution/double/denied
+=== RUN   TestReaderSubstitution/double/reader_failure
+--- PASS: TestReaderSubstitution (0.01s)
+    --- PASS: TestReaderSubstitution/file/normal (0.00s)
+    --- PASS: TestReaderSubstitution/file/boundary (0.00s)
+    --- PASS: TestReaderSubstitution/file/error_unknown (0.00s)
+    --- PASS: TestReaderSubstitution/file/denied (0.00s)
+    --- PASS: TestReaderSubstitution/file/reader_failure (0.00s)
+    --- PASS: TestReaderSubstitution/double/normal (0.00s)
+    --- PASS: TestReaderSubstitution/double/boundary (0.00s)
+    --- PASS: TestReaderSubstitution/double/error_unknown (0.00s)
+    --- PASS: TestReaderSubstitution/double/denied (0.00s)
+    --- PASS: TestReaderSubstitution/double/reader_failure (0.00s)
+=== RUN   TestContextPins
+=== RUN   TestContextPins/config
+=== RUN   TestContextPins/schema
+=== RUN   TestContextPins/evaluator
+=== RUN   TestContextPins/case
+=== RUN   TestContextPins/session
+--- PASS: TestContextPins (0.00s)
+    --- PASS: TestContextPins/config (0.00s)
+    --- PASS: TestContextPins/schema (0.00s)
+    --- PASS: TestContextPins/evaluator (0.00s)
+    --- PASS: TestContextPins/case (0.00s)
+    --- PASS: TestContextPins/session (0.00s)
+=== RUN   TestCanceledAndInvalidContext
+--- PASS: TestCanceledAndInvalidContext (0.00s)
+=== RUN   TestFinancialScope
+--- PASS: TestFinancialScope (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder	1.137s
+=== RUN   TestFinancialDecisionTable
+=== RUN   TestFinancialDecisionTable/account
+=== RUN   TestFinancialDecisionTable/connection
+=== RUN   TestFinancialDecisionTable/mode_scope
+=== RUN   TestFinancialDecisionTable/subscription
+=== RUN   TestFinancialDecisionTable/setup
+=== RUN   TestFinancialDecisionTable/unpaid
+=== RUN   TestFinancialDecisionTable/no_payment
+=== RUN   TestFinancialDecisionTable/zero
+=== RUN   TestFinancialDecisionTable/two_lines
+=== RUN   TestFinancialDecisionTable/zero_lines
+=== RUN   TestFinancialDecisionTable/zero_quantity
+=== RUN   TestFinancialDecisionTable/payment_intent
+=== RUN   TestFinancialDecisionTable/charge_failed
+=== RUN   TestFinancialDecisionTable/over_received
+=== RUN   TestFinancialDecisionTable/over_captured
+=== RUN   TestFinancialDecisionTable/before_activation
+=== RUN   TestFinancialDecisionTable/activation_equality
+=== RUN   TestFinancialDecisionTable/max_money
+=== RUN   TestFinancialDecisionTable/too_large
+=== RUN   TestFinancialDecisionTable/negative_money
+=== RUN   TestFinancialDecisionTable/negative_quantity
+=== RUN   TestFinancialDecisionTable/negative_count
+=== RUN   TestFinancialDecisionTable/enum
+=== RUN   TestFinancialDecisionTable/payment_enum
+=== RUN   TestFinancialDecisionTable/intent_enum
+=== RUN   TestFinancialDecisionTable/currency_length
+=== RUN   TestFinancialDecisionTable/currency_case
+=== RUN   TestFinancialDecisionTable/empty_price
+=== RUN   TestFinancialDecisionTable/pagination
+=== RUN   TestFinancialDecisionTable/incomplete
+=== RUN   TestFinancialDecisionTable/unknown_mode
+=== RUN   TestFinancialDecisionTable/unknown_paid
+=== RUN   TestFinancialDecisionTable/unknown_intent
+=== RUN   TestFinancialDecisionTable/empty_case
+=== RUN   TestFinancialDecisionTable/empty_session
+=== RUN   TestFinancialDecisionTable/unknown_config
+=== RUN   TestFinancialDecisionTable/old_evaluator
+--- PASS: TestFinancialDecisionTable (0.00s)
+    --- PASS: TestFinancialDecisionTable/account (0.00s)
+    --- PASS: TestFinancialDecisionTable/connection (0.00s)
+    --- PASS: TestFinancialDecisionTable/mode_scope (0.00s)
+    --- PASS: TestFinancialDecisionTable/subscription (0.00s)
+    --- PASS: TestFinancialDecisionTable/setup (0.00s)
+    --- PASS: TestFinancialDecisionTable/unpaid (0.00s)
+    --- PASS: TestFinancialDecisionTable/no_payment (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero (0.00s)
+    --- PASS: TestFinancialDecisionTable/two_lines (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero_lines (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero_quantity (0.00s)
+    --- PASS: TestFinancialDecisionTable/payment_intent (0.00s)
+    --- PASS: TestFinancialDecisionTable/charge_failed (0.00s)
+    --- PASS: TestFinancialDecisionTable/over_received (0.00s)
+    --- PASS: TestFinancialDecisionTable/over_captured (0.00s)
+    --- PASS: TestFinancialDecisionTable/before_activation (0.00s)
+    --- PASS: TestFinancialDecisionTable/activation_equality (0.00s)
+    --- PASS: TestFinancialDecisionTable/max_money (0.00s)
+    --- PASS: TestFinancialDecisionTable/too_large (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_money (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_quantity (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_count (0.00s)
+    --- PASS: TestFinancialDecisionTable/enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/payment_enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/intent_enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/currency_length (0.00s)
+    --- PASS: TestFinancialDecisionTable/currency_case (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_price (0.00s)
+    --- PASS: TestFinancialDecisionTable/pagination (0.00s)
+    --- PASS: TestFinancialDecisionTable/incomplete (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_mode (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_paid (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_intent (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_case (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_session (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_config (0.00s)
+    --- PASS: TestFinancialDecisionTable/old_evaluator (0.00s)
+=== RUN   TestEveryNullableFact
+=== RUN   TestEveryNullableFact/SessionCreatedAt
+=== RUN   TestEveryNullableFact/Mode
+=== RUN   TestEveryNullableFact/PaymentStatus
+=== RUN   TestEveryNullableFact/Currency
+=== RUN   TestEveryNullableFact/AmountTotal
+=== RUN   TestEveryNullableFact/LineItemsComplete
+=== RUN   TestEveryNullableFact/LineItemCount
+=== RUN   TestEveryNullableFact/PriceID
+=== RUN   TestEveryNullableFact/Quantity
+=== RUN   TestEveryNullableFact/PaymentIntentStatus
+=== RUN   TestEveryNullableFact/AmountReceived
+=== RUN   TestEveryNullableFact/ChargeSucceeded
+=== RUN   TestEveryNullableFact/ChargeCaptured
+=== RUN   TestEveryNullableFact/AmountCaptured
+=== RUN   TestEveryNullableFact/AmountRefunded
+=== RUN   TestEveryNullableFact/Disputed
+=== RUN   TestEveryNullableFact/AllCurrenciesEqual
+=== RUN   TestEveryNullableFact/Complete
+--- PASS: TestEveryNullableFact (0.00s)
+    --- PASS: TestEveryNullableFact/SessionCreatedAt (0.00s)
+    --- PASS: TestEveryNullableFact/Mode (0.00s)
+    --- PASS: TestEveryNullableFact/PaymentStatus (0.00s)
+    --- PASS: TestEveryNullableFact/Currency (0.00s)
+    --- PASS: TestEveryNullableFact/AmountTotal (0.00s)
+    --- PASS: TestEveryNullableFact/LineItemsComplete (0.00s)
+    --- PASS: TestEveryNullableFact/LineItemCount (0.00s)
+    --- PASS: TestEveryNullableFact/PriceID (0.00s)
+    --- PASS: TestEveryNullableFact/Quantity (0.00s)
+    --- PASS: TestEveryNullableFact/PaymentIntentStatus (0.00s)
+    --- PASS: TestEveryNullableFact/AmountReceived (0.00s)
+    --- PASS: TestEveryNullableFact/ChargeSucceeded (0.00s)
+    --- PASS: TestEveryNullableFact/ChargeCaptured (0.00s)
+    --- PASS: TestEveryNullableFact/AmountCaptured (0.00s)
+    --- PASS: TestEveryNullableFact/AmountRefunded (0.00s)
+    --- PASS: TestEveryNullableFact/Disputed (0.00s)
+    --- PASS: TestEveryNullableFact/AllCurrenciesEqual (0.00s)
+    --- PASS: TestEveryNullableFact/Complete (0.00s)
+=== RUN   TestProofTimeline
+=== RUN   TestProofTimeline/zero_oldest
+=== RUN   TestProofTimeline/zero_completed
+=== RUN   TestProofTimeline/zero_expiry
+=== RUN   TestProofTimeline/completed_before_oldest
+=== RUN   TestProofTimeline/future_completed
+=== RUN   TestProofTimeline/collection_over_30
+=== RUN   TestProofTimeline/expiry_at_completed
+=== RUN   TestProofTimeline/expiry_before_completed
+--- PASS: TestProofTimeline (0.00s)
+    --- PASS: TestProofTimeline/zero_oldest (0.00s)
+    --- PASS: TestProofTimeline/zero_completed (0.00s)
+    --- PASS: TestProofTimeline/zero_expiry (0.00s)
+    --- PASS: TestProofTimeline/completed_before_oldest (0.00s)
+    --- PASS: TestProofTimeline/future_completed (0.00s)
+    --- PASS: TestProofTimeline/collection_over_30 (0.00s)
+    --- PASS: TestProofTimeline/expiry_at_completed (0.00s)
+    --- PASS: TestProofTimeline/expiry_before_completed (0.00s)
+=== RUN   TestDeterminismAndOwnership
+--- PASS: TestDeterminismAndOwnership (0.00s)
+=== RUN   TestNormal
+--- PASS: TestNormal (0.00s)
+=== RUN   TestUnknownAndZero
+--- PASS: TestUnknownAndZero (0.00s)
+=== RUN   TestProofBoundary
+--- PASS: TestProofBoundary (0.00s)
+=== RUN   TestFinancialDenial
+=== RUN   TestFinancialDenial/refund
+=== RUN   TestFinancialDenial/capture
+=== RUN   TestFinancialDenial/received
+=== RUN   TestFinancialDenial/partial_capture
+=== RUN   TestFinancialDenial/dispute
+=== RUN   TestFinancialDenial/currency
+=== RUN   TestFinancialDenial/quantity
+=== RUN   TestFinancialDenial/price
+--- PASS: TestFinancialDenial (0.00s)
+    --- PASS: TestFinancialDenial/refund (0.00s)
+    --- PASS: TestFinancialDenial/capture (0.00s)
+    --- PASS: TestFinancialDenial/received (0.00s)
+    --- PASS: TestFinancialDenial/partial_capture (0.00s)
+    --- PASS: TestFinancialDenial/dispute (0.00s)
+    --- PASS: TestFinancialDenial/currency (0.00s)
+    --- PASS: TestFinancialDenial/quantity (0.00s)
+    --- PASS: TestFinancialDenial/price (0.00s)
+=== RUN   TestPrecedence
+--- PASS: TestPrecedence (0.00s)
+=== RUN   TestInvalidPolicy
+--- PASS: TestInvalidPolicy (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility	1.128s

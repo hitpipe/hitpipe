@@ -1,0 +1,52 @@
+{
+  "subject": "HIT-78",
+  "materialized_result": {
+    "summary": "Локальный durable admission NormalizedSignal: строгий JSON/JCS, первая активация по Session.created, атомарные inbox/case/safety, дедупликация и изоляция на PostgreSQL.",
+    "base_sha": "15e684e1c3f78bb7851bc1d4335c9a9f883f5dc1",
+    "tested_implementation_sha": "fa05c7dfd848ba576d2e9be054c9eb791ac96584",
+    "code": "https://github.com/hitpipe/hitpipe/tree/fa05c7dfd848ba576d2e9be054c9eb791ac96584/services/processing",
+    "base_pr": "https://github.com/hitpipe/hitpipe/pull/45",
+    "integration_state": "Проверено 14.11.2026: зависимая ветка PR50 направлена в work/HIT-76-processing-postgres; PR45 открыт, основная ветка ce771d37505e7770003d0796ae932556d06b7bab его не содержит.",
+    "lead_decision": "https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171",
+    "intake_clarification": "https://hitpipe.atlassian.net/browse/HIT-73?focusedCommentId=12172",
+    "reuse": "Схема HIT-76 переиспользована без повторной реализации. SHA256 миграции 001_processing.sql сохранён: a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93.",
+    "security_patch": "HP-CCR-POSTGRES-20261114: https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=12229",
+    "adr": "https://hitpipe.atlassian.net/wiki/spaces/Hitpipe/pages/24608769"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/admission/",
+    "services/processing/internal/adapters/postgres/",
+    "services/processing/scripts/postgres/verify_admission_storage.py",
+    "services/processing/go.mod",
+    "services/processing/go.sum",
+    "services/processing/docs/HIT-78/"
+  ],
+  "verification": {
+    "commands": "services/processing/docs/HIT-78/admission-verification-pg187-20261114/commands.json",
+    "summary": "services/processing/docs/HIT-78/admission-verification-pg187-20261114/summary.json",
+    "dod_matrix": "services/processing/docs/HIT-78/STATUS.md",
+    "source_audit": "services/processing/docs/HIT-78/source-audit.json",
+    "decision_snapshot": "services/processing/docs/HIT-78/lead-decision.json",
+    "environment": "Go1.27.2 linux/amd64: модульные race/vet; отдельный linux/amd64 CGO=0 двоичный файл тестов хранилища выполнен внутри изолированного PostgreSQL18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f. Отдельный контейнерный прогон не инструментирован race.",
+    "result": "Полный прогон 14.11.2026 на fa05c7df: PASS, 95 команд/75 SQL-команд, 31 ожидаемый отказ с проверенным SQLSTATE, неожиданных ошибок нет. Go race/vet exit0. Все11 групп/35 случаев настоящих PostgreSQL admission/storage тестов выполнены без пропусков: граница активации до/точно/после, старая Session с поздним платежом; строгая схема/digest; атомарность/rollback/ошибка commit; повтор/конфликт/конкурентная идентичность; контекст/закреплённые данные/RLS/CAS и регрессии HIT-76. Полные логи, хеши, ожидаемые коды и очистка сохранены.",
+    "bounded_test_report": "services/processing/docs/HIT-78/admission-verification-pg187-20261114/verification.json",
+    "bounded_test_report_sha256": "a3a0fd05559f4c8feaf936239284096e272fb53d7ad4d3fd912f06c48cf47dd4",
+    "artifact_hashes": "services/processing/docs/HIT-78/admission-verification-pg187-20261114/verification.json",
+    "source_manifest": "services/processing/docs/HIT-78/admission-verification-pg187-20261114/source-files.json"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Проверены надёжное локальное принятие и тестовая композиция с ранее установленным контекстом. Полномочия вызывающего, привязка источника и принятое локальное состояние обязательны; тестовые входы синтетические. Работающие IAM/Intake/Stripe не подтверждаются.",
+    "HTTP-обработчик, финансовое решение, outbox, Delivery и внешняя запись этой задачей не реализованы.",
+    "Необязательная revision квитанции опущена: принятый inbox не хранит редакцию исходного результата. SQL-схема не менялась.",
+    "Слияние с основной веткой, испытание потери питания, резервного копирования/восстановления и промышленного развёртывания не проведены. Отдельная эксплуатация CVE не воспроизводилась; проверена совместимость с18.7.",
+    "Проверка готовности передачи, независимое ревью и личная приёмка выполняются отдельно; настоящий прогон тестов не является их вердиктом."
+  ],
+  "authorship": "Codex по поручению Тимофея Патрушева / Tim1hik",
+  "operator_update": {
+    "date": "2026-11-14",
+    "requested_by": "Руководитель проекта в основной сессии",
+    "performed_by": "Codex: операторская актуализация среды и доказательств; исходное авторство реализации сохранено",
+    "scope": "Полный повтор verify_admission_storage.py на согласованной PostgreSQL18.7, публикация неизменённых сырых журналов и компактного проверяемого отчёта; бизнес-код и SQL не изменялись. Старые результаты и доказательства остаются в истории."
+  }
+}
