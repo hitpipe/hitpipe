@@ -112,7 +112,7 @@ try:
         for table in ["effect_observations","observation_content","intent_content"]:
             check(role+" immutable "+table,lambda role=role,table=table:sql(f"UPDATE hp_delivery.{table} SET workspace_id='{W}'",role,"permission denied"))
         check(role+" no purge membership",lambda role=role:eq(sql(f"SELECT pg_has_role('{role}','hp_delivery_purge','MEMBER')"),"f"))
-    check("lineage unique per case/effect",lambda:sql(seed+lineage,fail="duplicate key"))
+    check("lineage unique per case/effect",lambda:sql(seed+lineage.replace(L,OTHER),fail="effect_lineage_workspace_id_case_id_effect_kind_key"))
     check("attempt command unique",lambda:sql(seed+attempt.replace(A,OTHER).replace(",1,",",2,"),fail="duplicate key"))
     check("inbox message unique",lambda:sql(f"INSERT INTO hp_delivery.inbox(workspace_id,message_id,digest,disposition) VALUES('{W}','{MSG}','sha256:'||repeat('a',64),'APPLIED'); INSERT INTO hp_delivery.inbox SELECT * FROM hp_delivery.inbox",fail="duplicate key"))
     check("outbox message unique",lambda:sql(fullseed+"INSERT INTO hp_delivery.outbox SELECT * FROM hp_delivery.outbox",fail="duplicate key"))
