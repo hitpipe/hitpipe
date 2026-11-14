@@ -1,0 +1,44 @@
+{
+  "lead": {
+    "id": "12171",
+    "author": {
+      "accountId": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+      "displayName": "Dmitriy Karacheban",
+      "active": true,
+      "timeZone": "Europe/Moscow",
+      "accountType": "atlassian"
+    },
+    "body": "<p>Уточнение по HIT-78: время создания Checkout Session</p><p>По поручению руководителя принимаю следующее техническое уточнение для текущего MVP. Codex проверил закреплённую архитектуру, схему и рабочую ветку HIT-78; это решение об источнике времени, не приёмка реализации.</p><ol><li><p>NormalizedSignal.source_created_at означает время создания самой Stripe Checkout Session — значение Event.data.object.created. Это не внешнее Event.created и не время получения webhook. Intake переносит значение из проверенного подписанного события, проверяя тип объекта checkout.session и соответствие data.object.id полю session_id. Unix timestamp Stripe переводится в UTC без изменения момента времени.</p></li><li><p>Processing сравнивает именно это значение с сохранённым operations.first_activation_at. Допустимо Session.created &gt;= first_activation_at. Поздняя оплата, новый Event, повтор доставки, resume или новая версия конфигурации не сдвигают исходную границу и не изменяют время создания Session.</p></li><li><p>Если Session.created отсутствует или некорректно, Intake не подставляет Event.created, first_received_at или текущее время и не выдаёт такой сигнал за корректный. В HIT-78 строгий вход и ранее проверенный caller/binding context остаются обязательными; тестовая композиция не доказывает подлинность настоящего webhook.</p></li><li><p>В уже принятой SourceFacts есть отдельное session_created_at. Оно отражает то же Session.created при последующем чтении Session. Для HIT-78 не требуется новый вызов readSourceFacts до создания дела: это добавило бы зависимость от ещё не созданного case_id. Финансовое чтение и решение остаются в следующем срезе работы. Новые поля, endpoint и миграция SQL для этого уточнения не нужны.</p></li></ol><p>Что проверить в HIT-78:\n— Session создана до активации, а async_payment_succeeded пришёл после неё: старую Session не допускаем.\n— Session создана точно на границе: допускаем при остальных выполненных условиях.\n— Session создана после границы: допускаем при остальных выполненных условиях.\n— Повтор/другое событие той же Session сохраняет одну identity и прежнее время создания.\n— Отсутствующее/некорректное обязательное время не заменяется другим временем и не даёт успешного допуска.\nОстальные проверки атомарности, dedup, rollback, PostgreSQL и изоляции данных сохраняются.</p><p>Тимофей может продолжить HIT-78 с этим определением, сохранив уже выполненную работу. Оформить решение и ссылку на этот комментарий в отчёте, явно объяснить источник SourceCreatedAt в коде/тестовых данных. Не заявлять проверенным runtime Intake или финансовый сценарий, которых нет в границах HIT-78.</p><p>Основание: неизменное правило HP-MVP-A-015 (Session.created), закреплённая схема NormalizedSignal и существующее SourceFacts.session_created_at. Описание и критерии замороженной задачи этим комментарием не переписываются. При подготовке общего справочника интерфейса это определение следует перенести в описание поля, сохранив эту историю решения.</p><p>Закреплённые источники:\n<a href=\"https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md\" data-card-appearance=\"inline\">https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md</a>\n<a href=\"https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json\" data-card-appearance=\"inline\">https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json</a>\nStripe: <a href=\"https://docs.stripe.com/api/events/object\" data-card-appearance=\"inline\">https://docs.stripe.com/api/events/object</a> и <a href=\"https://docs.stripe.com/api/checkout/sessions/object\" data-card-appearance=\"inline\">https://docs.stripe.com/api/checkout/sessions/object</a></p>",
+    "updateAuthor": {
+      "accountId": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+      "displayName": "Dmitriy Karacheban",
+      "active": true,
+      "timeZone": "Europe/Moscow",
+      "accountType": "atlassian"
+    },
+    "created": "2026-11-14T11:55:20.427+0300",
+    "updated": "2026-11-14T11:55:20.427+0300",
+    "jsdPublic": true
+  },
+  "intake": {
+    "id": "12172",
+    "author": {
+      "accountId": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+      "displayName": "Dmitriy Karacheban",
+      "active": true,
+      "timeZone": "Europe/Moscow",
+      "accountType": "atlassian"
+    },
+    "body": "<p>Уточнение для нормализации времени в HIT-73</p><p>По поручению руководителя принято общее для Intake и Processing определение: NormalizedSignal.source_created_at — время создания Stripe Checkout Session из подписанного Event.data.object.created. Внешнее Event.created означает время события и в это поле не переносится. Поле session_id должно соответствовать data.object.id; объект — checkout.session. Отсутствующее или некорректное обязательное время не заменяется временем события/получения.</p><p>Полное решение и проверки: <a href=\"https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171\" data-card-appearance=\"inline\">https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171</a></p><p>Причина: уже принятая исходная граница активации относится к Session.created. Поздний async_payment_succeeded не должен допускать Session, созданную до первой активации. Формат сообщения, SQL и граница активации сохраняются. При выполнении HIT-73 отразить это определение в коде, тестах и отчёте; добавить ссылку на решение в источники результата.</p>",
+    "updateAuthor": {
+      "accountId": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+      "displayName": "Dmitriy Karacheban",
+      "active": true,
+      "timeZone": "Europe/Moscow",
+      "accountType": "atlassian"
+    },
+    "created": "2026-11-14T11:56:13.207+0300",
+    "updated": "2026-11-14T11:56:13.207+0300",
+    "jsdPublic": true
+  }
+}

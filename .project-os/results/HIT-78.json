@@ -1,0 +1,40 @@
+{
+  "subject": "HIT-78",
+  "materialized_result": {
+    "summary": "Локальный durable admission NormalizedSignal: строгий JSON/JCS, первая активация по Session.created, атомарные inbox/case/safety, дедупликация и изоляция на PostgreSQL.",
+    "base_sha": "15e684e1c3f78bb7851bc1d4335c9a9f883f5dc1",
+    "tested_implementation_sha": "2a2a4824ad387c243844f3344e1ee629f70c2629",
+    "code": "https://github.com/hitpipe/hitpipe/tree/2a2a4824ad387c243844f3344e1ee629f70c2629/services/processing",
+    "base_pr": "https://github.com/hitpipe/hitpipe/pull/45",
+    "integration_state": "Dependent branch; PR45 OPEN, not merged to observed main ce771d37505e7770003d0796ae932556d06b7bab.",
+    "lead_decision": "https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171",
+    "intake_clarification": "https://hitpipe.atlassian.net/browse/HIT-73?focusedCommentId=12172"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/admission/",
+    "services/processing/internal/adapters/postgres/",
+    "services/processing/scripts/postgres/verify_admission_storage.py",
+    "services/processing/go.mod",
+    "services/processing/go.sum",
+    "services/processing/docs/HIT-78/"
+  ],
+  "verification": {
+    "commands": "services/processing/docs/HIT-78/admission-verification-06/commands.json",
+    "summary": "services/processing/docs/HIT-78/admission-verification-06/summary.json",
+    "digests": "services/processing/docs/HIT-78/admission-verification-06/digests.json",
+    "dod_matrix": "services/processing/docs/HIT-78/STATUS.md",
+    "source_audit": "services/processing/docs/HIT-78/source-audit.json",
+    "decision_snapshot": "services/processing/docs/HIT-78/lead-decision.json",
+    "environment": "Go1.27.2 darwin/arm64 race/vet; separately compiled Go1.27.2 linux/arm64 CGO=0 DB tests against isolated pinned PostgreSQL18.6, no Linux race claim.",
+    "result": "Local checks PASS at tested SHA: exact/pre/post activation and old Session late payment; schema/digest; atomic commit/rollback/commit failure; repeat/conflict/concurrent identity; local context/pins/RLS/CAS and unchanged HIT-76 SQL regressions. Commands/exit/times/digests retained; expected SQL rejection and cleanup probe nonzero codes checked."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Previously verified caller/binding context and accepted local state are explicit mandatory composition inputs; test fixtures are synthetic. No runtime IAM/Intake/Stripe authentication claim.",
+    "No HTTP listener, financial decision, outbox, Delivery or external write.",
+    "Receipt revision omitted (optional wire field); accepted inbox does not retain original result revision. No SQL change.",
+    "No main integration, production power-loss durability, backup/recovery or deployment qualification.",
+    "Server handoff readiness, independent review and human acceptance are separate pending steps."
+  ],
+  "authorship": "Codex по поручению Тимофея Патрушева / Tim1hik"
+}
