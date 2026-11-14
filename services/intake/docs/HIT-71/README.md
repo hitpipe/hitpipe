@@ -13,6 +13,9 @@ SQL-проверок, exit 0; сервер сообщил ровно 18.7. Пр�
 
 PostgreSQL **18.7 Alpine** и указанный выше точный digest согласованы поправкой
 [HP-CCR-POSTGRES-20261114](https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md).
+Опубликованная запись согласования Project OS:
+[HIT-63, комментарий 12229](https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=12229).
+
 Она заменяет только прежнюю версию PostgreSQL 18.6 и закрепление образа;
 SQL, API, роли, RLS и параметры надёжного сохранения не меняются.
 Предыдущий запрос на решение руководителя о допустимой версии больше не является
