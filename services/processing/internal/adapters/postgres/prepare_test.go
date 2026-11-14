@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -24,6 +25,9 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/jackc/pgx/v5"
 )
+
+//go:embed testdata/sourcefacts-valid.json
+var paidFixture []byte
 
 const destination = "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
 
@@ -76,10 +80,7 @@ func (g sourceBoundary) Start(ctx context.Context, c sourcefacts.CallerContext, 
 }
 func sourceWire(t *testing.T, c preparecase.Case, change func(map[string]any)) []byte {
 	t.Helper()
-	b, e := os.ReadFile("../intake/sourcefacts/testdata/valid.json")
-	if e != nil {
-		t.Fatal(e)
-	}
+	b := append([]byte{}, paidFixture...)
 	var m map[string]any
 	json.Unmarshal(b, &m)
 	now := time.Now().UTC()
@@ -97,7 +98,7 @@ func sourceWire(t *testing.T, c preparecase.Case, change func(map[string]any)) [
 	}
 	delete(m, "digest")
 	b, _ = json.Marshal(m)
-	b, e = jcs.Transform(b)
+	b, e := jcs.Transform(b)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -110,10 +111,7 @@ func (f fixtureReaders) ForCase(ctx context.Context, c preparecase.Case, r prepa
 		return sourcefacts.NewReader(f.origin, c.Policy, sourcefacts.CallerContext{WorkspaceID: c.WorkspaceID, CaseID: c.CaseID, SessionID: c.SessionID, ConnectionID: c.Mapping.SourceConnectionID, AccountID: c.AccountID, RequestID: c.CaseID, ExpectedEpoch: r.Epoch, DeadlineAt: time.Now().Add(2 * time.Second), LiveMode: &c.Live}, f.transport, sourceBoundary{r.Epoch}, 1<<20)
 	}
 	// Actual SourceFacts decoding is reused even for the labelled owner fixture.
-	b, e := os.ReadFile("../intake/sourcefacts/testdata/valid.json")
-	if e != nil {
-		return nil, e
-	}
+	b := append([]byte{}, paidFixture...)
 	var m map[string]any
 	json.Unmarshal(b, &m)
 	now := time.Now().UTC()
@@ -498,11 +496,13 @@ func TestPreparationFileFaultsBeforeSQL(t *testing.T) {
 		t.Run(step, func(t *testing.T) {
 			f := prepared(t, []string{})
 			directories := 0
+			hits := 0
 			f.files.Step = func(name string) error {
 				if name == "directory-fsync" {
 					directories++
 				}
 				if name == step || (step == "history-file" && directories == 2) {
+					hits++
 					return errors.New("injected file failure")
 				}
 				return nil
@@ -510,6 +510,9 @@ func TestPreparationFileFaultsBeforeSQL(t *testing.T) {
 			r, e := f.service.Prepare(ctx, f.request)
 			if e == nil || r != (preparecase.Result{}) {
 				t.Fatal("file failure was accepted", r, e)
+			}
+			if hits != 1 {
+				t.Fatal("intended IO fault was not reached", hits)
 			}
 			decisionCounts(t, f.request.WorkspaceID, 0, 1, 0)
 		})
