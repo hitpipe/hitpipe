@@ -1,23 +1,23 @@
 {
   "subject": "HIT-70",
   "materialized_result": "Исполняемая миграция HP-MVP-SQL-DELIVERY без изменения принятого SQL и воспроизводимые изолированные проверки PostgreSQL 18.6.",
-  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/README.md",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/README.md",
   "changed_artifacts": [
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/migrations/001_delivery.sql",
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/tests/check_schema.py",
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/README.md",
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/source-audit.json",
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/postgresql.json",
-    "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/ci-status.json"
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/migrations/001_delivery.sql",
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/tests/check_schema.py",
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/README.md",
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/source-audit.json",
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/postgresql.json",
+    "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/ci-status.json"
   ],
   "verification": {
-    "code_commit": "ff160a2ebdaa21a43d89ac5c352a2430b0b46edc",
+    "code_commit": "0de835e7e606ccfe6585864974dc483f1201b9c4",
     "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
     "command": "py -3 services/delivery/tests/check_schema.py --report services/delivery/evidence/postgresql.json",
     "exit_code": 0,
     "checks_passed": 414,
-    "source_audit": "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/source-audit.json",
-    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/postgresql.json",
+    "source_audit": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/source-audit.json",
+    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/postgresql.json",
     "coverage": [
       "12 таблиц, владелец, функция, триггер и 9 FORCE RLS policies",
       "RLS всех tenant-таблиц для app/worker/purge, отрицательные записи, отделённый migrator",
@@ -30,7 +30,7 @@
     "ci": {
       "status": "FAILURE",
       "run": "https://github.com/hitpipe/hitpipe/actions/runs/43576499951",
-      "diagnostic": "https://github.com/hitpipe/hitpipe/blob/45ab90aa51c6461c919b1f7555ec7d6961df67c4/services/delivery/evidence/ci-status.json",
+      "diagnostic": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/ci-status.json",
       "reason": "Старый учебный wrapper требует lab-component.json; новые SQL-тесты в CI не запускались."
     }
   },
