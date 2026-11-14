@@ -10,7 +10,7 @@ import (
 
 	"context"
 	"github.com/gowebpki/jcs"
-	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/normalizedsignal"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
 	"github.com/jackc/pgx/v5"
 )
