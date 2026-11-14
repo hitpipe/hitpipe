@@ -14,7 +14,7 @@ import uuid
 
 IAM = Path(__file__).resolve().parents[1]
 REPO = IAM.parents[1]
-IMAGE = "postgres:18.6-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+IMAGE = "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73"
 SQL = IAM / "internal/adapters/postgres/sessionlookup/testdata/iam.sql"
 SQL_SHA256 = "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7"
 
@@ -37,7 +37,7 @@ def source_digest():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--go", default="go", help="Path to the accepted Go 1.27.2 binary")
-    parser.add_argument("--evidence-dir", type=Path, default=IAM / "evidence/HIT-68")
+    parser.add_argument("--evidence-dir", type=Path, default=IAM / "evidence/security-postgres-18.7")
     args = parser.parse_args()
     if hashlib.sha256(SQL.read_bytes()).hexdigest() != SQL_SHA256:
         parser.error("IAM fixture differs from the complete accepted SQL source")
@@ -53,7 +53,7 @@ def main():
     suffix = uuid.uuid4().hex[:12]
     name, network, database = "hit68-pg-" + suffix, "hit68-net-" + suffix, "hit68_test_" + suffix
     result = {
-        "task": "HIT-68", "schema_version": 1, "started_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "task": "HIT-68", "maintenance": "HP-CCR-POSTGRES-20261114", "schema_version": 1, "started_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "source_commit": run(["git", "rev-parse", "HEAD"]).stdout.strip(),
         "source_tree_sha256": source_digest(), "go_version": version,
         "platform": platform.platform(), "cpu_count": os.cpu_count(),
@@ -96,7 +96,7 @@ def main():
         bootstrap += "ALTER ROLE hp_hit68_lookup SET default_transaction_read_only=on;\n"
         run(psql, data=bootstrap)
         server = run(psql + ["-Atc", "SHOW server_version"]).stdout.strip()
-        if not server.startswith("18.6"):
+        if server != "18.7":
             raise RuntimeError("isolated PostgreSQL version does not match the accepted cohort")
         result["postgres_version"] = server
         address = run(["docker", "port", name, "5432/tcp"]).stdout.strip()
