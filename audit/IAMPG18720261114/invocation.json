@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "services/iam/tools/check_postgres_session_lookup.py",
+    "--go",
+    "/home/deploy/.local/share/hitpipe-dk-pr12-20261018/tools/go/bin/go",
+    "--evidence-dir",
+    "/home/deploy/hitpipe-pg187-iam-20261114/audit/IAMPG18720261114"
+  ],
+  "cwd": "/home/deploy/hitpipe-pg187-iam-20261114",
+  "started_utc": "2026-11-14T09:35:19.547275+00:00",
+  "source_revision": "5a813a15035eb2d23c3081d289f2eacf18ca12c7",
+  "free_before_run": 997117952,
+  "deployment_reserve_bytes": 681574400,
+  "image": "docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "scope": "One real isolated IAM session-lookup harness run; no live service or existing database",
+  "finished_utc": "2026-11-14T09:40:50.598112+00:00",
+  "exit_code": 0,
+  "free_after_run": 763838464
+}

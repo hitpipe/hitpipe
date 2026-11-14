@@ -1,0 +1,90 @@
+{
+  "task": "HIT-68",
+  "maintenance": "HP-CCR-POSTGRES-20261114",
+  "schema_version": 1,
+  "started_at_utc": "2026-11-14T09:35:19Z",
+  "source_commit": "5a813a15035eb2d23c3081d289f2eacf18ca12c7",
+  "source_tree_sha256": "7502735d08d7aaf29554055eaec1d396e395a290276e5edfd8e5dabfbec8e8ea",
+  "go_version": "go version go1.27.2 linux/amd64",
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "cpu_count": 1,
+  "execution_limits": {
+    "GOMAXPROCS": 1,
+    "GOGC": 50,
+    "go_build_parallelism": 1,
+    "postgres_memory_mib": 256,
+    "postgres_cpus": 0.5
+  },
+  "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+  "scope": "Isolated adapter and existing consumer tests, not login, authorization, trusted time or deployment qualification",
+  "checks": [
+    {
+      "name": "unit",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-count=1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 134.471,
+      "log": "unit.log",
+      "log_sha256": "344809aa4e066196ef80ac4b386c57c606ace43f8ec53b1ba506dc72dfb7757c"
+    },
+    {
+      "name": "postgres-race",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-tags=integration",
+        "-race",
+        "-count=1",
+        "-v",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 164.1,
+      "log": "postgres-race.log",
+      "log_sha256": "f71c04fe4f5020066793e88c933997bb9639d231be2204da24a11b9a1a4a59e3"
+    },
+    {
+      "name": "vet",
+      "command": [
+        "go",
+        "vet",
+        "-p",
+        "1",
+        "-tags=integration",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 19.531,
+      "log": "vet.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "command": [
+        "go",
+        "build",
+        "-p",
+        "1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.226,
+      "log": "build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "state": "PASSED",
+  "postgres_version": "18.7",
+  "test_container_removed": true,
+  "test_network_removed": true,
+  "finished_at_utc": "2026-11-14T09:40:50Z"
+}
