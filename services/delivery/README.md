@@ -1,6 +1,6 @@
 # Delivery: схема хранения (HIT-70)
 
-`migrations/001_delivery.sql` — исполняемый SQL-блок **HP-MVP-SQL-DELIVERY** без изменений из [PERSISTENCE.md, fedbe40](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md). SHA-256 блока с завершающим LF: `9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e`.
+`migrations/001_delivery.sql` — исполняемый SQL раздела **HP-MVP-SQL-DELIVERY** из [PERSISTENCE.md, fedbe40](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md). Байты совпадают с исходным [formal/sql/delivery.sql](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/delivery.sql), SHA-256: `9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e`. В объединённом Markdown после SQL дополнительно стоит пустая строка оформления.
 
 Применение предназначено только для отдельной базы Delivery. До миграции администратор этой базы создаёт `hp_delivery_migrator`, `hp_delivery_app`, `hp_delivery_worker`, `hp_delivery_purge` с `NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`. Миграция выполняется от мигратора, владельца базы. Рабочие роли не владеют объектами и не наследуют purge. Сама миграция транзакционная, однократная; повторный запуск не является обновлением версии.
 
