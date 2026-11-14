@@ -1,0 +1,54 @@
+{
+  "subject": "HIT-79",
+  "materialized_result": {
+    "summary": "Локальная подготовка финансового решения и одного неизменяемого DeliveryIntent: прежние Decode/evaluator/guarded reader, текущие guards, durable owner content, атомарные case/history/outbox refs и безопасный повтор после сбоя.",
+    "tested_implementation_sha": "4af9683cc2173476549fc3e1bd0515612719dd3f",
+    "code": "https://github.com/hitpipe/hitpipe/tree/4af9683cc2173476549fc3e1bd0515612719dd3f/services/processing",
+    "base_sha": "c218eb3d87c1df51d999d955d263b9d410f77bd7",
+    "dependency_integration_sha": "4c21dc3",
+    "dependency_reuse": {
+      "HIT-72": "PR44 MERGED; existing SourceFacts Decode",
+      "HIT-76": "PR45 OPEN, immutable migration/roles and qualification reused",
+      "HIT-77": "PR48 OPEN, exact Processing implementation d9bb781 and204fabc cherry-picked -x; byte comparison with b31a3adae4fac625c97fd903e13f9aad8d6ca771",
+      "HIT-78": "PR50 OPEN,c218eb3d87c1df51d999d955d263b9d410f77bd7; saved case admission and approved PG18.7"
+    },
+    "integration_state": "Own dependent branch; no PR merged or main integration claimed. Observed main ce771d37505e7770003d0796ae932556d06b7bab.",
+    "postgres_adoption": "https://hitpipe.atlassian.net/browse/HIT-79?focusedCommentId=12258"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/preparecase",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/prepare_test.go",
+    "services/processing/internal/adapters/postgres/intent",
+    "services/processing/internal/adapters/contentfiles",
+    "services/processing/internal/adapters/postgres/testdata/sourcefacts-valid.json",
+    "services/processing/scripts/postgres/verify_preparation.py",
+    "services/processing/tools/intent/generate.py",
+    "services/processing/docs/HIT-79"
+  ],
+  "verification": {
+    "commands": "services/processing/docs/HIT-79/verification/commands.json",
+    "summary": "services/processing/docs/HIT-79/verification/summary.json",
+    "raw_stream_archive": "services/processing/docs/HIT-79/verification/raw-run.tar.gz",
+    "go_race_stdout": "services/processing/docs/HIT-79/verification/go-race.stdout",
+    "postgres_stdout": "services/processing/docs/HIT-79/verification/postgres-tests.stdout",
+    "source_audit": "services/processing/docs/HIT-79/source-audit.json",
+    "supplemental_commands": "services/processing/docs/HIT-79/supplemental-commands.json",
+    "dod_matrix": "services/processing/docs/HIT-79/README.md",
+    "digests": "services/processing/docs/HIT-79/evidence-digests.json",
+    "environment": "Go1.27.2 darwin/arm64 race/vet; separate Go1.27.2 linux/arm64 CGO=0 actual PostgreSQL18.7 test binary. Network-none owned temporary Bookworm cluster, controlled HTTPS source fixture, owner files0700/0600. No Linux-race claim.",
+    "result": "Mandatory commands exit0: module race/vet, real PostgreSQL full HIT-76/HIT-78 regressions and preparation tests; paid and guards, unpaid→paid same case, concurrent CAS, canonical rendering and immutable outgoing JCS, source provenance preservation, file/directory fsync/rename, corruption/expiry/permissions, real process crashes across file steps and SQL commit, lost ACK/restart stable intent and actual source HTTPS without SQL row lock. Expected SQL rejection/readiness/absent-container probe codes checked separately.",
+    "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Локально сохранены решение и ожидающий outbox. Нет Delivery send, ClickUp create/readback, observations, CONFIRMED, всего MVP или основного production listener.",
+    "Реальные IAM/Intake/Stripe и production runtime fencing/credentials не подключены; owner grant/epoch replies в проверках явно синтетические. Общий Boundary обязателен и не имеет разрешающего default.",
+    "SourceFacts ID/digest/times сохраняются как сообщённая Intake provenance; не заменяются checksum domain-проекции и не объявляются самостоятельной проверкой Stripe.",
+    "Внедрённые deployment transport/buffer/deadline/pool/content-volume settings и текущее authority owner состояние обязательны. Нет пользовательского API настройки и неподтверждённой активации.",
+    "Проверены процессные crash/fault/reconnect сценарии на временном локальном стенде; нет утверждения о физической потере питания, production RPO, backup/restore/retention scheduler или эксплуатации CVE.",
+    "Expiry purge реализован по durable metadata; автоматическое удаление unexpired unknown-commit orphan не реализовано, такие файлы удерживаются до проверенного исхода либо hard expiry.",
+    "PR45/48/50 остаются зависимостями; после разрешённой Lead интеграции требуется проверить main и его CI. Независимое review и человеческая приёмка не подменяются локальными тестами."
+  ],
+  "authorship": "Codex по поручению Тимофея Патрушева / Tim1hik"
+}

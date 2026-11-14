@@ -1,0 +1,56 @@
+[
+  {
+    "label": "intent-generation",
+    "argv": [
+      "python3",
+      "services/processing/tools/intent/generate.py",
+      "--oas",
+      "../../research/HIT-72-20261112/openapi.json",
+      "--gofmt",
+      "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/gofmt"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit79-decision-outbox",
+    "source_sha": "4af9683cc2173476549fc3e1bd0515612719dd3f",
+    "started_at": "2026-11-14T20:24:51.591659+00:00",
+    "finished_at": "2026-11-14T20:24:51.637693+00:00",
+    "exit_code": 0,
+    "environment": "Inherited CLI environment, absolute Go1.27.2 gofmt, pinned input OAS hash checked by generator.",
+    "stdout": {
+      "file": "intent-generation.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "intent-generation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "intent-generation-diff",
+    "argv": [
+      "git",
+      "diff",
+      "--exit-code",
+      "HEAD",
+      "--",
+      "services/processing/internal/application/preparecase/wire_generated.go"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit79-decision-outbox",
+    "source_sha": "4af9683cc2173476549fc3e1bd0515612719dd3f",
+    "started_at": "2026-11-14T20:24:51.637959+00:00",
+    "finished_at": "2026-11-14T20:24:51.647977+00:00",
+    "exit_code": 0,
+    "environment": "Inherited CLI environment, absolute Go1.27.2 gofmt, pinned input OAS hash checked by generator.",
+    "stdout": {
+      "file": "intent-generation-diff.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "intent-generation-diff.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]
