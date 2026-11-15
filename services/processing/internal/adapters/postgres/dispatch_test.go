@@ -76,7 +76,7 @@ func newSendFixture(t *testing.T) sendFixture {
 	if e = os.Mkdir(path, 0700); e != nil {
 		t.Fatal(e)
 	}
-	s := dispatchintent.Service{Repository: repo, Content: f.files, Decoder: deliveryhttp.Codec{}, Boundary: g, Clock: testfixtures.Clock{}, Policy: dispatchintent.Policy{Batch: 10, MaxAttempts: 3, Lease: 2 * time.Second, RequestTimeout: time.Second, BaseBackoff: 40 * time.Millisecond, MaxBackoff: 200 * time.Millisecond}, Jitter: func(d time.Duration) (time.Duration, error) { return d / 2, nil }}
+	s := dispatchintent.Service{Repository: repo, Content: f.files, Decoder: deliveryhttp.Codec{}, Boundary: g, Clock: testfixtures.Clock{}, Policy: dispatchintent.Policy{Batch: 10, MaxAttempts: 3, Lease: 2 * time.Second, RequestTimeout: time.Second, BaseBackoff: 40 * time.Millisecond, MaxBackoff: 200 * time.Millisecond}, Jitter: dispatchintent.CryptoJitter}
 	return sendFixture{f, s, repo, r.MessageID, g, path, testfixtures.NewPKI(t)}
 }
 func (f sendFixture) request() dispatchintent.Request {

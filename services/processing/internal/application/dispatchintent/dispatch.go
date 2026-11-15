@@ -4,8 +4,10 @@ package dispatchintent
 
 import (
 	"context"
+	"crypto/rand"
 	"errors"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
+	"math/big"
 	"reflect"
 	"sync/atomic"
 	"time"
@@ -257,4 +259,17 @@ func Missing(v any) bool {
 		return r.IsNil()
 	}
 	return false
+}
+
+// CryptoJitter supplies bounded deployment backoff entropy. It does not grant
+// authority or extend source/episode/content expiry. Entropy failure holds work.
+func CryptoJitter(ceiling time.Duration) (time.Duration, error) {
+	if ceiling <= 0 {
+		return 0, ErrHeld
+	}
+	n, e := rand.Int(rand.Reader, new(big.Int).Add(big.NewInt(int64(ceiling)), big.NewInt(1)))
+	if e != nil {
+		return 0, ErrHeld
+	}
+	return time.Duration(n.Int64()), nil
 }

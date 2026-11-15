@@ -264,3 +264,58 @@ func TestDispatchSQLCommitAckLossAndPoolScopeReset(t *testing.T) {
 		t.Fatal("fresh connection recovery", e)
 	}
 }
+
+type rollbackDispatchDB struct {
+	dispatchTestDB
+	mode string
+}
+type rollbackDispatchTx struct {
+	pgx.Tx
+	mode string
+}
+
+func (d rollbackDispatchDB) BeginTx(c context.Context, o pgx.TxOptions) (pgx.Tx, error) {
+	tx, e := d.dispatchTestDB.BeginTx(c, o)
+	if e != nil {
+		return nil, e
+	}
+	return &rollbackDispatchTx{tx, d.mode}, nil
+}
+func (t *rollbackDispatchTx) Exec(c context.Context, q string, a ...any) (pgconn.CommandTag, error) {
+	if (t.mode == "claim" && strings.Contains(q, "UPDATE hp_processing.job_index SET claim_token=")) || (t.mode == "finish" && strings.Contains(q, "DELETE FROM hp_processing.job_index")) {
+		return pgconn.CommandTag{}, errors.New("controlled second-statement failure")
+	}
+	return t.Tx.Exec(c, q, a...)
+}
+func TestDispatchAtomicRollbackBetweenOutboxAndIndex(t *testing.T) {
+	f := newSendFixture(t)
+	if e := f.repo.Index(ctx, f.request(), 10); e != nil {
+		t.Fatal(e)
+	}
+	broken := DispatchStore{rollbackDispatchDB{mode: "claim"}}
+	if _, e := broken.Claim(ctx, f.request(), f.message, time.Second); e == nil {
+		t.Fatal("partial claim succeeded")
+	}
+	state, _, _, n := f.outbox(t)
+	if state != "PENDING" || n != 0 {
+		t.Fatal("outbox claim escaped rollback", state, n)
+	}
+	claim, e := f.repo.Claim(ctx, f.request(), f.message, time.Second)
+	if e != nil {
+		t.Fatal(e)
+	}
+	broken = DispatchStore{rollbackDispatchDB{mode: "finish"}}
+	if e = broken.Finish(ctx, claim, "ACKED", time.Now()); e == nil {
+		t.Fatal("partial finish succeeded")
+	}
+	state, _, _, n = f.outbox(t)
+	if state != "CLAIMED" || n != 1 {
+		t.Fatal("finish escaped rollback", state, n)
+	}
+	if e = f.repo.Check(ctx, claim); e != nil {
+		t.Fatal("rollback lost original lease", e)
+	}
+	if e = f.repo.Finish(ctx, claim, "HELD", time.Now()); e != nil {
+		t.Fatal(e)
+	}
+}
