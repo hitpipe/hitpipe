@@ -7,6 +7,7 @@ import (
 	"errors"
 	"reflect"
 	"regexp"
+	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -19,7 +20,7 @@ var (
 	ErrStale       = errors.New("OBSERVATION_STALE")
 	ErrUnavailable = errors.New("OBSERVATION_UNAVAILABLE")
 )
-var uuid = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
+var uuid = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 
 func UUID(s string) bool { return uuid.MatchString(s) }
 func Missing(x any) bool {
@@ -99,7 +100,7 @@ func (s Service) Execute(ctx context.Context, body []byte, emit func(Receipt) er
 		return e
 	}
 	valid := func() bool {
-		return grant.Allowed && !grant.RevocationPending && grant.WorkspaceID == o.WorkspaceID && UUID(grant.PrincipalID) && UUID(grant.OwnerID) && UUID(grant.OperationID) && UUID(grant.ConnectionID) && grant.Epoch > 0 && grant.Epoch <= 9007199254740991 && !s.Clock.Now().IsZero() && grant.ExpiresAt.After(s.Clock.Now())
+		return grant.Allowed && !grant.RevocationPending && strings.EqualFold(grant.WorkspaceID, o.WorkspaceID) && UUID(grant.PrincipalID) && UUID(grant.OwnerID) && UUID(grant.OperationID) && UUID(grant.ConnectionID) && grant.Epoch > 0 && grant.Epoch <= 9007199254740991 && !s.Clock.Now().IsZero() && grant.ExpiresAt.After(s.Clock.Now())
 	}
 	if !valid() {
 		return ErrDenied

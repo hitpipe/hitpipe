@@ -75,3 +75,25 @@ func TestKnowledgeDecisionTableAndHistoricalConfirmation(t *testing.T) {
 		t.Fatal("late observation regressed", c)
 	}
 }
+func TestEveryRequiredMatchMustBeKnownTrue(t *testing.T) {
+	now := time.Now()
+	yes := true
+	id, ref := "task_controlled", "11111111-1111-4111-8111-111111111111"
+	expiry := now.Add(time.Hour)
+	for index := 0; index < 6; index++ {
+		for _, missing := range []bool{true, false} {
+			o := TaskObservation{Knowledge: "RESULT_VERIFIED", Complete: true, TaskID: &id, ObservedAt: now, EvidenceRef: &ref, EvidenceExpiresAt: &expiry, WorkspaceMatches: &yes, ListMatches: &yes, AssigneeMatches: &yes, TitleMatches: &yes, MarkerMatches: &yes, ContextMatches: &yes}
+			fields := []**bool{&o.WorkspaceMatches, &o.ListMatches, &o.AssigneeMatches, &o.TitleMatches, &o.MarkerMatches, &o.ContextMatches}
+			no := false
+			if missing {
+				*fields[index] = nil
+			} else {
+				*fields[index] = &no
+			}
+			c := Decide(Snapshot{State: "WORKING", Outcome: "UNESTABLISHED"}, o, now)
+			if c.Disposition != "HELD" || c.State != "WORKING" || c.LastConfirmedAt != nil {
+				t.Fatal(index, missing, c)
+			}
+		}
+	}
+}

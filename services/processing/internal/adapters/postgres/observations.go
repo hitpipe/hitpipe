@@ -7,6 +7,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/observations"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/jackc/pgx/v5"
+	"strings"
 	"time"
 )
 
@@ -58,7 +59,7 @@ func observationReplay(ctx context.Context, tx pgx.Tx, o observations.TaskObserv
 	return &observations.Receipt{MessageID: o.MessageID, Disposition: disposition}, nil
 }
 func observationCase(ctx context.Context, tx pgx.Tx, o observations.TaskObservation, g observations.Grant, lock bool) (observations.Snapshot, error) {
-	s := observations.Snapshot{WorkspaceID: o.WorkspaceID, CaseID: o.CaseID}
+	s := observations.Snapshot{WorkspaceID: strings.ToLower(o.WorkspaceID), CaseID: strings.ToLower(o.CaseID)}
 	var lineage *string
 	var config []byte
 	q := `SELECT k.operation_id::text,k.config_id::text,k.owner_user_id::text,k.state,k.outcome_knowledge,k.revision,k.lineage_id::text,k.known_task_id,k.last_confirmed_at,k.ever_dispatch_fenced,a.canonical_config FROM hp_processing.case_identity k JOIN hp_processing.accepted_configs a ON (k.workspace_id,k.operation_id,k.config_id)=(a.workspace_id,a.operation_id,a.config_id) WHERE k.workspace_id=$1 AND k.case_id=$2`
@@ -79,7 +80,7 @@ func observationCase(ctx context.Context, tx pgx.Tx, o observations.TaskObservat
 		return s, observations.ErrUnavailable
 	}
 	s.ConnectionID = cfg.Destination
-	if g.WorkspaceID != s.WorkspaceID || g.OwnerID != s.OwnerID || g.OperationID != s.OperationID || g.ConnectionID != s.ConnectionID {
+	if !strings.EqualFold(g.WorkspaceID, s.WorkspaceID) || !strings.EqualFold(g.OwnerID, s.OwnerID) || !strings.EqualFold(g.OperationID, s.OperationID) || !strings.EqualFold(g.ConnectionID, s.ConnectionID) {
 		return s, observations.ErrDenied
 	}
 	if lineage != nil {
@@ -88,7 +89,7 @@ func observationCase(ctx context.Context, tx pgx.Tx, o observations.TaskObservat
 	return s, nil
 }
 func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observations.TaskObservation, s *observations.Snapshot, now time.Time) error {
-	if s.LineageID == "" || s.LineageID != o.LineageID {
+	if s.LineageID == "" || !strings.EqualFold(s.LineageID, o.LineageID) {
 		return observations.ErrConflict
 	}
 	var exists bool
@@ -114,7 +115,7 @@ func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observation
 		Scope    preparecase.Scope
 		Decision preparecase.Decision
 	}
-	if json.Unmarshal(b, &h) != nil || h.CaseID != s.CaseID || h.Revision < 1 || h.Revision > s.Revision || h.Scope.WorkspaceID != s.WorkspaceID || h.Scope.OperationID != s.OperationID || h.Scope.ConfigID != s.ConfigID || h.Scope.OwnerID != s.OwnerID || h.Decision.LineageID != s.LineageID || h.Decision.MessageID != s.LineageID || h.Decision.EpisodeID != o.EpisodeID || h.Decision.Intent == nil || !h.Decision.At.UTC().Truncate(time.Microsecond).Equal(at) {
+	if json.Unmarshal(b, &h) != nil || h.CaseID != s.CaseID || h.Revision < 1 || h.Revision > s.Revision || h.Scope.WorkspaceID != s.WorkspaceID || h.Scope.OperationID != s.OperationID || h.Scope.ConfigID != s.ConfigID || h.Scope.OwnerID != s.OwnerID || h.Decision.LineageID != s.LineageID || h.Decision.MessageID != s.LineageID || !strings.EqualFold(h.Decision.EpisodeID, o.EpisodeID) || h.Decision.Intent == nil || !h.Decision.At.UTC().Truncate(time.Microsecond).Equal(at) {
 		return observations.ErrConflict
 	}
 	s.EpisodeID = h.Decision.EpisodeID
@@ -141,7 +142,7 @@ func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observation
 				return observations.ErrUnavailable
 			}
 			var previous observationHistory
-			if json.Unmarshal(raw, &previous) != nil || previous.CaseID != s.CaseID || previous.Observation.CaseID != s.CaseID || previous.Observation.ObservedAt.After(received) {
+			if json.Unmarshal(raw, &previous) != nil || previous.CaseID != s.CaseID || !strings.EqualFold(previous.Observation.CaseID, s.CaseID) || previous.Observation.ObservedAt.After(received) {
 				return observations.ErrUnavailable
 			}
 			s.LatestObservationAt = previous.Observation.ObservedAt.UTC().Truncate(time.Microsecond)
@@ -238,8 +239,8 @@ func (db ObservationStore) Commit(ctx context.Context, o observations.TaskObserv
 	if e != nil {
 		return z, observations.ErrUnavailable
 	}
-	h := observationHistory{CaseID: o.CaseID, Revision: current.Revision + 1, OldState: current.State, OldOutcome: current.Outcome, NewOutcome: change.Outcome, Authority: g, ReceivedAt: now, Observation: o}
-	h.Decision.EpisodeID = o.EpisodeID
+	h := observationHistory{CaseID: current.CaseID, Revision: current.Revision + 1, OldState: current.State, OldOutcome: current.Outcome, NewOutcome: change.Outcome, Authority: g, ReceivedAt: now, Observation: o}
+	h.Decision.EpisodeID = current.EpisodeID
 	h.Decision.Reason = change.Reason
 	h.Decision.State = change.State
 	h.Decision.At = at
@@ -247,7 +248,7 @@ func (db ObservationStore) Commit(ctx context.Context, o observations.TaskObserv
 	if e != nil {
 		return z, observations.ErrUnavailable
 	}
-	ref, e := db.Content.Write(ctx, b, "HISTORY", preparecase.Origin{WorkspaceID: o.WorkspaceID, CaseID: o.CaseID, Revision: h.Revision}, expiry, now)
+	ref, e := db.Content.Write(ctx, b, "HISTORY", preparecase.Origin{WorkspaceID: strings.ToLower(o.WorkspaceID), CaseID: strings.ToLower(o.CaseID), Revision: h.Revision}, expiry, now)
 	if e != nil {
 		return z, observations.ErrUnavailable
 	}

@@ -33,7 +33,7 @@ type observationAuthority struct {
 func (a *observationAuthority) Authorize(c context.Context, q observations.Access) (observations.Grant, error) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
-	if a.denied || q.WorkspaceID != a.grant.WorkspaceID {
+	if a.denied || !strings.EqualFold(q.WorkspaceID, a.grant.WorkspaceID) {
 		return observations.Grant{}, observations.ErrDenied
 	}
 	return a.grant, nil
@@ -422,4 +422,20 @@ func (p *observationPool) BeginTx(c context.Context, o pgx.TxOptions) (pgx.Tx, e
 		}
 		return &readTx{Tx: tx, release: func() { p.slots <- conn }}, nil
 	}
+}
+func TestObservationUppercaseUUIDWirePreservesDigestAndReceipt(t *testing.T) {
+	f := newObservation(t)
+	o := f.observation(t, "RESULT_VERIFIED")
+	o.MessageID = strings.ToUpper(o.MessageID)
+	o.WorkspaceID = strings.ToUpper(o.WorkspaceID)
+	o.CaseID = strings.ToUpper(o.CaseID)
+	o.LineageID = strings.ToUpper(o.LineageID)
+	o.EpisodeID = strings.ToUpper(o.EpisodeID)
+	first := f.apply(t, o, 202, "uppercase_uuid_values_are_valid")
+	again := f.apply(t, o, 202, "uppercase_uuid_exact_replay")
+	if !bytes.Equal(first, again) {
+		t.Fatal("wire receipt case lost")
+	}
+	f.readAPI(t, "canonical_owner_ids_from_uppercase_wire")
+	f.counts(t, 1)
 }

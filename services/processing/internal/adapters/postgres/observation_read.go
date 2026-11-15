@@ -7,6 +7,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
 	"github.com/jackc/pgx/v5"
+	"strings"
 	"time"
 )
 
@@ -32,7 +33,7 @@ func (db CaseReadStore) observationView(ctx context.Context, tx pgx.Tx, r readca
 		return nil, false, readcases.ErrUnavailable
 	}
 	var h observationHistory
-	if json.Unmarshal(b, &h) != nil || h.CaseID != r.Summary.CaseID || h.Revision < 1 || h.Revision > r.Summary.Revision || h.Observation.WorkspaceID != ws || h.Observation.CaseID != r.Summary.CaseID || !h.Decision.At.UTC().Truncate(time.Microsecond).Equal(at) || h.Observation.ObservedAt.After(at) {
+	if json.Unmarshal(b, &h) != nil || h.CaseID != r.Summary.CaseID || h.Revision < 1 || h.Revision > r.Summary.Revision || !strings.EqualFold(h.Observation.WorkspaceID, ws) || !strings.EqualFold(h.Observation.CaseID, r.Summary.CaseID) || !h.Decision.At.UTC().Truncate(time.Microsecond).Equal(at) || h.Observation.ObservedAt.After(at) {
 		return nil, false, readcases.ErrUnavailable
 	}
 	o := h.Observation
