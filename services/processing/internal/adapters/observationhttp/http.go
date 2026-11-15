@@ -118,13 +118,15 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		bad(e)
 		return
 	}
+	started := false
 	e = h.Service.Execute(r.Context(), body, func(receipt observations.Receipt) error {
+		started = true
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Cache-Control", "no-store")
 		w.WriteHeader(202)
 		return json.NewEncoder(w).Encode(receipt)
 	})
-	if e != nil {
+	if e != nil && !started {
 		bad(e)
 	}
 }

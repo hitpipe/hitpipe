@@ -9,6 +9,8 @@ import (
 	"regexp"
 )
 
+var messageV4 = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
+
 func Digest(b []byte) string { h := sha256.Sum256(b); return "sha256:" + hex.EncodeToString(h[:]) }
 func Validate(name string, b []byte) error {
 	v, e := parse(b)
@@ -34,7 +36,7 @@ func (Codec) Decode(b []byte) (observations.TaskObservation, error) {
 	if e != nil || Digest(canon) != digest {
 		return out, observations.ErrInvalid
 	}
-	if !regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`).MatchString(m["message_id"].(string)) {
+	if !messageV4.MatchString(m["message_id"].(string)) {
 		return out, observations.ErrInvalid
 	}
 	if json.Unmarshal(b, &out) != nil {

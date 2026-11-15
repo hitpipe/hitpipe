@@ -411,3 +411,53 @@ func TestObservationExpiryPurgeAndMinimalReadAfterRestart(t *testing.T) {
 	}
 	f.readAPI(t, "new_unknown_after_expiry_projection")
 }
+
+// Abort the real PostgreSQL transaction immediately before its actual Commit.
+// This is distinct from a committed transaction whose ACK was lost.
+type observationAbortDB struct{ Beginner }
+type observationAbortTx struct{ *observationAckTx }
+
+func (d observationAbortDB) BeginTx(c context.Context, o pgx.TxOptions) (pgx.Tx, error) {
+	tx, e := d.Beginner.BeginTx(c, o)
+	if e != nil {
+		return nil, e
+	}
+	return &observationAbortTx{&observationAckTx{Tx: tx}}, nil
+}
+func (tx *observationAbortTx) Commit(c context.Context) error {
+	if tx.write {
+		_, _ = tx.Tx.Exec(c, `SELECT 1/0`)
+	}
+	return tx.Tx.Commit(c)
+}
+func TestObservationActualSQLCommitRollbackAndCommitGate(t *testing.T) {
+	for _, mode := range []string{"postgres_aborted_transaction", "commit_gate"} {
+		t.Run(mode, func(t *testing.T) {
+			f := newObservation(t)
+			o := f.observation(t, "RESULT_VERIFIED")
+			want := 503
+			if mode == "commit_gate" {
+				f.gate.denyPhase = "OBSERVATION_COMMIT"
+				want = 403
+			} else {
+				f.repo.DB = observationAbortDB{f.repo.DB}
+				f.service.Repository = f.repo
+				f.start(t)
+			}
+			f.apply(t, o, want, mode)
+			f.counts(t, 0)
+			state, outcome, rev, task, fence, confirmed := f.stored(t)
+			if state != "WORKING" || outcome != "UNESTABLISHED" || rev != 2 || task != nil || fence || confirmed != nil {
+				t.Fatal("rollback leaked state", state, outcome, rev, task, fence, confirmed)
+			}
+			f.gate.mu.Lock()
+			f.gate.denyPhase = ""
+			f.gate.mu.Unlock()
+			f.repo.DB = newObservationPool(t, 1)
+			f.service.Repository = f.repo
+			f.start(t)
+			f.apply(t, o, 202, "same_message_after_actual_rollback_or_gate_recovery")
+			f.counts(t, 1)
+		})
+	}
+}
