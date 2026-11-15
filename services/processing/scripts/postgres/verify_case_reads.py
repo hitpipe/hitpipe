@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""HIT-95 independent read-path qualification on owned PG18.7 + real mTLS.
+Does not claim nonempty Cases/CaseDetail readiness while display sources are absent.
+"""
+import argparse
+import hashlib
+import json
+import pathlib
+import uuid
+import verify_preparation as preparation
+
+class Run(preparation.Run):
+ def __init__(self,output,go,oas):
+  super().__init__(output,go)
+  self.name='hit95-'+uuid.uuid4().hex
+  self.oas=oas.resolve()
+  self.script_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
+ def command(self,label,args,*a,**kw):
+  args=['hitpipe.task=HIT-95' if x in ('hitpipe.task=HIT-76','hitpipe.task=HIT-78','hitpipe.task=HIT-79') else x for x in args]
+  if label=='postgres-storage-tests':
+   args[2:2]=['-e','HIT95_SCHEMA_CAPTURE=/tmp/hit95-schema.json']
+  return super().command(label,args,*a,**kw)
+ def checks(self):
+  super().checks()
+  result=self.command('read-api-capture',['docker','exec',self.container,'cat','/tmp/hit95-schema.json'])
+  (self.output/'api-capture.json').write_bytes(result.stdout)
+  self.command('exact-oas-response-validation',['python3',str(pathlib.Path(__file__).with_name('verify_read_schema.py')),str(self.oas),str(self.output/'api-capture.json')])
+ def main(self):
+  super().main()
+  p=self.output/'summary.json';s=json.loads(p.read_text());s['task']='HIT-95'
+  s['scope']='INDEPENDENT_READ_PATHS_VERIFIED / FULL_DOD_BLOCKED: actual private TLS1.3 BFF mTLS fixture, fresh controlled IAM/epoch, real PG18.7 RLS/read-only transactions/content; history200 with explicitly persisted synthetic history expiry metadata, missing predecessor expiry503, nonempty list/detail503 until Lead settles order_label/next_action. Host Go1.27.2 race/vet; Linux CGO0 actual DB binary, no Linux race claim. No actual IAM/BFF or production gate qualification.'
+  s['full_dod_ready']=False;s['blockers']=['approved source of order_label absent','approved projection rule for next_action absent','HIT78 initial history has no persisted history_content.expires_at; such history returns503']
+  p.write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s))
+
+if __name__=='__main__':
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',required=True,type=pathlib.Path);p.add_argument('--go',required=True,type=pathlib.Path);p.add_argument('--oas',required=True,type=pathlib.Path);a=p.parse_args();Run(a.output.resolve(),a.go,a.oas).main()
