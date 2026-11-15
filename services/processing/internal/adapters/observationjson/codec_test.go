@@ -45,3 +45,45 @@ func TestExactRequiredNullDigestAndCanonicalNames(t *testing.T) {
 		}
 	}
 }
+
+func TestOriginalWireRejectsUnpairedUnicodeSurrogatesBeforeDigest(t *testing.T) {
+	raw := testWire(t)
+	var m map[string]any
+	json.Unmarshal(raw, &m)
+	m["proof_code"] = "controlled_replacement_�"
+	delete(m, "message_digest")
+	unsigned, _ := json.Marshal(m)
+	canonical, e := jcs.Transform(unsigned)
+	if e != nil {
+		t.Fatal(e)
+	}
+	m["message_digest"] = Digest(canonical)
+	valid, _ := json.Marshal(m)
+	for _, escape := range []string{`\ud800`, `\udfff`} {
+		bad := strings.Replace(string(valid), "controlled_replacement_�", "controlled_replacement_"+escape, 1)
+		if _, e = (Codec{}).Decode([]byte(bad)); e == nil {
+			t.Fatal("unpaired surrogate accepted after lossy JSON decoding", escape)
+		}
+	}
+}
+
+func TestValidSurrogatePairAndLiteralUnicodeHaveSameDigest(t *testing.T) {
+	raw := testWire(t)
+	var m map[string]any
+	json.Unmarshal(raw, &m)
+	m["proof_code"] = "controlled_😀"
+	delete(m, "message_digest")
+	unsigned, _ := json.Marshal(m)
+	canon, e := jcs.Transform(unsigned)
+	if e != nil {
+		t.Fatal(e)
+	}
+	m["message_digest"] = Digest(canon)
+	valid, _ := json.Marshal(m)
+	escaped := strings.Replace(string(valid), "controlled_😀", `controlled_\ud83d\ude00`, 1)
+	for _, b := range []string{string(valid), escaped} {
+		if _, e = (Codec{}).Decode([]byte(b)); e != nil {
+			t.Fatal("valid Unicode rejected", e)
+		}
+	}
+}

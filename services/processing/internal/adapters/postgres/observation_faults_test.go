@@ -25,7 +25,7 @@ import (
 )
 
 func TestObservationWireScopeAndEpisodeRejection(t *testing.T) {
-	for _, mode := range []string{"digest", "extra", "duplicate", "case_variant_first", "case_variant_last", "required_omission", "forbidden_null", "enum", "version", "wrong_workspace", "foreign_case", "lineage", "episode", "old_episode", "future", "body_limit", "authority_header"} {
+	for _, mode := range []string{"digest", "extra", "duplicate", "case_variant_first", "case_variant_last", "required_omission", "forbidden_null", "enum", "version", "wrong_workspace", "foreign_case", "lineage", "episode", "old_episode", "future", "body_limit", "authority_header", "unicode_surrogate"} {
 		t.Run(mode, func(t *testing.T) {
 			f := newObservation(t)
 			o := f.observation(t, "RESULT_VERIFIED")
@@ -57,11 +57,15 @@ func TestObservationWireScopeAndEpisodeRejection(t *testing.T) {
 				want = 412
 			case "future":
 				o.ObservedAt = time.Now().Add(time.Minute)
+			case "unicode_surrogate":
+				o.ProofCode = "controlled_�"
 			case "authority_header":
 				headers["X-HitPipe-Role"] = "OWNER"
 			}
 			raw := observationWire(t, o)
 			switch mode {
+			case "unicode_surrogate":
+				raw = []byte(strings.Replace(string(raw), "controlled_�", `controlled_\ud800`, 1))
 			case "digest":
 				raw = []byte(strings.Replace(string(raw), `"complete":true`, `"complete":false`, 1))
 			case "extra":

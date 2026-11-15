@@ -21,6 +21,11 @@ func Validate(name string, b []byte) error {
 }
 func (Codec) Decode(b []byte) (observations.TaskObservation, error) {
 	var out observations.TaskObservation
+	// Validate the original Unicode/I-JSON before encoding/json can replace an
+	// unpaired surrogate with U+FFFD. Digest must bind the original valid input.
+	if _, e := jcs.Transform(b); e != nil {
+		return out, observations.ErrInvalid
+	}
 	v, e := parse(b)
 	if e != nil || !validate(v, schemas["TaskObservation"]) {
 		return out, observations.ErrInvalid
