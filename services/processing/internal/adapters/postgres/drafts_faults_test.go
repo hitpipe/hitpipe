@@ -239,19 +239,21 @@ func TestDraftMissingCorruptAndForeignContentFailClosed(t *testing.T) {
 	}
 }
 func TestDraftFileDurabilityFailureRollsBackMetadata(t *testing.T) {
-	for _, step := range []string{"write", "file-fsync", "rename", "dir-fsync"} {
+	for _, step := range []string{"write", "file-fsync", "rename", "directory-fsync"} {
 		t.Run(step, func(t *testing.T) {
 			f := newDraftFixture(t)
+			injected := false
 			f.files.Step = func(s string) error {
 				if s == step {
+					injected = true
 					return errors.New("controlled file failure")
 				}
 				return nil
 			}
 			input := drafts.DraftWrite{Command: f.meta(nil), Config: f.config()}
 			status, _ := f.call(t, drafts.Save, input, nil)
-			if status != 503 {
-				t.Fatal("fault acknowledged", status)
+			if status != 503 || !injected {
+				t.Fatal("fault acknowledged or not injected", status, injected)
 			}
 			db := connect(t)
 			tx := begin(t, db, f.workspace)
