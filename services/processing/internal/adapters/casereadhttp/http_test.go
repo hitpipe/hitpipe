@@ -46,13 +46,14 @@ type gate struct {
 	mu    sync.Mutex
 	phase string
 	calls int
+	epoch int64
 }
 
 func (g *gate) Start(ctx context.Context, a readcases.Grant, phase string, fn func(context.Context) error) error {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 	g.calls++
-	if ctx.Err() != nil || phase == g.phase {
+	if ctx.Err() != nil || phase == g.phase || a.Epoch != g.epoch {
 		return readcases.ErrDenied
 	}
 	return fn(ctx)
@@ -72,7 +73,7 @@ func (r *repository) Read(ctx context.Context, q readcases.Request, g readcases.
 }
 func components() (readcases.Service, *authority, *gate, *repository) {
 	a := &authority{grant: readcases.Grant{WorkspaceID: ws, PrincipalID: "22222222-2222-4222-8222-222222222222", Epoch: 1, ExpiresAt: time.Now().Add(time.Minute)}}
-	g := &gate{}
+	g := &gate{epoch: 1}
 	r := &repository{}
 	return readcases.Service{Authority: a, Boundary: g, Clock: clock{}, Repository: r}, a, g, r
 }
@@ -179,7 +180,7 @@ func request(t *testing.T, c *http.Client, url, session string, extra map[string
 }
 
 func TestRealMTLSAndFreshReadBoundaries(t *testing.T) {
-	for _, name := range []string{"ok", "no cert", "foreign cert", "untrusted cert", "expired cert", "missing session", "forged authority", "stale grant", "wrong workspace", "closed SQL gate", "revoked before response", "denied session", "database error", "invalid query"} {
+	for _, name := range []string{"ok", "no cert", "foreign cert", "untrusted cert", "expired cert", "TLS1.2", "missing session", "forged authority", "stale grant", "stale epoch", "wrong workspace", "closed SQL gate", "revoked before response", "denied session", "database error", "invalid query"} {
 		t.Run(name, func(t *testing.T) {
 			s, a, g, repo := components()
 			ts, p := fixture(t, s)
@@ -219,6 +220,13 @@ func TestRealMTLSAndFreshReadBoundaries(t *testing.T) {
 				a.grant.ExpiresAt = time.Now().Add(-time.Second)
 				want = 403
 				reads = 0
+			case "stale epoch":
+				g.epoch = 2
+				want = 403
+				reads = 0
+			case "TLS1.2":
+				want = 0
+				reads = 0
 			case "wrong workspace":
 				a.grant.WorkspaceID = "33333333-3333-4333-8333-333333333333"
 				want = 403
@@ -243,6 +251,10 @@ func TestRealMTLSAndFreshReadBoundaries(t *testing.T) {
 				reads = 0
 			}
 			c := client(p, presented)
+			if name == "TLS1.2" {
+				c.Transport.(*http.Transport).TLSClientConfig.MinVersion = tls.VersionTLS12
+				c.Transport.(*http.Transport).TLSClientConfig.MaxVersion = tls.VersionTLS12
+			}
 			defer c.CloseIdleConnections()
 			status, b, e := request(t, c, ts.URL+path, session, extra)
 			if status != want || (want == 0 && e == nil) || (want != 0 && e != nil) || repo.calls != reads {

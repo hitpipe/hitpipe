@@ -37,7 +37,7 @@ func NewServer(address string, t *tls.Config, s readcases.Service, peerDNS strin
 	if e != nil {
 		return nil, e
 	}
-	if t == nil || t.ClientCAs == nil || len(t.Certificates) == 0 || t.InsecureSkipVerify {
+	if t == nil || t.ClientCAs == nil || len(t.Certificates) == 0 || t.InsecureSkipVerify || t.GetConfigForClient != nil {
 		return nil, readcases.ErrUnavailable
 	}
 	config := t.Clone()
@@ -99,6 +99,12 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/"), "/")
+	if len(parts) > 3 {
+		parts[3] = strings.ToLower(parts[3])
+	}
+	if len(parts) > 5 {
+		parts[5] = strings.ToLower(parts[5])
+	}
 	if len(parts) < 5 || len(parts) > 7 || parts[0] != "api" || parts[1] != "v1" || parts[2] != "workspaces" || parts[4] != "cases" || !readcases.UUID(parts[3]) {
 		fail(w, readcases.ErrInvalid)
 		return

@@ -87,7 +87,7 @@ func readRequest(f preparedFixture, k readcases.Kind) readcases.Request {
 // These fixtures persist exact private HIT-79 envelopes with actual expiry refs.
 // They do not repair the existing admission writer or stand in for missing
 // order_label/next_action. No successful CaseDetail is claimed here.
-func seedReadHistory(t *testing.T, f preparedFixture, n int) []string {
+func seedReadHistory(t *testing.T, f preparedFixture, n int, badDigest ...bool) []string {
 	t.Helper()
 	db := connect(t)
 	tx := begin(t, db, f.request.WorkspaceID)
@@ -128,7 +128,11 @@ func seedReadHistory(t *testing.T, f preparedFixture, n int) []string {
 		if e != nil {
 			t.Fatal(e)
 		}
-		if _, e = tx.Exec(ctx, `INSERT INTO hp_processing.history_content VALUES($1,$2,$3,$4,$5,$6,$7)`, f.request.WorkspaceID, id, ref.ID, ref.Digest, ref.Bytes, at, ref.ExpiresAt); e != nil {
+		storedDigest := ref.Digest
+		if len(badDigest) > 0 && badDigest[0] {
+			storedDigest = "sha256:" + string(bytes.Repeat([]byte{'f'}, 64))
+		}
+		if _, e = tx.Exec(ctx, `INSERT INTO hp_processing.history_content VALUES($1,$2,$3,$4,$5,$6,$7)`, f.request.WorkspaceID, id, ref.ID, storedDigest, ref.Bytes, at, ref.ExpiresAt); e != nil {
 			t.Fatal(e)
 		}
 		ids = append(ids, id)
@@ -265,11 +269,113 @@ func TestReadHistoryParallelWorkspacesAndNoBusinessWrites(t *testing.T) {
 	}
 }
 
+func TestReadCaseSQLKeysetAndReadonlyOnActualRole(t *testing.T) {
+	f := prepared(t, []string{})
+	db := connect(t)
+	tx := begin(t, db, f.request.WorkspaceID)
+	var admitted time.Time
+	if e := tx.QueryRow(ctx, `SELECT admitted_at FROM hp_processing.case_identity WHERE workspace_id=$1 AND case_id=$2`, f.request.WorkspaceID, f.request.CaseID).Scan(&admitted); e != nil {
+		t.Fatal(e)
+	}
+	for i := 1; i <= 101; i++ {
+		id, _ := newID()
+		at := admitted.Add(time.Duration(i) * time.Microsecond)
+		history, _ := newID()
+		if _, e := tx.Exec(ctx, `INSERT INTO hp_processing.case_identity(workspace_id,case_id,operation_id,config_id,source_account_id,livemode,session_id,admitted_at,owner_user_id,state,revision,outcome_knowledge)VALUES($1,$2,$3,$4,'acct_synthetic',false,$5,$6,$7,'RECEIVED',1,'UNESTABLISHED')`, f.request.WorkspaceID, id, op, config, "pagination_"+id, at, owner); e != nil {
+			t.Fatal(e)
+		}
+		if _, e := tx.Exec(ctx, `INSERT INTO hp_processing.safety_history(workspace_id,entry_id,case_id,actor_kind,at,reason_code,new_state)VALUES($1,$2,$3,'SYSTEM',$4,'SIGNAL_ADMITTED','RECEIVED')`, f.request.WorkspaceID, history, id, at); e != nil {
+			t.Fatal(e)
+		}
+	}
+	if e := tx.Commit(ctx); e != nil {
+		t.Fatal(e)
+	}
+	p := newReadPool(t, 1)
+	readTx, e := p.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = readTx.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, f.request.WorkspaceID); e != nil {
+		t.Fatal(e)
+	}
+	var readonly string
+	if e = readTx.QueryRow(ctx, `SHOW transaction_read_only`).Scan(&readonly); e != nil || readonly != "on" {
+		t.Fatal(readonly, e)
+	}
+	var snapshot time.Time
+	if e = readTx.QueryRow(ctx, `SELECT transaction_timestamp()`).Scan(&snapshot); e != nil {
+		t.Fatal(e)
+	}
+	type position struct {
+		at time.Time
+		id string
+	}
+	collect := func(after *position, state string) []position {
+		var at *time.Time
+		var id *string
+		if after != nil {
+			at = &after.at
+			id = &after.id
+		}
+		rows, e := readTx.Query(ctx, caseReadSQL, f.request.WorkspaceID, "", state, snapshot, at, id, 101)
+		if e != nil {
+			t.Fatal(e)
+		}
+		defer rows.Close()
+		var all []position
+		for rows.Next() {
+			values, e := rows.Values()
+			if e != nil {
+				t.Fatal(e)
+			}
+			all = append(all, position{values[7].(time.Time), values[0].(string)})
+		}
+		if rows.Err() != nil {
+			t.Fatal(rows.Err())
+		}
+		return all
+	}
+	first := collect(nil, "RECEIVED")
+	if len(first) != 101 {
+		t.Fatal(len(first))
+	}
+	last := first[99]
+	second := collect(&last, "RECEIVED")
+	if len(second) != 2 || second[0].id != first[100].id {
+		t.Fatal("wrong keyset continuation")
+	}
+	if len(collect(nil, "CONFIRMED")) != 0 {
+		t.Fatal("filter returned other state")
+	}
+	if _, e = readTx.Exec(ctx, `INSERT INTO hp_processing.safety_history(workspace_id,entry_id,case_id,actor_kind,at,reason_code)VALUES($1,'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',$2,'SYSTEM',now(),'SHOULD_NOT_WRITE')`, f.request.WorkspaceID, f.request.CaseID); e == nil {
+		t.Fatal("read transaction allowed write")
+	}
+	readTx.Rollback(ctx)
+	c := <-p.slots
+	var count int
+	if e = c.QueryRow(ctx, `SELECT count(*) FROM hp_processing.case_identity`).Scan(&count); e != nil || count != 0 {
+		t.Fatal("rollback scope leak", count, e)
+	}
+	p.slots <- c
+	store := readStore(t, f, p)
+	r := readRequest(f, readcases.List)
+	r.CaseID = ""
+	if _, e = store.Read(ctx, r, readGrant(r.WorkspaceID)); !errors.Is(e, readcases.ErrUnavailable) {
+		t.Fatal("unapproved display values fabricated", e)
+	}
+	c = <-p.slots
+	if e = c.QueryRow(ctx, `SELECT count(*) FROM hp_processing.case_identity`).Scan(&count); e != nil || count != 0 {
+		t.Fatal("failed projection scope leak", count, e)
+	}
+	p.slots <- c
+}
+
 func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 	for _, mode := range []string{"missing", "corrupt", "wrong_hash", "symlink", "expired", "wrong_owner", "timeout", "unavailable_db"} {
 		t.Run(mode, func(t *testing.T) {
 			f := prepared(t, []string{})
-			seedReadHistory(t, f, 1)
+			seedReadHistory(t, f, 1, mode == "wrong_hash")
 			p := newReadPool(t, 1)
 			store := readStore(t, f, p)
 			r := readRequest(f, readcases.History)
@@ -293,13 +399,8 @@ func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 					t.Fatal(e)
 				}
 			case "wrong_hash":
-				tx = begin(t, db, r.WorkspaceID)
-				if _, e := tx.Exec(ctx, `UPDATE hp_processing.history_content SET detail_sha256=$2 WHERE workspace_id=$1`, r.WorkspaceID, "sha256:"+string(bytes.Repeat([]byte{'f'}, 64))); e != nil {
-					t.Fatal(e)
-				}
-				if e := tx.Commit(ctx); e != nil {
-					t.Fatal(e)
-				}
+				// Wrong hash was inserted as a new synthetic ref. The application
+				// role cannot UPDATE existing history_content; no grant is widened.
 			case "symlink":
 				original := filepath.Join(t.TempDir(), "foreign")
 				if e := os.Rename(path, original); e != nil {
