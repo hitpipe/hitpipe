@@ -68,17 +68,14 @@ func (l *Lookup) Lookup(ctx context.Context, reference string) (sessionpolicy.Sn
 	if err := ctx.Err(); err != nil {
 		return sessionpolicy.Snapshot{}, err
 	}
-	if len(reference) != sha256.Size*2 {
-		return sessionpolicy.Snapshot{}, ErrInvalidReference
-	}
-	digest, err := hex.DecodeString(reference)
-	if err != nil || hex.EncodeToString(digest) != reference {
+	digest, err := decodeReference(reference)
+	if err != nil {
 		return sessionpolicy.Snapshot{}, ErrInvalidReference
 	}
 	bounded, cancel := context.WithTimeout(ctx, queryTimeout)
 	defer cancel()
 	var snapshot sessionpolicy.Snapshot
-	err = l.pool.QueryRow(bounded, selectSnapshot, digest).Scan(
+	err = l.pool.QueryRow(bounded, selectSnapshot, digest[:]).Scan(
 		&snapshot.CreatedAt, &snapshot.ExpiresAt, &snapshot.IdleExpiresAt, &snapshot.Revoked,
 	)
 	if cancelled := bounded.Err(); cancelled != nil {
@@ -92,6 +89,35 @@ func (l *Lookup) Lookup(ctx context.Context, reference string) (sessionpolicy.Sn
 	}
 	snapshot.Found = true
 	return snapshot, nil
+}
+
+// decodeReference accepts the same exact lowercase SHA-256 representation as
+// before. Decode directly into a fixed-size value rather than allocating an
+// intermediate slice and re-encoding it just to verify the input's case.
+func decodeReference(reference string) ([sha256.Size]byte, error) {
+	var digest [sha256.Size]byte
+	if len(reference) != len(digest)*2 {
+		return digest, ErrInvalidReference
+	}
+	for i := range digest {
+		high, highOK := lowercaseHexNibble(reference[i*2])
+		low, lowOK := lowercaseHexNibble(reference[i*2+1])
+		if !highOK || !lowOK {
+			return [sha256.Size]byte{}, ErrInvalidReference
+		}
+		digest[i] = high<<4 | low
+	}
+	return digest, nil
+}
+
+func lowercaseHexNibble(value byte) (byte, bool) {
+	if value >= '0' && value <= '9' {
+		return value - '0', true
+	}
+	if value >= 'a' && value <= 'f' {
+		return value - 'a' + 10, true
+	}
+	return 0, false
 }
 
 var _ authenticatesession.SessionLookup = (*Lookup)(nil)
