@@ -42,7 +42,7 @@ func issuerDB(t *testing.T) issuerDatabase {
 	t.Helper()
 	adminDSN, appDSN := os.Getenv("HITPIPE_IAM_TEST_ADMIN_DSN"), os.Getenv("HITPIPE_IAM_TEST_APP_DSN")
 	if adminDSN == "" || appDSN == "" {
-		t.Skip("run tools/check_session_issuer.py for isolated PostgreSQL 18.7 tests")
+		t.Skip("run tools/check_session_issuance.py for isolated PostgreSQL 18.7 tests")
 	}
 	adminCfg, adminErr := pgxpool.ParseConfig(adminDSN)
 	appCfg, appErr := pgxpool.ParseConfig(appDSN)
@@ -350,7 +350,7 @@ func TestPostgresIssuerCancellationAndBoundedLock(t *testing.T) {
 
 func TestPostgresIssuerAuthorityAndDatabaseFailures(t *testing.T) {
 	db := issuerDB(t)
-	for _, env := range []string{"HITPIPE_IAM_TEST_ADMIN_DSN", "HITPIPE_IAM_TEST_WORKER_DSN", "HITPIPE_IAM_TEST_PURGE_DSN", "HITPIPE_IAM_TEST_MIGRATOR_DSN"} {
+	for _, env := range []string{"HITPIPE_IAM_TEST_ADMIN_DSN", "HITPIPE_IAM_TEST_WORKER_DSN", "HITPIPE_IAM_TEST_PURGE_DSN", "HITPIPE_IAM_MIGRATOR_DSN"} {
 		t.Run(env, func(t *testing.T) {
 			dsn := os.Getenv(env)
 			if dsn == "" {
