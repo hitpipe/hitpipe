@@ -1,0 +1,38 @@
+[
+  {
+    "run": 1,
+    "source_sha": "cf1224c17489f87a6c08406ad24e7d8af4f0a2cd",
+    "tree_status_at_start": "?? services/processing/scripts/postgres/__pycache__/\n",
+    "status": "FAILED",
+    "archive": "development-01.tar.gz",
+    "sha256": "71e14a5fbd12d55dfa95528e34e1e126b727734160111d73c396429fbab5940f",
+    "notes": "Wrong-hash test attempted forbidden UPDATE of history_content. App role correctly refused. Fixed fixture INSERT of a new synthetic wrong-digest row; no grant/schema change."
+  },
+  {
+    "run": 2,
+    "source_sha": "ca973c6062bc35fe92e59f74c7bbbd0dc967a8d2",
+    "tree_status_at_start": "?? services/processing/scripts/postgres/__pycache__/\n",
+    "status": "PASS",
+    "archive": "development-02.tar.gz",
+    "sha256": "834c3ad0788e17a82fa7aa7aef8455fc2fc8754d42e47f43d23a6c42a4ce20d3",
+    "notes": "PASS; retained untracked own Python bytecode noted explicitly. Later runner suppresses bytecode and measured tree is clean."
+  },
+  {
+    "run": 3,
+    "source_sha": "309644146a995d474dc2c922ed378f6904b123ee",
+    "tree_status_at_start": "",
+    "status": "PASS",
+    "archive": "development-03.tar.gz",
+    "sha256": "f67fc157ddd8c239e55b69aeebfe394810d097f3a3d27ae1aad437e3f045b6ee",
+    "notes": "PASS on clean source, before extending actual HTTP pagination capture."
+  },
+  {
+    "run": 4,
+    "source_sha": "fe7a59f2fb77e94653f7d1355eabd93c83aea2b8",
+    "tree_status_at_start": "",
+    "status": "PASS",
+    "archive": "development-04.tar.gz",
+    "sha256": "d2531761e8381e3e9e52ddc706b7a0ea639a4248c5005bb5a2d75a1afddfb29a",
+    "notes": "PASS on clean source, before real SQL timeout/closed-connection/rollback regressions."
+  }
+]
