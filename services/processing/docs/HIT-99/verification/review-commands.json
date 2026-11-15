@@ -1,6 +1,6 @@
 {
   "format": "Exact commands; merge referenced context into each command.",
-  "original_sha256": "cf670ab34f237bfc562fed8338cd5af9ac6a119656e1e8371a9fc1e4302fa383",
+  "original_sha256": "e27c2fd9c463a9bb6dbd76e55f23ac99d1080405cabd6f81a7f093f96a0e1c4f",
   "lossless_round_trip_verified": true,
   "contexts": [
     {
@@ -15,7 +15,7 @@
         "DOCKER_HOST": "<unset>",
         "PYTHONDONTWRITEBYTECODE": "1"
       },
-      "source_sha": "3eb792d0d464d0b39fb462417aac8155c3c988e4",
+      "source_sha": "ae8ebe99b09e5d193a39efde6fc8e6fcee628f4b",
       "tree_status_at_start": "",
       "runner_sha256": "2eff86f5f0a1cea82e6f2b27dfb6894a11a473c93c8e02a148c47af4b3198bf0"
     }
@@ -29,8 +29,8 @@
         "context",
         "inspect"
       ],
-      "started_at": "2026-11-15T20:50:37.977923+00:00",
-      "finished_at": "2026-11-15T20:50:37.991271+00:00",
+      "started_at": "2026-11-15T21:23:04.201908+00:00",
+      "finished_at": "2026-11-15T21:23:04.215195+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "000-docker-context.stdout",
@@ -52,8 +52,8 @@
         "--format",
         "{{json .}}"
       ],
-      "started_at": "2026-11-15T20:50:37.991876+00:00",
-      "finished_at": "2026-11-15T20:50:38.015199+00:00",
+      "started_at": "2026-11-15T21:23:04.215694+00:00",
+      "finished_at": "2026-11-15T21:23:04.229343+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "001-docker-version.stdout",
@@ -75,8 +75,8 @@
         "inspect",
         "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
       ],
-      "started_at": "2026-11-15T20:50:38.015725+00:00",
-      "finished_at": "2026-11-15T20:50:38.055781+00:00",
+      "started_at": "2026-11-15T21:23:04.229890+00:00",
+      "finished_at": "2026-11-15T21:23:05.301876+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "002-image-inspect.stdout",
@@ -96,11 +96,11 @@
         "docker",
         "run",
         "--mount",
-        "type=bind,source=/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-ehs2oeq_,target=/test,readonly",
+        "type=bind,source=/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-b8hh5xhl,target=/test,readonly",
         "--detach",
         "--rm",
         "--name",
-        "hit99-cdf90bf96dd54d1d81644ad5ab988ee2",
+        "hit99-4621296935214921bf29611a6c3f6e56",
         "--label",
         "hitpipe.task=HIT-99",
         "--network",
@@ -127,13 +127,13 @@
         "-c",
         "synchronous_commit=on"
       ],
-      "started_at": "2026-11-15T20:50:38.056482+00:00",
-      "finished_at": "2026-11-15T20:50:38.144751+00:00",
+      "started_at": "2026-11-15T21:23:05.302731+00:00",
+      "finished_at": "2026-11-15T21:23:05.447273+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "003-container-create.stdout",
         "bytes": 65,
-        "sha256": "a8d08ef6dcede13002a83ba9598f6c138c05f7bc6d6ea9aff61c7f63a97c965e"
+        "sha256": "e4f92353146375107d85db8e6d2a1219f18f9bd04514cc3d53617b6f1c325386"
       },
       "stderr": {
         "file": "003-container-create.stderr",
@@ -147,13 +147,13 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "pg_isready",
         "-U",
         "postgres"
       ],
-      "started_at": "2026-11-15T20:50:38.145515+00:00",
-      "finished_at": "2026-11-15T20:50:38.212177+00:00",
+      "started_at": "2026-11-15T21:23:05.448679+00:00",
+      "finished_at": "2026-11-15T21:23:05.520760+00:00",
       "exit_code": 2,
       "stdout": {
         "file": "004-ready.stdout",
@@ -172,10 +172,10 @@
       "argv": [
         "docker",
         "logs",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a"
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310"
       ],
-      "started_at": "2026-11-15T20:50:38.212955+00:00",
-      "finished_at": "2026-11-15T20:50:38.228797+00:00",
+      "started_at": "2026-11-15T21:23:05.521457+00:00",
+      "finished_at": "2026-11-15T21:23:05.537147+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "005-init-readiness.stdout",
@@ -194,13 +194,13 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "pg_isready",
         "-U",
         "postgres"
       ],
-      "started_at": "2026-11-15T20:50:38.734952+00:00",
-      "finished_at": "2026-11-15T20:50:38.855904+00:00",
+      "started_at": "2026-11-15T21:23:06.043096+00:00",
+      "finished_at": "2026-11-15T21:23:06.153730+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "006-ready.stdout",
@@ -219,20 +219,20 @@
       "argv": [
         "docker",
         "logs",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a"
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310"
       ],
-      "started_at": "2026-11-15T20:50:38.859060+00:00",
-      "finished_at": "2026-11-15T20:50:38.883463+00:00",
+      "started_at": "2026-11-15T21:23:06.155861+00:00",
+      "finished_at": "2026-11-15T21:23:06.179444+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "007-init-readiness.stdout",
         "bytes": 2383,
-        "sha256": "db1ff3bfa4490a35fd6d96b987cb74de38ed9673610062c108e87dff536b8225"
+        "sha256": "945c6d420d18295c7519e2168221dc16aba3a79bbe04a6c823591c208f683bdf"
       },
       "stderr": {
         "file": "007-init-readiness.stderr",
         "bytes": 1457,
-        "sha256": "5ef95ac44433cfeac3faf2af6034ea82f70fadc4bdedd38d138a572f12462d11"
+        "sha256": "de44d7473e7b533c9d1d85366d9e8f2d5910f24b13bb21084839e76679eea5f3"
       }
     },
     {
@@ -241,12 +241,12 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "postgres",
         "--version"
       ],
-      "started_at": "2026-11-15T20:50:38.884586+00:00",
-      "finished_at": "2026-11-15T20:50:38.947043+00:00",
+      "started_at": "2026-11-15T21:23:06.180412+00:00",
+      "finished_at": "2026-11-15T21:23:06.235344+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "008-postgres-version.stdout",
@@ -266,7 +266,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -281,8 +281,8 @@
         "-d",
         "postgres"
       ],
-      "started_at": "2026-11-15T20:50:38.947999+00:00",
-      "finished_at": "2026-11-15T20:50:39.022419+00:00",
+      "started_at": "2026-11-15T21:23:06.236124+00:00",
+      "finished_at": "2026-11-15T21:23:06.292039+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "009-postgres-settings.stdin",
@@ -307,7 +307,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -322,8 +322,8 @@
         "-d",
         "postgres"
       ],
-      "started_at": "2026-11-15T20:50:39.023643+00:00",
-      "finished_at": "2026-11-15T20:50:39.086094+00:00",
+      "started_at": "2026-11-15T21:23:06.292976+00:00",
+      "finished_at": "2026-11-15T21:23:06.353666+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "010-roles.stdin",
@@ -348,7 +348,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -363,8 +363,8 @@
         "-d",
         "postgres"
       ],
-      "started_at": "2026-11-15T20:50:39.087050+00:00",
-      "finished_at": "2026-11-15T20:50:39.160004+00:00",
+      "started_at": "2026-11-15T21:23:06.354493+00:00",
+      "finished_at": "2026-11-15T21:23:06.438942+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "011-database.stdin",
@@ -389,7 +389,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -404,8 +404,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.160964+00:00",
-      "finished_at": "2026-11-15T20:50:39.235802+00:00",
+      "started_at": "2026-11-15T21:23:06.440547+00:00",
+      "finished_at": "2026-11-15T21:23:06.520749+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "012-migration-first.stdin",
@@ -430,7 +430,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -445,8 +445,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.237375+00:00",
-      "finished_at": "2026-11-15T20:50:39.306569+00:00",
+      "started_at": "2026-11-15T21:23:06.522712+00:00",
+      "finished_at": "2026-11-15T21:23:06.587000+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "013-migration-identity-before.stdin",
@@ -456,7 +456,7 @@
       "stdout": {
         "file": "013-migration-identity-before.stdout",
         "bytes": 30,
-        "sha256": "8dcfedfe48203f69d6f9f67ae5d6bf4722a6574d9d9f84157073ae18ec1f61ca"
+        "sha256": "0b5885dbf50c605f2df877ebf7f56238de958b732b302e56ce92e3dd28a7551d"
       },
       "stderr": {
         "file": "013-migration-identity-before.stderr",
@@ -471,7 +471,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -486,8 +486,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.308868+00:00",
-      "finished_at": "2026-11-15T20:50:39.366157+00:00",
+      "started_at": "2026-11-15T21:23:06.588276+00:00",
+      "finished_at": "2026-11-15T21:23:06.656360+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "014-migration-again.stdin",
@@ -512,7 +512,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -527,8 +527,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.367183+00:00",
-      "finished_at": "2026-11-15T20:50:39.429559+00:00",
+      "started_at": "2026-11-15T21:23:06.657481+00:00",
+      "finished_at": "2026-11-15T21:23:06.719265+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "015-migration-identity-after.stdin",
@@ -538,7 +538,7 @@
       "stdout": {
         "file": "015-migration-identity-after.stdout",
         "bytes": 30,
-        "sha256": "8dcfedfe48203f69d6f9f67ae5d6bf4722a6574d9d9f84157073ae18ec1f61ca"
+        "sha256": "0b5885dbf50c605f2df877ebf7f56238de958b732b302e56ce92e3dd28a7551d"
       },
       "stderr": {
         "file": "015-migration-identity-after.stderr",
@@ -560,8 +560,8 @@
         "GOFLAGS",
         "GOEXPERIMENT"
       ],
-      "started_at": "2026-11-15T20:50:39.431543+00:00",
-      "finished_at": "2026-11-15T20:50:39.439256+00:00",
+      "started_at": "2026-11-15T21:23:06.720154+00:00",
+      "finished_at": "2026-11-15T21:23:06.727623+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "016-go-env.stdout",
@@ -581,7 +581,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -596,8 +596,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.440506+00:00",
-      "finished_at": "2026-11-15T20:50:39.503097+00:00",
+      "started_at": "2026-11-15T21:23:06.728731+00:00",
+      "finished_at": "2026-11-15T21:23:06.790965+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "017-role-hp_processing_app.stdin",
@@ -622,7 +622,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -637,8 +637,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.504130+00:00",
-      "finished_at": "2026-11-15T20:50:39.572030+00:00",
+      "started_at": "2026-11-15T21:23:06.792135+00:00",
+      "finished_at": "2026-11-15T21:23:06.856324+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "018-role-hp_processing_worker.stdin",
@@ -663,7 +663,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -678,8 +678,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.573257+00:00",
-      "finished_at": "2026-11-15T20:50:39.644707+00:00",
+      "started_at": "2026-11-15T21:23:06.857286+00:00",
+      "finished_at": "2026-11-15T21:23:06.913270+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "019-owner-and-rls.stdin",
@@ -704,7 +704,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -719,8 +719,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.646602+00:00",
-      "finished_at": "2026-11-15T20:50:39.720957+00:00",
+      "started_at": "2026-11-15T21:23:06.914274+00:00",
+      "finished_at": "2026-11-15T21:23:06.975156+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "020-seed-11111111.stdin",
@@ -745,7 +745,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -760,8 +760,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.723830+00:00",
-      "finished_at": "2026-11-15T20:50:39.786268+00:00",
+      "started_at": "2026-11-15T21:23:06.976614+00:00",
+      "finished_at": "2026-11-15T21:23:07.038151+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "021-seed-22222222.stdin",
@@ -786,7 +786,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -801,8 +801,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.788421+00:00",
-      "finished_at": "2026-11-15T20:50:39.862266+00:00",
+      "started_at": "2026-11-15T21:23:07.039255+00:00",
+      "finished_at": "2026-11-15T21:23:07.099248+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "022-no-scope-hp_processing_app-operations.stdin",
@@ -827,7 +827,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -842,8 +842,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.863975+00:00",
-      "finished_at": "2026-11-15T20:50:39.924165+00:00",
+      "started_at": "2026-11-15T21:23:07.100361+00:00",
+      "finished_at": "2026-11-15T21:23:07.161621+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "023-no-scope-hp_processing_app-drafts.stdin",
@@ -868,7 +868,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -883,8 +883,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.925376+00:00",
-      "finished_at": "2026-11-15T20:50:39.981101+00:00",
+      "started_at": "2026-11-15T21:23:07.162641+00:00",
+      "finished_at": "2026-11-15T21:23:07.232251+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "024-no-scope-hp_processing_app-accepted_configs.stdin",
@@ -909,7 +909,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -924,8 +924,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:39.982316+00:00",
-      "finished_at": "2026-11-15T20:50:40.049305+00:00",
+      "started_at": "2026-11-15T21:23:07.233400+00:00",
+      "finished_at": "2026-11-15T21:23:07.291981+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "025-no-scope-hp_processing_app-case_identity.stdin",
@@ -950,7 +950,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -965,8 +965,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.051728+00:00",
-      "finished_at": "2026-11-15T20:50:40.113265+00:00",
+      "started_at": "2026-11-15T21:23:07.293123+00:00",
+      "finished_at": "2026-11-15T21:23:07.354018+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "026-no-scope-hp_processing_app-episodes.stdin",
@@ -991,7 +991,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1006,8 +1006,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.116009+00:00",
-      "finished_at": "2026-11-15T20:50:40.188910+00:00",
+      "started_at": "2026-11-15T21:23:07.355354+00:00",
+      "finished_at": "2026-11-15T21:23:07.420198+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "027-no-scope-hp_processing_app-case_content.stdin",
@@ -1032,7 +1032,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1047,8 +1047,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.191891+00:00",
-      "finished_at": "2026-11-15T20:50:40.257652+00:00",
+      "started_at": "2026-11-15T21:23:07.422486+00:00",
+      "finished_at": "2026-11-15T21:23:07.489598+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "028-no-scope-hp_processing_app-safety_history.stdin",
@@ -1073,7 +1073,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1088,8 +1088,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.260050+00:00",
-      "finished_at": "2026-11-15T20:50:40.320574+00:00",
+      "started_at": "2026-11-15T21:23:07.491905+00:00",
+      "finished_at": "2026-11-15T21:23:07.551580+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "029-no-scope-hp_processing_app-history_content.stdin",
@@ -1114,7 +1114,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1129,8 +1129,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.321914+00:00",
-      "finished_at": "2026-11-15T20:50:40.386468+00:00",
+      "started_at": "2026-11-15T21:23:07.553619+00:00",
+      "finished_at": "2026-11-15T21:23:07.613326+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "030-no-scope-hp_processing_app-user_commands.stdin",
@@ -1155,7 +1155,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1170,8 +1170,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.388966+00:00",
-      "finished_at": "2026-11-15T20:50:40.448508+00:00",
+      "started_at": "2026-11-15T21:23:07.614533+00:00",
+      "finished_at": "2026-11-15T21:23:07.673188+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "031-no-scope-hp_processing_app-notifications.stdin",
@@ -1196,7 +1196,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1211,8 +1211,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.450949+00:00",
-      "finished_at": "2026-11-15T20:50:40.524192+00:00",
+      "started_at": "2026-11-15T21:23:07.674372+00:00",
+      "finished_at": "2026-11-15T21:23:07.734586+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "032-no-scope-hp_processing_app-inbox.stdin",
@@ -1237,7 +1237,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1252,8 +1252,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.527217+00:00",
-      "finished_at": "2026-11-15T20:50:40.593263+00:00",
+      "started_at": "2026-11-15T21:23:07.735862+00:00",
+      "finished_at": "2026-11-15T21:23:07.796369+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "033-no-scope-hp_processing_app-outbox.stdin",
@@ -1278,7 +1278,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1293,8 +1293,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.595108+00:00",
-      "finished_at": "2026-11-15T20:50:40.659575+00:00",
+      "started_at": "2026-11-15T21:23:07.797722+00:00",
+      "finished_at": "2026-11-15T21:23:07.864753+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "034-scoped-reset-hp_processing_app.stdin",
@@ -1319,7 +1319,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1334,8 +1334,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.661939+00:00",
-      "finished_at": "2026-11-15T20:50:40.727808+00:00",
+      "started_at": "2026-11-15T21:23:07.867444+00:00",
+      "finished_at": "2026-11-15T21:23:07.933817+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "035-own-only-hp_processing_app.stdin",
@@ -1360,7 +1360,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1375,8 +1375,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.730460+00:00",
-      "finished_at": "2026-11-15T20:50:40.794335+00:00",
+      "started_at": "2026-11-15T21:23:07.936681+00:00",
+      "finished_at": "2026-11-15T21:23:08.007217+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "036-foreign-write-hp_processing_app.stdin",
@@ -1403,7 +1403,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1418,8 +1418,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.795860+00:00",
-      "finished_at": "2026-11-15T20:50:40.850133+00:00",
+      "started_at": "2026-11-15T21:23:08.011155+00:00",
+      "finished_at": "2026-11-15T21:23:08.075418+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "037-no-scope-write-hp_processing_app.stdin",
@@ -1446,7 +1446,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1461,8 +1461,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.851623+00:00",
-      "finished_at": "2026-11-15T20:50:40.910237+00:00",
+      "started_at": "2026-11-15T21:23:08.078122+00:00",
+      "finished_at": "2026-11-15T21:23:08.147195+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "038-no-owner-role-hp_processing_app.stdin",
@@ -1489,7 +1489,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1504,8 +1504,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.913120+00:00",
-      "finished_at": "2026-11-15T20:50:40.973552+00:00",
+      "started_at": "2026-11-15T21:23:08.152695+00:00",
+      "finished_at": "2026-11-15T21:23:08.215734+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "039-config-immutable-hp_processing_app.stdin",
@@ -1532,7 +1532,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1547,8 +1547,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:40.976468+00:00",
-      "finished_at": "2026-11-15T20:50:41.043824+00:00",
+      "started_at": "2026-11-15T21:23:08.217449+00:00",
+      "finished_at": "2026-11-15T21:23:08.281479+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "040-no-scope-hp_processing_worker-operations.stdin",
@@ -1573,7 +1573,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1588,8 +1588,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.046748+00:00",
-      "finished_at": "2026-11-15T20:50:41.122061+00:00",
+      "started_at": "2026-11-15T21:23:08.284127+00:00",
+      "finished_at": "2026-11-15T21:23:08.345862+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "041-no-scope-hp_processing_worker-drafts.stdin",
@@ -1614,7 +1614,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1629,8 +1629,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.124963+00:00",
-      "finished_at": "2026-11-15T20:50:41.199009+00:00",
+      "started_at": "2026-11-15T21:23:08.347089+00:00",
+      "finished_at": "2026-11-15T21:23:08.413834+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "042-no-scope-hp_processing_worker-accepted_configs.stdin",
@@ -1655,7 +1655,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1670,8 +1670,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.201639+00:00",
-      "finished_at": "2026-11-15T20:50:41.271637+00:00",
+      "started_at": "2026-11-15T21:23:08.415808+00:00",
+      "finished_at": "2026-11-15T21:23:08.477636+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "043-no-scope-hp_processing_worker-case_identity.stdin",
@@ -1696,7 +1696,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1711,8 +1711,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.274427+00:00",
-      "finished_at": "2026-11-15T20:50:41.343592+00:00",
+      "started_at": "2026-11-15T21:23:08.480299+00:00",
+      "finished_at": "2026-11-15T21:23:08.541822+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "044-no-scope-hp_processing_worker-episodes.stdin",
@@ -1737,7 +1737,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1752,8 +1752,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.346247+00:00",
-      "finished_at": "2026-11-15T20:50:41.414357+00:00",
+      "started_at": "2026-11-15T21:23:08.543694+00:00",
+      "finished_at": "2026-11-15T21:23:08.610276+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "045-no-scope-hp_processing_worker-case_content.stdin",
@@ -1778,7 +1778,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1793,8 +1793,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.417540+00:00",
-      "finished_at": "2026-11-15T20:50:41.490562+00:00",
+      "started_at": "2026-11-15T21:23:08.612703+00:00",
+      "finished_at": "2026-11-15T21:23:08.681036+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "046-no-scope-hp_processing_worker-safety_history.stdin",
@@ -1819,7 +1819,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1834,8 +1834,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.493782+00:00",
-      "finished_at": "2026-11-15T20:50:41.561723+00:00",
+      "started_at": "2026-11-15T21:23:08.684934+00:00",
+      "finished_at": "2026-11-15T21:23:08.745151+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "047-no-scope-hp_processing_worker-history_content.stdin",
@@ -1860,7 +1860,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1875,8 +1875,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.564291+00:00",
-      "finished_at": "2026-11-15T20:50:41.623770+00:00",
+      "started_at": "2026-11-15T21:23:08.747053+00:00",
+      "finished_at": "2026-11-15T21:23:08.815350+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "048-no-scope-hp_processing_worker-user_commands.stdin",
@@ -1901,7 +1901,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1916,8 +1916,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.626199+00:00",
-      "finished_at": "2026-11-15T20:50:41.687802+00:00",
+      "started_at": "2026-11-15T21:23:08.818525+00:00",
+      "finished_at": "2026-11-15T21:23:08.877126+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "049-no-scope-hp_processing_worker-notifications.stdin",
@@ -1942,7 +1942,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1957,8 +1957,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.689296+00:00",
-      "finished_at": "2026-11-15T20:50:41.752269+00:00",
+      "started_at": "2026-11-15T21:23:08.878735+00:00",
+      "finished_at": "2026-11-15T21:23:08.939390+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "050-no-scope-hp_processing_worker-inbox.stdin",
@@ -1983,7 +1983,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -1998,8 +1998,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.754169+00:00",
-      "finished_at": "2026-11-15T20:50:41.819259+00:00",
+      "started_at": "2026-11-15T21:23:08.941067+00:00",
+      "finished_at": "2026-11-15T21:23:09.008450+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "051-no-scope-hp_processing_worker-outbox.stdin",
@@ -2024,7 +2024,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2039,8 +2039,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.822212+00:00",
-      "finished_at": "2026-11-15T20:50:41.890757+00:00",
+      "started_at": "2026-11-15T21:23:09.009997+00:00",
+      "finished_at": "2026-11-15T21:23:09.073861+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "052-scoped-reset-hp_processing_worker.stdin",
@@ -2065,7 +2065,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2080,8 +2080,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.894875+00:00",
-      "finished_at": "2026-11-15T20:50:41.968999+00:00",
+      "started_at": "2026-11-15T21:23:09.075368+00:00",
+      "finished_at": "2026-11-15T21:23:09.144103+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "053-own-only-hp_processing_worker.stdin",
@@ -2106,7 +2106,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2121,8 +2121,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:41.972245+00:00",
-      "finished_at": "2026-11-15T20:50:42.039051+00:00",
+      "started_at": "2026-11-15T21:23:09.145647+00:00",
+      "finished_at": "2026-11-15T21:23:09.207423+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "054-foreign-write-hp_processing_worker.stdin",
@@ -2149,7 +2149,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2164,8 +2164,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.043058+00:00",
-      "finished_at": "2026-11-15T20:50:42.114196+00:00",
+      "started_at": "2026-11-15T21:23:09.209058+00:00",
+      "finished_at": "2026-11-15T21:23:09.274207+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "055-no-scope-write-hp_processing_worker.stdin",
@@ -2192,7 +2192,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2207,8 +2207,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.118319+00:00",
-      "finished_at": "2026-11-15T20:50:42.187854+00:00",
+      "started_at": "2026-11-15T21:23:09.276288+00:00",
+      "finished_at": "2026-11-15T21:23:09.337101+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "056-no-owner-role-hp_processing_worker.stdin",
@@ -2235,7 +2235,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2250,8 +2250,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.191112+00:00",
-      "finished_at": "2026-11-15T20:50:42.257136+00:00",
+      "started_at": "2026-11-15T21:23:09.339501+00:00",
+      "finished_at": "2026-11-15T21:23:09.397174+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "057-config-immutable-hp_processing_worker.stdin",
@@ -2278,7 +2278,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2293,8 +2293,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.259919+00:00",
-      "finished_at": "2026-11-15T20:50:42.325691+00:00",
+      "started_at": "2026-11-15T21:23:09.399237+00:00",
+      "finished_at": "2026-11-15T21:23:09.454402+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "058-no-global-index-app.stdin",
@@ -2321,7 +2321,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2336,8 +2336,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.327750+00:00",
-      "finished_at": "2026-11-15T20:50:42.398406+00:00",
+      "started_at": "2026-11-15T21:23:09.456676+00:00",
+      "finished_at": "2026-11-15T21:23:09.513014+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "059-worker-index-metadata.stdin",
@@ -2362,7 +2362,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2377,8 +2377,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.400852+00:00",
-      "finished_at": "2026-11-15T20:50:42.461045+00:00",
+      "started_at": "2026-11-15T21:23:09.514411+00:00",
+      "finished_at": "2026-11-15T21:23:09.589038+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "060-session-unique.stdin",
@@ -2405,7 +2405,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2420,8 +2420,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.463293+00:00",
-      "finished_at": "2026-11-15T20:50:42.531042+00:00",
+      "started_at": "2026-11-15T21:23:09.593073+00:00",
+      "finished_at": "2026-11-15T21:23:09.654353+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "061-single-active.stdin",
@@ -2448,7 +2448,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2463,8 +2463,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.534585+00:00",
-      "finished_at": "2026-11-15T20:50:42.600774+00:00",
+      "started_at": "2026-11-15T21:23:09.656731+00:00",
+      "finished_at": "2026-11-15T21:23:09.718401+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "062-case-pin-workspace_id.stdin",
@@ -2491,7 +2491,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2506,8 +2506,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.604585+00:00",
-      "finished_at": "2026-11-15T20:50:42.670891+00:00",
+      "started_at": "2026-11-15T21:23:09.720612+00:00",
+      "finished_at": "2026-11-15T21:23:09.782094+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "063-case-pin-case_id.stdin",
@@ -2534,7 +2534,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2549,8 +2549,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.673409+00:00",
-      "finished_at": "2026-11-15T20:50:42.734160+00:00",
+      "started_at": "2026-11-15T21:23:09.783992+00:00",
+      "finished_at": "2026-11-15T21:23:09.839550+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "064-case-pin-operation_id.stdin",
@@ -2577,7 +2577,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2592,8 +2592,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.736281+00:00",
-      "finished_at": "2026-11-15T20:50:42.797885+00:00",
+      "started_at": "2026-11-15T21:23:09.841653+00:00",
+      "finished_at": "2026-11-15T21:23:09.898123+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "065-case-pin-config_id.stdin",
@@ -2620,7 +2620,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2635,8 +2635,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.801223+00:00",
-      "finished_at": "2026-11-15T20:50:42.866011+00:00",
+      "started_at": "2026-11-15T21:23:09.900572+00:00",
+      "finished_at": "2026-11-15T21:23:09.964334+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "066-case-pin-source_account_id.stdin",
@@ -2663,7 +2663,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2678,8 +2678,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.868278+00:00",
-      "finished_at": "2026-11-15T20:50:42.927231+00:00",
+      "started_at": "2026-11-15T21:23:09.967067+00:00",
+      "finished_at": "2026-11-15T21:23:10.029005+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "067-case-pin-livemode.stdin",
@@ -2706,7 +2706,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2721,8 +2721,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:42.929290+00:00",
-      "finished_at": "2026-11-15T20:50:43.001218+00:00",
+      "started_at": "2026-11-15T21:23:10.031724+00:00",
+      "finished_at": "2026-11-15T21:23:10.097975+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "068-case-pin-session_id.stdin",
@@ -2749,7 +2749,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2764,8 +2764,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.005833+00:00",
-      "finished_at": "2026-11-15T20:50:43.073332+00:00",
+      "started_at": "2026-11-15T21:23:10.101505+00:00",
+      "finished_at": "2026-11-15T21:23:10.174706+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "069-case-pin-admitted_at.stdin",
@@ -2792,7 +2792,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2807,8 +2807,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.077240+00:00",
-      "finished_at": "2026-11-15T20:50:43.136688+00:00",
+      "started_at": "2026-11-15T21:23:10.179192+00:00",
+      "finished_at": "2026-11-15T21:23:10.245326+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "070-activation-pin-null.stdin",
@@ -2835,7 +2835,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2850,8 +2850,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.139412+00:00",
-      "finished_at": "2026-11-15T20:50:43.202716+00:00",
+      "started_at": "2026-11-15T21:23:10.247530+00:00",
+      "finished_at": "2026-11-15T21:23:10.314471+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "071-activation-pin-later.stdin",
@@ -2878,7 +2878,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2893,8 +2893,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.204851+00:00",
-      "finished_at": "2026-11-15T20:50:43.268799+00:00",
+      "started_at": "2026-11-15T21:23:10.318744+00:00",
+      "finished_at": "2026-11-15T21:23:10.389643+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "072-episode-pin-workspace_id.stdin",
@@ -2921,7 +2921,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2936,8 +2936,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.271301+00:00",
-      "finished_at": "2026-11-15T20:50:43.330006+00:00",
+      "started_at": "2026-11-15T21:23:10.392691+00:00",
+      "finished_at": "2026-11-15T21:23:10.457349+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "073-episode-pin-episode_id.stdin",
@@ -2964,7 +2964,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -2979,8 +2979,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.332687+00:00",
-      "finished_at": "2026-11-15T20:50:43.397456+00:00",
+      "started_at": "2026-11-15T21:23:10.460554+00:00",
+      "finished_at": "2026-11-15T21:23:10.530450+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "074-episode-pin-case_id.stdin",
@@ -3007,7 +3007,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3022,8 +3022,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.400018+00:00",
-      "finished_at": "2026-11-15T20:50:43.457102+00:00",
+      "started_at": "2026-11-15T21:23:10.533756+00:00",
+      "finished_at": "2026-11-15T21:23:10.603344+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "075-episode-pin-started_at.stdin",
@@ -3050,7 +3050,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3065,8 +3065,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.459739+00:00",
-      "finished_at": "2026-11-15T20:50:43.529062+00:00",
+      "started_at": "2026-11-15T21:23:10.606194+00:00",
+      "finished_at": "2026-11-15T21:23:10.678279+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "076-episode-pin-deadline_at.stdin",
@@ -3093,7 +3093,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3108,8 +3108,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.531721+00:00",
-      "finished_at": "2026-11-15T20:50:43.595797+00:00",
+      "started_at": "2026-11-15T21:23:10.682369+00:00",
+      "finished_at": "2026-11-15T21:23:10.756119+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "077-episode-pin-automatic_writes.stdin",
@@ -3136,7 +3136,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3151,8 +3151,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.598770+00:00",
-      "finished_at": "2026-11-15T20:50:43.670072+00:00",
+      "started_at": "2026-11-15T21:23:10.760112+00:00",
+      "finished_at": "2026-11-15T21:23:10.823243+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "078-attempt-limit.stdin",
@@ -3179,7 +3179,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3194,8 +3194,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.672557+00:00",
-      "finished_at": "2026-11-15T20:50:43.731308+00:00",
+      "started_at": "2026-11-15T21:23:10.825853+00:00",
+      "finished_at": "2026-11-15T21:23:10.898733+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "079-episode-duration.stdin",
@@ -3222,7 +3222,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3237,8 +3237,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.734648+00:00",
-      "finished_at": "2026-11-15T20:50:43.795557+00:00",
+      "started_at": "2026-11-15T21:23:10.901495+00:00",
+      "finished_at": "2026-11-15T21:23:10.964337+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "080-atomic-rollback.stdin",
@@ -3265,7 +3265,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3280,8 +3280,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.798198+00:00",
-      "finished_at": "2026-11-15T20:50:43.865125+00:00",
+      "started_at": "2026-11-15T21:23:10.966894+00:00",
+      "finished_at": "2026-11-15T21:23:11.040820+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "081-rollback-new-connection.stdin",
@@ -3306,7 +3306,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3321,8 +3321,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.867232+00:00",
-      "finished_at": "2026-11-15T20:50:43.927932+00:00",
+      "started_at": "2026-11-15T21:23:11.045327+00:00",
+      "finished_at": "2026-11-15T21:23:11.110445+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "082-atomic-commit.stdin",
@@ -3347,7 +3347,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3362,8 +3362,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:43.929941+00:00",
-      "finished_at": "2026-11-15T20:50:44.004921+00:00",
+      "started_at": "2026-11-15T21:23:11.113514+00:00",
+      "finished_at": "2026-11-15T21:23:11.185530+00:00",
       "exit_code": 0,
       "stdin": {
         "file": "083-committed-new-connection.stdin",
@@ -3388,7 +3388,7 @@
         "docker",
         "exec",
         "-i",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "psql",
         "-X",
         "-q",
@@ -3403,8 +3403,8 @@
         "-d",
         "hit78"
       ],
-      "started_at": "2026-11-15T20:50:44.008839+00:00",
-      "finished_at": "2026-11-15T20:50:44.082152+00:00",
+      "started_at": "2026-11-15T21:23:11.190038+00:00",
+      "finished_at": "2026-11-15T21:23:11.259660+00:00",
       "exit_code": 3,
       "stdin": {
         "file": "084-constraint-after-reconnect.stdin",
@@ -3431,8 +3431,8 @@
         "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
         "version"
       ],
-      "started_at": "2026-11-15T20:50:44.087479+00:00",
-      "finished_at": "2026-11-15T20:50:44.095713+00:00",
+      "started_at": "2026-11-15T21:23:11.264665+00:00",
+      "finished_at": "2026-11-15T21:23:11.273974+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "085-go-version.stdout",
@@ -3458,13 +3458,13 @@
         "-v",
         "./..."
       ],
-      "started_at": "2026-11-15T20:50:44.098537+00:00",
-      "finished_at": "2026-11-15T20:50:47.265941+00:00",
+      "started_at": "2026-11-15T21:23:11.276696+00:00",
+      "finished_at": "2026-11-15T21:23:14.774525+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "086-go-race.stdout",
-        "bytes": 87796,
-        "sha256": "f9d443c5b234a5c0c080e0953c2637d356b3553cea4167590093e74eee323bc7"
+        "bytes": 88322,
+        "sha256": "d396fdee46307b5714527bc9e961f20e7d1e13e318e0777b11783ae8c8065354"
       },
       "stderr": {
         "file": "086-go-race.stderr",
@@ -3482,8 +3482,8 @@
         "vet",
         "./..."
       ],
-      "started_at": "2026-11-15T20:50:47.268822+00:00",
-      "finished_at": "2026-11-15T20:50:47.497892+00:00",
+      "started_at": "2026-11-15T21:23:14.777175+00:00",
+      "finished_at": "2026-11-15T21:23:14.977342+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "087-go-vet.stdout",
@@ -3502,12 +3502,12 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "uname",
         "-m"
       ],
-      "started_at": "2026-11-15T20:50:47.499318+00:00",
-      "finished_at": "2026-11-15T20:50:47.570862+00:00",
+      "started_at": "2026-11-15T21:23:14.978762+00:00",
+      "finished_at": "2026-11-15T21:23:15.050794+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "088-container-arch.stdout",
@@ -3534,11 +3534,11 @@
         "test",
         "-c",
         "-o",
-        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-ehs2oeq_/storage.test",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-b8hh5xhl/storage.test",
         "./internal/adapters/postgres"
       ],
-      "started_at": "2026-11-15T20:50:47.572870+00:00",
-      "finished_at": "2026-11-15T20:50:48.426857+00:00",
+      "started_at": "2026-11-15T21:23:15.052684+00:00",
+      "finished_at": "2026-11-15T21:23:15.903738+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "089-compile-linux-test.stdout",
@@ -3563,24 +3563,24 @@
         "HIT99_CAPTURE_FILE=/tmp/hit99-captures.jsonl",
         "-e",
         "HIT78_ISOLATED_PG=1",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "/test/storage.test",
         "-test.v",
         "-test.count=1",
         "-test.timeout=180s"
       ],
-      "started_at": "2026-11-15T20:50:48.435528+00:00",
-      "finished_at": "2026-11-15T20:50:53.920447+00:00",
+      "started_at": "2026-11-15T21:23:15.912579+00:00",
+      "finished_at": "2026-11-15T21:23:21.388917+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "090-postgres-storage-tests.stdout",
-        "bytes": 22230,
-        "sha256": "3522be6cf2f2a448875e61575c94d7dfef23bb75c62f66f6589f13b15dee2145"
+        "bytes": 22386,
+        "sha256": "d52505f0fb53950dd0f9bd2babeb2e3bfce3623a07a2faf0502853a87ccae5ee"
       },
       "stderr": {
         "file": "090-postgres-storage-tests.stderr",
         "bytes": 533,
-        "sha256": "956a512ca74e1745e25a3e53c9849f755a915561b16f1bdfa57ab1fe97fb817c"
+        "sha256": "7d11c673da881fc0b4c51e4435b5ce5c1b7f981bfe339272670fad66d54c9772"
       }
     },
     {
@@ -3589,17 +3589,17 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "cat",
         "/tmp/hit95-schema.json"
       ],
-      "started_at": "2026-11-15T20:50:53.926322+00:00",
-      "finished_at": "2026-11-15T20:50:53.986294+00:00",
+      "started_at": "2026-11-15T21:23:21.394389+00:00",
+      "finished_at": "2026-11-15T21:23:21.449785+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "091-read-api-capture.stdout",
-        "bytes": 60343,
-        "sha256": "f399bec580fdaf4e15b6795511cfaed67d90c99935cb1f5ca62a7a6c58733a57"
+        "bytes": 60344,
+        "sha256": "8227739cfacef34ce2d37a8d6354ff42d9e0ae69f860188d1e02b0ff99f40cc3"
       },
       "stderr": {
         "file": "091-read-api-capture.stderr",
@@ -3614,10 +3614,10 @@
         "python3",
         "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit99-task-observations/services/processing/scripts/postgres/verify_read_schema.py",
         "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/research/HIT-98-20261115/sources/mvp-openapi.json",
-        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/research/HIT-99-20261115/verification-07/api-capture.json"
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/research/HIT-99-20261115/verification-08/api-capture.json"
       ],
-      "started_at": "2026-11-15T20:50:53.990303+00:00",
-      "finished_at": "2026-11-15T20:50:54.033125+00:00",
+      "started_at": "2026-11-15T21:23:21.451841+00:00",
+      "finished_at": "2026-11-15T21:23:21.495211+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "092-exact-oas-response-validation.stdout",
@@ -3640,8 +3640,8 @@
         "build",
         "./..."
       ],
-      "started_at": "2026-11-15T20:50:54.035185+00:00",
-      "finished_at": "2026-11-15T20:50:54.218561+00:00",
+      "started_at": "2026-11-15T21:23:21.497154+00:00",
+      "finished_at": "2026-11-15T21:23:21.798910+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "093-go-build.stdout",
@@ -3660,17 +3660,17 @@
       "argv": [
         "docker",
         "exec",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a",
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310",
         "cat",
         "/tmp/hit99-captures.jsonl"
       ],
-      "started_at": "2026-11-15T20:50:54.219985+00:00",
-      "finished_at": "2026-11-15T20:50:54.293387+00:00",
+      "started_at": "2026-11-15T21:23:21.800402+00:00",
+      "finished_at": "2026-11-15T21:23:21.869160+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "094-observation-api-captures.stdout",
-        "bytes": 152137,
-        "sha256": "6aeefd11bd287aeeddf947bddd5e05d2fdf61093a923f6fa7fcb5bbdd88d4a00"
+        "bytes": 153315,
+        "sha256": "33d2d067f5a68b5930cb25f94de1a76f84e8975fa1dee2091d432e109b9f1fc7"
       },
       "stderr": {
         "file": "094-observation-api-captures.stderr",
@@ -3684,20 +3684,20 @@
       "argv": [
         "docker",
         "logs",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a"
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310"
       ],
-      "started_at": "2026-11-15T20:50:54.295637+00:00",
-      "finished_at": "2026-11-15T20:50:54.311823+00:00",
+      "started_at": "2026-11-15T21:23:21.871209+00:00",
+      "finished_at": "2026-11-15T21:23:21.887788+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "095-container-logs.stdout",
         "bytes": 2383,
-        "sha256": "db1ff3bfa4490a35fd6d96b987cb74de38ed9673610062c108e87dff536b8225"
+        "sha256": "945c6d420d18295c7519e2168221dc16aba3a79bbe04a6c823591c208f683bdf"
       },
       "stderr": {
         "file": "095-container-logs.stderr",
         "bytes": 17497,
-        "sha256": "28c2f4ae94f6c1fce765df8dac2fd2f1d43e19d14bdc9d5dcac922456afd8627"
+        "sha256": "decfca3db26c0636135b7ee0bedd03b1f75083eced19d54ec7f4a8776d17a458"
       }
     },
     {
@@ -3708,15 +3708,15 @@
         "rm",
         "-f",
         "-v",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a"
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310"
       ],
-      "started_at": "2026-11-15T20:50:54.313572+00:00",
-      "finished_at": "2026-11-15T20:50:54.359383+00:00",
+      "started_at": "2026-11-15T21:23:21.889642+00:00",
+      "finished_at": "2026-11-15T21:23:21.937469+00:00",
       "exit_code": 0,
       "stdout": {
         "file": "096-cleanup.stdout",
         "bytes": 65,
-        "sha256": "a8d08ef6dcede13002a83ba9598f6c138c05f7bc6d6ea9aff61c7f63a97c965e"
+        "sha256": "e4f92353146375107d85db8e6d2a1219f18f9bd04514cc3d53617b6f1c325386"
       },
       "stderr": {
         "file": "096-cleanup.stderr",
@@ -3731,10 +3731,10 @@
         "docker",
         "container",
         "inspect",
-        "fe4e96a71106d80d964febef520bb28bb278e7a22a5059fbe9f7bbe1a908623a"
+        "264f2c13442d0702038189ff99c83975798a710d3b827702d68de2d599ce7310"
       ],
-      "started_at": "2026-11-15T20:50:54.361478+00:00",
-      "finished_at": "2026-11-15T20:50:54.375102+00:00",
+      "started_at": "2026-11-15T21:23:21.939591+00:00",
+      "finished_at": "2026-11-15T21:23:21.953598+00:00",
       "exit_code": 1,
       "stdout": {
         "file": "097-cleanup-probe.stdout",
@@ -3744,7 +3744,7 @@
       "stderr": {
         "file": "097-cleanup-probe.stderr",
         "bytes": 112,
-        "sha256": "2a7f9a296650aee9d3899a737343728fb3b25e12fa1d8e7552f588513ff54d45"
+        "sha256": "87b64c156dd67b6db2a630e16874377fb8b012a64ebc2de1014d75413496bec8"
       }
     }
   ]

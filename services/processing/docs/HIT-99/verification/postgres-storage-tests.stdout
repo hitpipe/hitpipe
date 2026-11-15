@@ -24,11 +24,11 @@
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
 === RUN   TestAdmissionRejectsContextAndLocalState/missing_time
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
---- PASS: TestAdmissionRejectsContextAndLocalState (0.08s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.07s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.01s)
@@ -61,8 +61,8 @@
 === RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/lost-ack
 === RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/missing-content
 === RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/invalid-retention
---- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK (0.10s)
-    --- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK/write (0.02s)
+--- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK (0.07s)
+    --- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK/write (0.01s)
     --- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK/file-fsync (0.01s)
     --- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK/rename (0.01s)
     --- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK/directory-fsync (0.01s)
@@ -90,7 +90,8 @@
 === RUN   TestObservationWireScopeAndEpisodeRejection/future
 === RUN   TestObservationWireScopeAndEpisodeRejection/body_limit
 === RUN   TestObservationWireScopeAndEpisodeRejection/authority_header
---- PASS: TestObservationWireScopeAndEpisodeRejection (0.24s)
+=== RUN   TestObservationWireScopeAndEpisodeRejection/unicode_surrogate
+--- PASS: TestObservationWireScopeAndEpisodeRejection (0.25s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/digest (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/extra (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/duplicate (0.01s)
@@ -102,12 +103,13 @@
     --- PASS: TestObservationWireScopeAndEpisodeRejection/version (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/wrong_workspace (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/foreign_case (0.02s)
-    --- PASS: TestObservationWireScopeAndEpisodeRejection/lineage (0.02s)
+    --- PASS: TestObservationWireScopeAndEpisodeRejection/lineage (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/episode (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/old_episode (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/future (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/body_limit (0.01s)
     --- PASS: TestObservationWireScopeAndEpisodeRejection/authority_header (0.01s)
+    --- PASS: TestObservationWireScopeAndEpisodeRejection/unicode_surrogate (0.01s)
 === RUN   TestObservationRealTLSAndCurrentAuthorityBoundary
 === RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/denied
 === RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/expired
@@ -210,7 +212,7 @@
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read
---- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.08s)
+--- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.07s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/unknown (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/expired (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch (0.01s)
@@ -265,7 +267,7 @@
 === RUN   TestRevision3PinnedLabelContextExpiryPausedAndNoCommands
 --- PASS: TestRevision3PinnedLabelContextExpiryPausedAndNoCommands (0.01s)
 === RUN   TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence
---- PASS: TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence (0.01s)
+--- PASS: TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence (0.02s)
 === RUN   TestRevision3StoredConfirmationBoundaryNotLiveObservation
 --- PASS: TestRevision3StoredConfirmationBoundaryNotLiveObservation (0.01s)
 === RUN   TestReadHistoryActualStoragePaginationAndGaps

@@ -5,7 +5,7 @@ Authority: [точный OAS fedbe40b](https://github.com/hitpipe/project-os/blo
 | TaskObservation / Receipt | Источник, проверка, место |
 |---|---|
 | message_id | UUIDv4 внутреннего сообщения; inbox PK(workspace_id,message_id). Регистр UUID допустим, original wire case/digest сохраняет смысл. Не provider ID и не новая identity. |
-| message_digest | SHA256 RFC8785 JCS всего исходного сообщения без message_digest. Проверка до полномочий/SQL; другой digest того же ID →409. Hash собственных файлов отдельный. |
+| message_digest | SHA256 RFC8785 JCS всего исходного сообщения без message_digest. Исходный Unicode/I-JSON валидируется до lossy decode: lone surrogate отклоняется, корректная пара/literal разрешены. Проверка до полномочий/SQL; другой digest того же ID →409. Hash собственных файлов отдельный. |
 | schema_version | точная const1.0; неизвестная версия/enum/fields/duplicates/case variants/trailingJSON отвергаются |
 | workspace_id/case_id | существующий SQL case, scoped hp_processing_app/RLS; сравнение с независимым current Authority owner/operation/connection, а не разрешение из сообщения |
 | lineage_id | неизменная текущая case_identity.lineage_id и существующий DELIVERY_INTENT outbox message; ACKED не требуется, sender state не меняется |

@@ -2,7 +2,7 @@
   "subject": "HIT-99",
   "materialized_result": {
     "summary": "Durable Delivery-only private HTTPS applyTaskObservation: exact TaskObservation/JCS, current authority/actual-start, atomic inbox/CAS/state/knowledge/history, no identity rollback or repeat create; existing HIT95 read APIs show actual observations.",
-    "tested_code_sha": "3eb792d0d464d0b39fb462417aac8155c3c988e4",
+    "tested_code_sha": "ae8ebe99b09e5d193a39efde6fc8e6fcee628f4b",
     "base_sha": "ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8",
     "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
     "contract_revision": 1,
@@ -31,12 +31,14 @@
     "source_audit": "services/processing/docs/HIT-99/source-audit.json",
     "supplemental": "services/processing/docs/HIT-99/supplemental/commands.json",
     "digests": "services/processing/docs/HIT-99/evidence-digests.json",
-    "result": "All8DoD locally checked:98-command final clean run PASS,5 supplemental exit0,123 actual HTTP captures/7058 independent negative OAS sensitivity checks. Official handoff/independent review/human acceptance separate.",
+    "result": "All8DoD locally checked:98-command final clean run PASS,5 supplemental exit0,124 actual HTTP captures/7069 independent negative OAS sensitivity checks. Official handoff/independent review/human acceptance separate.",
     "environment": {
       "host": "Go1.27.2 darwin/arm64 CGO1 race/vet/build",
       "database": "separate linux/arm64 CGO0 actual owned PG18.7, not Linux race",
       "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
-    }
+    },
+    "unicode_regression": "services/processing/docs/HIT-99/unicode-regression/before-command.json",
+    "unicode_correction": "Raw original I-JSON/JCS validity before lossy encoding/json; unpaired surrogates400, valid pair/literal accepted. New actual full run08; old registered8f989ab/preflight13016 superseded, not readiness for this code."
   },
   "deviations": [],
   "known_limitations": [
