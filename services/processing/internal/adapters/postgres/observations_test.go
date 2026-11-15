@@ -64,7 +64,7 @@ type observationFixture struct {
 	service               observations.Service
 	authority             *observationAuthority
 	gate                  *observationGate
-	pki                   *testfixtures.PKI
+	pki                   *testfixtures.ObservationPKI
 	client                *http.Client
 	url, lineage, episode string
 }
@@ -80,7 +80,7 @@ func newObservation(t *testing.T) observationFixture {
 	repo := ObservationStore{pool, f.files, time.Hour}
 	authority := &observationAuthority{grant: observations.Grant{WorkspaceID: f.request.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}}
 	gate := &observationGate{epoch: 7}
-	pki := testfixtures.NewPKI(t)
+	pki := testfixtures.NewObservationPKI(t)
 	service := observations.Service{Repository: repo, Authority: authority, Boundary: gate, Clock: testClock{time.Now}, Codec: observationjson.Codec{}}
 	fixture := observationFixture{preparedFixture: f, repo: repo, service: service, authority: authority, gate: gate, pki: pki, lineage: result.MessageID}
 	db := connect(t)

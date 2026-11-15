@@ -129,7 +129,7 @@ func TestObservationRealTLSAndCurrentAuthorityBoundary(t *testing.T) {
 				case "expired_client":
 					tr.TLSClientConfig.Certificates = []tls.Certificate{f.pki.Leaf(t, "delivery.test", false, true)}
 				case "foreign_ca":
-					tr = testfixtures.NewPKI(t).Transport(t)
+					tr = testfixtures.NewObservationPKI(t).Transport(t)
 				case "missing_client":
 					tr.TLSClientConfig.Certificates = nil
 				case "wrong_server_name":
