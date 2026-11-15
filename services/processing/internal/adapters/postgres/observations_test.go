@@ -12,6 +12,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/observations"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
 	"github.com/hitpipe/hitpipe/services/processing/internal/testfixtures"
+	"github.com/jackc/pgx/v5"
 	"io"
 	"net"
 	"net/http"
@@ -75,7 +76,7 @@ func newObservation(t *testing.T) observationFixture {
 	if e != nil {
 		t.Fatal(e)
 	}
-	pool := newReadPool(t, 3)
+	pool := newObservationPool(t, 3)
 	repo := ObservationStore{pool, f.files, time.Hour}
 	authority := &observationAuthority{grant: observations.Grant{WorkspaceID: f.request.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}}
 	gate := &observationGate{epoch: 7}
@@ -396,4 +397,29 @@ func TestObservationLateReorderedIdentityAndNewMismatch(t *testing.T) {
 		t.Fatal("invented URL")
 	}
 	f.counts(t, 5)
+}
+
+// Receiver transactions are read/write; the HIT-95 read fixture deliberately
+// refuses them. Keep the pools distinct rather than weakening that read guard.
+type observationPool struct{ slots chan *pgx.Conn }
+
+func newObservationPool(t *testing.T, n int) *observationPool {
+	p := &observationPool{make(chan *pgx.Conn, n)}
+	for i := 0; i < n; i++ {
+		p.slots <- connect(t)
+	}
+	return p
+}
+func (p *observationPool) BeginTx(c context.Context, o pgx.TxOptions) (pgx.Tx, error) {
+	select {
+	case <-c.Done():
+		return nil, c.Err()
+	case conn := <-p.slots:
+		tx, e := conn.BeginTx(c, o)
+		if e != nil {
+			p.slots <- conn
+			return nil, e
+		}
+		return &readTx{Tx: tx, release: func() { p.slots <- conn }}, nil
+	}
 }
