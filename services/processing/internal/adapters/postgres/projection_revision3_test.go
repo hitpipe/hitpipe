@@ -2,6 +2,8 @@ package postgres
 
 import (
 	"encoding/json"
+	"github.com/jackc/pgx/v5"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -119,6 +121,34 @@ func TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence(t *testing
 	history := v.(readcases.HistoryView)
 	if len(history.Items) != 2 || history.Items[0].OldState != nil || history.Items[1].OldState == nil || *history.Items[1].OldState != "RECEIVED" || history.Items[1].EpisodeID == nil || history.Items[1].NewState != "WORKING" {
 		t.Fatal(history)
+	}
+	// Once the real retained metadata expires, episode knowledge from the detailed
+	// envelope is omitted, not rewritten as a claim that no episode ever existed.
+	boundary := history.Items[0].ExpiresAt
+	for _, entry := range history.Items {
+		if entry.ExpiresAt.After(boundary) {
+			boundary = entry.ExpiresAt
+		}
+	}
+	txBoundary, e := connect(t).BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
+	if e != nil {
+		t.Fatal(e)
+	}
+	txBoundary.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, r.WorkspaceID)
+	probe := reader
+	spy := &countOwned{OwnedContent: f.files}
+	probe.Content = spy
+	minimal, e := probe.readHistory(ctx, txBoundary, r, readcases.Page{Snapshot: boundary}, boundary)
+	txBoundary.Rollback(ctx)
+	if e != nil || spy.calls != 0 {
+		t.Fatal("expired detailed history accessed files", e, spy.calls)
+	}
+	for i, entry := range minimal.(readcases.HistoryView).Items {
+		before := history.Items[i]
+		before.EpisodeID = nil
+		if !reflect.DeepEqual(entry, before) {
+			t.Fatal("minimal history changed durable facts", entry, before)
+		}
 	}
 	decisionCounts(t, r.WorkspaceID, 1, 2, 1)
 	// Known task identity without qualified readback/command authority is not a URL
