@@ -192,6 +192,14 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 				at := rec.LastConfirmedAt.UTC()
 				detail.LastObservationAt = &at
 			}
+			observed, complete, err := db.observationView(ctx, tx, rec, r.WorkspaceID, now)
+			if err != nil {
+				return nil, err
+			}
+			if observed != nil {
+				detail.LastObservationAt = observed
+				detail.ObservationComplete = complete
+			}
 		}
 	}
 	if r.Kind == readcases.Detail {
