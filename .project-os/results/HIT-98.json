@@ -1,0 +1,59 @@
+{
+  "subject": "HIT-98",
+  "materialized_result": {
+    "summary": "Локальный bounded sender сохранённого DeliveryIntent: worker claims/RLS, immutable mTLS request, строгий Receipt, bounded same-message retry и устойчивое восстановление без фиктивного CONFIRMED.",
+    "tested_code_sha": "4d744101803caa864d94fed01d2ab7eaf854b9f9",
+    "base_sha": "3bae6417421465868c432fe18b379d46be6144aa",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "contract_revision": 1,
+    "integration_state": "Dependent on OPEN PR52; PR45/48/50/52 and separate PR54 not merged main. Existing work preserved."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/dispatchintent",
+    "services/processing/internal/adapters/postgres/dispatch*.go",
+    "services/processing/internal/adapters/deliveryhttp",
+    "services/processing/internal/testfixtures/delivery.go (controlled tests only)",
+    "services/processing/scripts/postgres/verify_dispatch.py",
+    "services/processing/tools/dispatch/generate.py",
+    "services/processing/docs/HIT-98"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-98/README.md",
+    "commands": "services/processing/docs/HIT-98/verification/commands.json",
+    "review_commands": "services/processing/docs/HIT-98/verification/review-commands.json",
+    "summary": "services/processing/docs/HIT-98/verification/summary.json",
+    "full_go_race": "services/processing/docs/HIT-98/verification/go-race.stdout",
+    "full_postgres_tests": "services/processing/docs/HIT-98/verification/postgres-storage-tests.stdout",
+    "wire_captures": "services/processing/docs/HIT-98/verification/delivery-captures.jsonl",
+    "raw_streams": "services/processing/docs/HIT-98/verification/raw-run.tar.gz",
+    "supplemental": "services/processing/docs/HIT-98/supplemental/commands.json",
+    "source_audit": "services/processing/docs/HIT-98/source-audit.json",
+    "digests": "services/processing/docs/HIT-98/evidence-digests.json",
+    "result": "All8 current DoD locally checked:95-command full run PASS,4 supplemental exit0,14 actual records/8 OAS request+receipt pairs with248 negative sensitivity checks; host race/vet/build and separate realPG18.7/mTLS suite exit0. Official readiness/independent review/human acceptance separate.",
+    "environment": {
+      "commands": 95,
+      "supplemental_commands": 4,
+      "captures": 14,
+      "actual_request_receipt_pairs": 8,
+      "independent_oas_sensitivity_cases": 248,
+      "host": "Go1.27.2 darwin/arm64 CGO1 full race/vet/build",
+      "database": "separate linux/arm64 CGO0 actual owned PG18.7; not Linux race",
+      "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+      "runner": "scripts/postgres/verify_dispatch.py",
+      "summary": "verification/summary.json",
+      "all8_criteria_locally_checked": true,
+      "official_ready_granted_by_document": false
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Only local sender and controlled durable Delivery peer are qualified. No live IAM/BFF/Delivery implementation, provider credentials, ClickUp create/readback, observations or production runtime fencing.",
+    "Runtime must supply current-authority/epoch workspace roster, shared actual-start boundary and existing bounded worker pool. All are explicit ports; no startup is enabled by default.",
+    "A fresh known workspace is indexed in a scoped worker transaction; global job discovery exposes only IDs and due/lease metadata. Sender is sequential bounded RunScope, no unbounded Go workers.",
+    "Expired/held/conflicting work is not regenerated; no fresh identity, financial re-decision, sliding TTL or inference of missing external effect from lease expiry.",
+    "SQL ACKED means durable controlled Delivery receipt; case remains WORKING/UNESTABLISHED. No provider success or whole MVP qualification.",
+    "Process exits/HTTP and commit ACK loss tested, not physical power loss, deployment RPO, long-window availability, load or production credentials.",
+    "PR45/48/50/52/54 OPEN; base is HIT-79 dependent stack, not integrated main. Agent does not merge or transition Jira."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
