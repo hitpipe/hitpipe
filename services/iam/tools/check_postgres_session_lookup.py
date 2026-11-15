@@ -12,7 +12,7 @@ import subprocess
 import sys
 import time
 import uuid
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 IAM = Path(__file__).resolve().parents[1]
 REPO = IAM.parents[1]
@@ -149,7 +149,8 @@ def main(*, task="HIT-81", schema_checks=True):
             startup_check = ["docker", "exec", "-i", "--env", "PGOPTIONS=-c role=hp_iam_migrator", name,
                              *migration_psql[4:], "-Atc", "SELECT current_user,session_user;"]
             check_command("migration-startup-role", startup_check)
-            migration_options = urlencode({"sslmode": "disable", "options": "-c role=hp_iam_migrator"})
+            # pgx PostgreSQL URI options preserve '+' literally; encode spaces as %20.
+            migration_options = urlencode({"sslmode": "disable", "options": "-c role=hp_iam_migrator"}, quote_via=quote)
             environment["HITPIPE_IAM_MIGRATOR_DSN"] = f"postgres://hp_hit81_migration@{address}/{database}?{migration_options}"
             for role in ("APP", "WORKER", "PURGE"):
                 environment["HITPIPE_IAM_TEST_" + role + "_DSN"] = f"postgres://hp_hit81_{role.lower()}@{address}/{database}?sslmode=disable"
