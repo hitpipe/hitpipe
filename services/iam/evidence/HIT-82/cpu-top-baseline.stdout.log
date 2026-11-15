@@ -1,0 +1,38 @@
+File: profile.test
+Build ID: cf2e99b5bfdc4983e9cff79a7d026c3bcfa3ab5a
+Type: cpu
+Time: 2026-11-15 14:43:36 UTC
+Duration: 4.05s, Total samples = 1.77s (43.71%)
+Showing nodes accounting for 1.53s, 86.44% of 1.77s total
+Showing top 30 nodes out of 214
+      flat  flat%   sum%        cum   cum%
+     0.37s 20.90% 20.90%      0.37s 20.90%  runtime.(*mspan).specialFindSplicePoint (inline)
+     0.26s 14.69% 35.59%      0.26s 14.69%  internal/runtime/syscall/linux.Syscall6
+     0.24s 13.56% 49.15%      0.26s 14.69%  runtime.step
+     0.13s  7.34% 56.50%      0.50s 28.25%  runtime.pcvalue
+     0.06s  3.39% 59.89%      0.06s  3.39%  runtime.findfunc
+     0.06s  3.39% 63.28%      0.68s 38.42%  runtime.tracebackPCs
+     0.05s  2.82% 66.10%      0.09s  5.08%  runtime.funcInfo.entry (inline)
+     0.04s  2.26% 68.36%      0.04s  2.26%  runtime.(*moduledata).textAddr
+     0.04s  2.26% 70.62%      0.20s 11.30%  runtime.(*unwinder).resolveInternal
+     0.04s  2.26% 72.88%      0.04s  2.26%  runtime.markrootSpans
+     0.02s  1.13% 74.01%      0.42s 23.73%  runtime.addspecial
+     0.02s  1.13% 75.14%      0.02s  1.13%  runtime.lock2
+     0.02s  1.13% 76.27%      0.25s 14.12%  runtime.mallocgcSmallScanNoHeaderSC2
+     0.02s  1.13% 77.40%      0.02s  1.13%  runtime.readvarint (inline)
+     0.01s  0.56% 77.97%      0.02s  1.13%  github.com/jackc/pgx/v5.(*baseRows).Next
+     0.01s  0.56% 78.53%      0.01s  0.56%  github.com/jackc/pgx/v5/internal/pgio.AppendUint32 (inline)
+     0.01s  0.56% 79.10%      0.01s  0.56%  github.com/jackc/pgx/v5/internal/stmtcache.(*LRUCache).Get
+     0.01s  0.56% 79.66%      0.68s 38.42%  github.com/jackc/pgx/v5/pgconn.(*PgConn).ExecStatement
+     0.01s  0.56% 80.23%      0.37s 20.90%  github.com/jackc/pgx/v5/pgconn.(*PgConn).execExtendedPrefix
+     0.01s  0.56% 80.79%      0.07s  3.95%  github.com/jackc/pgx/v5/pgconn.(*PgConn).receiveMessage
+     0.01s  0.56% 81.36%      0.09s  5.08%  github.com/jackc/pgx/v5/pgconn.(*ResultReader).readUntilRowDescription
+     0.01s  0.56% 81.92%      0.06s  3.39%  github.com/jackc/pgx/v5/pgproto3.(*Frontend).Receive
+     0.01s  0.56% 82.49%      0.01s  0.56%  github.com/jackc/pgx/v5/pgtype.(*timeWrapper).ScanTimestamptz
+     0.01s  0.56% 83.05%      0.01s  0.56%  github.com/jackc/pgx/v5/pgtype.scanPlanBinaryBoolToBool.Scan
+     0.01s  0.56% 83.62%      0.02s  1.13%  github.com/jackc/pgx/v5/pgxpool.(*Conn).Release
+     0.01s  0.56% 84.18%      0.01s  0.56%  github.com/jackc/pgx/v5/pgxpool.(*Pool).isExpired
+     0.01s  0.56% 84.75%      0.01s  0.56%  internal/chacha8rand.block
+     0.01s  0.56% 85.31%      0.01s  0.56%  internal/runtime/atomic.(*UnsafePointer).StoreNoWB
+     0.01s  0.56% 85.88%      0.01s  0.56%  internal/runtime/maps.ctrlGroup.matchH2
+     0.01s  0.56% 86.44%      0.01s  0.56%  internal/sync.(*Mutex).Unlock (inline)

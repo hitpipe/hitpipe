@@ -1,0 +1,39 @@
+File: profile.test
+Build ID: f22ae60968db631f81fe6c631c3706572dc4092a
+Type: cpu
+Time: 2026-11-15 14:44:13 UTC
+Duration: 8.24s, Total samples = 2.06s (25.01%)
+Showing nodes accounting for 1.69s, 82.04% of 2.06s total
+Dropped 74 nodes (cum <= 0.01s)
+Showing top 30 nodes out of 156
+      flat  flat%   sum%        cum   cum%
+     0.59s 28.64% 28.64%      0.59s 28.64%  runtime.(*mspan).specialFindSplicePoint (inline)
+     0.24s 11.65% 40.29%      0.24s 11.65%  internal/runtime/syscall/linux.Syscall6
+     0.14s  6.80% 47.09%      0.17s  8.25%  runtime.step
+     0.11s  5.34% 52.43%      0.12s  5.83%  runtime.findfunc
+     0.11s  5.34% 57.77%      0.33s 16.02%  runtime.pcvalue
+     0.07s  3.40% 61.17%      0.20s  9.71%  runtime.(*unwinder).resolveInternal
+     0.05s  2.43% 63.59%      0.61s 29.61%  runtime.tracebackPCs
+     0.04s  1.94% 65.53%      0.04s  1.94%  runtime.(*moduledata).textAddr
+     0.03s  1.46% 66.99%      0.03s  1.46%  runtime.lock2
+     0.03s  1.46% 68.45%      0.03s  1.46%  runtime.markrootSpans
+     0.03s  1.46% 69.90%      0.03s  1.46%  runtime.readvarint (inline)
+     0.02s  0.97% 70.87%      0.09s  4.37%  github.com/jackc/pgx/v5/pgproto3.(*Frontend).Receive
+     0.02s  0.97% 71.84%      0.02s  0.97%  runtime.funcdata (inline)
+     0.02s  0.97% 72.82%      0.02s  0.97%  runtime.futex
+     0.02s  0.97% 73.79%      0.15s  7.28%  runtime.mallocgcSmallScanNoHeaderSC6
+     0.02s  0.97% 74.76%      0.02s  0.97%  runtime.scanObject
+     0.02s  0.97% 75.73%      0.02s  0.97%  testing.(*B).Loop
+     0.01s  0.49% 76.21%      0.07s  3.40%  context.(*cancelCtx).Done
+     0.01s  0.49% 76.70%      0.16s  7.77%  context.WithDeadlineCause
+     0.01s  0.49% 77.18%      0.02s  0.97%  github.com/jackc/pgx/v5.(*ExtendedQueryBuilder).Build
+     0.01s  0.49% 77.67%      0.07s  3.40%  github.com/jackc/pgx/v5/pgconn/internal/bgreader.(*BGReader).Read
+     0.01s  0.49% 78.16%      0.02s  0.97%  github.com/jackc/pgx/v5/pgxpool.(*Conn).getPoolRow
+     0.01s  0.49% 78.64%      0.09s  4.37%  github.com/jackc/puddle/v2.(*Pool[go.shape.*uint8]).Acquire
+     0.01s  0.49% 79.13%      0.25s 12.14%  internal/poll.ignoringEINTRIO (inline)
+     0.01s  0.49% 79.61%      0.02s  0.97%  internal/runtime/maps.(*Map).deleteSmall
+     0.01s  0.49% 80.10%      0.02s  0.97%  runtime.(*inlineUnwinder).next
+     0.01s  0.49% 80.58%      0.03s  1.46%  runtime.(*sweepLocked).sweep
+     0.01s  0.49% 81.07%      0.62s 30.10%  runtime.addspecial
+     0.01s  0.49% 81.55%      0.64s 31.07%  runtime.callers.func1
+     0.01s  0.49% 82.04%      0.02s  0.97%  runtime.cheaprand (inline)
