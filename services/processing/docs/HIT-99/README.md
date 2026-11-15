@@ -1,0 +1,44 @@
+# HIT-99 — приём наблюдения Delivery и обновление дела
+
+Выполнил Codex по делегации Тимофея Патрушева / Tim1hik. Реализована одна принятая операция `POST /internal/v1/delivery-observations` (Processing private8443, TLS1.3/mTLS только Delivery). Строгий TaskObservation/JCS digest, current owner authority/epoch/shared actual-start; атомарные inbox/дело/revision/минимальная история + собственные durable refs; применимая модель знания, историческое подтверждение и запрет повторного create. Готовый API HIT95 показывает изменения, не выполняя новых provider reads.
+
+Код `3eb792d0d464d0b39fb462417aac8155c3c988e4`, база `ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8` (OPEN PR54, включает HIT79/3bae641 и HIT78/c218eb3). Наблюдаемый main `ce771d37505e7770003d0796ae932556d06b7bab`; зависимости HIT79/HIT95 фактически Jira Done, но PR52/54 и остальные PR45/50/57/58 OPEN и не объявлены слитыми. Текущая работа, включая local517797f, HIT98 и HIT100, сохранена. [Source audit / точные источники и SHA](source-audit.json).
+
+## Реальные проверки
+
+Финальный clean запуск verification-07 завершён `2026-11-15T20:50:54.295619+00:00`: **98 команд**, обязательные exit0. Ожидаемые SQLSTATE отказы exit3 и cleanup probe exit1 отмечены отдельно. [Exact commands/cwd/env/source/runner SHA/time/exits/digests](verification/commands.json), [тот же журнал с lossless deduplicated contexts](verification/review-commands.json), [summary](verification/summary.json). Все bytes stdin/stdout/stderr сохранены [raw-run.tar.gz](verification/raw-run.tar.gz); [digests](evidence-digests.json).
+
+Go **1.27.2 darwin/arm64 CGO1**: `go test -race -count=1 -v ./...`, `go vet ./...`, `go build ./...` — exit0; [полный race stdout](verification/go-race.stdout). DB тесты на host явно SKIP. Отдельный **linux/arm64 CGO0** test binary на настоящей PostgreSQL **18.7** и собственных файлах/HTTPS — exit0, [полный PG stdout](verification/postgres-storage-tests.stdout). Это не Linux race и не чужие прежние проверки. Pinned image `docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f`.
+
+**123 фактические HTTP записи** applyTaskObservation/listCases/getCase/getCaseHistory, все6 видов знания, 202 APPLIED/HELD, подтверждение/неопределённость/ошибки. Независимый pinned OAS checker и **7058** отрицательных проверок чувствительности схем — PASS. [Captures](verification/observation-captures.jsonl), [результат](supplemental/0.stdout), [проверяющее средство](verify_captures.py). **5 supplemental команд exit0**: OAS/captures, Go env, unchanged protected paths, воспроизводимая генерация и чистый diff ([журнал](supplemental/commands.json)). Старые API HIT95 также проверены исходным schema checker; API/SQL/domain/locks и чужие сервисы не переписаны.
+
+## Два наблюдаемых сценария
+
+`TestObservationRealMTLSPGCommitBeforeSenderACKAndReplay`: реально подготовленное HIT79 поручение остаётся PENDING в outbox. Синтетический Delivery mTLS POST с полным RESULT_VERIFIED/all6true/complete и свежей foreign proof provenance →202 APPLIED только после commit. Case получает CONFIRMED/RESULT_VERIFIED/revision3/native ID/fence и фактический last_confirmed_at. Те же list/detail/history через BFF mTLS дают200; complete=true, observed_at и документированная native task link. Это управляемая синтетическая task `86synthetic99`, не созданная реальная задача ClickUp. Тот же message ID/digest восстанавливает первоначальный двухпольный Receipt, не меняя историю/TTL. Другой digest того же ID409.
+
+`TestObservationLateReorderedIdentityAndNewMismatch`: после подтверждения старое INCOMPLETE и конфликтующий native ID удержаны без отката. Новое полное mismatch даёт ATTENTION/RESULT_MISMATCH, а более позднее неполное наблюдение — UNKNOWN с прежними ID/fence/last_confirmed_at и без проверенной ссылки. Через три настоящих API чтения видны200 и реальная история. ID/202/один true-флаг/unknown match не являются CONFIRMED; все6 matches отдельно проверены для null и false. Foreign evidence_ref не открывался и не назывался независимо проверенным содержимым.
+
+## Все восемь DoD: локальные результаты
+
+| № | Конкретное основание |
+|---|---|
+| 1 | main/OPEN PR/base/предшественники зафиксированы, готовые финансовый путь/миграции/content/read API переиспользованы; [карта полей и переходов](FIELD_MAP.md). |
+| 2 | Реальный Delivery-only private HTTPS mTLS, current Authority/epoch/gate; exact schema1.0, message UUIDv4, JCS digest, required/null, case variants в обоих порядках, duplicates/unknown/enum/version, body bound и чужие case/workspace/lineage/episode отвергаются. UUID value case допустим и сохраняет исходный digest/Receipt. |
+| 3 | Реальные SQL inbox+CAS/state/revision+history refs в одной транзакции; original Receipt replay,409 body conflict,6 concurrent одинаковых/разных сообщений; optimistic412 не теряет identity. |
+| 4 | TestObservationAllKnowledgeAndPartialMatches и чистая decision table проверяют6 enum, missing/false каждого из6 matches, incomplete/expired/missing evidence; только полное owner утверждение подтверждает результат. NO_EFFECT не разрешает новый create и не очищает fence. |
+| 5 | Late/reordered/конфликт ID, current/old episode, observation до sender ACK, confirmation→mismatch→unknown; прежние ID/fence/last_confirmed_at остаются, чужое episode не переназначается. Явная модель, не enum rank. |
+| 6 | Четыре настоящие IO fault boundaries дают rollback без SQL metadata; private HISTORY checksum/origin/expiry, corrupted initial binding503, TTL/purge/reopen и минимальная история, external Delivery evidence только provenance. Повтор срока не продлевает. |
+| 7 | Существующие HIT95 list/detail/history показывают подтверждённое и неизвестное200. Настоящий SQL aborted Commit (SELECT1/0), потерянный committed ACK и child-process exit24 после commit/до response, восстановление/replay, реальная TLS CA/SAN/expiry/client auth, denied/missing/non-invoking/commit/response gates, scope/RLS. Ни одного ClickUp API запроса. |
+| 8 | Полный98-command suite/race/vet/build и5 supplemental exit0 с SHA/временем/средой, полные stdout доступны; все inherited HIT76/78/79/95 регрессии. Русские позитивный/неопределённый примеры и контролируемые ограничения описаны. |
+
+Frozen IDs: `66b1e37f-d422-4df8-bd24-65d26a30ae6e`, `0c3ad9bd-3d76-42bc-ae3b-9a44bbeb9ff4`, `66d88e1a-6541-45af-a356-cff58c8a0184`, `9cdc1fc6-0a64-4af3-81a5-b267b1b6b56a`, `7ba41642-deb6-41c0-88bf-3ddbb3bc8ee3`, `e8a33306-0630-435f-986f-53d13c7630e6`, `e4ce3afa-4dd4-4525-9d45-75eba5bdda2e`, `292f7d7e-f136-46bd-8499-ba1542412e5f`.
+
+## Границы и дальнейшая приёмка
+
+Тестовые current-authority/grants/epoch/shared actual-start и Delivery/BFF certificates — **управляемые зависимости**, не рабочие IAM/Delivery/BFF. Их подтверждения не являются получением credential, реальным create/readback или сквозной интеграцией. Proof digest/ref другого владельца проверяются по wire форме/сроку/принадлежности сообщения; содержимое остаётся у Delivery. KNOWN_NO_EFFECT означает полное авторитетное утверждение Delivery, а не интерпретацию Processing произвольного HTTP статуса/пустого поиска. Production producer обязан соблюдать RULE008; никаких новых code allowlists или retry-create политик здесь нет.
+
+HistoryRetention/MaxBody задаются композицией явно; тестовые1h/300ms/64KiB не выдаются за новые продуктовые пороги. Исходный HIT79 private HISTORY обеспечивает точную lineage/episode связь после истечения intent payload; при потере/expiry этой истории новые неподтверждённые связи503. Существующий inbox продолжает восстанавливать original минимальный Receipt. После expiry подробностей observation chronology применяется консервативный bound, не выдуманное readback time. Минимальные identity/fence/knowledge/прежнее подтверждение сохраняются. Проверялся процесс/SQL/IO, не физическая потеря storage/SLA/нагрузка/deployment.
+
+Новые effects, финансовые решения, активация, recoverCase/RECHECK, реальное чтение ClickUp/Stripe, getObservationEvidence и изменения чужих сервисов/formal SQL/OAS отсутствуют. Ветви HIT98/HIT100 не включены в эту ветку и не объявлены интегрированными; будущую общую композицию и CI проверяет фактическая интеграция. Test PKI имеет отдельные Observation names, чтобы не добавлять конфликт общих имён параллельных testfixtures.
+
+[Предыдущие запуски](prior-runs/index.json) сохранены сырыми архивами: ошибка нового fixture read-only pool и ошибка компиляции при переименовании completeness, промежуточные PASS и новый конечный SHA не смешиваются. Финальный документационный commit следующий; собственный SHA документа бесконечно не догоняется. Результат/evidence, действительный CI и официальный handoff оформляются внешней записью после публикации. Локальное выполнение8/8 не является официальным READY, независимым PASS или решением Lead. Jira и merge — за человеком.
