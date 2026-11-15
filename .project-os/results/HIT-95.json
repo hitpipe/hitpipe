@@ -1,0 +1,52 @@
+{
+  "subject": "HIT-95",
+  "status": "PARTIAL_SOURCE_DECISION_PENDING",
+  "full_dod_ready": false,
+  "handoff_requested": false,
+  "registration_state": "DRAFT_ARTIFACT_NOT_REGISTERED_AS_COMPLETED_TASK",
+  "materialized_result": {
+    "summary": "Независимые защищённые read paths реализованы и локально проверены; непустые Cases/CaseDetail закрыты из-за отсутствующего order_label source/next_action rule. Истории без сохранённой expiry недоступны.",
+    "base_sha": "3bae6417421465868c432fe18b379d46be6144aa",
+    "tested_code_sha": "444aa011080cc7b321e3f37b0a0d0d5bb1f0e9de",
+    "code_url": "https://github.com/hitpipe/hitpipe/tree/444aa011080cc7b321e3f37b0a0d0d5bb1f0e9de/services/processing",
+    "dependency_state": "HIT78/79 Done; PR50/52 OPEN, dependent branch rather than main; PR53 preserved."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/readcases",
+    "services/processing/internal/adapters/casereadhttp",
+    "services/processing/internal/adapters/postgres/read_cases.go",
+    "services/processing/internal/adapters/postgres/read_cases_test.go",
+    "services/processing/internal/adapters/contentfiles/read_owned.go",
+    "services/processing/internal/adapters/contentfiles/read_owned_test.go",
+    "services/processing/scripts/postgres/verify_case_reads.py",
+    "services/processing/scripts/postgres/verify_read_schema.py",
+    "services/processing/docs/HIT-95"
+  ],
+  "verification": {
+    "scope": "Independent local qualification only; NOT full DoD. Host Go1.27.2 darwin/arm64 race/vet exit0, separate actual PG18.7/Linux arm64 CGO0+mTLS/content; no Linux race claim.",
+    "commands": "services/processing/docs/HIT-95/verification/commands.json",
+    "summary": "services/processing/docs/HIT-95/verification/summary.json",
+    "api_captures": "services/processing/docs/HIT-95/verification/api-capture.json",
+    "raw_archive": "services/processing/docs/HIT-95/verification/raw-run.tar.gz",
+    "go_race_stdout": "services/processing/docs/HIT-95/verification/go-race.stdout",
+    "postgres_tests_stdout": "services/processing/docs/HIT-95/verification/postgres-tests.stdout",
+    "source_audit": "services/processing/docs/HIT-95/source-audit.json",
+    "field_map": "services/processing/docs/HIT-95/FIELD_MAP.md",
+    "report": "services/processing/docs/HIT-95/README.md",
+    "lead_request": "services/processing/docs/HIT-95/LEAD_REQUEST_RU.md",
+    "digests": "services/processing/docs/HIT-95/evidence-digests.json",
+    "result": "96-command controlled verification group PASS,4 supplemental commands exit0. Real History HTTPS100+2 and empty Cases200 pass exact OAS; nonempty Cases/getCase503 intentionally. Actual role/RLS, scoped pool reuse, cursor isolation, private mTLS/auth/gate, owner content faults/expiry, actual SQL deadline/closed connection/rollback tested."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "No approved source of order_label. No fallback label fabricated.",
+    "No approved next_action rule; no new business rules or available-action permission default.",
+    "Full CaseDetail/nullable fields and positive nonempty Cases200 are pending and not represented as completed checks.",
+    "HIT78 SIGNAL_ADMITTED lacks persisted history_content.expires_at; honest503, not at+90d. Controlled positive fixture metadata is not a writer fix.",
+    "Live IAM/BFF/browser/production runtime gate/fencing/credentials are not connected. Explicit test auth/gate fixtures only.",
+    "No formal OAS/SQL, financial/write/activation rules, dependencies, other services/commonCI or working data changed.",
+    "No handoff/READY, independent review, acceptance, merge, status transition or closure by agent."
+  ],
+  "next_action": "Lead records source/rule decision using LEAD_REQUEST_RU.md; then implement approved projection, complete positive schema/nullable checks, register full result/evidence and run handoff-preflight.",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
