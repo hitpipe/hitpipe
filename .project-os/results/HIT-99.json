@@ -1,0 +1,54 @@
+{
+  "subject": "HIT-99",
+  "materialized_result": {
+    "summary": "Durable Delivery-only private HTTPS applyTaskObservation: exact TaskObservation/JCS, current authority/actual-start, atomic inbox/CAS/state/knowledge/history, no identity rollback or repeat create; existing HIT95 read APIs show actual observations.",
+    "tested_code_sha": "ae8ebe99b09e5d193a39efde6fc8e6fcee628f4b",
+    "base_sha": "ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "contract_revision": 1,
+    "integration_state": "Dependent on OPEN PR54 and existing HIT79/78; no main or sibling stack integration claimed."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/observations",
+    "services/processing/internal/adapters/observationjson",
+    "services/processing/internal/adapters/observationhttp",
+    "services/processing/internal/adapters/postgres/observation*.go",
+    "services/processing/internal/adapters/postgres/read_cases.go (narrow producer projection hook)",
+    "services/processing/internal/application/readcases/presentation.go (new actual reason codes only)",
+    "services/processing/internal/testfixtures/observation.go (controlled test PKI only)",
+    "services/processing/scripts/postgres/verify_observations.py",
+    "services/processing/tools/observations/generate.py",
+    "services/processing/docs/HIT-99"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-99/README.md",
+    "field_and_transition_map": "services/processing/docs/HIT-99/FIELD_MAP.md",
+    "commands": "services/processing/docs/HIT-99/verification/commands.json",
+    "review_commands": "services/processing/docs/HIT-99/verification/review-commands.json",
+    "full_go_race": "services/processing/docs/HIT-99/verification/go-race.stdout",
+    "full_postgres": "services/processing/docs/HIT-99/verification/postgres-storage-tests.stdout",
+    "captures": "services/processing/docs/HIT-99/verification/observation-captures.jsonl",
+    "source_audit": "services/processing/docs/HIT-99/source-audit.json",
+    "supplemental": "services/processing/docs/HIT-99/supplemental/commands.json",
+    "digests": "services/processing/docs/HIT-99/evidence-digests.json",
+    "result": "All8DoD locally checked:98-command final clean run PASS,5 supplemental exit0,124 actual HTTP captures/7069 independent negative OAS sensitivity checks. Official handoff/independent review/human acceptance separate.",
+    "environment": {
+      "host": "Go1.27.2 darwin/arm64 CGO1 race/vet/build",
+      "database": "separate linux/arm64 CGO0 actual owned PG18.7, not Linux race",
+      "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
+    },
+    "unicode_regression": "services/processing/docs/HIT-99/unicode-regression/before-command.json",
+    "unicode_correction": "Raw original I-JSON/JCS validity before lossy encoding/json; unpaired surrogates400, valid pair/literal accepted. New actual full run08; old registered8f989ab/preflight13016 superseded, not readiness for this code."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Controlled current-authority/shared actual-start and Delivery observations only, no live IAM/BFF/Delivery/ClickUp integration or credentials.",
+    "Foreign proof_code/digest/evidence_ref are authenticated owner assertions/provenance, not independently fetched proof content; no new getObservationEvidence path.",
+    "Explicit bounded caller policy, owned HISTORY <=90days. Lost/expired initial causal binding history fails closed; detail expiry preserves minimal identity and original inbox receipt.",
+    "Native task link only after complete unexpired verified readback and native alphanumeric ID; uncertainty/mismatch/expired details/custom route shape gives null. It is a recorded confirmation boundary, not continuous provider health/access.",
+    "No new case/intent/create/recovery command/financial decision/SQL/OAS/other-service changes.",
+    "Real process/IO/PG abort and ACK loss tested, not power loss, load/SLA or deployment qualification.",
+    "OPEN predecessor and sibling PRs not merged main; future actual integration must validate updated branches/CI."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
