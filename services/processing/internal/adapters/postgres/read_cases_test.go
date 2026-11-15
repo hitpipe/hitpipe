@@ -372,7 +372,7 @@ func TestReadCaseSQLKeysetAndReadonlyOnActualRole(t *testing.T) {
 }
 
 func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
-	for _, mode := range []string{"missing", "corrupt", "wrong_hash", "symlink", "expired", "wrong_owner", "timeout", "unavailable_db"} {
+	for _, mode := range []string{"missing", "corrupt", "wrong_hash", "symlink", "expired", "wrong_owner", "timeout", "cancel_before", "rollback", "unavailable_db"} {
 		t.Run(mode, func(t *testing.T) {
 			f := prepared(t, []string{})
 			seedReadHistory(t, f, 1, mode == "wrong_hash")
@@ -415,13 +415,25 @@ func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 				other := prepared(t, []string{})
 				store.Content = ownerSubstitute{f.files, other.request.WorkspaceID}
 			case "unavailable_db":
-				store.DB = failingReadDB{}
+				closed := connect(t)
+				if e := closed.Close(ctx); e != nil {
+					t.Fatal(e)
+				}
+				store.DB = closed
+			case "timeout":
+				store.DB = slowReadDB{p}
+			case "rollback":
+				store.DB = rollbackReadDB{p}
 			}
 			c := ctx
 			var cancel context.CancelFunc
-			if mode == "timeout" {
+			if mode == "cancel_before" {
 				c, cancel = context.WithCancel(ctx)
 				cancel()
+			}
+			if mode == "timeout" {
+				c, cancel = context.WithTimeout(ctx, 20*time.Millisecond)
+				defer cancel()
 			}
 			if _, e := store.Read(c, r, readGrant(r.WorkspaceID)); e == nil {
 				t.Fatal("fault produced success")
@@ -436,10 +448,37 @@ func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 	}
 }
 
-type failingReadDB struct{}
+type slowReadDB struct{ Beginner }
 
-func (failingReadDB) BeginTx(context.Context, pgx.TxOptions) (pgx.Tx, error) {
-	return nil, errors.New("synthetic database unavailable")
+func (p slowReadDB) BeginTx(ctx context.Context, o pgx.TxOptions) (pgx.Tx, error) {
+	tx, e := p.Beginner.BeginTx(ctx, o)
+	if e != nil {
+		return nil, e
+	}
+	if _, e = tx.Exec(ctx, `SELECT pg_sleep(1)`); e != nil {
+		cleanup, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+		tx.Rollback(cleanup)
+		return nil, e
+	}
+	return tx, nil
+}
+
+type rollbackReadDB struct{ Beginner }
+type rollbackReadTx struct{ pgx.Tx }
+
+func (p rollbackReadDB) BeginTx(ctx context.Context, o pgx.TxOptions) (pgx.Tx, error) {
+	tx, e := p.Beginner.BeginTx(ctx, o)
+	if e != nil {
+		return nil, e
+	}
+	return rollbackReadTx{tx}, nil
+}
+func (t rollbackReadTx) Commit(ctx context.Context) error {
+	if e := t.Tx.Rollback(ctx); e != nil {
+		return e
+	}
+	return errors.New("controlled read rollback before emit")
 }
 
 type expiredReadContent struct {
