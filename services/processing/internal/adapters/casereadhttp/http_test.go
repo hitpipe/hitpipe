@@ -281,6 +281,20 @@ func TestParsingAndUnavailableComposition(t *testing.T) {
 		t.Fatal("permissive empty composition")
 	}
 	s, _, _, repo := components()
+	pki := newPKI(t)
+	config := &tls.Config{Certificates: []tls.Certificate{pki.cert(t, "processing.private", true, false)}, ClientCAs: pki.roots}
+	for _, bind := range []string{":8443", "0.0.0.0:8443", "203.0.113.5:8443", "127.0.0.1:443"} {
+		if _, e := NewServer(bind, config, s, "bff.private"); e == nil {
+			t.Fatal("unqualified/public bind allowed", bind)
+		}
+	}
+	if _, e := NewServer("10.1.1.2:8443", config, s, "bff.private"); e != nil {
+		t.Fatal("explicit private owner bind rejected", e)
+	}
+	config.GetConfigForClient = func(*tls.ClientHelloInfo) (*tls.Config, error) { return &tls.Config{}, nil }
+	if _, e := NewServer("127.0.0.1:0", config, s, "bff.private"); e == nil {
+		t.Fatal("dynamic TLS bypass allowed")
+	}
 	ts, p := fixture(t, s)
 	cert := p.cert(t, "bff.private", false, false)
 	c := client(p, &cert)

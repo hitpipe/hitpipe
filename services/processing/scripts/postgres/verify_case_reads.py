@@ -8,6 +8,8 @@ import json
 import pathlib
 import os
 import uuid
+import sys
+sys.dont_write_bytecode=True
 import verify_preparation as preparation
 
 class Run(preparation.Run):
@@ -21,7 +23,7 @@ class Run(preparation.Run):
   if label=='postgres-storage-tests':
    args[2:2]=['-e','HIT95_SCHEMA_CAPTURE=/tmp/hit95-schema.json']
   result=super().command(label,args,*a,**kw)
-  self.records[-1]['environment']={k:os.environ.get(k,'<unset>') for k in ['PATH','GOTOOLCHAIN','GOMAXPROCS','CGO_ENABLED','GOFLAGS','GOEXPERIMENT','DOCKER_HOST']}
+  self.records[-1]['environment']={k:os.environ.get(k,'<unset>') for k in ['PATH','GOTOOLCHAIN','GOMAXPROCS','CGO_ENABLED','GOFLAGS','GOEXPERIMENT','DOCKER_HOST','PYTHONDONTWRITEBYTECODE']}
   self.save()
   return result
  def checks(self):

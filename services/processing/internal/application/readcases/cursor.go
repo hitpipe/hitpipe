@@ -12,11 +12,11 @@ import (
 )
 
 var uuid = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
-var States = []string{"RECEIVED", "WAITING_DATA", "WORKING", "UNKNOWN", "ATTENTION", "CONFIRMED", "EXCLUDED", "CLOSED_WITHOUT_CONFIRMATION"}
+var states = []string{"RECEIVED", "WAITING_DATA", "WORKING", "UNKNOWN", "ATTENTION", "CONFIRMED", "EXCLUDED", "CLOSED_WITHOUT_CONFIRMATION"}
 
 func UUID(s string) bool { return uuid.MatchString(s) }
 func State(s string) bool {
-	for _, v := range States {
+	for _, v := range states {
 		if s == v {
 			return true
 		}
@@ -62,7 +62,7 @@ func (k CursorKey) Encode(r Request, p Page) (string, error) {
 		}
 		copy(b[18:34], idBytes(r.CaseID))
 	}
-	for i, v := range States {
+	for i, v := range states {
 		if v == r.State {
 			b[34] = byte(i + 1)
 		}
@@ -92,7 +92,7 @@ func (k CursorKey) Decode(r Request) (Page, error) {
 		expectedCase = idBytes(r.CaseID)
 	}
 	st := byte(0)
-	for i, v := range States {
+	for i, v := range states {
 		if v == r.State {
 			st = byte(i + 1)
 		}

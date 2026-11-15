@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -33,6 +34,11 @@ func New(s readcases.Service, peerDNS string) (http.Handler, error) {
 // The production port is 8443 on a private interface; tests may use a loopback
 // ephemeral listener. Nothing binds a socket until the caller explicitly serves.
 func NewServer(address string, t *tls.Config, s readcases.Service, peerDNS string) (*http.Server, error) {
+	host, port, e := net.SplitHostPort(address)
+	ip := net.ParseIP(host)
+	if e != nil || ip == nil || (!ip.IsPrivate() && !ip.IsLoopback()) || (port != "8443" && !(ip.IsLoopback() && port == "0")) {
+		return nil, readcases.ErrUnavailable
+	}
 	h, e := New(s, peerDNS)
 	if e != nil {
 		return nil, e
