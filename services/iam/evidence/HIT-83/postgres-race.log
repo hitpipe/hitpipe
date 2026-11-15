@@ -1,0 +1,569 @@
+=== RUN   TestDiagnosticValid
+--- PASS: TestDiagnosticValid (0.00s)
+=== RUN   TestDiagnosticMalformedAndCanary
+=== RUN   TestDiagnosticMalformedAndCanary/extra
+=== RUN   TestDiagnosticMalformedAndCanary/comma_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/large_offset
+=== RUN   TestDiagnosticMalformedAndCanary/null_root
+=== RUN   TestDiagnosticMalformedAndCanary/unknown_null_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/bad_version
+=== RUN   TestDiagnosticMalformedAndCanary/missing_now
+=== RUN   TestDiagnosticMalformedAndCanary/oversize
+=== RUN   TestDiagnosticMalformedAndCanary/broken
+=== RUN   TestDiagnosticMalformedAndCanary/nested_case
+=== RUN   TestDiagnosticMalformedAndCanary/bad_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/trailing
+=== RUN   TestDiagnosticMalformedAndCanary/invalid_UTF8
+=== RUN   TestDiagnosticMalformedAndCanary/duplicate
+=== RUN   TestDiagnosticMalformedAndCanary/null_bool
+=== RUN   TestDiagnosticMalformedAndCanary/case_mismatched_key
+--- PASS: TestDiagnosticMalformedAndCanary (0.01s)
+    --- PASS: TestDiagnosticMalformedAndCanary/extra (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/comma_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/large_offset (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_root (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/unknown_null_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_version (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/missing_now (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/oversize (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/broken (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/nested_case (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/trailing (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/invalid_UTF8 (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/duplicate (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_bool (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/case_mismatched_key (0.00s)
+=== RUN   TestDiagnosticConfigAndVersion
+--- PASS: TestDiagnosticConfigAndVersion (0.00s)
+=== RUN   TestDiagnosticDeniedIsSuccessfulEvaluation
+--- PASS: TestDiagnosticDeniedIsSuccessfulEvaluation (0.00s)
+=== RUN   TestDiagnosticCompositionAndUnavailableClock
+--- PASS: TestDiagnosticCompositionAndUnavailableClock (0.00s)
+=== RUN   TestOutputFailureReturnsErrorWithoutLeaking
+--- PASS: TestOutputFailureReturnsErrorWithoutLeaking (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.036s
+=== RUN   TestConnectionDiagnosticDoesNotExposeServerOrDSN
+--- PASS: TestConnectionDiagnosticDoesNotExposeServerOrDSN (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.013s
+=== RUN   TestSystemClockRequiresAttestation
+--- PASS: TestSystemClockRequiresAttestation (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.025s
+=== RUN   TestSameConsumerContractWithBothAdapters
+=== RUN   TestSameConsumerContractWithBothAdapters/file/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/file/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/file/error
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/error
+--- PASS: TestSameConsumerContractWithBothAdapters (0.02s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)
+=== RUN   TestFileReloadFixedOwnershipAndConcurrency
+--- PASS: TestFileReloadFixedOwnershipAndConcurrency (0.01s)
+=== RUN   TestAdapterFailureAndBoundaryInputs
+--- PASS: TestAdapterFailureAndBoundaryInputs (0.00s)
+=== RUN   TestReaderFailureAndUnknownProjection
+--- PASS: TestReaderFailureAndUnknownProjection (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.048s
+=== RUN   TestIAMSchemaMigrationRepeatOnFreshConnection
+--- PASS: TestIAMSchemaMigrationRepeatOnFreshConnection (0.49s)
+=== RUN   TestIAMSchemaMigrationAtomicDDLFailure
+--- PASS: TestIAMSchemaMigrationAtomicDDLFailure (0.60s)
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/foreign_owner
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/partial_schema
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/unknown_version
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/missing_rls
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/weakened_policy
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/widened_grant
+--- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState (2.77s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/foreign_owner (0.23s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/partial_schema (0.22s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/unknown_version (0.45s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/missing_rls (0.40s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/weakened_policy (0.68s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/widened_grant (0.79s)
+=== RUN   TestIAMSchemaMigrationRefusesRuntimeAndOpenTransaction
+--- PASS: TestIAMSchemaMigrationRefusesRuntimeAndOpenTransaction (0.31s)
+=== RUN   TestIAMSchemaMigrationRejectsUnsafeDefaultPrivileges
+--- PASS: TestIAMSchemaMigrationRejectsUnsafeDefaultPrivileges (0.29s)
+=== RUN   TestIAMSchemaMigrationConcurrentInstall
+--- PASS: TestIAMSchemaMigrationConcurrentInstall (0.68s)
+=== RUN   TestAcceptedMigrationBytes
+--- PASS: TestAcceptedMigrationBytes (0.00s)
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/app
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/worker
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/purge
+--- PASS: TestIAMSchemaRoleSeparationAndOwnership (0.20s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/app (0.05s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/worker (0.03s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/purge (0.04s)
+=== RUN   TestIAMSchemaRuntimePrivilegeMatrix
+--- PASS: TestIAMSchemaRuntimePrivilegeMatrix (0.12s)
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/purge
+--- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation (1.11s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/app (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/worker (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/app (0.05s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/worker (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/purge (0.01s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/app (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/worker (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/purge (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/worker (0.06s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/purge (0.02s)
+=== RUN   TestIAMSchemaOwnerCannotBypassForcedRLS
+--- PASS: TestIAMSchemaOwnerCannotBypassForcedRLS (0.08s)
+=== RUN   TestIAMSchemaSetLocalDoesNotLeakAcrossTransactions
+--- PASS: TestIAMSchemaSetLocalDoesNotLeakAcrossTransactions (0.11s)
+=== RUN   TestIAMSchemaGlobalTablesAreIAMAuthorityWithoutTenantFiction
+--- PASS: TestIAMSchemaGlobalTablesAreIAMAuthorityWithoutTenantFiction (0.57s)
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/worker
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/purge
+--- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly (0.25s)
+    --- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/worker (0.02s)
+    --- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/purge (0.02s)
+=== RUN   TestIAMSchemaGlobalUniquenessAndForeignKeys
+--- PASS: TestIAMSchemaGlobalUniquenessAndForeignKeys (0.25s)
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/session_hash=decode('00','hex')
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/csrf_hash=decode('00','hex')
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/epoch=0
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/expires_at=created_at
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/idle_expires_at=expires_at+interval_'1_microsecond'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/epoch=0
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/deadline_at=accepted_at+interval_'6_seconds'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/status='EFFECTIVE'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/effective_at=accepted_at
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/scope='UNSUPPORTED'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/status='UNSUPPORTED'
+--- PASS: TestIAMSchemaSessionAndRevocationConstraints (0.13s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/session_hash=decode('00','hex') (0.01s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/csrf_hash=decode('00','hex') (0.01s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/epoch=0 (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/expires_at=created_at (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/idle_expires_at=expires_at+interval_'1_microsecond' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/epoch=0 (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/deadline_at=accepted_at+interval_'6_seconds' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/status='EFFECTIVE' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/effective_at=accepted_at (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/scope='UNSUPPORTED' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/status='UNSUPPORTED' (0.00s)
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/audit_minimal
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/command_receipts
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/audit_minimal
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/command_receipts
+--- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts (0.28s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/audit_minimal (0.02s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/command_receipts (0.02s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/audit_minimal (0.02s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/command_receipts (0.02s)
+=== RUN   TestIAMSchemaCommitIsDurableAndFailedTransactionLeavesNoPartialWrite
+--- PASS: TestIAMSchemaCommitIsDurableAndFailedTransactionLeavesNoPartialWrite (0.24s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	9.560s
+=== RUN   TestPostgresIssuerAtomicAndCompatibleLookup
+--- PASS: TestPostgresIssuerAtomicAndCompatibleLookup (0.08s)
+=== RUN   TestPostgresIssuerExistingPrincipalPreservesProfileAndIdentity
+--- PASS: TestPostgresIssuerExistingPrincipalPreservesProfileAndIdentity (0.07s)
+=== RUN   TestPostgresIssuerConcurrentDeduplication
+--- PASS: TestPostgresIssuerConcurrentDeduplication (0.23s)
+=== RUN   TestPostgresIssuerDisabledAndPendingRevocations
+=== RUN   TestPostgresIssuerDisabledAndPendingRevocations/disabled
+=== RUN   TestPostgresIssuerDisabledAndPendingRevocations/PENDING
+=== RUN   TestPostgresIssuerDisabledAndPendingRevocations/INCIDENT
+=== RUN   TestPostgresIssuerDisabledAndPendingRevocations/EFFECTIVE
+--- PASS: TestPostgresIssuerDisabledAndPendingRevocations (0.28s)
+    --- PASS: TestPostgresIssuerDisabledAndPendingRevocations/disabled (0.05s)
+    --- PASS: TestPostgresIssuerDisabledAndPendingRevocations/PENDING (0.08s)
+    --- PASS: TestPostgresIssuerDisabledAndPendingRevocations/INCIDENT (0.04s)
+    --- PASS: TestPostgresIssuerDisabledAndPendingRevocations/EFFECTIVE (0.11s)
+=== RUN   TestPostgresIssuerRollbackOnInsertFailure
+=== RUN   TestPostgresIssuerRollbackOnInsertFailure/session-id
+=== RUN   TestPostgresIssuerRollbackOnInsertFailure/session-hash
+--- PASS: TestPostgresIssuerRollbackOnInsertFailure (0.07s)
+    --- PASS: TestPostgresIssuerRollbackOnInsertFailure/session-id (0.02s)
+    --- PASS: TestPostgresIssuerRollbackOnInsertFailure/session-hash (0.00s)
+=== RUN   TestPostgresIssuerCancellationAndBoundedLock
+=== RUN   TestPostgresIssuerCancellationAndBoundedLock/30ms
+=== RUN   TestPostgresIssuerCancellationAndBoundedLock/5s
+--- PASS: TestPostgresIssuerCancellationAndBoundedLock (2.10s)
+    --- PASS: TestPostgresIssuerCancellationAndBoundedLock/30ms (0.05s)
+    --- PASS: TestPostgresIssuerCancellationAndBoundedLock/5s (2.01s)
+=== RUN   TestPostgresIssuerAuthorityAndDatabaseFailures
+=== RUN   TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_ADMIN_DSN
+=== RUN   TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_WORKER_DSN
+=== RUN   TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_PURGE_DSN
+=== RUN   TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_MIGRATOR_DSN
+--- PASS: TestPostgresIssuerAuthorityAndDatabaseFailures (0.11s)
+    --- PASS: TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_ADMIN_DSN (0.02s)
+    --- PASS: TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_WORKER_DSN (0.01s)
+    --- PASS: TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_TEST_PURGE_DSN (0.01s)
+    --- PASS: TestPostgresIssuerAuthorityAndDatabaseFailures/HITPIPE_IAM_MIGRATOR_DSN (0.03s)
+=== RUN   TestPostgresIssuerCommitUncertainDoesNotReturnSuccess
+--- PASS: TestPostgresIssuerCommitUncertainDoesNotReturnSuccess (0.07s)
+=== RUN   TestPostgresIssuerServiceOneUseProofAndLookup
+--- PASS: TestPostgresIssuerServiceOneUseProofAndLookup (0.08s)
+=== RUN   TestIssuerConfigurationAndInvalidRecords
+--- PASS: TestIssuerConfigurationAndInvalidRecords (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer	4.115s
+=== RUN   TestHIT82LatencySamples
+    lookup_benchmark_integration_test.go:392: set HITPIPE_IAM_BENCH_OUTPUT_DIR to retain real latency observations
+--- SKIP: TestHIT82LatencySamples (0.00s)
+=== RUN   TestPostgresExactSnapshotAndExistingConsumer
+--- PASS: TestPostgresExactSnapshotAndExistingConsumer (0.02s)
+=== RUN   TestPostgresMissingSessionIsNotFound
+--- PASS: TestPostgresMissingSessionIsNotFound (0.02s)
+=== RUN   TestPostgresNextReadObservesRevocation
+--- PASS: TestPostgresNextReadObservesRevocation (0.04s)
+=== RUN   TestPostgresReadsNeverModifyOrRenewSession
+--- PASS: TestPostgresReadsNeverModifyOrRenewSession (0.03s)
+=== RUN   TestPostgresErrorsAreSanitizedAndNeverValid
+--- PASS: TestPostgresErrorsAreSanitizedAndNeverValid (0.05s)
+=== RUN   TestPostgresInFlightCancellationFailsClosed
+--- PASS: TestPostgresInFlightCancellationFailsClosed (0.04s)
+=== RUN   TestPostgresInternalDeadlineBoundsBlockedRead
+--- PASS: TestPostgresInternalDeadlineBoundsBlockedRead (2.07s)
+=== RUN   TestPostgresConcurrentReadsReturnIndependentValues
+--- PASS: TestPostgresConcurrentReadsReturnIndependentValues (0.06s)
+=== RUN   TestPostgresCancelledContextAndClosedPool
+--- PASS: TestPostgresCancelledContextAndClosedPool (0.08s)
+=== RUN   TestReferenceUsesExactOpaqueSecret
+--- PASS: TestReferenceUsesExactOpaqueSecret (0.00s)
+=== RUN   TestNewRejectsMissingOrOversizedPool
+--- PASS: TestNewRejectsMissingOrOversizedPool (0.00s)
+=== RUN   TestZeroLookupFailsClosed
+--- PASS: TestZeroLookupFailsClosed (0.00s)
+=== RUN   TestDecodeReferenceAcceptsExactLowercaseDigests
+--- PASS: TestDecodeReferenceAcceptsExactLowercaseDigests (0.00s)
+=== RUN   TestDecodeReferenceRejectsEveryNonLowercaseHexByteAtEveryPosition
+--- PASS: TestDecodeReferenceRejectsEveryNonLowercaseHexByteAtEveryPosition (0.01s)
+=== RUN   TestDecodeReferenceLengthUnicodeAndFormatting
+--- PASS: TestDecodeReferenceLengthUnicodeAndFormatting (0.00s)
+=== RUN   TestDecodeReferenceMatchesLegacyDeterministicCorpus
+--- PASS: TestDecodeReferenceMatchesLegacyDeterministicCorpus (0.08s)
+=== RUN   TestLookupCancellationPrecedesReferenceValidation
+--- PASS: TestLookupCancellationPrecedesReferenceValidation (0.00s)
+=== RUN   TestLookupReferenceValidationAndUnavailableDoNotExposeInput
+--- PASS: TestLookupReferenceValidationAndUnavailableDoNotExposeInput (0.00s)
+=== RUN   FuzzDecodeReferenceMatchesLegacy
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#0
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#1
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#2
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#3
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#4
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#5
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#6
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#7
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#8
+--- PASS: FuzzDecodeReferenceMatchesLegacy (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#0 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#1 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#2 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#3 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#4 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#5 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#6 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#7 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#8 (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	3.525s
+=== RUN   TestDependenciesAndInvalidRequests
+--- PASS: TestDependenciesAndInvalidRequests (0.00s)
+=== RUN   TestPortErrorsDoNotAllowOrLeak
+=== RUN   TestPortErrorsDoNotAllowOrLeak/lookup
+=== RUN   TestPortErrorsDoNotAllowOrLeak/clock
+=== RUN   TestPortErrorsDoNotAllowOrLeak/untrusted
+=== RUN   TestPortErrorsDoNotAllowOrLeak/zero_clock
+--- PASS: TestPortErrorsDoNotAllowOrLeak (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/lookup (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/clock (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/untrusted (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/zero_clock (0.00s)
+=== RUN   TestClockReadAfterLookupAndCancellation
+=== RUN   TestClockReadAfterLookupAndCancellation/none
+=== RUN   TestClockReadAfterLookupAndCancellation/before
+=== RUN   TestClockReadAfterLookupAndCancellation/lookup
+=== RUN   TestClockReadAfterLookupAndCancellation/clock
+--- PASS: TestClockReadAfterLookupAndCancellation (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/none (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/before (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/lookup (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/clock (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.015s
+=== RUN   TestRequiresDependenciesAndExplicitPolicy
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_verifier
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_verifier
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_clock
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_clock
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_guard
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_guard
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_store
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_store
+--- PASS: TestRequiresDependenciesAndExplicitPolicy (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_verifier (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_verifier (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_clock (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_clock (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_guard (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_guard (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_store (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_store (0.00s)
+=== RUN   TestInvalidInputDoesNotConsumeProof
+=== RUN   TestInvalidInputDoesNotConsumeProof/nil_context
+=== RUN   TestInvalidInputDoesNotConsumeProof/empty
+=== RUN   TestInvalidInputDoesNotConsumeProof/oversized
+=== RUN   TestInvalidInputDoesNotConsumeProof/cancelled
+--- PASS: TestInvalidInputDoesNotConsumeProof (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/nil_context (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/empty (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/oversized (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/cancelled (0.00s)
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/verifier_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unverified_email
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_issuer
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/whitespace_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/control_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/invalid_UTF8
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/future_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/expired_equality
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/inverted_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/clock_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/untrusted_clock
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_clock
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/guard_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_guard
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unknown_guard
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_epoch
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/negative_epoch
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/rotation_hold
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/pending_revoke
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/entropy_failure
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/CSRF_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/principal_UUID_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_UUID_entropy_short
+--- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/verifier_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unverified_email (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_issuer (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/whitespace_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/control_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/invalid_UTF8 (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/future_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/expired_equality (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/inverted_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/clock_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/untrusted_clock (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_clock (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/guard_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_guard (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unknown_guard (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_epoch (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/negative_epoch (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/rotation_hold (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/pending_revoke (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/entropy_failure (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/CSRF_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/principal_UUID_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_UUID_entropy_short (0.00s)
+=== RUN   TestCreatesHashedSessionAfterCommit
+--- PASS: TestCreatesHashedSessionAfterCommit (0.00s)
+=== RUN   TestFormattingAndJSONRedactSecrets
+--- PASS: TestFormattingAndJSONRedactSecrets (0.00s)
+=== RUN   TestPostCommitFailureWithholdsSecrets
+=== RUN   TestPostCommitFailureWithholdsSecrets/unknown_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/cancel_after_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/clock_error
+=== RUN   TestPostCommitFailureWithholdsSecrets/untrusted_clock
+=== RUN   TestPostCommitFailureWithholdsSecrets/clock_backwards
+=== RUN   TestPostCommitFailureWithholdsSecrets/proof_expired_during_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/session_expired_during_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/guard_error
+=== RUN   TestPostCommitFailureWithholdsSecrets/guard_unknown
+=== RUN   TestPostCommitFailureWithholdsSecrets/epoch_changed
+=== RUN   TestPostCommitFailureWithholdsSecrets/pending_revoke
+=== RUN   TestPostCommitFailureWithholdsSecrets/rotation_hold
+--- PASS: TestPostCommitFailureWithholdsSecrets (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/unknown_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/cancel_after_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/clock_error (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/untrusted_clock (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/clock_backwards (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/proof_expired_during_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/session_expired_during_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/guard_error (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/guard_unknown (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/epoch_changed (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/pending_revoke (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/rotation_hold (0.00s)
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/zero
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/non_UUID
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/nil_UUID
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/wrong_session
+--- PASS: TestMalformedCommitReceiptWithholdsSecrets (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/zero (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/non_UUID (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/nil_UUID (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/wrong_session (0.00s)
+=== RUN   TestFreshClockRejectsProofExpiredBeforeStore
+--- PASS: TestFreshClockRejectsProofExpiredBeforeStore (0.00s)
+=== RUN   TestMaximumPolicyAndAttemptAreAllowed
+--- PASS: TestMaximumPolicyAndAttemptAreAllowed (0.00s)
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/verifier
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/clock
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/guard
+--- PASS: TestCancellationInDependenciesStopsBeforeWrite (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/verifier (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/clock (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/guard (0.00s)
+=== RUN   TestConcurrentOneUseConfirmationAndReplay
+--- PASS: TestConcurrentOneUseConfirmationAndReplay (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.026s
+=== RUN   TestEvaluateValid
+--- PASS: TestEvaluateValid (0.00s)
+=== RUN   TestEvaluateUnknown
+--- PASS: TestEvaluateUnknown (0.00s)
+=== RUN   TestEvaluateIdleBoundary
+=== RUN   TestEvaluateIdleBoundary/before
+=== RUN   TestEvaluateIdleBoundary/equal
+=== RUN   TestEvaluateIdleBoundary/after
+--- PASS: TestEvaluateIdleBoundary (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/before (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/equal (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/after (0.00s)
+=== RUN   TestEvaluateAbsoluteBoundary
+--- PASS: TestEvaluateAbsoluteBoundary (0.00s)
+=== RUN   TestEvaluateRevoked
+--- PASS: TestEvaluateRevoked (0.00s)
+=== RUN   TestEvaluateInvalidChronology
+=== RUN   TestEvaluateInvalidChronology/zero_creation
+=== RUN   TestEvaluateInvalidChronology/zero_absolute
+=== RUN   TestEvaluateInvalidChronology/zero_idle
+=== RUN   TestEvaluateInvalidChronology/absolute_equals_creation
+=== RUN   TestEvaluateInvalidChronology/idle_exceeds_absolute
+=== RUN   TestEvaluateInvalidChronology/unsupported_year
+=== RUN   TestEvaluateInvalidChronology/idle_equals_creation
+=== RUN   TestEvaluateInvalidChronology/lifetime_above_cap
+=== RUN   TestEvaluateInvalidChronology/far_future
+--- PASS: TestEvaluateInvalidChronology (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_idle (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/absolute_equals_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_exceeds_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/unsupported_year (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_equals_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/lifetime_above_cap (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/far_future (0.00s)
+=== RUN   TestEvaluateClockAndFutureCreation
+--- PASS: TestEvaluateClockAndFutureCreation (0.00s)
+=== RUN   TestEvaluateDeterministicImmutable
+--- PASS: TestEvaluateDeterministicImmutable (0.00s)
+=== RUN   TestEvaluateRenewedIdleAndOffsets
+--- PASS: TestEvaluateRenewedIdleAndOffsets (0.00s)
+=== RUN   TestDecisionRejectsMixedStateAndReason
+--- PASS: TestDecisionRejectsMixedStateAndReason (0.00s)
+=== RUN   TestDecisionTablePrecedence
+--- PASS: TestDecisionTablePrecedence (0.00s)
+=== RUN   FuzzValidityInvariants
+=== RUN   FuzzValidityInvariants/seed#0
+=== RUN   FuzzValidityInvariants/seed#1
+=== RUN   FuzzValidityInvariants/seed#2
+=== RUN   FuzzValidityInvariants/seed#3
+=== RUN   FuzzValidityInvariants/seed#4
+--- PASS: FuzzValidityInvariants (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#0 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#1 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#2 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#3 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#4 (0.00s)
+=== RUN   ExampleEvaluate
+--- PASS: ExampleEvaluate (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.039s
