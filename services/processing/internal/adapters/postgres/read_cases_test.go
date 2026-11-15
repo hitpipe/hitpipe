@@ -592,12 +592,7 @@ func TestReadActualMTLSPostgresContentComposition(t *testing.T) {
 	g.denyPhase = "RESPONSE_START"
 	g.mu.Unlock()
 	capture("getCaseHistory", "/"+f.request.CaseID+"/history", 403, "Error")
-	if output := os.Getenv("HIT95_SCHEMA_CAPTURE"); output != "" {
-		b, _ := json.MarshalIndent(captures, "", "  ")
-		if e = os.WriteFile(output, append(b, '\n'), 0600); e != nil {
-			t.Fatal(e)
-		}
-	}
+	saveReadCaptures(t, captures)
 }
 
 func readCertificates(t *testing.T) (*x509.CertPool, tls.Certificate, tls.Certificate) {
@@ -632,4 +627,26 @@ func readCertificates(t *testing.T) (*x509.CertPool, tls.Certificate, tls.Certif
 		return tls.Certificate{Certificate: [][]byte{cert}, PrivateKey: private}
 	}
 	return roots, makeCert("processing.private", true), makeCert("bff.private", false)
+}
+
+func saveReadCaptures(t *testing.T, captures []map[string]any) {
+	t.Helper()
+	if output := os.Getenv("HIT95_SCHEMA_CAPTURE"); output != "" {
+		var prior []map[string]any
+		if b, e := os.ReadFile(output); e == nil {
+			if e = json.Unmarshal(b, &prior); e != nil {
+				t.Fatal(e)
+			}
+		} else if !os.IsNotExist(e) {
+			t.Fatal(e)
+		}
+		prior = append(prior, captures...)
+		b, e := json.MarshalIndent(prior, "", "  ")
+		if e != nil {
+			t.Fatal(e)
+		}
+		if e = os.WriteFile(output, append(b, '\n'), 0600); e != nil {
+			t.Fatal(e)
+		}
+	}
 }
