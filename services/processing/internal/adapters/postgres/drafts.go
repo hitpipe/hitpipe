@@ -178,7 +178,7 @@ func (d DraftStore) replay(ctx context.Context, r drafts.Request, in drafts.Inpu
 			return nil, drafts.ErrUnavailable
 		}
 		var node drafts.CommandNode
-		if frame(raw, &node) != nil || node.Format != "draft-command-v1" || node.WorkspaceID != r.WorkspaceID || node.DraftID != r.DraftID || node.ResultRevision != ref.Revision {
+		if frame(raw, &node) != nil || node.Format != "draft-command-v1" || node.WorkspaceID != r.WorkspaceID || node.DraftID != r.DraftID || node.ResultRevision != ref.Revision || node.AuthorityEpoch < 1 {
 			return nil, drafts.ErrUnavailable
 		}
 		if node.RequestID == in.Command.RequestID {
@@ -188,6 +188,15 @@ func (d DraftStore) replay(ctx context.Context, r drafts.Request, in drafts.Inpu
 			body, e := d.readFile(ctx, node.Response, r.WorkspaceID, r.DraftID, snap.Config.Revision, d.Clock.Now())
 			if e != nil || d.Codec.ValidateResponse(r.Kind, body) != nil {
 				return nil, drafts.ErrUnavailable
+			}
+			if r.Kind == drafts.Check {
+				var check drafts.ReadinessCheck
+				if json.Unmarshal(body, &check) != nil {
+					return nil, drafts.ErrUnavailable
+				}
+				if check.Passed && (node.BindingCheck == nil || node.BindingCheck.Epoch != node.AuthorityEpoch || node.BindingCheck.PrincipalID != node.ActorID || node.BindingCheck.WorkspaceID != node.WorkspaceID) {
+					return nil, drafts.ErrUnavailable
+				}
 			}
 			if !responsePins(r.Kind, body, r.DraftID, node.ResultRevision, node.ConfigDigest) {
 				return nil, drafts.ErrUnavailable
@@ -328,7 +337,7 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 	if e != nil {
 		return nil, e
 	}
-	node := drafts.CommandNode{Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, RequestID: in.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: r.Kind, ExpectedRevision: in.Command.ExpectedRevision, ResultRevision: resultRevision, ConfigDigest: c.ConfigDigest, Response: responseRef, Previous: current.Root.Tail}
+	node := drafts.CommandNode{AuthorityEpoch: g.Epoch, BindingCheck: c.BindingCheck, Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, RequestID: in.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: r.Kind, ExpectedRevision: in.Command.ExpectedRevision, ResultRevision: resultRevision, ConfigDigest: c.ConfigDigest, Response: responseRef, Previous: current.Root.Tail}
 	raw, e := json.Marshal(node)
 	if e != nil {
 		return nil, e

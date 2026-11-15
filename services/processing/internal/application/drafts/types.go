@@ -92,6 +92,8 @@ type Root struct {
 	Tail                 *Ref
 }
 type CommandNode struct {
+	AuthorityEpoch                                   int64
+	BindingCheck                                     *BindingProof
 	Format                                           string
 	WorkspaceID, DraftID, RequestID, ActorID, Digest string
 	Kind                                             Kind
@@ -110,6 +112,7 @@ type Snapshot struct {
 	Replay                            []byte
 }
 type Candidate struct {
+	BindingCheck       *BindingProof
 	Config             DraftConfig
 	ConfigDigest       string
 	ContentExpiry      time.Time

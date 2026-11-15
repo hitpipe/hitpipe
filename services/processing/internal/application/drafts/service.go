@@ -181,6 +181,7 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 			view = check
 			if check.Passed {
 				candidate.PositiveValidUntil = &check.ExpiresAt
+				candidate.BindingCheck = &proof
 			}
 		case Rehearse:
 			if in.Command.ExpectedRevision == nil || *in.Command.ExpectedRevision != snap.Config.Revision || in.DraftRevision != snap.Config.Revision {
