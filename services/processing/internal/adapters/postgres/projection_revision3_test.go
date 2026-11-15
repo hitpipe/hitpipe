@@ -169,3 +169,39 @@ func TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence(t *testing
 		t.Fatal(d)
 	}
 }
+
+func TestRevision3StoredConfirmationBoundaryNotLiveObservation(t *testing.T) {
+	f := prepared(t, []string{})
+	db := connect(t)
+	tx := begin(t, db, f.request.WorkspaceID)
+	at := time.Now().UTC().Add(-time.Microsecond).Truncate(time.Microsecond)
+	var admitted time.Time
+	if e := tx.QueryRow(ctx, `SELECT admitted_at FROM hp_processing.case_identity WHERE workspace_id=$1 AND case_id=$2`, f.request.WorkspaceID, f.request.CaseID).Scan(&admitted); e != nil {
+		t.Fatal(e)
+	}
+	if at.Before(admitted) {
+		at = admitted
+	}
+	if _, e := tx.Exec(ctx, `UPDATE hp_processing.case_identity SET state='CONFIRMED',outcome_knowledge='RESULT_VERIFIED',last_confirmed_at=$3 WHERE workspace_id=$1 AND case_id=$2`, f.request.WorkspaceID, f.request.CaseID, at); e != nil {
+		t.Fatal(e)
+	}
+	id, _ := newID()
+	if _, e := tx.Exec(ctx, `INSERT INTO hp_processing.safety_history(workspace_id,entry_id,case_id,actor_kind,at,reason_code,old_state,new_state)VALUES($1,$2,$3,'SYSTEM',$4,'CONTROLLED_SAVED_OBSERVATION','RECEIVED','CONFIRMED')`, f.request.WorkspaceID, id, f.request.CaseID, at); e != nil {
+		t.Fatal(e)
+	}
+	if e := tx.Commit(ctx); e != nil {
+		t.Fatal(e)
+	}
+	// Explicitly persisted synthetic state tests preservation. No provider
+	// readback or CONFIRMED transition is performed by GET or claimed by this test.
+	reader := readStore(t, f, newReadPool(t, 1))
+	r := readRequest(f, readcases.Detail)
+	v, e := reader.Read(ctx, r, readGrant(r.WorkspaceID))
+	if e != nil {
+		t.Fatal(e)
+	}
+	d := v.(readcases.CaseDetail)
+	if d.LastObservationAt == nil || !d.LastObservationAt.Equal(at) || d.ObservationComplete || d.Case.TargetURL != nil || d.Case.State != "CONFIRMED" || d.Case.OutcomeKnowledge != "RESULT_VERIFIED" || len(d.AvailableActions) != 0 {
+		t.Fatal("lost stored boundary or invented live readback", d)
+	}
+}

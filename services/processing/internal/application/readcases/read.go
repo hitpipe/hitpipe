@@ -159,12 +159,13 @@ type Labels struct {
 	Actions                []string
 }
 type Record struct {
-	Summary        CaseSummary
-	Context        []ContextField
-	RequiredKeys   []string
-	ContextExpired bool
-	LatestReason   string
-	Config         []byte
-	KnownTaskID    *string
-	DispatchFenced bool
+	Summary         CaseSummary
+	Context         []ContextField
+	RequiredKeys    []string
+	ContextExpired  bool
+	LatestReason    string
+	Config          []byte
+	KnownTaskID     *string
+	DispatchFenced  bool
+	LastConfirmedAt *time.Time
 }

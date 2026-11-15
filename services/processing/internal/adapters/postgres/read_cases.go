@@ -85,7 +85,7 @@ func (db CaseReadStore) Read(ctx context.Context, r readcases.Request, g readcas
 }
 
 const caseReadSQL = `SELECT k.case_id::text,k.operation_id::text,k.config_id::text,a.digest,k.state,k.revision,k.owner_user_id::text,k.admitted_at,k.outcome_knowledge,a.canonical_config,h.at,h.new_state,h.reason_code,
- (SELECT e.deadline_at FROM hp_processing.episodes e WHERE e.workspace_id=k.workspace_id AND e.case_id=k.case_id AND e.completed_at IS NULL ORDER BY e.started_at,e.episode_id LIMIT 1),k.known_task_id,k.ever_dispatch_fenced
+ (SELECT e.deadline_at FROM hp_processing.episodes e WHERE e.workspace_id=k.workspace_id AND e.case_id=k.case_id AND e.completed_at IS NULL ORDER BY e.started_at,e.episode_id LIMIT 1),k.known_task_id,k.ever_dispatch_fenced,k.last_confirmed_at
  FROM hp_processing.case_identity k JOIN hp_processing.accepted_configs a ON (k.workspace_id,k.operation_id,k.config_id)=(a.workspace_id,a.operation_id,a.config_id)
  LEFT JOIN LATERAL (SELECT at,new_state,reason_code FROM hp_processing.safety_history WHERE workspace_id=k.workspace_id AND case_id=k.case_id ORDER BY at DESC,entry_id DESC LIMIT 1) h ON true
  WHERE k.workspace_id=$1 AND ($2='' OR k.case_id::text=$2) AND ($3='' OR k.state=$3) AND k.admitted_at<=$4
@@ -113,7 +113,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		var state, reason *string
 		var deadline *time.Time
 		s := &rec.Summary
-		e = rows.Scan(&s.CaseID, &s.OperationID, &s.ConfigID, &s.ConfigDigest, &s.State, &s.Revision, &s.OwnerUserID, &s.ReceivedAt, &s.OutcomeKnowledge, &rec.Config, &at, &state, &reason, &deadline, &rec.KnownTaskID, &rec.DispatchFenced)
+		e = rows.Scan(&s.CaseID, &s.OperationID, &s.ConfigID, &s.ConfigDigest, &s.State, &s.Revision, &s.OwnerUserID, &s.ReceivedAt, &s.OutcomeKnowledge, &rec.Config, &at, &state, &reason, &deadline, &rec.KnownTaskID, &rec.DispatchFenced, &rec.LastConfirmedAt)
 		if e != nil {
 			rows.Close()
 			return nil, readcases.ErrUnavailable
@@ -182,6 +182,16 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		if r.Kind == readcases.Detail {
 			complete := readcases.ContextComplete(rec)
 			detail = readcases.CaseDetail{Case: rec.Summary, Context: rec.Context, ContextComplete: complete, ContextExpired: rec.ContextExpired, AvailableActions: labels.Actions}
+			// Retain a known historical verification boundary when the stored
+			// state/knowledge explicitly identify it. This is not a new observation,
+			// current ClickUp health, a verified URL or complete readback attributes.
+			if rec.LastConfirmedAt != nil && rec.Summary.State == "CONFIRMED" && rec.Summary.OutcomeKnowledge == "RESULT_VERIFIED" {
+				if rec.LastConfirmedAt.After(now) || rec.LastConfirmedAt.Before(rec.Summary.ReceivedAt) {
+					return nil, readcases.ErrUnavailable
+				}
+				at := rec.LastConfirmedAt.UTC()
+				detail.LastObservationAt = &at
+			}
 		}
 	}
 	if r.Kind == readcases.Detail {
