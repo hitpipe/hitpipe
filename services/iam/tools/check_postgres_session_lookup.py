@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import platform
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -137,6 +138,17 @@ def main(*, task="HIT-81", schema_checks=True):
                 logins += (f"CREATE ROLE hp_hit81_{login} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE "
                            f"NOBYPASSRLS IN ROLE hp_iam_{group};\n")
             check_command("test-logins", psql, data=logins)
+            with socket.create_connection(("127.0.0.1", int(address.split(":")[1])), timeout=5):
+                result["host_loopback_tcp_probe"] = {"host": "127.0.0.1", "state": "PASSED"}
+            migration_psql = ["docker", "exec", "-i", name, "psql", "-X", "-v", "ON_ERROR_STOP=1",
+                              "-h", "127.0.0.1", "-U", "hp_hit81_migration", "-d", database]
+            role_check = check_command("migration-role-tcp", migration_psql + ["-Atc",
+                "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"])
+            if role_check.stdout.splitlines()[-1:] != ["hp_iam_migrator|hp_hit81_migration"]:
+                raise RuntimeError("migration login could not select the dedicated non-login owner")
+            startup_check = ["docker", "exec", "-i", "--env", "PGOPTIONS=-c role=hp_iam_migrator", name,
+                             *migration_psql[4:], "-Atc", "SELECT current_user,session_user;"]
+            check_command("migration-startup-role", startup_check)
             migration_options = urlencode({"sslmode": "disable", "options": "-c role=hp_iam_migrator"})
             environment["HITPIPE_IAM_MIGRATOR_DSN"] = f"postgres://hp_hit81_migration@{address}/{database}?{migration_options}"
             for role in ("APP", "WORKER", "PURGE"):
@@ -186,6 +198,15 @@ def main(*, task="HIT-81", schema_checks=True):
             result["setup_stderr"] = (exc.stderr or "")[-4000:]
             print(json.dumps({"step": result["failed_step"], "stderr": result["setup_stderr"]}), file=sys.stderr)
         print(result["failure"], file=sys.stderr)
+        if container_started:
+            diagnostic_command = ["docker", "logs", "--tail", "30", name]
+            diagnostic = run(diagnostic_command, check=False)
+            log = diagnostic.stdout + diagnostic.stderr
+            (evidence / "postgres-failure.log").write_text(log)
+            result["failure_diagnostics"] = {
+                "command": diagnostic_command, "exit_code": diagnostic.returncode,
+                "log": "postgres-failure.log", "log_sha256": hashlib.sha256(log.encode()).hexdigest(),
+            }
     finally:
         if container_started:
             result["test_container_removed"] = run(["docker", "rm", "--force", name], check=False).returncode == 0
