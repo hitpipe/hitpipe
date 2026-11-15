@@ -154,10 +154,6 @@ type HistoryView struct {
 	NextCursor *string        `json:"next_cursor"`
 }
 
-// Presentation requires an established source/rule for mandatory display fields.
-// A nil policy never manufactures a label/action from revision or a clock. This
-// port does not supply authority; implementers may only project the loaded record.
-type Presentation interface{ Project(Record) (Labels, error) }
 type Labels struct {
 	OrderLabel, NextAction string
 	Actions                []string
@@ -169,4 +165,6 @@ type Record struct {
 	ContextExpired bool
 	LatestReason   string
 	Config         []byte
+	KnownTaskID    *string
+	DispatchFenced bool
 }

@@ -97,16 +97,19 @@ func seedReadHistory(t *testing.T, f preparedFixture, n int, badDigest ...bool) 
 		t.Fatal("application unexpectedly deleted safety history")
 	}
 	tx.Rollback(ctx)
-	// Keep the admitted row; supply explicitly persisted, synthetic content for
-	// that one known row, then append typed events for pagination.
+	// Keep the real durable admission row and its original metadata/body;
+	// append only the extra explicitly synthetic pagination events.
 	tx = begin(t, db, f.request.WorkspaceID)
 	var initial string
 	var admitted time.Time
 	if e := tx.QueryRow(ctx, `SELECT entry_id::text,at FROM hp_processing.safety_history WHERE workspace_id=$1 AND case_id=$2`, f.request.WorkspaceID, f.request.CaseID).Scan(&initial, &admitted); e != nil {
 		t.Fatal(e)
 	}
-	ids := []string{}
-	for i := 0; i < n; i++ {
+	ids := []string{initial}
+	if len(badDigest) > 0 && badDigest[0] && n == 1 {
+		n = 2
+	}
+	for i := 1; i < n; i++ {
 		id := initial
 		at := admitted
 		reason := "SIGNAL_ADMITTED"
@@ -149,8 +152,8 @@ func TestReadHistoryActualStoragePaginationAndGaps(t *testing.T) {
 	store := readStore(t, f, p)
 	r := readRequest(f, readcases.History)
 	g := readGrant(r.WorkspaceID)
-	if _, e := store.Read(ctx, r, g); !errors.Is(e, readcases.ErrUnavailable) {
-		t.Fatal("admission without stored expiry claimed complete", e)
+	if v, e := store.Read(ctx, r, g); e != nil || len(v.(readcases.HistoryView).Items) != 1 {
+		t.Fatal("real producer history unavailable", e)
 	}
 	seedReadHistory(t, f, 102)
 	first, e := store.Read(ctx, r, g)
@@ -208,11 +211,11 @@ func TestReadHistoryActualStoragePaginationAndGaps(t *testing.T) {
 	p.slots <- c
 	list := readRequest(f, readcases.List)
 	list.CaseID = ""
-	if _, e = store.Read(ctx, list, g); !errors.Is(e, readcases.ErrUnavailable) {
-		t.Fatal("missing label/action manufactured", e)
+	if v, e := store.Read(ctx, list, g); e != nil || len(v.(readcases.Cases).Items) != 1 {
+		t.Fatal(v, e)
 	}
-	if _, e = store.Read(ctx, readRequest(f, readcases.Detail), g); !errors.Is(e, readcases.ErrUnavailable) {
-		t.Fatal("missing detail manufactured", e)
+	if v, e := store.Read(ctx, readRequest(f, readcases.Detail), g); e != nil || v.(readcases.CaseDetail).Case.OrderLabel != "Synthetic service" {
+		t.Fatal(v, e)
 	}
 	list.WorkspaceID, _ = newID()
 	empty, e := store.Read(ctx, list, readGrant(list.WorkspaceID))
@@ -361,8 +364,8 @@ func TestReadCaseSQLKeysetAndReadonlyOnActualRole(t *testing.T) {
 	store := readStore(t, f, p)
 	r := readRequest(f, readcases.List)
 	r.CaseID = ""
-	if _, e = store.Read(ctx, r, readGrant(r.WorkspaceID)); !errors.Is(e, readcases.ErrUnavailable) {
-		t.Fatal("unapproved display values fabricated", e)
+	if v, e := store.Read(ctx, r, readGrant(r.WorkspaceID)); e != nil || len(v.(readcases.Cases).Items) != 100 || v.(readcases.Cases).NextCursor == nil {
+		t.Fatal("case API keyset", v, e)
 	}
 	c = <-p.slots
 	if e = c.QueryRow(ctx, `SELECT count(*) FROM hp_processing.case_identity`).Scan(&count); e != nil || count != 0 {
@@ -438,7 +441,11 @@ func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 			if _, e := store.Read(c, r, readGrant(r.WorkspaceID)); e == nil {
 				t.Fatal("fault produced success")
 			}
-			decisionCounts(t, r.WorkspaceID, 0, 1, 0)
+			wantHistory := 1
+			if mode == "wrong_hash" {
+				wantHistory = 2
+			}
+			decisionCounts(t, r.WorkspaceID, 0, wantHistory, 0)
 			if mode == "expired" {
 				if _, e := os.Stat(path); !os.IsNotExist(e) {
 					t.Fatal("expired file retained", e)
@@ -577,8 +584,8 @@ func TestReadActualMTLSPostgresContentComposition(t *testing.T) {
 	if json.Unmarshal(body, &second) != nil || len(second.Items) != 2 || second.NextCursor != nil {
 		t.Fatal("wrong final page")
 	}
-	capture("getCase", "/"+f.request.CaseID, 503, "Error")
-	capture("listCases", "", 503, "Error")
+	capture("getCase", "/"+f.request.CaseID, 200, "CaseDetail")
+	capture("listCases", "", 200, "Cases")
 	capture("listCases", "?state=CONFIRMED", 200, "Cases")
 	capture("getCase", "/"+f.request.CaseID+"?unused=1", 400, "Error")
 	g.mu.Lock()

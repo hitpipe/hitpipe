@@ -66,4 +66,6 @@ for row in observations:
  else:raise AssertionError('validator did not detect removed required field')
  print(row['operation'],row['status'],row['schema'],'exact OAS PASS')
 assert any(r['schema']=='History' and r['status']==200 for r in observations)
-print('Nonempty Cases/CaseDetail200 not claimed: missing approved display sources.')
+assert any(r['schema']=='Cases' and r['status']==200 and r['body']['items'] for r in observations)
+assert any(r['schema']=='CaseDetail' and r['status']==200 for r in observations)
+print('All three operations have actual nonempty200 captures; nullable fields are required and validated.')

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"regexp"
 	"time"
 	"unicode/utf8"
 
@@ -14,6 +15,8 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+var readDigest = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
+
 type OwnedContent interface {
 	ReadOwned(context.Context, preparecase.Ref, preparecase.Origin, time.Time) ([]byte, error)
 }
@@ -21,10 +24,9 @@ type OwnedContent interface {
 // CaseReadStore uses only the owner database and files. Presentation has no
 // fallback for required fields missing from the predecessor result.
 type CaseReadStore struct {
-	DB           Beginner
-	Content      OwnedContent
-	Cursors      readcases.CursorKey
-	Presentation readcases.Presentation
+	DB      Beginner
+	Content OwnedContent
+	Cursors readcases.CursorKey
 }
 
 func (db CaseReadStore) Read(ctx context.Context, r readcases.Request, g readcases.Grant) (any, error) {
@@ -83,7 +85,7 @@ func (db CaseReadStore) Read(ctx context.Context, r readcases.Request, g readcas
 }
 
 const caseReadSQL = `SELECT k.case_id::text,k.operation_id::text,k.config_id::text,a.digest,k.state,k.revision,k.owner_user_id::text,k.admitted_at,k.outcome_knowledge,a.canonical_config,h.at,h.new_state,h.reason_code,
- (SELECT e.deadline_at FROM hp_processing.episodes e WHERE e.workspace_id=k.workspace_id AND e.case_id=k.case_id AND e.completed_at IS NULL ORDER BY e.started_at,e.episode_id LIMIT 1)
+ (SELECT e.deadline_at FROM hp_processing.episodes e WHERE e.workspace_id=k.workspace_id AND e.case_id=k.case_id AND e.completed_at IS NULL ORDER BY e.started_at,e.episode_id LIMIT 1),k.known_task_id,k.ever_dispatch_fenced
  FROM hp_processing.case_identity k JOIN hp_processing.accepted_configs a ON (k.workspace_id,k.operation_id,k.config_id)=(a.workspace_id,a.operation_id,a.config_id)
  LEFT JOIN LATERAL (SELECT at,new_state,reason_code FROM hp_processing.safety_history WHERE workspace_id=k.workspace_id AND case_id=k.case_id ORDER BY at DESC,entry_id DESC LIMIT 1) h ON true
  WHERE k.workspace_id=$1 AND ($2='' OR k.case_id::text=$2) AND ($3='' OR k.state=$3) AND k.admitted_at<=$4
@@ -111,7 +113,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		var state, reason *string
 		var deadline *time.Time
 		s := &rec.Summary
-		e = rows.Scan(&s.CaseID, &s.OperationID, &s.ConfigID, &s.ConfigDigest, &s.State, &s.Revision, &s.OwnerUserID, &s.ReceivedAt, &s.OutcomeKnowledge, &rec.Config, &at, &state, &reason, &deadline)
+		e = rows.Scan(&s.CaseID, &s.OperationID, &s.ConfigID, &s.ConfigDigest, &s.State, &s.Revision, &s.OwnerUserID, &s.ReceivedAt, &s.OutcomeKnowledge, &rec.Config, &at, &state, &reason, &deadline, &rec.KnownTaskID, &rec.DispatchFenced)
 		if e != nil {
 			rows.Close()
 			return nil, readcases.ErrUnavailable
@@ -165,10 +167,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		if e = db.loadReadContext(ctx, tx, r.WorkspaceID, &rec, now); e != nil {
 			return nil, e
 		}
-		if db.Presentation == nil {
-			return nil, readcases.ErrUnavailable
-		}
-		labels, e := db.Presentation.Project(rec)
+		labels, e := readcases.Project(rec)
 		if e != nil {
 			return nil, e
 		}
@@ -181,7 +180,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		// predecessors. A known task ID is not sufficient to fabricate either field.
 		result.Items = append(result.Items, rec.Summary)
 		if r.Kind == readcases.Detail {
-			complete := !rec.ContextExpired && len(rec.Context) == len(rec.RequiredKeys)
+			complete := readcases.ContextComplete(rec)
 			detail = readcases.CaseDetail{Case: rec.Summary, Context: rec.Context, ContextComplete: complete, ContextExpired: rec.ContextExpired, AvailableActions: labels.Actions}
 		}
 	}
@@ -237,6 +236,10 @@ func (db CaseReadStore) loadReadContext(ctx context.Context, tx pgx.Tx, ws strin
 		if !allowed[f.key] || f.at.After(now) || !f.ref.ExpiresAt.After(f.at) {
 			return readcases.ErrUnavailable
 		}
+		if !now.Before(f.ref.ExpiresAt) {
+			rec.ContextExpired = true
+			continue
+		}
 		b, e := db.Content.ReadOwned(ctx, f.ref, preparecase.Origin{WorkspaceID: ws, CaseID: rec.Summary.CaseID, Revision: rec.Summary.Revision}, now)
 		if errors.Is(e, readcases.ErrExpired) {
 			rec.ContextExpired = true
@@ -273,7 +276,7 @@ func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.
 		after = &p.After
 		id = &p.AfterID
 	}
-	rows, e := tx.Query(ctx, `SELECT h.entry_id::text,h.case_id::text,h.at,h.actor_kind,h.actor_id::text,h.old_state,h.new_state,h.reason_code,h.proof_ref::text,c.detail_ref::text,c.detail_sha256,c.detail_bytes,c.expires_at
+	rows, e := tx.Query(ctx, `SELECT h.entry_id::text,h.case_id::text,h.at,h.actor_kind,h.actor_id::text,h.old_state,h.new_state,h.reason_code,h.proof_ref::text,c.detail_ref::text,c.detail_sha256,c.detail_bytes,c.expires_at,c.created_at
  FROM hp_processing.safety_history h LEFT JOIN hp_processing.history_content c ON (h.workspace_id,h.entry_id)=(c.workspace_id,c.entry_id)
  WHERE h.workspace_id=$1 AND h.case_id=$2 AND h.at<=$3 AND ($4::timestamptz IS NULL OR (h.at,h.entry_id)>($4::timestamptz,$5::uuid)) ORDER BY h.at,h.entry_id LIMIT 101`, r.WorkspaceID, r.CaseID, p.Snapshot, after, id)
 	if e != nil {
@@ -284,13 +287,14 @@ func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.
 		refID, hash *string
 		bytes       *int
 		expiry      *time.Time
+		created     *time.Time
 		newState    *string
 	}
 	var all []source
 	for rows.Next() {
 		var s source
 		h := &s.entry
-		e = rows.Scan(&h.EntryID, &h.CaseID, &h.At, &h.ActorKind, &h.ActorID, &h.OldState, &s.newState, &h.ReasonCode, &h.EvidenceRef, &s.refID, &s.hash, &s.bytes, &s.expiry)
+		e = rows.Scan(&h.EntryID, &h.CaseID, &h.At, &h.ActorKind, &h.ActorID, &h.OldState, &s.newState, &h.ReasonCode, &h.EvidenceRef, &s.refID, &s.hash, &s.bytes, &s.expiry, &s.created)
 		if e != nil {
 			rows.Close()
 			return nil, readcases.ErrUnavailable
@@ -315,6 +319,16 @@ func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.
 		if s.newState == nil || !readcases.State(*s.newState) || s.refID == nil || s.hash == nil || s.bytes == nil || s.expiry == nil {
 			return nil, readcases.ErrUnavailable
 		}
+		if s.created == nil || !s.created.Equal(h.At) || !s.expiry.After(*s.created) || s.expiry.After(s.created.Add(90*24*time.Hour)) || !readcases.UUID(*s.refID) || !readDigest.MatchString(*s.hash) || *s.bytes < 1 || *s.bytes > 65536 {
+			return nil, readcases.ErrUnavailable
+		}
+		h.At = h.At.UTC()
+		h.NewState = *s.newState
+		h.ExpiresAt = s.expiry.UTC()
+		if !now.Before(*s.expiry) {
+			out.Items = append(out.Items, h)
+			continue
+		}
 		ref := preparecase.Ref{ID: *s.refID, Digest: *s.hash, Class: "HISTORY", Bytes: *s.bytes, ExpiresAt: *s.expiry}
 		b, e := db.Content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: r.WorkspaceID, CaseID: r.CaseID, Revision: revision}, now)
 		if e != nil {
@@ -332,7 +346,7 @@ func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.
 				At        time.Time
 			}
 		}
-		if json.Unmarshal(b, &envelope) != nil || envelope.CaseID != r.CaseID || envelope.Revision < 1 || envelope.Revision > revision || envelope.Decision.Reason != h.ReasonCode || envelope.Decision.State != *s.newState || !envelope.Decision.At.Equal(h.At) {
+		if json.Unmarshal(b, &envelope) != nil || envelope.CaseID != r.CaseID || envelope.Revision < 1 || envelope.Revision > revision || envelope.Decision.Reason != h.ReasonCode || envelope.Decision.State != *s.newState || !envelope.Decision.At.UTC().Truncate(time.Microsecond).Equal(h.At) {
 			return nil, readcases.ErrUnavailable
 		}
 		if envelope.Decision.EpisodeID != "" {

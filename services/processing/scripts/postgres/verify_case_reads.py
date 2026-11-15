@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""HIT-95 independent read-path qualification on owned PG18.7 + real mTLS.
-Does not claim nonempty Cases/CaseDetail readiness while display sources are absent.
+"""HIT-95 revision3 read-path/admission qualification on owned PG18.7 + real mTLS.
+Local owner API only; no production IAM/BFF/runtime qualification.
 """
 import argparse
 import hashlib
@@ -35,8 +35,10 @@ class Run(preparation.Run):
  def main(self):
   super().main()
   p=self.output/'summary.json';s=json.loads(p.read_text());s['task']='HIT-95'
-  s['scope']='INDEPENDENT_READ_PATHS_VERIFIED / FULL_DOD_BLOCKED: actual private TLS1.3 BFF mTLS fixture, fresh controlled IAM/epoch, real PG18.7 RLS/read-only transactions/content; history200 with explicitly persisted synthetic history expiry metadata, missing predecessor expiry503, nonempty list/detail503 until Lead settles order_label/next_action. Host Go1.27.2 race/vet; Linux CGO0 actual DB binary, no Linux race claim. No actual IAM/BFF or production gate qualification.'
-  s['full_dod_ready']=False;s['blockers']=['approved source of order_label absent','approved projection rule for next_action absent','HIT78 initial history has no persisted history_content.expires_at; such history returns503']
+  s['scope']='HIT-95 CCR revision3: nonempty listCases/getCase/getCaseHistory, approved label/display policy, real admission durable HISTORY and expiry/minimal reads, controlled TLS1.3 BFF mTLS/fresh IAM and epoch ports, real PG18.7 app-role RLS/scoped readonly reads/content. Host Go1.27.2 race/vet; separate Linux CGO0 DB binary, no Linux race or live IAM/BFF/runtime qualification claim.'
+  s['contract_revision']=3
+  s['local_verification_complete']=True
+  s['project_os_handoff_ready']='NOT_EVALUATED_BY_THIS_RUNNER'
   p.write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s))
 
 if __name__=='__main__':
