@@ -1,93 +1,119 @@
-# HIT-95 — источники обязательных полей
+# HIT-95 — карта полей, CCR редакция3
 
-Статус: PARTIAL / SOURCE_DECISION_PENDING. Карта описывает источник и текущую
-реализацию, а не подтверждает полный успешный CaseDetail. OAS/SQL не изменены.
-Все структуры создаются только после fresh authority и scoped owner read.
+Основание: решение Lead [12640](https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12640)
+и CCR [12646](https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12646).
+Проверенная кодовая версия `15ed1e567907bee951715b3b025c657e2009044d`.
+Схема OAS и formal SQL не изменены. Каждое чтение проходит fresh authority,
+общий actual-start/epoch gate, scoped owner transaction и повторный gate ответа.
 
 ## Cases
 
-| Поле | Источник/правило | Фактический статус |
-|---|---|---|
-| items | case_identity + принятая config + собственный context; порядок admitted_at,case_id | Пустой фильтр200 проверен; непустой результат503 до двух решений ниже |
-| next_cursor | HMAC-SHA256 keyset token; workspace/kind/case/filter/snapshot/позиция; null в конце | Codec и реальный SQL keyset проверены; непустой Cases API200 не заявлен |
-| snapshot_at | transaction_timestamp() read-only repeatable-read транзакции, UTC | Проверен в реальном пустом Cases200 |
+| Поле | Источник и правило |
+|---|---|
+| items | case_identity + case-pinned accepted_configs + собственный context; порядок admitted_at,case_id; непустые200 проверены |
+| next_cursor | HMAC token workspace/kind/case/filter/snapshot/позиция; null в конце, максимум100 на страницу |
+| snapshot_at | transaction_timestamp() read-only repeatable-read транзакции, UTC |
+
+Курсор ограничивает admission cohort; state читается заново в каждой транзакции.
+Один долгоживущий MVCC snapshot между HTTP-запросами не обещается. History
+использует неизменяемые at/entry_id с snapshot upper bound. Ключ явно задаётся
+композицией, в production-коде/логах нет default/секрета. Ротация отвергает старые
+курсоры. Курсор не предоставляет полномочий.
 
 ## CaseSummary
 
-| Поле | Реальный источник/правило | Ограничение |
-|---|---|---|
-| case_id | case_identity.case_id | UUID, собственный workspace |
-| operation_id | case_identity.operation_id | Связь того же workspace |
-| config_id | case_identity.config_id | Старый case остаётся на своей config |
-| config_digest | accepted_configs.digest; join по workspace/operation/config; проверка JCS canonical_config | Не текущий selected config другой версии |
-| state | case_identity.state, без переходов от GET | VALID/commit outbox не становятся CONFIRMED |
-| revision | case_identity.revision; safe integer1..9007199254740991 | Не счётчик времени/источник даты |
-| owner_user_id | case_identity.owner_user_id | Не browser header/не technical service principal |
-| order_label | Закреплённого источника нет | BLOCKED; нет service_label/SessionID/revision default |
-| received_at | case_identity.admitted_at, UTC | Сохранённый admission timestamp |
-| updated_at | at последнего safety_history по at,entry_id; требуется его new_state==сохранённому state и at>=admitted_at, at<=snapshot time | При отсутствующей/противоречивой истории503; не clock.Now и не revision |
-| next_action | Закреплённого правила нет | BLOCKED; собственная таблица действий не вводится |
-| due_at | deadline_at текущего незавершённого episodes; null при отсутствии такой записи | Таймер WAITING_DATA не изобретается |
-| target_url | В предшественниках нет qualified Delivery URL producer | Из known_task_id URL не строится; позитивная проекция пока закрыта |
-| outcome_knowledge | case_identity.outcome_knowledge | Сохранённое знание, без усиления от финансового результата |
+| Поле | Источник и правило |
+|---|---|
+| case_id | case_identity.case_id того же workspace |
+| operation_id | case_identity.operation_id |
+| config_id | case_identity.config_id, без миграции на новый selected_config |
+| config_digest | accepted_configs.digest после workspace/operation/config join и JCS проверки canonical_config |
+| state | case_identity.state, без переходов от GET |
+| revision | case_identity.revision, safe integer1..9007199254740991 |
+| owner_user_id | case_identity.owner_user_id, не browser/service identity header |
+| order_label | точный canonical_config.service_label принятого config_id дела:1–120 символов, без control; отсутствует/повреждён→503; без усечения, подстановок или нормализации |
+| received_at | case_identity.admitted_at, UTC |
+| updated_at | at последней safety_history по at,entry_id; new_state должен соответствовать сохранённому state, дата не раньше admission и не из будущего; иначе503 |
+| next_action | русский базовый текст сохранённого state + первый подходящий шаг1–9 решения Lead + безопасное объяснение реального producer code/knowledge/отсутствия команды, до512 символов |
+| due_at | deadline_at незавершённого episodes либо null; не выдуманный WAITING_DATA timer |
+| target_url | null без установленного источника verified Delivery URL; known_task_id не превращается в ссылку |
+| outcome_knowledge | case_identity.outcome_knowledge без усиления финансовым VALID/outbox commit |
 
-Непустые CaseSummary не выдаются вообще, пока обязательная Presentation не
-получит подтверждённый источник order_label и правило next_action. Остальные
-описанные источники не делают весь ответ квалифицированным.
+order_label — каталожное название, не уникальное имя покупки. Его конфигурация не
+истекает при expiry context/history. Проверено изменение selected config/PAUSED:
+старое дело сохраняет label/config_digest своей версии.
+
+Приоритеты next_action реализованы в presentation.go буквально по Lead:
+qualified RECHECK → UNKNOWN/possible send → mismatch → terminal → incomplete
+context → установленное препятствие доступа → WAITING_DATA → RECEIVED/WORKING →
+разбор причины. Запрет повторного create сохраняется при UNKNOWN/POSSIBLE_EFFECT
+или dispatch fence, даже при RECHECK. TARGET_ID_KNOWN не подтверждает результат;
+RESULT_VERIFIED объясняется как последняя сохранённая проверка, не текущее здоровье
+ClickUp. UNESTABLISHED без отправки остаётся неизвестным знанием.
+
+Каталог содержит только реальные codes текущих producers. Ни READER_UNAVAILABLE,
+ни IDENTITY_MISMATCH не выдаются за доказанный отказ доступа к прежнему подключению.
+Специального persisted access-denial code эти producers пока не записывают; условный
+приоритет6 проверен чистой таблицей условий, а runtime не выдумывает такой факт.
+Неизвестная причина отмечается фиксированным русским текстом без raw diagnostics.
 
 ## CaseDetail
 
-| Поле | Источник/правило текущего read path | Проверка/остаток |
-|---|---|---|
-| case | CaseSummary выше | BLOCKED; нет фиктивного полного200 |
-| context | case_content refs + реальный CASE_CONTEXT file; owner workspace/case, revision ceiling, class/hash/bytes/expiry | Только configured required_context_keys; посторонний payload не добавляется |
-| context_complete | Все configured keys представлены пригодным собственным содержимым | Полный CaseDetail200 ещё не проверен |
-| context_expired | Подтверждённая expiry metadata реального файла; просроченный body не возвращается | Expiry-on-read проверен отдельно; пропажа/коррупция503 |
-| last_observation_at | В HIT-78/79 нет Delivery observation projection | Не подменяется датой SourceFacts/финансового решения; позитивная проекция закрыта |
-| observation_complete | Нет квалифицированного Delivery readback источника в предшественниках | Финансовый VALID не complete observation; позитивная проекция закрыта |
-| available_actions | Будущая подтверждённая Presentation, согласованная с next_action и действительными guard/grants | Нет разрешающего default; до завершения CaseDetail200 не заявлен |
-| history_cursor | Продолжение отдельного history чтения; начальный GET history не требует cursor | Положительный CaseDetail и различия nullable ещё требуют проверки после решения |
+| Поле | Источник и правило |
+|---|---|
+| case | полная CaseSummary выше |
+| context | case_content + CASE_CONTEXT files; только configured keys; проверяются class/hash/bytes/expiry и causal workspace/case/revision; строки сохраняются точно |
+| context_complete | все configured keys представлены пригодным контекстом, нет истёкшего обязательного содержания |
+| context_expired | достоверная expiry scoped SQL metadata; expired body не читается/не отдаётся, даже после purge |
+| last_observation_at | сохранённый last_confirmed_at в UTC только при CONFIRMED/RESULT_VERIFIED; иначе null; это историческая граница проверки |
+| observation_complete | false без пригодных полных Delivery readback attributes; одна дата/ID/финансовый результат их не заменяют |
+| available_actions | в этом срезе []: recovery handler и command-authority не подключены; это полный валидный ответ, не503 |
+| history_cursor | null для начального отдельного GET history; продолжение возвращает сам history endpoint |
 
-## History
+available_actions — пересечение реально подключённой команды, fresh command grant,
+той же установленной task identity и выполненных проверок. Право чтения не является
+таким grant. Единственный будущий кандидат RECHECK. Чистые unit-таблицы различают
+отсутствующую функцию, неизвестную доступность и установленный отказ; они не
+подключают recovery/разрешающий runtime port. ACTIVE не навязывается чтению или
+будущим допустимым проверкам PAUSED. Закрытые/исключённые дела не переоткрываются.
 
-| Поле | Источник/правило | Проверка |
-|---|---|---|
-| items | safety_history + history_content + реальный HISTORY envelope HIT-79 | Полные controlled records200; 100+2 по HTTPS/PG/content |
-| next_cursor | Подписанный scoped token по at,entry_id и snapshot upper bound; null в конце | Проверены оба ответа OAS, отсутствие повторов и подмена scope |
+## History / HistoryEntry
 
-## HistoryEntry
+| Поле | Источник и правило |
+|---|---|
+| items | safety_history + retained history_content metadata; пока body пригодно — integrity/owner checked HISTORY envelope HIT-79 |
+| next_cursor | scoped token по at,entry_id и snapshot; null в конце |
+| entry_id | safety_history.entry_id |
+| case_id | safety_history.case_id, сверка с URL и scoped case |
+| at | safety_history.at UTC; live envelope Decision.At сверяется с SQL precision (microseconds), без изменения сохранённой даты |
+| actor_kind | safety_history.actor_kind |
+| actor_id | safety_history.actor_id, SQL NULL→JSON null |
+| old_state | safety_history.old_state, SQL NULL→JSON null |
+| new_state | safety_history.new_state, обязательный допустимый enum; NULL/неизвестный→503 |
+| reason_code | safety_history.reason_code; для live body совпадает с Decision.Reason |
+| evidence_ref | safety_history.proof_ref, nullable opaque causal UUID, не provider URL |
+| episode_id | до expiry: сохранённый Decision.EpisodeID, принадлежность проверяется по scoped episodes; после expiry:null означает, что подробность не представлена, а не что эпизода не было |
+| expires_at | настоящий history_content.expires_at; проверены ref/hash/bytes/created_at/interval≤90d; никогда не вычисляется reader-ом как at+90d |
 
-| Поле | Реальный источник/правило | Поведение при недостатке |
-|---|---|---|
-| entry_id | safety_history.entry_id | UUID |
-| case_id | safety_history.case_id, сопоставление с URL/scoped case | Чужой case404, без раскрытия его существования |
-| at | safety_history.at, UTC; совпадает с Decision.At в content | Противоречие503 |
-| actor_kind | safety_history.actor_kind | SYSTEM/USER/PROVIDER/SUPPORT не переименовываются |
-| actor_id | safety_history.actor_id, присутствующий nullable UUID | SQL NULL остаётся JSON null |
-| old_state | safety_history.old_state, присутствующий nullable enum | SQL NULL остаётся JSON null |
-| new_state | safety_history.new_state, сверка с content Decision.State | NULL/неизвестный state503 |
-| reason_code | safety_history.reason_code, сверка с content Decision.Reason | Причина не выдумывается |
-| evidence_ref | safety_history.proof_ref, nullable opaque UUID | Это causal ref, а не проверенная provider ссылка |
-| episode_id | сохранённый Decision.EpisodeID в HISTORY envelope HIT-79; непустой ID проверяется по episodes того же workspace/case | Пустое записанное значение→null; чужая/неустановленная episode503 |
-| expires_at | history_content.expires_at, совпадающий с integrity-checked file metadata | Отсутствие/коррупция/expiry503, без at+90d default |
+Первый SIGNAL_ADMITTED теперь создаётся настоящим admission producer: одно DB
+clock_timestamp для case admission/event/content creation; durable HISTORY file
+fsync→rename→directory fsync до одного commit inbox/case/safety/history_content.
+Retention по умолчанию90d, явно заданная меньшая внутренняя retention допустима,
+но не задаётся через HTTP/signal. Повторы не меняют время/expiry и не пишут новый
+файл; ошибка или неизвестный commit не подтверждаются ACK.
 
-Старая SIGNAL_ADMITTED из HIT-78 не имеет history_content/expires_at: реальный
-negative test подтверждает503. Positive fixtures отдельно и явно создают metadata
-в свежем тестовом workspace; это не доказательство исправления старого writer.
-Expiry-on-read удаляет только проверенный собственный файл; case/safety_history
-и неизвестность внешнего эффекта не стираются.
+После достоверного now>=expires_at минимальный ответ использует только сохранённые
+safety/expiry metadata, без чтения body. Purge удаляет body, не metadata/safety.
+At/reason/actor/old/new/evidence/expiry сохраняются при повторе/перезапуске.
+Старые строки без metadata, повреждённая metadata и пропажа/коррупция ещё
+неистёкшего body дают503; старые данные не дополняются выдуманным сроком.
 
-## Ошибки и области доверия
+## Error и проверка
 
-Error соответствует принятому OAS: code/message/request_id, случайный UUID
-request_id, без payload/session/SQL diagnostics/чужого resource existence.
-401/403/400/404/503 различают отказ входа, scope и недоступность без выдуманной
-полноты. Cursor не даёт полномочий: fresh IAM port и общий epoch/actual-start
-gate проверяются для каждого чтения и начала ответа. SET LOCAL — только
-defense-in-depth после этой проверки.
+Error соответствует OAS: code/message/request_id; UUID создаётся случайно.
+Нет payload/session/SQL diagnostics/чужого resource existence. Проверены401/403/
+400/404/503, mTLS failure до handler и readonly/no cross-tenant leakage.
 
-Для case keyset snapshot ограничивает admission cohort, а state читается заново
-в каждой транзакции. Между HTTP-страницами не обещается один долгоживущий MVCC
-snapshot всех изменяемых полей. Для history используются append-only at/entry_id
-и тот же upper bound. Ключ курсоров должен быть явно предоставлен deployment;
-его нет в коде/логах. Ротация делает старые курсоры невалидными.
+См. actual captures и протоколы в verification-r3/, матрицу9 DoD в README.md.
+Сохранённые verification/ и supplemental/ относятся к прежней редакции2 и не
+переименованы в результаты текущей версии.

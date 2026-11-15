@@ -1,42 +1,61 @@
 {
   "task": "HIT-95",
-  "state": "PARTIAL_BLOCKED_SOURCE_GAPS",
-  "recorded_at": "2026-11-15T09:35:30.930317+00:00",
+  "contract_revision": 3,
+  "state": "LOCAL_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+  "recorded_at": "2026-11-15T14:36:51.846580+00:00",
+  "tested_code_sha": "15ed1e567907bee951715b3b025c657e2009044d",
+  "original_pr54_head": "45c6723543f6597f2b39161fb19545361a51d15e",
   "base_sha": "3bae6417421465868c432fe18b379d46be6144aa",
-  "tested_code_sha": "444aa011080cc7b321e3f37b0a0d0d5bb1f0e9de",
-  "actual_main_observed": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "lead_decision": {
+    "ref": "https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12640",
+    "actual_author_and_update_author": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1"
+  },
+  "ccr": {
+    "ref": "https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12646",
+    "actual_author_and_update_author": "712020:98d613f7-2ada-48c2-9ef5-04f0a11f63b1",
+    "contract_revision": 3,
+    "fingerprint": "7b8a260e956c9d8f0fa479eb9b30c24aae6b30aca2846f88935ba7ba6e648e48",
+    "protocol_sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+  },
   "reuse": {
-    "HIT-78": "Done, PR50 OPEN,c218eb3d87c1df51d999d955d263b9d410f77bd7 included in PR52 ancestry",
-    "HIT-79": "Done, PR52 OPEN, exact3bae641 reused; admission/financial/decision/outbox/content writer unchanged",
-    "HIT-80": "Separate PR53 preserved; optimization not repeated or force-integrated"
+    "HIT-78": "admission/identity/unique constraints/ACK, with explicitly authorized durable initial-history repair",
+    "HIT-79": "same HISTORY envelope and actual fsync/rename content store; pure financial/prepare implementations unchanged",
+    "HIT-80": "PR53 preserved; not reimplemented or force-integrated"
   },
-  "contract_revision": 2,
-  "protocol_pin": "685e797bf32f71fd4ca42cd5f594b80912736473",
-  "oas": {
-    "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
-    "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+  "source_locks": {
+    "oas": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+    "oas_sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e",
+    "processing_sql_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+    "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "security_adoption": "HIT-95/12254"
   },
-  "migration": {
-    "sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
-    "unchanged": true
+  "projections": {
+    "order_label": "exact service_label of case-pinned accepted config after workspace/operation/config join and JCS digest check;1..120 Unicode scalars, no controls, no fallback/truncation/normalization",
+    "next_action": "Lead base text + first priority1..9 + bounded real-producer catalog + current absent-feature explanation + no-create warning/knowledge wording;<=512 characters; no raw unknown diagnostics",
+    "available_actions": "[] in this slice: no recovery handler/command-authority is connected. Pure matrix tests do not wire a permissive runtime port.",
+    "access_priority": "No current HIT78/79 stored producer code specifically establishes an external access denial. READER_UNAVAILABLE/IDENTITY_MISMATCH are not fabricated into one; conditional priority6 is tested in the pure selector, current catalog is conservative.",
+    "history": "actual initial producer uses one DB clock_timestamp, existing durable HISTORY writer, same scoped SQL transaction of inbox/case/safety/history_content; unchanged expiry on duplicates; no ACK on failed/unknown commit",
+    "expired_history": "validate retained metadata first; now>=expires_at returns actual minimal safety fields without body IO, episode_id=null means omitted detail. Legacy missing/corrupt metadata and nonexpired missing/corrupt body503.",
+    "observation": "No new provider readback/URL inferred. last_confirmed_at preserved as historical boundary only with stored CONFIRMED/RESULT_VERIFIED; observation_complete remains false without retained qualified attributes; target_url null without verified URL source."
   },
-  "postgres_adoption": "https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12254",
-  "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
-  "user_decision": "2026-11-15 chat: no pinned order_label source/next_action rule exists; continue independent work, no invented values, SQL/OAS change, full DoD or READY; prepare specific Lead question.",
-  "not_registered_as_completed_result": true,
-  "environments": "Go1.27.2 darwin/arm64 host race/vet with DB tests explicitly skipped. Go1.27.2 linux/arm64 CGO0 actual isolated PG18.7+mTLS/content tests; no Linux race claim.",
-  "unchanged_code_proof": "supplemental/commands.json: migration, domain, financial/admission/preparation writers, go.mod/go.sum, other services, common CI unchanged.",
-  "schema_validation": "Stdlib closed subset validator of the exact OAS; unsupported schema keywords fail; real captured History200 x2, Cases200 empty filtered set only, Error503/400/403. No nonempty Cases/CaseDetail200 evidence invented.",
-  "source_gap_proof": {
-    "order_label": "No column/metadata emitted by78/79 for the required field. No synthetic service_label/SessionID/revision replacement.",
-    "next_action": "No accepted rule or emitted data. Presentation has no default; request fails503.",
-    "initial_history_expiry": "record.go admission writes safety_history without history_content. Expires_at is required in OAS; no at+90d fabrication. Such real predecessor histories fail503."
+  "qualification": {
+    "commands": "verification-r3/commands.json",
+    "summary": "verification-r3/summary.json",
+    "api_captures": "verification-r3/api-capture.json",
+    "all9_local_criteria_checked": true,
+    "official_ready_granted_by_this_document": false,
+    "host": "Go1.27.2 darwin/arm64 full race/vet; DB tests explicitly skip here",
+    "database": "Go1.27.2 linux/arm64 CGO0 on real owned PG18.7 and actual mTLS/content; not a Linux race run",
+    "source_scope_audit": "supplemental-r3/commands.json: formal SQL/OAS, domain/financial/admission app/prepare implementations, dependencies, other services/commonCI unchanged; only the expressly authorized initial storage producer changed"
   },
-  "test_fixture_note": "Positive history fixtures explicitly INSERT their own new history_content metadata and actual owner files in fresh owned DB. This is controlled complete input, not proof that the old admission writer supplies it. Existing test workspaces with unmodified admission rows are separately checked503.",
-  "runtime_limits": [
-    "No live IAM/BFF/browser, credentials, production runtime epoch/fencing or full integration qualification.",
-    "No working data or preexisting DSN accepted by runner; owned network-none container removed.",
-    "Private literal IP8443 composition only; loopback port0 solely for tests. No serving entry point with permissive authority/gate stubs."
+  "retention": "default90days ceiling; explicitly shorter internal retention can be injected for controlled qualification/deployment, never from HTTP/signal. New producer only; no fabricated legacy expiry or sliding TTL.",
+  "limits": [
+    "Local owner API and controlled authority/gate ports, no live IAM/BFF/browser/Stripe/ClickUp, credentials or production runtime fencing qualification.",
+    "Actual process crash after admission SQL commit and fresh reader/listener reopen tested; no physical power-loss/production RPO claim.",
+    "Old records without trusted metadata deliberately remain503, per Lead decision.",
+    "Expired detailed episode/attributes not re-created; history metadata and minimal safety state retained.",
+    "PR50/52 OPEN dependency stack is not merged main; agent does not merge or change Jira status. Independent review and human acceptance pending."
   ],
-  "full_dod_ready": false
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
 }
