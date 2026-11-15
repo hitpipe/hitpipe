@@ -95,7 +95,7 @@ func (s *Store) syncDir() error {
 	return f.Sync()
 }
 func validClass(c string) bool {
-	return c == "DELIVERY_INTENT" || c == "HISTORY" || c == "CASE_CONTEXT"
+	return c == "DELIVERY_INTENT" || c == "HISTORY" || c == "CASE_CONTEXT" || c == "DRAFT_DATA"
 }
 func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (preparecase.Ref, error) {
 	zero := preparecase.Ref{}

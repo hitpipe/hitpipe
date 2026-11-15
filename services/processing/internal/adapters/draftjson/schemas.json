@@ -1,0 +1,316 @@
+{
+  "CommandMeta": {
+    "additionalProperties": false,
+    "description": "Expected revision mandatory for existing mutable aggregate; header If-Match must agree if present. Stable request ID plus body digest defines command identity.",
+    "properties": {
+      "expected_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "request_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "request_id"
+    ],
+    "type": "object"
+  },
+  "DraftConfig": {
+    "additionalProperties": false,
+    "properties": {
+      "assignee_alias": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "destination_connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "draft_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "list_alias": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "mode": {
+        "enum": [
+          "TEST",
+          "LIVE"
+        ],
+        "type": "string"
+      },
+      "name": {
+        "maxLength": 120,
+        "minLength": 1,
+        "type": "string"
+      },
+      "price_alias": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "required_context_keys": {
+        "items": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "type": "string"
+        },
+        "maxItems": 20,
+        "type": "array",
+        "uniqueItems": true
+      },
+      "revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "service_label": {
+        "maxLength": 120,
+        "minLength": 1,
+        "type": "string"
+      },
+      "source_connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title_pattern": {
+        "enum": [
+          "SERVICE_ORDER"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "draft_id",
+      "revision",
+      "name"
+    ],
+    "type": "object"
+  },
+  "DraftWrite": {
+    "additionalProperties": false,
+    "properties": {
+      "command": {
+        "$ref": "#/components/schemas/CommandMeta"
+      },
+      "config": {
+        "$ref": "#/components/schemas/DraftConfig"
+      }
+    },
+    "required": [
+      "command",
+      "config"
+    ],
+    "type": "object"
+  },
+  "Error": {
+    "additionalProperties": false,
+    "description": "No secrets or other-workspace existence in error text. Unknown fields fail closed.",
+    "properties": {
+      "code": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "current_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "message": {
+        "maxLength": 512,
+        "type": "string"
+      },
+      "request_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "retry_after_seconds": {
+        "maximum": 3600,
+        "minimum": 0,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "request_id"
+    ],
+    "type": "object"
+  },
+  "ReadinessCheck": {
+    "additionalProperties": false,
+    "properties": {
+      "check_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "checked_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "config_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "draft_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "draft_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "expires_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "issues": {
+        "items": {
+          "$ref": "#/components/schemas/Error"
+        },
+        "maxItems": 100,
+        "type": "array"
+      },
+      "passed": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "check_id",
+      "draft_id",
+      "draft_revision",
+      "config_digest",
+      "passed",
+      "checked_at",
+      "expires_at",
+      "issues"
+    ],
+    "type": "object"
+  },
+  "ScenarioExample": {
+    "additionalProperties": false,
+    "properties": {
+      "amount_minor": {
+        "maximum": 9007199254740991,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "duplicate": {
+        "type": "boolean"
+      },
+      "missing_context_keys": {
+        "items": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 20,
+        "type": "array"
+      },
+      "paid": {
+        "type": "boolean"
+      },
+      "synthetic_session_alias": {
+        "pattern": "^example_[A-Za-z0-9_]+$",
+        "type": "string"
+      }
+    },
+    "required": [
+      "synthetic_session_alias",
+      "amount_minor",
+      "paid",
+      "duplicate",
+      "missing_context_keys"
+    ],
+    "type": "object"
+  },
+  "RehearsalRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "command": {
+        "$ref": "#/components/schemas/CommandMeta"
+      },
+      "draft_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "draft_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "examples": {
+        "items": {
+          "$ref": "#/components/schemas/ScenarioExample"
+        },
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array"
+      }
+    },
+    "required": [
+      "command",
+      "draft_id",
+      "draft_revision",
+      "examples"
+    ],
+    "type": "object"
+  },
+  "RehearsalResult": {
+    "additionalProperties": false,
+    "properties": {
+      "config_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "draft_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "draft_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "live_requests_made": {
+        "const": 0,
+        "type": "integer"
+      },
+      "rehearsal_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "results": {
+        "items": {
+          "enum": [
+            "WOULD_CONFIRM",
+            "WOULD_WAIT",
+            "WOULD_EXCLUDE",
+            "WOULD_HOLD_UNKNOWN"
+          ],
+          "type": "string"
+        },
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array"
+      }
+    },
+    "required": [
+      "rehearsal_id",
+      "draft_id",
+      "draft_revision",
+      "config_digest",
+      "results",
+      "live_requests_made"
+    ],
+    "type": "object"
+  }
+}
