@@ -9,6 +9,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
 	"github.com/hitpipe/hitpipe/services/processing/internal/testfixtures"
 	"net/http"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -222,4 +223,32 @@ func TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft(t *testing.T) {
 	}
 	f.counts(t, 1)
 	draftCapture(t, drafts.Save, status, saved, b, "expired_purged_reopened_no_fabricated_response")
+}
+
+func TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse(t *testing.T) {
+	f := newDraftFixture(t)
+	f.save(t)
+	rev := int64(1)
+	for _, n := range []int{1, 10, 0, 11} {
+		examples := make([]drafts.ScenarioExample, n)
+		for i := range examples {
+			examples[i] = drafts.ScenarioExample{SyntheticSessionAlias: "example_zero", AmountMinor: 0, Paid: false, Duplicate: false, MissingContextKeys: []string{}}
+		}
+		input := drafts.RehearsalRequest{Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: examples}
+		status, b := f.call(t, drafts.Rehearse, input, nil)
+		if n == 1 || n == 10 {
+			var out drafts.RehearsalResult
+			if status != 200 || json.Unmarshal(b, &out) != nil || len(out.Results) != n || out.LiveRequestsMade != 0 {
+				t.Fatal(n, status, string(b))
+			}
+			for _, v := range out.Results {
+				if v != "WOULD_WAIT" {
+					t.Fatal("known zero unpaid", v)
+				}
+			}
+		} else if status != 400 {
+			t.Fatal("array bound", n, status, string(b))
+		}
+		draftCapture(t, drafts.Rehearse, status, input, b, "rehearsal_array_"+strconv.Itoa(n))
+	}
 }
