@@ -37,6 +37,7 @@ func valid(t *testing.T) ([]byte, dispatchintent.Claim) {
 }
 func TestStrictIntentSchemaDigestAndPins(t *testing.T) {
 	b, c := valid(t)
+	c.DeadlineAt = c.DeadlineAt.Truncate(time.Microsecond) // actual timestamptz storage precision; original wire bytes remain intact
 	m, e := (Codec{}).Decode(b, c, time.Now())
 	if e != nil || string(m.Body) != string(b) {
 		t.Fatal("canonical rejected", e)

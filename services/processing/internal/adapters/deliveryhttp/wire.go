@@ -253,7 +253,7 @@ func (Codec) Decode(b []byte, c dispatchintent.Claim, now time.Time) (dispatchin
 	if json.Unmarshal(b, &p) != nil {
 		return fail()
 	}
-	if p.MessageId != c.MessageID || p.MessageDigest != c.Digest || p.WorkspaceId != c.WorkspaceID || p.CaseId != c.CaseID || p.OperationId != c.OperationID || p.ConfigId != c.ConfigID || p.ConfigDigest != c.ConfigDigest || p.LineageId != c.LineageID || p.MessageId != p.LineageId || p.EpisodeId != c.EpisodeID || p.ConnectionId != c.ConnectionID || p.ConnectionEpoch != c.Epoch || !p.DeadlineAt.Equal(c.DeadlineAt) || !now.Before(p.DeadlineAt) || !now.Before(p.FactsValidUntil) {
+	if p.MessageId != c.MessageID || p.MessageDigest != c.Digest || p.WorkspaceId != c.WorkspaceID || p.CaseId != c.CaseID || p.OperationId != c.OperationID || p.ConfigId != c.ConfigID || p.ConfigDigest != c.ConfigDigest || p.LineageId != c.LineageID || p.MessageId != p.LineageId || p.EpisodeId != c.EpisodeID || p.ConnectionId != c.ConnectionID || p.ConnectionEpoch != c.Epoch || !p.DeadlineAt.Truncate(time.Microsecond).Equal(c.DeadlineAt.Truncate(time.Microsecond)) || !now.Before(p.DeadlineAt) || !now.Before(p.FactsValidUntil) {
 		return fail()
 	}
 	values := map[string]string{}
@@ -268,7 +268,7 @@ func (Codec) Decode(b []byte, c dispatchintent.Claim, now time.Time) (dispatchin
 	if e != nil || len(canonical) > 32768 {
 		return fail()
 	}
-	return dispatchintent.Message{Body: append([]byte(nil), b...), FactsUntil: p.FactsValidUntil, Deadline: p.DeadlineAt}, nil
+	return dispatchintent.Message{Body: append([]byte(nil), b...), FactsUntil: p.FactsValidUntil, Deadline: c.DeadlineAt}, nil
 }
 func decodeReceipt(b []byte, id string) (dispatchintent.Receipt, error) {
 	v, e := parse(b)
