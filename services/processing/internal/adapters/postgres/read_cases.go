@@ -176,8 +176,12 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		}
 		rec.Summary.OrderLabel = labels.OrderLabel
 		rec.Summary.NextAction = labels.NextAction
-		// No Delivery observation consumer/verified URL producer is wired in these
-		// predecessors. A known task ID is not sufficient to fabricate either field.
+
+		observed, complete, target, err := db.observationView(ctx, tx, rec, r.WorkspaceID, now)
+		if err != nil {
+			return nil, err
+		}
+		rec.Summary.TargetURL = target
 		result.Items = append(result.Items, rec.Summary)
 		if r.Kind == readcases.Detail {
 			complete := readcases.ContextComplete(rec)
@@ -191,10 +195,6 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 				}
 				at := rec.LastConfirmedAt.UTC()
 				detail.LastObservationAt = &at
-			}
-			observed, complete, err := db.observationView(ctx, tx, rec, r.WorkspaceID, now)
-			if err != nil {
-				return nil, err
 			}
 			if observed != nil {
 				detail.LastObservationAt = observed

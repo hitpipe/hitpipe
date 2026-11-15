@@ -115,7 +115,7 @@ func (f observationFixture) observation(t *testing.T, kind string) observations.
 	message, _ := newID()
 	observation, _ := newID()
 	ref, _ := newID()
-	task := "controlled_task_001"
+	task := "86synthetic99"
 	yes := true
 	expiry := time.Now().Add(time.Hour)
 	return observations.TaskObservation{MessageID: message, SchemaVersion: "1.0", WorkspaceID: f.request.WorkspaceID, CaseID: f.request.CaseID, LineageID: f.lineage, EpisodeID: f.episode, ObservationID: observation, Knowledge: kind, TaskID: &task, ObservedAt: time.Now().UTC().Truncate(time.Microsecond), Complete: true, WorkspaceMatches: &yes, ListMatches: &yes, AssigneeMatches: &yes, TitleMatches: &yes, MarkerMatches: &yes, ContextMatches: &yes, ProofCode: "CONTROLLED_DELIVERY_READBACK", ProofDigest: "sha256:" + strings.Repeat("a", 64), EvidenceRef: &ref, EvidenceExpiresAt: &expiry}
@@ -275,7 +275,7 @@ func TestObservationRealMTLSPGCommitBeforeSenderACKAndReplay(t *testing.T) {
 		t.Fatal(state, outcome, revision, task, fenced, confirmed)
 	}
 	detail := f.readAPI(t, "verified_projection")
-	if detail.Case.State != "CONFIRMED" || detail.Case.Revision != 3 || detail.Case.OutcomeKnowledge != "RESULT_VERIFIED" || !detail.ObservationComplete || detail.LastObservationAt == nil || !detail.LastObservationAt.Equal(o.ObservedAt) {
+	if detail.Case.State != "CONFIRMED" || detail.Case.Revision != 3 || detail.Case.OutcomeKnowledge != "RESULT_VERIFIED" || detail.Case.TargetURL == nil || *detail.Case.TargetURL != "https://app.clickup.com/t/86synthetic99" || !detail.ObservationComplete || detail.LastObservationAt == nil || !detail.LastObservationAt.Equal(o.ObservedAt) {
 		t.Fatal(detail)
 	}
 	again := f.apply(t, o, 202, "same_message_original_receipt")
