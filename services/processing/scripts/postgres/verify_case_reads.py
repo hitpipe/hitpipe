@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import os
 import uuid
 import verify_preparation as preparation
 
@@ -19,8 +20,12 @@ class Run(preparation.Run):
   args=['hitpipe.task=HIT-95' if x in ('hitpipe.task=HIT-76','hitpipe.task=HIT-78','hitpipe.task=HIT-79') else x for x in args]
   if label=='postgres-storage-tests':
    args[2:2]=['-e','HIT95_SCHEMA_CAPTURE=/tmp/hit95-schema.json']
-  return super().command(label,args,*a,**kw)
+  result=super().command(label,args,*a,**kw)
+  self.records[-1]['environment']={k:os.environ.get(k,'<unset>') for k in ['PATH','GOTOOLCHAIN','GOMAXPROCS','CGO_ENABLED','GOFLAGS','GOEXPERIMENT','DOCKER_HOST']}
+  self.save()
+  return result
  def checks(self):
+  self.command('go-env',[self.go,'env','-json','GOOS','GOARCH','GOVERSION','CGO_ENABLED','GOFLAGS','GOEXPERIMENT'])
   super().checks()
   result=self.command('read-api-capture',['docker','exec',self.container,'cat','/tmp/hit95-schema.json'])
   (self.output/'api-capture.json').write_bytes(result.stdout)
