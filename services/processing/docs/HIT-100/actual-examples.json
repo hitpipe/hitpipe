@@ -1,0 +1,181 @@
+[
+  {
+    "actual_pg187_mtls_content": true,
+    "operation": "saveDraft",
+    "request": {
+      "command": {
+        "request_id": "4fac02ec-8312-43bd-9d49-ab72a8e20ad4"
+      },
+      "config": {
+        "assignee_alias": "Исполнитель стенда",
+        "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        "draft_id": "d01f696e-6cd0-4768-a708-c36efbc36e1c",
+        "list_alias": "Список примеров",
+        "mode": "TEST",
+        "name": "Синтетический частный черновик",
+        "price_alias": "Цена на русском",
+        "required_context_keys": [
+          "brief"
+        ],
+        "revision": 1,
+        "service_label": "Синтетическая услуга",
+        "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "title_pattern": "SERVICE_ORDER"
+      }
+    },
+    "response": {
+      "assignee_alias": "Исполнитель стенда",
+      "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "draft_id": "d01f696e-6cd0-4768-a708-c36efbc36e1c",
+      "list_alias": "Список примеров",
+      "mode": "TEST",
+      "name": "Синтетический частный черновик",
+      "price_alias": "Цена на русском",
+      "required_context_keys": [
+        "brief"
+      ],
+      "revision": 1,
+      "service_label": "Синтетическая услуга",
+      "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "title_pattern": "SERVICE_ORDER"
+    },
+    "scenario": "complete_draft_save",
+    "status": 201
+  },
+  {
+    "actual_pg187_mtls_content": true,
+    "operation": "getDraft",
+    "request": null,
+    "response": {
+      "assignee_alias": "Исполнитель стенда",
+      "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "draft_id": "ef9fbc6c-2d91-48db-a6d8-58779f47e9f3",
+      "list_alias": "Список примеров",
+      "mode": "TEST",
+      "name": "Синтетический частный черновик",
+      "price_alias": "Цена на русском",
+      "required_context_keys": [
+        "brief"
+      ],
+      "revision": 1,
+      "service_label": "Синтетическая услуга",
+      "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "title_pattern": "SERVICE_ORDER"
+    },
+    "scenario": "get_saved_draft",
+    "status": 200
+  },
+  {
+    "actual_pg187_mtls_content": true,
+    "operation": "checkDraftReadiness",
+    "request": {
+      "expected_revision": 1,
+      "request_id": "3a3b1de1-22ac-4ceb-98d9-dcad2e0d7188"
+    },
+    "response": {
+      "check_id": "ee23408f-59ff-464f-a9ee-19f40ecb4079",
+      "checked_at": "2026-11-15T19:52:43.957840584Z",
+      "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+      "draft_id": "ef9fbc6c-2d91-48db-a6d8-58779f47e9f3",
+      "draft_revision": 1,
+      "expires_at": "2026-11-15T19:52:44.45784Z",
+      "issues": [],
+      "passed": true
+    },
+    "scenario": "current_owner_bindings_verified",
+    "status": 200
+  },
+  {
+    "actual_pg187_mtls_content": true,
+    "operation": "rehearseDraft",
+    "request": {
+      "command": {
+        "expected_revision": 1,
+        "request_id": "79aed833-fd45-43b5-aece-f1efb4f71013"
+      },
+      "draft_id": "ef9fbc6c-2d91-48db-a6d8-58779f47e9f3",
+      "draft_revision": 1,
+      "examples": [
+        {
+          "amount_minor": 100,
+          "duplicate": false,
+          "missing_context_keys": [],
+          "paid": true,
+          "synthetic_session_alias": "example_paid"
+        },
+        {
+          "amount_minor": 100,
+          "duplicate": false,
+          "missing_context_keys": [],
+          "paid": false,
+          "synthetic_session_alias": "example_unpaid"
+        },
+        {
+          "amount_minor": 0,
+          "duplicate": false,
+          "missing_context_keys": [],
+          "paid": true,
+          "synthetic_session_alias": "example_zero"
+        },
+        {
+          "amount_minor": 100,
+          "duplicate": true,
+          "missing_context_keys": [],
+          "paid": true,
+          "synthetic_session_alias": "example_duplicate"
+        },
+        {
+          "amount_minor": 100,
+          "duplicate": false,
+          "missing_context_keys": [
+            "brief"
+          ],
+          "paid": true,
+          "synthetic_session_alias": "example_missing"
+        }
+      ]
+    },
+    "response": {
+      "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+      "draft_id": "ef9fbc6c-2d91-48db-a6d8-58779f47e9f3",
+      "draft_revision": 1,
+      "live_requests_made": 0,
+      "rehearsal_id": "018d47de-26b8-4093-89eb-512b55234320",
+      "results": [
+        "WOULD_CONFIRM",
+        "WOULD_WAIT",
+        "WOULD_EXCLUDE",
+        "WOULD_HOLD_UNKNOWN",
+        "WOULD_WAIT"
+      ]
+    },
+    "scenario": "synthetic_all_outcomes_zero_live_calls",
+    "status": 200
+  },
+  {
+    "actual_pg187_mtls_content": true,
+    "operation": "checkDraftReadiness",
+    "request": {
+      "expected_revision": 1,
+      "request_id": "c2b2d37b-744e-474c-b72a-8de78a3c782a"
+    },
+    "response": {
+      "check_id": "8c5a1cbb-61c0-48a1-936f-6562942c55fb",
+      "checked_at": "2026-11-15T19:52:43.996791751Z",
+      "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+      "draft_id": "75a2e36b-0c60-473d-a8a9-fbaa718a32de",
+      "draft_revision": 1,
+      "expires_at": "2026-11-15T19:52:44.496791Z",
+      "issues": [
+        {
+          "code": "OWNER_CHECK_UNAVAILABLE",
+          "message": "Draft configuration could not be verified",
+          "request_id": "c2b2d37b-744e-474c-b72a-8de78a3c782a"
+        }
+      ],
+      "passed": false
+    },
+    "scenario": "honest_negative_unavailable",
+    "status": 200
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "subject": "HIT-100",
+  "materialized_result": {
+    "summary": "Сохраняемые DraftConfig и четыре private HTTPS/mTLS операции: версия/CAS/idempotent full-response replay, current owner readiness и чистый synthetic rehearsal без активации.",
+    "tested_code_sha": "369a553aaddbc581e82d9bcf7203bbf2db9efd20",
+    "base_sha": "3bae6417421465868c432fe18b379d46be6144aa",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "contract_revision": 1,
+    "integration_state": "Dependent on OPEN PR52; predecessor and sibling PRs not merged main."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/drafts",
+    "services/processing/internal/adapters/drafthttp",
+    "services/processing/internal/adapters/draftjson",
+    "services/processing/internal/adapters/postgres/drafts*.go",
+    "services/processing/internal/adapters/contentfiles/draft.go and DRAFT_DATA class only in store.go",
+    "services/processing/internal/testfixtures/draft.go (test PKI only)",
+    "services/processing/scripts/postgres/verify_drafts.py",
+    "services/processing/tools/drafts/generate.py",
+    "services/processing/docs/HIT-100"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-100/README.md",
+    "field_map": "services/processing/docs/HIT-100/FIELD_MAP.md",
+    "commands": "services/processing/docs/HIT-100/verification/commands.json",
+    "review_commands": "services/processing/docs/HIT-100/verification/review-commands.json",
+    "full_go_race": "services/processing/docs/HIT-100/verification/go-race.stdout",
+    "full_postgres_tests": "services/processing/docs/HIT-100/verification/postgres-storage-tests.stdout",
+    "summary": "services/processing/docs/HIT-100/verification/summary.json",
+    "captures": "services/processing/docs/HIT-100/verification/api-captures.jsonl",
+    "source_audit": "services/processing/docs/HIT-100/source-audit.json",
+    "supplemental": "services/processing/docs/HIT-100/supplemental/commands.json",
+    "digests": "services/processing/docs/HIT-100/evidence-digests.json",
+    "result": "95-command full run PASS,5 supplemental commands exit0,61 real HTTP captures checked against exact OAS with3911 negative schema sensitivity cases. All8 DoD locally checked, official handoff/independent review separate.",
+    "environment": {
+      "host": "Go1.27.2 darwin/arm64 CGO1 full race/vet/build",
+      "database": "separate linux/arm64 CGO0 actual owned PG18.7; not Linux race",
+      "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f"
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Controlled authority/session/shared actual-start/owner bindings only; no live IAM/BFF/provider integration or credentials.",
+    "Explicit caller policy for bounded TTL/body/replay; no permissive authority defaults.",
+    "Expired/corrupt/missing owner content or bounded-ledger exhaustion returns503; historical full response does not renew check or authorize activation.",
+    "No activateOperation,accepted_configs write,ACTIVE operation,real case,DeliveryIntent,AI or provider calls. Future activation must fresh-check revision,digest,current context and expiry.",
+    "Process crash and IO/SQL ACK tested, not power-loss/SLA/load/deployment qualification.",
+    "Dependent OPEN stack, not main integration; agent does not merge, transition Jira or accept own work."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}
