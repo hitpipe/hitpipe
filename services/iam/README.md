@@ -2,7 +2,18 @@
 
 HIT-19 / Feature HIT-11, MANUAL_LAB_PR12. Author-owner: Дмитрий Карачебан; agent implementation: Codex. This is reusable IAM logic with a synthetic diagnostic executable, not a deployed authentication service.
 
-## Текущая доработка: HIT-81 — собственная схема базы
+## Текущая доработка: HIT-83 — создание сессии после проверенного входа
+
+Добавлены прикладное создание сессии и запись пользователя с сессией одной
+транзакцией. Переиспользованы схема HIT-81 и оптимизированное чтение HIT-82.
+Порядок подключения, проверки и границы результата:
+[`docs/SESSION_ISSUANCE_RU.md`](docs/SESSION_ISSUANCE_RU.md).
+
+```sh
+python3 services/iam/tools/check_session_issuance.py --evidence-dir /tmp/hit83-check
+```
+
+## Переиспользованный результат: HIT-81 — собственная схема базы
 
 Добавлены отдельная установка точной принятой схемы IAM и проверки изоляции
 данных на одноразовой PostgreSQL **18.7**. Роли владельца схемы, приложения,
