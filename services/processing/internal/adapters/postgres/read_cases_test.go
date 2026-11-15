@@ -485,7 +485,7 @@ func (g *readBoundary) Start(ctx context.Context, a readcases.Grant, phase strin
 
 func TestReadActualMTLSPostgresContentComposition(t *testing.T) {
 	f := prepared(t, []string{})
-	seedReadHistory(t, f, 2)
+	seedReadHistory(t, f, 102)
 	p := newReadPool(t, 1)
 	store := readStore(t, f, p)
 	g := &readBoundary{epoch: 7}
@@ -502,9 +502,12 @@ func TestReadActualMTLSPostgresContentComposition(t *testing.T) {
 	client := &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: roots, Certificates: []tls.Certificate{clientCert}, MinVersion: tls.VersionTLS13}}, Timeout: 3 * time.Second}
 	defer client.CloseIdleConnections()
 	captures := []map[string]any{}
-	for _, suffix := range []string{"/history", "", "?unused=1"} {
-		url := ts.URL + "/api/v1/workspaces/" + f.request.WorkspaceID + "/cases/" + f.request.CaseID + suffix
-		req, _ := http.NewRequest("GET", url, nil)
+	root := ts.URL + "/api/v1/workspaces/" + f.request.WorkspaceID + "/cases"
+	capture := func(operation, path string, want int, schema string) []byte {
+		req, e := http.NewRequest("GET", root+path, nil)
+		if e != nil {
+			t.Fatal(e)
+		}
 		req.Header.Set("X-HitPipe-Session", "synthetic-session")
 		res, e := client.Do(req)
 		if e != nil {
@@ -515,44 +518,39 @@ func TestReadActualMTLSPostgresContentComposition(t *testing.T) {
 		if e != nil {
 			t.Fatal(e)
 		}
-		want := 200
-		if suffix == "" {
-			want = 503
-		}
-		if suffix == "?unused=1" {
-			want = 400
-		}
-		if res.StatusCode != want {
-			t.Fatalf("%s status=%d body=%s", suffix, res.StatusCode, body)
+		if res.StatusCode != want || res.Header.Get("Cache-Control") != "no-store" {
+			t.Fatalf("%s status=%d want=%d body=%s", operation, res.StatusCode, want, body)
 		}
 		var payload any
 		if json.Unmarshal(body, &payload) != nil {
 			t.Fatal(string(body))
 		}
-		schema := "History"
-		if want != 200 {
-			schema = "Error"
-		}
-		captures = append(captures, map[string]any{"operation": "getCaseHistory", "status": want, "schema": schema, "body": payload, "local_actual_mtls_postgres_content": true})
+		captures = append(captures, map[string]any{"operation": operation, "status": want, "schema": schema, "body": payload, "local_actual_mtls_postgres_content": true})
+		return body
 	}
+	body := capture("getCaseHistory", "/"+f.request.CaseID+"/history", 200, "History")
+	var first readcases.HistoryView
+	if json.Unmarshal(body, &first) != nil || len(first.Items) != 100 || first.NextCursor == nil {
+		t.Fatal("missing bounded first page")
+	}
+	body = capture("getCaseHistory", "/"+f.request.CaseID+"/history?cursor="+*first.NextCursor, 200, "History")
+	var second readcases.HistoryView
+	if json.Unmarshal(body, &second) != nil || len(second.Items) != 2 || second.NextCursor != nil {
+		t.Fatal("wrong final page")
+	}
+	capture("getCase", "/"+f.request.CaseID, 503, "Error")
+	capture("listCases", "", 503, "Error")
+	capture("listCases", "?state=CONFIRMED", 200, "Cases")
+	capture("getCase", "/"+f.request.CaseID+"?unused=1", 400, "Error")
+	g.mu.Lock()
+	g.denyPhase = "RESPONSE_START"
+	g.mu.Unlock()
+	capture("getCaseHistory", "/"+f.request.CaseID+"/history", 403, "Error")
 	if output := os.Getenv("HIT95_SCHEMA_CAPTURE"); output != "" {
 		b, _ := json.MarshalIndent(captures, "", "  ")
 		if e = os.WriteFile(output, append(b, '\n'), 0600); e != nil {
 			t.Fatal(e)
 		}
-	}
-	g.mu.Lock()
-	g.denyPhase = "RESPONSE_START"
-	g.mu.Unlock()
-	req, _ := http.NewRequest("GET", ts.URL+"/api/v1/workspaces/"+f.request.WorkspaceID+"/cases/"+f.request.CaseID+"/history", nil)
-	req.Header.Set("X-HitPipe-Session", "synthetic-session")
-	res, e := client.Do(req)
-	if e != nil {
-		t.Fatal(e)
-	}
-	res.Body.Close()
-	if res.StatusCode != 403 {
-		t.Fatal("revoke allowed response", res.StatusCode)
 	}
 }
 
