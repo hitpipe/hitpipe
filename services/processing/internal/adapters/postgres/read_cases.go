@@ -177,7 +177,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 		rec.Summary.OrderLabel = labels.OrderLabel
 		rec.Summary.NextAction = labels.NextAction
 
-		observed, complete, target, err := db.observationView(ctx, tx, rec, r.WorkspaceID, now)
+		observed, observationComplete, target, err := db.observationView(ctx, tx, rec, r.WorkspaceID, now)
 		if err != nil {
 			return nil, err
 		}
@@ -198,7 +198,7 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 			}
 			if observed != nil {
 				detail.LastObservationAt = observed
-				detail.ObservationComplete = complete
+				detail.ObservationComplete = observationComplete
 			}
 		}
 	}

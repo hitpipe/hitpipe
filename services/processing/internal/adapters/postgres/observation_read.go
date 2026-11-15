@@ -13,9 +13,8 @@ import (
 )
 
 // Adds this producer's actual observation time/completeness to the existing
-// owner projection. It does not fetch Delivery evidence or construct a URL
-// absent from the accepted TaskObservation contract. Native task link uses
-// ClickUp's documented short internal route, only after complete verification.
+// owner projection. No Delivery evidence body or provider URL is fetched.
+// A fully verified native ID uses ClickUp's documented short internal route.
 func (db CaseReadStore) observationView(ctx context.Context, tx pgx.Tx, r readcases.Record, ws string, now time.Time) (*time.Time, bool, *string, error) {
 	var at time.Time
 	ref := preparecase.Ref{Class: "HISTORY"}
