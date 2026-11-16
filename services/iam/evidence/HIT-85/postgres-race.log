@@ -1,0 +1,1051 @@
+=== RUN   TestDiagnosticValid
+--- PASS: TestDiagnosticValid (0.01s)
+=== RUN   TestDiagnosticMalformedAndCanary
+=== RUN   TestDiagnosticMalformedAndCanary/broken
+=== RUN   TestDiagnosticMalformedAndCanary/trailing
+=== RUN   TestDiagnosticMalformedAndCanary/null_root
+=== RUN   TestDiagnosticMalformedAndCanary/case_mismatched_key
+=== RUN   TestDiagnosticMalformedAndCanary/nested_case
+=== RUN   TestDiagnosticMalformedAndCanary/invalid_UTF8
+=== RUN   TestDiagnosticMalformedAndCanary/duplicate
+=== RUN   TestDiagnosticMalformedAndCanary/large_offset
+=== RUN   TestDiagnosticMalformedAndCanary/extra
+=== RUN   TestDiagnosticMalformedAndCanary/missing_now
+=== RUN   TestDiagnosticMalformedAndCanary/oversize
+=== RUN   TestDiagnosticMalformedAndCanary/null_bool
+=== RUN   TestDiagnosticMalformedAndCanary/unknown_null_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/bad_version
+=== RUN   TestDiagnosticMalformedAndCanary/bad_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/comma_timestamp
+--- PASS: TestDiagnosticMalformedAndCanary (0.03s)
+    --- PASS: TestDiagnosticMalformedAndCanary/broken (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/trailing (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_root (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/case_mismatched_key (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/nested_case (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/invalid_UTF8 (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/duplicate (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/large_offset (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/extra (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/missing_now (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/oversize (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_bool (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/unknown_null_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_version (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/comma_timestamp (0.00s)
+=== RUN   TestDiagnosticConfigAndVersion
+--- PASS: TestDiagnosticConfigAndVersion (0.00s)
+=== RUN   TestDiagnosticDeniedIsSuccessfulEvaluation
+--- PASS: TestDiagnosticDeniedIsSuccessfulEvaluation (0.00s)
+=== RUN   TestDiagnosticCompositionAndUnavailableClock
+--- PASS: TestDiagnosticCompositionAndUnavailableClock (0.01s)
+=== RUN   TestOutputFailureReturnsErrorWithoutLeaking
+--- PASS: TestOutputFailureReturnsErrorWithoutLeaking (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.105s
+=== RUN   TestConnectionDiagnosticDoesNotExposeServerOrDSN
+--- PASS: TestConnectionDiagnosticDoesNotExposeServerOrDSN (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.027s
+=== RUN   TestSystemClockRequiresAttestation
+--- PASS: TestSystemClockRequiresAttestation (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.015s
+=== RUN   TestProfileContentStrictFormatAndExactDigest
+=== RUN   TestProfileContentStrictFormatAndExactDigest/trailing
+=== RUN   TestProfileContentStrictFormatAndExactDigest/duplicate
+=== RUN   TestProfileContentStrictFormatAndExactDigest/null
+=== RUN   TestProfileContentStrictFormatAndExactDigest/missing
+=== RUN   TestProfileContentStrictFormatAndExactDigest/fraction
+=== RUN   TestProfileContentStrictFormatAndExactDigest/empty
+=== RUN   TestProfileContentStrictFormatAndExactDigest/long_name
+=== RUN   TestProfileContentStrictFormatAndExactDigest/long_zone
+=== RUN   TestProfileContentStrictFormatAndExactDigest/unknown
+=== RUN   TestProfileContentStrictFormatAndExactDigest/unsafe_integer
+=== RUN   TestProfileContentStrictFormatAndExactDigest/invalid_UUID
+=== RUN   TestProfileContentStrictFormatAndExactDigest/invalid_UTF8
+=== RUN   TestProfileContentStrictFormatAndExactDigest/oversize
+--- PASS: TestProfileContentStrictFormatAndExactDigest (0.01s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/trailing (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/duplicate (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/null (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/missing (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/fraction (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/empty (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/long_name (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/long_zone (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/unknown (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/unsafe_integer (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/invalid_UUID (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/invalid_UTF8 (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/oversize (0.00s)
+=== RUN   TestProfileContentFilesystemBoundary
+=== RUN   TestProfileContentFilesystemBoundary/symlink
+=== RUN   TestProfileContentFilesystemBoundary/hardlink
+=== RUN   TestProfileContentFilesystemBoundary/directory
+=== RUN   TestProfileContentFilesystemBoundary/fifo
+=== RUN   TestProfileContentFilesystemBoundary/public_file
+=== RUN   TestProfileContentFilesystemBoundary/public_root
+=== RUN   TestProfileContentFilesystemBoundary/missing
+--- PASS: TestProfileContentFilesystemBoundary (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/symlink (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/hardlink (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/directory (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/fifo (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/public_file (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/public_root (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/missing (0.00s)
+=== RUN   TestProfileContentNoCachedFallbackAfterChange
+--- PASS: TestProfileContentNoCachedFallbackAfterChange (0.00s)
+=== RUN   TestProfileContentRejectsUnpairedUnicodeWithoutRepairingIt
+--- PASS: TestProfileContentRejectsUnpairedUnicodeWithoutRepairingIt (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/profilefiles	1.026s
+=== RUN   TestSameConsumerContractWithBothAdapters
+=== RUN   TestSameConsumerContractWithBothAdapters/file/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/file/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/file/error
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/error
+--- PASS: TestSameConsumerContractWithBothAdapters (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)
+=== RUN   TestFileReloadFixedOwnershipAndConcurrency
+--- PASS: TestFileReloadFixedOwnershipAndConcurrency (0.00s)
+=== RUN   TestAdapterFailureAndBoundaryInputs
+--- PASS: TestAdapterFailureAndBoundaryInputs (0.00s)
+=== RUN   TestReaderFailureAndUnknownProjection
+--- PASS: TestReaderFailureAndUnknownProjection (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.023s
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/global_profile_without_workspace
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/forged_browser_claims
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/wrong_session
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/revoked_session
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/disabled_principal
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/closed_runtime
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/missing_content
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/mismatched_digest
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/closed_gate
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/epoch_changes_during_content_read
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/database_unavailable
+--- PASS: TestProfileHTTPSPostgresAndOwnerFiles (0.96s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/global_profile_without_workspace (0.18s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/forged_browser_claims (0.12s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/wrong_session (0.08s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/revoked_session (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/disabled_principal (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/closed_runtime (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/missing_content (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/mismatched_digest (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/closed_gate (0.04s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/epoch_changes_during_content_read (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/database_unavailable (0.05s)
+=== RUN   TestProfileHTTPConfiguration
+--- PASS: TestProfileHTTPConfiguration (0.01s)
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/BFF
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/missing_certificate
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/foreign_CA
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/foreign_SAN
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/same_SAN_different_fingerprint
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/expired_certificate
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/TLS12
+--- PASS: TestProfileHTTPSMutualTLSBFFBinding (0.05s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/BFF (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/missing_certificate (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/foreign_CA (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/foreign_SAN (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/same_SAN_different_fingerprint (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/expired_certificate (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/TLS12 (0.00s)
+=== RUN   TestProfileHTTPErrorAndResponseStart
+=== RUN   TestProfileHTTPErrorAndResponseStart/missing_session
+=== RUN   TestProfileHTTPErrorAndResponseStart/forbidden_caller
+=== RUN   TestProfileHTTPErrorAndResponseStart/invalid_request
+=== RUN   TestProfileHTTPErrorAndResponseStart/database_or_content_failure
+=== RUN   TestProfileHTTPErrorAndResponseStart/cancelled
+=== RUN   TestProfileHTTPErrorAndResponseStart/no_emission
+=== RUN   TestProfileHTTPErrorAndResponseStart/invalid_profile
+=== RUN   TestProfileHTTPErrorAndResponseStart/error_after_emission
+=== RUN   TestProfileHTTPErrorAndResponseStart/second_emission
+--- PASS: TestProfileHTTPErrorAndResponseStart (0.08s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/missing_session (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/forbidden_caller (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/invalid_request (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/database_or_content_failure (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/cancelled (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/no_emission (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/invalid_profile (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/error_after_emission (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/second_emission (0.01s)
+=== RUN   TestProfileHTTPCredentialsAndRoutes
+=== RUN   TestProfileHTTPCredentialsAndRoutes/cookie_only
+=== RUN   TestProfileHTTPCredentialsAndRoutes/duplicate_credential
+=== RUN   TestProfileHTTPCredentialsAndRoutes/wrong_session_with_forged_identity
+=== RUN   TestProfileHTTPCredentialsAndRoutes/write_method
+=== RUN   TestProfileHTTPCredentialsAndRoutes/another_route
+=== RUN   TestProfileHTTPCredentialsAndRoutes/client-selected_principal
+=== RUN   TestProfileHTTPCredentialsAndRoutes/claims_do_not_replace_session_identity
+--- PASS: TestProfileHTTPCredentialsAndRoutes (0.06s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/cookie_only (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/duplicate_credential (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/wrong_session_with_forged_identity (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/write_method (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/another_route (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/client-selected_principal (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/claims_do_not_replace_session_identity (0.01s)
+=== RUN   TestProfileHTTPBoundedWriteAndUnsupportedWriter
+--- PASS: TestProfileHTTPBoundedWriteAndUnsupportedWriter (0.03s)
+=== RUN   TestProfileHTTPRechecksCertificateBeforeResponseStart
+--- PASS: TestProfileHTTPRechecksCertificateBeforeResponseStart (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/profile	2.232s
+=== RUN   TestPostgresAuthorizationCurrentProjectionAndIsolation
+--- PASS: TestPostgresAuthorizationCurrentProjectionAndIsolation (0.12s)
+=== RUN   TestPostgresAuthorizationFreshCommittedChanges
+--- PASS: TestPostgresAuthorizationFreshCommittedChanges (0.12s)
+=== RUN   TestPostgresAuthorizationScopeEpochsRemainSeparate
+--- PASS: TestPostgresAuthorizationScopeEpochsRemainSeparate (0.11s)
+=== RUN   TestPostgresAuthorizationConcurrentFreshSnapshots
+--- PASS: TestPostgresAuthorizationConcurrentFreshSnapshots (0.25s)
+=== RUN   TestPostgresAuthorizationCancellationFailureAndPoolAuthority
+=== RUN   TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_ADMIN_DSN
+=== RUN   TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_WORKER_DSN
+=== RUN   TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_PURGE_DSN
+=== RUN   TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_MIGRATOR_DSN
+--- PASS: TestPostgresAuthorizationCancellationFailureAndPoolAuthority (2.28s)
+    --- PASS: TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_ADMIN_DSN (0.02s)
+    --- PASS: TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_WORKER_DSN (0.02s)
+    --- PASS: TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_TEST_PURGE_DSN (0.06s)
+    --- PASS: TestPostgresAuthorizationCancellationFailureAndPoolAuthority/HITPIPE_IAM_MIGRATOR_DSN (0.02s)
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CONFIG_WRITE
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CONNECTOR_WRITE
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CASE_READ
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CASE_READ
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CASE_RECOVER
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CONFIG_WRITE
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CONNECTOR_WRITE
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CASE_READ
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CONFIG_READ
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CASE_RECOVER
+=== RUN   TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CONFIG_WRITE
+--- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix (0.17s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CONFIG_WRITE (0.05s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CONNECTOR_WRITE (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OWNER/CASE_READ (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CASE_READ (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CASE_RECOVER (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CONFIG_WRITE (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/OPERATOR/CONNECTOR_WRITE (0.00s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CASE_READ (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CONFIG_READ (0.01s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CASE_RECOVER (0.00s)
+    --- PASS: TestPostgresAuthorizationRoleActionWorkspaceMatrix/READER/CONFIG_WRITE (0.00s)
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/unknown-session
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/disabled
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/revoked-session
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/expired
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/revoked-membership
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/new-session-epoch
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/new-workspace-epoch
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-closed
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-syncing
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-fenced
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-new-boot
+=== RUN   TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-new-generation
+--- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate (1.28s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/unknown-session (0.05s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/disabled (0.15s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/revoked-session (0.17s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/expired (0.10s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/revoked-membership (0.12s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/new-session-epoch (0.09s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/new-workspace-epoch (0.09s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-closed (0.08s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-syncing (0.10s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-fenced (0.11s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-new-boot (0.10s)
+    --- PASS: TestPostgresAuthorizationFreshDenialsAndCurrentEpochGate/runtime-new-generation (0.10s)
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/SESSION/PENDING
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/SESSION/INCIDENT
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/MEMBERSHIP/PENDING
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/MEMBERSHIP/INCIDENT
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/CONNECTION/PENDING
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/CONNECTION/INCIDENT
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/WORKSPACE/PENDING
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/WORKSPACE/INCIDENT
+=== RUN   TestPostgresAuthorizationTypedRevocationAdmission/effective-needs-exact-explicit-overlay
+--- PASS: TestPostgresAuthorizationTypedRevocationAdmission (0.85s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/SESSION/PENDING (0.09s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/SESSION/INCIDENT (0.11s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/MEMBERSHIP/PENDING (0.10s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/MEMBERSHIP/INCIDENT (0.08s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/CONNECTION/PENDING (0.10s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/CONNECTION/INCIDENT (0.08s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/WORKSPACE/PENDING (0.09s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/WORKSPACE/INCIDENT (0.09s)
+    --- PASS: TestPostgresAuthorizationTypedRevocationAdmission/effective-needs-exact-explicit-overlay (0.11s)
+=== RUN   TestPostgresAuthorizationOwnerProofBindingAndCallerIdentity
+--- PASS: TestPostgresAuthorizationOwnerProofBindingAndCallerIdentity (0.10s)
+=== RUN   TestPostgresAuthorizationRechecksAfterOwnerWait
+=== RUN   TestPostgresAuthorizationRechecksAfterOwnerWait/write-becomes-forbidden
+=== RUN   TestPostgresAuthorizationRechecksAfterOwnerWait/old-proof-from-different-role
+--- PASS: TestPostgresAuthorizationRechecksAfterOwnerWait (0.20s)
+    --- PASS: TestPostgresAuthorizationRechecksAfterOwnerWait/write-becomes-forbidden (0.09s)
+    --- PASS: TestPostgresAuthorizationRechecksAfterOwnerWait/old-proof-from-different-role (0.10s)
+=== RUN   TestPostgresAuthorizationSharedLocalGateSerializesRevoke
+--- PASS: TestPostgresAuthorizationSharedLocalGateSerializesRevoke (0.11s)
+=== RUN   TestPostgresAuthorizationUnrelatedConnectionIsNotAuthority
+--- PASS: TestPostgresAuthorizationUnrelatedConnectionIsNotAuthority (0.29s)
+=== RUN   TestPostgresAuthorizationSessionDenyUnknownWorkspaceRelation
+--- PASS: TestPostgresAuthorizationSessionDenyUnknownWorkspaceRelation (0.25s)
+=== RUN   TestReaderConfigurationAndInput
+--- PASS: TestReaderConfigurationAndInput (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	7.163s
+=== RUN   TestIAMSchemaMigrationRepeatOnFreshConnection
+--- PASS: TestIAMSchemaMigrationRepeatOnFreshConnection (0.66s)
+=== RUN   TestIAMSchemaMigrationAtomicDDLFailure
+--- PASS: TestIAMSchemaMigrationAtomicDDLFailure (0.50s)
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/foreign_owner
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/partial_schema
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/unknown_version
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/missing_rls
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/weakened_policy
+=== RUN   TestIAMSchemaMigrationRefusesInvalidExistingState/widened_grant
+--- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState (2.93s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/foreign_owner (0.28s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/partial_schema (0.26s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/unknown_version (0.50s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/missing_rls (0.52s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/weakened_policy (0.62s)
+    --- PASS: TestIAMSchemaMigrationRefusesInvalidExistingState/widened_grant (0.74s)
+=== RUN   TestIAMSchemaMigrationRefusesRuntimeAndOpenTransaction
+--- PASS: TestIAMSchemaMigrationRefusesRuntimeAndOpenTransaction (0.31s)
+=== RUN   TestIAMSchemaMigrationRejectsUnsafeDefaultPrivileges
+--- PASS: TestIAMSchemaMigrationRejectsUnsafeDefaultPrivileges (0.25s)
+=== RUN   TestIAMSchemaMigrationConcurrentInstall
+--- PASS: TestIAMSchemaMigrationConcurrentInstall (0.40s)
+=== RUN   TestAcceptedMigrationBytes
+--- PASS: TestAcceptedMigrationBytes (0.00s)
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/app
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/worker
+=== RUN   TestIAMSchemaRoleSeparationAndOwnership/purge
+--- PASS: TestIAMSchemaRoleSeparationAndOwnership (0.18s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/app (0.02s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/worker (0.05s)
+    --- PASS: TestIAMSchemaRoleSeparationAndOwnership/purge (0.06s)
+=== RUN   TestIAMSchemaRuntimePrivilegeMatrix
+--- PASS: TestIAMSchemaRuntimePrivilegeMatrix (0.06s)
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/purge
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/app
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/worker
+=== RUN   TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/purge
+--- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation (0.97s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/worker (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/workspaces/purge (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/worker (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/memberships/purge (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/owner_transfers/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/app (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/external_bindings/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/worker (0.04s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_overlays/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/deletion_receipts/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/support_grants/purge (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/command_receipts/purge (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/app (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/audit_minimal/purge (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/app (0.02s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/worker (0.03s)
+    --- PASS: TestIAMSchemaTenantRLSReadAndWriteIsolation/outbox/purge (0.02s)
+=== RUN   TestIAMSchemaOwnerCannotBypassForcedRLS
+--- PASS: TestIAMSchemaOwnerCannotBypassForcedRLS (0.09s)
+=== RUN   TestIAMSchemaSetLocalDoesNotLeakAcrossTransactions
+--- PASS: TestIAMSchemaSetLocalDoesNotLeakAcrossTransactions (0.12s)
+=== RUN   TestIAMSchemaGlobalTablesAreIAMAuthorityWithoutTenantFiction
+--- PASS: TestIAMSchemaGlobalTablesAreIAMAuthorityWithoutTenantFiction (0.21s)
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/worker
+=== RUN   TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/purge
+--- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly (0.25s)
+    --- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/worker (0.03s)
+    --- PASS: TestIAMSchemaJobIndexIsWorkerAndPurgeOnly/purge (0.03s)
+=== RUN   TestIAMSchemaGlobalUniquenessAndForeignKeys
+--- PASS: TestIAMSchemaGlobalUniquenessAndForeignKeys (0.16s)
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/session_hash=decode('00','hex')
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/csrf_hash=decode('00','hex')
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/epoch=0
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/expires_at=created_at
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/session/idle_expires_at=expires_at+interval_'1_microsecond'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/epoch=0
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/deadline_at=accepted_at+interval_'6_seconds'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/status='EFFECTIVE'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/effective_at=accepted_at
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/scope='UNSUPPORTED'
+=== RUN   TestIAMSchemaSessionAndRevocationConstraints/revocation/status='UNSUPPORTED'
+--- PASS: TestIAMSchemaSessionAndRevocationConstraints (0.15s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/session_hash=decode('00','hex') (0.01s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/csrf_hash=decode('00','hex') (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/epoch=0 (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/expires_at=created_at (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/session/idle_expires_at=expires_at+interval_'1_microsecond' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/epoch=0 (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/deadline_at=accepted_at+interval_'6_seconds' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/status='EFFECTIVE' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/effective_at=accepted_at (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/scope='UNSUPPORTED' (0.00s)
+    --- PASS: TestIAMSchemaSessionAndRevocationConstraints/revocation/status='UNSUPPORTED' (0.00s)
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/audit_minimal
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/command_receipts
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/audit_minimal
+=== RUN   TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/command_receipts
+--- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts (0.31s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/audit_minimal (0.05s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/app/command_receipts (0.06s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/audit_minimal (0.02s)
+    --- PASS: TestIAMSchemaAppendOnlyAuditAndCommandReceipts/worker/command_receipts (0.02s)
+=== RUN   TestIAMSchemaCommitIsDurableAndFailedTransactionLeavesNoPartialWrite
+--- PASS: TestIAMSchemaCommitIsDurableAndFailedTransactionLeavesNoPartialWrite (0.13s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	8.733s
+=== RUN   TestPostgresProfileGlobalSessionOwnerProjection
+--- PASS: TestPostgresProfileGlobalSessionOwnerProjection (0.13s)
+=== RUN   TestPostgresProfileFreshMetadataAndNullableContent
+--- PASS: TestPostgresProfileFreshMetadataAndNullableContent (0.10s)
+=== RUN   TestPostgresProfileExactSessionRevocations
+--- PASS: TestPostgresProfileExactSessionRevocations (0.13s)
+=== RUN   TestPostgresProfileConcurrentConsistentSnapshots
+--- PASS: TestPostgresProfileConcurrentConsistentSnapshots (0.36s)
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_ADMIN_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_WORKER_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_PURGE_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_MIGRATOR_DSN
+--- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure (2.27s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_ADMIN_DSN (0.02s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_WORKER_DSN (0.03s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_PURGE_DSN (0.05s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_MIGRATOR_DSN (0.03s)
+=== RUN   TestProfileReaderConfigurationAndInput
+--- PASS: TestProfileReaderConfigurationAndInput (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/profile	4.031s
+=== RUN   TestHIT82LatencySamples
+    lookup_benchmark_integration_test.go:392: set HITPIPE_IAM_BENCH_OUTPUT_DIR to retain real latency observations
+--- SKIP: TestHIT82LatencySamples (0.00s)
+=== RUN   TestPostgresExactSnapshotAndExistingConsumer
+--- PASS: TestPostgresExactSnapshotAndExistingConsumer (0.02s)
+=== RUN   TestPostgresMissingSessionIsNotFound
+--- PASS: TestPostgresMissingSessionIsNotFound (0.02s)
+=== RUN   TestPostgresNextReadObservesRevocation
+--- PASS: TestPostgresNextReadObservesRevocation (0.02s)
+=== RUN   TestPostgresReadsNeverModifyOrRenewSession
+--- PASS: TestPostgresReadsNeverModifyOrRenewSession (0.06s)
+=== RUN   TestPostgresErrorsAreSanitizedAndNeverValid
+--- PASS: TestPostgresErrorsAreSanitizedAndNeverValid (0.03s)
+=== RUN   TestPostgresInFlightCancellationFailsClosed
+--- PASS: TestPostgresInFlightCancellationFailsClosed (0.09s)
+=== RUN   TestPostgresInternalDeadlineBoundsBlockedRead
+--- PASS: TestPostgresInternalDeadlineBoundsBlockedRead (2.05s)
+=== RUN   TestPostgresConcurrentReadsReturnIndependentValues
+--- PASS: TestPostgresConcurrentReadsReturnIndependentValues (0.07s)
+=== RUN   TestPostgresCancelledContextAndClosedPool
+--- PASS: TestPostgresCancelledContextAndClosedPool (0.07s)
+=== RUN   TestReferenceUsesExactOpaqueSecret
+--- PASS: TestReferenceUsesExactOpaqueSecret (0.00s)
+=== RUN   TestNewRejectsMissingOrOversizedPool
+--- PASS: TestNewRejectsMissingOrOversizedPool (0.00s)
+=== RUN   TestZeroLookupFailsClosed
+--- PASS: TestZeroLookupFailsClosed (0.00s)
+=== RUN   TestDecodeReferenceAcceptsExactLowercaseDigests
+--- PASS: TestDecodeReferenceAcceptsExactLowercaseDigests (0.00s)
+=== RUN   TestDecodeReferenceRejectsEveryNonLowercaseHexByteAtEveryPosition
+--- PASS: TestDecodeReferenceRejectsEveryNonLowercaseHexByteAtEveryPosition (0.01s)
+=== RUN   TestDecodeReferenceLengthUnicodeAndFormatting
+--- PASS: TestDecodeReferenceLengthUnicodeAndFormatting (0.00s)
+=== RUN   TestDecodeReferenceMatchesLegacyDeterministicCorpus
+--- PASS: TestDecodeReferenceMatchesLegacyDeterministicCorpus (0.11s)
+=== RUN   TestLookupCancellationPrecedesReferenceValidation
+--- PASS: TestLookupCancellationPrecedesReferenceValidation (0.00s)
+=== RUN   TestLookupReferenceValidationAndUnavailableDoNotExposeInput
+--- PASS: TestLookupReferenceValidationAndUnavailableDoNotExposeInput (0.00s)
+=== RUN   FuzzDecodeReferenceMatchesLegacy
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#0
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#1
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#2
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#3
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#4
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#5
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#6
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#7
+=== RUN   FuzzDecodeReferenceMatchesLegacy/seed#8
+--- PASS: FuzzDecodeReferenceMatchesLegacy (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#0 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#1 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#2 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#3 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#4 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#5 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#6 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#7 (0.00s)
+    --- PASS: FuzzDecodeReferenceMatchesLegacy/seed#8 (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	3.580s
+=== RUN   TestDependenciesAndInvalidRequests
+--- PASS: TestDependenciesAndInvalidRequests (0.00s)
+=== RUN   TestPortErrorsDoNotAllowOrLeak
+=== RUN   TestPortErrorsDoNotAllowOrLeak/lookup
+=== RUN   TestPortErrorsDoNotAllowOrLeak/clock
+=== RUN   TestPortErrorsDoNotAllowOrLeak/untrusted
+=== RUN   TestPortErrorsDoNotAllowOrLeak/zero_clock
+--- PASS: TestPortErrorsDoNotAllowOrLeak (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/lookup (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/clock (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/untrusted (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/zero_clock (0.00s)
+=== RUN   TestClockReadAfterLookupAndCancellation
+=== RUN   TestClockReadAfterLookupAndCancellation/none
+=== RUN   TestClockReadAfterLookupAndCancellation/before
+=== RUN   TestClockReadAfterLookupAndCancellation/lookup
+=== RUN   TestClockReadAfterLookupAndCancellation/clock
+--- PASS: TestClockReadAfterLookupAndCancellation (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/none (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/before (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/lookup (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/clock (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.025s
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/missing_resource
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/missing_action
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/unknown_field
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/duplicate_field
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/unknown_action
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/null_workspace
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/bad_resource
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/array_resource
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/number_action
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/trailing_object
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/top_null
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/top_array
+=== RUN   TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/truncated
+--- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/missing_resource (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/missing_action (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/unknown_field (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/duplicate_field (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/unknown_action (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/null_workspace (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/bad_resource (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/array_resource (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/number_action (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/trailing_object (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/top_null (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/top_array (0.00s)
+    --- PASS: TestRequestJSONRequiresNullResourceAndRejectsAmbiguity/truncated (0.00s)
+=== RUN   TestMandatoryPortsAndZeroValue
+--- PASS: TestMandatoryPortsAndZeroValue (0.00s)
+=== RUN   TestValidReplyReusesConsumerAndKeepsScopeEpochsSeparate
+--- PASS: TestValidReplyReusesConsumerAndKeepsScopeEpochsSeparate (0.00s)
+=== RUN   TestRoleActionMatrix
+=== RUN   TestRoleActionMatrix/OWNER/PROFILE_READ
+=== RUN   TestRoleActionMatrix/OWNER/PROFILE_WRITE
+=== RUN   TestRoleActionMatrix/OWNER/WORKSPACE_READ
+=== RUN   TestRoleActionMatrix/OWNER/WORKSPACE_MANAGE
+=== RUN   TestRoleActionMatrix/OWNER/CONFIG_READ
+=== RUN   TestRoleActionMatrix/OWNER/CONFIG_WRITE
+=== RUN   TestRoleActionMatrix/OWNER/ACTIVATE
+=== RUN   TestRoleActionMatrix/OWNER/CASE_READ
+=== RUN   TestRoleActionMatrix/OWNER/CASE_CONTEXT_WRITE
+=== RUN   TestRoleActionMatrix/OWNER/CASE_RECOVER
+=== RUN   TestRoleActionMatrix/OWNER/OWNER_CLOSE
+=== RUN   TestRoleActionMatrix/OWNER/EXPORT
+=== RUN   TestRoleActionMatrix/OWNER/CONNECTOR_READ
+=== RUN   TestRoleActionMatrix/OWNER/CONNECTOR_WRITE
+=== RUN   TestRoleActionMatrix/OWNER/AI_PREPARE
+=== RUN   TestRoleActionMatrix/OPERATOR/PROFILE_READ
+=== RUN   TestRoleActionMatrix/OPERATOR/PROFILE_WRITE
+=== RUN   TestRoleActionMatrix/OPERATOR/WORKSPACE_READ
+=== RUN   TestRoleActionMatrix/OPERATOR/WORKSPACE_MANAGE
+=== RUN   TestRoleActionMatrix/OPERATOR/CONFIG_READ
+=== RUN   TestRoleActionMatrix/OPERATOR/CONFIG_WRITE
+=== RUN   TestRoleActionMatrix/OPERATOR/ACTIVATE
+=== RUN   TestRoleActionMatrix/OPERATOR/CASE_READ
+=== RUN   TestRoleActionMatrix/OPERATOR/CASE_CONTEXT_WRITE
+=== RUN   TestRoleActionMatrix/OPERATOR/CASE_RECOVER
+=== RUN   TestRoleActionMatrix/OPERATOR/OWNER_CLOSE
+=== RUN   TestRoleActionMatrix/OPERATOR/EXPORT
+=== RUN   TestRoleActionMatrix/OPERATOR/CONNECTOR_READ
+=== RUN   TestRoleActionMatrix/OPERATOR/CONNECTOR_WRITE
+=== RUN   TestRoleActionMatrix/OPERATOR/AI_PREPARE
+=== RUN   TestRoleActionMatrix/READER/PROFILE_READ
+=== RUN   TestRoleActionMatrix/READER/PROFILE_WRITE
+=== RUN   TestRoleActionMatrix/READER/WORKSPACE_READ
+=== RUN   TestRoleActionMatrix/READER/WORKSPACE_MANAGE
+=== RUN   TestRoleActionMatrix/READER/CONFIG_READ
+=== RUN   TestRoleActionMatrix/READER/CONFIG_WRITE
+=== RUN   TestRoleActionMatrix/READER/ACTIVATE
+=== RUN   TestRoleActionMatrix/READER/CASE_READ
+=== RUN   TestRoleActionMatrix/READER/CASE_CONTEXT_WRITE
+=== RUN   TestRoleActionMatrix/READER/CASE_RECOVER
+=== RUN   TestRoleActionMatrix/READER/OWNER_CLOSE
+=== RUN   TestRoleActionMatrix/READER/EXPORT
+=== RUN   TestRoleActionMatrix/READER/CONNECTOR_READ
+=== RUN   TestRoleActionMatrix/READER/CONNECTOR_WRITE
+=== RUN   TestRoleActionMatrix/READER/AI_PREPARE
+--- PASS: TestRoleActionMatrix (0.01s)
+    --- PASS: TestRoleActionMatrix/OWNER/PROFILE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/PROFILE_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/WORKSPACE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/WORKSPACE_MANAGE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CONFIG_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CONFIG_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/ACTIVATE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CASE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CASE_CONTEXT_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CASE_RECOVER (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/OWNER_CLOSE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/EXPORT (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CONNECTOR_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/CONNECTOR_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OWNER/AI_PREPARE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/PROFILE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/PROFILE_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/WORKSPACE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/WORKSPACE_MANAGE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CONFIG_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CONFIG_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/ACTIVATE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CASE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CASE_CONTEXT_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CASE_RECOVER (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/OWNER_CLOSE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/EXPORT (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CONNECTOR_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/CONNECTOR_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/OPERATOR/AI_PREPARE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/PROFILE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/PROFILE_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/WORKSPACE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/WORKSPACE_MANAGE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CONFIG_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CONFIG_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/ACTIVATE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CASE_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CASE_CONTEXT_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CASE_RECOVER (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/OWNER_CLOSE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/EXPORT (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CONNECTOR_READ (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/CONNECTOR_WRITE (0.00s)
+    --- PASS: TestRoleActionMatrix/READER/AI_PREPARE (0.00s)
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/public_UUID
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/short
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/long
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/workspace
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/runtime
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/resource
+=== RUN   TestInvalidInputAndCancellationDoNotReadAuthority/action
+--- PASS: TestInvalidInputAndCancellationDoNotReadAuthority (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/public_UUID (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/short (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/long (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/workspace (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/runtime (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/resource (0.00s)
+    --- PASS: TestInvalidInputAndCancellationDoNotReadAuthority/action (0.00s)
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/unknown_session
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/revoked_session
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/expired_session
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/idle_expired
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/fresh_session_revoked
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/fresh_session_unknown
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_epoch
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/unsafe_epoch
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_revision
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/principal_disabled
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/principal_unknown
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_principal
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_membership
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_workspace
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_membership_scope
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/invited
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/revoked
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/unknown_role
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/deleting_workspace
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/deleted_workspace
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_closed
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_fenced
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_unknown
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_generation
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_boot
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_certificate
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/browser_caller
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_caller_runtime
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_generation
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/untrusted_clock
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_clock
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/lookup_error
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/reader_error
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/caller_error
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/clock_error
+=== RUN   TestInvalidCurrentFactsAndInfrastructureFailClosed/owner_error
+--- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/unknown_session (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/revoked_session (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/expired_session (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/idle_expired (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/fresh_session_revoked (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/fresh_session_unknown (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_epoch (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/unsafe_epoch (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_revision (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/principal_disabled (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/principal_unknown (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_principal (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_membership (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_workspace (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/foreign_membership_scope (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/invited (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/revoked (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/unknown_role (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/deleting_workspace (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/deleted_workspace (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_closed (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_fenced (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/runtime_unknown (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_generation (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_boot (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_certificate (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/browser_caller (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/wrong_caller_runtime (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_generation (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/untrusted_clock (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/zero_clock (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/lookup_error (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/reader_error (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/caller_error (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/clock_error (0.00s)
+    --- PASS: TestInvalidCurrentFactsAndInfrastructureFailClosed/owner_error (0.00s)
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/unknown
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/foreign_actor
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/foreign_scope
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/foreign_resource
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/different_action
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/missing_purpose
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/wrong_purpose
+=== RUN   TestRoleCannotReplaceExactOwnerResourceProof/deferred_purpose
+--- PASS: TestRoleCannotReplaceExactOwnerResourceProof (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/unknown (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/foreign_actor (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/foreign_scope (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/foreign_resource (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/different_action (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/missing_purpose (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/wrong_purpose (0.00s)
+    --- PASS: TestRoleCannotReplaceExactOwnerResourceProof/deferred_purpose (0.00s)
+=== RUN   TestRetainedRecoveryAndLifecycleCommands
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/PAUSE
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/PREPARE_RESUME
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/ACCEPT_RESUME
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/ARCHIVE
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/#00
+=== RUN   TestRetainedRecoveryAndLifecycleCommands/DELETE
+--- PASS: TestRetainedRecoveryAndLifecycleCommands (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/PAUSE (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/PREPARE_RESUME (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/ACCEPT_RESUME (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/ARCHIVE (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/#00 (0.00s)
+    --- PASS: TestRetainedRecoveryAndLifecycleCommands/DELETE (0.00s)
+=== RUN   TestGateRequiresExactBindingCurrentWorkspaceEpochAndFinalSuccess
+--- PASS: TestGateRequiresExactBindingCurrentWorkspaceEpochAndFinalSuccess (0.00s)
+=== RUN   TestFreshReadsAfterOwnerWaitCatchChanges
+--- PASS: TestFreshReadsAfterOwnerWaitCatchChanges (0.00s)
+=== RUN   TestGateWaitPrecedesAllReads
+--- PASS: TestGateWaitPrecedesAllReads (0.00s)
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/SESSIONPENDING
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/SESSIONINCIDENT
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/WORKSPACEPENDING
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/WORKSPACEINCIDENT
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/MEMBERSHIPPENDING
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/MEMBERSHIPINCIDENT
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/CONNECTIONPENDING
+=== RUN   TestRevocationScopeAndHistoryAreNotFlattened/CONNECTIONINCIDENT
+--- PASS: TestRevocationScopeAndHistoryAreNotFlattened (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/SESSIONPENDING (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/SESSIONINCIDENT (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/WORKSPACEPENDING (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/WORKSPACEINCIDENT (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/MEMBERSHIPPENDING (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/MEMBERSHIPINCIDENT (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/CONNECTIONPENDING (0.00s)
+    --- PASS: TestRevocationScopeAndHistoryAreNotFlattened/CONNECTIONINCIDENT (0.00s)
+=== RUN   TestFinalClockAndCancellationWithholdGrant
+=== RUN   TestFinalClockAndCancellationWithholdGrant/clock_error
+=== RUN   TestFinalClockAndCancellationWithholdGrant/untrusted
+=== RUN   TestFinalClockAndCancellationWithholdGrant/expired
+=== RUN   TestFinalClockAndCancellationWithholdGrant/backwards
+=== RUN   TestFinalClockAndCancellationWithholdGrant/cancel
+=== RUN   TestFinalClockAndCancellationWithholdGrant/cancel_after_callback
+--- PASS: TestFinalClockAndCancellationWithholdGrant (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/clock_error (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/untrusted (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/expired (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/backwards (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/cancel (0.00s)
+    --- PASS: TestFinalClockAndCancellationWithholdGrant/cancel_after_callback (0.00s)
+=== RUN   TestOnboardingAndUppercaseUUIDs
+--- PASS: TestOnboardingAndUppercaseUUIDs (0.00s)
+=== RUN   TestConcurrentChecksAfterCommittedMembershipRevoke
+--- PASS: TestConcurrentChecksAfterCommittedMembershipRevoke (0.00s)
+=== RUN   TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead
+=== RUN   TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead/CASE_READ
+=== RUN   TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead/CONFIG_READ
+--- PASS: TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead (0.00s)
+    --- PASS: TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead/CASE_READ (0.00s)
+    --- PASS: TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead/CONFIG_READ (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.044s
+=== RUN   TestRequiresEveryPortAndZeroServiceCannotEmit
+--- PASS: TestRequiresEveryPortAndZeroServiceCannotEmit (0.00s)
+=== RUN   TestOwnGlobalProfileEmitsInsideGateFromCurrentPrincipal
+--- PASS: TestOwnGlobalProfileEmitsInsideGateFromCurrentPrincipal (0.00s)
+=== RUN   TestMissingSessionInvalidCallerAndCancellationDoNotEmit
+--- PASS: TestMissingSessionInvalidCallerAndCancellationDoNotEmit (0.00s)
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/revoked_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/expired_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/legacy_lookup_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_missing
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_revoked
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_expired
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/disabled_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/mismatched_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_epoch
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_epoch
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/CLOSED_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SYNCING_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/FENCED_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/old_runtime_generation
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_boot
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_cert
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_profile_ref
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_digest
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_digest
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SQL_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/content_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/untrusted_clock
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_clock
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/clock_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unverified_content_user
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_name
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_name
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_UTF8
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_timezone
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_timezone
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_revision
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_revision
+--- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit (0.01s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/revoked_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/expired_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/legacy_lookup_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_missing (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_revoked (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_expired (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/disabled_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/mismatched_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_epoch (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_epoch (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/CLOSED_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SYNCING_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/FENCED_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/old_runtime_generation (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_boot (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_cert (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_profile_ref (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_digest (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_digest (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SQL_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/content_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/untrusted_clock (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_clock (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/clock_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unverified_content_user (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_name (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_name (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_UTF8 (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_timezone (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_timezone (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_revision (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_revision (0.00s)
+=== RUN   TestSessionDenyCannotDisappearThroughWorkspaceFilter
+--- PASS: TestSessionDenyCannotDisappearThroughWorkspaceFilter (0.00s)
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_reference
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_digest
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_switched
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_switched
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/epoch_changed
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_revoked
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_disabled
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/runtime_fenced
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_lifetime_changed
+--- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_reference (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_digest (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_switched (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_switched (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/epoch_changed (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_revoked (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_disabled (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/runtime_fenced (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_lifetime_changed (0.00s)
+=== RUN   TestAdmissionBindingConfirmationAndFinalClock
+--- PASS: TestAdmissionBindingConfirmationAndFinalClock (0.00s)
+=== RUN   TestCancelDuringContentOrConfirmationPreventsResponse
+--- PASS: TestCancelDuringContentOrConfirmationPreventsResponse (0.00s)
+=== RUN   TestEmitterAndPostCallbackErrorsNeverCauseASecondResponse
+--- PASS: TestEmitterAndPostCallbackErrorsNeverCauseASecondResponse (0.00s)
+=== RUN   TestCriticalBudgetIsRealAndCannotBeRemovedByGate
+--- PASS: TestCriticalBudgetIsRealAndCannotBeRemovedByGate (2.00s)
+=== RUN   TestConcurrentReadsAfterCommittedSessionRevokeCannotEmit
+--- PASS: TestConcurrentReadsAfterCommittedSessionRevokeCannotEmit (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/getprofile	3.058s
+=== RUN   TestEvaluateValid
+--- PASS: TestEvaluateValid (0.00s)
+=== RUN   TestEvaluateUnknown
+--- PASS: TestEvaluateUnknown (0.00s)
+=== RUN   TestEvaluateIdleBoundary
+=== RUN   TestEvaluateIdleBoundary/before
+=== RUN   TestEvaluateIdleBoundary/equal
+=== RUN   TestEvaluateIdleBoundary/after
+--- PASS: TestEvaluateIdleBoundary (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/before (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/equal (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/after (0.00s)
+=== RUN   TestEvaluateAbsoluteBoundary
+--- PASS: TestEvaluateAbsoluteBoundary (0.00s)
+=== RUN   TestEvaluateRevoked
+--- PASS: TestEvaluateRevoked (0.00s)
+=== RUN   TestEvaluateInvalidChronology
+=== RUN   TestEvaluateInvalidChronology/zero_creation
+=== RUN   TestEvaluateInvalidChronology/zero_absolute
+=== RUN   TestEvaluateInvalidChronology/zero_idle
+=== RUN   TestEvaluateInvalidChronology/idle_exceeds_absolute
+=== RUN   TestEvaluateInvalidChronology/lifetime_above_cap
+=== RUN   TestEvaluateInvalidChronology/absolute_equals_creation
+=== RUN   TestEvaluateInvalidChronology/idle_equals_creation
+=== RUN   TestEvaluateInvalidChronology/far_future
+=== RUN   TestEvaluateInvalidChronology/unsupported_year
+--- PASS: TestEvaluateInvalidChronology (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_idle (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_exceeds_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/lifetime_above_cap (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/absolute_equals_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_equals_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/far_future (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/unsupported_year (0.00s)
+=== RUN   TestEvaluateClockAndFutureCreation
+--- PASS: TestEvaluateClockAndFutureCreation (0.00s)
+=== RUN   TestEvaluateDeterministicImmutable
+--- PASS: TestEvaluateDeterministicImmutable (0.00s)
+=== RUN   TestEvaluateRenewedIdleAndOffsets
+--- PASS: TestEvaluateRenewedIdleAndOffsets (0.00s)
+=== RUN   TestDecisionRejectsMixedStateAndReason
+--- PASS: TestDecisionRejectsMixedStateAndReason (0.00s)
+=== RUN   TestDecisionTablePrecedence
+--- PASS: TestDecisionTablePrecedence (0.00s)
+=== RUN   FuzzValidityInvariants
+=== RUN   FuzzValidityInvariants/seed#0
+=== RUN   FuzzValidityInvariants/seed#1
+=== RUN   FuzzValidityInvariants/seed#2
+=== RUN   FuzzValidityInvariants/seed#3
+=== RUN   FuzzValidityInvariants/seed#4
+--- PASS: FuzzValidityInvariants (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#0 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#1 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#2 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#3 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#4 (0.00s)
+=== RUN   ExampleEvaluate
+--- PASS: ExampleEvaluate (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.020s
