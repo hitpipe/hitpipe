@@ -19,6 +19,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession"
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction"
 	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -77,7 +78,20 @@ func (db authorityDatabase) exec(t *testing.T, sql string, args ...any) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if _, err := db.admin.Exec(ctx, sql, args...); err != nil {
-		t.Fatal("isolated authority fixture statement failed; values withheld")
+		state := "non-postgres"
+		var postgresError *pgconn.PgError
+		if errors.As(err, &postgresError) && len(postgresError.Code) == 5 {
+			safe := true
+			for _, c := range []byte(postgresError.Code) {
+				if !(c >= '0' && c <= '9' || c >= 'A' && c <= 'Z') {
+					safe = false
+				}
+			}
+			if safe {
+				state = postgresError.Code
+			}
+		}
+		t.Fatalf("isolated authority fixture statement failed: SQLSTATE=%s statement_sha256=%x; values withheld", state, sha256.Sum256([]byte(sql)))
 	}
 }
 
@@ -96,7 +110,7 @@ func (db authorityDatabase) seed(t *testing.T) authorityFixture {
 	csrf := sha256.Sum256([]byte("HIT84-SYNTHETIC-CSRF-" + authorityUUID(t)))
 	foreign := sha256.Sum256([]byte("HIT84-SYNTHETIC-FOREIGN-" + authorityUUID(t)))
 	for _, principal := range []string{f.principal, f.foreignPrincipal} {
-		db.exec(t, `INSERT INTO hp_iam.principals(principal_id,oidc_issuer,oidc_subject,created_at) VALUES($1,'https://issuer.invalid',$1::text,$2)`, principal, f.now.Add(-time.Minute))
+		db.exec(t, `INSERT INTO hp_iam.principals(principal_id,oidc_issuer,oidc_subject,created_at) VALUES($1::uuid,'https://issuer.invalid',$2::text,$3::timestamptz)`, principal, principal, f.now.Add(-time.Minute))
 	}
 	for _, s := range []struct {
 		id, principal string
@@ -111,7 +125,7 @@ func (db authorityDatabase) seed(t *testing.T) authorityFixture {
 		db.exec(t, `INSERT INTO hp_iam.memberships(workspace_id,principal_id,role,status,revision,accepted_at) VALUES($1,$2,'OWNER','ACTIVE',5,$3)`, m.workspace, m.principal, f.now)
 	}
 	for _, b := range []struct{ workspace, grant string }{{f.workspace, f.grant}, {f.foreignWorkspace, f.foreignGrant}} {
-		db.exec(t, `INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1,$2,'STRIPE',$2::text,false,'PAID_ORDER_TASK_V1','VERIFIED',17,$3,$3)`, b.workspace, b.grant, f.now)
+		db.exec(t, `INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1::uuid,$2::uuid,'STRIPE',$3::text,false,'PAID_ORDER_TASK_V1','VERIFIED',17,$4::timestamptz,$4::timestamptz)`, b.workspace, b.grant, b.grant, f.now)
 	}
 	f.caller = authorizeaction.Caller{Service: "BFF", RuntimeID: f.runtime, BootID: f.boot, Generation: 11, CertificateFingerprint: "sha256:" + strings.Repeat("a", 64)}
 	db.exec(t, `INSERT INTO hp_iam.runtime_registry(runtime_id,service,generation,boot_id,certificate_fingerprint,status,registered_at,last_observed_at) VALUES($1,'BFF',11,$2,$3,'OPEN',$4,$4)`, f.runtime, f.boot, f.caller.CertificateFingerprint, f.now)
@@ -789,7 +803,7 @@ func TestPostgresAuthorizationUnrelatedConnectionIsNotAuthority(t *testing.T) {
 	db := authorityDB(t)
 	f := db.seed(t)
 	otherGrant := authorityUUID(t)
-	db.exec(t, `INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1,$2,'STRIPE',$2::text,false,'PAID_ORDER_TASK_V1','VERIFIED',91,$3,$3)`, f.workspace, otherGrant, f.now)
+	db.exec(t, `INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1::uuid,$2::uuid,'STRIPE',$3::text,false,'PAID_ORDER_TASK_V1','VERIFIED',91,$4::timestamptz,$4::timestamptz)`, f.workspace, otherGrant, otherGrant, f.now)
 	db.revoke(t, f, "CONNECTION", f.workspace, otherGrant, "PENDING", 92)
 	// The owner attests grant A. A revoke for grant B in the same workspace must
 	// neither block A nor be included as A's grant/epoch in Confirm.
