@@ -25,13 +25,13 @@
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_response
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking
---- PASS: TestActivationCurrentEvidenceAndAuthorityFailures (0.46s)
+--- PASS: TestActivationCurrentEvidenceAndAuthorityFailures (0.45s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_absent (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_unknown (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/role (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace (0.01s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/browser_authority (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/request_id (0.02s)
     --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/confirm (0.02s)
@@ -65,7 +65,7 @@
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/prepared
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary
---- PASS: TestActivationExistingOperationRevisionAndFirstBoundary (0.13s)
+--- PASS: TestActivationExistingOperationRevisionAndFirstBoundary (0.12s)
     --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision (0.02s)
     --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/stale (0.02s)
     --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/if_match (0.02s)
@@ -79,25 +79,25 @@
 === RUN   TestActivationFileAndCommitFailureRecovery/directory-fsync
 === RUN   TestActivationFileAndCommitFailureRecovery/commit_abort
 === RUN   TestActivationFileAndCommitFailureRecovery/commit_ack_loss
---- PASS: TestActivationFileAndCommitFailureRecovery (0.19s)
+--- PASS: TestActivationFileAndCommitFailureRecovery (0.20s)
     --- PASS: TestActivationFileAndCommitFailureRecovery/write (0.03s)
     --- PASS: TestActivationFileAndCommitFailureRecovery/file-fsync (0.03s)
     --- PASS: TestActivationFileAndCommitFailureRecovery/rename (0.03s)
     --- PASS: TestActivationFileAndCommitFailureRecovery/directory-fsync (0.03s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_abort (0.03s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_abort (0.04s)
     --- PASS: TestActivationFileAndCommitFailureRecovery/commit_ack_loss (0.03s)
 === RUN   TestActivationProcessCrashAfterCommit
---- PASS: TestActivationProcessCrashAfterCommit (0.06s)
+--- PASS: TestActivationProcessCrashAfterCommit (0.04s)
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root
---- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs (0.28s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired (0.09s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged (0.11s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response (0.04s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root (0.04s)
+--- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs (0.11s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired (0.03s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged (0.03s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response (0.03s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root (0.03s)
 === RUN   TestActivationTLSCallerAndRouteBoundaries
 === RUN   TestActivationTLSCallerAndRouteBoundaries/intake
 === RUN   TestActivationTLSCallerAndRouteBoundaries/delivery
@@ -105,7 +105,7 @@
 === RUN   TestActivationTLSCallerAndRouteBoundaries/no_cert
 === RUN   TestActivationTLSCallerAndRouteBoundaries/wrong_ca
 === RUN   TestActivationTLSCallerAndRouteBoundaries/wrong_server
---- PASS: TestActivationTLSCallerAndRouteBoundaries (0.03s)
+--- PASS: TestActivationTLSCallerAndRouteBoundaries (0.02s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/intake (0.00s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/delivery (0.00s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/expired (0.00s)
@@ -122,6 +122,8 @@
 === RUN   TestActivationNoStaleOrFabricatedPreparation/changed_original_examples
 === RUN   TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_price
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_list
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_assignee
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_destination
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_account
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_mode
@@ -129,33 +131,35 @@
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_principal
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_epoch
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_expired
---- PASS: TestActivationNoStaleOrFabricatedPreparation (0.71s)
+--- PASS: TestActivationNoStaleOrFabricatedPreparation (0.40s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/incomplete (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/failed_check (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_check (0.09s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal (0.14s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_result (0.06s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_original_examples (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.03s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/failed_check (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_check (0.03s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal (0.03s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_result (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_original_examples (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.02s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.03s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_list (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_assignee (0.02s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_destination (0.02s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_account (0.02s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_mode (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_workspace (0.11s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_principal (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.03s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_workspace (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_principal (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.02s)
 === RUN   TestActivationMissingPortsDenyAndForeignRLS
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/absent_grant
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/expired_grant
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/closed_gate
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch
---- PASS: TestActivationMissingPortsDenyAndForeignRLS (0.11s)
+--- PASS: TestActivationMissingPortsDenyAndForeignRLS (0.09s)
     --- PASS: TestActivationMissingPortsDenyAndForeignRLS/absent_grant (0.02s)
     --- PASS: TestActivationMissingPortsDenyAndForeignRLS/expired_grant (0.02s)
     --- PASS: TestActivationMissingPortsDenyAndForeignRLS/closed_gate (0.02s)
-    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch (0.03s)
+    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch (0.02s)
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup/public
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup/port
@@ -187,7 +191,7 @@
 === RUN   TestAdmissionActivationBoundary/exact
 === RUN   TestAdmissionActivationBoundary/after
 === RUN   TestAdmissionActivationBoundary/old_session_late_payment
---- PASS: TestAdmissionActivationBoundary (0.03s)
+--- PASS: TestAdmissionActivationBoundary (0.02s)
     --- PASS: TestAdmissionActivationBoundary/before (0.01s)
     --- PASS: TestAdmissionActivationBoundary/exact (0.01s)
     --- PASS: TestAdmissionActivationBoundary/after (0.01s)
@@ -208,14 +212,14 @@
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
 === RUN   TestAdmissionRejectsContextAndLocalState/missing_time
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
---- PASS: TestAdmissionRejectsContextAndLocalState (0.08s)
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.07s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/paused (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/draft (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/missing_config (0.01s)
@@ -223,7 +227,7 @@
     --- PASS: TestAdmissionRejectsContextAndLocalState/stale_revision (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
 === RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
 --- PASS: TestAdmissionReplayAfterLifecycleAndNewConnection (0.01s)
 === RUN   TestAdmissionCommitFailureNeverAcknowledges
@@ -233,15 +237,15 @@
 === RUN   TestAdmissionConcurrentAndDigestConflict
 --- PASS: TestAdmissionConcurrentAndDigestConflict (0.01s)
 === RUN   TestDraftCommandConflictVersionCASAndHistoricalReplay
---- PASS: TestDraftCommandConflictVersionCASAndHistoricalReplay (0.04s)
+--- PASS: TestDraftCommandConflictVersionCASAndHistoricalReplay (0.03s)
 === RUN   TestDraftConcurrentCASAndSameCommand
 === RUN   TestDraftConcurrentCASAndSameCommand/conflicting_revisions
 === RUN   TestDraftConcurrentCASAndSameCommand/same_command
---- PASS: TestDraftConcurrentCASAndSameCommand (0.06s)
+--- PASS: TestDraftConcurrentCASAndSameCommand (0.05s)
     --- PASS: TestDraftConcurrentCASAndSameCommand/conflicting_revisions (0.03s)
-    --- PASS: TestDraftConcurrentCASAndSameCommand/same_command (0.03s)
+    --- PASS: TestDraftConcurrentCASAndSameCommand/same_command (0.02s)
 === RUN   TestDraftExpiryReplayDoesNotRenewPositiveReadiness
---- PASS: TestDraftExpiryReplayDoesNotRenewPositiveReadiness (0.63s)
+--- PASS: TestDraftExpiryReplayDoesNotRenewPositiveReadiness (0.64s)
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_root
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root
@@ -249,7 +253,7 @@
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_full_response
 --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed (0.08s)
-    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/missing_root (0.01s)
+    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/missing_root (0.02s)
     --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root (0.01s)
     --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/bad_digest (0.01s)
     --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref (0.02s)
@@ -259,15 +263,15 @@
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/rename
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync
---- PASS: TestDraftFileDurabilityFailureRollsBackMetadata (0.07s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/write (0.02s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync (0.02s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/rename (0.02s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync (0.02s)
+--- PASS: TestDraftFileDurabilityFailureRollsBackMetadata (0.05s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/write (0.01s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync (0.01s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/rename (0.01s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync (0.01s)
 === RUN   TestDraftSQLCommitAckLossRestoresFullResponse
---- PASS: TestDraftSQLCommitAckLossRestoresFullResponse (0.02s)
+--- PASS: TestDraftSQLCommitAckLossRestoresFullResponse (0.01s)
 === RUN   TestDraftProcessCrashAfterCommit
---- PASS: TestDraftProcessCrashAfterCommit (0.03s)
+--- PASS: TestDraftProcessCrashAfterCommit (0.02s)
 === RUN   TestDraftApplicationRolePoolAndCancellation
 --- PASS: TestDraftApplicationRolePoolAndCancellation (0.01s)
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart
@@ -284,7 +288,7 @@
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/closed_gate
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/non_invoking_gate
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/response_gate
---- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart (0.06s)
+--- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart (0.05s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_session (0.00s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/invalid_session (0.00s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_csrf (0.00s)
@@ -313,11 +317,11 @@
 === RUN   TestDraftReadRolesAndForeignDraftScope
 --- PASS: TestDraftReadRolesAndForeignDraftScope (0.02s)
 === RUN   TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck
---- PASS: TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck (0.03s)
+--- PASS: TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck (0.02s)
 === RUN   TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft
---- PASS: TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft (0.62s)
+--- PASS: TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft (0.63s)
 === RUN   TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse
---- PASS: TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse (0.02s)
+--- PASS: TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse (0.03s)
 === RUN   TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart
 --- PASS: TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart (0.03s)
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness
@@ -326,14 +330,14 @@
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/denied
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port
---- PASS: TestDraftHonestIncompleteAndUnavailableReadiness (0.08s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/incomplete (0.02s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/unavailable (0.02s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/denied (0.02s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof (0.02s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port (0.02s)
+--- PASS: TestDraftHonestIncompleteAndUnavailableReadiness (0.06s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/incomplete (0.01s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/unavailable (0.01s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/denied (0.01s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof (0.01s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port (0.01s)
 === RUN   TestPreparationPaidReplayAndRestart
---- PASS: TestPreparationPaidReplayAndRestart (0.02s)
+--- PASS: TestPreparationPaidReplayAndRestart (0.01s)
 === RUN   TestPreparationUnpaidThenPaidSamePins
 --- PASS: TestPreparationUnpaidThenPaidSamePins (0.01s)
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled
@@ -348,13 +352,13 @@
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read
---- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.09s)
+--- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.07s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/unknown (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/expired (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/cancel (0.01s)
-    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/authority (0.01s)
-    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/epoch (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/authority (0.00s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/epoch (0.00s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/pause (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/stale_case (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source (0.01s)
@@ -367,16 +371,16 @@
 === RUN   TestPreparationCommitFailureAndLostAck/lost_ack_after_commit
 --- PASS: TestPreparationCommitFailureAndLostAck (0.03s)
     --- PASS: TestPreparationCommitFailureAndLostAck/rollback_at_commit (0.02s)
-    --- PASS: TestPreparationCommitFailureAndLostAck/lost_ack_after_commit (0.02s)
+    --- PASS: TestPreparationCommitFailureAndLostAck/lost_ack_after_commit (0.01s)
 === RUN   TestPreparationActualReaderNoNetworkUnderRowLock
---- PASS: TestPreparationActualReaderNoNetworkUnderRowLock (0.02s)
+--- PASS: TestPreparationActualReaderNoNetworkUnderRowLock (0.01s)
 === RUN   TestPreparationFileFaultsBeforeSQL
 === RUN   TestPreparationFileFaultsBeforeSQL/write
 === RUN   TestPreparationFileFaultsBeforeSQL/file-fsync
 === RUN   TestPreparationFileFaultsBeforeSQL/rename
 === RUN   TestPreparationFileFaultsBeforeSQL/directory-fsync
 === RUN   TestPreparationFileFaultsBeforeSQL/history-file
---- PASS: TestPreparationFileFaultsBeforeSQL (0.04s)
+--- PASS: TestPreparationFileFaultsBeforeSQL (0.03s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/write (0.01s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/file-fsync (0.01s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/rename (0.01s)
@@ -390,7 +394,7 @@
 === RUN   TestPreparationContentAvailabilityAndGuards/expired
 === RUN   TestPreparationContentAvailabilityAndGuards/possible_effect
 === RUN   TestPreparationContentAvailabilityAndGuards/existing_task
---- PASS: TestPreparationContentAvailabilityAndGuards (0.07s)
+--- PASS: TestPreparationContentAvailabilityAndGuards (0.06s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/valid_context (0.01s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/short_context (0.01s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/missing (0.01s)
@@ -401,7 +405,7 @@
 === RUN   TestPreparationProcessCrashAfterSQLCommit
 --- PASS: TestPreparationProcessCrashAfterSQLCommit (0.02s)
 === RUN   TestRecordCommitRepeatConflictAndReconnect
---- PASS: TestRecordCommitRepeatConflictAndReconnect (0.03s)
+--- PASS: TestRecordCommitRepeatConflictAndReconnect (0.02s)
 === RUN   TestRecordRollbackAndCommitFailure
 === RUN   TestRecordRollbackAndCommitFailure/rollback
 === RUN   TestRecordRollbackAndCommitFailure/commit_failure
@@ -413,7 +417,7 @@
 === RUN   TestRecordConcurrentIdentityAndMessage
 === RUN   TestRecordConcurrentIdentityAndMessage/two_messages
 === RUN   TestRecordConcurrentIdentityAndMessage/same_message
---- PASS: TestRecordConcurrentIdentityAndMessage (0.02s)
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.01s)
     --- PASS: TestRecordConcurrentIdentityAndMessage/two_messages (0.01s)
     --- PASS: TestRecordConcurrentIdentityAndMessage/same_message (0.01s)
 === RUN   TestRecordRLSRejectsForeignWorkspace

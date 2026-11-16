@@ -9,7 +9,7 @@
 === RUN   TestOutputFailure
 --- PASS: TestOutputFailure (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck	1.217s
+ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck	1.226s
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/activationhttp	[no test files]
 === RUN   TestDurableContentAndRestart
 --- PASS: TestDurableContentAndRestart (0.01s)
@@ -18,7 +18,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck
 === RUN   TestFaultStepsNeverReturnAcceptedRef/file-fsync
 === RUN   TestFaultStepsNeverReturnAcceptedRef/rename
 === RUN   TestFaultStepsNeverReturnAcceptedRef/directory-fsync
---- PASS: TestFaultStepsNeverReturnAcceptedRef (0.03s)
+--- PASS: TestFaultStepsNeverReturnAcceptedRef (0.02s)
     --- PASS: TestFaultStepsNeverReturnAcceptedRef/write (0.00s)
     --- PASS: TestFaultStepsNeverReturnAcceptedRef/file-fsync (0.00s)
     --- PASS: TestFaultStepsNeverReturnAcceptedRef/rename (0.01s)
@@ -34,32 +34,32 @@ ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck
 === RUN   TestCrashBetweenFileSteps/file-fsync
 === RUN   TestCrashBetweenFileSteps/rename
 === RUN   TestCrashBetweenFileSteps/directory-fsync
---- PASS: TestCrashBetweenFileSteps (0.12s)
+--- PASS: TestCrashBetweenFileSteps (0.09s)
     --- PASS: TestCrashBetweenFileSteps/write (0.03s)
     --- PASS: TestCrashBetweenFileSteps/file-fsync (0.02s)
-    --- PASS: TestCrashBetweenFileSteps/rename (0.03s)
-    --- PASS: TestCrashBetweenFileSteps/directory-fsync (0.03s)
+    --- PASS: TestCrashBetweenFileSteps/rename (0.02s)
+    --- PASS: TestCrashBetweenFileSteps/directory-fsync (0.02s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles	2.439s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles	2.402s
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/drafthttp	[no test files]
 === RUN   TestActivationExactWireContract
+=== RUN   TestActivationExactWireContract/acceptance_text_version
+=== RUN   TestActivationExactWireContract/accepted_config_digest
 === RUN   TestActivationExactWireContract/command
 === RUN   TestActivationExactWireContract/confirm_activate
 === RUN   TestActivationExactWireContract/draft_id
 === RUN   TestActivationExactWireContract/draft_revision
 === RUN   TestActivationExactWireContract/readiness_check_id
 === RUN   TestActivationExactWireContract/rehearsal_id
-=== RUN   TestActivationExactWireContract/acceptance_text_version
-=== RUN   TestActivationExactWireContract/accepted_config_digest
 --- PASS: TestActivationExactWireContract (0.01s)
+    --- PASS: TestActivationExactWireContract/acceptance_text_version (0.00s)
+    --- PASS: TestActivationExactWireContract/accepted_config_digest (0.00s)
     --- PASS: TestActivationExactWireContract/command (0.00s)
     --- PASS: TestActivationExactWireContract/confirm_activate (0.00s)
     --- PASS: TestActivationExactWireContract/draft_id (0.00s)
     --- PASS: TestActivationExactWireContract/draft_revision (0.00s)
     --- PASS: TestActivationExactWireContract/readiness_check_id (0.00s)
     --- PASS: TestActivationExactWireContract/rehearsal_id (0.00s)
-    --- PASS: TestActivationExactWireContract/acceptance_text_version (0.00s)
-    --- PASS: TestActivationExactWireContract/accepted_config_digest (0.00s)
 === RUN   TestActivationOperationNullableFieldsAndCanonicalDigest
 --- PASS: TestActivationOperationNullableFieldsAndCanonicalDigest (0.00s)
 === RUN   TestStrictCanonicalNamesBothOrdersAndAllLevels
@@ -69,7 +69,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfil
 === RUN   TestGeneratedSchemaRequiredSensitivityAndNull
 --- PASS: TestGeneratedSchemaRequiredSensitivityAndNull (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	1.236s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	1.218s
 === RUN   TestCanonicalFieldNames
 === RUN   TestCanonicalFieldNames//POLICY
 === RUN   TestCanonicalFieldNames//Policy
@@ -77,10 +77,6 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	
 === RUN   TestCanonicalFieldNames//Facts
 === RUN   TestCanonicalFieldNames//NOW
 === RUN   TestCanonicalFieldNames//Now
-=== RUN   TestCanonicalFieldNames/policy/LIVEMODE
-=== RUN   TestCanonicalFieldNames/policy/Livemode
-=== RUN   TestCanonicalFieldNames/policy/PRICE_ID
-=== RUN   TestCanonicalFieldNames/policy/Price_id
 === RUN   TestCanonicalFieldNames/policy/ACTIVATION_AT
 === RUN   TestCanonicalFieldNames/policy/Activation_at
 === RUN   TestCanonicalFieldNames/policy/CONFIG_ID
@@ -93,58 +89,62 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	
 === RUN   TestCanonicalFieldNames/policy/Account_id
 === RUN   TestCanonicalFieldNames/policy/CONNECTION_ID
 === RUN   TestCanonicalFieldNames/policy/Connection_id
+=== RUN   TestCanonicalFieldNames/policy/LIVEMODE
+=== RUN   TestCanonicalFieldNames/policy/Livemode
+=== RUN   TestCanonicalFieldNames/policy/PRICE_ID
+=== RUN   TestCanonicalFieldNames/policy/Price_id
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_CAPTURED
+=== RUN   TestCanonicalFieldNames/facts/Amount_captured
+=== RUN   TestCanonicalFieldNames/facts/DISPUTED
+=== RUN   TestCanonicalFieldNames/facts/Disputed
+=== RUN   TestCanonicalFieldNames/facts/SESSION_ID
+=== RUN   TestCanonicalFieldNames/facts/Session_id
+=== RUN   TestCanonicalFieldNames/facts/ACCOUNT_ID
+=== RUN   TestCanonicalFieldNames/facts/Account_id
+=== RUN   TestCanonicalFieldNames/facts/CONNECTION_ID
+=== RUN   TestCanonicalFieldNames/facts/Connection_id
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Line_items_complete
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEM_COUNT
+=== RUN   TestCanonicalFieldNames/facts/Line_item_count
 === RUN   TestCanonicalFieldNames/facts/QUANTITY
 === RUN   TestCanonicalFieldNames/facts/Quantity
 === RUN   TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS
 === RUN   TestCanonicalFieldNames/facts/Payment_intent_status
 === RUN   TestCanonicalFieldNames/facts/CHARGE_CAPTURED
 === RUN   TestCanonicalFieldNames/facts/Charge_captured
-=== RUN   TestCanonicalFieldNames/facts/DISPUTED
-=== RUN   TestCanonicalFieldNames/facts/Disputed
-=== RUN   TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE
-=== RUN   TestCanonicalFieldNames/facts/Line_items_complete
-=== RUN   TestCanonicalFieldNames/facts/CASE_ID
-=== RUN   TestCanonicalFieldNames/facts/Case_id
-=== RUN   TestCanonicalFieldNames/facts/SESSION_ID
-=== RUN   TestCanonicalFieldNames/facts/Session_id
-=== RUN   TestCanonicalFieldNames/facts/CONNECTION_ID
-=== RUN   TestCanonicalFieldNames/facts/Connection_id
-=== RUN   TestCanonicalFieldNames/facts/PAYMENT_STATUS
-=== RUN   TestCanonicalFieldNames/facts/Payment_status
+=== RUN   TestCanonicalFieldNames/facts/SESSION_CREATED_AT
+=== RUN   TestCanonicalFieldNames/facts/Session_created_at
+=== RUN   TestCanonicalFieldNames/facts/MODE
+=== RUN   TestCanonicalFieldNames/facts/Mode
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_TOTAL
+=== RUN   TestCanonicalFieldNames/facts/Amount_total
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_RECEIVED
+=== RUN   TestCanonicalFieldNames/facts/Amount_received
 === RUN   TestCanonicalFieldNames/facts/AMOUNT_REFUNDED
 === RUN   TestCanonicalFieldNames/facts/Amount_refunded
+=== RUN   TestCanonicalFieldNames/facts/COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Complete
 === RUN   TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT
 === RUN   TestCanonicalFieldNames/facts/Oldest_observed_at
 === RUN   TestCanonicalFieldNames/facts/VALID_UNTIL
 === RUN   TestCanonicalFieldNames/facts/Valid_until
-=== RUN   TestCanonicalFieldNames/facts/MODE
-=== RUN   TestCanonicalFieldNames/facts/Mode
-=== RUN   TestCanonicalFieldNames/facts/LINE_ITEM_COUNT
-=== RUN   TestCanonicalFieldNames/facts/Line_item_count
-=== RUN   TestCanonicalFieldNames/facts/PRICE_ID
-=== RUN   TestCanonicalFieldNames/facts/Price_id
-=== RUN   TestCanonicalFieldNames/facts/AMOUNT_RECEIVED
-=== RUN   TestCanonicalFieldNames/facts/Amount_received
-=== RUN   TestCanonicalFieldNames/facts/AMOUNT_CAPTURED
-=== RUN   TestCanonicalFieldNames/facts/Amount_captured
-=== RUN   TestCanonicalFieldNames/facts/COMPLETE
-=== RUN   TestCanonicalFieldNames/facts/Complete
-=== RUN   TestCanonicalFieldNames/facts/LIVEMODE
-=== RUN   TestCanonicalFieldNames/facts/Livemode
-=== RUN   TestCanonicalFieldNames/facts/SESSION_CREATED_AT
-=== RUN   TestCanonicalFieldNames/facts/Session_created_at
+=== RUN   TestCanonicalFieldNames/facts/PAYMENT_STATUS
+=== RUN   TestCanonicalFieldNames/facts/Payment_status
 === RUN   TestCanonicalFieldNames/facts/CURRENCY
 === RUN   TestCanonicalFieldNames/facts/Currency
-=== RUN   TestCanonicalFieldNames/facts/AMOUNT_TOTAL
-=== RUN   TestCanonicalFieldNames/facts/Amount_total
 === RUN   TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED
 === RUN   TestCanonicalFieldNames/facts/Charge_succeeded
 === RUN   TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL
 === RUN   TestCanonicalFieldNames/facts/All_currencies_equal
 === RUN   TestCanonicalFieldNames/facts/COMPLETED_AT
 === RUN   TestCanonicalFieldNames/facts/Completed_at
-=== RUN   TestCanonicalFieldNames/facts/ACCOUNT_ID
-=== RUN   TestCanonicalFieldNames/facts/Account_id
+=== RUN   TestCanonicalFieldNames/facts/CASE_ID
+=== RUN   TestCanonicalFieldNames/facts/Case_id
+=== RUN   TestCanonicalFieldNames/facts/LIVEMODE
+=== RUN   TestCanonicalFieldNames/facts/Livemode
+=== RUN   TestCanonicalFieldNames/facts/PRICE_ID
+=== RUN   TestCanonicalFieldNames/facts/Price_id
 --- PASS: TestCanonicalFieldNames (0.01s)
     --- PASS: TestCanonicalFieldNames//POLICY (0.00s)
     --- PASS: TestCanonicalFieldNames//Policy (0.00s)
@@ -152,10 +152,6 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	
     --- PASS: TestCanonicalFieldNames//Facts (0.00s)
     --- PASS: TestCanonicalFieldNames//NOW (0.00s)
     --- PASS: TestCanonicalFieldNames//Now (0.00s)
-    --- PASS: TestCanonicalFieldNames/policy/LIVEMODE (0.00s)
-    --- PASS: TestCanonicalFieldNames/policy/Livemode (0.00s)
-    --- PASS: TestCanonicalFieldNames/policy/PRICE_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/policy/Price_id (0.00s)
     --- PASS: TestCanonicalFieldNames/policy/ACTIVATION_AT (0.00s)
     --- PASS: TestCanonicalFieldNames/policy/Activation_at (0.00s)
     --- PASS: TestCanonicalFieldNames/policy/CONFIG_ID (0.00s)
@@ -168,166 +164,170 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	
     --- PASS: TestCanonicalFieldNames/policy/Account_id (0.00s)
     --- PASS: TestCanonicalFieldNames/policy/CONNECTION_ID (0.00s)
     --- PASS: TestCanonicalFieldNames/policy/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Price_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_CAPTURED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_captured (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/DISPUTED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Disputed (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/ACCOUNT_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CONNECTION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_items_complete (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEM_COUNT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_item_count (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/QUANTITY (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Quantity (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Payment_intent_status (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/CHARGE_CAPTURED (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Charge_captured (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/DISPUTED (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Disputed (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Line_items_complete (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/CASE_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Case_id (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/SESSION_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Session_id (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/CONNECTION_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Connection_id (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_STATUS (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Payment_status (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_CREATED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_created_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/MODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Mode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_TOTAL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_total (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_RECEIVED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_received (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/AMOUNT_REFUNDED (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Amount_refunded (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Complete (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Oldest_observed_at (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/VALID_UNTIL (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Valid_until (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/MODE (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Mode (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEM_COUNT (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Line_item_count (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/PRICE_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Price_id (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_RECEIVED (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Amount_received (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_CAPTURED (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Amount_captured (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/COMPLETE (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Complete (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/LIVEMODE (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Livemode (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/SESSION_CREATED_AT (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Session_created_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_STATUS (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Payment_status (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/CURRENCY (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Currency (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_TOTAL (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Amount_total (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Charge_succeeded (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/All_currencies_equal (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/COMPLETED_AT (0.00s)
     --- PASS: TestCanonicalFieldNames/facts/Completed_at (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/ACCOUNT_ID (0.00s)
-    --- PASS: TestCanonicalFieldNames/facts/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CASE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Case_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Price_id (0.00s)
 === RUN   TestConflictingAliasesBothOrders
-=== RUN   TestConflictingAliasesBothOrders/top_alias_first
-=== RUN   TestConflictingAliasesBothOrders/unicode_fold_alias
 === RUN   TestConflictingAliasesBothOrders/nested_canonical_first
 === RUN   TestConflictingAliasesBothOrders/nested_alias_first
 === RUN   TestConflictingAliasesBothOrders/policy_canonical_first
 === RUN   TestConflictingAliasesBothOrders/policy_alias_first
 === RUN   TestConflictingAliasesBothOrders/top_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/top_alias_first
+=== RUN   TestConflictingAliasesBothOrders/unicode_fold_alias
 --- PASS: TestConflictingAliasesBothOrders (0.00s)
-    --- PASS: TestConflictingAliasesBothOrders/top_alias_first (0.00s)
-    --- PASS: TestConflictingAliasesBothOrders/unicode_fold_alias (0.00s)
     --- PASS: TestConflictingAliasesBothOrders/nested_canonical_first (0.00s)
     --- PASS: TestConflictingAliasesBothOrders/nested_alias_first (0.00s)
     --- PASS: TestConflictingAliasesBothOrders/policy_canonical_first (0.00s)
     --- PASS: TestConflictingAliasesBothOrders/policy_alias_first (0.00s)
     --- PASS: TestConflictingAliasesBothOrders/top_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/top_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/unicode_fold_alias (0.00s)
 === RUN   TestCanonicalZeroAndStrictRejections
-=== RUN   TestCanonicalZeroAndStrictRejections/fraction
-=== RUN   TestCanonicalZeroAndStrictRejections/integer_overflow
-=== RUN   TestCanonicalZeroAndStrictRejections/exact_duplicate
-=== RUN   TestCanonicalZeroAndStrictRejections/unknown_nested
-=== RUN   TestCanonicalZeroAndStrictRejections/trailing_document
-=== RUN   TestCanonicalZeroAndStrictRejections/exponent
 === RUN   TestCanonicalZeroAndStrictRejections/number_string
+=== RUN   TestCanonicalZeroAndStrictRejections/integer_overflow
 === RUN   TestCanonicalZeroAndStrictRejections/nonfinite
+=== RUN   TestCanonicalZeroAndStrictRejections/exact_duplicate
 === RUN   TestCanonicalZeroAndStrictRejections/escaped_duplicate
+=== RUN   TestCanonicalZeroAndStrictRejections/unknown_nested
 === RUN   TestCanonicalZeroAndStrictRejections/unknown_top
+=== RUN   TestCanonicalZeroAndStrictRejections/trailing_document
+=== RUN   TestCanonicalZeroAndStrictRejections/fraction
+=== RUN   TestCanonicalZeroAndStrictRejections/exponent
 --- PASS: TestCanonicalZeroAndStrictRejections (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/fraction (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/integer_overflow (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/exact_duplicate (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_nested (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/trailing_document (0.00s)
-    --- PASS: TestCanonicalZeroAndStrictRejections/exponent (0.00s)
     --- PASS: TestCanonicalZeroAndStrictRejections/number_string (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/integer_overflow (0.00s)
     --- PASS: TestCanonicalZeroAndStrictRejections/nonfinite (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exact_duplicate (0.00s)
     --- PASS: TestCanonicalZeroAndStrictRejections/escaped_duplicate (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_nested (0.00s)
     --- PASS: TestCanonicalZeroAndStrictRejections/unknown_top (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/trailing_document (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/fraction (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exponent (0.00s)
 === RUN   TestStrictFixture
 --- PASS: TestStrictFixture (0.00s)
 === RUN   TestReadFailure
---- PASS: TestReadFailure (0.01s)
+--- PASS: TestReadFailure (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input	1.234s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input	1.432s
 === RUN   TestFileReaderBoundaries
 --- PASS: TestFileReaderBoundaries (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts	1.207s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts	1.413s
 === RUN   TestProjectionPreservesFactsAndLocalPins
 --- PASS: TestProjectionPreservesFactsAndLocalPins (0.00s)
 === RUN   TestEveryRequiredFieldAndNullableValue
+=== RUN   TestEveryRequiredFieldAndNullableValue/mode
 === RUN   TestEveryRequiredFieldAndNullableValue/payment_status
-=== RUN   TestEveryRequiredFieldAndNullableValue/amount_received
-=== RUN   TestEveryRequiredFieldAndNullableValue/amount_refunded
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_total
+=== RUN   TestEveryRequiredFieldAndNullableValue/case_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/completed_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/connection_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/digest
 === RUN   TestEveryRequiredFieldAndNullableValue/disputed
 === RUN   TestEveryRequiredFieldAndNullableValue/price_id
 === RUN   TestEveryRequiredFieldAndNullableValue/session_created_at
-=== RUN   TestEveryRequiredFieldAndNullableValue/valid_until
-=== RUN   TestEveryRequiredFieldAndNullableValue/amount_captured
-=== RUN   TestEveryRequiredFieldAndNullableValue/amount_total
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_received
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_refunded
 === RUN   TestEveryRequiredFieldAndNullableValue/charge_captured
-=== RUN   TestEveryRequiredFieldAndNullableValue/charge_succeeded
-=== RUN   TestEveryRequiredFieldAndNullableValue/currency
+=== RUN   TestEveryRequiredFieldAndNullableValue/complete
 === RUN   TestEveryRequiredFieldAndNullableValue/facts_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/livemode
+=== RUN   TestEveryRequiredFieldAndNullableValue/valid_until
+=== RUN   TestEveryRequiredFieldAndNullableValue/payment_intent_status
+=== RUN   TestEveryRequiredFieldAndNullableValue/all_currencies_equal
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_captured
+=== RUN   TestEveryRequiredFieldAndNullableValue/currency
 === RUN   TestEveryRequiredFieldAndNullableValue/line_items_complete
 === RUN   TestEveryRequiredFieldAndNullableValue/oldest_observed_at
-=== RUN   TestEveryRequiredFieldAndNullableValue/all_currencies_equal
-=== RUN   TestEveryRequiredFieldAndNullableValue/case_id
-=== RUN   TestEveryRequiredFieldAndNullableValue/complete
-=== RUN   TestEveryRequiredFieldAndNullableValue/completed_at
-=== RUN   TestEveryRequiredFieldAndNullableValue/connection_id
 === RUN   TestEveryRequiredFieldAndNullableValue/quantity
 === RUN   TestEveryRequiredFieldAndNullableValue/session_id
 === RUN   TestEveryRequiredFieldAndNullableValue/stripe_account_id
-=== RUN   TestEveryRequiredFieldAndNullableValue/digest
+=== RUN   TestEveryRequiredFieldAndNullableValue/charge_succeeded
 === RUN   TestEveryRequiredFieldAndNullableValue/line_item_count
-=== RUN   TestEveryRequiredFieldAndNullableValue/livemode
-=== RUN   TestEveryRequiredFieldAndNullableValue/mode
-=== RUN   TestEveryRequiredFieldAndNullableValue/payment_intent_status
---- PASS: TestEveryRequiredFieldAndNullableValue (0.05s)
+--- PASS: TestEveryRequiredFieldAndNullableValue (0.04s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/mode (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/payment_status (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_received (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_refunded (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_total (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/case_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/completed_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/connection_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/digest (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/disputed (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/price_id (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/session_created_at (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/valid_until (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_captured (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_total (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_received (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_refunded (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/charge_captured (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_succeeded (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/currency (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/complete (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/facts_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/livemode (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/valid_until (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_intent_status (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/all_currencies_equal (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_captured (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/currency (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/line_items_complete (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/oldest_observed_at (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/all_currencies_equal (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/case_id (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/complete (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/completed_at (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/connection_id (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/quantity (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/session_id (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/stripe_account_id (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/digest (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_succeeded (0.00s)
     --- PASS: TestEveryRequiredFieldAndNullableValue/line_item_count (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/livemode (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/mode (0.00s)
-    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_intent_status (0.00s)
 === RUN   TestInvalidScalars
 === RUN   TestInvalidScalars/amount_captured-1
 === RUN   TestInvalidScalars/amount_captured1.2
@@ -336,13 +336,6 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestInvalidScalars/amount_captured9223372036854775808
 === RUN   TestInvalidScalars/amount_capturedtrue
 === RUN   TestInvalidScalars/amount_captured"1"
-=== RUN   TestInvalidScalars/amount_total-1
-=== RUN   TestInvalidScalars/amount_total1.2
-=== RUN   TestInvalidScalars/amount_total1e100
-=== RUN   TestInvalidScalars/amount_total9007199254740992
-=== RUN   TestInvalidScalars/amount_total9223372036854775808
-=== RUN   TestInvalidScalars/amount_totaltrue
-=== RUN   TestInvalidScalars/amount_total"1"
 === RUN   TestInvalidScalars/quantity-1
 === RUN   TestInvalidScalars/quantity1.2
 === RUN   TestInvalidScalars/quantity1e100
@@ -357,6 +350,13 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestInvalidScalars/line_item_count9223372036854775808
 === RUN   TestInvalidScalars/line_item_counttrue
 === RUN   TestInvalidScalars/line_item_count"1"
+=== RUN   TestInvalidScalars/amount_total-1
+=== RUN   TestInvalidScalars/amount_total1.2
+=== RUN   TestInvalidScalars/amount_total1e100
+=== RUN   TestInvalidScalars/amount_total9007199254740992
+=== RUN   TestInvalidScalars/amount_total9223372036854775808
+=== RUN   TestInvalidScalars/amount_totaltrue
+=== RUN   TestInvalidScalars/amount_total"1"
 === RUN   TestInvalidScalars/amount_received-1
 === RUN   TestInvalidScalars/amount_received1.2
 === RUN   TestInvalidScalars/amount_received1e100
@@ -371,7 +371,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestInvalidScalars/amount_refunded9223372036854775808
 === RUN   TestInvalidScalars/amount_refundedtrue
 === RUN   TestInvalidScalars/amount_refunded"1"
---- PASS: TestInvalidScalars (0.03s)
+--- PASS: TestInvalidScalars (0.02s)
     --- PASS: TestInvalidScalars/amount_captured-1 (0.00s)
     --- PASS: TestInvalidScalars/amount_captured1.2 (0.00s)
     --- PASS: TestInvalidScalars/amount_captured1e100 (0.00s)
@@ -379,13 +379,6 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
     --- PASS: TestInvalidScalars/amount_captured9223372036854775808 (0.00s)
     --- PASS: TestInvalidScalars/amount_capturedtrue (0.00s)
     --- PASS: TestInvalidScalars/amount_captured"1" (0.00s)
-    --- PASS: TestInvalidScalars/amount_total-1 (0.00s)
-    --- PASS: TestInvalidScalars/amount_total1.2 (0.00s)
-    --- PASS: TestInvalidScalars/amount_total1e100 (0.00s)
-    --- PASS: TestInvalidScalars/amount_total9007199254740992 (0.00s)
-    --- PASS: TestInvalidScalars/amount_total9223372036854775808 (0.00s)
-    --- PASS: TestInvalidScalars/amount_totaltrue (0.00s)
-    --- PASS: TestInvalidScalars/amount_total"1" (0.00s)
     --- PASS: TestInvalidScalars/quantity-1 (0.00s)
     --- PASS: TestInvalidScalars/quantity1.2 (0.00s)
     --- PASS: TestInvalidScalars/quantity1e100 (0.00s)
@@ -400,6 +393,13 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
     --- PASS: TestInvalidScalars/line_item_count9223372036854775808 (0.00s)
     --- PASS: TestInvalidScalars/line_item_counttrue (0.00s)
     --- PASS: TestInvalidScalars/line_item_count"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_total-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_totaltrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_total"1" (0.00s)
     --- PASS: TestInvalidScalars/amount_received-1 (0.00s)
     --- PASS: TestInvalidScalars/amount_received1.2 (0.00s)
     --- PASS: TestInvalidScalars/amount_received1e100 (0.00s)
@@ -454,7 +454,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestMTLSAndActualSocketStart/wrong_server_CA
 === RUN   TestMTLSAndActualSocketStart/wrong_server_name
 === RUN   TestMTLSAndActualSocketStart/revoke_after_handshake_verification_before_HTTP
---- PASS: TestMTLSAndActualSocketStart (0.02s)
+--- PASS: TestMTLSAndActualSocketStart (0.01s)
     --- PASS: TestMTLSAndActualSocketStart/deny_before_dial (0.00s)
     --- PASS: TestMTLSAndActualSocketStart/boundary_does_not_start (0.00s)
     --- PASS: TestMTLSAndActualSocketStart/missing_certificate (0.00s)
@@ -478,22 +478,22 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_chunked
 === RUN   TestResponseFailuresNeverRetryOrPublishProjection/media
 === RUN   TestResponseFailuresNeverRetryOrPublishProjection/encoding
---- PASS: TestResponseFailuresNeverRetryOrPublishProjection (0.09s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/401 (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/403 (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/429 (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/503 (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/malformed (0.01s)
+--- PASS: TestResponseFailuresNeverRetryOrPublishProjection (0.07s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/401 (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/403 (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/429 (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/503 (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/malformed (0.00s)
     --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/case_mismatch (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/account_mismatch (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/connection_mismatch (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/session_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/account_mismatch (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/connection_mismatch (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/session_mismatch (0.00s)
     --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/mode_mismatch (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/OAS_oversized_field (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_ContentLength (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_chunked (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/media (0.01s)
-    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/encoding (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/OAS_oversized_field (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_ContentLength (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_chunked (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/media (0.00s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/encoding (0.00s)
 === RUN   TestRedirectAndDroppedResponseDoNotReplay
 --- PASS: TestRedirectAndDroppedResponseDoNotReplay (0.01s)
 === RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator
@@ -507,14 +507,14 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
     --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/refund (0.01s)
     --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/unknown (0.01s)
     --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/expired (0.01s)
-    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/malformed (0.01s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/malformed (0.00s)
 === RUN   TestCancelAndTimeoutJoinWithoutStaleResult
 === RUN   TestCancelAndTimeoutJoinWithoutStaleResult/cancel_before
 === RUN   TestCancelAndTimeoutJoinWithoutStaleResult/cancel_headers
 === RUN   TestCancelAndTimeoutJoinWithoutStaleResult/deadline
 --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult (0.21s)
     --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/cancel_before (0.00s)
-    --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/cancel_headers (0.01s)
+    --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/cancel_headers (0.00s)
     --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/deadline (0.20s)
 === RUN   TestConcurrentReadsOwnValues
 --- PASS: TestConcurrentReadsOwnValues (0.01s)
@@ -523,13 +523,13 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/s
 === RUN   TestCanceledReuseCannotReturnPreviousProjection
 --- PASS: TestCanceledReuseCannotReturnPreviousProjection (0.01s)
 === RUN   TestServerCertificateSANMismatch
---- PASS: TestServerCertificateSANMismatch (0.01s)
+--- PASS: TestServerCertificateSANMismatch (0.00s)
 === RUN   TestTransportRetainsExplicitDialerAndRejectsUnsafeTLS
 --- PASS: TestTransportRetainsExplicitDialerAndRejectsUnsafeTLS (0.01s)
 === RUN   TestExistingApplicationPortRetainsSourceProof
 --- PASS: TestExistingApplicationPortRetainsSourceProof (0.01s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts	1.760s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts	1.850s
 === RUN   TestActivationFullRoundTripRestartReplayAndInitialBoundary
     activation_test.go:159: requires owned isolated HIT-78 PostgreSQL runner
 --- SKIP: TestActivationFullRoundTripRestartReplayAndInitialBoundary (0.00s)
@@ -682,37 +682,41 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sou
 --- SKIP: TestActivationTLSCallerAndRouteBoundaries (0.00s)
 === RUN   TestActivationNoStaleOrFabricatedPreparation
 === RUN   TestActivationNoStaleOrFabricatedPreparation/incomplete
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/failed_check
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/foreign_check
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/changed_result
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/missing_original_examples
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/changed_original_examples
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response
-    activation_test.go:827: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_price
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_list
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_assignee
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_destination
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_account
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_mode
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_workspace
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_principal
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_epoch
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_expired
-    activation_test.go:906: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:910: requires owned isolated HIT-78 PostgreSQL runner
 --- PASS: TestActivationNoStaleOrFabricatedPreparation (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/incomplete (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/failed_check (0.00s)
@@ -723,6 +727,8 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sou
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_list (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_assignee (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_destination (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_account (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_mode (0.00s)
@@ -731,10 +737,10 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sou
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.00s)
     --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.00s)
 === RUN   TestActivationMissingPortsDenyAndForeignRLS
-    activation_test.go:920: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:924: requires owned isolated HIT-78 PostgreSQL runner
 --- SKIP: TestActivationMissingPortsDenyAndForeignRLS (0.00s)
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup
-    activation_test.go:977: requires owned isolated HIT-78 PostgreSQL runner
+    activation_test.go:981: requires owned isolated HIT-78 PostgreSQL runner
 --- SKIP: TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup (0.00s)
 === RUN   TestAdmissionActivationBoundary
 === RUN   TestAdmissionActivationBoundary/before
@@ -1080,7 +1086,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sou
     record_test.go:265: go1.27.2 darwin arm64 isolated_pg=
 --- PASS: TestEnvironment (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres	1.297s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres	1.316s
 === RUN   TestGoldenRenderingAndDigest
 --- PASS: TestGoldenRenderingAndDigest (0.00s)
 === RUN   TestRenderingRejectsAmbiguityAndExpiry
@@ -1100,103 +1106,103 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres	1
     --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#05 (0.00s)
     --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#06 (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent	1.250s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent	1.265s
 === RUN   TestCanonicalAndJCS
 --- PASS: TestCanonicalAndJCS (0.00s)
 === RUN   TestRejectInvalidSignal
-=== RUN   TestRejectInvalidSignal/digest_mismatch
-=== RUN   TestRejectInvalidSignal/surrogate
-=== RUN   TestRejectInvalidSignal/missing_livemode
-=== RUN   TestRejectInvalidSignal/missing_message_digest
-=== RUN   TestRejectInvalidSignal/array
-=== RUN   TestRejectInvalidSignal/case_first
 === RUN   TestRejectInvalidSignal/case_last
-=== RUN   TestRejectInvalidSignal/missing_first_received_at
-=== RUN   TestRejectInvalidSignal/null_connection_id
+=== RUN   TestRejectInvalidSignal/escaped_duplicate
+=== RUN   TestRejectInvalidSignal/surrogate
+=== RUN   TestRejectInvalidSignal/null_message_digest
+=== RUN   TestRejectInvalidSignal/array
+=== RUN   TestRejectInvalidSignal/digest_mismatch
+=== RUN   TestRejectInvalidSignal/missing_message_id
 === RUN   TestRejectInvalidSignal/null_receipt_id
 === RUN   TestRejectInvalidSignal/null_workspace_id
-=== RUN   TestRejectInvalidSignal/schema_source_created_at
-=== RUN   TestRejectInvalidSignal/missing_workspace_id
-=== RUN   TestRejectInvalidSignal/missing_stripe_account_id
-=== RUN   TestRejectInvalidSignal/schema_unknown
-=== RUN   TestRejectInvalidSignal/schema_schema_version
-=== RUN   TestRejectInvalidSignal/escaped_duplicate
-=== RUN   TestRejectInvalidSignal/utf8
-=== RUN   TestRejectInvalidSignal/null_livemode
-=== RUN   TestRejectInvalidSignal/missing_source_created_at
-=== RUN   TestRejectInvalidSignal/schema_session_id
-=== RUN   TestRejectInvalidSignal/missing_session_id
-=== RUN   TestRejectInvalidSignal/missing_event_id
-=== RUN   TestRejectInvalidSignal/missing_expires_at
 === RUN   TestRejectInvalidSignal/null_stripe_account_id
-=== RUN   TestRejectInvalidSignal/schema_livemode
-=== RUN   TestRejectInvalidSignal/exact_duplicate
 === RUN   TestRejectInvalidSignal/null_first_received_at
-=== RUN   TestRejectInvalidSignal/null_event_type
-=== RUN   TestRejectInvalidSignal/null_message_digest
-=== RUN   TestRejectInvalidSignal/schema_event_type
-=== RUN   TestRejectInvalidSignal/null_schema_version
-=== RUN   TestRejectInvalidSignal/missing_connection_id
-=== RUN   TestRejectInvalidSignal/missing_event_type
-=== RUN   TestRejectInvalidSignal/missing_message_id
+=== RUN   TestRejectInvalidSignal/missing_stripe_account_id
 === RUN   TestRejectInvalidSignal/null_message_id
-=== RUN   TestRejectInvalidSignal/schema_event_id
-=== RUN   TestRejectInvalidSignal/trailing
-=== RUN   TestRejectInvalidSignal/null_source_created_at
-=== RUN   TestRejectInvalidSignal/missing_schema_version
-=== RUN   TestRejectInvalidSignal/null_session_id
+=== RUN   TestRejectInvalidSignal/null_schema_version
 === RUN   TestRejectInvalidSignal/null_event_id
-=== RUN   TestRejectInvalidSignal/null_expires_at
-=== RUN   TestRejectInvalidSignal/missing_receipt_id
+=== RUN   TestRejectInvalidSignal/missing_expires_at
+=== RUN   TestRejectInvalidSignal/null_source_created_at
 === RUN   TestRejectInvalidSignal/schema_workspace_id
+=== RUN   TestRejectInvalidSignal/schema_session_id
+=== RUN   TestRejectInvalidSignal/trailing
+=== RUN   TestRejectInvalidSignal/missing_schema_version
+=== RUN   TestRejectInvalidSignal/missing_receipt_id
+=== RUN   TestRejectInvalidSignal/missing_workspace_id
+=== RUN   TestRejectInvalidSignal/missing_livemode
+=== RUN   TestRejectInvalidSignal/missing_source_created_at
+=== RUN   TestRejectInvalidSignal/schema_unknown
+=== RUN   TestRejectInvalidSignal/schema_event_id
+=== RUN   TestRejectInvalidSignal/missing_session_id
+=== RUN   TestRejectInvalidSignal/null_session_id
+=== RUN   TestRejectInvalidSignal/schema_event_type
+=== RUN   TestRejectInvalidSignal/missing_connection_id
+=== RUN   TestRejectInvalidSignal/null_expires_at
+=== RUN   TestRejectInvalidSignal/missing_first_received_at
+=== RUN   TestRejectInvalidSignal/schema_source_created_at
+=== RUN   TestRejectInvalidSignal/exact_duplicate
+=== RUN   TestRejectInvalidSignal/utf8
+=== RUN   TestRejectInvalidSignal/missing_message_digest
+=== RUN   TestRejectInvalidSignal/null_connection_id
+=== RUN   TestRejectInvalidSignal/null_livemode
+=== RUN   TestRejectInvalidSignal/case_first
+=== RUN   TestRejectInvalidSignal/missing_event_id
+=== RUN   TestRejectInvalidSignal/missing_event_type
+=== RUN   TestRejectInvalidSignal/null_event_type
+=== RUN   TestRejectInvalidSignal/schema_schema_version
+=== RUN   TestRejectInvalidSignal/schema_livemode
 --- PASS: TestRejectInvalidSignal (0.01s)
-    --- PASS: TestRejectInvalidSignal/digest_mismatch (0.00s)
-    --- PASS: TestRejectInvalidSignal/surrogate (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_livemode (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_message_digest (0.00s)
-    --- PASS: TestRejectInvalidSignal/array (0.00s)
-    --- PASS: TestRejectInvalidSignal/case_first (0.00s)
     --- PASS: TestRejectInvalidSignal/case_last (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_first_received_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/escaped_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/surrogate (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/array (0.00s)
+    --- PASS: TestRejectInvalidSignal/digest_mismatch (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_id (0.00s)
     --- PASS: TestRejectInvalidSignal/null_receipt_id (0.00s)
     --- PASS: TestRejectInvalidSignal/null_workspace_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_source_created_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_workspace_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_stripe_account_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_unknown (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_schema_version (0.00s)
-    --- PASS: TestRejectInvalidSignal/escaped_duplicate (0.00s)
-    --- PASS: TestRejectInvalidSignal/utf8 (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_livemode (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_source_created_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_session_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_session_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_event_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_expires_at (0.00s)
     --- PASS: TestRejectInvalidSignal/null_stripe_account_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_livemode (0.00s)
-    --- PASS: TestRejectInvalidSignal/exact_duplicate (0.00s)
     --- PASS: TestRejectInvalidSignal/null_first_received_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_event_type (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_message_digest (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_event_type (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_schema_version (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_connection_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_event_type (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_message_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_stripe_account_id (0.00s)
     --- PASS: TestRejectInvalidSignal/null_message_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/schema_event_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/trailing (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_source_created_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_schema_version (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_schema_version (0.00s)
     --- PASS: TestRejectInvalidSignal/null_event_id (0.00s)
-    --- PASS: TestRejectInvalidSignal/null_expires_at (0.00s)
-    --- PASS: TestRejectInvalidSignal/missing_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_source_created_at (0.00s)
     --- PASS: TestRejectInvalidSignal/schema_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/trailing (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_unknown (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_first_received_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/exact_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/utf8 (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/case_first (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_livemode (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal	1.230s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal	1.250s
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/application/activation	[no test files]
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/application/admission	[no test files]
 === RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects
@@ -1212,7 +1218,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/n
     --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/duplicate_without_retained_outcome (0.00s)
     --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/missing (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/drafts	1.217s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/drafts	1.230s
 === RUN   TestReaderSubstitution
 === RUN   TestReaderSubstitution/file/normal
 === RUN   TestReaderSubstitution/file/boundary
@@ -1224,9 +1230,9 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/drafts	
 === RUN   TestReaderSubstitution/double/error_unknown
 === RUN   TestReaderSubstitution/double/denied
 === RUN   TestReaderSubstitution/double/reader_failure
---- PASS: TestReaderSubstitution (0.02s)
-    --- PASS: TestReaderSubstitution/file/normal (0.01s)
-    --- PASS: TestReaderSubstitution/file/boundary (0.01s)
+--- PASS: TestReaderSubstitution (0.01s)
+    --- PASS: TestReaderSubstitution/file/normal (0.00s)
+    --- PASS: TestReaderSubstitution/file/boundary (0.00s)
     --- PASS: TestReaderSubstitution/file/error_unknown (0.00s)
     --- PASS: TestReaderSubstitution/file/denied (0.00s)
     --- PASS: TestReaderSubstitution/file/reader_failure (0.00s)
@@ -1252,7 +1258,7 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/drafts	
 === RUN   TestFinancialScope
 --- PASS: TestFinancialScope (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder	1.235s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder	1.245s
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase	[no test files]
 === RUN   TestFinancialDecisionTable
 === RUN   TestFinancialDecisionTable/account
@@ -1417,5 +1423,5 @@ ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/evaluat
 === RUN   TestInvalidPolicy
 --- PASS: TestInvalidPolicy (0.00s)
 PASS
-ok  	github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility	1.219s
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility	1.228s
 ?   	github.com/hitpipe/hitpipe/services/processing/internal/testfixtures	[no test files]

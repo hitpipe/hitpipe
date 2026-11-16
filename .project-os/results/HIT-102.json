@@ -2,8 +2,8 @@
   "subject": "HIT-102",
   "materialized_result": {
     "summary": "Незавершённая явная активация проверенного черновика; собственные компоненты проходят, интеграция выявила необходимость согласовать draft/accepted canonical digest.",
-    "implementation_status": "PARTIAL_PENDING_DIGEST_DECISION",
-    "tested_code_sha": "ec0eeb8c35c253dcccbab83b78ae329b8256dab3",
+    "implementation_status": "PARTIAL_BLOCKED_PUBLIC_CANONICAL_DIGEST_PREVIEW_GAP",
+    "tested_code_sha": "c3b0f430046d90b0d1614692df819a3c4ec0e720",
     "base_sha": "48b2829fb37bf6048db83f5586f949dbb8883b1d",
     "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
     "contract_revision": 1,
@@ -30,8 +30,9 @@
     "source_audit": "services/processing/docs/HIT-102/source-audit.json",
     "captures": "services/processing/docs/HIT-102/verification/activation-api-captures.jsonl",
     "ci": "services/processing/docs/HIT-102/verification/ci-code-evidence.json",
-    "local_result": "96-command local component run PASS;79 actual HTTPcaptures independently OASvalidated;5 supplemental commands exit0. Go1.27.2 darwin/arm64 CGO1 race/vet/build; separate linux/arm64 CGO0 actual owned PostgreSQL18.7, not Linux race.",
-    "integration_result": "FAIL, exact approved/stored vs actual canonical digest mismatch; scope decision pending; full DoD not achieved."
+    "local_result": "96-command local component run PASS;81 actual HTTPcaptures independently OASvalidated;5 supplemental commands exit0. Go1.27.2 darwin/arm64 CGO1 race/vet/build; separate linux/arm64 CGO0 actual owned PostgreSQL18.7, not Linux race.",
+    "integration_result": "FAIL, exact approved/stored vs actual canonical digest mismatch; scope decision pending; full DoD not achieved.",
+    "contract_analysis": "services/processing/docs/HIT-102/CONTRACT_COMPATIBILITY_RU.md"
   },
   "deviations": [
     "Implementation incomplete pending explicit agreement on draft-to-accepted config digest mapping; no relaxation of HIT-95 validation."
@@ -41,7 +42,8 @@
     "Controlled session/authority/owner-binding/actual-start ports; no live IAM/BFF/Stripe/ClickUp or production qualification.",
     "Separate experimental integration branches, not actual main merges.",
     "Full response is expiring owner content; metadata cannot recreate a missing/expired result.",
-    "No financial effects,pause/resume/archive,formal SQL/OAS or foreign-service changes."
+    "No financial effects,pause/resume/archive,formal SQL/OAS or foreign-service changes.",
+    "User-preferred variant B matches canonical SQL/read semantics, but accepted public preparation/options outputs do not expose resolved IDs, canonical bytes or final canonical hash before explicit activation. No fabricated user approval or API extension. Lead decision required on a pre-activation canonical digest source."
   ],
   "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
 }
