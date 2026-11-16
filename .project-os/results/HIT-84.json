@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-84",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Локальная проверка текущих прав IAM: сессия, членство и роль, доказанная область ресурса, runtime и обязательный допуск; отзыв, неизвестность, ошибка и старое доказательство не становятся разрешением.",
+    "baseline_commit": "961ca9bc9743e3d7c288529af4983227007eb4d3",
+    "code_commit": "595223163e71cd418ee24401a71a898e10e565cd",
+    "evidence_commit": "eac81efb95680444b4587e3e96624cdf9971d843",
+    "report": "https://github.com/hitpipe/hitpipe/blob/eac81efb95680444b4587e3e96624cdf9971d843/services/iam/evidence/HIT-84/README.md",
+    "instruction": "https://github.com/hitpipe/hitpipe/blob/595223163e71cd418ee24401a71a898e10e565cd/services/iam/docs/CURRENT_AUTHORIZATION_RU.md",
+    "scope": "Только local authorization composition; реальные PostgreSQL-факты и управляемые caller/owner/start-gate порты. Не подключённый сервер."
+  },
+  "changed_artifacts": {
+    "code_version": "595223163e71cd418ee24401a71a898e10e565cd",
+    "code_paths": [
+      "services/iam/internal/application/authorizeaction/ports.go",
+      "services/iam/internal/application/authorizeaction/service.go",
+      "services/iam/internal/application/authorizeaction/request_json.go",
+      "services/iam/internal/application/authorizeaction/service_test.go",
+      "services/iam/internal/application/authorizeaction/request_json_test.go",
+      "services/iam/internal/adapters/postgres/authorization/reader.go",
+      "services/iam/internal/adapters/postgres/authorization/reader_test.go",
+      "services/iam/internal/adapters/postgres/authorization/reader_integration_test.go",
+      "services/iam/tools/check_authorization.py",
+      "services/iam/tools/check_postgres_session_lookup.py",
+      "services/iam/docs/CURRENT_AUTHORIZATION_RU.md",
+      "services/iam/README.md"
+    ],
+    "evidence_manifest": "https://github.com/hitpipe/hitpipe/blob/eac81efb95680444b4587e3e96624cdf9971d843/services/iam/evidence/HIT-84/artifact-manifest.json",
+    "preserved": "sessionpolicy, AuthenticateSession, оптимизированный SessionLookup, принятый IAM SQL, go.mod/go.sum побайтово совпадают с baseline; другие сервисы, HIT-69, Keycloak и formal OAS/SQL не изменялись."
+  },
+  "verification": {
+    "state": "PASSED",
+    "protocol": "https://github.com/hitpipe/hitpipe/blob/eac81efb95680444b4587e3e96624cdf9971d843/services/iam/evidence/HIT-84/verification.json",
+    "race_log": "https://github.com/hitpipe/hitpipe/blob/eac81efb95680444b4587e3e96624cdf9971d843/services/iam/evidence/HIT-84/postgres-race.log",
+    "summary": "https://github.com/hitpipe/hitpipe/blob/eac81efb95680444b4587e3e96624cdf9971d843/services/iam/evidence/HIT-84/summary.json",
+    "commands": "11 успешных команд: раздельные роли, установка и повтор миграции, unit, PostgreSQL integration -race, vet, build.",
+    "results": "95 верхних проверок/380 вместе с подслучаями, включая 13 новых SQL-сценариев авторизации. 0 FAIL, обязательных SKIP нет; TestHIT82LatencySamples необязателен и пропущен без режима измерений.",
+    "environment": "Go1.27.2, pgx5.11.0, PostgreSQL18.7 exact Alpine image digest, 1 CPU; 2026-11-16 04:26:24–04:27:22 UTC.",
+    "source_tree_sha256": "986c70d5ab72a83fd35ebedb89f7cc84b309d241b274551692e7e03e2e6ffb56",
+    "covered": "Текущие SQL-факты; матрица ролей; чужой workspace/grant; runtime/certificate/boot и точный workspace epoch; scope revocations; committed role/revoke changes; owner wait; старый actor proof; concurrent local gate; отмена, БД/role/pool errors; строгие поля OAS и доверенное время.",
+    "sandbox": "Одноразовые синтетические данные, контейнер и сеть удалены; рабочие базы не использовались."
+  },
+  "deviations": [
+    "Содержательные требования задачи и принятый MVP не изменены.",
+    "Первый SQL-прогон на d99d8e86f15ec0e28bcffd1b6b92a1fe0a66560a остановился до новых сценариев из-за UUID/text параметров тестового seed; исправлен и полностью повторён на code_commit. Неудачный исходный протокол сохранён в операторском audit/HIT-84-worker/attempt-1.",
+    "MEMBERSHIP subject UUID не имеет установленного отображения на составной ключ в принятом контракте: соответствующий workspace удерживается, идентичность не выдумывается.",
+    "Доверенные caller/resource-owner/actual-start-gate обязательны. При неизвестных применимых source/target grants owner не выдаёт Verified; пустой BindingGrantID означает доказанную неприменимость.",
+    "Живой mTLS listener, рабочий HIT-69 gate, общий barrier/coordinator и реальные полномочия ресурсов других сервисов не подтверждаются локальным компонентом; фактический owner повторяет допуск перед действием."
+  ]
+}
