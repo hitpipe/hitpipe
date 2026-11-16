@@ -2,7 +2,57 @@
 
 HIT-19 / Feature HIT-11, MANUAL_LAB_PR12. Author-owner: Дмитрий Карачебан; agent implementation: Codex. This is reusable IAM logic with a synthetic diagnostic executable, not a deployed authentication service.
 
-## Текущая доработка: HIT-68
+## HIT-85 — защищённое чтение профиля
+
+Приватный `GET /api/v1/profile` для BFF: TLS 1.3 с проверкой сертификата,
+действительная сохранённая сессия, текущий владелец из IAM SQL и проверенный файл
+профиля. Допуск удерживается до начала ответа; рабочий координатор HIT-69 здесь
+не подменяется. Устройство, подключение и границы —
+[`docs/PROTECTED_PROFILE_RU.md`](docs/PROTECTED_PROFILE_RU.md).
+
+```sh
+python3 services/iam/tools/check_profile.py --evidence-dir /tmp/hit85-check
+```
+
+Команда проверяет настоящий HTTPS, отдельную PostgreSQL и временные owner-файлы.
+Рабочий сервер и внешние подключения этим не развёртываются.
+
+## HIT-84 — проверка текущих прав
+
+Добавлена локальная прикладная проверка действия: действительная сессия,
+актуальная роль в рабочем пространстве, доверенный вызывающий процесс,
+доказательство принадлежности ресурса и обязательный допуск к началу действия.
+Чтение выполняется из собственной PostgreSQL IAM; сохранённое разрешение не
+заменяет следующую свежую проверку. Инструкция, матрица прав и границы —
+[`docs/CURRENT_AUTHORIZATION_RU.md`](docs/CURRENT_AUTHORIZATION_RU.md).
+
+```sh
+python3 services/iam/tools/check_authorization.py --evidence-dir /tmp/hit84-check
+```
+
+Это проверяемый компонент для последующего подключения к серверу. Сетевой
+обработчик, общая распределённая защита и рабочее подключение допуска HIT-69 в
+этой задаче не создаются. Команда использует отдельную одноразовую PostgreSQL;
+обычные команды проверки схемы также запускают новые обязательные SQL-тесты.
+
+## HIT-81 — собственная схема базы
+
+Добавлены отдельная установка точной принятой схемы IAM и проверки изоляции
+данных на одноразовой PostgreSQL **18.7**. Роли владельца схемы, приложения,
+обработчика и очистки разделены. Повторный запуск распознаёт установленную версию.
+Подробности и границы —
+[`internal/adapters/postgres/migrations`](internal/adapters/postgres/migrations/README.md).
+
+```sh
+python3 services/iam/tools/check_iam_schema.py --evidence-dir /tmp/hit81-check
+```
+
+Команда запускается из корня репозитория; нужны Go **1.27.2** и Docker.
+Используйте новый пустой каталог протоколов для каждого запуска. Проверка включает
+уже существующий SessionLookup; старое имя команды ниже сохранено для CI и
+выполняет тот же актуальный проход. Рабочие базы и другие сервисы не используются.
+
+## Переиспользованный результат HIT-68
 
 Добавлен read-only PostgreSQL адаптер существующего `SessionLookup`:
 [`internal/adapters/postgres/sessionlookup`](internal/adapters/postgres/sessionlookup/README.md).
@@ -47,8 +97,10 @@ The wrapper creates `.pr12-build/iam/dev/iam-contractcheck` and `.pr12-build/iam
 - `internal/adapters/fixtures/sessionlookup`: strict fixture boundary; a file-backed synthetic lookup and immutable fixed double; fixed diagnostic clock.
 - `internal/adapters/clock/system`: host clock adapter requiring an explicit health probe.
 - `internal/adapters/postgres/sessionlookup`: HIT-68 read-only stored-session adapter and isolated PostgreSQL checks; no production wiring.
+- `internal/application/authorizeaction`: текущие права в собственной области IAM; обязательные доверенные порты вызывающего процесса, владельца ресурса и допуска.
+- `internal/adapters/postgres/authorization`: свежее согласованное чтение IAM в отдельной транзакции; выбор области SQL не выдаёт права.
 - `cmd/iam-contractcheck`: the single diagnostic composition root and safe output.
 - `docs/module-contract.md`: sole local normative contract, authored in HIT-18 before code.
 - `testdata`: synthetic, fixed dates and no user/production data.
 
-The application consumer is production-oriented reusable code, exercised through synthetic adapters. File Lookup rereads the fixture each call; fixed Lookup does no IO and preserves its construction-time value. Both ignore the synthetic reference because each instance contains one fixture. The fixture clock is also construction-time synthetic data: this pair proves consumer substitution, not real authority freshness. A future production authority must provide current sessions and verified clock health. SQL/Keycloak/OIDC/current workspace authorization/runtime barriers remain outside this slice. A session_valid result grants no business permission. See the exact [candidate input context](../../docs/labs/pr12/context-lock.json).
+The historical application consumer is production-oriented reusable code, exercised through synthetic adapters. File Lookup rereads the fixture each call; fixed Lookup does no IO and preserves its construction-time value. Both ignore the synthetic reference because each instance contains one fixture. The fixture clock is also construction-time synthetic data: this pair proves consumer substitution, not real authority freshness. A future production authority must provide current sessions and verified clock health. Keycloak/OIDC and runtime barriers remain outside the historical kernel; local SQL and current authorization are covered by the later components above. A session_valid result grants no business permission. See the exact [candidate input context](../../docs/labs/pr12/context-lock.json).

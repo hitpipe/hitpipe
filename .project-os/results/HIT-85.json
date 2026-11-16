@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-85",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Приватный GET /api/v1/profile: BFF mTLS, текущая сохранённая сессия и principal, проверенный owner-файл, обязательный допуск до фактического начала ответа.",
+    "baseline_commit": "fba9d664862adedd3df305e18e3c03fb95e0f95c",
+    "code_commit": "f32a0e7f8f59007bff008210e21e07bad259e387",
+    "evidence_commit": "0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8",
+    "report": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/README.md",
+    "instruction": "https://github.com/hitpipe/hitpipe/blob/f32a0e7f8f59007bff008210e21e07bad259e387/services/iam/docs/PROTECTED_PROFILE_RU.md",
+    "scope": "Реальная локальная HTTPS/PostgreSQL/content композиция с управляемым обязательным допуском; не рабочее развёртывание IAM."
+  },
+  "changed_artifacts": {
+    "code_version": "f32a0e7f8f59007bff008210e21e07bad259e387",
+    "code_paths": [
+      "services/iam/README.md",
+      "services/iam/docs/PROTECTED_PROFILE_RU.md",
+      "services/iam/internal/adapters/content/profilefiles/reader.go",
+      "services/iam/internal/adapters/content/profilefiles/reader_test.go",
+      "services/iam/internal/adapters/http/profile/handler.go",
+      "services/iam/internal/adapters/http/profile/handler_integration_test.go",
+      "services/iam/internal/adapters/http/profile/handler_test.go",
+      "services/iam/internal/adapters/postgres/authorization/reader.go",
+      "services/iam/internal/adapters/postgres/profile/reader.go",
+      "services/iam/internal/adapters/postgres/profile/reader_integration_test.go",
+      "services/iam/internal/adapters/postgres/profile/reader_test.go",
+      "services/iam/internal/application/getprofile/ports.go",
+      "services/iam/internal/application/getprofile/service.go",
+      "services/iam/internal/application/getprofile/service_test.go",
+      "services/iam/tools/check_postgres_session_lookup.py",
+      "services/iam/tools/check_profile.py"
+    ],
+    "evidence_manifest": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/artifact-manifest.json",
+    "preserved": "HIT-68 sessionpolicy/AuthenticateSession/SessionLookup, миграции SQL, go.mod/go.sum сохранены побайтово. Из HIT-84 экспортирована неизменённая проверка SQL-роли; правила authorization не клонированы. Другие сервисы, HIT-69, Keycloak, formal SQL/OAS не изменялись."
+  },
+  "verification": {
+    "state": "PASSED",
+    "protocol": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/verification.json",
+    "full_race_log": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/postgres-race.log",
+    "profile_log_exact_excerpt": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/profile-checks.log",
+    "summary": "https://github.com/hitpipe/hitpipe/blob/0f635f8aa0a5c29ec7c45ffea5a8b8d475ebc8d8/services/iam/evidence/HIT-85/summary.json",
+    "commands": "11 успешных команд: отдельные роли, миграции install/repeat, unit, integration -race, vet, build.",
+    "results": "123 верхних проверки/510 с подслучаями, 0 FAIL. Обязательные HTTPS/PostgreSQL/content тесты выполнены без SKIP. Пропущены только необязательные исторические измерения HIT-82.",
+    "environment": {
+      "go": "1.27.2",
+      "pgx": "5.11.0",
+      "postgres": "18.7",
+      "image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+      "started_at_utc": "2026-11-16T17:39:41Z",
+      "finished_at_utc": "2026-11-16T17:43:54Z",
+      "limits": {
+        "GOMAXPROCS": 1,
+        "GOGC": 50,
+        "go_build_parallelism": 1,
+        "postgres_memory_mib": 256,
+        "postgres_cpus": 0.5
+      }
+    },
+    "source_tree_sha256": "07db7b2750d9dd7b356247ac250c21afe22984819787399fdefe3bbdb5457628",
+    "covered": "BFF TLS1.3 цепочка/SAN/fingerprint/expiry, свежая session→principal/runtime identity и отдельная SESSION epoch, browser claims не authority, exact ref/digest/current owner до и после content I/O, deny до response start, 2s context/write deadlines и Flush внутри gate, Unicode/JSON/path/mode/symlink/digest, cancel/DB/content errors, no cache/default/second emit.",
+    "sandbox": "Только синтетические данные, loopback и временные owner-файлы. Контейнер и сеть удалены; рабочие базы/секреты не использованы."
+  },
+  "deviations": [
+    "Содержательные требования HIT-85 и принятый MVP не изменены; первый полный формальный проход прошёл успешно.",
+    "Частный адаптер кодирует профиль полным строгим Profile JSON в UUID.json и sha256:hex digest точных байтов. Лимит 32KiB — локальная граница памяти, не новый продуктовый TTL или изменение SQL/OAS.",
+    "Профиль глобальный собственный: workspace/membership grant не выдуман. Существующая workspace-specific authorizeaction.Execute не вызывается с фиктивной областью; reuse сохранён через session consumer/policy, Reference, runtime types и SQL guard.",
+    "Доверенный actual-response-start Gate и часы обязательны и внедряются явно. Тестовый управляемый gate не доказывает готовность HIT-69/общего координатора; разрешающего default нет.",
+    "Рабочий слушатель/BFF/Keycloak, cookie/login/logout, GET session, PATCH profile, writer/очистка/retention coordinator не входят в задачу. Сертификаты и runtime binding поставляет дальнейшая приватная серверная композиция.",
+    "Исходный результат HIT-84 принят в Jira, но PR61 ещё открыт; ветка опирается на его точный результат и включает предшествующую очередь HIT-81/82. Автоматическое слияние не выполнялось."
+  ]
+}
