@@ -66,14 +66,17 @@ func (db Store) Accept(ctx context.Context, s admission.Signal, c admission.Esta
  ON (a.workspace_id,a.operation_id,a.config_id)=(o.workspace_id,o.operation_id,o.selected_config_id)
  WHERE o.workspace_id=$1 AND o.operation_id=$2 FOR UPDATE OF o`, c.WorkspaceID, c.OperationID).Scan(&state, &config, &owner, &revision, &first)
 	if errors.Is(e, pgx.ErrNoRows) {
-		return zero, admission.ErrNotAdmissible
+		return zero, admission.ErrNotFound
 	}
 	if e != nil {
 		return zero, e
 	}
 	// source_created_at is Session.created from Event.data.object.created, NOT
 	// Event.created: Lead decision HIT-78 comment 12171 / HIT-73 comment 12172.
-	if state != "ACTIVE" || first == nil || revision != c.ExpectedRevision || s.SourceCreatedAt.Before(*first) {
+	if revision != c.ExpectedRevision {
+		return zero, admission.ErrStaleRevision
+	}
+	if state != "ACTIVE" || first == nil || s.SourceCreatedAt.Before(*first) {
 		return zero, admission.ErrNotAdmissible
 	}
 	retention := db.HistoryRetention

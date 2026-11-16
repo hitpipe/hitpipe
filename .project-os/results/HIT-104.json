@@ -1,0 +1,60 @@
+{
+  "subject": "HIT-104",
+  "materialized_result": {
+    "summary": "Private Intake-only receiveNormalizedSignal attached to existing Processing TLS1.3/mTLS server; existing exact NormalizedSignal/JCS and atomic admission/inbox/case/safety/HISTORY, current trusted context/epoch/actual-start, Receipt only after commit; no financial or provider effect in HTTP acknowledgement.",
+    "tested_code_sha": "5dea7c4592f52218d71afc88b1529b5f458be415",
+    "base_sha": "60f6c4863d91bc5f32812d55afbe01de94557f9e",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "contract_revision": 1,
+    "contract_fingerprint": "d4d9e7d05ad3fd4b468f2ba284cd65fe67f54f897b744555e19f2a622c6d3306",
+    "pr": "https://github.com/hitpipe/hitpipe/pull/62",
+    "integration_state": "Dependent on OPEN PR59/HIT99, preserving HIT78/79/95; sibling PR57/58 preserved, no main/full-stack integration claimed."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/intakehttp",
+    "services/processing/internal/application/receivesignals",
+    "services/processing/internal/application/admission/admit.go (shared context resolution and Receipt tags only)",
+    "services/processing/internal/adapters/postgres/admit.go (specific missing-resource/stale-revision errors only)",
+    "services/processing/internal/adapters/postgres/normalizedsignal/decode.go (RFC3339/UUID scope consistency; same raw decoder/JCS)",
+    "services/processing/internal/adapters/postgres/record.go (minimal Intake provenance in existing expiring HISTORY only)",
+    "services/processing/internal/adapters/postgres/intake*_test.go",
+    "services/processing/scripts/postgres/verify_intake_http.py",
+    "services/processing/scripts/postgres/verify_intake_schema.py",
+    "services/processing/docs/HIT-104"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-104/README.md",
+    "route_and_field_map": "services/processing/docs/HIT-104/ROUTE_MAP.md",
+    "source_audit": "services/processing/docs/HIT-104/source-audit.json",
+    "commands": "services/processing/docs/HIT-104/verification/commands.json",
+    "review_commands": "services/processing/docs/HIT-104/verification/review-commands.json",
+    "go_race_full_stdout": "services/processing/docs/HIT-104/verification/go-race.stdout",
+    "postgres_full_stdout": "services/processing/docs/HIT-104/verification/postgres-storage-tests.stdout",
+    "raw_streams": "services/processing/docs/HIT-104/verification/raw-streams.tar.gz",
+    "actual_http": "services/processing/docs/HIT-104/verification/intake-captures.jsonl",
+    "oas_validation": "services/processing/docs/HIT-104/verification/exact-intake-oas-validation.stdout",
+    "summary": "services/processing/docs/HIT-104/verification/summary.json",
+    "supplemental": "services/processing/docs/HIT-104/supplemental/commands.json",
+    "digests": "services/processing/docs/HIT-104/evidence-digests.json",
+    "result": "All8 frozen DoD locally checked; final clean run05:101 actual commands PASS incl race/vet/build, real PG18.7/mTLS/RLS/content and existing regressions;3 supplemental exit0;133 HTTP responses and2867 independent negative OAS sensitivity checks. Official READY/independent review/human acceptance remain separate.",
+    "environment": {
+      "host": "Go1.27.2 darwin/arm64 CGO1 full race/vet/build",
+      "database": "Separate Go1.27.2 linux/arm64 CGO0 actual owned PostgreSQL18.7 suite; not Linux race",
+      "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+      "python_tool": "actual Python3.14.2, stdlib verification only; not3.14.8 runtime qualification"
+    },
+    "session_created_decision": "https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171",
+    "history_policy": "Prior runs01-04 retained with own SHA/time/exit; stopped Docker run01 kept as failed environment. No historical logs rewritten."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Controlled installed binding/current authority/epoch and HTTPS Intake test client, not production IAM/Intake sender/credentials/Stripe webhook verification or live provider integration.",
+    "ContextSource is an explicit required trust port; protected lookups must share runtime actual-start. Test source uses real scoped own-operation read under shared gate; no production resolver or permissive default is supplied.",
+    "No financial algorithm/outbox/scheduler/automatic case advancement/provider write inside HTTP202. Admission is not payment/CONFIRMED/DeliveryACK.",
+    "Input first_received_at/expires_at are original Intake provenance, not new financial cutoffs or a claim of implementing Intake held-queue retention. Own HISTORY keeps existing<=90day policy, minimal identity/Receipt survives details expiry.",
+    "Real commit abort, ACK loss, client/server errors, filesystem step faults and process exit24 after commit tested; not power loss, loss of all storage, load/SLA/deployment qualification.",
+    "No main/full sibling-stack integration; after actual merges validate updated branches and exact-head CI.",
+    "No Jira transitions, PR merge or self acceptance. Fresh official Project OS handoff and independent review required."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}

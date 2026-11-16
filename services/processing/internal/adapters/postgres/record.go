@@ -86,7 +86,16 @@ func record(ctx context.Context, tx pgx.Tx, s admission.Signal, operation, confi
 			Scope             preparecase.Scope
 			OperationRevision int64
 			Decision          preparecase.Decision
-		}{id, 1, "", preparecase.Scope{Request: preparecase.Request{WorkspaceID: s.WorkspaceID, CaseID: id}, OperationID: operation, ConfigID: config, SourceConnectionID: s.ConnectionID, OwnerID: owner}, operationRevision, preparecase.Decision{Reason: "SIGNAL_ADMITTED", State: "RECEIVED", At: at}})
+			// Minimal Intake provenance in the existing expiring HISTORY only.
+			// No raw event, full NormalizedSignal, event text or payload in SQL.
+			IntakeOrigin struct {
+				Service, ReceiptID                           string
+				SessionCreatedAt, FirstReceivedAt, ExpiresAt time.Time
+			}
+		}{id, 1, "", preparecase.Scope{Request: preparecase.Request{WorkspaceID: s.WorkspaceID, CaseID: id}, OperationID: operation, ConfigID: config, SourceConnectionID: s.ConnectionID, OwnerID: owner}, operationRevision, preparecase.Decision{Reason: "SIGNAL_ADMITTED", State: "RECEIVED", At: at}, struct {
+			Service, ReceiptID                           string
+			SessionCreatedAt, FirstReceivedAt, ExpiresAt time.Time
+		}{"INTAKE", s.ReceiptID, s.SourceCreatedAt, s.FirstReceivedAt, s.ExpiresAt}})
 		if e != nil {
 			return zero, e
 		}
