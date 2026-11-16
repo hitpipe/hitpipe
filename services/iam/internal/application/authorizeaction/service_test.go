@@ -538,3 +538,19 @@ func TestConcurrentChecksAfterCommittedMembershipRevoke(t *testing.T) {
 		t.Fatal("cached authority used")
 	}
 }
+
+// Both roles permit these broad action names, but the owner's resource proof
+// can cover a wider area. A changed actor must obtain a new scoped proof.
+func TestRoleChangeInvalidatesOwnerProofEvenWhenBothRolesCanRead(t *testing.T) {
+	for _, action := range []string{"CASE_READ", "CONFIG_READ"} {
+		t.Run(action, func(t *testing.T) {
+			f := fresh(t)
+			f.afterOwner = func() { f.facts.Membership.Role = "READER" }
+			result, err := f.service.Execute(context.Background(), rawSession, request(action))
+			failed(t, result, err, ErrDenied)
+			if f.reads != 2 || f.confirms != 0 {
+				t.Fatal("changed actor reused an earlier owner proof")
+			}
+		})
+	}
+}

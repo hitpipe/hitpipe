@@ -695,15 +695,37 @@ func TestPostgresAuthorizationOwnerProofBindingAndCallerIdentity(t *testing.T) {
 }
 
 func TestPostgresAuthorizationRechecksAfterOwnerWait(t *testing.T) {
-	db := authorityDB(t)
-	f := db.seed(t)
-	owner := authorityOwner{operation: "saveDraft", before: func() {
-		db.exec(t, `UPDATE hp_iam.memberships SET role='READER',revision=6 WHERE workspace_id=$1 AND principal_id=$2`, f.workspace, f.principal)
-	}}
-	service := db.service(t, f, owner, f.gate(false), f.caller)
-	if got, err := service.Execute(context.Background(), f.raw, f.action("CONFIG_WRITE")); err == nil || got.Allowed {
-		t.Fatal("owner-port wait turned earlier role into retained grant")
-	}
+	t.Run("write-becomes-forbidden", func(t *testing.T) {
+		db := authorityDB(t)
+		f := db.seed(t)
+		owner := authorityOwner{operation: "saveDraft", before: func() {
+			db.exec(t, `UPDATE hp_iam.memberships SET role='READER',revision=6 WHERE workspace_id=$1 AND principal_id=$2`, f.workspace, f.principal)
+		}}
+		service := db.service(t, f, owner, f.gate(false), f.caller)
+		if got, err := service.Execute(context.Background(), f.raw, f.action("CONFIG_WRITE")); err == nil || got.Allowed {
+			t.Fatal("owner-port wait turned earlier role into retained grant")
+		}
+	})
+	t.Run("old-proof-from-different-role", func(t *testing.T) {
+		db := authorityDB(t)
+		f := db.seed(t)
+		gate := f.gate(false)
+		owner := authorityOwner{operation: "listCases", before: func() {
+			db.exec(t, `UPDATE hp_iam.memberships SET role='READER',revision=6 WHERE workspace_id=$1 AND principal_id=$2`, f.workspace, f.principal)
+			// The controlled gate already knows the new revision. An old proof
+			// must still be rejected even though both roles permit CASE_READ.
+			gate.expected.MembershipRevision = 6
+		}}
+		service := db.service(t, f, owner, gate, f.caller)
+		if got, err := service.Execute(context.Background(), f.raw, f.action("CASE_READ")); err == nil || got.Allowed {
+			t.Fatal("owner proof obtained for the previous role survived a role change")
+		}
+		// A separate fresh attempt asks the owner using the new actor role.
+		fresh := db.service(t, f, authorityOwner{operation: "listCases"}, gate, f.caller)
+		if got, err := fresh.Execute(context.Background(), f.raw, f.action("CASE_READ")); err != nil || !got.Allowed || got.Role != "READER" {
+			t.Fatalf("fresh owner proof for the current reader did not work: %v", err)
+		}
+	})
 }
 
 func TestPostgresAuthorizationSharedLocalGateSerializesRevoke(t *testing.T) {

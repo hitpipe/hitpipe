@@ -399,7 +399,8 @@ func (s Service) Execute(ctx context.Context, opaqueSession string, request Requ
 		if cancelled(ctx, work) {
 			return ErrCancelled
 		}
-		proof, err := s.owner.Prove(work, actor, copyRequest(request))
+		provedActor := actor
+		proof, err := s.owner.Prove(work, provedActor, copyRequest(request))
 		if cancelled(ctx, work) {
 			return ErrCancelled
 		}
@@ -424,7 +425,7 @@ func (s Service) Execute(ctx context.Context, opaqueSession string, request Requ
 		if err != nil {
 			return err
 		}
-		if !roleAllows(actor.Role, request.Action) || !validProof(proof, actor, request) {
+		if actor != provedActor || !roleAllows(actor.Role, request.Action) || !validProof(proof, actor, request) {
 			return ErrDenied
 		}
 		if err = s.authenticate(work, reference, snapshotLookup{snapshot.Session.Policy}); err != nil {
