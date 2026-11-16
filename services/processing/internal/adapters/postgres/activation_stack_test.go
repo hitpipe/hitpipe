@@ -5,9 +5,11 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"github.com/gowebpki/jcs"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/activationhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/casereadhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/drafthttp"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intakehttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/observationhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal"
@@ -91,6 +93,18 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	if res.StatusCode != 202 {
 		t.Fatal("Intake after actual activation", res.StatusCode, string(body))
 	}
+	tx := begin(t, connect(t), f.workspace)
+	var canonical []byte
+	var savedDigest string
+	if e = tx.QueryRow(ctx, `SELECT canonical_config,digest FROM hp_processing.accepted_configs WHERE workspace_id=$1`, f.workspace).Scan(&canonical, &savedDigest); e != nil {
+		t.Fatal(e)
+	}
+	tx.Rollback(ctx)
+	canonical, e = jcs.Transform(canonical)
+	if e != nil {
+		t.Fatal(e)
+	}
+	t.Logf("DIGEST_DIAGNOSTIC approved_draft=%s stored_accepted=%s actual_canonical=%s canonical=%s", command.AcceptedConfigDigest, savedDigest, draftjson.Hash(canonical), canonical)
 	req, _ = http.NewRequest("GET", f.url+"/api/v1/workspaces/"+f.workspace+"/cases", nil)
 	req.Header.Set("X-HitPipe-Session", "synthetic-session")
 	req.Header.Set("X-Request-ID", config)
