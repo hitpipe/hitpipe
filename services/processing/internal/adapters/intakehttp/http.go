@@ -10,7 +10,6 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/receivesignals"
 	"io"
-	"math"
 	"mime"
 	"net"
 	"net/http"
@@ -19,23 +18,25 @@ import (
 
 const Path = "/internal/v1/intake-signals"
 
+// HP-NFR-004: one incoming signal is bounded to256KiB.
+const MaxSignalBytes int64 = 256 << 10
+
 type Handler struct {
 	service receivesignals.Service
 	peer    string
-	maxBody int64
 }
 
-func New(s receivesignals.Service, peer string, maxBody int64) (http.Handler, error) {
-	if !s.Ready() || peer == "" || maxBody < 1 || maxBody == math.MaxInt64 {
+func New(s receivesignals.Service, peer string) (http.Handler, error) {
+	if !s.Ready() || peer == "" {
 		return nil, receivesignals.ErrUnavailable
 	}
-	return Handler{s, peer, maxBody}, nil
+	return Handler{s, peer}, nil
 }
 
 // Attach is called before ServeTLS. It retains existing read/Delivery handlers,
 // TLS policy, timeouts and single listener. No new socket or production grant.
-func Attach(server *http.Server, s receivesignals.Service, peer string, maxBody int64) error {
-	h, e := New(s, peer, maxBody)
+func Attach(server *http.Server, s receivesignals.Service, peer string) error {
+	h, e := New(s, peer)
 	if e != nil {
 		return e
 	}
@@ -127,7 +128,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		bad(admission.ErrInvalidSignal)
 		return
 	}
-	r.Body = http.MaxBytesReader(w, r.Body, h.maxBody)
+	r.Body = http.MaxBytesReader(w, r.Body, MaxSignalBytes)
 	raw, e := io.ReadAll(r.Body)
 	if e != nil {
 		bad(e)

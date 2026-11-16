@@ -158,7 +158,7 @@ func (f *intakeFixture) start(t *testing.T) {
 			}
 		})
 	}
-	if e = intakehttp.Attach(server, f.service, "intake.test", 1<<16); e != nil {
+	if e = intakehttp.Attach(server, f.service, "intake.test"); e != nil {
 		t.Fatal(e)
 	}
 	l, e := net.Listen("tcp", server.Addr)
@@ -330,7 +330,7 @@ func TestIntakeHTTPStrictWireAndHTTPBoundary(t *testing.T) {
 	for name, raw := range cases {
 		t.Run(name, func(t *testing.T) { f.apply(t, raw, 400, name); counts(t, f.ws, 0, 0, 0) })
 	}
-	f.apply(t, bytes.Repeat([]byte(" "), (1<<16)+1), 413, "body_limit")
+	f.apply(t, bytes.Repeat([]byte(" "), int(intakehttp.MaxSignalBytes)+1), 413, "body_limit")
 	counts(t, f.ws, 0, 0, 0)
 	for _, tc := range []struct {
 		name, method, path string
@@ -346,6 +346,8 @@ func TestIntakeHTTPStrictWireAndHTTPBoundary(t *testing.T) {
 		})
 	}
 	f.apply(t, good, 202, "canonical_false")
+	padded := append(append([]byte{}, good...), bytes.Repeat([]byte(" "), int(intakehttp.MaxSignalBytes)-len(good))...)
+	f.apply(t, padded, 202, "exact_256KiB_limit_canonical_false")
 	counts(t, f.ws, 1, 1, 1)
 }
 func TestIntakeHTTPBindingAuthorityLifecycleAndTLS(t *testing.T) {
