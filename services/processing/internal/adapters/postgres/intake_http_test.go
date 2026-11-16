@@ -11,6 +11,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/casereadhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intakehttp"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/observationhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
@@ -107,6 +108,7 @@ type intakeFixture struct {
 	pki           *testfixtures.ObservationPKI
 	client        *http.Client
 	server        *http.Server
+	extra         http.Handler
 }
 
 func newIntake(t *testing.T) intakeFixture {
@@ -144,6 +146,17 @@ func (f *intakeFixture) start(t *testing.T) {
 	server, e := casereadhttp.NewServer("127.0.0.1:0", &tls.Config{Certificates: []tls.Certificate{f.pki.Leaf(t, "processing.test", true, false)}, ClientCAs: f.pki.Root}, read, "bff.test")
 	if e != nil {
 		t.Fatal(e)
+	}
+	if f.extra != nil {
+		previous := server.Handler
+		extra := f.extra
+		server.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/internal/v1/delivery-observations" {
+				extra.ServeHTTP(w, r)
+			} else {
+				previous.ServeHTTP(w, r)
+			}
+		})
 	}
 	if e = intakehttp.Attach(server, f.service, "intake.test", 1<<16); e != nil {
 		t.Fatal(e)
@@ -477,6 +490,10 @@ func TestIntakeHTTPReplayPauseConcurrencyIdentityAndReadRoute(t *testing.T) {
 	if e := tx.Commit(ctx); e != nil {
 		t.Fatal(e)
 	}
+	f.apply(t, intakeWire(t, f.ws, func(m map[string]any) {
+		m["source_created_at"] = "2026-11-13T23:59:59Z"
+		m["event_type"] = "checkout.session.async_payment_succeeded"
+	}), 409, "resume_does_not_move_first_activation")
 	for _, same := range []bool{true, false} {
 		t.Run(fmt.Sprintf("concurrent_same_%t", same), func(t *testing.T) {
 			base := intakeWire(t, f.ws, nil)
@@ -526,4 +543,39 @@ func TestIntakeHTTPReplayPauseConcurrencyIdentityAndReadRoute(t *testing.T) {
 	f.source.mu.Unlock()
 	f.apply(t, intakeWire(t, f.ws, func(m map[string]any) { m["stripe_account_id"] = "acct_other" }), 202, "same_session_other_trusted_account")
 	counts(t, f.ws, 11, 4, 4)
+}
+
+func TestIntakeHTTPUUIDIdentityAndExistingDeliveryRoute(t *testing.T) {
+	f := newIntake(t)
+	raw := intakeWire(t, f.ws, func(m map[string]any) {
+		m["workspace_id"] = strings.ToUpper(f.ws)
+		m["connection_id"] = strings.ToUpper(config)
+	})
+	body := f.apply(t, raw, 202, "uppercase_uuid_same_identity")
+	var receipt admission.Receipt
+	json.Unmarshal(body, &receipt)
+	ref, at := historyRef(t, f.ws, receipt.RecordID)
+	if _, e := f.files.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: f.ws, CaseID: receipt.RecordID, Revision: 1}, at); e != nil {
+		t.Fatal("UUID scope/content origin split", e)
+	}
+	other := newObservation(t)
+	handler, e := observationhttp.New(other.service, "delivery.test", 1<<16)
+	if e != nil {
+		t.Fatal(e)
+	}
+	f.extra = handler
+	f.start(t)
+	tr := f.pki.Transport(t)
+	tr.TLSClientConfig.Certificates = []tls.Certificate{f.pki.Leaf(t, "delivery.test", false, false)}
+	f.client = &http.Client{Transport: tr, Timeout: time.Second}
+	defer f.client.CloseIdleConnections()
+	code, b, e := f.call(t, observationWire(t, other.observation(t, "RESULT_VERIFIED")), "POST", "/internal/v1/delivery-observations", nil)
+	if e != nil || code != 202 {
+		t.Fatal("existing Delivery handler lost", code, string(b), e)
+	}
+	other.counts(t, 1)
+	code, _, e = f.call(t, raw, "POST", intakehttp.Path, nil)
+	if e != nil || code != 403 {
+		t.Fatal("Delivery admitted as Intake")
+	}
 }

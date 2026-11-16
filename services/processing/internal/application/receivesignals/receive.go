@@ -115,12 +115,14 @@ func (s Service) Execute(ctx context.Context, raw []byte, emit func(admission.Re
 		return
 	}}
 	receipt, e := admission.AdmitWithContext(ctx, raw, s.Decoder, store, func(c context.Context, v admission.Signal) (admission.EstablishedContext, error) {
+		bounded, cancel := context.WithTimeout(c, 2*time.Second)
+		defer cancel()
 		var e error
-		grant, e = s.Contexts.Establish(c, Identity{v.WorkspaceID, v.ConnectionID, v.AccountID, v.Live})
+		grant, e = s.Contexts.Establish(bounded, Identity{v.WorkspaceID, v.ConnectionID, v.AccountID, v.Live})
 		if e != nil {
 			return admission.EstablishedContext{}, e
 		}
-		if !valid() {
+		if bounded.Err() != nil || !valid() {
 			return admission.EstablishedContext{}, admission.ErrNotAuthorized
 		}
 		return grant.Context, nil

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"io"
 	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/gowebpki/jcs"
@@ -129,5 +130,9 @@ func (Decoder) Decode(raw []byte) (Signal, error) {
 	if zero.Digest != "sha256:"+hex.EncodeToString(sum[:]) {
 		return Signal{}, ErrInvalidSignal
 	}
+	// PostgreSQL UUID scope and owned-content origin use the same UUID identity.
+	// Digest remains over the original bytes, before this identity normalization.
+	zero.WorkspaceID = strings.ToLower(zero.WorkspaceID)
+	zero.ConnectionID = strings.ToLower(zero.ConnectionID)
 	return zero, nil
 }
