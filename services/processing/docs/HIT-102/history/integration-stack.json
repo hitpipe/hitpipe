@@ -1,0 +1,19 @@
+{
+  "status": "FAIL_PENDING_DIGEST_DECISION",
+  "not_merged_main": true,
+  "base_activation_sha": "ec0eeb8c35c253dcccbab83b78ae329b8256dab3",
+  "integrated_pr62_sha": "ce6afe4ff78559920646aaca1de4ca90d0531734",
+  "integrated_pr57_sha": "d53f42b0803c2c9ec51364faa117a7d4e886abb7",
+  "local_integration_sha": "722d2d0c55162656c46a354c5235ea21cfaf0d78",
+  "integration_test_file": "history/integration-stack-test.go.txt",
+  "integration_test_sha256": "a726b99cff3383abdfa8249cd972e581861f639a1d0dfd7186aa2e405e1757cb",
+  "diagnostic_commands_archive": "history/integration-diagnostic-03.tar.gz",
+  "recipe": [
+    "Create a separate worktree/branch from activation code SHA.",
+    "Merge PR62 SHA and PR57 SHA without rewriting predecessors.",
+    "Copy the archived integration test into services/processing/internal/adapters/postgres/activation_stack_test.go.",
+    "Commit this experimental integration snapshot; do not claim main acceptance.",
+    "Use verify_activation.py with owned PostgreSQL18.7. The archived diagnostic restricts postgres binary with -test.run=^TestActivationExperimentalStackOnePrivateListener$. Exact arguments/cwd/env/exits/source SHA are in commands.json."
+  ],
+  "actual_result": "activation201,receiveNormalizedSignal202,listCases503 READ_UNAVAILABLE; DB read proves stored approved digest differs from SHA256(JCS(canonical_config))."
+}
