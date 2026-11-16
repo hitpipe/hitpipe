@@ -802,6 +802,10 @@ func (b changedActivationBindings) Check(c context.Context, g drafts.Grant, q dr
 	switch b.field {
 	case "price":
 		p.PriceID = "price_changed"
+	case "list":
+		p.ListID = "list_changed"
+	case "assignee":
+		p.AssigneeID = "assignee_changed"
 	case "destination":
 		p.DestinationWorkspaceID = "other_workspace"
 	case "account":
@@ -901,7 +905,7 @@ func TestActivationNoStaleOrFabricatedPreparation(t *testing.T) {
 			activationCapture(t, s, in, b, "preparation_"+mode)
 		})
 	}
-	for _, field := range []string{"price", "destination", "account", "mode", "workspace", "principal", "epoch", "expired"} {
+	for _, field := range []string{"price", "list", "assignee", "destination", "account", "mode", "workspace", "principal", "epoch", "expired"} {
 		t.Run("binding_"+field, func(t *testing.T) {
 			f := newActivationFixture(t)
 			in := f.ready(t)
