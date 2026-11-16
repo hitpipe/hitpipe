@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-81",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Добавлены отдельная административная подготовка ролей и команда установки точной принятой схемы IAM. Мигратор владеет схемой, прикладные роли разделены. Повторный запуск распознаёт версию1; частичная/чужая схема, ослабленные политики или права вызывают отказ без удаления/ремонта. Результат HIT-68 переиспользован, адаптер чтения не изменён.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_commit": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "code_commit": "829934b4dab057661f1a63d8cc009645d9f515e9",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/55",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/README.md",
+    "schema_source": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql",
+      "sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+      "byte_identical": true
+    }
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/README.md",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/README.md"
+    },
+    {
+      "path": "services/iam/cmd/iam-migrate/main.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/cmd/iam-migrate/main.go"
+    },
+    {
+      "path": "services/iam/cmd/iam-migrate/main_test.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/cmd/iam-migrate/main_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/README.md",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/README.md"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/bootstrap_roles.sql",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/bootstrap_roles.sql"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/migrate.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/migrate.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/migrate_integration_test.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/migrate_integration_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/migrate_test.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/migrate_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/permissions.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/permissions.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/schema/001_iam.sql",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/schema/001_iam.sql"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/schema_integration_test.go",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/internal/adapters/postgres/migrations/schema_integration_test.go"
+    },
+    {
+      "path": "services/iam/tools/check_iam_schema.py",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/tools/check_iam_schema.py"
+    },
+    {
+      "path": "services/iam/tools/check_postgres_session_lookup.py",
+      "version": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/829934b4dab057661f1a63d8cc009645d9f515e9/services/iam/tools/check_postgres_session_lookup.py"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/README.md",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/README.md"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/bootstrap-roles.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/bootstrap-roles.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/build.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/build.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/ci-proof.json",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/ci-proof.json"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/migration-install.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-install.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/migration-repeat.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-repeat.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/migration-role-tcp.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-role-tcp.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/migration-startup-role.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-startup-role.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/postgres-race.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/postgres-race.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/read-only-lookup.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/read-only-lookup.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/test-logins.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/test-logins.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/unit.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/unit.log"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/verification.json",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/verification.json"
+    },
+    {
+      "path": "services/iam/evidence/HIT-81/vet.log",
+      "version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/vet.log"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "829934b4dab057661f1a63d8cc009645d9f515e9",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/verification.json",
+    "protocol_version": "65e5fe77dd62e864b4762ba563f20adc8b4e1942",
+    "postgres_log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/postgres-race.log",
+    "source_tree_sha256": "b53318496d30d03bd72622332633832ef3ad5593f4b51e2fdd19bfa5bdf63327",
+    "state": "PASSED",
+    "environment": {
+      "go": "go version go1.27.2 linux/amd64",
+      "postgres": "18.7",
+      "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+      "scope": "Собственный одноразовый PostgreSQL на loopback, синтетические данные, реальные отдельные LOGIN. Рабочие базы не используются.",
+      "execution_limits": {
+        "GOMAXPROCS": 1,
+        "GOGC": 50,
+        "go_build_parallelism": 1,
+        "postgres_memory_mib": 256,
+        "postgres_cpus": 0.5
+      }
+    },
+    "commands": [
+      {
+        "name": "bootstrap-roles",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-8536e7a3be93",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_8536e7a3be93"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/bootstrap-roles.log",
+        "log_sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322"
+      },
+      {
+        "name": "test-logins",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-8536e7a3be93",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_8536e7a3be93"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/test-logins.log",
+        "log_sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7"
+      },
+      {
+        "name": "migration-role-tcp",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-8536e7a3be93",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_8536e7a3be93",
+          "-Atc",
+          "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-role-tcp.log",
+        "log_sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+      },
+      {
+        "name": "migration-startup-role",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "--env",
+          "PGOPTIONS=-c role=hp_iam_migrator",
+          "hit81-pg-8536e7a3be93",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_8536e7a3be93",
+          "-Atc",
+          "SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-startup-role.log",
+        "log_sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+      },
+      {
+        "name": "migration-install",
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-install.log",
+        "log_sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+      },
+      {
+        "name": "migration-repeat",
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/migration-repeat.log",
+        "log_sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+      },
+      {
+        "name": "read-only-lookup",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-8536e7a3be93",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_8536e7a3be93"
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/read-only-lookup.log",
+        "log_sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76"
+      },
+      {
+        "name": "unit",
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/unit.log",
+        "log_sha256": "a5b022fea2bbeed297731f56e28548299995757edc4c8869e03a5d0d6b8e3cc7"
+      },
+      {
+        "name": "postgres-race",
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-tags=integration",
+          "-race",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/postgres-race.log",
+        "log_sha256": "ba896800face997f406a36be651322ab297df37d6446e433a6cc1bf6d454bf48"
+      },
+      {
+        "name": "vet",
+        "command": [
+          "go",
+          "vet",
+          "-p",
+          "1",
+          "-tags=integration",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/vet.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "build",
+        "command": [
+          "go",
+          "build",
+          "-p",
+          "1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/build.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "top_level_tests_passed": 58,
+    "iam_schema_tests_passed": 17,
+    "iam_schema_subcases_passed": 56,
+    "legacy_postgres_lookup_tests_passed": 9,
+    "skipped_tests": 0,
+    "checked_behavior": [
+      "Точная миграция: installed, затем already_installed на прежнем и новом соединении; два параллельных мигратора сериализованы.",
+      "17таблиц принадлежат migrator; runtime не SUPERUSER/BYPASSRLS/owner и не может перейти в purge/migrator.",
+      "10tenantтаблиц: без workspace нет данных, чужие INSERT/UPDATE отклонены, SET LOCAL не переносится после COMMIT/ROLLBACK.",
+      "Уникальность issuer+subject/session_hash/external binding, принятые сроки sessions/revocations, append-only audit/command receipts.",
+      "Глобальные IAM-таблицы намеренно не получают фиктивного tenant-фильтра; job_index worker/purge-only.",
+      "COMMIT читается новым соединением; ошибка второй записи откатывает первую; ошибка DDL откатывает создание всей схемы.",
+      "RLS/ACL/default-privileges drift не объявляются уже установленной безопасной схемой.",
+      "Настройки fsync/full_page_writes/synchronous_commit включены, таблицы logged; это не квалификация аппаратного хранения."
+    ],
+    "cleanup": {
+      "test_container_removed": true,
+      "test_network_removed": true
+    },
+    "github_actions": {
+      "run_id": 43708079414,
+      "ref": "https://github.com/hitpipe/hitpipe/actions/runs/43708079414",
+      "checked_revision": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "conclusion": "success",
+      "source_tree_sha256": "b53318496d30d03bd72622332633832ef3ad5593f4b51e2fdd19bfa5bdf63327",
+      "artifact_logs_verified": true,
+      "proof_ref": "https://github.com/hitpipe/hitpipe/blob/65e5fe77dd62e864b4762ba563f20adc8b4e1942/services/iam/evidence/HIT-81/ci-proof.json",
+      "scope": "Отдельный реальный CI-прогон того же кода, не вердикт Project OS Reviewer."
+    },
+    "reproduce": "python3 services/iam/tools/check_iam_schema.py --evidence-dir /tmp/hit81-new-check"
+  },
+  "deviations": {
+    "scope_changes": "Нет: изменения ограничены services/iam и этой RELATED JSON-проекцией. Другие сервисы, клиент, Keycloak, Project OS runtime, принятые SQL/API и рабочие базы не менялись.",
+    "accepted_postgres_patch": "Использована применённая к HIT-81 поправка PostgreSQL18.7, источник https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md. Остальной стек и schema bytes сохранены.",
+    "known_release_input": "Go1.27.2 и pgx5.11.0 сохранены по принятому cohort. Историческая заметка HIT-68 о Go advisories остаётся актуальным ограничением перед развёртыванием; новый анализ достижимости или квалификация безопасности не заявлены.",
+    "historical_security_note_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/security-note.json"
+  },
+  "limitations": [
+    "Готовы миграция и проверка схемы во временной настоящей PostgreSQL. Вход пользователя, выдача сессий, прикладные grants, распределённый отзыв и эксплуатация остаются отдельными задачами.",
+    "RLS служит дополнительной защитой: сервис сам выбирает hp.workspace_id, поэтому этот параметр не доказывает бизнес-полномочий на tenant или глобальные IAM-таблицы.",
+    "Повторная миграция сверяет версию, владельцев, таблицы и правила доступа; не обещает универсальную сверку всех столбцов и индексов.",
+    "Согласованный SQL не изменялся для усиления правил приложения; не выраженные в SQL гарантии времени/полномочий/связности остаются обязанностью соответствующего кода.",
+    "Независимое ревью и человеческое принятие этим результатом не подменяются."
+  ]
+}

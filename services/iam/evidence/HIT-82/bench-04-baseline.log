@@ -1,0 +1,15 @@
+goos: linux
+goarch: amd64
+pkg: github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup
+cpu: AMD Ryzen 9 7950X3D 16-Core Processor          
+BenchmarkPostgresLookup/valid         	    1000	    259738 ns/op	    1813 B/op	      28 allocs/op
+BenchmarkPostgresLookup/unknown       	    1000	    225279 ns/op	    1619 B/op	      20 allocs/op
+BenchmarkPostgresLookup/revoked       	    1000	    187624 ns/op	    1813 B/op	      28 allocs/op
+BenchmarkPostgresLookup/canceled      	    1000	        49.59 ns/op	       0 B/op	       0 allocs/op
+BenchmarkPostgresLookup/parallel_valid_pool5         	    1000	    186361 ns/op	    1826 B/op	      28 allocs/op
+BenchmarkReferenceDecode/valid                       	    1000	       376.2 ns/op	     160 B/op	       3 allocs/op
+BenchmarkReferenceDecode/uppercase                   	    1000	       458.2 ns/op	     160 B/op	       3 allocs/op
+BenchmarkReferenceDecode/malformed                   	    1000	      1061 ns/op	      32 B/op	       1 allocs/op
+BenchmarkReferenceDecode/short                       	    1000	         2.675 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	0.996s
