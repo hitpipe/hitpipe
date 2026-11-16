@@ -182,3 +182,33 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		bad(e)
 	}
 }
+
+// Attach retains other owner routes on the same private server. Call before ServeTLS.
+func Attach(server *http.Server, s drafts.Service, peer string, maxBody int64) error {
+	h, e := New(s, peer, maxBody)
+	if e != nil {
+		return e
+	}
+	if server == nil || server.Handler == nil {
+		return drafts.ErrUnavailable
+	}
+	host, port, e := net.SplitHostPort(server.Addr)
+	ip := net.ParseIP(host)
+	if e != nil || ip == nil || (!ip.IsPrivate() && !ip.IsLoopback()) || (port != "8443" && !(ip.IsLoopback() && port == "0")) {
+		return drafts.ErrUnavailable
+	}
+	t := server.TLSConfig
+	if t == nil || t.ClientCAs == nil || len(t.Certificates) == 0 || t.ClientAuth != tls.RequireAndVerifyClientCert || t.MinVersion != tls.VersionTLS13 || t.MaxVersion != tls.VersionTLS13 || t.InsecureSkipVerify || t.GetConfigForClient != nil {
+		return drafts.ErrUnavailable
+	}
+	previous := server.Handler
+	server.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		parts := strings.Split(r.URL.Path, "/")
+		if len(parts) >= 5 && parts[1] == "api" && parts[2] == "v1" && parts[3] == "workspaces" && len(parts) >= 6 && (parts[5] == "drafts" || parts[5] == "rehearsals") {
+			h.ServeHTTP(w, r)
+			return
+		}
+		previous.ServeHTTP(w, r)
+	})
+	return nil
+}

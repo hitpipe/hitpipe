@@ -49,6 +49,17 @@ func (f *activationFixture) startActivation(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
+	previous := s.Handler
+	s.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/retained-owner-route" {
+			w.WriteHeader(204)
+			return
+		}
+		previous.ServeHTTP(w, r)
+	})
+	if e = drafthttp.Attach(s, f.service, "bff.test", 256<<10); e != nil {
+		t.Fatal(e)
+	}
 	if e = activationhttp.Attach(s, f.act, "bff.test", 256<<10); e != nil {
 		t.Fatal(e)
 	}
@@ -960,4 +971,55 @@ func TestActivationMissingPortsDenyAndForeignRLS(t *testing.T) {
 		})
 	}
 	_ = in
+}
+
+func TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup(t *testing.T) {
+	f := newActivationFixture(t)
+	res, e := f.client.Get(f.url + "/retained-owner-route")
+	if e != nil {
+		t.Fatal(e)
+	}
+	res.Body.Close()
+	if res.StatusCode != 204 {
+		t.Fatal("previous owner handler replaced")
+	}
+	for _, mode := range []string{"public", "port", "no_tls", "no_ca", "no_certificate", "no_client_auth", "tls12", "unbounded_tls", "insecure", "dynamic_tls", "missing_service", "bad_size"} {
+		t.Run(mode, func(t *testing.T) {
+			s, e := drafthttp.NewServer("127.0.0.1:0", &tls.Config{Certificates: []tls.Certificate{f.pki.Leaf(t, "processing.test", true, false)}, ClientCAs: f.pki.Root}, f.service, "bff.test", 256<<10)
+			if e != nil {
+				t.Fatal(e)
+			}
+			service := f.act
+			size := int64(256 << 10)
+			switch mode {
+			case "public":
+				s.Addr = "0.0.0.0:8443"
+			case "port":
+				s.Addr = "127.0.0.1:8080"
+			case "no_tls":
+				s.TLSConfig = nil
+			case "no_ca":
+				s.TLSConfig.ClientCAs = nil
+			case "no_certificate":
+				s.TLSConfig.Certificates = nil
+			case "no_client_auth":
+				s.TLSConfig.ClientAuth = tls.NoClientCert
+			case "tls12":
+				s.TLSConfig.MinVersion = tls.VersionTLS12
+			case "unbounded_tls":
+				s.TLSConfig.MaxVersion = 0
+			case "insecure":
+				s.TLSConfig.InsecureSkipVerify = true
+			case "dynamic_tls":
+				s.TLSConfig.GetConfigForClient = func(*tls.ClientHelloInfo) (*tls.Config, error) { return nil, nil }
+			case "missing_service":
+				service.Bindings = nil
+			case "bad_size":
+				size++
+			}
+			if activationhttp.Attach(s, service, "bff.test", size) == nil {
+				t.Fatal("unsafe attachment accepted", mode)
+			}
+		})
+	}
 }
