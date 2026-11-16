@@ -2,6 +2,21 @@
 
 HIT-19 / Feature HIT-11, MANUAL_LAB_PR12. Author-owner: Дмитрий Карачебан; agent implementation: Codex. This is reusable IAM logic with a synthetic diagnostic executable, not a deployed authentication service.
 
+## HIT-85 — защищённое чтение профиля
+
+Приватный `GET /api/v1/profile` для BFF: TLS 1.3 с проверкой сертификата,
+действительная сохранённая сессия, текущий владелец из IAM SQL и проверенный файл
+профиля. Допуск удерживается до начала ответа; рабочий координатор HIT-69 здесь
+не подменяется. Устройство, подключение и границы —
+[`docs/PROTECTED_PROFILE_RU.md`](docs/PROTECTED_PROFILE_RU.md).
+
+```sh
+python3 services/iam/tools/check_profile.py --evidence-dir /tmp/hit85-check
+```
+
+Команда проверяет настоящий HTTPS, отдельную PostgreSQL и временные owner-файлы.
+Рабочий сервер и внешние подключения этим не развёртываются.
+
 ## HIT-84 — проверка текущих прав
 
 Добавлена локальная прикладная проверка действия: действительная сессия,
