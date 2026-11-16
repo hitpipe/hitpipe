@@ -123,7 +123,7 @@ type draftFixture struct {
 	gate                     *draftGate
 	bindings                 *draftBindings
 	client                   *http.Client
-	pki                      *testfixtures.PKI
+	pki                      *testfixtures.DraftPKI
 }
 
 func newDraftFixture(t *testing.T) draftFixture {
@@ -154,7 +154,7 @@ func newDraftFixtureBase(t *testing.T) draftFixture {
 	gate := &draftGate{workspace: ws, epoch: 7}
 	bindings := &draftBindings{}
 	service := drafts.Service{Repository: repo, Authority: auth, Boundary: gate, Bindings: bindings, Clock: clock, Codec: codec, Policy: policy}
-	pki := testfixtures.NewPKI(t)
+	pki := testfixtures.NewDraftPKI(t)
 	f := draftFixture{workspace: ws, id: id, path: path, files: files, repo: repo, service: service, authority: auth, gate: gate, bindings: bindings, pki: pki}
 	return f
 }
