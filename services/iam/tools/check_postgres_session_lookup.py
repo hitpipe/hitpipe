@@ -37,13 +37,17 @@ def source_digest():
     return digest.hexdigest()
 
 
-def main(*, task="HIT-81", schema_checks=True):
+def main(*, task="HIT-81", schema_checks=True, authorization_checks=False):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--go", default="go", help="Path to the accepted Go 1.27.2 binary")
     parser.add_argument("--evidence-dir", type=Path, default=IAM / "evidence" / task)
     parser.add_argument("--measure-baseline", type=Path,
                         help="Optional local HIT-82 baseline worktree; never a database URL")
     args = parser.parse_args()
+    # The established CI entry must run the new real-database authorization
+    # checks whenever this implementation is present, including through the
+    # historical schema/lookup wrappers.
+    authorization_checks = authorization_checks or (IAM / "internal/application/authorizeaction").is_dir()
     if hashlib.sha256(SQL.read_bytes()).hexdigest() != SQL_SHA256:
         parser.error("IAM fixture differs from the complete accepted SQL source")
     if schema_checks and hashlib.sha256((MIGRATIONS / "schema/001_iam.sql").read_bytes()).hexdigest() != SQL_SHA256:
@@ -76,7 +80,9 @@ def main(*, task="HIT-81", schema_checks=True):
         "execution_limits": {"GOMAXPROCS": 1, "GOGC": 50, "go_build_parallelism": 1,
                              "postgres_memory_mib": 256, "postgres_cpus": 0.5},
         "postgres_image": IMAGE, "iam_sql_sha256": SQL_SHA256,
-        "scope": ("Isolated IAM schema migration, role permissions, row isolation, constraints and transaction checks, "
+        "scope": ("Local current authorization with controlled caller, owner-resource and actual-start gate ports, "
+                  "real PostgreSQL authority and existing session consumer; not a live listener or distributed coordinator"
+                  if authorization_checks else "Isolated IAM schema migration, role permissions, row isolation, constraints and transaction checks, "
                   "plus the existing session lookup and consumer; not live IAM, login, trusted time or deployment qualification"
                   if schema_checks else "Isolated adapter and existing consumer tests, not login, authorization, trusted time or deployment qualification"),
         "checks": [], "state": "FAILED",
@@ -190,6 +196,8 @@ def main(*, task="HIT-81", schema_checks=True):
                 raise RuntimeError("required real PostgreSQL tests did not run")
             if schema_checks and label == "postgres-race" and ("--- SKIP: TestIAMSchema" in log or "--- PASS: TestIAMSchema" not in log):
                 raise RuntimeError("required IAM schema and permission tests did not run")
+            if authorization_checks and label == "postgres-race" and ("--- SKIP: TestPostgresAuthorization" in log or "--- PASS: TestPostgresAuthorization" not in log):
+                raise RuntimeError("required current authorization PostgreSQL tests did not run")
         if args.measure_baseline:
             from measure_session_lookup import measure
             measure(args.go, environment, evidence, args.measure_baseline)
