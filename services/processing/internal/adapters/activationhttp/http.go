@@ -9,6 +9,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
 	"io"
 	"mime"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -21,7 +22,16 @@ type Handler struct {
 }
 
 func Attach(server *http.Server, s activation.Service, peer string, maxBody int64) error {
-	if server == nil || server.Handler == nil || !s.Ready() || peer == "" || maxBody != 256<<10 || server.TLSConfig == nil || server.TLSConfig.MinVersion != tls.VersionTLS13 || server.TLSConfig.ClientAuth != tls.RequireAndVerifyClientCert {
+	if server == nil || server.Handler == nil || !s.Ready() || peer == "" || maxBody != 256<<10 {
+		return drafts.ErrUnavailable
+	}
+	host, port, e := net.SplitHostPort(server.Addr)
+	ip := net.ParseIP(host)
+	if e != nil || ip == nil || (!ip.IsPrivate() && !ip.IsLoopback()) || (port != "8443" && !(ip.IsLoopback() && port == "0")) {
+		return drafts.ErrUnavailable
+	}
+	t := server.TLSConfig
+	if t == nil || t.ClientCAs == nil || len(t.Certificates) == 0 || t.ClientAuth != tls.RequireAndVerifyClientCert || t.MinVersion != tls.VersionTLS13 || t.MaxVersion != tls.VersionTLS13 || t.InsecureSkipVerify || t.GetConfigForClient != nil {
 		return drafts.ErrUnavailable
 	}
 	old := server.Handler
