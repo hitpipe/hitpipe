@@ -719,3 +719,245 @@ func TestActivationTLSCallerAndRouteBoundaries(t *testing.T) {
 		t.Fatal("existing handler lost", status, string(b))
 	}
 }
+
+// Mutates only this test's own durable files, rebuilding their hashes/SQL pointer
+// to test semantic validation independently from byte-corruption detection.
+func (f activationFixture) rewriteRehearsal(t *testing.T, change func(*drafts.RehearsalResult, *drafts.CommandNode)) {
+	t.Helper()
+	tx := begin(t, connect(t), f.workspace)
+	var id, digest string
+	var expiry time.Time
+	if e := tx.QueryRow(ctx, `SELECT prose_ref::text,prose_sha256,expires_at FROM hp_processing.drafts WHERE workspace_id=$1`, f.workspace).Scan(&id, &digest, &expiry); e != nil {
+		t.Fatal(e)
+	}
+	tx.Rollback(ctx)
+	raw, e := f.files.ReadDraftRoot(ctx, id, digest, expiry, origin(f.workspace, f.id, 1), time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	var root drafts.Root
+	json.Unmarshal(raw, &root)
+	raw, e = f.files.ReadDraft(ctx, *root.Tail, origin(f.workspace, f.id, 1), time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	var node drafts.CommandNode
+	json.Unmarshal(raw, &node)
+	if node.Kind != drafts.Rehearse {
+		t.Fatal("not rehearsal tail")
+	}
+	raw, e = f.files.ReadDraft(ctx, node.Response, origin(f.workspace, f.id, 1), time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	var rr drafts.RehearsalResult
+	json.Unmarshal(raw, &rr)
+	change(&rr, &node)
+	raw, e = f.service.Codec.Encode(drafts.Rehearse, rr)
+	if e != nil {
+		t.Fatal(e)
+	}
+	node.Response, e = f.repo.writeFile(ctx, raw, f.workspace, f.id, 1, expiry, time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	raw, _ = json.Marshal(node)
+	tail, e := f.repo.writeFile(ctx, raw, f.workspace, f.id, 1, expiry, time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	root.Tail = &tail
+	raw, _ = json.Marshal(root)
+	ref, e := f.repo.writeFile(ctx, raw, f.workspace, f.id, 1, expiry, time.Now())
+	if e != nil {
+		t.Fatal(e)
+	}
+	tx = begin(t, connect(t), f.workspace)
+	if _, e = tx.Exec(ctx, `UPDATE hp_processing.drafts SET prose_ref=$2,prose_sha256=$3 WHERE workspace_id=$1`, f.workspace, ref.ID, ref.Digest); e != nil {
+		t.Fatal(e)
+	}
+	if e = tx.Commit(ctx); e != nil {
+		t.Fatal(e)
+	}
+}
+
+type changedActivationBindings struct {
+	base  *draftBindings
+	field string
+}
+
+func (b changedActivationBindings) Check(c context.Context, g drafts.Grant, q drafts.BindingQuery) (drafts.BindingProof, error) {
+	p, e := b.base.Check(c, g, q)
+	switch b.field {
+	case "price":
+		p.PriceID = "price_changed"
+	case "destination":
+		p.DestinationWorkspaceID = "other_workspace"
+	case "account":
+		p.SourceAccountID = "acct_other"
+	case "connection":
+		p.SourceConnectionID = config
+	case "mode":
+		p.Mode = "LIVE"
+	case "workspace":
+		p.WorkspaceID = config
+	case "principal":
+		p.PrincipalID = config
+	case "epoch":
+		p.Epoch++
+	case "expired":
+		p.ExpiresAt = time.Now().Add(-time.Second)
+	}
+	return p, e
+}
+func TestActivationNoStaleOrFabricatedPreparation(t *testing.T) {
+	for _, mode := range []string{"incomplete", "failed_check", "foreign_check", "foreign_rehearsal", "changed_result", "missing_original_examples", "changed_original_examples", "missing_preparation_response"} {
+		t.Run(mode, func(t *testing.T) {
+			f := newActivationFixture(t)
+			var in drafts.ActivationCommand
+			want := 409
+			if mode == "incomplete" || mode == "failed_check" {
+				cfg := f.config()
+				if mode == "incomplete" {
+					cfg.ServiceLabel = nil
+				}
+				s, b := f.call(t, drafts.Save, drafts.DraftWrite{Command: f.meta(nil), Config: cfg}, nil)
+				if s != 201 {
+					t.Fatal(s, string(b))
+				}
+				f.bindings.denied = mode == "failed_check"
+				rev := int64(1)
+				s, b = f.call(t, drafts.Check, f.meta(&rev), nil)
+				var ck drafts.ReadinessCheck
+				if s != 200 || json.Unmarshal(b, &ck) != nil || ck.Passed {
+					t.Fatal("negative check expected", s, string(b))
+				}
+				f.bindings.denied = false
+				s, b = f.call(t, drafts.Rehearse, drafts.RehearsalRequest{Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: []drafts.ScenarioExample{{SyntheticSessionAlias: "example_unpaid", MissingContextKeys: []string{}}}}, nil)
+				var rr drafts.RehearsalResult
+				if s != 200 || json.Unmarshal(b, &rr) != nil {
+					t.Fatal(s, string(b))
+				}
+				in = drafts.ActivationCommand{Command: f.meta(nil), DraftID: f.id, DraftRevision: 1, ReadinessCheckID: ck.CheckID, RehearsalID: rr.RehearsalID, AcceptedConfigDigest: ck.ConfigDigest, AcceptanceTextVersion: "managed-operation-v1", ConfirmActivate: true}
+			} else {
+				in = f.ready(t)
+				switch mode {
+				case "foreign_check", "foreign_rehearsal":
+					other := newActivationFixture(t)
+					oi := other.ready(t)
+					if mode == "foreign_check" {
+						in.ReadinessCheckID = oi.ReadinessCheckID
+					} else {
+						in.RehearsalID = oi.RehearsalID
+					}
+				case "changed_result":
+					f.rewriteRehearsal(t, func(rr *drafts.RehearsalResult, _ *drafts.CommandNode) { rr.Results[0] = "WOULD_WAIT" })
+				case "missing_original_examples":
+					f.rewriteRehearsal(t, func(_ *drafts.RehearsalResult, n *drafts.CommandNode) { n.Examples = nil })
+					want = 503
+				case "changed_original_examples":
+					f.rewriteRehearsal(t, func(_ *drafts.RehearsalResult, n *drafts.CommandNode) { n.Examples[0].Paid = false })
+					want = 503
+				case "missing_preparation_response":
+					tx := begin(t, connect(t), f.workspace)
+					var id, digest string
+					var expiry time.Time
+					tx.QueryRow(ctx, `SELECT prose_ref::text,prose_sha256,expires_at FROM hp_processing.drafts WHERE workspace_id=$1`, f.workspace).Scan(&id, &digest, &expiry)
+					tx.Rollback(ctx)
+					raw, e := f.files.ReadDraftRoot(ctx, id, digest, expiry, origin(f.workspace, f.id, 1), time.Now())
+					if e != nil {
+						t.Fatal(e)
+					}
+					var root drafts.Root
+					json.Unmarshal(raw, &root)
+					raw, e = f.files.ReadDraft(ctx, *root.Tail, origin(f.workspace, f.id, 1), time.Now())
+					if e != nil {
+						t.Fatal(e)
+					}
+					var node drafts.CommandNode
+					json.Unmarshal(raw, &node)
+					if e = os.Remove(filepath.Join(f.path, node.Response.ID)); e != nil {
+						t.Fatal(e)
+					}
+					want = 503
+				}
+			}
+			s, b := f.activate(t, in, nil)
+			if s != want {
+				t.Fatal(mode, s, want, string(b))
+			}
+			f.assertCounts(t, 0, 3)
+			activationCapture(t, s, in, b, "preparation_"+mode)
+		})
+	}
+	for _, field := range []string{"price", "destination", "account", "mode", "workspace", "principal", "epoch", "expired"} {
+		t.Run("binding_"+field, func(t *testing.T) {
+			f := newActivationFixture(t)
+			in := f.ready(t)
+			f.act.Bindings = changedActivationBindings{f.bindings, field}
+			f.startActivation(t)
+			s, b := f.activate(t, in, nil)
+			if s != 403 {
+				t.Fatal("changed substantial binding accepted", field, s, string(b))
+			}
+			f.assertCounts(t, 0, 3)
+			activationCapture(t, s, in, b, "changed_binding_"+field)
+		})
+	}
+}
+func TestActivationMissingPortsDenyAndForeignRLS(t *testing.T) {
+	f := newActivationFixture(t)
+	in := f.ready(t)
+	for _, missing := range []string{"repository", "authority", "boundary", "bindings", "clock", "codec", "typed_nil"} {
+		s := f.act
+		switch missing {
+		case "repository":
+			s.Repository = nil
+		case "authority":
+			s.Authority = nil
+		case "boundary":
+			s.Boundary = nil
+		case "bindings":
+			s.Bindings = nil
+		case "clock":
+			s.Clock = nil
+		case "codec":
+			s.Codec = nil
+		case "typed_nil":
+			var b *draftBindings
+			s.Bindings = b
+		}
+		if s.Ready() {
+			t.Fatal("missing substantial port accepted", missing)
+		}
+	}
+	tx := begin(t, connect(t), config)
+	var n int
+	if e := tx.QueryRow(ctx, `SELECT count(*) FROM hp_processing.drafts WHERE draft_id=$1`, f.id).Scan(&n); e != nil || n != 0 {
+		t.Fatal("cross workspace RLS", n, e)
+	}
+	tx.Rollback(ctx)
+	for _, mode := range []string{"absent_grant", "expired_grant", "closed_gate", "stale_gate_epoch"} {
+		t.Run(mode, func(t *testing.T) {
+			f := newActivationFixture(t)
+			in := f.ready(t)
+			switch mode {
+			case "absent_grant":
+				f.authority.denied = true
+			case "expired_grant":
+				f.authority.expiry = time.Now().Add(-time.Second)
+			case "closed_gate":
+				f.gate.closed = true
+			case "stale_gate_epoch":
+				f.gate.epoch++
+			}
+			s, b := f.activate(t, in, nil)
+			if s != 403 {
+				t.Fatal(mode, s, string(b))
+			}
+			f.assertCounts(t, 0, 3)
+			activationCapture(t, s, in, b, mode)
+		})
+	}
+	_ = in
+}
