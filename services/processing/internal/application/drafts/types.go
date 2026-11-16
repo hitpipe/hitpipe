@@ -92,6 +92,10 @@ type Root struct {
 	Tail                 *Ref
 }
 type CommandNode struct {
+	// Private expiring evidence needed to verify rehearsal meaning at activation.
+	Examples                                         []ScenarioExample `json:",omitempty"`
+	OperationID                                      string            `json:",omitempty"`
+	OperationRevision                                int64             `json:",omitempty"`
 	AuthorityEpoch                                   int64
 	BindingCheck                                     *BindingProof
 	Format                                           string

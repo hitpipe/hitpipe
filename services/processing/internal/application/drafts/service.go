@@ -193,7 +193,7 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 			}
 			out := []string{}
 			for _, ex := range in.Examples {
-				out = append(out, rehearse(snap.Config, ex, now))
+				out = append(out, RehearseExample(snap.Config, ex, now))
 			}
 			view = RehearsalResult{RehearsalID: id, DraftID: r.DraftID, DraftRevision: snap.Config.Revision, ConfigDigest: snap.ConfigDigest, Results: out, LiveRequestsMade: 0}
 		}
@@ -270,6 +270,10 @@ func (s Service) readiness(r Request, in Input, g Grant, snap Snapshot, p Bindin
 
 // Rehearsal is a pure labelled synthetic adapter to the existing financial
 // kernel. It creates no SourceFacts proof, real identity, case or connector port.
+// RehearseExample reuses the existing pure synthetic evaluator at activation.
+func RehearseExample(c DraftConfig, ex ScenarioExample, now time.Time) string {
+	return rehearse(c, ex, now)
+}
 func rehearse(c DraftConfig, ex ScenarioExample, now time.Time) string {
 	if !complete(c) || ex.Duplicate {
 		return "WOULD_HOLD_UNKNOWN"

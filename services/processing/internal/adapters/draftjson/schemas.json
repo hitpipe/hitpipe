@@ -312,5 +312,147 @@
       "live_requests_made"
     ],
     "type": "object"
+  },
+  "ActivationCommand": {
+    "additionalProperties": false,
+    "properties": {
+      "acceptance_text_version": {
+        "const": "managed-operation-v1",
+        "type": "string"
+      },
+      "accepted_config_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "command": {
+        "$ref": "#/components/schemas/CommandMeta"
+      },
+      "confirm_activate": {
+        "const": true,
+        "type": "boolean"
+      },
+      "draft_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "draft_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "readiness_check_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "rehearsal_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "command",
+      "draft_id",
+      "draft_revision",
+      "readiness_check_id",
+      "rehearsal_id",
+      "accepted_config_digest",
+      "acceptance_text_version",
+      "confirm_activate"
+    ],
+    "type": "object"
+  },
+  "Operation": {
+    "additionalProperties": false,
+    "properties": {
+      "accepted_config_digest": {
+        "anyOf": [
+          {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "accepted_config_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "connection_health": {
+        "enum": [
+          "READY",
+          "DEGRADED",
+          "REVOKED",
+          "UNCHECKED"
+        ],
+        "type": "string"
+      },
+      "drain_deadline_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "first_activation_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "name": {
+        "maxLength": 120,
+        "type": "string"
+      },
+      "operation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "state": {
+        "enum": [
+          "DRAFT",
+          "PREPARED",
+          "ACTIVE",
+          "DRAINING",
+          "PAUSED",
+          "ARCHIVED"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "operation_id",
+      "revision",
+      "name",
+      "state",
+      "first_activation_at",
+      "accepted_config_id",
+      "accepted_config_digest",
+      "connection_health",
+      "drain_deadline_at"
+    ],
+    "type": "object"
   }
 }

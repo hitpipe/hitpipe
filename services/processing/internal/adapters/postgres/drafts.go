@@ -338,6 +338,9 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 		return nil, e
 	}
 	node := drafts.CommandNode{AuthorityEpoch: g.Epoch, BindingCheck: c.BindingCheck, Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, RequestID: in.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: r.Kind, ExpectedRevision: in.Command.ExpectedRevision, ResultRevision: resultRevision, ConfigDigest: c.ConfigDigest, Response: responseRef, Previous: current.Root.Tail}
+	if r.Kind == drafts.Rehearse {
+		node.Examples = in.Examples
+	}
 	raw, e := json.Marshal(node)
 	if e != nil {
 		return nil, e

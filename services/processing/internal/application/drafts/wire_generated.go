@@ -63,3 +63,24 @@ type RehearsalResult struct {
 	RehearsalID      string   `json:"rehearsal_id"`
 	Results          []string `json:"results"`
 }
+type ActivationCommand struct {
+	AcceptanceTextVersion string      `json:"acceptance_text_version"`
+	AcceptedConfigDigest  string      `json:"accepted_config_digest"`
+	Command               CommandMeta `json:"command"`
+	ConfirmActivate       bool        `json:"confirm_activate"`
+	DraftID               string      `json:"draft_id"`
+	DraftRevision         int64       `json:"draft_revision"`
+	ReadinessCheckID      string      `json:"readiness_check_id"`
+	RehearsalID           string      `json:"rehearsal_id"`
+}
+type Operation struct {
+	AcceptedConfigDigest *string    `json:"accepted_config_digest"`
+	AcceptedConfigID     *string    `json:"accepted_config_id"`
+	ConnectionHealth     string     `json:"connection_health"`
+	DrainDeadlineAt      *time.Time `json:"drain_deadline_at"`
+	FirstActivationAt    *time.Time `json:"first_activation_at"`
+	Name                 string     `json:"name"`
+	OperationID          string     `json:"operation_id"`
+	Revision             int64      `json:"revision"`
+	State                string     `json:"state"`
+}

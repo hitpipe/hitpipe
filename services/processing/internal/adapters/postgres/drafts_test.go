@@ -128,6 +128,12 @@ type draftFixture struct {
 
 func newDraftFixture(t *testing.T) draftFixture {
 	t.Helper()
+	f := newDraftFixtureBase(t)
+	f.start(t)
+	return f
+}
+func newDraftFixtureBase(t *testing.T) draftFixture {
+	t.Helper()
 	connect(t)
 	ws, _ := newID()
 	id, _ := newID()
@@ -150,7 +156,6 @@ func newDraftFixture(t *testing.T) draftFixture {
 	service := drafts.Service{Repository: repo, Authority: auth, Boundary: gate, Bindings: bindings, Clock: clock, Codec: codec, Policy: policy}
 	pki := testfixtures.NewPKI(t)
 	f := draftFixture{workspace: ws, id: id, path: path, files: files, repo: repo, service: service, authority: auth, gate: gate, bindings: bindings, pki: pki}
-	f.start(t)
 	return f
 }
 func (f *draftFixture) start(t *testing.T) {
