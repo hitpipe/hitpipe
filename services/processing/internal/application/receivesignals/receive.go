@@ -30,7 +30,9 @@ type Grant struct {
 }
 
 // ContextSource must resolve hints using trusted operation/installation and
-// current authority data. The controlled test source is not a runtime IAM client.
+// current authority data. Any protected lookup in that implementation must use
+// the same current-epoch/actual-start gate as admission. No port is optional.
+// The controlled test source is not a runtime IAM client.
 type ContextSource interface {
 	Establish(context.Context, Identity) (Grant, error)
 }

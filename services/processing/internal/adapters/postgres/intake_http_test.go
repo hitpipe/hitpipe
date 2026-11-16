@@ -38,6 +38,7 @@ type intakeContexts struct {
 	installed       receivesignals.Identity
 	operation, mode string
 	epoch           int64
+	gate            *intakeGate
 }
 
 func (a *intakeContexts) Establish(c context.Context, q receivesignals.Identity) (receivesignals.Grant, error) {
@@ -46,23 +47,7 @@ func (a *intakeContexts) Establish(c context.Context, q receivesignals.Identity)
 	if !strings.EqualFold(q.WorkspaceID, a.installed.WorkspaceID) || !strings.EqualFold(q.ConnectionID, a.installed.ConnectionID) || q.AccountID != a.installed.AccountID || q.Live != a.installed.Live || a.mode == "denied" {
 		return receivesignals.Grant{}, admission.ErrNotAuthorized
 	}
-	tx, e := a.pool.BeginTx(c, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
-	if e != nil {
-		return receivesignals.Grant{}, e
-	}
-	defer tx.Rollback(c)
-	if _, e = tx.Exec(c, `SELECT set_config('hp.workspace_id',$1,true)`, a.installed.WorkspaceID); e != nil {
-		return receivesignals.Grant{}, e
-	}
-	var revision int64
-	e = tx.QueryRow(c, `SELECT revision FROM hp_processing.operations WHERE workspace_id=$1 AND operation_id=$2`, a.installed.WorkspaceID, a.operation).Scan(&revision)
-	if errors.Is(e, pgx.ErrNoRows) {
-		return receivesignals.Grant{}, admission.ErrNotFound
-	}
-	if e != nil {
-		return receivesignals.Grant{}, e
-	}
-	grant := receivesignals.Grant{Context: admission.EstablishedContext{WorkspaceID: a.installed.WorkspaceID, ConnectionID: a.installed.ConnectionID, AccountID: a.installed.AccountID, Live: a.installed.Live, OperationID: a.operation, ExpectedRevision: revision, AuthorityVerified: true}, PrincipalID: owner, Epoch: a.epoch, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}
+	grant := receivesignals.Grant{Context: admission.EstablishedContext{WorkspaceID: a.installed.WorkspaceID, ConnectionID: a.installed.ConnectionID, AccountID: a.installed.AccountID, Live: a.installed.Live, OperationID: a.operation, ExpectedRevision: 1, AuthorityVerified: true}, PrincipalID: owner, Epoch: a.epoch, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}
 	switch a.mode {
 	case "expired":
 		grant.ExpiresAt = time.Now().Add(-time.Second)
@@ -70,12 +55,44 @@ func (a *intakeContexts) Establish(c context.Context, q receivesignals.Identity)
 		grant.RevocationPending = true
 	case "unverified":
 		grant.Context.AuthorityVerified = false
-	case "revision":
-		grant.Context.ExpectedRevision++
 	case "foreign_context":
 		grant.Context.ConnectionID = owner
 	case "zero_epoch":
 		grant.Epoch = 0
+	}
+	if !grant.ExpiresAt.After(time.Now()) || grant.RevocationPending || !grant.Context.AuthorityVerified {
+		return receivesignals.Grant{}, admission.ErrNotAuthorized
+	}
+	if e := grant.Context.Check(admission.Signal{WorkspaceID: q.WorkspaceID, ConnectionID: q.ConnectionID, AccountID: q.AccountID, Live: q.Live}); e != nil {
+		return receivesignals.Grant{}, e
+	}
+	// The explicit owner fixture uses the same actual-start gate for its own
+	// read-only operation lookup, the admission write and protected response.
+	called := false
+	e := a.gate.Start(c, grant, "INTAKE_CONTEXT_SQL_READ", func(c context.Context) error {
+		called = true
+		tx, e := a.pool.BeginTx(c, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
+		if e != nil {
+			return e
+		}
+		defer tx.Rollback(c)
+		if _, e = tx.Exec(c, `SELECT set_config('hp.workspace_id',$1,true)`, a.installed.WorkspaceID); e != nil {
+			return e
+		}
+		e = tx.QueryRow(c, `SELECT revision FROM hp_processing.operations WHERE workspace_id=$1 AND operation_id=$2`, a.installed.WorkspaceID, a.operation).Scan(&grant.Context.ExpectedRevision)
+		if errors.Is(e, pgx.ErrNoRows) {
+			return admission.ErrNotFound
+		}
+		return e
+	})
+	if e != nil {
+		return receivesignals.Grant{}, e
+	}
+	if !called {
+		return receivesignals.Grant{}, admission.ErrNotAuthorized
+	}
+	if a.mode == "revision" {
+		grant.Context.ExpectedRevision++
 	}
 	return grant, nil
 }
@@ -131,6 +148,7 @@ func intakeAt(t *testing.T, ws, path string) intakeFixture {
 	pool := newObservationPool(t, 4)
 	source := &intakeContexts{pool: pool, installed: receivesignals.Identity{WorkspaceID: ws, ConnectionID: config, AccountID: "acct_synthetic", Live: false}, operation: op, epoch: 7}
 	gate := &intakeGate{epoch: 7}
+	source.gate = gate
 	repo := Store{DB: pool, Content: files}
 	f := intakeFixture{ws: ws, path: path, files: files, repo: repo, source: source, gate: gate, pki: testfixtures.NewObservationPKI(t)}
 	f.service = receivesignals.Service{Contexts: source, Boundary: gate, Clock: testClock{time.Now}, Decoder: normalizedsignal.Decoder{}, Store: repo}
@@ -351,7 +369,7 @@ func TestIntakeHTTPStrictWireAndHTTPBoundary(t *testing.T) {
 	counts(t, f.ws, 1, 1, 1)
 }
 func TestIntakeHTTPBindingAuthorityLifecycleAndTLS(t *testing.T) {
-	for _, mode := range []string{"workspace", "connection", "account", "mode", "missing_operation", "revision", "paused", "draft", "denied", "expired", "revoke", "unverified", "foreign_context", "zero_epoch", "epoch", "closed", "no_call", "response_gate", "wrong_service", "expired_cert", "foreign_ca", "missing_cert", "wrong_server"} {
+	for _, mode := range []string{"workspace", "connection", "account", "mode", "missing_operation", "revision", "paused", "draft", "denied", "expired", "revoke", "unverified", "foreign_context", "zero_epoch", "epoch", "closed", "no_call", "context_gate", "response_gate", "wrong_service", "expired_cert", "foreign_ca", "missing_cert", "wrong_server"} {
 		t.Run(mode, func(t *testing.T) {
 			f := newIntake(t)
 			want := 403
@@ -394,6 +412,8 @@ func TestIntakeHTTPBindingAuthorityLifecycleAndTLS(t *testing.T) {
 				f.gate.epoch++
 			case "closed", "no_call":
 				f.gate.mode = mode
+			case "context_gate":
+				f.gate.mode = "INTAKE_CONTEXT_SQL_READ"
 			case "response_gate":
 				f.gate.mode = "INTAKE_RECEIPT_RESPONSE_START"
 			default:
