@@ -1,0 +1,219 @@
+{
+  "DeliveryIntent": {
+    "additionalProperties": false,
+    "description": "Only verified accepted config mappings; serialized context <=32KiB. Stable lineage independent of episode. Not a provider idempotency key. Delivery cannot invent business config/case state.",
+    "properties": {
+      "assignee_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "case_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "case_marker": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "config_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "config_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "connection_epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "context": {
+        "items": {
+          "$ref": "#/components/schemas/ContextField"
+        },
+        "maxItems": 20,
+        "type": "array"
+      },
+      "deadline_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "destination_workspace_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "episode_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "facts_valid_until": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "lineage_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "message_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "message_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "operation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "order_reference": {
+        "maxLength": 64,
+        "minLength": 1,
+        "type": "string"
+      },
+      "rendered_handoff_block": {
+        "maxLength": 36864,
+        "minLength": 1,
+        "type": "string"
+      },
+      "rendering_version": {
+        "const": "handoff-block-v1",
+        "type": "string"
+      },
+      "schema_version": {
+        "const": "1.0",
+        "type": "string"
+      },
+      "service_label": {
+        "maxLength": 120,
+        "minLength": 1,
+        "type": "string"
+      },
+      "source_facts_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "source_facts_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "source_session_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "target_list_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "message_id",
+      "message_digest",
+      "schema_version",
+      "workspace_id",
+      "case_id",
+      "operation_id",
+      "config_id",
+      "config_digest",
+      "lineage_id",
+      "episode_id",
+      "connection_id",
+      "connection_epoch",
+      "source_facts_id",
+      "source_facts_digest",
+      "facts_valid_until",
+      "deadline_at",
+      "destination_workspace_id",
+      "target_list_id",
+      "assignee_id",
+      "title",
+      "service_label",
+      "source_session_id",
+      "order_reference",
+      "rendering_version",
+      "rendered_handoff_block",
+      "case_marker",
+      "context"
+    ],
+    "type": "object"
+  },
+  "ContextField": {
+    "additionalProperties": false,
+    "properties": {
+      "added_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "expires_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "key": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$",
+        "type": "string"
+      },
+      "value": {
+        "maxLength": 32768,
+        "type": "string"
+      }
+    },
+    "required": [
+      "key",
+      "value",
+      "added_at",
+      "expires_at"
+    ],
+    "type": "object"
+  },
+  "Receipt": {
+    "additionalProperties": false,
+    "properties": {
+      "disposition": {
+        "enum": [
+          "APPLIED",
+          "DUPLICATE",
+          "HELD",
+          "CONFLICT"
+        ],
+        "type": "string"
+      },
+      "message_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "record_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "message_id",
+      "disposition"
+    ],
+    "type": "object"
+  }
+}
