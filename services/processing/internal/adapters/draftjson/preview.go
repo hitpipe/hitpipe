@@ -12,7 +12,16 @@ func PreviewValid(p drafts.ActivationPreview) bool {
 		return false
 	}
 	raw, e = jcs.Transform(raw)
-	return e == nil && Hash(raw) == p.AcceptedConfigDigest && !KnownSecret(p.CanonicalConfig.ServiceLabel)
+	if e != nil || Hash(raw) != p.AcceptedConfigDigest {
+		return false
+	}
+	c := p.CanonicalConfig
+	for _, v := range []string{c.PriceID, c.ListID, c.AssigneeID, c.DestinationWorkspaceID, c.ServiceLabel} {
+		if KnownSecret(v) {
+			return false
+		}
+	}
+	return true
 }
 func (Codec) Preview(c drafts.DraftConfig, p drafts.BindingProof) (drafts.ActivationPreview, error) {
 	v, e := drafts.CanonicalConfig(c, p)

@@ -265,7 +265,7 @@ func TestActivationCurrentEvidenceAndAuthorityFailures(t *testing.T) {
 				want = 400
 			case "digest":
 				in.AcceptedConfigDigest = "sha256:" + strings.Repeat("b", 64)
-				want = 400
+				want = 409
 			case "draft_revision":
 				in.DraftRevision = 2
 				want = 412
@@ -295,11 +295,11 @@ func TestActivationCurrentEvidenceAndAuthorityFailures(t *testing.T) {
 				want = 403
 			case "stale_binding":
 				f.bindings.stale = true
-				want = 403
+				want = 409
 			case "epoch_changed":
 				f.authority.epoch = 8
 				f.gate.epoch = 8
-				want = 403
+				want = 409
 			case "gate_read":
 				f.gate.denyPhase = "ACTIVATION_SQL_CONTENT_READ"
 				want = 403
@@ -912,8 +912,12 @@ func TestActivationNoStaleOrFabricatedPreparation(t *testing.T) {
 			f.act.Bindings = changedActivationBindings{f.bindings, field}
 			f.startActivation(t)
 			s, b := f.activate(t, in, nil)
-			if s != 403 {
-				t.Fatal("changed substantial binding accepted", field, s, string(b))
+			want := 409
+			if field == "workspace" || field == "principal" {
+				want = 403
+			}
+			if s != want {
+				t.Fatal("changed substantial binding accepted", field, s, want, string(b))
 			}
 			f.assertCounts(t, 0, 3)
 			activationCapture(t, s, in, b, "changed_binding_"+field)

@@ -34,13 +34,16 @@ func (d DraftStore) selectedCheck(ctx context.Context, tx pgx.Tx, r drafts.Reque
 				return nil, drafts.ErrUnavailable
 			}
 			if check.CheckID == id {
-				if !check.Passed {
-					return nil, drafts.ErrConflict
-				}
 				// Historical missing preview is not upgraded under a new consent.
 				var historical map[string]json.RawMessage
 				json.Unmarshal(body, &historical)
 				if _, ok := historical["activation_preview"]; !ok {
+					return nil, drafts.ErrConflict
+				}
+				if d.Codec.ValidateResponse(drafts.Check, body) != nil {
+					return nil, drafts.ErrUnavailable
+				}
+				if !check.Passed {
 					return nil, drafts.ErrConflict
 				}
 				if d.Codec.ValidateResponse(drafts.Check, body) != nil || node.BindingCheck == nil || check.ActivationPreview == nil || node.Response.Revision != node.ResultRevision {
