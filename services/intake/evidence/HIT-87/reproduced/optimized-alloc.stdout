@@ -1,0 +1,27 @@
+File: optimized
+Type: alloc_space
+Time: 2026-11-18 01:35:01 MSK
+Showing nodes accounting for 2249.78MB, 98.57% of 2282.34MB total
+Dropped 164 nodes (cum <= 11.41MB)
+      flat  flat%   sum%        cum   cum%
+ 1397.05MB 61.21% 61.21%  1397.05MB 61.21%  io.ReadAll
+  428.75MB 18.79% 80.00%   880.21MB 38.57%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.Consumer.Normalize
+  361.59MB 15.84% 95.84%   361.59MB 15.84%  bytes.growSlice
+   27.44MB  1.20% 97.04%    27.44MB  1.20%  strings.Fields
+   13.28MB  0.58% 97.62%    13.28MB  0.58%  strings.(*Builder).WriteByte (inline)
+   12.30MB  0.54% 98.16%    12.30MB  0.54%  github.com/gowebpki/jcs.appendMember (inline)
+    9.14MB   0.4% 98.56%    36.04MB  1.58%  github.com/gowebpki/jcs.(*jcsData).parseObject
+    0.23MB 0.0099% 98.57%  2277.66MB 99.79%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.FromReader
+         0     0% 98.57%   361.59MB 15.84%  bytes.(*Buffer).Grow (inline)
+         0     0% 98.57%   361.59MB 15.84%  bytes.(*Buffer).grow
+         0     0% 98.57%    13.10MB  0.57%  encoding/json.Unmarshal (inline)
+         0     0% 98.57%    13.10MB  0.57%  encoding/json/v2.Unmarshal
+         0     0% 98.57%    13.04MB  0.57%  encoding/json/v2.makeMapArshaler.func3
+         0     0% 98.57%    13.09MB  0.57%  encoding/json/v2.unmarshalDecode
+         0     0% 98.57%    36.04MB  1.58%  github.com/gowebpki/jcs.(*jcsData).parseElement
+         0     0% 98.57%    36.04MB  1.58%  github.com/gowebpki/jcs.(*jcsData).parseEntry
+         0     0% 98.57%   399.96MB 17.52%  github.com/gowebpki/jcs.Transform
+         0     0% 98.57%    27.44MB  1.20%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.allowed
+         0     0% 98.57%     2278MB 99.81%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.ReadNormalize
+         0     0% 98.57%  2281.13MB 99.95%  main.main
+         0     0% 98.57%  2281.13MB 99.95%  runtime.main

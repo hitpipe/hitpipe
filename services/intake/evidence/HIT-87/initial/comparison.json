@@ -1,0 +1,2529 @@
+{
+  "corpus_sha256": "4e9abe37832c2e4abb9ea8f6e37ef257019b8aff0c452355e481f159d9b5826a",
+  "cases": 35,
+  "rounds": 5,
+  "events_per_case_per_phase": 200,
+  "all_outcomes_identical": true,
+  "rows": [
+    {
+      "name": "checkout.session.completed/512",
+      "accepted": true,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 27117.68,
+            "min": 27117.68,
+            "max": 27117.92
+          },
+          "optimized": {
+            "median": 26565.68,
+            "min": 26565.68,
+            "max": 26565.92
+          },
+          "median_change_pct": -2.03557236459756
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 425.07,
+            "min": 425.07,
+            "max": 425.075
+          },
+          "optimized": {
+            "median": 426.07,
+            "min": 426.07,
+            "max": 426.075
+          },
+          "median_change_pct": 0.2352553697038129
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 39625,
+            "min": 38958,
+            "max": 40666
+          },
+          "optimized": {
+            "median": 39625,
+            "min": 34750,
+            "max": 65208
+          },
+          "median_change_pct": 0.0
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 60042,
+            "min": 57834,
+            "max": 61417
+          },
+          "optimized": {
+            "median": 55958,
+            "min": 50833,
+            "max": 95958
+          },
+          "median_change_pct": -6.801905332933611
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 22702.225465109008,
+            "min": 21277.066556366353,
+            "max": 23278.14473186487
+          },
+          "optimized": {
+            "median": 23183.14020038811,
+            "min": 16932.709159808284,
+            "max": 24134.0666710832
+          },
+          "median_change_pct": 2.1183594358104463
+        }
+      }
+    },
+    {
+      "name": "checkout.session.completed/4096",
+      "accepted": true,
+      "bytes": 4096,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 47664.6,
+            "min": 47664.6,
+            "max": 47664.84
+          },
+          "optimized": {
+            "median": 42824.52,
+            "min": 42824.52,
+            "max": 42824.52
+          },
+          "median_change_pct": -10.154454249065347
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 431.105,
+            "min": 431.105,
+            "max": 431.11
+          },
+          "optimized": {
+            "median": 432.105,
+            "min": 432.105,
+            "max": 432.105
+          },
+          "median_change_pct": 0.2319620510084608
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 54084,
+            "min": 52417,
+            "max": 54291
+          },
+          "optimized": {
+            "median": 52334,
+            "min": 48584,
+            "max": 55375
+          },
+          "median_change_pct": -3.2357074180903833
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 75167,
+            "min": 71625,
+            "max": 76500
+          },
+          "optimized": {
+            "median": 74584,
+            "min": 65542,
+            "max": 84125
+          },
+          "median_change_pct": -0.7756063166016958
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 17510.834829050476,
+            "min": 15816.42320446428,
+            "max": 17784.956576694647
+          },
+          "optimized": {
+            "median": 17193.454039404303,
+            "min": 17043.033659991477,
+            "max": 19014.719960236416
+          },
+          "median_change_pct": -1.8124823444718774
+        }
+      }
+    },
+    {
+      "name": "checkout.session.completed/65536",
+      "accepted": true,
+      "bytes": 65536,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 367198.52,
+            "min": 367198.36,
+            "max": 367198.68
+          },
+          "optimized": {
+            "median": 293485.52,
+            "min": 293485.44,
+            "max": 293485.68
+          },
+          "median_change_pct": -20.074427315229915
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 438.665,
+            "min": 438.665,
+            "max": 438.665
+          },
+          "optimized": {
+            "median": 439.56,
+            "min": 439.56,
+            "max": 439.565
+          },
+          "median_change_pct": 0.2040281308059555
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 280959,
+            "min": 276958,
+            "max": 282083
+          },
+          "optimized": {
+            "median": 270667,
+            "min": 269042,
+            "max": 272459
+          },
+          "median_change_pct": -3.6631679355350832
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 347292,
+            "min": 345208,
+            "max": 366625
+          },
+          "optimized": {
+            "median": 341083,
+            "min": 329792,
+            "max": 343083
+          },
+          "median_change_pct": -1.787832717137161
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 3502.908123081052,
+            "min": 3491.114728992095,
+            "max": 3546.9745256112224
+          },
+          "optimized": {
+            "median": 3755.780380742236,
+            "min": 3720.125647243736,
+            "max": 3810.0136684240356
+          },
+          "median_change_pct": 7.218923499448371
+        }
+      }
+    },
+    {
+      "name": "checkout.session.completed/262143",
+      "accepted": true,
+      "bytes": 262143,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448689.28,
+            "min": 1448686.76,
+            "max": 1448692.2
+          },
+          "optimized": {
+            "median": 1178343.56,
+            "min": 1178343.56,
+            "max": 1178346.4
+          },
+          "median_change_pct": -18.661401290965586
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 444.45,
+            "min": 444.42,
+            "max": 444.49
+          },
+          "optimized": {
+            "median": 445.065,
+            "min": 445.065,
+            "max": 445.1
+          },
+          "median_change_pct": 0.1383732703341245
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1026208,
+            "min": 1009583,
+            "max": 1031000
+          },
+          "optimized": {
+            "median": 1002584,
+            "min": 995916,
+            "max": 1019166
+          },
+          "median_change_pct": -2.3020674171318145
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1119084,
+            "min": 1091500,
+            "max": 1130708
+          },
+          "optimized": {
+            "median": 1083666,
+            "min": 1064792,
+            "max": 1122834
+          },
+          "median_change_pct": -3.1649098727173253
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 998.8492457609437,
+            "min": 894.0971678157887,
+            "max": 1007.1543663634089
+          },
+          "optimized": {
+            "median": 1029.7174287531561,
+            "min": 1015.5877949725875,
+            "max": 1052.4335552652592
+          },
+          "median_change_pct": 3.0903745608473976
+        }
+      }
+    },
+    {
+      "name": "checkout.session.completed/262144",
+      "accepted": true,
+      "bytes": 262144,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448689.28,
+            "min": 1448686.52,
+            "max": 1448689.28
+          },
+          "optimized": {
+            "median": 1178343.56,
+            "min": 1178343.56,
+            "max": 1178343.72
+          },
+          "median_change_pct": -18.661401290965586
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 444.45,
+            "min": 444.415,
+            "max": 444.45
+          },
+          "optimized": {
+            "median": 445.065,
+            "min": 445.065,
+            "max": 445.065
+          },
+          "median_change_pct": 0.1383732703341245
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1031042,
+            "min": 1026125,
+            "max": 1051458
+          },
+          "optimized": {
+            "median": 998291,
+            "min": 994916,
+            "max": 1015583
+          },
+          "median_change_pct": -3.1764952349176867
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1105042,
+            "min": 1092834,
+            "max": 1172375
+          },
+          "optimized": {
+            "median": 1075500,
+            "min": 1067875,
+            "max": 1147625
+          },
+          "median_change_pct": -2.673382550165515
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 988.2684285489858,
+            "min": 954.6100805631245,
+            "max": 999.1964811617265
+          },
+          "optimized": {
+            "median": 1047.7782535331357,
+            "min": 1038.5231544397234,
+            "max": 1067.463706233988
+          },
+          "median_change_pct": 6.021625629741578
+        }
+      }
+    },
+    {
+      "name": "checkout.session.completed/262145",
+      "accepted": false,
+      "bytes": 262145,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "optimized": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "optimized": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 24750,
+            "min": 24166,
+            "max": 25917
+          },
+          "optimized": {
+            "median": 24792,
+            "min": 23750,
+            "max": 25209
+          },
+          "median_change_pct": 0.16969696969697523
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 74708,
+            "min": 69708,
+            "max": 76291
+          },
+          "optimized": {
+            "median": 71042,
+            "min": 69291,
+            "max": 79833
+          },
+          "median_change_pct": -4.907104995448952
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 26892.112207338185,
+            "min": 15707.886097091387,
+            "max": 27305.308711772395
+          },
+          "optimized": {
+            "median": 26516.40702684786,
+            "min": 25896.39061286916,
+            "max": 27359.62766829899
+          },
+          "median_change_pct": -1.3970831952270557
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/512",
+      "accepted": true,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 27405.68,
+            "min": 27405.68,
+            "max": 27405.76
+          },
+          "optimized": {
+            "median": 26853.76,
+            "min": 26853.68,
+            "max": 26853.76
+          },
+          "median_change_pct": -2.0138890916043706
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 429.07,
+            "min": 429.07,
+            "max": 429.07
+          },
+          "optimized": {
+            "median": 430.07,
+            "min": 430.07,
+            "max": 430.07
+          },
+          "median_change_pct": 0.2330622043023256
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 39416,
+            "min": 39000,
+            "max": 42959
+          },
+          "optimized": {
+            "median": 36416,
+            "min": 34791,
+            "max": 39750
+          },
+          "median_change_pct": -7.611122386847979
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 59041,
+            "min": 56125,
+            "max": 139167
+          },
+          "optimized": {
+            "median": 54250,
+            "min": 52833,
+            "max": 58375
+          },
+          "median_change_pct": -8.114699954269067
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 21843.20141823538,
+            "min": 21198.510804615977,
+            "max": 22016.630922666365
+          },
+          "optimized": {
+            "median": 23295.768905972454,
+            "min": 20909.111438036685,
+            "max": 24736.274212483608
+          },
+          "median_change_pct": 6.649975248245554
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/4096",
+      "accepted": true,
+      "bytes": 4096,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 47952.6,
+            "min": 47952.6,
+            "max": 47952.6
+          },
+          "optimized": {
+            "median": 43112.52,
+            "min": 43112.52,
+            "max": 43112.6
+          },
+          "median_change_pct": -10.093467298957727
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 435.105,
+            "min": 435.105,
+            "max": 435.105
+          },
+          "optimized": {
+            "median": 436.105,
+            "min": 436.105,
+            "max": 436.105
+          },
+          "median_change_pct": 0.22982958136541498
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 53666,
+            "min": 53291,
+            "max": 54584
+          },
+          "optimized": {
+            "median": 50959,
+            "min": 48625,
+            "max": 53042
+          },
+          "median_change_pct": -5.044162039279987
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 73208,
+            "min": 71250,
+            "max": 75875
+          },
+          "optimized": {
+            "median": 68125,
+            "min": 66708,
+            "max": 82292
+          },
+          "median_change_pct": -6.943230248060317
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 17519.591940672355,
+            "min": 17194.564144880365,
+            "max": 17681.902572716823
+          },
+          "optimized": {
+            "median": 18473.54569782526,
+            "min": 17739.278025575783,
+            "max": 19355.38627979895
+          },
+          "median_change_pct": 5.4450683576611425
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/65536",
+      "accepted": true,
+      "bytes": 65536,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 367486.44,
+            "min": 367486.44,
+            "max": 367486.52
+          },
+          "optimized": {
+            "median": 293770.6,
+            "min": 293770.6,
+            "max": 293773.52
+          },
+          "median_change_pct": -20.05947212637289
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 442.665,
+            "min": 442.665,
+            "max": 442.665
+          },
+          "optimized": {
+            "median": 443.525,
+            "min": 443.525,
+            "max": 443.56
+          },
+          "median_change_pct": 0.19427783990149106
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 280042,
+            "min": 279125,
+            "max": 295083
+          },
+          "optimized": {
+            "median": 272792,
+            "min": 268500,
+            "max": 275125
+          },
+          "median_change_pct": -2.5888973796787673
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 344459,
+            "min": 339875,
+            "max": 364625
+          },
+          "optimized": {
+            "median": 336125,
+            "min": 328875,
+            "max": 344041
+          },
+          "median_change_pct": -2.419446145985449
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 3514.6038908738687,
+            "min": 3225.0760239108427,
+            "max": 3538.706030383259
+          },
+          "optimized": {
+            "median": 3720.226607931233,
+            "min": 3681.902070609677,
+            "max": 3763.5605556046594
+          },
+          "median_change_pct": 5.850523229411175
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/262143",
+      "accepted": true,
+      "bytes": 262143,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448977.12,
+            "min": 1448974.44,
+            "max": 1448977.28
+          },
+          "optimized": {
+            "median": 1178631.72,
+            "min": 1178623.04,
+            "max": 1178631.8
+          },
+          "median_change_pct": -18.657672110102062
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 448.45,
+            "min": 448.415,
+            "max": 448.45
+          },
+          "optimized": {
+            "median": 449.065,
+            "min": 448.96,
+            "max": 449.065
+          },
+          "median_change_pct": 0.13713903445200515
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1028500,
+            "min": 1012625,
+            "max": 1042000
+          },
+          "optimized": {
+            "median": 1011500,
+            "min": 992542,
+            "max": 1018708
+          },
+          "median_change_pct": -1.6528925619834656
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1132125,
+            "min": 1088416,
+            "max": 1237708
+          },
+          "optimized": {
+            "median": 1105459,
+            "min": 1070875,
+            "max": 1158042
+          },
+          "median_change_pct": -2.355393618195867
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 991.7713966930622,
+            "min": 846.5563674266274,
+            "max": 1004.6506938290994
+          },
+          "optimized": {
+            "median": 1028.655561428093,
+            "min": 977.6526925471702,
+            "max": 1048.0427183888883
+          },
+          "median_change_pct": 3.719018803931684
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/262144",
+      "accepted": true,
+      "bytes": 262144,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448974.36,
+            "min": 1448971.6,
+            "max": 1448977.28
+          },
+          "optimized": {
+            "median": 1178626.04,
+            "min": 1178620.36,
+            "max": 1178631.64
+          },
+          "median_change_pct": -18.65790917100838
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 448.415,
+            "min": 448.38,
+            "max": 448.45
+          },
+          "optimized": {
+            "median": 448.995,
+            "min": 448.925,
+            "max": 449.065
+          },
+          "median_change_pct": 0.12934446885140005
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1027750,
+            "min": 1019459,
+            "max": 1029625
+          },
+          "optimized": {
+            "median": 1004625,
+            "min": 991875,
+            "max": 1027875
+          },
+          "median_change_pct": -2.250060812454391
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1095667,
+            "min": 1078416,
+            "max": 1111458
+          },
+          "optimized": {
+            "median": 1084667,
+            "min": 1068000,
+            "max": 1135875
+          },
+          "median_change_pct": -1.003954668708651
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 993.5296382310205,
+            "min": 899.6977577844942,
+            "max": 1016.2343436396433
+          },
+          "optimized": {
+            "median": 1038.7332838730092,
+            "min": 1024.7432769590973,
+            "max": 1048.4790500779807
+          },
+          "median_change_pct": 4.549803438423217
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_succeeded/262145",
+      "accepted": false,
+      "bytes": 262145,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "optimized": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "optimized": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 25000,
+            "min": 23875,
+            "max": 25833
+          },
+          "optimized": {
+            "median": 24584,
+            "min": 23917,
+            "max": 26125
+          },
+          "median_change_pct": -1.6639999999999988
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 71333,
+            "min": 63334,
+            "max": 73667
+          },
+          "optimized": {
+            "median": 72583,
+            "min": 70042,
+            "max": 76125
+          },
+          "median_change_pct": 1.752344637124481
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 26491.090781259354,
+            "min": 25487.041432371727,
+            "max": 28517.957401301133
+          },
+          "optimized": {
+            "median": 26753.168578403503,
+            "min": 26266.253393435774,
+            "max": 27453.20087163913
+          },
+          "median_change_pct": 0.9893054208607754
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/512",
+      "accepted": true,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 27405.68,
+            "min": 27405.68,
+            "max": 27405.76
+          },
+          "optimized": {
+            "median": 26853.68,
+            "min": 26853.68,
+            "max": 26853.68
+          },
+          "median_change_pct": -2.0141810018944994
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 429.07,
+            "min": 429.07,
+            "max": 429.07
+          },
+          "optimized": {
+            "median": 430.07,
+            "min": 430.07,
+            "max": 430.07
+          },
+          "median_change_pct": 0.2330622043023256
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 39333,
+            "min": 39166,
+            "max": 41042
+          },
+          "optimized": {
+            "median": 35000,
+            "min": 34875,
+            "max": 39333
+          },
+          "median_change_pct": -11.016195052500443
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 57667,
+            "min": 55667,
+            "max": 58875
+          },
+          "optimized": {
+            "median": 52625,
+            "min": 52250,
+            "max": 59791
+          },
+          "median_change_pct": -8.743302061837788
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 22150.33454204017,
+            "min": 21223.442310757462,
+            "max": 22831.592348311468
+          },
+          "optimized": {
+            "median": 23377.45828584787,
+            "min": 21634.972153627343,
+            "max": 24548.913710568308
+          },
+          "median_change_pct": 5.539978375851096
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/4096",
+      "accepted": true,
+      "bytes": 4096,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 47952.6,
+            "min": 47952.6,
+            "max": 47952.6
+          },
+          "optimized": {
+            "median": 43112.52,
+            "min": 43112.52,
+            "max": 43112.52
+          },
+          "median_change_pct": -10.093467298957727
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 435.105,
+            "min": 435.105,
+            "max": 435.105
+          },
+          "optimized": {
+            "median": 436.105,
+            "min": 436.105,
+            "max": 436.105
+          },
+          "median_change_pct": 0.22982958136541498
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 53375,
+            "min": 51750,
+            "max": 54083
+          },
+          "optimized": {
+            "median": 50041,
+            "min": 48417,
+            "max": 53584
+          },
+          "median_change_pct": -6.2463700234192014
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 72708,
+            "min": 71500,
+            "max": 76500
+          },
+          "optimized": {
+            "median": 71333,
+            "min": 66959,
+            "max": 74375
+          },
+          "median_change_pct": -1.891126148429334
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 17564.339052165033,
+            "min": 16653.020903787754,
+            "max": 17691.614112989795
+          },
+          "optimized": {
+            "median": 18345.678446121037,
+            "min": 17417.55639173373,
+            "max": 18712.72016801777
+          },
+          "median_change_pct": 4.448441763936994
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/65536",
+      "accepted": true,
+      "bytes": 65536,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 367486.44,
+            "min": 367486.36,
+            "max": 367489.36
+          },
+          "optimized": {
+            "median": 293773.52,
+            "min": 293770.6,
+            "max": 293773.6
+          },
+          "median_change_pct": -20.058677539231105
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 442.665,
+            "min": 442.665,
+            "max": 442.7
+          },
+          "optimized": {
+            "median": 443.56,
+            "min": 443.525,
+            "max": 443.56
+          },
+          "median_change_pct": 0.20218449617657175
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 279834,
+            "min": 277708,
+            "max": 286000
+          },
+          "optimized": {
+            "median": 271875,
+            "min": 268875,
+            "max": 274959
+          },
+          "median_change_pct": -2.844186196101972
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 350750,
+            "min": 339959,
+            "max": 357792
+          },
+          "optimized": {
+            "median": 336875,
+            "min": 322000,
+            "max": 339250
+          },
+          "median_change_pct": -3.9558089807555263
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 3491.554035534663,
+            "min": 3336.679299723775,
+            "max": 3517.560709536316
+          },
+          "optimized": {
+            "median": 3716.835904426694,
+            "min": 3657.1846535388977,
+            "max": 3819.481744070851
+          },
+          "median_change_pct": 6.452194827840718
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/262143",
+      "accepted": true,
+      "bytes": 262143,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448977.2,
+            "min": 1448974.44,
+            "max": 1448982.8
+          },
+          "optimized": {
+            "median": 1178625.88,
+            "min": 1178625.88,
+            "max": 1178628.8
+          },
+          "median_change_pct": -18.658079644041337
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 448.45,
+            "min": 448.415,
+            "max": 448.52
+          },
+          "optimized": {
+            "median": 448.995,
+            "min": 448.995,
+            "max": 449.03
+          },
+          "median_change_pct": 0.12152971345746888
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1041458,
+            "min": 1016542,
+            "max": 1048417
+          },
+          "optimized": {
+            "median": 1002000,
+            "min": 995833,
+            "max": 1022917
+          },
+          "median_change_pct": -3.788726957784183
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1164041,
+            "min": 1092500,
+            "max": 1230125
+          },
+          "optimized": {
+            "median": 1091084,
+            "min": 1064333,
+            "max": 1180000
+          },
+          "median_change_pct": -6.267562740487664
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 985.6163681073704,
+            "min": 457.98423961735415,
+            "max": 1001.9510943562846
+          },
+          "optimized": {
+            "median": 1030.9147732550894,
+            "min": 1003.6075526546591,
+            "max": 1054.6680597073955
+          },
+          "median_change_pct": 4.595946923517835
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/262144",
+      "accepted": true,
+      "bytes": 262144,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1448974.44,
+            "min": 1448971.68,
+            "max": 1448977.28
+          },
+          "optimized": {
+            "median": 1178625.88,
+            "min": 1178623.04,
+            "max": 1178631.8
+          },
+          "median_change_pct": -18.657924704317075
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 448.415,
+            "min": 448.38,
+            "max": 448.45
+          },
+          "optimized": {
+            "median": 448.995,
+            "min": 448.96,
+            "max": 449.065
+          },
+          "median_change_pct": 0.12934446885140005
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1020959,
+            "min": 1012208,
+            "max": 1032584
+          },
+          "optimized": {
+            "median": 999417,
+            "min": 993917,
+            "max": 1009458
+          },
+          "median_change_pct": -2.109976992220064
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1109500,
+            "min": 1092208,
+            "max": 1142167
+          },
+          "optimized": {
+            "median": 1077042,
+            "min": 1070125,
+            "max": 1105292
+          },
+          "median_change_pct": -2.9254619197836895
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 986.100299959385,
+            "min": 962.9186062956823,
+            "max": 1005.1360340554562
+          },
+          "optimized": {
+            "median": 1043.661582295325,
+            "min": 1028.9671434636307,
+            "max": 1053.9015747197088
+          },
+          "median_change_pct": 5.837264458626645
+        }
+      }
+    },
+    {
+      "name": "checkout.session.async_payment_failed/262145",
+      "accepted": false,
+      "bytes": 262145,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "optimized": {
+            "median": 637944,
+            "min": 637944,
+            "max": 637944
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "optimized": {
+            "median": 24,
+            "min": 24,
+            "max": 24
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 24542,
+            "min": 23959,
+            "max": 25083
+          },
+          "optimized": {
+            "median": 24375,
+            "min": 23916,
+            "max": 24667
+          },
+          "median_change_pct": -0.6804661396789147
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 73625,
+            "min": 70250,
+            "max": 77125
+          },
+          "optimized": {
+            "median": 73250,
+            "min": 70791,
+            "max": 75041
+          },
+          "median_change_pct": -0.5093378607809895
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 26709.993838004422,
+            "min": 25870.29281937685,
+            "max": 27841.581401823623
+          },
+          "optimized": {
+            "median": 27137.962617456495,
+            "min": 25923.663366195466,
+            "max": 28481.066285552024
+          },
+          "median_change_pct": 1.6022795888598562
+        }
+      }
+    },
+    {
+      "name": "repeat",
+      "accepted": true,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 27117.76,
+            "min": 27117.76,
+            "max": 27117.76
+          },
+          "optimized": {
+            "median": 26565.68,
+            "min": 26565.68,
+            "max": 26565.68
+          },
+          "median_change_pct": -2.035861369080627
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 425.07,
+            "min": 425.07,
+            "max": 425.07
+          },
+          "optimized": {
+            "median": 426.07,
+            "min": 426.07,
+            "max": 426.07
+          },
+          "median_change_pct": 0.2352553697038129
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 38541,
+            "min": 38375,
+            "max": 38791
+          },
+          "optimized": {
+            "median": 35125,
+            "min": 34542,
+            "max": 38583
+          },
+          "median_change_pct": -8.863288446070417
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 54458,
+            "min": 53917,
+            "max": 56542
+          },
+          "optimized": {
+            "median": 54041,
+            "min": 52833,
+            "max": 56416
+          },
+          "median_change_pct": -0.7657277167725574
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 21685.115640216176,
+            "min": 21137.274124446547,
+            "max": 23541.99149710351
+          },
+          "optimized": {
+            "median": 24267.05898412024,
+            "min": 22184.119764076324,
+            "max": 25707.35390992786
+          },
+          "median_change_pct": 11.906523288793158
+        }
+      }
+    },
+    {
+      "name": "bad-signature/512",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 3152,
+            "min": 3152,
+            "max": 3152
+          },
+          "optimized": {
+            "median": 2593.04,
+            "min": 2593.04,
+            "max": 2593.04
+          },
+          "median_change_pct": -17.733502538071065
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 20,
+            "min": 20,
+            "max": 20
+          },
+          "optimized": {
+            "median": 21,
+            "min": 21,
+            "max": 21
+          },
+          "median_change_pct": 5.000000000000004
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1041,
+            "min": 1041,
+            "max": 1083
+          },
+          "optimized": {
+            "median": 916,
+            "min": 875,
+            "max": 917
+          },
+          "median_change_pct": -12.007684918347739
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1708,
+            "min": 1542,
+            "max": 2458
+          },
+          "optimized": {
+            "median": 1667,
+            "min": 1292,
+            "max": 2250
+          },
+          "median_change_pct": -2.4004683840749386
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 688567.710305793,
+            "min": 656633.3096945342,
+            "max": 702575.2897244851
+          },
+          "optimized": {
+            "median": 817855.4195189375,
+            "min": 764452.9383659818,
+            "max": 837987.6564418207
+          },
+          "median_change_pct": 18.776324721315763
+        }
+      }
+    },
+    {
+      "name": "bad-signature/4096",
+      "accepted": false,
+      "bytes": 4096,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 20112,
+            "min": 20112,
+            "max": 20112
+          },
+          "optimized": {
+            "median": 15265.04,
+            "min": 15265.04,
+            "max": 15265.04
+          },
+          "median_change_pct": -24.099840891010338
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 26,
+            "min": 26,
+            "max": 26
+          },
+          "optimized": {
+            "median": 27,
+            "min": 27,
+            "max": 27
+          },
+          "median_change_pct": 3.8461538461538547
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 3333,
+            "min": 3250,
+            "max": 3625
+          },
+          "optimized": {
+            "median": 3125,
+            "min": 3125,
+            "max": 3166
+          },
+          "median_change_pct": -6.2406240624062415
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 5083,
+            "min": 4958,
+            "max": 5500
+          },
+          "optimized": {
+            "median": 4584,
+            "min": 3834,
+            "max": 4625
+          },
+          "median_change_pct": -9.817037182766086
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 241972.26755841513,
+            "min": 238024.39750074383,
+            "max": 245010.36393839458
+          },
+          "optimized": {
+            "median": 267439.38820565556,
+            "min": 260473.3060444133,
+            "max": 274411.2848896798
+          },
+          "median_change_pct": 10.52480968344538
+        }
+      }
+    },
+    {
+      "name": "bad-signature/65536",
+      "accepted": false,
+      "bytes": 65536,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 278160,
+            "min": 278160,
+            "max": 278160
+          },
+          "optimized": {
+            "median": 204449.6,
+            "min": 204449.6,
+            "max": 204449.6
+          },
+          "median_change_pct": -26.499280989358642
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 33,
+            "min": 33,
+            "max": 33
+          },
+          "optimized": {
+            "median": 34,
+            "min": 34,
+            "max": 34
+          },
+          "median_change_pct": 3.0303030303030276
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 39000,
+            "min": 38417,
+            "max": 39375
+          },
+          "optimized": {
+            "median": 36458,
+            "min": 36250,
+            "max": 36792
+          },
+          "median_change_pct": -6.517948717948718
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 82625,
+            "min": 80542,
+            "max": 83083
+          },
+          "optimized": {
+            "median": 76875,
+            "min": 75042,
+            "max": 77667
+          },
+          "median_change_pct": -6.959152798789714
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 21582.63754506994,
+            "min": 21182.139177880934,
+            "max": 22004.420027850996
+          },
+          "optimized": {
+            "median": 24039.66352163762,
+            "min": 23884.874902967695,
+            "max": 24341.015682429585
+          },
+          "median_change_pct": 11.38427113663376
+        }
+      }
+    },
+    {
+      "name": "bad-signature/262144",
+      "accepted": false,
+      "bytes": 262144,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1162896,
+            "min": 1162896,
+            "max": 1162896
+          },
+          "optimized": {
+            "median": 892579.6,
+            "min": 892579.6,
+            "max": 892579.68
+          },
+          "median_change_pct": -23.245105323261928
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 37,
+            "min": 37,
+            "max": 37
+          },
+          "optimized": {
+            "median": 38,
+            "min": 38,
+            "max": 38
+          },
+          "median_change_pct": 2.7027027027026973
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 185375,
+            "min": 183000,
+            "max": 187833
+          },
+          "optimized": {
+            "median": 163167,
+            "min": 162250,
+            "max": 164375
+          },
+          "median_change_pct": -11.980040458530006
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 210292,
+            "min": 203375,
+            "max": 220333
+          },
+          "optimized": {
+            "median": 191792,
+            "min": 188459,
+            "max": 194875
+          },
+          "median_change_pct": -8.797291385311857
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 5670.052661464601,
+            "min": 5543.218045946349,
+            "max": 5724.9450712988955
+          },
+          "optimized": {
+            "median": 6222.07358379772,
+            "min": 6209.66145701944,
+            "max": 6260.009363722006
+          },
+          "median_change_pct": 9.735728313156944
+        }
+      }
+    },
+    {
+      "name": "changed-bytes",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 3152,
+            "min": 3152,
+            "max": 3152
+          },
+          "optimized": {
+            "median": 2593.04,
+            "min": 2593.04,
+            "max": 2593.04
+          },
+          "median_change_pct": -17.733502538071065
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 20,
+            "min": 20,
+            "max": 20
+          },
+          "optimized": {
+            "median": 21,
+            "min": 21,
+            "max": 21
+          },
+          "median_change_pct": 5.000000000000004
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1042,
+            "min": 875,
+            "max": 1167
+          },
+          "optimized": {
+            "median": 1000,
+            "min": 917,
+            "max": 1042
+          },
+          "median_change_pct": -4.0307101727447225
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1875,
+            "min": 1333,
+            "max": 2334
+          },
+          "optimized": {
+            "median": 1542,
+            "min": 1416,
+            "max": 1625
+          },
+          "median_change_pct": -17.759999999999998
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 776322.1737020863,
+            "min": 696056.4919448863,
+            "max": 818273.6880004255
+          },
+          "optimized": {
+            "median": 1051480.4845222072,
+            "min": 920950.2364539732,
+            "max": 1066666.6666666667
+          },
+          "median_change_pct": 35.44382991251682
+        }
+      }
+    },
+    {
+      "name": "conflicting-timestamp",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 2088,
+            "min": 2088,
+            "max": 2088
+          },
+          "optimized": {
+            "median": 2088,
+            "min": 2088,
+            "max": 2088
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 13,
+            "min": 13,
+            "max": 13
+          },
+          "optimized": {
+            "median": 13,
+            "min": 13,
+            "max": 13
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 375,
+            "min": 375,
+            "max": 375
+          },
+          "optimized": {
+            "median": 375,
+            "min": 375,
+            "max": 417
+          },
+          "median_change_pct": 0.0
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 583,
+            "min": 542,
+            "max": 584
+          },
+          "optimized": {
+            "median": 542,
+            "min": 500,
+            "max": 625
+          },
+          "median_change_pct": -7.032590051457976
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 2601626.0162601625,
+            "min": 2498688.188700932,
+            "max": 2674118.5436750413
+          },
+          "optimized": {
+            "median": 2566866.8822834846,
+            "min": 2351806.7755553205,
+            "max": 2624396.388830569
+          },
+          "median_change_pct": -1.3360542122285546
+        }
+      }
+    },
+    {
+      "name": "unsupported-signature",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 2008,
+            "min": 2008,
+            "max": 2008
+          },
+          "optimized": {
+            "median": 2008,
+            "min": 2008,
+            "max": 2008
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 11,
+            "min": 11,
+            "max": 11
+          },
+          "optimized": {
+            "median": 11,
+            "min": 11,
+            "max": 11
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 292,
+            "min": 292,
+            "max": 292
+          },
+          "optimized": {
+            "median": 292,
+            "min": 292,
+            "max": 333
+          },
+          "median_change_pct": 0.0
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 417,
+            "min": 417,
+            "max": 500
+          },
+          "optimized": {
+            "median": 417,
+            "min": 417,
+            "max": 459
+          },
+          "median_change_pct": 0.0
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 3342581.1411572015,
+            "min": 3285420.9445585217,
+            "max": 3473186.9963878854
+          },
+          "optimized": {
+            "median": 3143418.467583497,
+            "min": 2669656.6821506754,
+            "max": 3252032.5203252034
+          },
+          "median_change_pct": -5.958349705304511
+        }
+      }
+    },
+    {
+      "name": "stale",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 2064,
+            "min": 2064,
+            "max": 2064
+          },
+          "optimized": {
+            "median": 2064,
+            "min": 2064,
+            "max": 2064
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 13,
+            "min": 13,
+            "max": 13
+          },
+          "optimized": {
+            "median": 13,
+            "min": 13,
+            "max": 13
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 334,
+            "min": 334,
+            "max": 334
+          },
+          "optimized": {
+            "median": 334,
+            "min": 333,
+            "max": 375
+          },
+          "median_change_pct": 0.0
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 500,
+            "min": 459,
+            "max": 500
+          },
+          "optimized": {
+            "median": 500,
+            "min": 459,
+            "max": 541
+          },
+          "median_change_pct": 0.0
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 2874265.2659413936,
+            "min": 2714919.8419916653,
+            "max": 2961120.4879926564
+          },
+          "optimized": {
+            "median": 2825177.9862131313,
+            "min": 2657807.3089701,
+            "max": 2889797.5696802437
+          },
+          "median_change_pct": -1.707820092665835
+        }
+      }
+    },
+    {
+      "name": "tolerance-300",
+      "accepted": true,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 27117.76,
+            "min": 27117.76,
+            "max": 27117.76
+          },
+          "optimized": {
+            "median": 26565.68,
+            "min": 26565.68,
+            "max": 26565.76
+          },
+          "median_change_pct": -2.035861369080627
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 425.07,
+            "min": 425.07,
+            "max": 425.07
+          },
+          "optimized": {
+            "median": 426.07,
+            "min": 426.07,
+            "max": 426.07
+          },
+          "median_change_pct": 0.2352553697038129
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 39833,
+            "min": 38750,
+            "max": 40916
+          },
+          "optimized": {
+            "median": 36459,
+            "min": 35375,
+            "max": 38375
+          },
+          "median_change_pct": -8.470363768734469
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 60125,
+            "min": 57916,
+            "max": 62833
+          },
+          "optimized": {
+            "median": 57333,
+            "min": 54792,
+            "max": 58208
+          },
+          "median_change_pct": -4.643659043659043
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 22305.142829866854,
+            "min": 21332.953322324818,
+            "max": 23110.14479892325
+          },
+          "optimized": {
+            "median": 22702.550166108886,
+            "min": 21561.501163458604,
+            "max": 23447.461507474818
+          },
+          "median_change_pct": 1.7816847857611506
+        }
+      }
+    },
+    {
+      "name": "null-context",
+      "accepted": false,
+      "bytes": 512,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 3216,
+            "min": 3216,
+            "max": 3216
+          },
+          "optimized": {
+            "median": 2657.04,
+            "min": 2657.04,
+            "max": 2657.04
+          },
+          "median_change_pct": -17.38059701492537
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 21,
+            "min": 21,
+            "max": 21
+          },
+          "optimized": {
+            "median": 22,
+            "min": 22,
+            "max": 22
+          },
+          "median_change_pct": 4.761904761904767
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1166,
+            "min": 1166,
+            "max": 1167
+          },
+          "optimized": {
+            "median": 1000,
+            "min": 1000,
+            "max": 1000
+          },
+          "median_change_pct": -14.236706689536883
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1708,
+            "min": 1583,
+            "max": 2291
+          },
+          "optimized": {
+            "median": 1292,
+            "min": 1292,
+            "max": 1917
+          },
+          "median_change_pct": -24.35597189695551
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 642741.6789055394,
+            "min": 630914.8264984227,
+            "max": 663442.3369092875
+          },
+          "optimized": {
+            "median": 747431.6380338063,
+            "min": 717488.7892376682,
+            "max": 759134.2832633664
+          },
+          "median_change_pct": 16.288030256032716
+        }
+      }
+    },
+    {
+      "name": "unknown-field",
+      "accepted": false,
+      "bytes": 527,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 11497.84,
+            "min": 11439.76,
+            "max": 11565.6
+          },
+          "optimized": {
+            "median": 10964.32,
+            "min": 10904.64,
+            "max": 11006.56
+          },
+          "median_change_pct": -4.640175893907028
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 183.08,
+            "min": 182.75,
+            "max": 183.465
+          },
+          "optimized": {
+            "median": 184.185,
+            "min": 183.84,
+            "max": 184.425
+          },
+          "median_change_pct": 0.6035612846842842
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 11916,
+            "min": 11750,
+            "max": 12042
+          },
+          "optimized": {
+            "median": 11541,
+            "min": 11042,
+            "max": 11958
+          },
+          "median_change_pct": -3.1470292044310177
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 19667,
+            "min": 19042,
+            "max": 20334
+          },
+          "optimized": {
+            "median": 19209,
+            "min": 18500,
+            "max": 19667
+          },
+          "median_change_pct": -2.32877408857477
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 87179.20775894949,
+            "min": 86672.31192324993,
+            "max": 87560.88217588792
+          },
+          "optimized": {
+            "median": 85495.99002432788,
+            "min": 81124.94336464892,
+            "max": 87473.14574425652
+          },
+          "median_change_pct": -1.9307559427193977
+        }
+      }
+    },
+    {
+      "name": "duplicate",
+      "accepted": false,
+      "bytes": 529,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 8578.2,
+            "min": 8578.2,
+            "max": 8579.88
+          },
+          "optimized": {
+            "median": 8018.28,
+            "min": 8018.28,
+            "max": 8018.28
+          },
+          "median_change_pct": -6.527243477652666
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 145.03,
+            "min": 145.03,
+            "max": 145.04
+          },
+          "optimized": {
+            "median": 146.03,
+            "min": 146.03,
+            "max": 146.03
+          },
+          "median_change_pct": 0.6895125146521464
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 7417,
+            "min": 7375,
+            "max": 8125
+          },
+          "optimized": {
+            "median": 7708,
+            "min": 7417,
+            "max": 8209
+          },
+          "median_change_pct": 3.923419172172027
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 12958,
+            "min": 12875,
+            "max": 14084
+          },
+          "optimized": {
+            "median": 12792,
+            "min": 12042,
+            "max": 13125
+          },
+          "median_change_pct": -1.2810618922673211
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 128331.89708551845,
+            "min": 127391.94296917497,
+            "max": 131129.56978355098
+          },
+          "optimized": {
+            "median": 136251.38380311674,
+            "min": 133207.49665149656,
+            "max": 152414.86105861265
+          },
+          "median_change_pct": 6.171097675210757
+        }
+      }
+    },
+    {
+      "name": "missing-created",
+      "accepted": false,
+      "bytes": 491,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 15498.88,
+            "min": 15498.88,
+            "max": 15498.88
+          },
+          "optimized": {
+            "median": 15010.8,
+            "min": 15010.8,
+            "max": 15010.8
+          },
+          "median_change_pct": -3.149130775901221
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 200.04,
+            "min": 200.04,
+            "max": 200.04
+          },
+          "optimized": {
+            "median": 201.04,
+            "min": 201.04,
+            "max": 201.04
+          },
+          "median_change_pct": 0.4999000199960024
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 19666,
+            "min": 19458,
+            "max": 19750
+          },
+          "optimized": {
+            "median": 20042,
+            "min": 18875,
+            "max": 20417
+          },
+          "median_change_pct": 1.9119292179395897
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 28167,
+            "min": 28042,
+            "max": 28333
+          },
+          "optimized": {
+            "median": 28292,
+            "min": 27417,
+            "max": 31041
+          },
+          "median_change_pct": 0.44378173039372193
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 43325.98885612241,
+            "min": 42553.56270129165,
+            "max": 43926.28028085585
+          },
+          "optimized": {
+            "median": 42920.379905450696,
+            "min": 40478.66015634882,
+            "max": 44600.12862677096
+          },
+          "median_change_pct": -0.9361793264976881
+        }
+      }
+    },
+    {
+      "name": "null-created",
+      "accepted": false,
+      "bytes": 506,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 17274.8,
+            "min": 17274.8,
+            "max": 17274.88
+          },
+          "optimized": {
+            "median": 16722.8,
+            "min": 16722.8,
+            "max": 16722.88
+          },
+          "median_change_pct": -3.1954060249612115
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 209.04,
+            "min": 209.04,
+            "max": 209.04
+          },
+          "optimized": {
+            "median": 210.04,
+            "min": 210.04,
+            "max": 210.04
+          },
+          "median_change_pct": 0.4783773440489858
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 21875,
+            "min": 21500,
+            "max": 23000
+          },
+          "optimized": {
+            "median": 20834,
+            "min": 20666,
+            "max": 21625
+          },
+          "median_change_pct": -4.758857142857142
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 30584,
+            "min": 30416,
+            "max": 31250
+          },
+          "optimized": {
+            "median": 29750,
+            "min": 29542,
+            "max": 30625
+          },
+          "median_change_pct": -2.72691603452786
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 42817.7596934591,
+            "min": 42171.10334787955,
+            "max": 43093.39005572622
+          },
+          "optimized": {
+            "median": 42493.66419466858,
+            "min": 41640.64126587549,
+            "max": 44617.132577355515
+          },
+          "median_change_pct": -0.7569183934675316
+        }
+      }
+    },
+    {
+      "name": "malformed-signed",
+      "accepted": false,
+      "bytes": 6,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 1640.68,
+            "min": 1640.68,
+            "max": 1640.68
+          },
+          "optimized": {
+            "median": 1632.68,
+            "min": 1632.68,
+            "max": 1632.68
+          },
+          "median_change_pct": -0.48760270131896766
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 29.01,
+            "min": 29.01,
+            "max": 29.01
+          },
+          "optimized": {
+            "median": 30.01,
+            "min": 30.01,
+            "max": 30.01
+          },
+          "median_change_pct": 3.4470872113064432
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 1125,
+            "min": 1125,
+            "max": 1167
+          },
+          "optimized": {
+            "median": 1167,
+            "min": 1125,
+            "max": 1208
+          },
+          "median_change_pct": 3.733333333333344
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 1500,
+            "min": 1334,
+            "max": 1542
+          },
+          "optimized": {
+            "median": 1500,
+            "min": 1333,
+            "max": 1542
+          },
+          "median_change_pct": 0.0
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 794309.5662672613,
+            "min": 750117.2058134084,
+            "max": 854551.1256574703
+          },
+          "optimized": {
+            "median": 845966.4320519762,
+            "min": 812044.2401702044,
+            "max": 869565.2173913043
+          },
+          "median_change_pct": 6.503366946399569
+        }
+      }
+    },
+    {
+      "name": "empty",
+      "accepted": false,
+      "bytes": 0,
+      "metrics": {
+        "bytes_per_event": {
+          "baseline": {
+            "median": 632,
+            "min": 632,
+            "max": 632
+          },
+          "optimized": {
+            "median": 632,
+            "min": 632,
+            "max": 632
+          },
+          "median_change_pct": 0.0
+        },
+        "allocs_per_event": {
+          "baseline": {
+            "median": 5,
+            "min": 5,
+            "max": 5
+          },
+          "optimized": {
+            "median": 5,
+            "min": 5,
+            "max": 5
+          },
+          "median_change_pct": 0.0
+        },
+        "p50_ns": {
+          "baseline": {
+            "median": 125,
+            "min": 84,
+            "max": 125
+          },
+          "optimized": {
+            "median": 84,
+            "min": 84,
+            "max": 125
+          },
+          "median_change_pct": -32.8
+        },
+        "p95_ns": {
+          "baseline": {
+            "median": 208,
+            "min": 208,
+            "max": 209
+          },
+          "optimized": {
+            "median": 208,
+            "min": 208,
+            "max": 250
+          },
+          "median_change_pct": 0.0
+        },
+        "events_per_second": {
+          "baseline": {
+            "median": 10300782.859497322,
+            "min": 9107882.872626258,
+            "max": 11428571.42857143
+          },
+          "optimized": {
+            "median": 10596026.490066225,
+            "min": 8775393.795796586,
+            "max": 11008972.312434634
+          },
+          "median_change_pct": 2.866225165562919
+        }
+      }
+    }
+  ]
+}

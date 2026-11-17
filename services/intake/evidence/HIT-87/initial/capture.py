@@ -1,0 +1,4 @@
+import subprocess,time,json,pathlib,os,sys
+root=pathlib.Path(os.environ.get('HIT87_CAPTURE_ROOT','/Users/nic_piter/code/hitpipe-HIT-87'));out=pathlib.Path('/tmp/hit87-run');env=dict(os.environ,GOTOOLCHAIN='local',GOMAXPROCS='1')
+cmd=sys.argv[2:];label=sys.argv[1];start=time.time();r=subprocess.run(cmd,cwd=root/'services/intake',env=env,capture_output=True);(out/(label+'.stdout')).write_bytes(r.stdout);(out/(label+'.stderr')).write_bytes(r.stderr)
+f=out/'commands.json';p=json.loads(f.read_text()) if f.exists() else [];p.append(dict(label=label,argv=cmd,source_sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),dirty=subprocess.check_output(['git','status','--porcelain'],cwd=root,text=True).splitlines(),started_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime(start)),seconds=time.time()-start,exit_code=r.returncode));f.write_text(json.dumps(p,indent=2)+'\n');print(label,'exit',r.returncode);sys.exit(r.returncode)

@@ -1,0 +1,45 @@
+HIT-87 — factual test/build/measurement transcript
+Baseline 8acc83de7daa316719004212fe0d76092aecb8f2
+Optimized 7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12
+Reproduction tool f7fbe681056e61d9d650633cdf7afe1342d04360
+Corpus 4e9abe37832c2e4abb9ea8f6e37ef257019b8aff0c452355e481f159d9b5826a; all 35 outcomes/signals/errors identical across both versions and both comparisons.
+
+go-version: exit 0; source=None; argv=["/tmp/hit73-toolchain/go/bin/go", "version"]
+go-env: exit 0; source=None; argv=["/tmp/hit73-toolchain/go/bin/go", "env", "-json"]
+baseline-build: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "build", "-o", "/private/tmp/hit87-reproduced/baseline", "./cmd/webhookbench"]
+baseline-race: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "test", "-race", "-count=1", "-json", "./..."]
+baseline-vet: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "vet", "./..."]
+baseline-modules: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "mod", "verify"]
+optimized-build: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "build", "-o", "/private/tmp/hit87-reproduced/optimized", "./cmd/webhookbench"]
+optimized-race: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "test", "-race", "-count=1", "-json", "./..."]
+optimized-vet: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "vet", "./..."]
+optimized-modules: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "mod", "verify"]
+baseline-round-1: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-n", "200"]
+optimized-round-1: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-n", "200"]
+optimized-round-2: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-n", "200"]
+baseline-round-2: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-n", "200"]
+baseline-round-3: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-n", "200"]
+optimized-round-3: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-n", "200"]
+optimized-round-4: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-n", "200"]
+baseline-round-4: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-n", "200"]
+baseline-round-5: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-n", "200"]
+optimized-round-5: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-n", "200"]
+baseline-profile: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/private/tmp/hit87-reproduced/baseline", "-profile", "/private/tmp/hit87-reproduced/baseline", "-duration", "5s"]
+baseline-cpu: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "tool", "pprof", "-top", "/private/tmp/hit87-reproduced/baseline", "/private/tmp/hit87-reproduced/baseline.cpu.pprof"]
+baseline-alloc: exit 0; source=8acc83de7daa316719004212fe0d76092aecb8f2; argv=["/tmp/hit73-toolchain/go/bin/go", "tool", "pprof", "-top", "-alloc_space", "/private/tmp/hit87-reproduced/baseline", "/private/tmp/hit87-reproduced/baseline.heap.pprof"]
+optimized-profile: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/private/tmp/hit87-reproduced/optimized", "-profile", "/private/tmp/hit87-reproduced/optimized", "-duration", "5s"]
+optimized-cpu: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "tool", "pprof", "-top", "/private/tmp/hit87-reproduced/optimized", "/private/tmp/hit87-reproduced/optimized.cpu.pprof"]
+optimized-alloc: exit 0; source=7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12; argv=["/tmp/hit73-toolchain/go/bin/go", "tool", "pprof", "-top", "-alloc_space", "/private/tmp/hit87-reproduced/optimized", "/private/tmp/hit87-reproduced/optimized.heap.pprof"]
+
+baseline: 120 PASS test/subtest events; failed=0; skipped tests=0. Four packages report no test files (package skip, not skipped tests).
+PASS TestBoundedReadingAndFailures
+PASS TestCorpusConcurrentIsolation
+
+optimized: 122 PASS test/subtest events; failed=0; skipped tests=0. Four packages report no test files (package skip, not skipped tests).
+PASS TestStreamingMatchesConcatenatedMessage
+PASS TestStreamingConcurrentRequestIsolation
+PASS TestBoundedReadingAndFailures
+PASS TestCorpusConcurrentIsolation
+
+Original full execution logs, raw latency samples and profiles are retained under initial/ and reproduced/. Hash index: artifacts.json.
+No HTTP, SQL, durable receipt, Processing, runtime, real keys/events, deployed SLO or independent Reviewer verdict claimed.

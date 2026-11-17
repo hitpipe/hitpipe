@@ -1,0 +1,134 @@
+{
+  "task": "HIT-87",
+  "main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "reuse": {
+    "task": "HIT-73",
+    "status_readback": "Done",
+    "pr": 65,
+    "merged": false,
+    "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864"
+  },
+  "baseline_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+  "optimized_code_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+  "reproduction_tool_sha": "f7fbe681056e61d9d650633cdf7afe1342d04360",
+  "baseline_production_diff_vs_HIT73": "empty for authenticatewebhook, normalizesignal and stripesignature; git diff checked before measurements",
+  "production_change": "only streaming writes in stripesignature.Verify; no parser/auth order, comparison, tolerance or dependency changes",
+  "bootstrap": {
+    "request": "13765",
+    "receipt": "13777",
+    "parts": [
+      "13767",
+      "13768",
+      "13769",
+      "13770",
+      "13771",
+      "13772",
+      "13773",
+      "13774",
+      "13775",
+      "13776"
+    ],
+    "verified_sha256": "3fbb32b75bd465e5eb3dd6c5f842ef2a606c537fef08a57d2e9ff81d995d7b0b",
+    "protocol_pin": {
+      "release": "v2",
+      "sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+    }
+  },
+  "consent_comment": "13766",
+  "changed_paths_before_evidence": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/Makefile",
+    "services/intake/README.md",
+    "services/intake/cmd/intake-contractcheck/main.go",
+    "services/intake/cmd/webhookbench/main.go",
+    "services/intake/docs/HIT-73/README.md",
+    "services/intake/docs/module-contract.md",
+    "services/intake/evidence/HIT-73/build.stderr",
+    "services/intake/evidence/HIT-73/build.stdout",
+    "services/intake/evidence/HIT-73/commands.json",
+    "services/intake/evidence/HIT-73/modules.stderr",
+    "services/intake/evidence/HIT-73/modules.stdout",
+    "services/intake/evidence/HIT-73/race.stderr",
+    "services/intake/evidence/HIT-73/race.stdout",
+    "services/intake/evidence/HIT-73/source-audit.json",
+    "services/intake/evidence/HIT-73/vet.stderr",
+    "services/intake/evidence/HIT-73/vet.stdout",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/internal/adapters/clock/system/clock.go",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/normalizesignal/normalize_test.go",
+    "services/intake/internal/application/normalizesignal/normalized_signal.schema.json",
+    "services/intake/internal/domain/stripesignature/stream_test.go",
+    "services/intake/internal/domain/stripesignature/verifier.go",
+    "services/intake/internal/domain/stripesignature/verifier_test.go",
+    "services/intake/internal/measurement/webhook/workload.go",
+    "services/intake/internal/measurement/webhook/workload_test.go",
+    "services/intake/lab-component.json",
+    "services/intake/testdata/tampered.json",
+    "services/intake/testdata/verified.json",
+    "services/intake/tools/check.py",
+    "services/intake/tools/compare_webhook.py"
+  ],
+  "source_hashes": {
+    "services/intake/go.mod": "415f2229879175c0180e1cf8e5cc1749c137812a071f92970a23125a52fb0dfd",
+    "services/intake/go.sum": "56124f89986c20d40fee9107d53578a3c527f3e4c965f75226cf69617f8f2e41",
+    "services/intake/tools/check.py": "943570ee46acab0634e75aaa42aaa5fe1bdf4282a1b7d48b81c61bc6f5370074",
+    "services/intake/tools/compare_webhook.py": "43968cc797834a192e348eecd58b2f870963b30f2d1129db860871716e1ff0ba",
+    "services/intake/cmd/intake-contractcheck/main.go": "06ddbb225ec9ce0e58a7d02e284a614df1ef26527363bbc1bf611ef932249d2a",
+    "services/intake/cmd/webhookbench/main.go": "4d33fb854b9a31bfbcfaa53111d30fb1f543a75014a20ac6b9657aee713eab14",
+    "services/intake/evidence/HIT-87/initial/capture.py": "96577b6f0e1ee7806d511cda88159679326c4f78698c30f71b298b926a01d7be",
+    "services/intake/evidence/HIT-87/initial/compare.py": "7557cfa874553d1453fbc4100a77713d6ac8b1277c5e561aa3ec3cf6e2e3e56e",
+    "services/intake/internal/measurement/webhook/workload_test.go": "892a63dbb4520c123c4ee9566846e7d77fa60d16e64b92cb94a5afb0e0af3256",
+    "services/intake/internal/measurement/webhook/workload.go": "8b2ea95f9284ae547a8654d589eefd13b19c4f44ffb8f6e300ebc7999c19fbcd",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go": "20470bb2e7309f35a6f50cd0f885d5e7a8aa78f4566e1b362b87546a9a66ed92",
+    "services/intake/internal/adapters/clock/system/clock.go": "eed73766e3d792a21a1cbd78dbe33181ff2f934a7e391b03b78f1e40ccb35068",
+    "services/intake/internal/application/normalizesignal/normalize.go": "85b3d67ae7c0c2edfcd7de516e88fd2322a1d10f91b6a6e7136d662a17a67fca",
+    "services/intake/internal/application/normalizesignal/normalize_test.go": "e4fb60508d2bff7023dffc176295dc340fefd23c6518fe0b66747772859d1b95",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go": "867db8eeb4d3d0f3ad975caf3df182a7eb9280aebf724ed6196b0234d073a883",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go": "a75c4a1b391edddfdc03028ddb1575d9a95d76191a65a98bac572d8ca96fd95a",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go": "5a6e183263b048197fe20babd8c57cbd7a759441dcd4f6185c200a90c3766545",
+    "services/intake/internal/domain/stripesignature/verifier_test.go": "453f5002af44e37fc01a7e5845da67e9f436921ab930ea0329bb350206ef7263",
+    "services/intake/internal/domain/stripesignature/stream_test.go": "7a3efcca58c1491bd699831f082a1114d512e4700641044193db4e064313a147",
+    "services/intake/internal/domain/stripesignature/verifier.go": "3cffbe06f4e441d288d154a17b2f4b18bc6b94e04d53bf4c27a5aa3b69b68a7b"
+  },
+  "dod": [
+    {
+      "id": "4a490ab8-4b16-4236-82e1-7cf437307696",
+      "text": "Зафиксированы корректная исходная версия HIT-73 и итоговый SHA, фактические пути изменений, версия компилятора, параметры запуска, CPU, память и существенные ограничения среды. Исходный вариант не ухудшался намеренно и не переписан после начала замеров."
+    },
+    {
+      "id": "967f3ea4-c349-4f67-863e-3bb58b701d22",
+      "text": "Сохранён воспроизводимый набор входов: он строится из синтетических данных и охватывает два события оплаты, предусмотренное схемой async_payment_failed, повторы, разные размеры и границы лимита 256 KiB; отдельно измеряются успешные и отвергнутые входы, чтобы более ранний отказ не выдавался за ускорение полезной обработки."
+    },
+    {
+      "id": "b6de3701-016e-499c-84dd-2d6c28ad5691",
+      "text": "Для исходного варианта сохранены реальные повторные измерения пропускной способности, p50/p95 времени обработки, байтов и количества выделений памяти на событие, а также профиль CPU/памяти. Время подготовки или подписи тестового события не подмешивается в измеряемый путь; для одинакового входа измеряется один и тот же участок обеих версий."
+    },
+    {
+      "id": "e52ad68c-ae31-4697-acaa-408155418e27",
+      "text": "Сохранены профиль и протокол сравнения, обосновывающие одну внедрённую низкоуровневую оптимизацию. На одинаковом наборе показано воспроизводимое улучшение хотя бы одной измеряемой характеристики с указанием остальных изменений и разброса; величина эффекта не придумана и не превращена в новый продуктовый порог. Если попытка не дала эффекта, это явно отражено как недостигнутый критерий, а не названо выполненной оптимизацией."
+    },
+    {
+      "id": "9e71a468-0d1c-41de-ba4a-7f0010501270",
+      "text": "Сравнительные тесты исходного и улучшенного вариантов подтверждают одинаковые результаты и отказы: подпись проверяется на неизменённых исходных байтах до разбора, сравнение остаётся constant-time, допуск времени остаётся 300 секунд, каждый повтор проверяется заново. Ошибочная подпись, изменённые байты, противоречивый timestamp и неподдержанная схема подписи не допускаются."
+    },
+    {
+      "id": "c7b601f5-7ab3-46a6-a464-82915b4677bb",
+      "text": "Сохраняются строгая форма и версии, ограничения значений и размера, различие null/отсутствия/неизвестного и ограничения контекста из HIT-73. Проверены повторные и конкурентные вызовы без загрязнения данных между событиями; буферы и диагностика не сохраняют сырой payload, секрет или данные другого запроса. Выполнены тесты гонок и применимые отрицательные проверки."
+    },
+    {
+      "id": "0db9d7e8-b296-4058-b5f6-9764e5f8d49c",
+      "text": "Обе версии действительно запущены; сохранены сырые выборки, настоящие протоколы тестов, анализа и сборки, команды и их коды завершения. Понятная инструкция позволяет повторить сравнение из закреплённых версий без доступа к Stripe и без выполнения старых учебных задач."
+    },
+    {
+      "id": "f9b288f9-5f01-494c-87eb-554b4e217350",
+      "text": "Русский отчёт связывает исходный профиль, гипотезу, изменение, проверку корректности и полученные цифры. Он объясняет ограничения измерения и честно отделяет локальный путь от надёжного приёма, рабочего webhook, нагрузки deployment и Stripe → ClickUp."
+    }
+  ],
+  "bounds": "No HTTP, SQL, outbox, Processing, IAM/runtime, production load/disk or Stripe/ClickUp. No historical lab tasks or Project OS changes."
+}

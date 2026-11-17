@@ -1,0 +1,397 @@
+[
+  {
+    "label": "baseline-build",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "build",
+      "-o",
+      "/tmp/hit87-run/baseline",
+      "./cmd/webhookbench"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:14Z",
+    "seconds": 1.0493662357330322,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-profile",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-profile",
+      "/tmp/hit87-run/baseline",
+      "-duration",
+      "5s"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:15Z",
+    "seconds": 5.681688070297241,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-cpu",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "/tmp/hit87-run/baseline",
+      "/tmp/hit87-run/baseline.cpu.pprof"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:21Z",
+    "seconds": 11.766302108764648,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-alloc",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "-alloc_space",
+      "/tmp/hit87-run/baseline",
+      "/tmp/hit87-run/baseline.heap.pprof"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:33Z",
+    "seconds": 0.8591082096099854,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-initial-1",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "100"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:50Z",
+    "seconds": 2.5128538608551025,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-initial-2",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "100"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:52Z",
+    "seconds": 2.4844119548797607,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-initial-3",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "100"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:29:55Z",
+    "seconds": 2.510132074356079,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-build",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "build",
+      "-o",
+      "/tmp/hit87-run/optimized",
+      "./cmd/webhookbench"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:36Z",
+    "seconds": 1.342482089996338,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-race",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "test",
+      "-race",
+      "-count=1",
+      "-json",
+      "./..."
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:37Z",
+    "seconds": 10.5957190990448,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-vet",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "vet",
+      "./..."
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:48Z",
+    "seconds": 0.5830950736999512,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-modules",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "mod",
+      "verify"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:48Z",
+    "seconds": 0.05352497100830078,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-1",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:54Z",
+    "seconds": 4.791400909423828,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-1",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:30:59Z",
+    "seconds": 5.001331806182861,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-2",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:04Z",
+    "seconds": 4.53887414932251,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-2",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:08Z",
+    "seconds": 4.7765209674835205,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-3",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:13Z",
+    "seconds": 4.805437088012695,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-3",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:18Z",
+    "seconds": 4.557868003845215,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-4",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:23Z",
+    "seconds": 4.554782867431641,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-4",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:27Z",
+    "seconds": 4.78770899772644,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-5",
+    "argv": [
+      "/tmp/hit87-run/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:32Z",
+    "seconds": 5.0415098667144775,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-5",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:37Z",
+    "seconds": 4.604596138000488,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-profile",
+    "argv": [
+      "/tmp/hit87-run/optimized",
+      "-profile",
+      "/tmp/hit87-run/optimized",
+      "-duration",
+      "5s"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:42Z",
+    "seconds": 5.190601110458374,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-alloc",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "-alloc_space",
+      "/tmp/hit87-run/optimized",
+      "/tmp/hit87-run/optimized.heap.pprof"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:47Z",
+    "seconds": 0.834545373916626,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-cpu",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "/tmp/hit87-run/optimized",
+      "/tmp/hit87-run/optimized.cpu.pprof"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:31:48Z",
+    "seconds": 0.20372986793518066,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-race",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "test",
+      "-race",
+      "-count=1",
+      "-json",
+      "./..."
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:32:01Z",
+    "seconds": 10.928276062011719,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-vet",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "vet",
+      "./..."
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:32:12Z",
+    "seconds": 0.7700679302215576,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-modules",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "mod",
+      "verify"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:32:13Z",
+    "seconds": 0.05195903778076172,
+    "exit_code": 0
+  },
+  {
+    "label": "reproduce",
+    "argv": [
+      "python3",
+      "tools/compare_webhook.py",
+      "--go",
+      "/tmp/hit73-toolchain/go/bin/go",
+      "--output",
+      "/tmp/hit87-reproduced"
+    ],
+    "source_sha": "f7fbe681056e61d9d650633cdf7afe1342d04360",
+    "dirty": [],
+    "started_utc": "2026-11-17T22:33:37Z",
+    "seconds": 85.07917785644531,
+    "exit_code": 0
+  }
+]
