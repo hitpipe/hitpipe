@@ -1,32 +1,37 @@
-# HIT-102 — карта команды и собственного состояния
+# HIT-102 — карта полей, двух хешей и состояния
 
-Статус: локальная реализация, **согласование digest не завершено**. Источник формы — неизменённый OAS `fedbe40bb597e25f66aeb1172af3ff7459c81b40`; SQL — точная HIT-76 migration. DTO/schema генерируются, новый продуктовый формат не добавлен.
+Редакция2, HP-CCR-ACTIVATION-20261116. Единственный действующий OAS `aa380880c43d8045a851d3c939d0cd0a879b7484`, SHA256 `e10177793312cd80224c461113ccab3fdc3f8af82fe0d08ce77513bcd5a2e31e`. Исходные44 операции и SQL сохраняются; меняются только утверждённые pointer fragments readiness/rehearsal/preview и описания digest. DTO/schema сгенерированы из этих exact bytes.
 
-| Вход/источник | Проверка | Собственное хранение/выход |
+| Источник | Проверка/назначение | Собственное состояние/выход |
 |---|---|---|
-|workspace_id path|canonical UUID, current grant scope, RLS|SET LOCAL workspace; scoped операции/черновики/команды|
-|mTLS BFF|TLS1.3/CA/SAN/expiry; private8443|внутренний service caller, не бизнес-права пользователя|
-|X-HitPipe-Session/CSRF|authoritative port, OWNER, current epoch/expiry/actual-start; CSRFVerified|grant/инициатор, без записи токена или CSRF в SQL|
-|X-Request-ID / command.request_id|совпадение; stable UUID/JCS digest тела|user_commands PK(workspace,request_id); полный ответ через root private ledger|
-|command.expected_revision / If-Match|оба согласованы; существующая операция требует её revision|owner operation CAS; не draft_revision|
-|draft_id / draft_revision|существующий собственный current draft и точная версия|drafts operation link/root; не новая параллельная конфигурация|
-|readiness_check_id|сохранённый полный ответ, command provenance, passed/no issues/expiry/version/digest/owner proof|read-only поиск в existing durable root ledger; нет новой SQL таблицы|
-|rehearsal_id|сохранённый результат+examples, исходный request digest, 1–10 результатов, чистый existing evaluator|частные expiring examples в существующем command node; RehearsalResult wire без passed/expires_at|
-|accepted_config_digest input|сейчас сравнивается с digest текущего DraftConfig и обоих проверок|**вопрос соответствия SQL canonical_config и Operation digest открыт**; см. DIGEST_DECISION_REQUIRED_RU.md|
-|acceptance_text_version|managed-operation-v1 обязательно|идентичность исходной принятой команды через digest|
-|confirm_activate|true обязательно; false не разрешает запись|никакого implicit activate из save/check/rehearsal/AI|
-|текущие owner bindings|exact same source/destination connection, account/mode/Price/List/Assignee, principal/epoch/time/expiry|только разрешённые IDs/семантика в safe_config_valid accepted subset; alias/name остаются в файлах|
-|canonical_config|PAID_ORDER_TASK_V1 + разрешённые IDs/mode/keys/title/service_label; SQL safe_config_valid|accepted_configs canonical_config; **его фактический JCS hash сейчас отличается от записанного draft digest — известный незавершённый дефект**|
-|rehearsal_digest|hash точного сохранённого RehearsalResult|accepted_configs.rehearsal_digest|
-|accepted_by/at|действительный principal и серверное DB время|accepted_configs в той же транзакции|
-|owner/revision/config_id|авторитетный владелец; новая op1 / существующая op+1|operations owner,revision,selected_config_id; accepted config FK same workspace/op|
-|first_activation_at|DB time только когда исходной границы нет|COALESCE + существующий immutable SQL trigger; exact replay/pause не сдвигают|
-|Operation201 name|полное имя из current draft|только private expiring полный ответ; не SQL/логи|
-|Operation201 accepted_config_id/digest|идентичность принятой конфигурации|id связан атомарно; **digest семантически не завершён**|
-|connection_health|READY только при свежем совпавшем owner proof в этом bounded локальном пути|не обещание будущей доступности/provider integration|
-|drain_deadline_at|null при первичной активации|не объявляется реализованным pause/drain|
-|ошибка до/при commit или файлах|без доказанного SQL commit нет201|503 и сохранённая возможность точного повторения; orphan только собственный TTL/purge|
+|workspace path, BFF mTLS, session/CSRF|private8443/TLS1.3, CA/SAN/expiry, актуальный OWNER/grant/scope/epoch/actual-start|RLS SET LOCAL; токен/CSRF/private grant не в SQL/preview|
+|DraftConfig/revision|переиспользуется current saved content, safe SQL subset|name/aliases/private full config только owner files; existing draft root|
+|ReadinessCheck.config_digest|JCS SHA256 значимых DraftConfig полей без name/draft_id/revision|**draft hash**, не accepted SQL hash|
+|BindingProof|действительные подключения, catalog service_label, account/mode, resolved Price/List/Assignee/destination workspace IDs; инициатор/область/epoch/time/expiry|частный saved proof; не публичный preview и не SQL payload|
+|CanonicalAcceptedConfig|один чистый builder: ровно pack_id,source_connection_id,destination_connection_id,destination_workspace_id,price_id,list_id,assignee_id,mode,required_context_keys,title_pattern,service_label|pack=PAID_ORDER_TASK_V1/title=SERVICE_ORDER, строгий OAS и safe_config_valid; secret/private proof/name/aliases нет|
+|ActivationPreview.accepted_config_digest|SHA256 RFC8785 JCS полного canonical_config, без исключений и иной нормализации|**final hash** показанного и записываемого объекта|
+|ReadinessCheck.activation_preview|passed=true→полный object; passed=false→null; корреляция сверх JSON Schema|полный check+preview+proof/root durable до ответа; ACTIVE/accepted_configs не создаются|
+|check_id/expires_at|идентичность/срок именно выбранного preview; scope/principal/draft/version/draft hash|existing durable node/response, без новой таблицы или срока|
+|RehearsalRequest.readiness_check_id|обязательный UUID; только этот successful saved check, не latest/default|selectedCheck читается без owner/provider вызовов и повторно проверяется при commit|
+|RehearsalResult.config_digest|тот же **draft hash**; synthetic results по выбранному snapshot, live_requests_made=0|публичный результат без новых passed/expires_at|
+|Rehearsal private CommandNode|исходные request/examples/JCS identity, check ID, final hash и существенный BindingProof|saved association; диагностические времена proof не определяют конфигурацию|
+|ActivationCommand.accepted_config_digest|только **final hash** публичного selected preview; match private rehearsal final hash и check ID|повторное разрешение aliases в другие ID под старой командой запрещено|
+|draft_revision / command.expected_revision / If-Match|draft revision отдельно; existing operation expected revision обязательно и If-Match согласован|пример draft1/existing op7→op8; новая operation ожидаемую op revision не выдумывает|
+|X-Request-ID/command.request_id|совпадение для активации; UUID и стабильный JCS digest всего тела|existing user_commands PK; same ID/different body409|
+|confirm_activate / acceptance_text_version|true / managed-operation-v1 обязательны|save/check/rehearsal/AI не принимают конфигурацию за человека|
+|актуальный owner lookup|вне SQL locks; exact same semantic proof, валидность текущего scope/epoch/start gate|новые ID/отзыв/expiry не заменяют сохранённый preview; требуется новый check/rehearsal/показ/команда|
+|accepted_configs.canonical_config/digest|записаны ровно показанные canonical bytes после JCS; hash повторно проверен|один **final hash** с Command/Operation, SQL safe_config_valid неизменён|
+|accepted_by/at, selected_config_id, owner/revision|действительный principal, server DB time, same workspace/op FK|одна защищённая scoped транзакция; SINGLE/CAS/UNIQUE/RLS сохранены|
+|first_activation_at|server time только при отсутствии исходной границы|COALESCE/immutable trigger; повтор/restart/pause не сдвигают|
+|Operation201|точная nullable OAS форма, name из saved draft, final digest/accepted config ID, ACTIVE|полный immutable response только в owner files; никакой финансовой обработки/внешней записи|
+|rehearsal_digest|hash точного сохранённого RehearsalResult|отдельное назначение SQL поля сохраняется|
+|исторический exact replay|после текущего доступа, без повторной активации/owner resolve/TTL renewal|истечение readiness после commit не уничтожает сохранённую квитанцию|
+|legacy/missing/corrupt|старые snapshots без нужных pins не достраиваются, metadata не заменяет полный результат|история сохраняется; новая активация требует нового корректного check/rehearsal|
 
-Короткие command→draft→workspace activation locks используются только в своей транзакции; source/network lookup вне locks. Load/Commit повторно читают current root/handles/version. Full response/node/root fsync завершаются перед публикацией SQL refs; общий commit связывает конфигурацию/операцию/первую границу/журнал. Пропавшие, чужие, повреждённые или истёкшие файлы не заменяются metadata-only ответом.
+`CanonicalConfig` используется общим путём preview/проверки сохранённого снимка/commit. Проверка replay не нормализует и не заменяет принятый final hash. Файлы response→command node→root завершают file fsync/rename/directory fsync до SQL refs/ACTIVE. Сироты до rollback не объявляются принятыми и очищаются по прежней TTL policy, без угадывания неизвестного commit.
 
-Частные поля CommandNode `Examples`, `OperationID`, `OperationRevision` относятся к своему файловому конверту, не расширяют OAS/DDL. Examples нужны для проверки фактического смысла rehearsal и должны давать тот же исходный command digest. Исторические узлы без них остаются читаемыми для собственных старых повторов, но не дают новую успешную активацию.
+Все protected reads, commit и response start сохраняют bounded gate2сек. Нет внешнего owner/provider запроса под SQL row lock. На commit повторно читаются current draft/version, выбранный check/expiry и saved pair; сохранённая конфигурация сравнивается с тем же common builder и текущими подтверждёнными привязками.
+
+Ошибки:400 INVALID_REQUEST — неверная форма/const/required/null/duplicate/case/число;401/403/404 — сессия/права/видимость;412 REVISION_PRECONDITION_FAILED — revision;409 COMMAND_CONFLICT — неподходящая/истёкшая/изменившаяся pair/config/digest или конфликтующий exact ID;503 ACTIVATION_UNAVAILABLE/соответствующая owner ошибка — недостоверное обязательное чтение, corruption, missing port/content, IO/commit ACK. Body >256KiB сохраняет413. Неизвестное никогда не становится ACTIVE.
+
+Существующие helper имена DraftPKI отделены от Delivery PKI только в тестах, не вводят production сертификаты. Новые proof/association поля принадлежат частному CommandNode/owner port внутри Processing; это не новый межсервисный API. Клиентские изменения HIT-97, реальные подключения и production runtime здесь не выполнялись.

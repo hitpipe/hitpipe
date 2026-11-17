@@ -1,0 +1,2215 @@
+=== RUN   TestCLIRejectsRefundShadowing
+=== RUN   TestCLIRejectsRefundShadowing/refund-shadowed.json
+=== RUN   TestCLIRejectsRefundShadowing/refund-shadowed-reverse.json
+--- PASS: TestCLIRejectsRefundShadowing (0.00s)
+    --- PASS: TestCLIRejectsRefundShadowing/refund-shadowed.json (0.00s)
+    --- PASS: TestCLIRejectsRefundShadowing/refund-shadowed-reverse.json (0.00s)
+=== RUN   TestCLIConfiguration
+--- PASS: TestCLIConfiguration (0.00s)
+=== RUN   TestOutputFailure
+--- PASS: TestOutputFailure (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/cmd/processing-contractcheck	1.628s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/activationhttp	[no test files]
+=== RUN   TestRealMTLSAndFreshReadBoundaries
+=== RUN   TestRealMTLSAndFreshReadBoundaries/ok
+=== RUN   TestRealMTLSAndFreshReadBoundaries/no_cert
+=== RUN   TestRealMTLSAndFreshReadBoundaries/foreign_cert
+=== RUN   TestRealMTLSAndFreshReadBoundaries/untrusted_cert
+=== RUN   TestRealMTLSAndFreshReadBoundaries/expired_cert
+=== RUN   TestRealMTLSAndFreshReadBoundaries/TLS1.2
+=== RUN   TestRealMTLSAndFreshReadBoundaries/missing_session
+=== RUN   TestRealMTLSAndFreshReadBoundaries/forged_authority
+=== RUN   TestRealMTLSAndFreshReadBoundaries/stale_grant
+=== RUN   TestRealMTLSAndFreshReadBoundaries/stale_epoch
+=== RUN   TestRealMTLSAndFreshReadBoundaries/wrong_workspace
+=== RUN   TestRealMTLSAndFreshReadBoundaries/closed_SQL_gate
+=== RUN   TestRealMTLSAndFreshReadBoundaries/revoked_before_response
+=== RUN   TestRealMTLSAndFreshReadBoundaries/denied_session
+=== RUN   TestRealMTLSAndFreshReadBoundaries/database_error
+=== RUN   TestRealMTLSAndFreshReadBoundaries/invalid_query
+--- PASS: TestRealMTLSAndFreshReadBoundaries (0.10s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/ok (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/no_cert (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/foreign_cert (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/untrusted_cert (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/expired_cert (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/TLS1.2 (0.00s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/missing_session (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/forged_authority (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/stale_grant (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/stale_epoch (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/wrong_workspace (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/closed_SQL_gate (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/revoked_before_response (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/denied_session (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/database_error (0.01s)
+    --- PASS: TestRealMTLSAndFreshReadBoundaries/invalid_query (0.01s)
+=== RUN   TestParsingAndUnavailableComposition
+--- PASS: TestParsingAndUnavailableComposition (0.01s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/casereadhttp	1.525s
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/workspace
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/case
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/revision
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/hash
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/class
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/bytes
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/expiry
+=== RUN   TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/traversal
+--- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal (0.02s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/workspace (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/case (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/revision (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/hash (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/class (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/bytes (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/expiry (0.00s)
+    --- PASS: TestReadOwnedCausalScopeIntegrityExpiryAndTraversal/traversal (0.00s)
+=== RUN   TestDurableContentAndRestart
+--- PASS: TestDurableContentAndRestart (0.01s)
+=== RUN   TestFaultStepsNeverReturnAcceptedRef
+=== RUN   TestFaultStepsNeverReturnAcceptedRef/write
+=== RUN   TestFaultStepsNeverReturnAcceptedRef/file-fsync
+=== RUN   TestFaultStepsNeverReturnAcceptedRef/rename
+=== RUN   TestFaultStepsNeverReturnAcceptedRef/directory-fsync
+--- PASS: TestFaultStepsNeverReturnAcceptedRef (0.05s)
+    --- PASS: TestFaultStepsNeverReturnAcceptedRef/write (0.00s)
+    --- PASS: TestFaultStepsNeverReturnAcceptedRef/file-fsync (0.01s)
+    --- PASS: TestFaultStepsNeverReturnAcceptedRef/rename (0.01s)
+    --- PASS: TestFaultStepsNeverReturnAcceptedRef/directory-fsync (0.03s)
+=== RUN   TestExpiryCorruptionTraversalAndSymlink
+--- PASS: TestExpiryCorruptionTraversalAndSymlink (0.06s)
+=== RUN   TestUncertainCommitOrphanRetainedUntilExpiry
+--- PASS: TestUncertainCommitOrphanRetainedUntilExpiry (0.01s)
+=== RUN   TestContentProcessRestart
+--- PASS: TestContentProcessRestart (1.03s)
+=== RUN   TestCrashBetweenFileSteps
+=== RUN   TestCrashBetweenFileSteps/write
+=== RUN   TestCrashBetweenFileSteps/file-fsync
+=== RUN   TestCrashBetweenFileSteps/rename
+=== RUN   TestCrashBetweenFileSteps/directory-fsync
+--- PASS: TestCrashBetweenFileSteps (0.09s)
+    --- PASS: TestCrashBetweenFileSteps/write (0.02s)
+    --- PASS: TestCrashBetweenFileSteps/file-fsync (0.02s)
+    --- PASS: TestCrashBetweenFileSteps/rename (0.02s)
+    --- PASS: TestCrashBetweenFileSteps/directory-fsync (0.02s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles	2.678s
+=== RUN   TestActualTLSExactBytesAndNoRedirect
+--- PASS: TestActualTLSExactBytesAndNoRedirect (0.02s)
+=== RUN   TestTLSAndGateRejectionBeforeHandler
+=== RUN   TestTLSAndGateRejectionBeforeHandler/foreign_ca
+=== RUN   TestTLSAndGateRejectionBeforeHandler/wrong_service
+=== RUN   TestTLSAndGateRejectionBeforeHandler/expired_client
+=== RUN   TestTLSAndGateRejectionBeforeHandler/missing_client
+=== RUN   TestTLSAndGateRejectionBeforeHandler/wrong_server
+=== RUN   TestTLSAndGateRejectionBeforeHandler/closed_gate
+=== RUN   TestTLSAndGateRejectionBeforeHandler/no_gate_call
+--- PASS: TestTLSAndGateRejectionBeforeHandler (0.05s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/foreign_ca (0.01s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/wrong_service (0.01s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/expired_client (0.01s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/missing_client (0.00s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/wrong_server (0.01s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/closed_gate (0.00s)
+    --- PASS: TestTLSAndGateRejectionBeforeHandler/no_gate_call (0.00s)
+=== RUN   TestReceiptStatusContentAndRetryAfter
+=== RUN   TestReceiptStatusContentAndRetryAfter/empty202
+=== RUN   TestReceiptStatusContentAndRetryAfter/bad_id
+=== RUN   TestReceiptStatusContentAndRetryAfter/bad_json
+=== RUN   TestReceiptStatusContentAndRetryAfter/oversized
+=== RUN   TestReceiptStatusContentAndRetryAfter/wrong_type
+=== RUN   TestReceiptStatusContentAndRetryAfter/retry_seconds
+=== RUN   TestReceiptStatusContentAndRetryAfter/retry_date
+--- PASS: TestReceiptStatusContentAndRetryAfter (0.05s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/empty202 (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/bad_id (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/bad_json (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/oversized (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/wrong_type (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/retry_seconds (0.01s)
+    --- PASS: TestReceiptStatusContentAndRetryAfter/retry_date (0.01s)
+=== RUN   TestStrictIntentSchemaDigestAndPins
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_rendered_handoff_block
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_schema_version
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_service_label
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_source_facts_digest
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_title
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_workspace_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_episode_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_message_digest
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_case_marker
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_config_digest
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_connection_epoch
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_deadline_at
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_source_facts_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_config_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_rendering_version
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_source_session_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_target_list_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_destination_workspace_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_facts_valid_until
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_lineage_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_assignee_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_case_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_connection_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_context
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_order_reference
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_message_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/required_operation_id
+=== RUN   TestStrictIntentSchemaDigestAndPins/workspace
+=== RUN   TestStrictIntentSchemaDigestAndPins/epoch
+=== RUN   TestStrictIntentSchemaDigestAndPins/digest
+=== RUN   TestStrictIntentSchemaDigestAndPins/expired
+=== RUN   TestStrictIntentSchemaDigestAndPins/config
+=== RUN   TestStrictIntentSchemaDigestAndPins/episode
+--- PASS: TestStrictIntentSchemaDigestAndPins (0.04s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_rendered_handoff_block (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_schema_version (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_service_label (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_source_facts_digest (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_title (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_workspace_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_episode_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_message_digest (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_case_marker (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_config_digest (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_connection_epoch (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_deadline_at (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_source_facts_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_config_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_rendering_version (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_source_session_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_target_list_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_destination_workspace_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_facts_valid_until (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_lineage_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_assignee_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_case_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_connection_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_context (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_order_reference (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_message_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/required_operation_id (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/workspace (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/epoch (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/digest (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/expired (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/config (0.00s)
+    --- PASS: TestStrictIntentSchemaDigestAndPins/episode (0.00s)
+=== RUN   TestReceiptCanonicalNamesDuplicatesAndBounds
+--- PASS: TestReceiptCanonicalNamesDuplicatesAndBounds (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/deliveryhttp	1.779s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/drafthttp	[no test files]
+=== RUN   TestActivationExactWireContract
+=== RUN   TestActivationExactWireContract/command
+=== RUN   TestActivationExactWireContract/confirm_activate
+=== RUN   TestActivationExactWireContract/draft_id
+=== RUN   TestActivationExactWireContract/draft_revision
+=== RUN   TestActivationExactWireContract/readiness_check_id
+=== RUN   TestActivationExactWireContract/rehearsal_id
+=== RUN   TestActivationExactWireContract/acceptance_text_version
+=== RUN   TestActivationExactWireContract/accepted_config_digest
+--- PASS: TestActivationExactWireContract (0.01s)
+    --- PASS: TestActivationExactWireContract/command (0.00s)
+    --- PASS: TestActivationExactWireContract/confirm_activate (0.00s)
+    --- PASS: TestActivationExactWireContract/draft_id (0.00s)
+    --- PASS: TestActivationExactWireContract/draft_revision (0.00s)
+    --- PASS: TestActivationExactWireContract/readiness_check_id (0.00s)
+    --- PASS: TestActivationExactWireContract/rehearsal_id (0.00s)
+    --- PASS: TestActivationExactWireContract/acceptance_text_version (0.00s)
+    --- PASS: TestActivationExactWireContract/accepted_config_digest (0.00s)
+=== RUN   TestActivationOperationNullableFieldsAndCanonicalDigest
+--- PASS: TestActivationOperationNullableFieldsAndCanonicalDigest (0.00s)
+=== RUN   TestStrictCanonicalNamesBothOrdersAndAllLevels
+--- PASS: TestStrictCanonicalNamesBothOrdersAndAllLevels (0.00s)
+=== RUN   TestRehearsalKnownZeroFalseAndArrayLimits
+--- PASS: TestRehearsalKnownZeroFalseAndArrayLimits (0.00s)
+=== RUN   TestGeneratedSchemaRequiredSensitivityAndNull
+--- PASS: TestGeneratedSchemaRequiredSensitivityAndNull (0.00s)
+=== RUN   TestReadinessPreviewCorrelationHashAndStrictCanonicalFields
+--- PASS: TestReadinessPreviewCorrelationHashAndStrictCanonicalFields (0.09s)
+=== RUN   TestRehearsalRequiresSelectedCheckIDAndRejectsCaseConflicts
+--- PASS: TestRehearsalRequiresSelectedCheckIDAndRejectsCaseConflicts (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson	1.681s
+=== RUN   TestCanonicalFieldNames
+=== RUN   TestCanonicalFieldNames//POLICY
+=== RUN   TestCanonicalFieldNames//Policy
+=== RUN   TestCanonicalFieldNames//FACTS
+=== RUN   TestCanonicalFieldNames//Facts
+=== RUN   TestCanonicalFieldNames//NOW
+=== RUN   TestCanonicalFieldNames//Now
+=== RUN   TestCanonicalFieldNames/policy/CONFIG_ID
+=== RUN   TestCanonicalFieldNames/policy/Config_id
+=== RUN   TestCanonicalFieldNames/policy/SCHEMA_VERSION
+=== RUN   TestCanonicalFieldNames/policy/Schema_version
+=== RUN   TestCanonicalFieldNames/policy/EVALUATOR_VERSION
+=== RUN   TestCanonicalFieldNames/policy/Evaluator_version
+=== RUN   TestCanonicalFieldNames/policy/ACCOUNT_ID
+=== RUN   TestCanonicalFieldNames/policy/Account_id
+=== RUN   TestCanonicalFieldNames/policy/CONNECTION_ID
+=== RUN   TestCanonicalFieldNames/policy/Connection_id
+=== RUN   TestCanonicalFieldNames/policy/LIVEMODE
+=== RUN   TestCanonicalFieldNames/policy/Livemode
+=== RUN   TestCanonicalFieldNames/policy/PRICE_ID
+=== RUN   TestCanonicalFieldNames/policy/Price_id
+=== RUN   TestCanonicalFieldNames/policy/ACTIVATION_AT
+=== RUN   TestCanonicalFieldNames/policy/Activation_at
+=== RUN   TestCanonicalFieldNames/facts/VALID_UNTIL
+=== RUN   TestCanonicalFieldNames/facts/Valid_until
+=== RUN   TestCanonicalFieldNames/facts/ACCOUNT_ID
+=== RUN   TestCanonicalFieldNames/facts/Account_id
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Line_items_complete
+=== RUN   TestCanonicalFieldNames/facts/CHARGE_CAPTURED
+=== RUN   TestCanonicalFieldNames/facts/Charge_captured
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_REFUNDED
+=== RUN   TestCanonicalFieldNames/facts/Amount_refunded
+=== RUN   TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL
+=== RUN   TestCanonicalFieldNames/facts/All_currencies_equal
+=== RUN   TestCanonicalFieldNames/facts/LIVEMODE
+=== RUN   TestCanonicalFieldNames/facts/Livemode
+=== RUN   TestCanonicalFieldNames/facts/SESSION_CREATED_AT
+=== RUN   TestCanonicalFieldNames/facts/Session_created_at
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_TOTAL
+=== RUN   TestCanonicalFieldNames/facts/Amount_total
+=== RUN   TestCanonicalFieldNames/facts/LINE_ITEM_COUNT
+=== RUN   TestCanonicalFieldNames/facts/Line_item_count
+=== RUN   TestCanonicalFieldNames/facts/QUANTITY
+=== RUN   TestCanonicalFieldNames/facts/Quantity
+=== RUN   TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS
+=== RUN   TestCanonicalFieldNames/facts/Payment_intent_status
+=== RUN   TestCanonicalFieldNames/facts/DISPUTED
+=== RUN   TestCanonicalFieldNames/facts/Disputed
+=== RUN   TestCanonicalFieldNames/facts/COMPLETE
+=== RUN   TestCanonicalFieldNames/facts/Complete
+=== RUN   TestCanonicalFieldNames/facts/SESSION_ID
+=== RUN   TestCanonicalFieldNames/facts/Session_id
+=== RUN   TestCanonicalFieldNames/facts/PAYMENT_STATUS
+=== RUN   TestCanonicalFieldNames/facts/Payment_status
+=== RUN   TestCanonicalFieldNames/facts/CURRENCY
+=== RUN   TestCanonicalFieldNames/facts/Currency
+=== RUN   TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED
+=== RUN   TestCanonicalFieldNames/facts/Charge_succeeded
+=== RUN   TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT
+=== RUN   TestCanonicalFieldNames/facts/Oldest_observed_at
+=== RUN   TestCanonicalFieldNames/facts/CASE_ID
+=== RUN   TestCanonicalFieldNames/facts/Case_id
+=== RUN   TestCanonicalFieldNames/facts/CONNECTION_ID
+=== RUN   TestCanonicalFieldNames/facts/Connection_id
+=== RUN   TestCanonicalFieldNames/facts/MODE
+=== RUN   TestCanonicalFieldNames/facts/Mode
+=== RUN   TestCanonicalFieldNames/facts/PRICE_ID
+=== RUN   TestCanonicalFieldNames/facts/Price_id
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_RECEIVED
+=== RUN   TestCanonicalFieldNames/facts/Amount_received
+=== RUN   TestCanonicalFieldNames/facts/AMOUNT_CAPTURED
+=== RUN   TestCanonicalFieldNames/facts/Amount_captured
+=== RUN   TestCanonicalFieldNames/facts/COMPLETED_AT
+=== RUN   TestCanonicalFieldNames/facts/Completed_at
+--- PASS: TestCanonicalFieldNames (0.02s)
+    --- PASS: TestCanonicalFieldNames//POLICY (0.00s)
+    --- PASS: TestCanonicalFieldNames//Policy (0.00s)
+    --- PASS: TestCanonicalFieldNames//FACTS (0.00s)
+    --- PASS: TestCanonicalFieldNames//Facts (0.00s)
+    --- PASS: TestCanonicalFieldNames//NOW (0.00s)
+    --- PASS: TestCanonicalFieldNames//Now (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/CONFIG_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Config_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/SCHEMA_VERSION (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Schema_version (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/EVALUATOR_VERSION (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Evaluator_version (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/ACCOUNT_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/CONNECTION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Price_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/ACTIVATION_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/policy/Activation_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/VALID_UNTIL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Valid_until (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/ACCOUNT_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Account_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEMS_COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_items_complete (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CHARGE_CAPTURED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Charge_captured (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_REFUNDED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_refunded (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/ALL_CURRENCIES_EQUAL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/All_currencies_equal (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LIVEMODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Livemode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_CREATED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_created_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_TOTAL (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_total (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/LINE_ITEM_COUNT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Line_item_count (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/QUANTITY (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Quantity (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_INTENT_STATUS (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Payment_intent_status (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/DISPUTED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Disputed (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/COMPLETE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Complete (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/SESSION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Session_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PAYMENT_STATUS (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Payment_status (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CURRENCY (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Currency (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CHARGE_SUCCEEDED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Charge_succeeded (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/OLDEST_OBSERVED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Oldest_observed_at (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CASE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Case_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/CONNECTION_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Connection_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/MODE (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Mode (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/PRICE_ID (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Price_id (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_RECEIVED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_received (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/AMOUNT_CAPTURED (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Amount_captured (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/COMPLETED_AT (0.00s)
+    --- PASS: TestCanonicalFieldNames/facts/Completed_at (0.00s)
+=== RUN   TestConflictingAliasesBothOrders
+=== RUN   TestConflictingAliasesBothOrders/top_alias_first
+=== RUN   TestConflictingAliasesBothOrders/unicode_fold_alias
+=== RUN   TestConflictingAliasesBothOrders/nested_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/nested_alias_first
+=== RUN   TestConflictingAliasesBothOrders/policy_canonical_first
+=== RUN   TestConflictingAliasesBothOrders/policy_alias_first
+=== RUN   TestConflictingAliasesBothOrders/top_canonical_first
+--- PASS: TestConflictingAliasesBothOrders (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/top_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/unicode_fold_alias (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/nested_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/nested_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/policy_canonical_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/policy_alias_first (0.00s)
+    --- PASS: TestConflictingAliasesBothOrders/top_canonical_first (0.00s)
+=== RUN   TestCanonicalZeroAndStrictRejections
+=== RUN   TestCanonicalZeroAndStrictRejections/exact_duplicate
+=== RUN   TestCanonicalZeroAndStrictRejections/unknown_top
+=== RUN   TestCanonicalZeroAndStrictRejections/trailing_document
+=== RUN   TestCanonicalZeroAndStrictRejections/exponent
+=== RUN   TestCanonicalZeroAndStrictRejections/number_string
+=== RUN   TestCanonicalZeroAndStrictRejections/escaped_duplicate
+=== RUN   TestCanonicalZeroAndStrictRejections/unknown_nested
+=== RUN   TestCanonicalZeroAndStrictRejections/fraction
+=== RUN   TestCanonicalZeroAndStrictRejections/integer_overflow
+=== RUN   TestCanonicalZeroAndStrictRejections/nonfinite
+--- PASS: TestCanonicalZeroAndStrictRejections (0.01s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exact_duplicate (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_top (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/trailing_document (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/exponent (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/number_string (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/escaped_duplicate (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/unknown_nested (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/fraction (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/integer_overflow (0.00s)
+    --- PASS: TestCanonicalZeroAndStrictRejections/nonfinite (0.00s)
+=== RUN   TestStrictFixture
+--- PASS: TestStrictFixture (0.00s)
+=== RUN   TestReadFailure
+--- PASS: TestReadFailure (0.01s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/input	1.606s
+=== RUN   TestFileReaderBoundaries
+--- PASS: TestFileReaderBoundaries (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/fixtures/sourcefacts	1.512s
+=== RUN   TestProjectionPreservesFactsAndLocalPins
+--- PASS: TestProjectionPreservesFactsAndLocalPins (0.00s)
+=== RUN   TestEveryRequiredFieldAndNullableValue
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_received
+=== RUN   TestEveryRequiredFieldAndNullableValue/complete
+=== RUN   TestEveryRequiredFieldAndNullableValue/digest
+=== RUN   TestEveryRequiredFieldAndNullableValue/line_item_count
+=== RUN   TestEveryRequiredFieldAndNullableValue/oldest_observed_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/price_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/session_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_captured
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_total
+=== RUN   TestEveryRequiredFieldAndNullableValue/completed_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/facts_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/livemode
+=== RUN   TestEveryRequiredFieldAndNullableValue/session_created_at
+=== RUN   TestEveryRequiredFieldAndNullableValue/charge_captured
+=== RUN   TestEveryRequiredFieldAndNullableValue/connection_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/disputed
+=== RUN   TestEveryRequiredFieldAndNullableValue/line_items_complete
+=== RUN   TestEveryRequiredFieldAndNullableValue/valid_until
+=== RUN   TestEveryRequiredFieldAndNullableValue/payment_intent_status
+=== RUN   TestEveryRequiredFieldAndNullableValue/amount_refunded
+=== RUN   TestEveryRequiredFieldAndNullableValue/case_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/charge_succeeded
+=== RUN   TestEveryRequiredFieldAndNullableValue/currency
+=== RUN   TestEveryRequiredFieldAndNullableValue/quantity
+=== RUN   TestEveryRequiredFieldAndNullableValue/stripe_account_id
+=== RUN   TestEveryRequiredFieldAndNullableValue/mode
+=== RUN   TestEveryRequiredFieldAndNullableValue/payment_status
+=== RUN   TestEveryRequiredFieldAndNullableValue/all_currencies_equal
+--- PASS: TestEveryRequiredFieldAndNullableValue (0.05s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_received (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/complete (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/digest (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/line_item_count (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/oldest_observed_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/price_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/session_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_captured (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_total (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/completed_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/facts_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/livemode (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/session_created_at (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_captured (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/connection_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/disputed (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/line_items_complete (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/valid_until (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_intent_status (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/amount_refunded (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/case_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/charge_succeeded (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/currency (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/quantity (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/stripe_account_id (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/mode (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/payment_status (0.00s)
+    --- PASS: TestEveryRequiredFieldAndNullableValue/all_currencies_equal (0.00s)
+=== RUN   TestInvalidScalars
+=== RUN   TestInvalidScalars/amount_received-1
+=== RUN   TestInvalidScalars/amount_received1.2
+=== RUN   TestInvalidScalars/amount_received1e100
+=== RUN   TestInvalidScalars/amount_received9007199254740992
+=== RUN   TestInvalidScalars/amount_received9223372036854775808
+=== RUN   TestInvalidScalars/amount_receivedtrue
+=== RUN   TestInvalidScalars/amount_received"1"
+=== RUN   TestInvalidScalars/line_item_count-1
+=== RUN   TestInvalidScalars/line_item_count1.2
+=== RUN   TestInvalidScalars/line_item_count1e100
+=== RUN   TestInvalidScalars/line_item_count9007199254740992
+=== RUN   TestInvalidScalars/line_item_count9223372036854775808
+=== RUN   TestInvalidScalars/line_item_counttrue
+=== RUN   TestInvalidScalars/line_item_count"1"
+=== RUN   TestInvalidScalars/amount_captured-1
+=== RUN   TestInvalidScalars/amount_captured1.2
+=== RUN   TestInvalidScalars/amount_captured1e100
+=== RUN   TestInvalidScalars/amount_captured9007199254740992
+=== RUN   TestInvalidScalars/amount_captured9223372036854775808
+=== RUN   TestInvalidScalars/amount_capturedtrue
+=== RUN   TestInvalidScalars/amount_captured"1"
+=== RUN   TestInvalidScalars/amount_total-1
+=== RUN   TestInvalidScalars/amount_total1.2
+=== RUN   TestInvalidScalars/amount_total1e100
+=== RUN   TestInvalidScalars/amount_total9007199254740992
+=== RUN   TestInvalidScalars/amount_total9223372036854775808
+=== RUN   TestInvalidScalars/amount_totaltrue
+=== RUN   TestInvalidScalars/amount_total"1"
+=== RUN   TestInvalidScalars/amount_refunded-1
+=== RUN   TestInvalidScalars/amount_refunded1.2
+=== RUN   TestInvalidScalars/amount_refunded1e100
+=== RUN   TestInvalidScalars/amount_refunded9007199254740992
+=== RUN   TestInvalidScalars/amount_refunded9223372036854775808
+=== RUN   TestInvalidScalars/amount_refundedtrue
+=== RUN   TestInvalidScalars/amount_refunded"1"
+=== RUN   TestInvalidScalars/quantity-1
+=== RUN   TestInvalidScalars/quantity1.2
+=== RUN   TestInvalidScalars/quantity1e100
+=== RUN   TestInvalidScalars/quantity9007199254740992
+=== RUN   TestInvalidScalars/quantity9223372036854775808
+=== RUN   TestInvalidScalars/quantitytrue
+=== RUN   TestInvalidScalars/quantity"1"
+--- PASS: TestInvalidScalars (0.02s)
+    --- PASS: TestInvalidScalars/amount_received-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_received9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_receivedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_received"1" (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count-1 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count1.2 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count1e100 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/line_item_counttrue (0.00s)
+    --- PASS: TestInvalidScalars/line_item_count"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_capturedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_captured"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_total-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_total9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_totaltrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_total"1" (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded-1 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded1.2 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded1e100 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/amount_refundedtrue (0.00s)
+    --- PASS: TestInvalidScalars/amount_refunded"1" (0.00s)
+    --- PASS: TestInvalidScalars/quantity-1 (0.00s)
+    --- PASS: TestInvalidScalars/quantity1.2 (0.00s)
+    --- PASS: TestInvalidScalars/quantity1e100 (0.00s)
+    --- PASS: TestInvalidScalars/quantity9007199254740992 (0.00s)
+    --- PASS: TestInvalidScalars/quantity9223372036854775808 (0.00s)
+    --- PASS: TestInvalidScalars/quantitytrue (0.00s)
+    --- PASS: TestInvalidScalars/quantity"1" (0.00s)
+=== RUN   TestStrictCanonicalJSON
+--- PASS: TestStrictCanonicalJSON (0.02s)
+=== RUN   TestExpectedScopeAndPolicy
+--- PASS: TestExpectedScopeAndPolicy (0.00s)
+=== RUN   TestApplicationComposition
+=== RUN   TestApplicationComposition/normal
+=== RUN   TestApplicationComposition/refund
+=== RUN   TestApplicationComposition/null
+=== RUN   TestApplicationComposition/unknown_enum
+=== RUN   TestApplicationComposition/expiry_boundary
+=== RUN   TestApplicationComposition/absent
+=== RUN   TestApplicationComposition/error
+=== RUN   TestApplicationComposition/cancel-before
+=== RUN   TestApplicationComposition/cancel-during
+--- PASS: TestApplicationComposition (0.00s)
+    --- PASS: TestApplicationComposition/normal (0.00s)
+    --- PASS: TestApplicationComposition/refund (0.00s)
+    --- PASS: TestApplicationComposition/null (0.00s)
+    --- PASS: TestApplicationComposition/unknown_enum (0.00s)
+    --- PASS: TestApplicationComposition/expiry_boundary (0.00s)
+    --- PASS: TestApplicationComposition/absent (0.00s)
+    --- PASS: TestApplicationComposition/error (0.00s)
+    --- PASS: TestApplicationComposition/cancel-before (0.00s)
+    --- PASS: TestApplicationComposition/cancel-during (0.00s)
+=== RUN   TestEquivalentJSONIntegers
+--- PASS: TestEquivalentJSONIntegers (0.00s)
+=== RUN   TestDomainProjectionMatchesIndependentFixture
+--- PASS: TestDomainProjectionMatchesIndependentFixture (0.00s)
+=== RUN   TestHTTPSReadExactRequestAndProvenance
+--- PASS: TestHTTPSReadExactRequestAndProvenance (0.01s)
+=== RUN   TestMissingContextAndDependenciesNeverConnect
+--- PASS: TestMissingContextAndDependenciesNeverConnect (0.00s)
+=== RUN   TestMTLSAndActualSocketStart
+=== RUN   TestMTLSAndActualSocketStart/deny_before_dial
+=== RUN   TestMTLSAndActualSocketStart/boundary_does_not_start
+=== RUN   TestMTLSAndActualSocketStart/missing_certificate
+=== RUN   TestMTLSAndActualSocketStart/wrong_client_principal
+=== RUN   TestMTLSAndActualSocketStart/wrong_server_CA
+=== RUN   TestMTLSAndActualSocketStart/wrong_server_name
+=== RUN   TestMTLSAndActualSocketStart/revoke_after_handshake_verification_before_HTTP
+--- PASS: TestMTLSAndActualSocketStart (0.02s)
+    --- PASS: TestMTLSAndActualSocketStart/deny_before_dial (0.00s)
+    --- PASS: TestMTLSAndActualSocketStart/boundary_does_not_start (0.00s)
+    --- PASS: TestMTLSAndActualSocketStart/missing_certificate (0.00s)
+    --- PASS: TestMTLSAndActualSocketStart/wrong_client_principal (0.01s)
+    --- PASS: TestMTLSAndActualSocketStart/wrong_server_CA (0.01s)
+    --- PASS: TestMTLSAndActualSocketStart/wrong_server_name (0.00s)
+    --- PASS: TestMTLSAndActualSocketStart/revoke_after_handshake_verification_before_HTTP (0.00s)
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/401
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/403
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/429
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/503
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/malformed
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/case_mismatch
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/account_mismatch
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/connection_mismatch
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/session_mismatch
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/mode_mismatch
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/OAS_oversized_field
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_ContentLength
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_chunked
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/media
+=== RUN   TestResponseFailuresNeverRetryOrPublishProjection/encoding
+--- PASS: TestResponseFailuresNeverRetryOrPublishProjection (0.11s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/401 (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/403 (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/429 (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/503 (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/malformed (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/case_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/account_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/connection_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/session_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/mode_mismatch (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/OAS_oversized_field (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_ContentLength (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/transport_bound_chunked (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/media (0.01s)
+    --- PASS: TestResponseFailuresNeverRetryOrPublishProjection/encoding (0.01s)
+=== RUN   TestRedirectAndDroppedResponseDoNotReplay
+--- PASS: TestRedirectAndDroppedResponseDoNotReplay (0.01s)
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator/normal
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator/refund
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator/unknown
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator/expired
+=== RUN   TestHTTPSCompositionUsesExistingFinancialEvaluator/malformed
+--- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator (0.03s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/normal (0.01s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/refund (0.01s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/unknown (0.01s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/expired (0.01s)
+    --- PASS: TestHTTPSCompositionUsesExistingFinancialEvaluator/malformed (0.01s)
+=== RUN   TestCancelAndTimeoutJoinWithoutStaleResult
+=== RUN   TestCancelAndTimeoutJoinWithoutStaleResult/cancel_before
+=== RUN   TestCancelAndTimeoutJoinWithoutStaleResult/cancel_headers
+=== RUN   TestCancelAndTimeoutJoinWithoutStaleResult/deadline
+--- PASS: TestCancelAndTimeoutJoinWithoutStaleResult (0.21s)
+    --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/cancel_before (0.00s)
+    --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/cancel_headers (0.01s)
+    --- PASS: TestCancelAndTimeoutJoinWithoutStaleResult/deadline (0.20s)
+=== RUN   TestConcurrentReadsOwnValues
+--- PASS: TestConcurrentReadsOwnValues (0.01s)
+=== RUN   TestEstablishedScopeMismatchDeniedByInjectedBoundary
+--- PASS: TestEstablishedScopeMismatchDeniedByInjectedBoundary (0.00s)
+=== RUN   TestCanceledReuseCannotReturnPreviousProjection
+--- PASS: TestCanceledReuseCannotReturnPreviousProjection (0.01s)
+=== RUN   TestServerCertificateSANMismatch
+--- PASS: TestServerCertificateSANMismatch (0.00s)
+=== RUN   TestTransportRetainsExplicitDialerAndRejectsUnsafeTLS
+--- PASS: TestTransportRetainsExplicitDialerAndRejectsUnsafeTLS (0.01s)
+=== RUN   TestExistingApplicationPortRetainsSourceProof
+--- PASS: TestExistingApplicationPortRetainsSourceProof (0.01s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts	2.156s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/intakehttp	[no test files]
+?   	github.com/hitpipe/hitpipe/services/processing/internal/adapters/observationhttp	[no test files]
+=== RUN   TestExactRequiredNullDigestAndCanonicalNames
+--- PASS: TestExactRequiredNullDigestAndCanonicalNames (0.02s)
+=== RUN   TestOriginalWireRejectsUnpairedUnicodeSurrogatesBeforeDigest
+--- PASS: TestOriginalWireRejectsUnpairedUnicodeSurrogatesBeforeDigest (0.00s)
+=== RUN   TestValidSurrogatePairAndLiteralUnicodeHaveSameDigest
+--- PASS: TestValidSurrogatePairAndLiteralUnicodeHaveSameDigest (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/observationjson	1.586s
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/price
+    activation_preview_test.go:59: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/list
+    activation_preview_test.go:59: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/assignee
+    activation_preview_test.go:59: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationCheckARehearsalACannotAuthorizeCheckB (0.00s)
+    --- SKIP: TestActivationCheckARehearsalACannotAuthorizeCheckB/price (0.00s)
+    --- SKIP: TestActivationCheckARehearsalACannotAuthorizeCheckB/list (0.00s)
+    --- SKIP: TestActivationCheckARehearsalACannotAuthorizeCheckB/assignee (0.00s)
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/true_null
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/false_object
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_hash
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/changed_config_with_correct_hash
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/old_missing_preview
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/expired
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_draft_digest
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_binding_proof
+    activation_preview_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/true_null (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/false_object (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_hash (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/changed_config_with_correct_hash (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/old_missing_preview (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/expired (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_draft_digest (0.00s)
+    --- SKIP: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_binding_proof (0.00s)
+=== RUN   TestActivationCommitRechecksSelectedDurableExpiry
+    activation_preview_test.go:264: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationCommitRechecksSelectedDurableExpiry (0.00s)
+=== RUN   TestActivationLegacyRehearsalWithoutPairIsNotUpgraded
+    activation_preview_test.go:289: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationLegacyRehearsalWithoutPairIsNotUpgraded (0.00s)
+=== RUN   TestActivationCommittedReplayAfterReadinessExpiry
+    activation_preview_test.go:304: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationCommittedReplayAfterReadinessExpiry (0.00s)
+=== RUN   TestActivationExperimentalStackOnePrivateListener
+    activation_stack_test.go:29: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationExperimentalStackOnePrivateListener (0.00s)
+=== RUN   TestActivationFullRoundTripRestartReplayAndInitialBoundary
+    activation_test.go:159: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationFullRoundTripRestartReplayAndInitialBoundary (0.00s)
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/session_absent
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/session_unknown
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/role
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/browser_authority
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/request_id
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/confirm
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/acceptance_version
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/digest
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/draft_revision
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/check_missing
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/rehearsal_missing
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/draft_changed
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/expired
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/owner_unavailable
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/owner_denied
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/stale_binding
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/epoch_changed
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_read
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_response
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking
+    activation_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationCurrentEvidenceAndAuthorityFailures (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/session_absent (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/session_unknown (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/role (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/browser_authority (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/request_id (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/confirm (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/acceptance_version (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/digest (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/draft_revision (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/check_missing (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/rehearsal_missing (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/draft_changed (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/expired (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/owner_unavailable (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/owner_denied (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/stale_binding (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/epoch_changed (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/gate_read (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/gate_response (0.00s)
+    --- SKIP: TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking (0.00s)
+=== RUN   TestActivationStrictHTTPJSONAndBounds
+    activation_test.go:335: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationStrictHTTPJSONAndBounds (0.00s)
+=== RUN   TestActivationConcurrentCommandsAndSingleInvariant
+=== RUN   TestActivationConcurrentCommandsAndSingleInvariant/different_commands
+    activation_test.go:360: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationConcurrentCommandsAndSingleInvariant/same_command
+    activation_test.go:360: requires owned isolated HIT-78 PostgreSQL runner
+=== NAME  TestActivationConcurrentCommandsAndSingleInvariant
+    activation_test.go:388: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationConcurrentCommandsAndSingleInvariant (0.00s)
+    --- SKIP: TestActivationConcurrentCommandsAndSingleInvariant/different_commands (0.00s)
+    --- SKIP: TestActivationConcurrentCommandsAndSingleInvariant/same_command (0.00s)
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/stale
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/if_match
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/prepared
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary
+    activation_test.go:414: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationExistingOperationRevisionAndFirstBoundary (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/stale (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/if_match (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/prepared (0.00s)
+    --- SKIP: TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary (0.00s)
+=== RUN   TestActivationFileAndCommitFailureRecovery
+=== RUN   TestActivationFileAndCommitFailureRecovery/write
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationFileAndCommitFailureRecovery/file-fsync
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationFileAndCommitFailureRecovery/rename
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationFileAndCommitFailureRecovery/directory-fsync
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationFileAndCommitFailureRecovery/commit_abort
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationFileAndCommitFailureRecovery/commit_ack_loss
+    activation_test.go:497: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationFileAndCommitFailureRecovery (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/write (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/file-fsync (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/rename (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/directory-fsync (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/commit_abort (0.00s)
+    --- SKIP: TestActivationFileAndCommitFailureRecovery/commit_ack_loss (0.00s)
+=== RUN   TestActivationProcessCrashAfterCommit
+    activation_test.go:559: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationProcessCrashAfterCommit (0.00s)
+=== RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs
+=== RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired
+    activation_test.go:591: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged
+    activation_test.go:591: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response
+    activation_test.go:591: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root
+    activation_test.go:591: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs (0.00s)
+    --- SKIP: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired (0.00s)
+    --- SKIP: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged (0.00s)
+    --- SKIP: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response (0.00s)
+    --- SKIP: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root (0.00s)
+=== RUN   TestActivationTLSCallerAndRouteBoundaries
+    activation_test.go:653: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationTLSCallerAndRouteBoundaries (0.00s)
+=== RUN   TestActivationNoStaleOrFabricatedPreparation
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/incomplete
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/failed_check
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/foreign_check
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/changed_result
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/missing_original_examples
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/changed_original_examples
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response
+    activation_test.go:831: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_price
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_list
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_assignee
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_destination
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_account
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_mode
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_workspace
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_principal
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_epoch
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestActivationNoStaleOrFabricatedPreparation/binding_expired
+    activation_test.go:914: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestActivationNoStaleOrFabricatedPreparation (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/incomplete (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/failed_check (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/foreign_check (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/changed_result (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/missing_original_examples (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_list (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_assignee (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_destination (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_account (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_mode (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_workspace (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_principal (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.00s)
+    --- SKIP: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.00s)
+=== RUN   TestActivationMissingPortsDenyAndForeignRLS
+    activation_test.go:932: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationMissingPortsDenyAndForeignRLS (0.00s)
+=== RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup
+    activation_test.go:989: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup (0.00s)
+=== RUN   TestAdmissionActivationBoundary
+=== RUN   TestAdmissionActivationBoundary/before
+    admit_test.go:48: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/exact
+    admit_test.go:48: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/after
+    admit_test.go:48: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionActivationBoundary/old_session_late_payment
+    admit_test.go:48: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestAdmissionActivationBoundary (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/before (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/exact (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/after (0.00s)
+    --- SKIP: TestAdmissionActivationBoundary/old_session_late_payment (0.00s)
+=== RUN   TestAdmissionRejectsContextAndLocalState
+=== RUN   TestAdmissionRejectsContextAndLocalState/authority
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/binding
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/connection
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/account
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/livemode
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/workspace
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_operation
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/paused
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/draft
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_config
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_activation
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/stale_revision
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_time
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
+    admit_test.go:68: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_operation (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/paused (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/draft (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_config (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_activation (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/stale_revision (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
+    --- SKIP: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
+=== RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
+    admit_test.go:142: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionReplayAfterLifecycleAndNewConnection (0.00s)
+=== RUN   TestAdmissionCommitFailureNeverAcknowledges
+    admit_test.go:189: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionCommitFailureNeverAcknowledges (0.00s)
+=== RUN   TestAdmissionTwoSignalsOnePinnedCase
+    admit_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionTwoSignalsOnePinnedCase (0.00s)
+=== RUN   TestAdmissionConcurrentAndDigestConflict
+    admit_test.go:232: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestAdmissionConcurrentAndDigestConflict (0.00s)
+=== RUN   TestDispatchHoldsWithoutNetworkStart
+=== RUN   TestDispatchHoldsWithoutNetworkStart/closed_gate
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/missing_gate
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/no_gate_call
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/stale_epoch
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/missing_content
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/corrupt_content
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/expiry
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/wrong_content_hash
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchHoldsWithoutNetworkStart/attempt_bound
+    dispatch_faults_test.go:25: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDispatchHoldsWithoutNetworkStart (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/closed_gate (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/missing_gate (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/no_gate_call (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/stale_epoch (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/missing_content (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/corrupt_content (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/expiry (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/wrong_content_hash (0.00s)
+    --- SKIP: TestDispatchHoldsWithoutNetworkStart/attempt_bound (0.00s)
+=== RUN   TestDispatchRevocationBetweenConnectAndTLSWrite
+    dispatch_faults_test.go:90: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchRevocationBetweenConnectAndTLSWrite (0.00s)
+=== RUN   TestDispatchRetryAfterAndHardExpiry
+=== RUN   TestDispatchRetryAfterAndHardExpiry/short_retry
+    dispatch_faults_test.go:133: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchRetryAfterAndHardExpiry/beyond_facts
+    dispatch_faults_test.go:133: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchRetryAfterAndHardExpiry/bad_receipt
+    dispatch_faults_test.go:133: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchRetryAfterAndHardExpiry/conflict_status
+    dispatch_faults_test.go:133: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDispatchRetryAfterAndHardExpiry (0.00s)
+    --- SKIP: TestDispatchRetryAfterAndHardExpiry/short_retry (0.00s)
+    --- SKIP: TestDispatchRetryAfterAndHardExpiry/beyond_facts (0.00s)
+    --- SKIP: TestDispatchRetryAfterAndHardExpiry/bad_receipt (0.00s)
+    --- SKIP: TestDispatchRetryAfterAndHardExpiry/conflict_status (0.00s)
+=== RUN   TestDispatchSQLCommitAckLossAndPoolScopeReset
+    dispatch_faults_test.go:220: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchSQLCommitAckLossAndPoolScopeReset (0.00s)
+=== RUN   TestDispatchAtomicRollbackBetweenOutboxAndIndex
+    dispatch_faults_test.go:291: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchAtomicRollbackBetweenOutboxAndIndex (0.00s)
+=== RUN   TestDispatchActualProducerMTLSReceiptAndKnowledge
+=== RUN   TestDispatchActualProducerMTLSReceiptAndKnowledge/APPLIED
+    dispatch_test.go:205: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchActualProducerMTLSReceiptAndKnowledge/DUPLICATE
+    dispatch_test.go:205: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchActualProducerMTLSReceiptAndKnowledge/HELD
+    dispatch_test.go:205: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDispatchActualProducerMTLSReceiptAndKnowledge/CONFLICT
+    dispatch_test.go:205: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDispatchActualProducerMTLSReceiptAndKnowledge (0.00s)
+    --- SKIP: TestDispatchActualProducerMTLSReceiptAndKnowledge/APPLIED (0.00s)
+    --- SKIP: TestDispatchActualProducerMTLSReceiptAndKnowledge/DUPLICATE (0.00s)
+    --- SKIP: TestDispatchActualProducerMTLSReceiptAndKnowledge/HELD (0.00s)
+    --- SKIP: TestDispatchActualProducerMTLSReceiptAndKnowledge/CONFLICT (0.00s)
+=== RUN   TestDispatchLostACKReopenAndSameBytes
+    dispatch_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchLostACKReopenAndSameBytes (0.00s)
+=== RUN   TestDispatchConcurrentClaimStaleLeaseAndWorkspace
+    dispatch_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchConcurrentClaimStaleLeaseAndWorkspace (0.00s)
+=== RUN   TestDispatchNoSQLLockDuringActualNetwork
+    dispatch_test.go:307: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchNoSQLLockDuringActualNetwork (0.00s)
+=== RUN   TestDispatchProcessDiesAfterClaim
+    dispatch_test.go:342: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDispatchProcessDiesAfterClaim (0.00s)
+=== RUN   TestDraftCommandConflictVersionCASAndHistoricalReplay
+    drafts_faults_test.go:24: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftCommandConflictVersionCASAndHistoricalReplay (0.00s)
+=== RUN   TestDraftConcurrentCASAndSameCommand
+=== RUN   TestDraftConcurrentCASAndSameCommand/conflicting_revisions
+    drafts_faults_test.go:83: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftConcurrentCASAndSameCommand/same_command
+    drafts_faults_test.go:83: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftConcurrentCASAndSameCommand (0.00s)
+    --- SKIP: TestDraftConcurrentCASAndSameCommand/conflicting_revisions (0.00s)
+    --- SKIP: TestDraftConcurrentCASAndSameCommand/same_command (0.00s)
+=== RUN   TestDraftExpiryReplayDoesNotRenewPositiveReadiness
+    drafts_faults_test.go:136: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftExpiryReplayDoesNotRenewPositiveReadiness (0.00s)
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_root
+    drafts_faults_test.go:162: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root
+    drafts_faults_test.go:162: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed/bad_digest
+    drafts_faults_test.go:162: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref
+    drafts_faults_test.go:162: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_full_response
+    drafts_faults_test.go:162: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftMissingCorruptAndForeignContentFailClosed (0.00s)
+    --- SKIP: TestDraftMissingCorruptAndForeignContentFailClosed/missing_root (0.00s)
+    --- SKIP: TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root (0.00s)
+    --- SKIP: TestDraftMissingCorruptAndForeignContentFailClosed/bad_digest (0.00s)
+    --- SKIP: TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref (0.00s)
+    --- SKIP: TestDraftMissingCorruptAndForeignContentFailClosed/missing_full_response (0.00s)
+=== RUN   TestDraftFileDurabilityFailureRollsBackMetadata
+=== RUN   TestDraftFileDurabilityFailureRollsBackMetadata/write
+    drafts_faults_test.go:244: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync
+    drafts_faults_test.go:244: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftFileDurabilityFailureRollsBackMetadata/rename
+    drafts_faults_test.go:244: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync
+    drafts_faults_test.go:244: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftFileDurabilityFailureRollsBackMetadata (0.00s)
+    --- SKIP: TestDraftFileDurabilityFailureRollsBackMetadata/write (0.00s)
+    --- SKIP: TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync (0.00s)
+    --- SKIP: TestDraftFileDurabilityFailureRollsBackMetadata/rename (0.00s)
+    --- SKIP: TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync (0.00s)
+=== RUN   TestDraftSQLCommitAckLossRestoresFullResponse
+    drafts_faults_test.go:310: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftSQLCommitAckLossRestoresFullResponse (0.00s)
+=== RUN   TestDraftProcessCrashAfterCommit
+    drafts_faults_test.go:352: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftProcessCrashAfterCommit (0.00s)
+=== RUN   TestDraftApplicationRolePoolAndCancellation
+    drafts_faults_test.go:389: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftApplicationRolePoolAndCancellation (0.00s)
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_session
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/invalid_session
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_csrf
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/wrong_csrf
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/forged_role_header
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/reader_write
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/operator_write
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/denied
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/expired_grant
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/stale_epoch
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/closed_gate
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/non_invoking_gate
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/response_gate
+    drafts_security_test.go:21: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_session (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/invalid_session (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_csrf (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/wrong_csrf (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/forged_role_header (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/reader_write (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/operator_write (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/denied (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/expired_grant (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/stale_epoch (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/closed_gate (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/non_invoking_gate (0.00s)
+    --- SKIP: TestDraftHTTPAuthoritySessionCSRFAndActualStart/response_gate (0.00s)
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies/wrong_service
+    drafts_security_test.go:89: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies/expired_client
+    drafts_security_test.go:89: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies/foreign_ca
+    drafts_security_test.go:89: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies/missing_client
+    drafts_security_test.go:89: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftTLSCallerCertificateAndMissingDependencies/wrong_server_name
+    drafts_security_test.go:89: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftTLSCallerCertificateAndMissingDependencies (0.00s)
+    --- SKIP: TestDraftTLSCallerCertificateAndMissingDependencies/wrong_service (0.00s)
+    --- SKIP: TestDraftTLSCallerCertificateAndMissingDependencies/expired_client (0.00s)
+    --- SKIP: TestDraftTLSCallerCertificateAndMissingDependencies/foreign_ca (0.00s)
+    --- SKIP: TestDraftTLSCallerCertificateAndMissingDependencies/missing_client (0.00s)
+    --- SKIP: TestDraftTLSCallerCertificateAndMissingDependencies/wrong_server_name (0.00s)
+=== RUN   TestDraftReadRolesAndForeignDraftScope
+    drafts_security_test.go:125: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftReadRolesAndForeignDraftScope (0.00s)
+=== RUN   TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck
+    drafts_security_test.go:146: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck (0.00s)
+=== RUN   TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft
+    drafts_security_test.go:198: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft (0.00s)
+=== RUN   TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse
+    drafts_security_test.go:229: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse (0.00s)
+=== RUN   TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart
+    drafts_test.go:308: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart (0.00s)
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness/incomplete
+    drafts_test.go:375: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness/unavailable
+    drafts_test.go:375: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness/denied
+    drafts_test.go:375: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof
+    drafts_test.go:375: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port
+    drafts_test.go:375: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestDraftHonestIncompleteAndUnavailableReadiness (0.00s)
+    --- SKIP: TestDraftHonestIncompleteAndUnavailableReadiness/incomplete (0.00s)
+    --- SKIP: TestDraftHonestIncompleteAndUnavailableReadiness/unavailable (0.00s)
+    --- SKIP: TestDraftHonestIncompleteAndUnavailableReadiness/denied (0.00s)
+    --- SKIP: TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof (0.00s)
+    --- SKIP: TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port (0.00s)
+=== RUN   TestRevision3AdmissionCrashThenHTTPExpiryPurgeAndRestart
+    history_api_revision3_test.go:55: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3AdmissionCrashThenHTTPExpiryPurgeAndRestart (0.00s)
+=== RUN   TestRevision3ActualAdmissionHistoryReplayExpiryPurgeRestart
+    history_revision3_test.go:63: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3ActualAdmissionHistoryReplayExpiryPurgeRestart (0.00s)
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/write
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/file-fsync
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/rename
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/directory-fsync
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/commit
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/lost-ack
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/missing-content
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRevision3AdmissionFileAndCommitFaultsNoACK/invalid-retention
+    history_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestRevision3AdmissionFileAndCommitFaultsNoACK (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/write (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/file-fsync (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/rename (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/directory-fsync (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/commit (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/lost-ack (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/missing-content (0.00s)
+    --- SKIP: TestRevision3AdmissionFileAndCommitFaultsNoACK/invalid-retention (0.00s)
+=== RUN   TestRevision3LegacyMissingExpiryAndCorruptMetadataFail
+    history_revision3_test.go:231: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3LegacyMissingExpiryAndCorruptMetadataFail (0.00s)
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash/abort
+    intake_faults_test.go:64: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash/ack_loss
+    intake_faults_test.go:64: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash/closed_connection
+    intake_faults_test.go:64: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash/missing_content
+    intake_faults_test.go:64: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPErrorsCommitAckAndProcessCrash/crash
+    intake_faults_test.go:64: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestIntakeHTTPErrorsCommitAckAndProcessCrash (0.00s)
+    --- SKIP: TestIntakeHTTPErrorsCommitAckAndProcessCrash/abort (0.00s)
+    --- SKIP: TestIntakeHTTPErrorsCommitAckAndProcessCrash/ack_loss (0.00s)
+    --- SKIP: TestIntakeHTTPErrorsCommitAckAndProcessCrash/closed_connection (0.00s)
+    --- SKIP: TestIntakeHTTPErrorsCommitAckAndProcessCrash/missing_content (0.00s)
+    --- SKIP: TestIntakeHTTPErrorsCommitAckAndProcessCrash/crash (0.00s)
+=== RUN   TestIntakeHTTPDurableFileFailuresAndExpiryRestart
+=== RUN   TestIntakeHTTPDurableFileFailuresAndExpiryRestart/write
+    intake_faults_test.go:117: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPDurableFileFailuresAndExpiryRestart/file-fsync
+    intake_faults_test.go:117: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPDurableFileFailuresAndExpiryRestart/rename
+    intake_faults_test.go:117: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPDurableFileFailuresAndExpiryRestart/directory-fsync
+    intake_faults_test.go:117: requires owned isolated HIT-78 PostgreSQL runner
+=== NAME  TestIntakeHTTPDurableFileFailuresAndExpiryRestart
+    intake_faults_test.go:137: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestIntakeHTTPDurableFileFailuresAndExpiryRestart (0.00s)
+    --- SKIP: TestIntakeHTTPDurableFileFailuresAndExpiryRestart/write (0.00s)
+    --- SKIP: TestIntakeHTTPDurableFileFailuresAndExpiryRestart/file-fsync (0.00s)
+    --- SKIP: TestIntakeHTTPDurableFileFailuresAndExpiryRestart/rename (0.00s)
+    --- SKIP: TestIntakeHTTPDurableFileFailuresAndExpiryRestart/directory-fsync (0.00s)
+=== RUN   TestIntakeHTTPActivationBoundaryAndReceipt
+=== RUN   TestIntakeHTTPActivationBoundaryAndReceipt/before
+    intake_http_test.go:272: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPActivationBoundaryAndReceipt/exact
+    intake_http_test.go:272: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPActivationBoundaryAndReceipt/after
+    intake_http_test.go:272: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPActivationBoundaryAndReceipt/old_session_late_payment
+    intake_http_test.go:272: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestIntakeHTTPActivationBoundaryAndReceipt (0.00s)
+    --- SKIP: TestIntakeHTTPActivationBoundaryAndReceipt/before (0.00s)
+    --- SKIP: TestIntakeHTTPActivationBoundaryAndReceipt/exact (0.00s)
+    --- SKIP: TestIntakeHTTPActivationBoundaryAndReceipt/after (0.00s)
+    --- SKIP: TestIntakeHTTPActivationBoundaryAndReceipt/old_session_late_payment (0.00s)
+=== RUN   TestIntakeHTTPStrictWireAndHTTPBoundary
+    intake_http_test.go:321: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestIntakeHTTPStrictWireAndHTTPBoundary (0.00s)
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/workspace
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/connection
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/account
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/mode
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/missing_operation
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/revision
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/paused
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/draft
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/denied
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/expired
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/revoke
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/unverified
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/foreign_context
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/zero_epoch
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/epoch
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/closed
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/no_call
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/context_gate
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/response_gate
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/wrong_service
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/expired_cert
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/foreign_ca
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/missing_cert
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestIntakeHTTPBindingAuthorityLifecycleAndTLS/wrong_server
+    intake_http_test.go:374: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestIntakeHTTPBindingAuthorityLifecycleAndTLS (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/workspace (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/connection (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/account (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/mode (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/missing_operation (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/revision (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/paused (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/draft (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/denied (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/expired (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/revoke (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/unverified (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/foreign_context (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/zero_epoch (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/epoch (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/closed (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/no_call (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/context_gate (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/response_gate (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/wrong_service (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/expired_cert (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/foreign_ca (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/missing_cert (0.00s)
+    --- SKIP: TestIntakeHTTPBindingAuthorityLifecycleAndTLS/wrong_server (0.00s)
+=== RUN   TestIntakeHTTPReplayPauseConcurrencyIdentityAndReadRoute
+    intake_http_test.go:460: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestIntakeHTTPReplayPauseConcurrencyIdentityAndReadRoute (0.00s)
+=== RUN   TestIntakeHTTPUUIDIdentityAndExistingDeliveryRoute
+    intake_http_test.go:571: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestIntakeHTTPUUIDIdentityAndExistingDeliveryRoute (0.00s)
+=== RUN   TestObservationWireScopeAndEpisodeRejection
+=== RUN   TestObservationWireScopeAndEpisodeRejection/digest
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/extra
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/duplicate
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/case_variant_first
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/case_variant_last
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/required_omission
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/forbidden_null
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/enum
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/version
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/wrong_workspace
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/foreign_case
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/lineage
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/episode
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/old_episode
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/future
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/body_limit
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/authority_header
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationWireScopeAndEpisodeRejection/unicode_surrogate
+    observation_faults_test.go:30: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestObservationWireScopeAndEpisodeRejection (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/digest (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/extra (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/duplicate (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/case_variant_first (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/case_variant_last (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/required_omission (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/forbidden_null (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/enum (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/version (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/wrong_workspace (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/foreign_case (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/lineage (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/episode (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/old_episode (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/future (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/body_limit (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/authority_header (0.00s)
+    --- SKIP: TestObservationWireScopeAndEpisodeRejection/unicode_surrogate (0.00s)
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/denied
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/expired
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/pending_revoke
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/stale_epoch
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/gate_closed
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/non_invoking_gate
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/response_denied
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/wrong_service
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/expired_client
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/foreign_ca
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/missing_client
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationRealTLSAndCurrentAuthorityBoundary/wrong_server_name
+    observation_faults_test.go:110: requires owned isolated HIT-78 PostgreSQL runner
+=== NAME  TestObservationRealTLSAndCurrentAuthorityBoundary
+    observation_faults_test.go:171: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/denied (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/expired (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/pending_revoke (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/stale_epoch (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/gate_closed (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/non_invoking_gate (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/response_denied (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/wrong_service (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/expired_client (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/foreign_ca (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/missing_client (0.00s)
+    --- SKIP: TestObservationRealTLSAndCurrentAuthorityBoundary/wrong_server_name (0.00s)
+=== RUN   TestObservationConcurrentSameMessageAndRevisionCAS
+=== RUN   TestObservationConcurrentSameMessageAndRevisionCAS/same_message
+    observation_faults_test.go:187: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationConcurrentSameMessageAndRevisionCAS/distinct_messages
+    observation_faults_test.go:187: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestObservationConcurrentSameMessageAndRevisionCAS (0.00s)
+    --- SKIP: TestObservationConcurrentSameMessageAndRevisionCAS/same_message (0.00s)
+    --- SKIP: TestObservationConcurrentSameMessageAndRevisionCAS/distinct_messages (0.00s)
+=== RUN   TestObservationCommitAckLossAndRealProcessCrash
+=== RUN   TestObservationCommitAckLossAndRealProcessCrash/commit_ack_loss
+    observation_faults_test.go:304: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationCommitAckLossAndRealProcessCrash/real_process_exit24
+    observation_faults_test.go:304: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestObservationCommitAckLossAndRealProcessCrash (0.00s)
+    --- SKIP: TestObservationCommitAckLossAndRealProcessCrash/commit_ack_loss (0.00s)
+    --- SKIP: TestObservationCommitAckLossAndRealProcessCrash/real_process_exit24 (0.00s)
+=== RUN   TestObservationFileFaultRollbackAndContentCorruption
+=== RUN   TestObservationFileFaultRollbackAndContentCorruption/write
+    observation_faults_test.go:344: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationFileFaultRollbackAndContentCorruption/file-fsync
+    observation_faults_test.go:344: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationFileFaultRollbackAndContentCorruption/rename
+    observation_faults_test.go:344: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationFileFaultRollbackAndContentCorruption/directory-fsync
+    observation_faults_test.go:344: requires owned isolated HIT-78 PostgreSQL runner
+=== NAME  TestObservationFileFaultRollbackAndContentCorruption
+    observation_faults_test.go:364: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationFileFaultRollbackAndContentCorruption (0.00s)
+    --- SKIP: TestObservationFileFaultRollbackAndContentCorruption/write (0.00s)
+    --- SKIP: TestObservationFileFaultRollbackAndContentCorruption/file-fsync (0.00s)
+    --- SKIP: TestObservationFileFaultRollbackAndContentCorruption/rename (0.00s)
+    --- SKIP: TestObservationFileFaultRollbackAndContentCorruption/directory-fsync (0.00s)
+=== RUN   TestObservationExpiryPurgeAndMinimalReadAfterRestart
+    observation_faults_test.go:379: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationExpiryPurgeAndMinimalReadAfterRestart (0.00s)
+=== RUN   TestObservationActualSQLCommitRollbackAndCommitGate
+=== RUN   TestObservationActualSQLCommitRollbackAndCommitGate/postgres_aborted_transaction
+    observation_faults_test.go:440: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationActualSQLCommitRollbackAndCommitGate/commit_gate
+    observation_faults_test.go:440: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestObservationActualSQLCommitRollbackAndCommitGate (0.00s)
+    --- SKIP: TestObservationActualSQLCommitRollbackAndCommitGate/postgres_aborted_transaction (0.00s)
+    --- SKIP: TestObservationActualSQLCommitRollbackAndCommitGate/commit_gate (0.00s)
+=== RUN   TestObservationRealMTLSPGCommitBeforeSenderACKAndReplay
+    observations_test.go:270: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationRealMTLSPGCommitBeforeSenderACKAndReplay (0.00s)
+=== RUN   TestObservationAllKnowledgeAndPartialMatches
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/RESULT_VERIFIED
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/TARGET_ID_OBSERVED
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/POSSIBLE_EFFECT
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/RESULT_MISMATCH
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/INCOMPLETE
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/KNOWN_NO_EFFECT
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/missing_match
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/expired_evidence
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/missing_evidence
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/false_match
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestObservationAllKnowledgeAndPartialMatches/incomplete_verified
+    observations_test.go:302: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestObservationAllKnowledgeAndPartialMatches (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/RESULT_VERIFIED (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/TARGET_ID_OBSERVED (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/POSSIBLE_EFFECT (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/RESULT_MISMATCH (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/INCOMPLETE (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/KNOWN_NO_EFFECT (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/missing_match (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/expired_evidence (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/missing_evidence (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/false_match (0.00s)
+    --- SKIP: TestObservationAllKnowledgeAndPartialMatches/incomplete_verified (0.00s)
+=== RUN   TestObservationLateReorderedIdentityAndNewMismatch
+    observations_test.go:359: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationLateReorderedIdentityAndNewMismatch (0.00s)
+=== RUN   TestObservationUppercaseUUIDWirePreservesDigestAndReceipt
+    observations_test.go:427: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestObservationUppercaseUUIDWirePreservesDigestAndReceipt (0.00s)
+=== RUN   TestPreparationPaidReplayAndRestart
+    prepare_test.go:210: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestPreparationPaidReplayAndRestart (0.00s)
+=== RUN   TestPreparationUnpaidThenPaidSamePins
+    prepare_test.go:238: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestPreparationUnpaidThenPaidSamePins (0.00s)
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/unknown
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/expired
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/cancel
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/authority
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/epoch
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/stale_case
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read
+    prepare_test.go:260: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/unknown (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/expired (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/cancel (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/authority (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/epoch (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/pause (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/stale_case (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context (0.00s)
+    --- SKIP: TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read (0.00s)
+=== RUN   TestPreparationConcurrentCASOneIntent
+    prepare_test.go:319: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestPreparationConcurrentCASOneIntent (0.00s)
+=== RUN   TestPreparationCommitFailureAndLostAck
+=== RUN   TestPreparationCommitFailureAndLostAck/rollback_at_commit
+    prepare_test.go:411: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationCommitFailureAndLostAck/lost_ack_after_commit
+    prepare_test.go:411: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestPreparationCommitFailureAndLostAck (0.00s)
+    --- SKIP: TestPreparationCommitFailureAndLostAck/rollback_at_commit (0.00s)
+    --- SKIP: TestPreparationCommitFailureAndLostAck/lost_ack_after_commit (0.00s)
+=== RUN   TestPreparationActualReaderNoNetworkUnderRowLock
+    prepare_test.go:436: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestPreparationActualReaderNoNetworkUnderRowLock (0.00s)
+=== RUN   TestPreparationFileFaultsBeforeSQL
+=== RUN   TestPreparationFileFaultsBeforeSQL/write
+    prepare_test.go:492: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationFileFaultsBeforeSQL/file-fsync
+    prepare_test.go:492: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationFileFaultsBeforeSQL/rename
+    prepare_test.go:492: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationFileFaultsBeforeSQL/directory-fsync
+    prepare_test.go:492: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationFileFaultsBeforeSQL/history-file
+    prepare_test.go:492: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestPreparationFileFaultsBeforeSQL (0.00s)
+    --- SKIP: TestPreparationFileFaultsBeforeSQL/write (0.00s)
+    --- SKIP: TestPreparationFileFaultsBeforeSQL/file-fsync (0.00s)
+    --- SKIP: TestPreparationFileFaultsBeforeSQL/rename (0.00s)
+    --- SKIP: TestPreparationFileFaultsBeforeSQL/directory-fsync (0.00s)
+    --- SKIP: TestPreparationFileFaultsBeforeSQL/history-file (0.00s)
+=== RUN   TestPreparationContentAvailabilityAndGuards
+=== RUN   TestPreparationContentAvailabilityAndGuards/valid_context
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/short_context
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/missing
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/corrupt
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/expired
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/possible_effect
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestPreparationContentAvailabilityAndGuards/existing_task
+    prepare_test.go:519: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestPreparationContentAvailabilityAndGuards (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/valid_context (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/short_context (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/missing (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/corrupt (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/expired (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/possible_effect (0.00s)
+    --- SKIP: TestPreparationContentAvailabilityAndGuards/existing_task (0.00s)
+=== RUN   TestPreparationProcessCrashAfterSQLCommit
+    prepare_test.go:611: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestPreparationProcessCrashAfterSQLCommit (0.00s)
+=== RUN   TestRevision3PinnedLabelContextExpiryPausedAndNoCommands
+    projection_revision3_test.go:18: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3PinnedLabelContextExpiryPausedAndNoCommands (0.00s)
+=== RUN   TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence
+    projection_revision3_test.go:101: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3FinancialValidReadRemainsWorkingAndNullableEvidence (0.00s)
+=== RUN   TestRevision3StoredConfirmationBoundaryNotLiveObservation
+    projection_revision3_test.go:174: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRevision3StoredConfirmationBoundaryNotLiveObservation (0.00s)
+=== RUN   TestReadHistoryActualStoragePaginationAndGaps
+    read_cases_test.go:150: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestReadHistoryActualStoragePaginationAndGaps (0.00s)
+=== RUN   TestReadHistoryParallelWorkspacesAndNoBusinessWrites
+    read_cases_test.go:228: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestReadHistoryParallelWorkspacesAndNoBusinessWrites (0.00s)
+=== RUN   TestReadCaseSQLKeysetAndReadonlyOnActualRole
+    read_cases_test.go:276: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestReadCaseSQLKeysetAndReadonlyOnActualRole (0.00s)
+=== RUN   TestReadContentFaultsAndSQLCancellation
+=== RUN   TestReadContentFaultsAndSQLCancellation/missing
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/corrupt
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/wrong_hash
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/symlink
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/expired
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/wrong_owner
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/timeout
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/cancel_before
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/rollback
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestReadContentFaultsAndSQLCancellation/unavailable_db
+    read_cases_test.go:380: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestReadContentFaultsAndSQLCancellation (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/missing (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/corrupt (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/wrong_hash (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/symlink (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/expired (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/wrong_owner (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/timeout (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/cancel_before (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/rollback (0.00s)
+    --- SKIP: TestReadContentFaultsAndSQLCancellation/unavailable_db (0.00s)
+=== RUN   TestReadActualMTLSPostgresContentComposition
+    read_cases_test.go:533: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestReadActualMTLSPostgresContentComposition (0.00s)
+=== RUN   TestRecordCommitRepeatConflictAndReconnect
+    record_test.go:127: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRecordCommitRepeatConflictAndReconnect (0.00s)
+=== RUN   TestRecordRollbackAndCommitFailure
+=== RUN   TestRecordRollbackAndCommitFailure/rollback
+    record_test.go:181: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordRollbackAndCommitFailure/commit_failure
+    record_test.go:181: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordRollbackAndCommitFailure/history_failure
+    record_test.go:181: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestRecordRollbackAndCommitFailure (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/rollback (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/commit_failure (0.00s)
+    --- SKIP: TestRecordRollbackAndCommitFailure/history_failure (0.00s)
+=== RUN   TestRecordConcurrentIdentityAndMessage
+=== RUN   TestRecordConcurrentIdentityAndMessage/two_messages
+    record_test.go:217: requires owned isolated HIT-78 PostgreSQL runner
+=== RUN   TestRecordConcurrentIdentityAndMessage/same_message
+    record_test.go:217: requires owned isolated HIT-78 PostgreSQL runner
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.00s)
+    --- SKIP: TestRecordConcurrentIdentityAndMessage/two_messages (0.00s)
+    --- SKIP: TestRecordConcurrentIdentityAndMessage/same_message (0.00s)
+=== RUN   TestRecordRLSRejectsForeignWorkspace
+    record_test.go:273: requires owned isolated HIT-78 PostgreSQL runner
+--- SKIP: TestRecordRLSRejectsForeignWorkspace (0.00s)
+=== RUN   TestEnvironment
+    record_test.go:285: go1.27.2 darwin arm64 isolated_pg=
+--- PASS: TestEnvironment (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres	1.365s
+=== RUN   TestGoldenRenderingAndDigest
+--- PASS: TestGoldenRenderingAndDigest (0.00s)
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#01
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#02
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#03
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#04
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#05
+=== RUN   TestRenderingRejectsAmbiguityAndExpiry/context#06
+--- PASS: TestRenderingRejectsAmbiguityAndExpiry (0.01s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#01 (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#02 (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#03 (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#04 (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#05 (0.00s)
+    --- PASS: TestRenderingRejectsAmbiguityAndExpiry/context#06 (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent	1.234s
+=== RUN   TestCanonicalAndJCS
+--- PASS: TestCanonicalAndJCS (0.00s)
+=== RUN   TestRejectInvalidSignal
+=== RUN   TestRejectInvalidSignal/trailing
+=== RUN   TestRejectInvalidSignal/array
+=== RUN   TestRejectInvalidSignal/null_message_digest
+=== RUN   TestRejectInvalidSignal/missing_stripe_account_id
+=== RUN   TestRejectInvalidSignal/schema_source_created_at
+=== RUN   TestRejectInvalidSignal/case_first
+=== RUN   TestRejectInvalidSignal/case_last
+=== RUN   TestRejectInvalidSignal/escaped_duplicate
+=== RUN   TestRejectInvalidSignal/schema_session_id
+=== RUN   TestRejectInvalidSignal/null_first_received_at
+=== RUN   TestRejectInvalidSignal/null_session_id
+=== RUN   TestRejectInvalidSignal/missing_source_created_at
+=== RUN   TestRejectInvalidSignal/null_workspace_id
+=== RUN   TestRejectInvalidSignal/missing_livemode
+=== RUN   TestRejectInvalidSignal/null_livemode
+=== RUN   TestRejectInvalidSignal/missing_receipt_id
+=== RUN   TestRejectInvalidSignal/null_stripe_account_id
+=== RUN   TestRejectInvalidSignal/null_event_id
+=== RUN   TestRejectInvalidSignal/missing_workspace_id
+=== RUN   TestRejectInvalidSignal/null_message_id
+=== RUN   TestRejectInvalidSignal/missing_message_digest
+=== RUN   TestRejectInvalidSignal/missing_connection_id
+=== RUN   TestRejectInvalidSignal/missing_event_id
+=== RUN   TestRejectInvalidSignal/schema_unknown
+=== RUN   TestRejectInvalidSignal/digest_mismatch
+=== RUN   TestRejectInvalidSignal/exact_duplicate
+=== RUN   TestRejectInvalidSignal/missing_event_type
+=== RUN   TestRejectInvalidSignal/missing_session_id
+=== RUN   TestRejectInvalidSignal/null_source_created_at
+=== RUN   TestRejectInvalidSignal/null_event_type
+=== RUN   TestRejectInvalidSignal/missing_first_received_at
+=== RUN   TestRejectInvalidSignal/null_expires_at
+=== RUN   TestRejectInvalidSignal/null_schema_version
+=== RUN   TestRejectInvalidSignal/null_connection_id
+=== RUN   TestRejectInvalidSignal/schema_schema_version
+=== RUN   TestRejectInvalidSignal/schema_event_type
+=== RUN   TestRejectInvalidSignal/schema_livemode
+=== RUN   TestRejectInvalidSignal/surrogate
+=== RUN   TestRejectInvalidSignal/utf8
+=== RUN   TestRejectInvalidSignal/missing_expires_at
+=== RUN   TestRejectInvalidSignal/null_receipt_id
+=== RUN   TestRejectInvalidSignal/missing_message_id
+=== RUN   TestRejectInvalidSignal/missing_schema_version
+=== RUN   TestRejectInvalidSignal/schema_workspace_id
+=== RUN   TestRejectInvalidSignal/schema_event_id
+--- PASS: TestRejectInvalidSignal (0.01s)
+    --- PASS: TestRejectInvalidSignal/trailing (0.00s)
+    --- PASS: TestRejectInvalidSignal/array (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_stripe_account_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/case_first (0.00s)
+    --- PASS: TestRejectInvalidSignal/case_last (0.00s)
+    --- PASS: TestRejectInvalidSignal/escaped_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_first_received_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_stripe_account_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_message_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_digest (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_unknown (0.00s)
+    --- PASS: TestRejectInvalidSignal/digest_mismatch (0.00s)
+    --- PASS: TestRejectInvalidSignal/exact_duplicate (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_session_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_source_created_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_first_received_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_connection_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_type (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_livemode (0.00s)
+    --- PASS: TestRejectInvalidSignal/surrogate (0.00s)
+    --- PASS: TestRejectInvalidSignal/utf8 (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_expires_at (0.00s)
+    --- PASS: TestRejectInvalidSignal/null_receipt_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_message_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/missing_schema_version (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_workspace_id (0.00s)
+    --- PASS: TestRejectInvalidSignal/schema_event_id (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal	1.208s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/application/activation	[no test files]
+?   	github.com/hitpipe/hitpipe/services/processing/internal/application/admission	[no test files]
+=== RUN   TestAbsentAndNonInvokingAuthorityNeverStart
+--- PASS: TestAbsentAndNonInvokingAuthorityNeverStart (0.00s)
+=== RUN   TestBackoffEntropyBounds
+--- PASS: TestBackoffEntropyBounds (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/dispatchintent	1.182s
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects/paid
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects/unpaid
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects/nonpositive
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects/duplicate_without_retained_outcome
+=== RUN   TestPureRehearsalUsesFinancialKernelWithoutEffects/missing
+--- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects (0.00s)
+    --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/paid (0.00s)
+    --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/unpaid (0.00s)
+    --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/nonpositive (0.00s)
+    --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/duplicate_without_retained_outcome (0.00s)
+    --- PASS: TestPureRehearsalUsesFinancialKernelWithoutEffects/missing (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/drafts	1.244s
+=== RUN   TestReaderSubstitution
+=== RUN   TestReaderSubstitution/file/normal
+=== RUN   TestReaderSubstitution/file/boundary
+=== RUN   TestReaderSubstitution/file/error_unknown
+=== RUN   TestReaderSubstitution/file/denied
+=== RUN   TestReaderSubstitution/file/reader_failure
+=== RUN   TestReaderSubstitution/double/normal
+=== RUN   TestReaderSubstitution/double/boundary
+=== RUN   TestReaderSubstitution/double/error_unknown
+=== RUN   TestReaderSubstitution/double/denied
+=== RUN   TestReaderSubstitution/double/reader_failure
+--- PASS: TestReaderSubstitution (0.01s)
+    --- PASS: TestReaderSubstitution/file/normal (0.00s)
+    --- PASS: TestReaderSubstitution/file/boundary (0.00s)
+    --- PASS: TestReaderSubstitution/file/error_unknown (0.00s)
+    --- PASS: TestReaderSubstitution/file/denied (0.00s)
+    --- PASS: TestReaderSubstitution/file/reader_failure (0.00s)
+    --- PASS: TestReaderSubstitution/double/normal (0.00s)
+    --- PASS: TestReaderSubstitution/double/boundary (0.00s)
+    --- PASS: TestReaderSubstitution/double/error_unknown (0.00s)
+    --- PASS: TestReaderSubstitution/double/denied (0.00s)
+    --- PASS: TestReaderSubstitution/double/reader_failure (0.00s)
+=== RUN   TestContextPins
+=== RUN   TestContextPins/config
+=== RUN   TestContextPins/schema
+=== RUN   TestContextPins/evaluator
+=== RUN   TestContextPins/case
+=== RUN   TestContextPins/session
+--- PASS: TestContextPins (0.00s)
+    --- PASS: TestContextPins/config (0.00s)
+    --- PASS: TestContextPins/schema (0.00s)
+    --- PASS: TestContextPins/evaluator (0.00s)
+    --- PASS: TestContextPins/case (0.00s)
+    --- PASS: TestContextPins/session (0.00s)
+=== RUN   TestCanceledAndInvalidContext
+--- PASS: TestCanceledAndInvalidContext (0.00s)
+=== RUN   TestFinancialScope
+--- PASS: TestFinancialScope (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder	1.257s
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/verified
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/ID_only
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/possible
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/incomplete
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/mismatch
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/no_effect
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/missing_match
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/one_false
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/incomplete_verification
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/expired_proof
+=== RUN   TestKnowledgeDecisionTableAndHistoricalConfirmation/missing_proof
+--- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/verified (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/ID_only (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/possible (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/incomplete (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/mismatch (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/no_effect (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/missing_match (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/one_false (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/incomplete_verification (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/expired_proof (0.00s)
+    --- PASS: TestKnowledgeDecisionTableAndHistoricalConfirmation/missing_proof (0.00s)
+=== RUN   TestEveryRequiredMatchMustBeKnownTrue
+--- PASS: TestEveryRequiredMatchMustBeKnownTrue (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/observations	1.182s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase	[no test files]
+=== RUN   TestCursorBindsScopeOperationFilterAndPosition
+--- PASS: TestCursorBindsScopeOperationFilterAndPosition (0.00s)
+=== RUN   TestLeadStepPriority
+--- PASS: TestLeadStepPriority (0.00s)
+=== RUN   TestPresentationAllStatesKnowledgeAndBounds
+--- PASS: TestPresentationAllStatesKnowledgeAndBounds (0.01s)
+=== RUN   TestPresentationLabelExactAndInvalidSource
+--- PASS: TestPresentationLabelExactAndInvalidSource (0.00s)
+=== RUN   TestCommandKnowledgeNeverComesFromReadPermission
+--- PASS: TestCommandKnowledgeNeverComesFromReadPermission (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/readcases	1.213s
+=== RUN   TestOneRawDecodeCommitThenProtectedReceipt
+--- PASS: TestOneRawDecodeCommitThenProtectedReceipt (0.00s)
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/deny
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/no_call
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/nil_context
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/cancel
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/expired
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/unverified
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/pending
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/wrong_binding
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/zero_epoch
+=== RUN   TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/commit_error
+--- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/deny (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/no_call (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/nil_context (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/cancel (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/expired (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/unverified (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/pending (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/wrong_binding (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/zero_epoch (0.00s)
+    --- PASS: TestNoAcknowledgementOnUnknownAuthorityAndFailedGates/commit_error (0.00s)
+=== RUN   TestMissingAndTypedNilPortsStayClosed
+=== RUN   TestMissingAndTypedNilPortsStayClosed/contexts
+=== RUN   TestMissingAndTypedNilPortsStayClosed/boundary
+=== RUN   TestMissingAndTypedNilPortsStayClosed/clock
+=== RUN   TestMissingAndTypedNilPortsStayClosed/decoder
+=== RUN   TestMissingAndTypedNilPortsStayClosed/store
+--- PASS: TestMissingAndTypedNilPortsStayClosed (0.00s)
+    --- PASS: TestMissingAndTypedNilPortsStayClosed/contexts (0.00s)
+    --- PASS: TestMissingAndTypedNilPortsStayClosed/boundary (0.00s)
+    --- PASS: TestMissingAndTypedNilPortsStayClosed/clock (0.00s)
+    --- PASS: TestMissingAndTypedNilPortsStayClosed/decoder (0.00s)
+    --- PASS: TestMissingAndTypedNilPortsStayClosed/store (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/application/receivesignals	1.220s
+=== RUN   TestFinancialDecisionTable
+=== RUN   TestFinancialDecisionTable/account
+=== RUN   TestFinancialDecisionTable/connection
+=== RUN   TestFinancialDecisionTable/mode_scope
+=== RUN   TestFinancialDecisionTable/subscription
+=== RUN   TestFinancialDecisionTable/setup
+=== RUN   TestFinancialDecisionTable/unpaid
+=== RUN   TestFinancialDecisionTable/no_payment
+=== RUN   TestFinancialDecisionTable/zero
+=== RUN   TestFinancialDecisionTable/two_lines
+=== RUN   TestFinancialDecisionTable/zero_lines
+=== RUN   TestFinancialDecisionTable/zero_quantity
+=== RUN   TestFinancialDecisionTable/payment_intent
+=== RUN   TestFinancialDecisionTable/charge_failed
+=== RUN   TestFinancialDecisionTable/over_received
+=== RUN   TestFinancialDecisionTable/over_captured
+=== RUN   TestFinancialDecisionTable/before_activation
+=== RUN   TestFinancialDecisionTable/activation_equality
+=== RUN   TestFinancialDecisionTable/max_money
+=== RUN   TestFinancialDecisionTable/too_large
+=== RUN   TestFinancialDecisionTable/negative_money
+=== RUN   TestFinancialDecisionTable/negative_quantity
+=== RUN   TestFinancialDecisionTable/negative_count
+=== RUN   TestFinancialDecisionTable/enum
+=== RUN   TestFinancialDecisionTable/payment_enum
+=== RUN   TestFinancialDecisionTable/intent_enum
+=== RUN   TestFinancialDecisionTable/currency_length
+=== RUN   TestFinancialDecisionTable/currency_case
+=== RUN   TestFinancialDecisionTable/empty_price
+=== RUN   TestFinancialDecisionTable/pagination
+=== RUN   TestFinancialDecisionTable/incomplete
+=== RUN   TestFinancialDecisionTable/unknown_mode
+=== RUN   TestFinancialDecisionTable/unknown_paid
+=== RUN   TestFinancialDecisionTable/unknown_intent
+=== RUN   TestFinancialDecisionTable/empty_case
+=== RUN   TestFinancialDecisionTable/empty_session
+=== RUN   TestFinancialDecisionTable/unknown_config
+=== RUN   TestFinancialDecisionTable/old_evaluator
+--- PASS: TestFinancialDecisionTable (0.00s)
+    --- PASS: TestFinancialDecisionTable/account (0.00s)
+    --- PASS: TestFinancialDecisionTable/connection (0.00s)
+    --- PASS: TestFinancialDecisionTable/mode_scope (0.00s)
+    --- PASS: TestFinancialDecisionTable/subscription (0.00s)
+    --- PASS: TestFinancialDecisionTable/setup (0.00s)
+    --- PASS: TestFinancialDecisionTable/unpaid (0.00s)
+    --- PASS: TestFinancialDecisionTable/no_payment (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero (0.00s)
+    --- PASS: TestFinancialDecisionTable/two_lines (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero_lines (0.00s)
+    --- PASS: TestFinancialDecisionTable/zero_quantity (0.00s)
+    --- PASS: TestFinancialDecisionTable/payment_intent (0.00s)
+    --- PASS: TestFinancialDecisionTable/charge_failed (0.00s)
+    --- PASS: TestFinancialDecisionTable/over_received (0.00s)
+    --- PASS: TestFinancialDecisionTable/over_captured (0.00s)
+    --- PASS: TestFinancialDecisionTable/before_activation (0.00s)
+    --- PASS: TestFinancialDecisionTable/activation_equality (0.00s)
+    --- PASS: TestFinancialDecisionTable/max_money (0.00s)
+    --- PASS: TestFinancialDecisionTable/too_large (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_money (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_quantity (0.00s)
+    --- PASS: TestFinancialDecisionTable/negative_count (0.00s)
+    --- PASS: TestFinancialDecisionTable/enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/payment_enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/intent_enum (0.00s)
+    --- PASS: TestFinancialDecisionTable/currency_length (0.00s)
+    --- PASS: TestFinancialDecisionTable/currency_case (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_price (0.00s)
+    --- PASS: TestFinancialDecisionTable/pagination (0.00s)
+    --- PASS: TestFinancialDecisionTable/incomplete (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_mode (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_paid (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_intent (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_case (0.00s)
+    --- PASS: TestFinancialDecisionTable/empty_session (0.00s)
+    --- PASS: TestFinancialDecisionTable/unknown_config (0.00s)
+    --- PASS: TestFinancialDecisionTable/old_evaluator (0.00s)
+=== RUN   TestEveryNullableFact
+=== RUN   TestEveryNullableFact/SessionCreatedAt
+=== RUN   TestEveryNullableFact/Mode
+=== RUN   TestEveryNullableFact/PaymentStatus
+=== RUN   TestEveryNullableFact/Currency
+=== RUN   TestEveryNullableFact/AmountTotal
+=== RUN   TestEveryNullableFact/LineItemsComplete
+=== RUN   TestEveryNullableFact/LineItemCount
+=== RUN   TestEveryNullableFact/PriceID
+=== RUN   TestEveryNullableFact/Quantity
+=== RUN   TestEveryNullableFact/PaymentIntentStatus
+=== RUN   TestEveryNullableFact/AmountReceived
+=== RUN   TestEveryNullableFact/ChargeSucceeded
+=== RUN   TestEveryNullableFact/ChargeCaptured
+=== RUN   TestEveryNullableFact/AmountCaptured
+=== RUN   TestEveryNullableFact/AmountRefunded
+=== RUN   TestEveryNullableFact/Disputed
+=== RUN   TestEveryNullableFact/AllCurrenciesEqual
+=== RUN   TestEveryNullableFact/Complete
+--- PASS: TestEveryNullableFact (0.00s)
+    --- PASS: TestEveryNullableFact/SessionCreatedAt (0.00s)
+    --- PASS: TestEveryNullableFact/Mode (0.00s)
+    --- PASS: TestEveryNullableFact/PaymentStatus (0.00s)
+    --- PASS: TestEveryNullableFact/Currency (0.00s)
+    --- PASS: TestEveryNullableFact/AmountTotal (0.00s)
+    --- PASS: TestEveryNullableFact/LineItemsComplete (0.00s)
+    --- PASS: TestEveryNullableFact/LineItemCount (0.00s)
+    --- PASS: TestEveryNullableFact/PriceID (0.00s)
+    --- PASS: TestEveryNullableFact/Quantity (0.00s)
+    --- PASS: TestEveryNullableFact/PaymentIntentStatus (0.00s)
+    --- PASS: TestEveryNullableFact/AmountReceived (0.00s)
+    --- PASS: TestEveryNullableFact/ChargeSucceeded (0.00s)
+    --- PASS: TestEveryNullableFact/ChargeCaptured (0.00s)
+    --- PASS: TestEveryNullableFact/AmountCaptured (0.00s)
+    --- PASS: TestEveryNullableFact/AmountRefunded (0.00s)
+    --- PASS: TestEveryNullableFact/Disputed (0.00s)
+    --- PASS: TestEveryNullableFact/AllCurrenciesEqual (0.00s)
+    --- PASS: TestEveryNullableFact/Complete (0.00s)
+=== RUN   TestProofTimeline
+=== RUN   TestProofTimeline/zero_oldest
+=== RUN   TestProofTimeline/zero_completed
+=== RUN   TestProofTimeline/zero_expiry
+=== RUN   TestProofTimeline/completed_before_oldest
+=== RUN   TestProofTimeline/future_completed
+=== RUN   TestProofTimeline/collection_over_30
+=== RUN   TestProofTimeline/expiry_at_completed
+=== RUN   TestProofTimeline/expiry_before_completed
+--- PASS: TestProofTimeline (0.00s)
+    --- PASS: TestProofTimeline/zero_oldest (0.00s)
+    --- PASS: TestProofTimeline/zero_completed (0.00s)
+    --- PASS: TestProofTimeline/zero_expiry (0.00s)
+    --- PASS: TestProofTimeline/completed_before_oldest (0.00s)
+    --- PASS: TestProofTimeline/future_completed (0.00s)
+    --- PASS: TestProofTimeline/collection_over_30 (0.00s)
+    --- PASS: TestProofTimeline/expiry_at_completed (0.00s)
+    --- PASS: TestProofTimeline/expiry_before_completed (0.00s)
+=== RUN   TestDeterminismAndOwnership
+--- PASS: TestDeterminismAndOwnership (0.00s)
+=== RUN   TestNormal
+--- PASS: TestNormal (0.00s)
+=== RUN   TestUnknownAndZero
+--- PASS: TestUnknownAndZero (0.00s)
+=== RUN   TestProofBoundary
+--- PASS: TestProofBoundary (0.00s)
+=== RUN   TestFinancialDenial
+=== RUN   TestFinancialDenial/refund
+=== RUN   TestFinancialDenial/capture
+=== RUN   TestFinancialDenial/received
+=== RUN   TestFinancialDenial/partial_capture
+=== RUN   TestFinancialDenial/dispute
+=== RUN   TestFinancialDenial/currency
+=== RUN   TestFinancialDenial/quantity
+=== RUN   TestFinancialDenial/price
+--- PASS: TestFinancialDenial (0.00s)
+    --- PASS: TestFinancialDenial/refund (0.00s)
+    --- PASS: TestFinancialDenial/capture (0.00s)
+    --- PASS: TestFinancialDenial/received (0.00s)
+    --- PASS: TestFinancialDenial/partial_capture (0.00s)
+    --- PASS: TestFinancialDenial/dispute (0.00s)
+    --- PASS: TestFinancialDenial/currency (0.00s)
+    --- PASS: TestFinancialDenial/quantity (0.00s)
+    --- PASS: TestFinancialDenial/price (0.00s)
+=== RUN   TestPrecedence
+--- PASS: TestPrecedence (0.00s)
+=== RUN   TestInvalidPolicy
+--- PASS: TestInvalidPolicy (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/processing/internal/domain/eligibility	1.202s
+?   	github.com/hitpipe/hitpipe/services/processing/internal/testfixtures	[no test files]

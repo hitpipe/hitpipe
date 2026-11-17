@@ -1,0 +1,172 @@
+{
+  "activation_request": {
+    "acceptance_text_version": "managed-operation-v1",
+    "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+    "command": {
+      "request_id": "d18e7f7a-a8be-4919-a013-1bc50fa8d84e"
+    },
+    "confirm_activate": true,
+    "draft_id": "9abefda6-4261-447a-81c7-cd254d37a0f4",
+    "draft_revision": 1,
+    "readiness_check_id": "434ff3b6-106a-4770-bb9a-2d9833c3ba7c",
+    "rehearsal_id": "72fcf085-6433-4564-b9b8-9d69a0531d53"
+  },
+  "actual_private_tls13_mtls_pg187_files": true,
+  "getCase": {
+    "case": {
+      "case_id": "1893e021-1fce-406f-9f6d-c05ecae5afc7",
+      "operation_id": "556f8386-2080-4fc8-980c-9c61eefd7486",
+      "config_id": "808feaa0-02f0-4a0e-abe2-93ec872a2ed6",
+      "config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "state": "RECEIVED",
+      "revision": 1,
+      "owner_user_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "order_label": "Синтетическая услуга",
+      "received_at": "2026-11-17T18:24:05.788542Z",
+      "updated_at": "2026-11-17T18:24:05.788542Z",
+      "next_action": "Дело получено, ожидается проверка данных. Нужны актуальные обязательные данные; новая отправка удержана. Дело принято. Повторная проверка в этой версии не подключена. Знание о результате не установлено.",
+      "due_at": null,
+      "target_url": null,
+      "outcome_knowledge": "UNESTABLISHED"
+    },
+    "context": [],
+    "context_complete": false,
+    "context_expired": false,
+    "last_observation_at": null,
+    "observation_complete": false,
+    "available_actions": [],
+    "history_cursor": null
+  },
+  "getCaseHistory": {
+    "items": [
+      {
+        "entry_id": "c8fd5950-1f82-4bc9-812a-f76e97497e66",
+        "case_id": "1893e021-1fce-406f-9f6d-c05ecae5afc7",
+        "at": "2026-11-17T18:24:05.788542Z",
+        "actor_kind": "SYSTEM",
+        "actor_id": null,
+        "old_state": null,
+        "new_state": "RECEIVED",
+        "reason_code": "SIGNAL_ADMITTED",
+        "evidence_ref": "52443a5e-2edb-4cff-85c4-c0f4e6e6202f",
+        "episode_id": null,
+        "expires_at": "2027-02-15T18:24:05.788542Z"
+      }
+    ],
+    "next_cursor": null
+  },
+  "listCases": {
+    "items": [
+      {
+        "case_id": "1893e021-1fce-406f-9f6d-c05ecae5afc7",
+        "operation_id": "556f8386-2080-4fc8-980c-9c61eefd7486",
+        "config_id": "808feaa0-02f0-4a0e-abe2-93ec872a2ed6",
+        "config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+        "state": "RECEIVED",
+        "revision": 1,
+        "owner_user_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "order_label": "Синтетическая услуга",
+        "received_at": "2026-11-17T18:24:05.788542Z",
+        "updated_at": "2026-11-17T18:24:05.788542Z",
+        "next_action": "Дело получено, ожидается проверка данных. Нужны актуальные обязательные данные; новая отправка удержана. Дело принято. Повторная проверка в этой версии не подключена. Знание о результате не установлено.",
+        "due_at": null,
+        "target_url": null,
+        "outcome_knowledge": "UNESTABLISHED"
+      }
+    ],
+    "next_cursor": null,
+    "snapshot_at": "2026-11-17T18:24:05.791346Z"
+  },
+  "operation": {
+    "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+    "accepted_config_id": "808feaa0-02f0-4a0e-abe2-93ec872a2ed6",
+    "connection_health": "READY",
+    "drain_deadline_at": null,
+    "first_activation_at": "2026-11-17T18:24:05.782038Z",
+    "name": "Синтетический частный черновик",
+    "operation_id": "556f8386-2080-4fc8-980c-9c61eefd7486",
+    "revision": 1,
+    "state": "ACTIVE"
+  },
+  "readiness": {
+    "activation_preview": {
+      "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "canonical_config": {
+        "assignee_id": "assignee_controlled",
+        "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        "destination_workspace_id": "workspace_controlled",
+        "list_id": "list_controlled",
+        "mode": "TEST",
+        "pack_id": "PAID_ORDER_TASK_V1",
+        "price_id": "price_controlled",
+        "required_context_keys": [
+          "brief"
+        ],
+        "service_label": "Синтетическая услуга",
+        "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "title_pattern": "SERVICE_ORDER"
+      }
+    },
+    "check_id": "434ff3b6-106a-4770-bb9a-2d9833c3ba7c",
+    "checked_at": "2026-11-17T18:24:05.740522631Z",
+    "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+    "draft_id": "9abefda6-4261-447a-81c7-cd254d37a0f4",
+    "draft_revision": 1,
+    "expires_at": "2026-11-17T18:25:05.740522Z",
+    "issues": [],
+    "passed": true
+  },
+  "rehearsal": {
+    "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+    "draft_id": "9abefda6-4261-447a-81c7-cd254d37a0f4",
+    "draft_revision": 1,
+    "live_requests_made": 0,
+    "rehearsal_id": "72fcf085-6433-4564-b9b8-9d69a0531d53",
+    "results": [
+      "WOULD_CONFIRM",
+      "WOULD_EXCLUDE",
+      "WOULD_WAIT",
+      "WOULD_HOLD_UNKNOWN"
+    ]
+  },
+  "rehearsal_request": {
+    "command": {
+      "expected_revision": 1,
+      "request_id": "052e3aff-15d9-4fc5-a9a0-46f2d33431d0"
+    },
+    "draft_id": "9abefda6-4261-447a-81c7-cd254d37a0f4",
+    "draft_revision": 1,
+    "examples": [
+      {
+        "amount_minor": 100,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_paid"
+      },
+      {
+        "amount_minor": 0,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_zero"
+      },
+      {
+        "amount_minor": 100,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": false,
+        "synthetic_session_alias": "example_unpaid"
+      },
+      {
+        "amount_minor": 100,
+        "duplicate": true,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_duplicate"
+      }
+    ],
+    "readiness_check_id": "434ff3b6-106a-4770-bb9a-2d9833c3ba7c"
+  },
+  "sql_canonical_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187"
+}

@@ -1,5 +1,37 @@
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/price
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/list
+=== RUN   TestActivationCheckARehearsalACannotAuthorizeCheckB/assignee
+--- PASS: TestActivationCheckARehearsalACannotAuthorizeCheckB (0.40s)
+    --- PASS: TestActivationCheckARehearsalACannotAuthorizeCheckB/price (0.13s)
+    --- PASS: TestActivationCheckARehearsalACannotAuthorizeCheckB/list (0.15s)
+    --- PASS: TestActivationCheckARehearsalACannotAuthorizeCheckB/assignee (0.11s)
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/true_null
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/false_object
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_hash
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/changed_config_with_correct_hash
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/old_missing_preview
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/expired
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_draft_digest
+=== RUN   TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_binding_proof
+--- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed (0.50s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/true_null (0.05s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/false_object (0.13s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_hash (0.06s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/changed_config_with_correct_hash (0.06s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/old_missing_preview (0.04s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/expired (0.05s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_draft_digest (0.06s)
+    --- PASS: TestActivationPreviewTamperLegacyAndExpiryFailClosed/wrong_binding_proof (0.05s)
+=== RUN   TestActivationCommitRechecksSelectedDurableExpiry
+--- PASS: TestActivationCommitRechecksSelectedDurableExpiry (0.12s)
+=== RUN   TestActivationLegacyRehearsalWithoutPairIsNotUpgraded
+--- PASS: TestActivationLegacyRehearsalWithoutPairIsNotUpgraded (0.06s)
+=== RUN   TestActivationCommittedReplayAfterReadinessExpiry
+--- PASS: TestActivationCommittedReplayAfterReadinessExpiry (0.08s)
 === RUN   TestActivationFullRoundTripRestartReplayAndInitialBoundary
---- PASS: TestActivationFullRoundTripRestartReplayAndInitialBoundary (0.05s)
+--- PASS: TestActivationFullRoundTripRestartReplayAndInitialBoundary (0.08s)
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong
@@ -25,39 +57,39 @@
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_response
 === RUN   TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking
---- PASS: TestActivationCurrentEvidenceAndAuthorityFailures (0.45s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_absent (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_unknown (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/role (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/browser_authority (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/request_id (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/confirm (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/acceptance_version (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/digest (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/draft_revision (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/check_missing (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/rehearsal_missing (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/draft_changed (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/expired (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/owner_unavailable (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/owner_denied (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/stale_binding (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/epoch_changed (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_read (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_response (0.02s)
-    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking (0.02s)
+--- PASS: TestActivationCurrentEvidenceAndAuthorityFailures (1.14s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_absent (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/csrf_wrong (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_absent (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/session_unknown (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/role (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/foreign_workspace (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/browser_authority (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/request_id (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/confirm (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/acceptance_version (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/digest (0.06s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/draft_revision (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/check_missing (0.04s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/rehearsal_missing (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/draft_changed (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/expired (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/owner_unavailable (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/owner_denied (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/stale_binding (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/epoch_changed (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_read (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_commit (0.05s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_response (0.07s)
+    --- PASS: TestActivationCurrentEvidenceAndAuthorityFailures/gate_noninvoking (0.04s)
 === RUN   TestActivationStrictHTTPJSONAndBounds
---- PASS: TestActivationStrictHTTPJSONAndBounds (0.03s)
+--- PASS: TestActivationStrictHTTPJSONAndBounds (0.07s)
 === RUN   TestActivationConcurrentCommandsAndSingleInvariant
 === RUN   TestActivationConcurrentCommandsAndSingleInvariant/different_commands
 === RUN   TestActivationConcurrentCommandsAndSingleInvariant/same_command
---- PASS: TestActivationConcurrentCommandsAndSingleInvariant (0.12s)
-    --- PASS: TestActivationConcurrentCommandsAndSingleInvariant/different_commands (0.04s)
-    --- PASS: TestActivationConcurrentCommandsAndSingleInvariant/same_command (0.04s)
+--- PASS: TestActivationConcurrentCommandsAndSingleInvariant (0.32s)
+    --- PASS: TestActivationConcurrentCommandsAndSingleInvariant/different_commands (0.12s)
+    --- PASS: TestActivationConcurrentCommandsAndSingleInvariant/same_command (0.08s)
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/stale
@@ -65,13 +97,13 @@
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/prepared
 === RUN   TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary
---- PASS: TestActivationExistingOperationRevisionAndFirstBoundary (0.12s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision (0.02s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/stale (0.02s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/if_match (0.02s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner (0.02s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/prepared (0.02s)
-    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary (0.02s)
+--- PASS: TestActivationExistingOperationRevisionAndFirstBoundary (0.32s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/missing_revision (0.05s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/stale (0.05s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/if_match (0.04s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/foreign_owner (0.05s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/prepared (0.06s)
+    --- PASS: TestActivationExistingOperationRevisionAndFirstBoundary/original_boundary (0.07s)
 === RUN   TestActivationFileAndCommitFailureRecovery
 === RUN   TestActivationFileAndCommitFailureRecovery/write
 === RUN   TestActivationFileAndCommitFailureRecovery/file-fsync
@@ -79,25 +111,25 @@
 === RUN   TestActivationFileAndCommitFailureRecovery/directory-fsync
 === RUN   TestActivationFileAndCommitFailureRecovery/commit_abort
 === RUN   TestActivationFileAndCommitFailureRecovery/commit_ack_loss
---- PASS: TestActivationFileAndCommitFailureRecovery (0.20s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/write (0.03s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/file-fsync (0.03s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/rename (0.03s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/directory-fsync (0.03s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_abort (0.04s)
-    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_ack_loss (0.03s)
+--- PASS: TestActivationFileAndCommitFailureRecovery (0.54s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/write (0.09s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/file-fsync (0.09s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/rename (0.09s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/directory-fsync (0.09s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_abort (0.10s)
+    --- PASS: TestActivationFileAndCommitFailureRecovery/commit_ack_loss (0.07s)
 === RUN   TestActivationProcessCrashAfterCommit
---- PASS: TestActivationProcessCrashAfterCommit (0.04s)
+--- PASS: TestActivationProcessCrashAfterCommit (0.07s)
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response
 === RUN   TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root
---- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs (0.11s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired (0.03s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged (0.03s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response (0.03s)
-    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root (0.03s)
+--- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs (0.28s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/expired (0.07s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/purged (0.07s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/missing_response (0.07s)
+    --- PASS: TestActivationExpiredPurgedAndMissingContentNeverReconstructs/corrupted_root (0.07s)
 === RUN   TestActivationTLSCallerAndRouteBoundaries
 === RUN   TestActivationTLSCallerAndRouteBoundaries/intake
 === RUN   TestActivationTLSCallerAndRouteBoundaries/delivery
@@ -105,7 +137,7 @@
 === RUN   TestActivationTLSCallerAndRouteBoundaries/no_cert
 === RUN   TestActivationTLSCallerAndRouteBoundaries/wrong_ca
 === RUN   TestActivationTLSCallerAndRouteBoundaries/wrong_server
---- PASS: TestActivationTLSCallerAndRouteBoundaries (0.02s)
+--- PASS: TestActivationTLSCallerAndRouteBoundaries (0.05s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/intake (0.00s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/delivery (0.00s)
     --- PASS: TestActivationTLSCallerAndRouteBoundaries/expired (0.00s)
@@ -131,35 +163,35 @@
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_principal
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_epoch
 === RUN   TestActivationNoStaleOrFabricatedPreparation/binding_expired
---- PASS: TestActivationNoStaleOrFabricatedPreparation (0.40s)
+--- PASS: TestActivationNoStaleOrFabricatedPreparation (0.97s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/incomplete (0.02s)
     --- PASS: TestActivationNoStaleOrFabricatedPreparation/failed_check (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_check (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal (0.03s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_result (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_original_examples (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_list (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_assignee (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_destination (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_account (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_mode (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_workspace (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_principal (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.02s)
-    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.02s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_check (0.09s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/foreign_rehearsal (0.10s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_result (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_original_examples (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/changed_original_examples (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/missing_preparation_response (0.06s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_price (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_list (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_assignee (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_destination (0.06s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_account (0.06s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_mode (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_workspace (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_principal (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_epoch (0.05s)
+    --- PASS: TestActivationNoStaleOrFabricatedPreparation/binding_expired (0.06s)
 === RUN   TestActivationMissingPortsDenyAndForeignRLS
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/absent_grant
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/expired_grant
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/closed_gate
 === RUN   TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch
---- PASS: TestActivationMissingPortsDenyAndForeignRLS (0.09s)
-    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/absent_grant (0.02s)
-    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/expired_grant (0.02s)
-    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/closed_gate (0.02s)
-    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch (0.02s)
+--- PASS: TestActivationMissingPortsDenyAndForeignRLS (0.21s)
+    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/absent_grant (0.05s)
+    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/expired_grant (0.04s)
+    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/closed_gate (0.04s)
+    --- PASS: TestActivationMissingPortsDenyAndForeignRLS/stale_gate_epoch (0.04s)
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup/public
 === RUN   TestActivationAttachRetainsPrivateServerAndRejectsUnsafeSetup/port
@@ -191,7 +223,7 @@
 === RUN   TestAdmissionActivationBoundary/exact
 === RUN   TestAdmissionActivationBoundary/after
 === RUN   TestAdmissionActivationBoundary/old_session_late_payment
---- PASS: TestAdmissionActivationBoundary (0.02s)
+--- PASS: TestAdmissionActivationBoundary (0.03s)
     --- PASS: TestAdmissionActivationBoundary/before (0.01s)
     --- PASS: TestAdmissionActivationBoundary/exact (0.01s)
     --- PASS: TestAdmissionActivationBoundary/after (0.01s)
@@ -212,22 +244,22 @@
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
 === RUN   TestAdmissionRejectsContextAndLocalState/missing_time
 === RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
---- PASS: TestAdmissionRejectsContextAndLocalState (0.07s)
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.09s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.00s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/paused (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/draft (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/missing_config (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/missing_activation (0.01s)
     --- PASS: TestAdmissionRejectsContextAndLocalState/stale_revision (0.01s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
-    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_time (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.01s)
 === RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
 --- PASS: TestAdmissionReplayAfterLifecycleAndNewConnection (0.01s)
 === RUN   TestAdmissionCommitFailureNeverAcknowledges
@@ -237,15 +269,15 @@
 === RUN   TestAdmissionConcurrentAndDigestConflict
 --- PASS: TestAdmissionConcurrentAndDigestConflict (0.01s)
 === RUN   TestDraftCommandConflictVersionCASAndHistoricalReplay
---- PASS: TestDraftCommandConflictVersionCASAndHistoricalReplay (0.03s)
+--- PASS: TestDraftCommandConflictVersionCASAndHistoricalReplay (0.06s)
 === RUN   TestDraftConcurrentCASAndSameCommand
 === RUN   TestDraftConcurrentCASAndSameCommand/conflicting_revisions
 === RUN   TestDraftConcurrentCASAndSameCommand/same_command
---- PASS: TestDraftConcurrentCASAndSameCommand (0.05s)
+--- PASS: TestDraftConcurrentCASAndSameCommand (0.06s)
     --- PASS: TestDraftConcurrentCASAndSameCommand/conflicting_revisions (0.03s)
-    --- PASS: TestDraftConcurrentCASAndSameCommand/same_command (0.02s)
+    --- PASS: TestDraftConcurrentCASAndSameCommand/same_command (0.03s)
 === RUN   TestDraftExpiryReplayDoesNotRenewPositiveReadiness
---- PASS: TestDraftExpiryReplayDoesNotRenewPositiveReadiness (0.64s)
+--- PASS: TestDraftExpiryReplayDoesNotRenewPositiveReadiness (0.65s)
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_root
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root
@@ -253,25 +285,25 @@
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref
 === RUN   TestDraftMissingCorruptAndForeignContentFailClosed/missing_full_response
 --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed (0.08s)
-    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/missing_root (0.02s)
+    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/missing_root (0.01s)
     --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/corrupt_root (0.01s)
-    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/bad_digest (0.01s)
-    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref (0.02s)
+    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/bad_digest (0.02s)
+    --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/foreign_ref (0.03s)
     --- PASS: TestDraftMissingCorruptAndForeignContentFailClosed/missing_full_response (0.01s)
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/write
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/rename
 === RUN   TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync
---- PASS: TestDraftFileDurabilityFailureRollsBackMetadata (0.05s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/write (0.01s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync (0.01s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/rename (0.01s)
-    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync (0.01s)
+--- PASS: TestDraftFileDurabilityFailureRollsBackMetadata (0.07s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/write (0.02s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/file-fsync (0.02s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/rename (0.02s)
+    --- PASS: TestDraftFileDurabilityFailureRollsBackMetadata/directory-fsync (0.02s)
 === RUN   TestDraftSQLCommitAckLossRestoresFullResponse
---- PASS: TestDraftSQLCommitAckLossRestoresFullResponse (0.01s)
+--- PASS: TestDraftSQLCommitAckLossRestoresFullResponse (0.02s)
 === RUN   TestDraftProcessCrashAfterCommit
---- PASS: TestDraftProcessCrashAfterCommit (0.02s)
+--- PASS: TestDraftProcessCrashAfterCommit (0.04s)
 === RUN   TestDraftApplicationRolePoolAndCancellation
 --- PASS: TestDraftApplicationRolePoolAndCancellation (0.01s)
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart
@@ -288,7 +320,7 @@
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/closed_gate
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/non_invoking_gate
 === RUN   TestDraftHTTPAuthoritySessionCSRFAndActualStart/response_gate
---- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart (0.05s)
+--- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart (0.06s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_session (0.00s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/invalid_session (0.00s)
     --- PASS: TestDraftHTTPAuthoritySessionCSRFAndActualStart/missing_csrf (0.00s)
@@ -317,24 +349,24 @@
 === RUN   TestDraftReadRolesAndForeignDraftScope
 --- PASS: TestDraftReadRolesAndForeignDraftScope (0.02s)
 === RUN   TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck
---- PASS: TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck (0.02s)
+--- PASS: TestDraftContextChangeKeepsHistoricalProofAndRequiresFreshCheck (0.04s)
 === RUN   TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft
 --- PASS: TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft (0.63s)
 === RUN   TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse
---- PASS: TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse (0.03s)
+--- PASS: TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse (0.06s)
 === RUN   TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart
---- PASS: TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart (0.03s)
+--- PASS: TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart (0.06s)
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/incomplete
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/unavailable
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/denied
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof
 === RUN   TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port
---- PASS: TestDraftHonestIncompleteAndUnavailableReadiness (0.06s)
+--- PASS: TestDraftHonestIncompleteAndUnavailableReadiness (0.07s)
     --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/incomplete (0.01s)
     --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/unavailable (0.01s)
     --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/denied (0.01s)
-    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof (0.01s)
+    --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/stale_proof (0.02s)
     --- PASS: TestDraftHonestIncompleteAndUnavailableReadiness/no_owner_port (0.01s)
 === RUN   TestPreparationPaidReplayAndRestart
 --- PASS: TestPreparationPaidReplayAndRestart (0.01s)
@@ -352,7 +384,7 @@
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context
 === RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read
---- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.07s)
+--- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.08s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/unknown (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/expired (0.01s)
     --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch (0.01s)
@@ -373,14 +405,14 @@
     --- PASS: TestPreparationCommitFailureAndLostAck/rollback_at_commit (0.02s)
     --- PASS: TestPreparationCommitFailureAndLostAck/lost_ack_after_commit (0.01s)
 === RUN   TestPreparationActualReaderNoNetworkUnderRowLock
---- PASS: TestPreparationActualReaderNoNetworkUnderRowLock (0.01s)
+--- PASS: TestPreparationActualReaderNoNetworkUnderRowLock (0.02s)
 === RUN   TestPreparationFileFaultsBeforeSQL
 === RUN   TestPreparationFileFaultsBeforeSQL/write
 === RUN   TestPreparationFileFaultsBeforeSQL/file-fsync
 === RUN   TestPreparationFileFaultsBeforeSQL/rename
 === RUN   TestPreparationFileFaultsBeforeSQL/directory-fsync
 === RUN   TestPreparationFileFaultsBeforeSQL/history-file
---- PASS: TestPreparationFileFaultsBeforeSQL (0.03s)
+--- PASS: TestPreparationFileFaultsBeforeSQL (0.04s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/write (0.01s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/file-fsync (0.01s)
     --- PASS: TestPreparationFileFaultsBeforeSQL/rename (0.01s)
@@ -394,7 +426,7 @@
 === RUN   TestPreparationContentAvailabilityAndGuards/expired
 === RUN   TestPreparationContentAvailabilityAndGuards/possible_effect
 === RUN   TestPreparationContentAvailabilityAndGuards/existing_task
---- PASS: TestPreparationContentAvailabilityAndGuards (0.06s)
+--- PASS: TestPreparationContentAvailabilityAndGuards (0.08s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/valid_context (0.01s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/short_context (0.01s)
     --- PASS: TestPreparationContentAvailabilityAndGuards/missing (0.01s)
