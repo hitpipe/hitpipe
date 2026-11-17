@@ -1,0 +1,157 @@
+File: baseline
+Type: cpu
+Time: 2026-11-18 01:29:15 MSK
+Duration: 5.16s, Total samples = 4.40s (85.25%)
+Showing nodes accounting for 4.02s, 91.36% of 4.40s total
+Dropped 108 nodes (cum <= 0.02s)
+      flat  flat%   sum%        cum   cum%
+     0.99s 22.50% 22.50%      0.99s 22.50%  runtime.kevent
+     0.56s 12.73% 35.23%      0.56s 12.73%  runtime.madvise
+     0.48s 10.91% 46.14%      0.58s 13.18%  runtime.step
+     0.45s 10.23% 56.36%      1.35s 30.68%  runtime.pcvalue
+     0.28s  6.36% 62.73%      1.55s 35.23%  github.com/gowebpki/jcs.Transform
+     0.19s  4.32% 67.05%      0.21s  4.77%  encoding/json/internal/jsonwire.ConsumeWhitespace (inline)
+     0.17s  3.86% 70.91%      0.17s  3.86%  runtime.(*moduledata).textAddr
+     0.10s  2.27% 73.18%      0.10s  2.27%  runtime.readvarint (inline)
+     0.09s  2.05% 75.23%      0.09s  2.05%  runtime.(*mspan).specialFindSplicePoint (inline)
+     0.09s  2.05% 77.27%      0.26s  5.91%  runtime.funcInfo.entry (inline)
+     0.05s  1.14% 78.41%      0.05s  1.14%  crypto/internal/fips140/sha256.blockSHA2
+     0.05s  1.14% 79.55%      0.46s 10.45%  runtime.(*unwinder).resolveInternal
+     0.05s  1.14% 80.68%      0.05s  1.14%  runtime.acquirem (inline)
+     0.04s  0.91% 81.59%      0.04s  0.91%  runtime.asyncPreempt
+     0.04s  0.91% 82.50%      0.04s  0.91%  runtime.findfunc
+     0.04s  0.91% 83.41%      0.04s  0.91%  runtime.releasem (inline)
+     0.04s  0.91% 84.32%      3.38s 76.82%  runtime.systemstack
+     0.03s  0.68% 85.00%      0.03s  0.68%  internal/runtime/atomic.(*UnsafePointer).Load (inline)
+     0.03s  0.68% 85.68%      0.51s 11.59%  runtime.(*unwinder).next
+     0.03s  0.68% 86.36%      0.03s  0.68%  runtime.memmove
+     0.03s  0.68% 87.05%      0.06s  1.36%  runtime.stkbucket
+     0.03s  0.68% 87.73%      1.59s 36.14%  runtime.tracebackPCs
+     0.02s  0.45% 88.18%      0.12s  2.73%  runtime.(*inlineUnwinder).next
+     0.02s  0.45% 88.64%      0.09s  2.05%  runtime.findRunnable
+     0.02s  0.45% 89.09%      0.04s  0.91%  runtime.unlock2
+     0.01s  0.23% 89.32%      0.39s  8.86%  github.com/gowebpki/jcs.(*jcsData).decorateString
+     0.01s  0.23% 89.55%      0.51s 11.59%  github.com/gowebpki/jcs.(*jcsData).parseQuotedString
+     0.01s  0.23% 89.77%      0.10s  2.27%  runtime.addspecial
+     0.01s  0.23% 90.00%      0.04s  0.91%  runtime.bgsweep
+     0.01s  0.23% 90.23%      0.41s  9.32%  runtime.funcspdelta (inline)
+     0.01s  0.23% 90.45%      1.82s 41.36%  runtime.mProf_Malloc
+     0.01s  0.23% 90.68%      0.10s  2.27%  runtime.mallocgcSmallNoscan
+     0.01s  0.23% 90.91%      0.89s 20.23%  runtime.newInlineUnwinder
+     0.01s  0.23% 91.14%      0.96s 21.82%  runtime.pcdatavalue1
+     0.01s  0.23% 91.36%      0.06s  1.36%  strings.Fields
+         0     0% 91.36%      0.03s  0.68%  crypto/hmac.New
+         0     0% 91.36%      0.05s  1.14%  crypto/internal/fips140/hmac.(*HMAC).Write
+         0     0% 91.36%      0.03s  0.68%  crypto/internal/fips140/hmac.New[go.shape.interface { BlockSize int; Reset; Size int; Sum []uint8; Write  }]
+         0     0% 91.36%      0.05s  1.14%  crypto/internal/fips140/sha256.(*Digest).Write
+         0     0% 91.36%      0.05s  1.14%  crypto/internal/fips140/sha256.block
+         0     0% 91.36%      0.09s  2.05%  encoding/json.Marshal (inline)
+         0     0% 91.36%      0.48s 10.91%  encoding/json.Unmarshal (inline)
+         0     0% 91.36%      0.08s  1.82%  encoding/json.Valid (inline)
+         0     0% 91.36%      0.08s  1.82%  encoding/json.checkValid
+         0     0% 91.36%      0.14s  3.18%  encoding/json/jsontext.(*Value).UnmarshalJSON
+         0     0% 91.36%      0.10s  2.27%  encoding/json/jsontext.(*decoderState).CheckEOF (inline)
+         0     0% 91.36%      0.11s  2.50%  encoding/json/jsontext.(*decoderState).CheckNextValue
+         0     0% 91.36%      0.21s  4.77%  encoding/json/jsontext.(*decoderState).checkEOF
+         0     0% 91.36%      0.21s  4.77%  encoding/json/jsontext.(*decoderState).consumeWhitespace
+         0     0% 91.36%      0.09s  2.05%  encoding/json/v2.Marshal
+         0     0% 91.36%      0.48s 10.91%  encoding/json/v2.Unmarshal
+         0     0% 91.36%      0.08s  1.82%  encoding/json/v2.makeMapArshaler.func2
+         0     0% 91.36%      0.33s  7.50%  encoding/json/v2.makeMapArshaler.func3
+         0     0% 91.36%      0.14s  3.18%  encoding/json/v2.makeMethodArshaler.func6
+         0     0% 91.36%      0.08s  1.82%  encoding/json/v2.marshalEncode
+         0     0% 91.36%      0.12s  2.73%  encoding/json/v2.newAddressableValue
+         0     0% 91.36%      0.47s 10.68%  encoding/json/v2.unmarshalDecode
+         0     0% 91.36%      1.05s 23.86%  github.com/gowebpki/jcs.(*jcsData).parseElement
+         0     0% 91.36%      1.05s 23.86%  github.com/gowebpki/jcs.(*jcsData).parseEntry
+         0     0% 91.36%      1.05s 23.86%  github.com/gowebpki/jcs.(*jcsData).parseObject
+         0     0% 91.36%      0.05s  1.14%  github.com/gowebpki/jcs.(*jcsData).parseSimpleType
+         0     0% 91.36%      0.17s  3.86%  github.com/gowebpki/jcs.(*jcsData).writeNode
+         0     0% 91.36%      0.04s  0.91%  github.com/gowebpki/jcs.NumberToJSON
+         0     0% 91.36%      0.06s  1.36%  github.com/gowebpki/jcs.appendMember (inline)
+         0     0% 91.36%      0.04s  0.91%  github.com/gowebpki/jcs.parseLiteral
+         0     0% 91.36%      0.12s  2.73%  github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook.Consumer.Authenticate
+         0     0% 91.36%      2.48s 56.36%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.Consumer.Normalize
+         0     0% 91.36%      0.06s  1.36%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.allowed
+         0     0% 91.36%      0.36s  8.18%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.object
+         0     0% 91.36%      0.03s  0.68%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.textField
+         0     0% 91.36%      0.12s  2.73%  github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature.Verify
+         0     0% 91.36%      2.63s 59.77%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.FromReader
+         0     0% 91.36%      2.64s 60.00%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.ReadNormalize
+         0     0% 91.36%      0.03s  0.68%  internal/runtime/maps.(*Map).growToSmall
+         0     0% 91.36%      0.03s  0.68%  internal/runtime/maps.NewMap
+         0     0% 91.36%      0.03s  0.68%  internal/runtime/maps.newGroups (inline)
+         0     0% 91.36%      0.03s  0.68%  internal/runtime/maps.newarray
+         0     0% 91.36%      0.04s  0.91%  internal/strconv.FormatFloat
+         0     0% 91.36%      0.14s  3.18%  io.ReadAll
+         0     0% 91.36%      2.64s 60.00%  main.main
+         0     0% 91.36%      0.03s  0.68%  reflect.MakeMap (inline)
+         0     0% 91.36%      0.03s  0.68%  reflect.MakeMapWithSize
+         0     0% 91.36%      0.12s  2.73%  reflect.New
+         0     0% 91.36%      0.06s  1.36%  reflect.Value.MapIndex
+         0     0% 91.36%      0.05s  1.14%  reflect.Value.SetMapIndex
+         0     0% 91.36%      0.06s  1.36%  reflect.copyVal
+         0     0% 91.36%      0.03s  0.68%  reflect.makemap
+         0     0% 91.36%      0.05s  1.14%  reflect.mapassign_faststr
+         0     0% 91.36%      0.05s  1.14%  reflect.mapassign_faststr0
+         0     0% 91.36%      0.17s  3.86%  reflect.unsafe_New
+         0     0% 91.36%      0.96s 21.82%  runtime.(*inlineUnwinder).resolveInternal (inline)
+         0     0% 91.36%      0.04s  0.91%  runtime.(*mcache).allocLarge
+         0     0% 91.36%      0.57s 12.95%  runtime.(*mheap).alloc.func1
+         0     0% 91.36%      0.57s 12.95%  runtime.(*mheap).allocSpan
+         0     0% 91.36%      0.03s  0.68%  runtime.(*sweepLocked).sweep
+         0     0% 91.36%      0.03s  0.68%  runtime.(*timers).check
+         0     0% 91.36%      1.62s 36.82%  runtime.callers
+         0     0% 91.36%      1.61s 36.59%  runtime.callers.func1
+         0     0% 91.36%      0.03s  0.68%  runtime.deductAssistCredit
+         0     0% 91.36%      0.03s  0.68%  runtime.deductSweepCredit
+         0     0% 91.36%      0.03s  0.68%  runtime.freeSpecial
+         0     0% 91.36%      0.03s  0.68%  runtime.gcAssistAlloc
+         0     0% 91.36%      0.03s  0.68%  runtime.gcAssistAlloc.func2
+         0     0% 91.36%      0.03s  0.68%  runtime.gcAssistAlloc1
+         0     0% 91.36%      0.03s  0.68%  runtime.gcDrainN
+         0     0% 91.36%      0.31s  7.05%  runtime.gcMarkTermination.func3
+         0     0% 91.36%      0.68s 15.45%  runtime.gcStart.func4
+         0     0% 91.36%      0.13s  2.95%  runtime.gopreempt_m (inline)
+         0     0% 91.36%      0.13s  2.95%  runtime.goschedImpl
+         0     0% 91.36%      1.24s 28.18%  runtime.growslice
+         0     0% 91.36%      0.11s  2.50%  runtime.mProf_Malloc.func1
+         0     0% 91.36%      2.64s 60.00%  runtime.main
+         0     0% 91.36%      0.03s  0.68%  runtime.makemap (inline)
+         0     0% 91.36%      0.17s  3.86%  runtime.makeslice
+         0     0% 91.36%      1.80s 40.91%  runtime.mallocgc
+         0     0% 91.36%      0.05s  1.14%  runtime.mallocgcLarge
+         0     0% 91.36%      0.45s 10.23%  runtime.mallocgcSmallNoScanSC2
+         0     0% 91.36%      0.14s  3.18%  runtime.mallocgcSmallNoScanSC3
+         0     0% 91.36%      0.19s  4.32%  runtime.mallocgcSmallNoScanSC4
+         0     0% 91.36%      0.07s  1.59%  runtime.mallocgcSmallNoScanSC6
+         0     0% 91.36%      0.23s  5.23%  runtime.mallocgcSmallNoScanSlowPath
+         0     0% 91.36%      0.08s  1.82%  runtime.mallocgcSmallScanNoHeader
+         0     0% 91.36%      0.08s  1.82%  runtime.mallocgcSmallScanNoHeaderSC2
+         0     0% 91.36%      0.14s  3.18%  runtime.mallocgcSmallScanNoHeaderSC3
+         0     0% 91.36%      0.04s  0.91%  runtime.mallocgcSmallScanNoHeaderSC4
+         0     0% 91.36%      0.08s  1.82%  runtime.mallocgcSmallScanNoHeaderSC5
+         0     0% 91.36%      0.08s  1.82%  runtime.mallocgcSmallScanNoHeaderSC7
+         0     0% 91.36%      0.10s  2.27%  runtime.mallocgcSmallScanSlowPath
+         0     0% 91.36%      0.34s  7.73%  runtime.mallocgcTinySC2
+         0     0% 91.36%      0.06s  1.36%  runtime.mallocgcTinySlowPath
+         0     0% 91.36%      0.05s  1.14%  runtime.mapassign_faststr
+         0     0% 91.36%      0.11s  2.50%  runtime.morestack
+         0     0% 91.36%      0.99s 22.50%  runtime.netpoll
+         0     0% 91.36%      0.03s  0.68%  runtime.newarray
+         0     0% 91.36%      0.05s  1.14%  runtime.newobject
+         0     0% 91.36%      0.13s  2.95%  runtime.newstack
+         0     0% 91.36%      1.82s 41.36%  runtime.profilealloc
+         0     0% 91.36%      0.11s  2.50%  runtime.schedule
+         0     0% 91.36%      0.11s  2.50%  runtime.setprofilebucket
+         0     0% 91.36%      0.12s  2.73%  runtime.slicebytetostring
+         0     0% 91.36%      0.99s 22.50%  runtime.startTheWorldWithSema
+         0     0% 91.36%      0.04s  0.91%  runtime.sweepone
+         0     0% 91.36%      0.56s 12.73%  runtime.sysUsed (inline)
+         0     0% 91.36%      0.56s 12.73%  runtime.sysUsedOS (inline)
+         0     0% 91.36%      0.04s  0.91%  runtime.unlock (inline)
+         0     0% 91.36%      0.04s  0.91%  runtime.unlockWithRank (inline)
+         0     0% 91.36%      0.04s  0.91%  strconv.FormatFloat (inline)
+         0     0% 91.36%      0.88s 20.00%  strings.(*Builder).WriteByte (inline)
+         0     0% 91.36%      0.05s  1.14%  time.Time.Format
+         0     0% 91.36%      0.08s  1.82%  unicode/utf16.Encode

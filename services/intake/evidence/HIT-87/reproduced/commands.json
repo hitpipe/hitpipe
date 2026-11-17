@@ -1,0 +1,341 @@
+[
+  {
+    "label": "go-version",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "version"
+    ],
+    "source_sha": null,
+    "started_utc": "2026-11-17T22:33:37Z",
+    "seconds": 0.04935717582702637,
+    "exit_code": 0
+  },
+  {
+    "label": "go-env",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "env",
+      "-json"
+    ],
+    "source_sha": null,
+    "started_utc": "2026-11-17T22:33:37Z",
+    "seconds": 2.076889753341675,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-build",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "build",
+      "-o",
+      "/private/tmp/hit87-reproduced/baseline",
+      "./cmd/webhookbench"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:33:39Z",
+    "seconds": 1.0209460258483887,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-race",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "test",
+      "-race",
+      "-count=1",
+      "-json",
+      "./..."
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:33:40Z",
+    "seconds": 10.403690099716187,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-vet",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "vet",
+      "./..."
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:33:50Z",
+    "seconds": 0.532916784286499,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-modules",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "mod",
+      "verify"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:33:51Z",
+    "seconds": 0.017064332962036133,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-build",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "build",
+      "-o",
+      "/private/tmp/hit87-reproduced/optimized",
+      "./cmd/webhookbench"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:33:51Z",
+    "seconds": 0.591644287109375,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-race",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "test",
+      "-race",
+      "-count=1",
+      "-json",
+      "./..."
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:33:51Z",
+    "seconds": 9.911629915237427,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-vet",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "vet",
+      "./..."
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:01Z",
+    "seconds": 0.5090329647064209,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-modules",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "mod",
+      "verify"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:02Z",
+    "seconds": 0.013875007629394531,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-1",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:02Z",
+    "seconds": 5.467176198959351,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-1",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:07Z",
+    "seconds": 4.979345083236694,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-2",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:12Z",
+    "seconds": 4.561539173126221,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-2",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:17Z",
+    "seconds": 4.911916971206665,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-3",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:22Z",
+    "seconds": 4.751657009124756,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-3",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:27Z",
+    "seconds": 4.542312860488892,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-4",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:31Z",
+    "seconds": 4.559767961502075,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-4",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:36Z",
+    "seconds": 4.772693157196045,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-round-5",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-n",
+      "200"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:40Z",
+    "seconds": 4.756469011306763,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-round-5",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-n",
+      "200"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:45Z",
+    "seconds": 4.543894052505493,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-profile",
+    "argv": [
+      "/private/tmp/hit87-reproduced/baseline",
+      "-profile",
+      "/private/tmp/hit87-reproduced/baseline",
+      "-duration",
+      "5s"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:50Z",
+    "seconds": 5.204179048538208,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-cpu",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "/private/tmp/hit87-reproduced/baseline",
+      "/private/tmp/hit87-reproduced/baseline.cpu.pprof"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:55Z",
+    "seconds": 0.8051929473876953,
+    "exit_code": 0
+  },
+  {
+    "label": "baseline-alloc",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "-alloc_space",
+      "/private/tmp/hit87-reproduced/baseline",
+      "/private/tmp/hit87-reproduced/baseline.heap.pprof"
+    ],
+    "source_sha": "8acc83de7daa316719004212fe0d76092aecb8f2",
+    "started_utc": "2026-11-17T22:34:56Z",
+    "seconds": 0.17182207107543945,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-profile",
+    "argv": [
+      "/private/tmp/hit87-reproduced/optimized",
+      "-profile",
+      "/private/tmp/hit87-reproduced/optimized",
+      "-duration",
+      "5s"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:34:56Z",
+    "seconds": 5.229066371917725,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-cpu",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "/private/tmp/hit87-reproduced/optimized",
+      "/private/tmp/hit87-reproduced/optimized.cpu.pprof"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:35:01Z",
+    "seconds": 0.19358491897583008,
+    "exit_code": 0
+  },
+  {
+    "label": "optimized-alloc",
+    "argv": [
+      "/tmp/hit73-toolchain/go/bin/go",
+      "tool",
+      "pprof",
+      "-top",
+      "-alloc_space",
+      "/private/tmp/hit87-reproduced/optimized",
+      "/private/tmp/hit87-reproduced/optimized.heap.pprof"
+    ],
+    "source_sha": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+    "started_utc": "2026-11-17T22:35:01Z",
+    "seconds": 0.16901803016662598,
+    "exit_code": 0
+  }
+]

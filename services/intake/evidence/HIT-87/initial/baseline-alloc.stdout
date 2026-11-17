@@ -1,0 +1,23 @@
+File: baseline
+Type: alloc_space
+Time: 2026-11-18 01:29:21 MSK
+Showing nodes accounting for 2454.50MB, 97.85% of 2508.40MB total
+Dropped 167 nodes (cum <= 12.54MB)
+      flat  flat%   sum%        cum   cum%
+ 1284.10MB 51.19% 51.19%  1284.10MB 51.19%  io.ReadAll
+  409.61MB 16.33% 67.52%   413.13MB 16.47%  github.com/hitpipe/hitpipe/services/intake/internal/domain/stripesignature.Verify
+  394.33MB 15.72% 83.24%  1218.85MB 48.59%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.Consumer.Normalize
+  332.35MB 13.25% 96.49%   332.35MB 13.25%  bytes.growSlice
+   25.23MB  1.01% 97.50%    25.23MB  1.01%  strings.Fields
+    8.40MB  0.33% 97.83%    33.16MB  1.32%  github.com/gowebpki/jcs.(*jcsData).parseObject
+    0.27MB 0.011% 97.84%   413.41MB 16.48%  github.com/hitpipe/hitpipe/services/intake/internal/application/authenticatewebhook.Consumer.Authenticate
+    0.21MB 0.0083% 97.85%  2503.32MB 99.80%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.FromReader
+         0     0% 97.85%   332.35MB 13.25%  bytes.(*Buffer).Grow (inline)
+         0     0% 97.85%   332.35MB 13.25%  bytes.(*Buffer).grow
+         0     0% 97.85%    33.16MB  1.32%  github.com/gowebpki/jcs.(*jcsData).parseElement
+         0     0% 97.85%    33.16MB  1.32%  github.com/gowebpki/jcs.(*jcsData).parseEntry
+         0     0% 97.85%   367.66MB 14.66%  github.com/gowebpki/jcs.Transform
+         0     0% 97.85%    25.23MB  1.01%  github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal.allowed
+         0     0% 97.85%  2503.63MB 99.81%  github.com/hitpipe/hitpipe/services/intake/internal/measurement/webhook.ReadNormalize
+         0     0% 97.85%  2507.08MB 99.95%  main.main
+         0     0% 97.85%  2507.08MB 99.95%  runtime.main
