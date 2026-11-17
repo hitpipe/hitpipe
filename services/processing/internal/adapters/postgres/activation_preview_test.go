@@ -299,3 +299,43 @@ func TestActivationLegacyRehearsalWithoutPairIsNotUpgraded(t *testing.T) {
 	f.assertCounts(t, 0, 3)
 	activationCapture(t, s, in, b, "historical_rehearsal_missing_pair_not_backfilled")
 }
+
+func TestActivationCommittedReplayAfterReadinessExpiry(t *testing.T) {
+	f := newActivationFixture(t)
+	in := f.ready(t)
+	s, original := f.activate(t, in, nil)
+	if s != 201 {
+		t.Fatal(s, string(original))
+	}
+	tx := begin(t, connect(t), f.workspace)
+	var before time.Time
+	if e := tx.QueryRow(ctx, `SELECT expires_at FROM hp_processing.drafts WHERE workspace_id=$1`, f.workspace).Scan(&before); e != nil {
+		t.Fatal(e)
+	}
+	tx.Rollback(ctx)
+	later := testClock{func() time.Time { return time.Now().Add(2 * time.Minute) }}
+	f.store.Drafts.Clock = later
+	f.act.Clock = later
+	f.act.Repository = f.store
+	f.bindings.unavailable = true
+	f.startActivation(t)
+	s, b := f.activate(t, in, nil)
+	if s != 201 || !bytes.Equal(b, original) {
+		t.Fatal("committed receipt incorrectly treated as new expired activation", s, string(b))
+	}
+	activationCapture(t, s, in, b, "exact_committed_receipt_after_readiness_expiry_without_renewal")
+	changed := in
+	changed.Command = f.meta(nil)
+	s, b = f.activate(t, changed, nil)
+	if s != 409 {
+		t.Fatal("new activation used expired consent", s, string(b))
+	}
+	activationCapture(t, s, changed, b, "new_request_cannot_reuse_expired_pair")
+	tx = begin(t, connect(t), f.workspace)
+	var after time.Time
+	if e := tx.QueryRow(ctx, `SELECT expires_at FROM hp_processing.drafts WHERE workspace_id=$1`, f.workspace).Scan(&after); e != nil || !after.Equal(before) {
+		t.Fatal("technical replay renewed TTL", e)
+	}
+	tx.Rollback(ctx)
+	f.assertCounts(t, 1, 4)
+}
