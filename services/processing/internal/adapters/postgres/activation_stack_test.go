@@ -19,6 +19,8 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 )
@@ -64,7 +66,12 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	t.Cleanup(func() { s.Close(); l.Close() })
 	f.url = "https://" + l.Addr().String()
 	f.client = &http.Client{Transport: f.pki.Transport(t), Timeout: 4 * time.Second}
-	command := f.ready(t)
+	f.save(t)
+	shown := f.checkPreview(t)
+	rehearsalRequest, rehearsed := f.rehearseCheck(t, shown)
+	command := f.acceptPreview(shown, rehearsed)
+	graph := map[string]any{"readiness": shown, "rehearsal_request": rehearsalRequest, "rehearsal": rehearsed, "activation_request": command, "actual_private_tls13_mtls_pg187_files": true}
+
 	status, body := f.activate(t, command, nil)
 	if status != 201 {
 		t.Fatal("activation on shared existing read listener", status, string(body))
@@ -72,6 +79,11 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	var operation drafts.Operation
 	json.Unmarshal(body, &operation)
 	source.operation = operation.OperationID
+	graph["operation"] = operation
+	if operation.AcceptedConfigDigest == nil || *operation.AcceptedConfigDigest != shown.ActivationPreview.AcceptedConfigDigest {
+		t.Fatal("operation did not retain publicly shown hash")
+	}
+
 	signal := intakeWire(t, f.workspace, func(m map[string]any) {
 		m["stripe_account_id"] = "acct_controlled"
 		m["source_created_at"] = operation.FirstActivationAt.Format(time.RFC3339Nano)
@@ -104,7 +116,14 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	t.Logf("DIGEST_DIAGNOSTIC approved_draft=%s stored_accepted=%s actual_canonical=%s canonical=%s", command.AcceptedConfigDigest, savedDigest, draftjson.Hash(canonical), canonical)
+	shownBytes, _ := json.Marshal(shown.ActivationPreview.CanonicalConfig)
+	shownBytes, _ = jcs.Transform(shownBytes)
+	if savedDigest != command.AcceptedConfigDigest || savedDigest != draftjson.Hash(canonical) || !bytes.Equal(canonical, shownBytes) {
+		t.Fatal("actual stored bytes differ from public preview")
+	}
+	t.Logf("DIGEST_VERIFIED draft=%s final=%s stored=%s actual_canonical=%s", shown.ConfigDigest, command.AcceptedConfigDigest, savedDigest, draftjson.Hash(canonical))
+	graph["sql_canonical_digest"] = savedDigest
+
 	req, _ = http.NewRequest("GET", f.url+"/api/v1/workspaces/"+f.workspace+"/cases", nil)
 	req.Header.Set("X-HitPipe-Session", "synthetic-session")
 	req.Header.Set("X-Request-ID", config)
@@ -116,6 +135,41 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	res.Body.Close()
 	if res.StatusCode != 200 {
 		t.Fatal("BFF list after actual activation/admission", res.StatusCode, string(body))
+	}
+	var cases struct {
+		Items []struct {
+			CaseID       string `json:"case_id"`
+			ConfigDigest string `json:"config_digest"`
+		}
+	}
+	if json.Unmarshal(body, &cases) != nil || len(cases.Items) != 1 || cases.Items[0].ConfigDigest != savedDigest {
+		t.Fatal("nonempty exact case list missing", string(body))
+	}
+	graph["listCases"] = json.RawMessage(bytes.Clone(body))
+	for _, suffix := range []string{"", "/history"} {
+		req, _ = http.NewRequest("GET", f.url+"/api/v1/workspaces/"+f.workspace+"/cases/"+cases.Items[0].CaseID+suffix, nil)
+		req.Header.Set("X-HitPipe-Session", "synthetic-session")
+		req.Header.Set("X-Request-ID", config)
+		res, e = f.client.Do(req)
+		if e != nil {
+			t.Fatal(e)
+		}
+		body, _ = io.ReadAll(res.Body)
+		res.Body.Close()
+		if res.StatusCode != 200 {
+			t.Fatal("postactivation case/detail/history", suffix, res.StatusCode, string(body))
+		}
+		if suffix == "/history" {
+			var history struct {
+				Items []json.RawMessage `json:"items"`
+			}
+			if json.Unmarshal(body, &history) != nil || len(history.Items) == 0 {
+				t.Fatal("nonempty history missing", string(body))
+			}
+			graph["getCaseHistory"] = json.RawMessage(bytes.Clone(body))
+		} else {
+			graph["getCase"] = json.RawMessage(bytes.Clone(body))
+		}
 	}
 	tr = f.pki.Transport(t)
 	tr.TLSClientConfig.Certificates = []tls.Certificate{f.pki.Leaf(t, "delivery.test", false, false)}
@@ -132,5 +186,11 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	if res.StatusCode != 400 {
 		t.Fatal("Delivery route did not survive attachment", res.StatusCode, string(body))
 	}
-	activationCapture(t, 201, command, func() []byte { _, b := f.activate(t, command, nil); return b }(), "experimental_shared_listener_activation_intake202_read200_delivery400")
+	activationCapture(t, 201, command, func() []byte { _, b := f.activate(t, command, nil); return b }(), "experimental_public_preview_rehearsal_activation_intake_list_detail_history_success")
+	if path := os.Getenv("HIT102_CAPTURE_FILE"); path != "" {
+		raw, _ := json.MarshalIndent(graph, "", "  ")
+		if e = os.WriteFile(filepath.Join(filepath.Dir(path), "activation-pipeline.json"), raw, 0600); e != nil {
+			t.Fatal(e)
+		}
+	}
 }
