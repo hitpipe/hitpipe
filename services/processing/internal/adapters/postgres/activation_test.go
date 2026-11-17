@@ -901,7 +901,11 @@ func TestActivationNoStaleOrFabricatedPreparation(t *testing.T) {
 			if s != want {
 				t.Fatal(mode, s, want, string(b))
 			}
-			f.assertCounts(t, 0, 3)
+			commands := 3
+			if mode == "incomplete" || mode == "failed_check" {
+				commands = 2
+			}
+			f.assertCounts(t, 0, commands)
 			activationCapture(t, s, in, b, "preparation_"+mode)
 		})
 	}

@@ -68,9 +68,10 @@ func (g *draftGate) Start(c context.Context, a drafts.Grant, phase string, work 
 }
 
 type draftBindings struct {
-	mu                         sync.Mutex
-	calls                      int
-	unavailable, denied, stale bool
+	priceID, listID, assigneeID, accountID, destinationID, label string
+	mu                                                           sync.Mutex
+	calls                                                        int
+	unavailable, denied, stale                                   bool
 }
 
 func (b *draftBindings) Check(c context.Context, g drafts.Grant, q drafts.BindingQuery) (drafts.BindingProof, error) {
@@ -84,7 +85,26 @@ func (b *draftBindings) Check(c context.Context, g drafts.Grant, q drafts.Bindin
 	if b.stale {
 		now = now.Add(-time.Hour)
 	}
-	return drafts.BindingProof{WorkspaceID: g.WorkspaceID, PrincipalID: g.PrincipalID, Epoch: g.Epoch, SourceConnectionID: q.SourceConnectionID, DestinationConnectionID: q.DestinationConnectionID, Mode: q.Mode, PriceAlias: q.PriceAlias, ListAlias: q.ListAlias, AssigneeAlias: q.AssigneeAlias, ServiceLabel: "Синтетическая услуга", SourceAccountID: "acct_controlled", DestinationWorkspaceID: "workspace_controlled", PriceID: "price_controlled", ListID: "list_controlled", AssigneeID: "assignee_controlled", Granted: !b.denied, CheckedAt: now, ExpiresAt: now.Add(time.Minute)}, nil
+	p := drafts.BindingProof{WorkspaceID: g.WorkspaceID, PrincipalID: g.PrincipalID, Epoch: g.Epoch, SourceConnectionID: q.SourceConnectionID, DestinationConnectionID: q.DestinationConnectionID, Mode: q.Mode, PriceAlias: q.PriceAlias, ListAlias: q.ListAlias, AssigneeAlias: q.AssigneeAlias, ServiceLabel: "Синтетическая услуга", SourceAccountID: "acct_controlled", DestinationWorkspaceID: "workspace_controlled", PriceID: "price_controlled", ListID: "list_controlled", AssigneeID: "assignee_controlled", Granted: !b.denied, CheckedAt: now, ExpiresAt: now.Add(time.Minute)}
+	if b.priceID != "" {
+		p.PriceID = b.priceID
+	}
+	if b.listID != "" {
+		p.ListID = b.listID
+	}
+	if b.assigneeID != "" {
+		p.AssigneeID = b.assigneeID
+	}
+	if b.accountID != "" {
+		p.SourceAccountID = b.accountID
+	}
+	if b.destinationID != "" {
+		p.DestinationWorkspaceID = b.destinationID
+	}
+	if b.label != "" {
+		p.ServiceLabel = b.label
+	}
+	return p, nil
 }
 
 type draftTestDB struct{}
