@@ -1,0 +1,104 @@
+{
+  "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "search_scope": [
+    "current main complete tracked Intake tree",
+    "GitHub PR search HIT-86",
+    "exact dependency PR heads/status",
+    "current Jira HIT-71/HIT-73/HIT-74 Done",
+    "current HIT-86 description/comments and verified bootstrap"
+  ],
+  "corresponding_ready_implementation": "not found in inspected scope",
+  "reuse": [
+    {
+      "task": "HIT-71",
+      "pr": 47,
+      "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+      "merged": false
+    },
+    {
+      "task": "HIT-73",
+      "pr": 65,
+      "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864",
+      "merged": false
+    },
+    {
+      "task": "HIT-74",
+      "pr": 66,
+      "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+      "merged": false
+    }
+  ],
+  "changed_paths": [
+    "services/intake/README.md",
+    "services/intake/docs/HIT-71/README.md",
+    "services/intake/docs/HIT-71/RESULT_RU.md",
+    "services/intake/docs/HIT-71/postgres-18.7.json",
+    "services/intake/docs/HIT-71/source-audit.json",
+    "services/intake/docs/HIT-71/verification-18.7/commands.json",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stdout",
+    "services/intake/docs/HIT-71/verification/commands.json",
+    "services/intake/docs/HIT-71/verification/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification/postgres.stderr",
+    "services/intake/docs/HIT-71/verification/postgres.stdout",
+    "services/intake/evidence/HIT-86/README.md",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/internal/adapters/clock/system/clock.go",
+    "services/intake/internal/adapters/contentstore/store.go",
+    "services/intake/internal/adapters/contentstore/store_test.go",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go",
+    "services/intake/internal/adapters/postgres/receipt/commit_loss_integration_test.go",
+    "services/intake/internal/adapters/postgres/receipt/receipt_integration_test.go",
+    "services/intake/internal/adapters/postgres/receipt/repository.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/normalizesignal/normalize_test.go",
+    "services/intake/internal/application/normalizesignal/normalized_signal.schema.json",
+    "services/intake/internal/application/receivesignal/receive.go",
+    "services/intake/internal/domain/contentref/ref.go",
+    "services/intake/internal/domain/stripesignature/verifier.go",
+    "services/intake/internal/domain/stripesignature/verifier_test.go",
+    "services/intake/migrations/0001_intake.sql",
+    "services/intake/tests/postgres/bootstrap.sql",
+    "services/intake/tools/check_postgres.py",
+    "services/intake/tools/check_receipt.py",
+    ".github/workflows/pr12-nb.yml"
+  ],
+  "ddl_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+  "bootstrap": {
+    "request": "13668",
+    "receipt": "13680",
+    "parts": [
+      "13670",
+      "13671",
+      "13672",
+      "13673",
+      "13674",
+      "13675",
+      "13676",
+      "13677",
+      "13678",
+      "13679"
+    ],
+    "sha256": "996607d49f737dcd22b4b5c890d065a51f2c8878ec22816ff805a810586f68b7",
+    "author_and_updateAuthor": "712020:587adcd1-4f1b-40a6-aa6b-04fbd97a21af",
+    "complete": true,
+    "verified": true,
+    "protocol_pin": {
+      "release": "v2",
+      "sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+    }
+  },
+  "consent": {
+    "location": "this worker session",
+    "text": "План подтверждаю",
+    "jira_record": "13669"
+  },
+  "limits": "Local synthetic Intake receipt; no public HTTP, network sender, Processing, IAM/runtime or production disk qualification."
+}
