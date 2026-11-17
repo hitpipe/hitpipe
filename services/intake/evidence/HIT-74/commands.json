@@ -1,0 +1,63 @@
+{
+  "started_utc": "2026-11-17T13:05:59.878992+00:00",
+  "source_sha": "63650f89fcf12957e92cd0297e58070b15f15f4e",
+  "dirty": [],
+  "go": "go version go1.27.2 darwin/arm64",
+  "host": "macOS-26.5-arm64-arm-64bit",
+  "source_sha256": {
+    "services/intake/go.mod": "a188fb5b3597d4066760c1196bf1667aa8ca0495465d4a42bf461b52aa9e23ee",
+    "services/intake/internal/adapters/contentstore/store.go": "73469b0fc92af528829f28ab1ad960b8024c34c7bb4409372d12b1767a0da211",
+    "services/intake/internal/adapters/contentstore/store_test.go": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811"
+  },
+  "scope": "synthetic local module only; no durable receipt, HTTP ACK, external service or independent review",
+  "commands": [
+    {
+      "name": "race",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-74/services/intake",
+      "exit_code": 0,
+      "seconds": 3.066
+    },
+    {
+      "name": "vet",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-74/services/intake",
+      "exit_code": 0,
+      "seconds": 0.149
+    },
+    {
+      "name": "build",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "build",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-74/services/intake",
+      "exit_code": 0,
+      "seconds": 0.076
+    },
+    {
+      "name": "modules",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-74/services/intake",
+      "exit_code": 0,
+      "seconds": 0.008
+    }
+  ],
+  "finished_utc": "2026-11-17T13:06:03.299402+00:00"
+}

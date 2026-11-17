@@ -1,0 +1,34 @@
+{
+  "subject": "HIT-74",
+  "materialized_result": {
+    "summary": "Изолированный файловый элемент Intake: случайные имена,0700/0600, защита путей/ссылок, file fsync→rename→directory fsync, expiry и orphan purge.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "63650f89fcf12957e92cd0297e58070b15f15f4e",
+    "report": "services/intake/docs/HIT-74/README.md"
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/docs/HIT-74/README.md",
+    "services/intake/go.mod",
+    "services/intake/internal/adapters/contentstore/store.go",
+    "services/intake/internal/adapters/contentstore/store_test.go",
+    "services/intake/tools/check.py"
+  ],
+  "verification": {
+    "environment": "Go1.27.2 darwin/arm64; synthetic temporary directories only",
+    "source_sha": "63650f89fcf12957e92cd0297e58070b15f15f4e",
+    "protocol": "services/intake/evidence/HIT-74/commands.json",
+    "logs": [
+      "services/intake/evidence/HIT-74/race.stdout",
+      "services/intake/evidence/HIT-74/vet.stderr",
+      "services/intake/evidence/HIT-74/build.stderr"
+    ],
+    "result": "race/vet/build/modules exit0; 14 successful tests/subtests, zero failures or skips; real child process exit23 at four stages and actual residual-file readback."
+  },
+  "deviations": [],
+  "limitations": [
+    "No runtime disk/power-loss/flush qualification, SQL reference commit, durable webhook ACK, Stripe, server or deployed recovery.",
+    "Caller provides authoritative expiry and complete referenced-ID snapshot; exclusive root ownership and no concurrent external publisher required. Nil snapshot rejected. Global90day cap does not extend held-signal72hour owner limit.",
+    "Independent review and human acceptance not performed."
+  ]
+}
