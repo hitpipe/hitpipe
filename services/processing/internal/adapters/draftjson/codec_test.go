@@ -36,7 +36,7 @@ func TestStrictCanonicalNamesBothOrdersAndAllLevels(t *testing.T) {
 	}
 }
 func TestRehearsalKnownZeroFalseAndArrayLimits(t *testing.T) {
-	v := drafts.RehearsalRequest{Command: drafts.CommandMeta{RequestID: id}, DraftID: id, DraftRevision: 1, Examples: []drafts.ScenarioExample{{SyntheticSessionAlias: "example_zero", AmountMinor: 0, Paid: false, Duplicate: false, MissingContextKeys: []string{}}}}
+	v := drafts.RehearsalRequest{ReadinessCheckID: id, Command: drafts.CommandMeta{RequestID: id}, DraftID: id, DraftRevision: 1, Examples: []drafts.ScenarioExample{{SyntheticSessionAlias: "example_zero", AmountMinor: 0, Paid: false, Duplicate: false, MissingContextKeys: []string{}}}}
 	b, _ := json.Marshal(v)
 	in, e := (Codec{}).Decode(drafts.Rehearse, b)
 	if e != nil || len(in.Examples) != 1 || in.Examples[0].Paid || in.Examples[0].AmountMinor != 0 {

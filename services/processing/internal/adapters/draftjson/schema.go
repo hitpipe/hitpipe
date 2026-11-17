@@ -106,7 +106,7 @@ func parse(b []byte) (any, error) {
 func validate(v any, s map[string]any) bool {
 	for k := range s {
 		switch k {
-		case "$ref", "type", "description", "additionalProperties", "properties", "required", "minLength", "maxLength", "format", "pattern", "minimum", "maximum", "const", "enum", "items", "maxItems", "minItems", "uniqueItems":
+		case "anyOf", "$ref", "type", "description", "additionalProperties", "properties", "required", "minLength", "maxLength", "format", "pattern", "minimum", "maximum", "const", "enum", "items", "maxItems", "minItems", "uniqueItems":
 		default:
 			return false
 		}
@@ -118,6 +118,17 @@ func validate(v any, s map[string]any) bool {
 		}
 		sub, ok := schemas[r[len(prefix):]]
 		return ok && validate(v, sub)
+	}
+	if options, ok := s["anyOf"].([]any); ok {
+		for _, option := range options {
+			if sub, ok := option.(map[string]any); ok && validate(v, sub) {
+				return true
+			}
+		}
+		return false
+	}
+	if s["type"] == "null" {
+		return v == nil
 	}
 	if v == nil {
 		return false

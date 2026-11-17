@@ -1,0 +1,107 @@
+{
+  "canonical_digests": [
+    "sha256:0ab14c402828f7fa61707770818f96c007dbfb118fc8fb4e3974fab82dd8f803",
+    "sha256:c1c1a833f7190825e9360126e71425b2036bed852863ad9e537d570cfde72dfe"
+  ],
+  "conclusion": "Current public draft/options/readiness/rehearsal do not determine the private resolved canonical hash. Both snapshots satisfy the existing public schema; a client cannot extract absent provider IDs or the final canonical digest. Reusing public draft digest as canonical user approval would be a different semantic decision.",
+  "draft_digest": "sha256:9b34b3db942477b91b4eb252c8ced3d78283b6a6926522fb1bdfe0cd765d5864",
+  "kind": "OFFLINE_SYNTHETIC_CONTRACT_COUNTEREXAMPLE_NOT_USER_ACCEPTANCE_OR_HTTP_RUN",
+  "private_configurations": [
+    {
+      "assignee_id": "assignee_A",
+      "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "destination_workspace_id": "workspace_A",
+      "list_id": "list_A",
+      "mode": "TEST",
+      "pack_id": "PAID_ORDER_TASK_V1",
+      "price_id": "price_A",
+      "required_context_keys": [
+        "brief"
+      ],
+      "service_label": "Услуга",
+      "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "title_pattern": "SERVICE_ORDER"
+    },
+    {
+      "assignee_id": "assignee_A",
+      "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "destination_workspace_id": "workspace_A",
+      "list_id": "list_A",
+      "mode": "TEST",
+      "pack_id": "PAID_ORDER_TASK_V1",
+      "price_id": "price_B",
+      "required_context_keys": [
+        "brief"
+      ],
+      "service_label": "Услуга",
+      "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "title_pattern": "SERVICE_ORDER"
+    }
+  ],
+  "public_pre_activation_views": {
+    "draft": {
+      "assignee_alias": "ASSIGNEE_A",
+      "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "draft_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "list_alias": "LIST_A",
+      "mode": "TEST",
+      "name": "Синтетический пример",
+      "price_alias": "PRICE_A",
+      "required_context_keys": [
+        "brief"
+      ],
+      "revision": 1,
+      "service_label": "Услуга",
+      "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "title_pattern": "SERVICE_ORDER"
+    },
+    "options": {
+      "complete": true,
+      "items": [
+        {
+          "alias": "PRICE_A",
+          "available": true,
+          "kind": "PRICE",
+          "label": "Тариф A"
+        },
+        {
+          "alias": "LIST_A",
+          "available": true,
+          "kind": "LIST",
+          "label": "Список A"
+        },
+        {
+          "alias": "ASSIGNEE_A",
+          "available": true,
+          "kind": "ASSIGNEE",
+          "label": "Исполнитель A"
+        }
+      ],
+      "next_cursor": null,
+      "observed_at": "2026-11-16T00:00:00Z"
+    },
+    "readiness": {
+      "check_id": "11111111-1111-4111-8111-111111111111",
+      "checked_at": "2026-11-16T00:00:00Z",
+      "config_digest": "sha256:9b34b3db942477b91b4eb252c8ced3d78283b6a6926522fb1bdfe0cd765d5864",
+      "draft_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "draft_revision": 1,
+      "expires_at": "2026-11-16T01:00:00Z",
+      "issues": [],
+      "passed": true
+    },
+    "rehearsal": {
+      "config_digest": "sha256:9b34b3db942477b91b4eb252c8ced3d78283b6a6926522fb1bdfe0cd765d5864",
+      "draft_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "draft_revision": 1,
+      "live_requests_made": 0,
+      "rehearsal_id": "22222222-2222-4222-8222-222222222222",
+      "results": [
+        "WOULD_CONFIRM",
+        "WOULD_WAIT",
+        "WOULD_EXCLUDE"
+      ]
+    }
+  },
+  "same_public_bytes": "{\"draft\":{\"assignee_alias\":\"ASSIGNEE_A\",\"destination_connection_id\":\"dddddddd-dddd-4ddd-8ddd-dddddddddddd\",\"draft_id\":\"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa\",\"list_alias\":\"LIST_A\",\"mode\":\"TEST\",\"name\":\"Синтетический пример\",\"price_alias\":\"PRICE_A\",\"required_context_keys\":[\"brief\"],\"revision\":1,\"service_label\":\"Услуга\",\"source_connection_id\":\"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb\",\"title_pattern\":\"SERVICE_ORDER\"},\"options\":{\"complete\":true,\"items\":[{\"alias\":\"PRICE_A\",\"available\":true,\"kind\":\"PRICE\",\"label\":\"Тариф A\"},{\"alias\":\"LIST_A\",\"available\":true,\"kind\":\"LIST\",\"label\":\"Список A\"},{\"alias\":\"ASSIGNEE_A\",\"available\":true,\"kind\":\"ASSIGNEE\",\"label\":\"Исполнитель A\"}],\"next_cursor\":null,\"observed_at\":\"2026-11-16T00:00:00Z\"},\"readiness\":{\"check_id\":\"11111111-1111-4111-8111-111111111111\",\"checked_at\":\"2026-11-16T00:00:00Z\",\"config_digest\":\"sha256:9b34b3db942477b91b4eb252c8ced3d78283b6a6926522fb1bdfe0cd765d5864\",\"draft_id\":\"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa\",\"draft_revision\":1,\"expires_at\":\"2026-11-16T01:00:00Z\",\"issues\":[],\"passed\":true},\"rehearsal\":{\"config_digest\":\"sha256:9b34b3db942477b91b4eb252c8ced3d78283b6a6926522fb1bdfe0cd765d5864\",\"draft_id\":\"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa\",\"draft_revision\":1,\"live_requests_made\":0,\"rehearsal_id\":\"22222222-2222-4222-8222-222222222222\",\"results\":[\"WOULD_CONFIRM\",\"WOULD_WAIT\",\"WOULD_EXCLUDE\"]}}"
+}

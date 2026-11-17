@@ -89,6 +89,7 @@ func (Codec) Decode(k drafts.Kind, b []byte) (drafts.Input, error) {
 		in.DraftID = v.DraftID
 		in.DraftRevision = v.DraftRevision
 		in.Examples = v.Examples
+		in.ReadinessCheckID = v.ReadinessCheckID
 	default:
 		return zero, drafts.ErrInvalid
 	}
@@ -100,7 +101,7 @@ func (Codec) Encode(k drafts.Kind, v any) ([]byte, error) {
 		return nil, drafts.ErrUnavailable
 	}
 	b, e = jcs.Transform(b)
-	if e != nil || Validate(responseSchema(k), b) != nil {
+	if e != nil || (Codec{}).ValidateResponse(k, b) != nil {
 		return nil, drafts.ErrUnavailable
 	}
 	return b, nil
@@ -108,6 +109,12 @@ func (Codec) Encode(k drafts.Kind, v any) ([]byte, error) {
 func (Codec) ValidateResponse(k drafts.Kind, b []byte) error {
 	if Validate(responseSchema(k), b) != nil {
 		return drafts.ErrUnavailable
+	}
+	if k == drafts.Check {
+		var check drafts.ReadinessCheck
+		if json.Unmarshal(b, &check) != nil || check.Passed != (check.ActivationPreview != nil) || check.ActivationPreview != nil && !PreviewValid(*check.ActivationPreview) {
+			return drafts.ErrUnavailable
+		}
 	}
 	return nil
 }

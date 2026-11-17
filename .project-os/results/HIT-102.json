@@ -1,0 +1,63 @@
+{
+  "subject": "HIT-102",
+  "materialized_result": {
+    "summary": "Явная активация точного серверного activation_preview с окончательным canonical hash, привязанной selected readiness репетицией и атомарной устойчивой записью. HP-CCR-ACTIVATION-20261116 полностью реализована; все12 критериев локально проверены, независимая приёмка отдельно.",
+    "implementation_status": "IMPLEMENTED_LOCALLY_VERIFIED_12_DOD",
+    "contract_revision": 2,
+    "contract_fingerprint": "c71b4b71f1c243c435d65459b1934475c3f76687d83541da827c30cf213b7219",
+    "tested_code_sha": "de34bca0f6c92479f48702f44186aba80fd97431",
+    "code_and_validator_sha": "bd80e23a519f960fbee5e71ac48744faa99e30cf",
+    "integrated_test_source_sha": "c88b495ea4d0393feecd39c66bc33a971e14d8d5",
+    "base_sha": "48b2829fb37bf6048db83f5586f949dbb8883b1d",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "integration_state": "Separate experimental stack with OPEN PR57/62 and HIT95/98/99/104, not merged main or merged PRs. Shared implementation files match main PR63 code."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/activation",
+    "services/processing/internal/application/drafts (preview builder, selected check, private proof/association and generated DTOs)",
+    "services/processing/internal/adapters/draftjson (exact authorized amended OAS subset and validation)",
+    "services/processing/internal/adapters/drafthttp/http.go (shared private listener attachment)",
+    "services/processing/internal/adapters/activationhttp",
+    "services/processing/internal/adapters/postgres/activation.go",
+    "services/processing/internal/adapters/postgres/draft_check.go",
+    "services/processing/internal/adapters/postgres/drafts.go and regression tests",
+    "services/processing/internal/testfixtures/draft.go (DraftPKI test namespace only)",
+    "services/processing/tools/drafts/generate.py",
+    "services/processing/scripts/postgres/verify_activation.py",
+    "services/processing/docs/HIT-102"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-102/README.md",
+    "field_map": "services/processing/docs/HIT-102/FIELD_MAP.md",
+    "source_audit": "services/processing/docs/HIT-102/source-audit.json",
+    "main_test_protocol": "services/processing/docs/HIT-102/verification/test-evidence.json",
+    "integrated_test_protocol": "services/processing/docs/HIT-102/integration/test-evidence.json",
+    "main_full_commands": "services/processing/docs/HIT-102/verification/commands.json",
+    "integrated_full_commands": "services/processing/docs/HIT-102/integration/commands.json",
+    "main_full_go_race": "services/processing/docs/HIT-102/verification/go-race.stdout",
+    "integrated_full_go_race": "services/processing/docs/HIT-102/integration/go-race.stdout",
+    "main_full_postgres": "services/processing/docs/HIT-102/verification/postgres-storage-tests.stdout",
+    "integrated_full_postgres": "services/processing/docs/HIT-102/integration/postgres-storage-tests.stdout",
+    "pipeline": "services/processing/docs/HIT-102/integration/activation-pipeline.json",
+    "ci_protocol": "services/processing/docs/HIT-102/verification/ci-code-evidence.json",
+    "supplemental_protocol": "services/processing/docs/HIT-102/supplemental/commands.json",
+    "digests": "services/processing/docs/HIT-102/evidence-digests.json",
+    "actual_results": "96 main and97 integrated actual commands PASS; expected SQL-negative exit3 and cleanup probe exit1 preserved. 102/103 activation captures and178/181 draft/readiness/rehearsal captures independently validated against exact amended OAS. Six supplementary commands exit0. Public preview -> selected rehearsal -> activation201 -> Intake202 -> nonempty list/detail/history200, with actual SQL canonical JCS hash equal to shown/command/Operation final hash. Code CI5/5SUCCESS; final package head CI is an external PR/Jira record.",
+    "environment": {
+      "host": "Go1.27.2 darwin/arm64 CGO1 full race/vet/build",
+      "db": "Separate linux/arm64 CGO0 actual owned PostgreSQL18.7/files/private TLS1.3 mTLS/RLS. Not Linux race.",
+      "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+      "python": "3.14.2 verification tool; production stack not changed"
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Controlled session/current authority/shared actual-start/owner binding ports and synthetic command caller; no live IAM/BFF/Stripe/ClickUp credentials or deployment qualification. Frontend HIT-97 not changed.",
+    "Local full DoD verification is not independent PASS, acceptance or merge. Fresh official handoff result is a separate external record; PR63 stays Draft per explicit user instruction and Jira is transitioned only by the human.",
+    "Main local journal truthfully records one dirty documentary verifier file; all compiled Go/schema/module/runner files match tested_code_sha. Verifier was separately committed/tested; integrated snapshot is clean and all25 shared implementation files are exact.",
+    "Existing bounded owner content TTL/replay is preserved. Missing/expired full content is503, not metadata-reconstructed success; committed replay after readiness expiry does not renew consent or alter original activation time.",
+    "Private file/process crash and commit ACK faults tested, not power-loss/SLA/load/full distributed revocation qualification.",
+    "No SQL migration,OAS authority source,financial rules,foreign services,common CI or dependency locks changed. Only the exact already-approved activation amendment is adopted inside Processing."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}

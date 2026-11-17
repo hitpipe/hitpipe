@@ -15,13 +15,13 @@ import (
 	"time"
 )
 
-type PKI struct {
+type DraftPKI struct {
 	Root *x509.CertPool
 	ca   *x509.Certificate
 	key  *ecdsa.PrivateKey
 }
 
-func NewPKI(t *testing.T) *PKI {
+func NewDraftPKI(t *testing.T) *DraftPKI {
 	t.Helper()
 	k, e := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if e != nil {
@@ -38,9 +38,9 @@ func NewPKI(t *testing.T) *PKI {
 	}
 	roots := x509.NewCertPool()
 	roots.AddCert(ca)
-	return &PKI{roots, ca, k}
+	return &DraftPKI{roots, ca, k}
 }
-func (p *PKI) Leaf(t *testing.T, name string, server, expired bool) tls.Certificate {
+func (p *DraftPKI) Leaf(t *testing.T, name string, server, expired bool) tls.Certificate {
 	t.Helper()
 	k, e := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if e != nil {
@@ -62,6 +62,6 @@ func (p *PKI) Leaf(t *testing.T, name string, server, expired bool) tls.Certific
 	}
 	return tls.Certificate{Certificate: [][]byte{der}, PrivateKey: k}
 }
-func (p *PKI) Transport(t *testing.T) *http.Transport {
+func (p *DraftPKI) Transport(t *testing.T) *http.Transport {
 	return &http.Transport{TLSClientConfig: &tls.Config{MinVersion: tls.VersionTLS13, RootCAs: p.Root, Certificates: []tls.Certificate{p.Leaf(t, "bff.test", false, false)}}}
 }

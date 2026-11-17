@@ -35,12 +35,13 @@ type Request struct {
 	Body                                []byte
 }
 type Input struct {
-	Command       CommandMeta
-	Config        DraftConfig
-	DraftID       string
-	DraftRevision int64
-	Examples      []ScenarioExample
-	Digest        string
+	ReadinessCheckID string
+	Command          CommandMeta
+	Config           DraftConfig
+	DraftID          string
+	DraftRevision    int64
+	Examples         []ScenarioExample
+	Digest           string
 }
 type Grant struct {
 	WorkspaceID, PrincipalID, SessionID, Role string
@@ -67,6 +68,7 @@ type Codec interface {
 	Encode(Kind, any) ([]byte, error)
 	ValidateResponse(Kind, []byte) error
 	ConfigDigest(DraftConfig) (string, error)
+	Preview(DraftConfig, BindingProof) (ActivationPreview, error)
 }
 type Ref struct {
 	preparecase.Ref
@@ -92,6 +94,12 @@ type Root struct {
 	Tail                 *Ref
 }
 type CommandNode struct {
+	ReadinessCheckID     string `json:",omitempty"`
+	AcceptedConfigDigest string `json:",omitempty"`
+	// Private expiring evidence needed to verify rehearsal meaning at activation.
+	Examples                                         []ScenarioExample `json:",omitempty"`
+	OperationID                                      string            `json:",omitempty"`
+	OperationRevision                                int64             `json:",omitempty"`
 	AuthorityEpoch                                   int64
 	BindingCheck                                     *BindingProof
 	Format                                           string
@@ -103,7 +111,12 @@ type CommandNode struct {
 	Response                                         Ref
 	Previous                                         *Ref
 }
+type CheckEvidence struct {
+	Check ReadinessCheck
+	Proof BindingProof
+}
 type Snapshot struct {
+	SelectedCheck                     *CheckEvidence
 	Exists                            bool
 	Config                            DraftConfig
 	ConfigDigest                      string
@@ -112,12 +125,14 @@ type Snapshot struct {
 	Replay                            []byte
 }
 type Candidate struct {
-	BindingCheck       *BindingProof
-	Config             DraftConfig
-	ConfigDigest       string
-	ContentExpiry      time.Time
-	Response           []byte
-	PositiveValidUntil *time.Time
+	ReadinessCheckID     string
+	AcceptedConfigDigest string
+	BindingCheck         *BindingProof
+	Config               DraftConfig
+	ConfigDigest         string
+	ContentExpiry        time.Time
+	Response             []byte
+	PositiveValidUntil   *time.Time
 }
 type Repository interface {
 	Load(context.Context, Request, Input, Grant) (Snapshot, error)
@@ -125,7 +140,7 @@ type Repository interface {
 }
 type BindingProof struct {
 	WorkspaceID, PrincipalID, SourceConnectionID, DestinationConnectionID, Mode, PriceAlias, ListAlias, AssigneeAlias string
-	SourceAccountID, DestinationWorkspaceID, PriceID, ListID, AssigneeID                                              string
+	SourceAccountID, DestinationWorkspaceID, PriceID, ListID, AssigneeID, ServiceLabel                                string
 	Epoch                                                                                                             int64
 	Granted                                                                                                           bool
 	CheckedAt, ExpiresAt                                                                                              time.Time
