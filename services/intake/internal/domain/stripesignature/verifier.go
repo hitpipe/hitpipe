@@ -76,12 +76,14 @@ func Verify(rawBody []byte, signatureHeader string, secret []byte, nowUnix int64
 		return Outcome{Status: Rejected, Reason: ReasonTimestampStale, Version: Version, Timestamp: timestamp}
 	}
 
-	message := make([]byte, 0, 20+1+len(rawBody))
-	message = append(message, []byte(formatUnix(timestamp))...)
-	message = append(message, '.')
-	message = append(message, rawBody...)
+	// Stream the same timestamp + '.' + raw bytes into the request-local HMAC.
+	// Avoid a body-sized concatenation allocation; do not cache verification or
+	// share mutable digest/buffer state across deliveries.
 	digest := hmac.New(sha256.New, secret)
-	_, _ = digest.Write(message)
+	_, _ = digest.Write([]byte(formatUnix(timestamp)))
+	_, _ = digest.Write([]byte{'.'})
+	_, _ = digest.Write(rawBody)
+
 	expected := digest.Sum(nil)
 	for _, candidate := range signatures {
 		if hmac.Equal(expected, candidate) {
