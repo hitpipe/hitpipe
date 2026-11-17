@@ -1,0 +1,60 @@
+{
+  "subject": "HIT-73",
+  "materialized_result": {
+    "summary": "Изолированная проверка исходных подписанных байтов и нормализация Stripe Checkout Session в принятую NormalizedSignal; без сохранения, HTTP ACK и внешнего действия.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "bff5594b0f0ba35fd66609ec576888a3d0b2b291",
+    "code_url": "https://github.com/hitpipe/hitpipe/blob/bff5594b0f0ba35fd66609ec576888a3d0b2b291/services/intake/internal/application/normalizesignal/normalize.go",
+    "report": "services/intake/docs/HIT-73/README.md",
+    "schema_source": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "source_time_decision": "https://hitpipe.atlassian.net/browse/HIT-78?focusedCommentId=12171"
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/Makefile",
+    "services/intake/README.md",
+    "services/intake/cmd/intake-contractcheck/main.go",
+    "services/intake/docs/HIT-73/README.md",
+    "services/intake/docs/module-contract.md",
+    "services/intake/evidence/HIT-73/source-audit.json",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/internal/adapters/clock/system/clock.go",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/normalizesignal/normalize_test.go",
+    "services/intake/internal/application/normalizesignal/normalized_signal.schema.json",
+    "services/intake/internal/domain/stripesignature/verifier.go",
+    "services/intake/internal/domain/stripesignature/verifier_test.go",
+    "services/intake/lab-component.json",
+    "services/intake/testdata/tampered.json",
+    "services/intake/testdata/verified.json",
+    "services/intake/tools/check.py"
+  ],
+  "verification": {
+    "environment": "Go 1.27.2 darwin/arm64; GOTOOLCHAIN=local; synthetic input only",
+    "source_sha": "bff5594b0f0ba35fd66609ec576888a3d0b2b291",
+    "commands": "services/intake/evidence/HIT-73/commands.json",
+    "source_audit": "services/intake/evidence/HIT-73/source-audit.json",
+    "logs": [
+      "services/intake/evidence/HIT-73/race.stdout",
+      "services/intake/evidence/HIT-73/vet.stdout",
+      "services/intake/evidence/HIT-73/build.stdout",
+      "services/intake/evidence/HIT-73/modules.stdout"
+    ],
+    "results": "All four commands exit 0: go test -race -count=1 -json ./..., go vet ./..., go build ./..., go mod verify. 118 passing test/subtest events, 3 tested packages PASS; zero test failures or skipped tests. Three other packages contain no tests.",
+    "coverage": "Signature before JSON; forged repeats reauthenticate; explicit checked account/mode/API version and receipt identity; required absent/null/wrong-type; Session.created only; UUIDv4 message identity; TTL<=72h; size<=256KiB; unknown/case/duplicate/Unicode rejection; exact OAS output-field constraints; JCS RFC8785 vectors and digest exclusion; metadata/contact/brief excluded."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Binding and Receipt are explicit owner-checked inputs; this isolated slice does not verify live installation/grants or durable identity metadata. Caller must retain same IDs/first age on retries and atomically reject conflicts in the future receipt adapter.",
+    "No HTTP route, durable receipt/database/files, outbox, transmission, financial decision or external service integration.",
+    "Synthetic tests do not prove reliable persistence, successful HTTP acknowledgement or external service operation.",
+    "Go pin unchanged; GO-2026-6859 concerns HTTP server net/http, absent here; future deployment security not qualified.",
+    "Independent review and human acceptance not performed."
+  ],
+  "authorship": "Codex по поручению Budykins; план подтверждён в рабочей сессии, Jira13518."
+}
