@@ -147,6 +147,17 @@
   "ReadinessCheck": {
     "additionalProperties": false,
     "properties": {
+      "activation_preview": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ActivationPreview"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "Обязательный объект при passed=true и ровно null при passed=false. Сервер сохраняет именно этот снимок вместе с частным BindingProof до ответа; клиент не достраивает его из aliases."
+      },
       "check_id": {
         "format": "uuid",
         "type": "string"
@@ -156,6 +167,7 @@
         "type": "string"
       },
       "config_digest": {
+        "description": "SHA-256 RFC8785 JCS значимых полей DraftConfig: исходный объект без name, draft_id и revision. Версия проверяется отдельно. Это digest черновика, а не окончательной конфигурации с разрешёнными ID.",
         "pattern": "^sha256:[0-9a-f]{64}$",
         "type": "string"
       },
@@ -191,7 +203,8 @@
       "passed",
       "checked_at",
       "expires_at",
-      "issues"
+      "issues",
+      "activation_preview"
     ],
     "type": "object"
   },
@@ -254,13 +267,19 @@
         "maxItems": 10,
         "minItems": 1,
         "type": "array"
+      },
+      "readiness_check_id": {
+        "description": "Точная успешная непросроченная проверка готовности, чей activation_preview используется в этой репетиции. Сервер не выбирает последнюю проверку автоматически.",
+        "format": "uuid",
+        "type": "string"
       }
     },
     "required": [
       "command",
       "draft_id",
       "draft_revision",
-      "examples"
+      "examples",
+      "readiness_check_id"
     ],
     "type": "object"
   },
@@ -268,6 +287,7 @@
     "additionalProperties": false,
     "properties": {
       "config_digest": {
+        "description": "SHA-256 RFC8785 JCS значимых полей DraftConfig: исходный объект без name, draft_id и revision. Версия проверяется отдельно. Это digest черновика, а не окончательной конфигурации с разрешёнными ID.",
         "pattern": "^sha256:[0-9a-f]{64}$",
         "type": "string"
       },
@@ -321,6 +341,7 @@
         "type": "string"
       },
       "accepted_config_digest": {
+        "description": "Окончательный digest сохранённого activation_preview, явно показанного и принятого человеком. Совпадает с Operation.accepted_config_digest и accepted_configs.digest, не с digest черновика. Выбранная репетиция обязана быть сохранена для того же readiness_check_id и окончательного digest.",
         "pattern": "^sha256:[0-9a-f]{64}$",
         "type": "string"
       },
@@ -373,7 +394,8 @@
           {
             "type": "null"
           }
-        ]
+        ],
+        "description": "Digest принятого полного canonical_config либо null до принятия. То же окончательное значение, которое человек подтвердил в ActivationCommand и которое сохранено в accepted_configs.digest."
       },
       "accepted_config_id": {
         "anyOf": [
@@ -452,6 +474,100 @@
       "accepted_config_digest",
       "connection_health",
       "drain_deadline_at"
+    ],
+    "type": "object"
+  },
+  "CanonicalAcceptedConfig": {
+    "additionalProperties": false,
+    "description": "Предлагаемый полный безопасный снимок существующей конфигурации Processing после разрешения псевдонимов. Все поля существенны и обязательны; секреты, private BindingProof, сессии и свободный текст здесь запрещены. Ограничения safe_config_valid и происхождение service_label из каталога сохраняются.",
+    "properties": {
+      "assignee_id": {
+        "pattern": "^[A-Za-z0-9_.:-]{1,255}$",
+        "type": "string"
+      },
+      "destination_connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "destination_workspace_id": {
+        "pattern": "^[A-Za-z0-9_.:-]{1,255}$",
+        "type": "string"
+      },
+      "list_id": {
+        "pattern": "^[A-Za-z0-9_.:-]{1,255}$",
+        "type": "string"
+      },
+      "mode": {
+        "enum": [
+          "TEST",
+          "LIVE"
+        ],
+        "type": "string"
+      },
+      "pack_id": {
+        "const": "PAID_ORDER_TASK_V1",
+        "type": "string"
+      },
+      "price_id": {
+        "pattern": "^[A-Za-z0-9_.:-]{1,255}$",
+        "type": "string"
+      },
+      "required_context_keys": {
+        "items": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "type": "string"
+        },
+        "maxItems": 20,
+        "type": "array",
+        "uniqueItems": true
+      },
+      "service_label": {
+        "maxLength": 120,
+        "minLength": 1,
+        "type": "string"
+      },
+      "source_connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title_pattern": {
+        "enum": [
+          "SERVICE_ORDER"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "pack_id",
+      "source_connection_id",
+      "destination_connection_id",
+      "destination_workspace_id",
+      "price_id",
+      "list_id",
+      "assignee_id",
+      "mode",
+      "required_context_keys",
+      "title_pattern",
+      "service_label"
+    ],
+    "type": "object"
+  },
+  "ActivationPreview": {
+    "additionalProperties": false,
+    "description": "Неизменяемая конфигурация, показанная до принятия. Идентичность и срок задаёт содержащий ReadinessCheck. Не включает и не создаёт accepted_configs или ACTIVE.",
+    "properties": {
+      "accepted_config_digest": {
+        "description": "sha256: + нижний шестнадцатеричный SHA-256 RFC8785 JCS полного canonical_config, без дополнительных полей и альтернативной нормализации.",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "canonical_config": {
+        "$ref": "#/components/schemas/CanonicalAcceptedConfig"
+      }
+    },
+    "required": [
+      "canonical_config",
+      "accepted_config_digest"
     ],
     "type": "object"
   }

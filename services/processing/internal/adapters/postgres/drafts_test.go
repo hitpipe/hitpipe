@@ -84,7 +84,7 @@ func (b *draftBindings) Check(c context.Context, g drafts.Grant, q drafts.Bindin
 	if b.stale {
 		now = now.Add(-time.Hour)
 	}
-	return drafts.BindingProof{WorkspaceID: g.WorkspaceID, PrincipalID: g.PrincipalID, Epoch: g.Epoch, SourceConnectionID: q.SourceConnectionID, DestinationConnectionID: q.DestinationConnectionID, Mode: q.Mode, PriceAlias: q.PriceAlias, ListAlias: q.ListAlias, AssigneeAlias: q.AssigneeAlias, SourceAccountID: "acct_controlled", DestinationWorkspaceID: "workspace_controlled", PriceID: "price_controlled", ListID: "list_controlled", AssigneeID: "assignee_controlled", Granted: !b.denied, CheckedAt: now, ExpiresAt: now.Add(time.Minute)}, nil
+	return drafts.BindingProof{WorkspaceID: g.WorkspaceID, PrincipalID: g.PrincipalID, Epoch: g.Epoch, SourceConnectionID: q.SourceConnectionID, DestinationConnectionID: q.DestinationConnectionID, Mode: q.Mode, PriceAlias: q.PriceAlias, ListAlias: q.ListAlias, AssigneeAlias: q.AssigneeAlias, ServiceLabel: "Синтетическая услуга", SourceAccountID: "acct_controlled", DestinationWorkspaceID: "workspace_controlled", PriceID: "price_controlled", ListID: "list_controlled", AssigneeID: "assignee_controlled", Granted: !b.denied, CheckedAt: now, ExpiresAt: now.Add(time.Minute)}, nil
 }
 
 type draftTestDB struct{}
@@ -301,7 +301,7 @@ func TestDraftHTTPFullRoundtripReadinessRehearsalAndRestart(t *testing.T) {
 	}
 	draftCapture(t, drafts.Check, status, command, checked, "current_owner_bindings_verified")
 	examples := []drafts.ScenarioExample{{SyntheticSessionAlias: "example_paid", AmountMinor: 100, Paid: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_unpaid", AmountMinor: 100, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_zero", AmountMinor: 0, Paid: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_duplicate", AmountMinor: 100, Paid: true, Duplicate: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_missing", AmountMinor: 100, Paid: true, MissingContextKeys: []string{"brief"}}}
-	rehearsal := drafts.RehearsalRequest{Command: f.meta(&revision), DraftID: f.id, DraftRevision: 1, Examples: examples}
+	rehearsal := drafts.RehearsalRequest{ReadinessCheckID: check.CheckID, Command: f.meta(&revision), DraftID: f.id, DraftRevision: 1, Examples: examples}
 	status, rehearsed := f.call(t, drafts.Rehearse, rehearsal, nil)
 	var rr drafts.RehearsalResult
 	if status != 200 || json.Unmarshal(rehearsed, &rr) != nil || rr.LiveRequestsMade != 0 || strings.Join(rr.Results, ",") != "WOULD_CONFIRM,WOULD_WAIT,WOULD_EXCLUDE,WOULD_HOLD_UNKNOWN,WOULD_WAIT" {

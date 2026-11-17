@@ -21,6 +21,8 @@ type Input struct {
 	Digest  string
 }
 type Snapshot struct {
+	RehearsalReadinessID, RehearsalFinalDigest  string
+	RehearsalBinding                            *drafts.BindingProof
 	Draft                                       drafts.Snapshot
 	Check                                       drafts.ReadinessCheck
 	Rehearsal                                   drafts.RehearsalResult
@@ -129,7 +131,10 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 			return drafts.ErrUnavailable
 		}
 		if !FreshBinding(snap, g, p, s.Clock.Now()) {
-			return drafts.ErrDenied
+			if !p.Granted || p.WorkspaceID != g.WorkspaceID || p.PrincipalID != g.PrincipalID {
+				return drafts.ErrDenied
+			}
+			return drafts.ErrConflict
 		}
 		if e = protected("ACTIVATION_COMMAND_COMMIT", func(c context.Context) error {
 			var e error
@@ -173,31 +178,32 @@ func CheckSaved(in Input, s Snapshot, g drafts.Grant, now time.Time) error {
 			return drafts.ErrConflict
 		}
 	}
-	if !a.ConfirmActivate || a.AcceptanceTextVersion != "managed-operation-v1" || s.Draft.ConfigDigest != a.AcceptedConfigDigest {
+	if !a.ConfirmActivate || a.AcceptanceTextVersion != "managed-operation-v1" {
 		return drafts.ErrInvalid
 	}
 	if c.SourceConnectionID == nil || c.DestinationConnectionID == nil || c.Mode == nil || c.PriceAlias == nil || c.ListAlias == nil || c.AssigneeAlias == nil || c.ServiceLabel == nil || c.TitlePattern == nil || c.RequiredContextKeys == nil {
 		return drafts.ErrConflict
 	}
 	ck, rr := s.Check, s.Rehearsal
-	if ck.CheckID != a.ReadinessCheckID || !ck.Passed || len(ck.Issues) != 0 || ck.DraftID != a.DraftID || ck.DraftRevision != a.DraftRevision || ck.ConfigDigest != a.AcceptedConfigDigest || ck.CheckedAt.IsZero() || ck.CheckedAt.After(now) || !now.Before(ck.ExpiresAt) || !now.Before(s.Draft.ConfigExpiry) {
+	if ck.CheckID != a.ReadinessCheckID || !ck.Passed || len(ck.Issues) != 0 || ck.DraftID != a.DraftID || ck.DraftRevision != a.DraftRevision || ck.ConfigDigest != s.Draft.ConfigDigest || ck.CheckedAt.IsZero() || ck.CheckedAt.After(now) || !now.Before(ck.ExpiresAt) || !now.Before(s.Draft.ConfigExpiry) {
 		return drafts.ErrConflict
 	}
-	if rr.RehearsalID != a.RehearsalID || rr.DraftID != a.DraftID || rr.DraftRevision != a.DraftRevision || rr.ConfigDigest != a.AcceptedConfigDigest || rr.LiveRequestsMade != 0 || len(s.Examples) == 0 || len(s.Examples) > 10 || len(rr.Results) != len(s.Examples) {
+	if ck.ActivationPreview == nil || ck.ActivationPreview.AcceptedConfigDigest != a.AcceptedConfigDigest || s.RehearsalReadinessID != ck.CheckID || s.RehearsalFinalDigest != a.AcceptedConfigDigest || s.RehearsalBinding == nil || !drafts.SameBinding(s.Binding, *s.RehearsalBinding) {
+		return drafts.ErrConflict
+	}
+	if rr.RehearsalID != a.RehearsalID || rr.DraftID != a.DraftID || rr.DraftRevision != a.DraftRevision || rr.ConfigDigest != s.Draft.ConfigDigest || rr.LiveRequestsMade != 0 || len(s.Examples) == 0 || len(s.Examples) > 10 || len(rr.Results) != len(s.Examples) {
 		return drafts.ErrConflict
 	}
 	for i, ex := range s.Examples {
-		if rr.Results[i] != drafts.RehearseExample(c, ex, now) {
+		if rr.Results[i] != drafts.RehearseCanonical(c.DraftID, ck.ActivationPreview.CanonicalConfig, ex, now) {
 			return drafts.ErrConflict
 		}
 	}
 	if s.Binding.Epoch != g.Epoch || s.Binding.PrincipalID != g.PrincipalID || s.Binding.WorkspaceID != g.WorkspaceID {
-		return drafts.ErrDenied
+		return drafts.ErrConflict
 	}
 	return nil
 }
 func FreshBinding(s Snapshot, g drafts.Grant, p drafts.BindingProof, now time.Time) bool {
-	old := s.Binding
-	// A fresh lookup must still resolve the exact same accepted owner identities.
-	return p.Granted && p.WorkspaceID == g.WorkspaceID && p.PrincipalID == g.PrincipalID && p.Epoch == g.Epoch && p.SourceConnectionID == old.SourceConnectionID && p.DestinationConnectionID == old.DestinationConnectionID && p.Mode == old.Mode && p.PriceAlias == old.PriceAlias && p.ListAlias == old.ListAlias && p.AssigneeAlias == old.AssigneeAlias && p.SourceAccountID == old.SourceAccountID && p.DestinationWorkspaceID == old.DestinationWorkspaceID && p.PriceID == old.PriceID && p.ListID == old.ListID && p.AssigneeID == old.AssigneeID && !p.CheckedAt.Before(s.Draft.LoadedAt) && !p.CheckedAt.After(now) && now.Before(p.ExpiresAt)
+	return drafts.SameBinding(s.Binding, p) && !p.CheckedAt.Before(s.Draft.LoadedAt) && !p.CheckedAt.After(now) && now.Before(p.ExpiresAt)
 }

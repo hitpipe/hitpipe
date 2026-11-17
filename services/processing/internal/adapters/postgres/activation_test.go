@@ -82,12 +82,12 @@ func (f activationFixture) ready(t *testing.T) drafts.ActivationCommand {
 		t.Fatal("readiness", status, string(b))
 	}
 	ex := []drafts.ScenarioExample{{SyntheticSessionAlias: "example_paid", AmountMinor: 100, Paid: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_unpaid", AmountMinor: 100, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_zero", Paid: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_duplicate", AmountMinor: 100, Paid: true, Duplicate: true, MissingContextKeys: []string{}}, {SyntheticSessionAlias: "example_missing", AmountMinor: 100, Paid: true, MissingContextKeys: []string{"brief"}}}
-	status, b = f.call(t, drafts.Rehearse, drafts.RehearsalRequest{Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: ex}, nil)
+	status, b = f.call(t, drafts.Rehearse, drafts.RehearsalRequest{ReadinessCheckID: ck.CheckID, Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: ex}, nil)
 	var rr drafts.RehearsalResult
 	if status != 200 || json.Unmarshal(b, &rr) != nil {
 		t.Fatal("rehearsal", status, string(b))
 	}
-	return drafts.ActivationCommand{Command: f.meta(nil), DraftID: f.id, DraftRevision: 1, ReadinessCheckID: ck.CheckID, RehearsalID: rr.RehearsalID, AcceptedConfigDigest: ck.ConfigDigest, AcceptanceTextVersion: "managed-operation-v1", ConfirmActivate: true}
+	return drafts.ActivationCommand{Command: f.meta(nil), DraftID: f.id, DraftRevision: 1, ReadinessCheckID: ck.CheckID, RehearsalID: rr.RehearsalID, AcceptedConfigDigest: ck.ActivationPreview.AcceptedConfigDigest, AcceptanceTextVersion: "managed-operation-v1", ConfirmActivate: true}
 }
 func activationCapture(t *testing.T, status int, in any, b []byte, scenario string) {
 	t.Helper()
@@ -848,11 +848,11 @@ func TestActivationNoStaleOrFabricatedPreparation(t *testing.T) {
 					t.Fatal("negative check expected", s, string(b))
 				}
 				f.bindings.denied = false
-				s, b = f.call(t, drafts.Rehearse, drafts.RehearsalRequest{Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: []drafts.ScenarioExample{{SyntheticSessionAlias: "example_unpaid", MissingContextKeys: []string{}}}}, nil)
-				var rr drafts.RehearsalResult
-				if s != 200 || json.Unmarshal(b, &rr) != nil {
-					t.Fatal(s, string(b))
+				s, b = f.call(t, drafts.Rehearse, drafts.RehearsalRequest{ReadinessCheckID: ck.CheckID, Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: []drafts.ScenarioExample{{SyntheticSessionAlias: "example_unpaid", MissingContextKeys: []string{}}}}, nil)
+				if s != 409 {
+					t.Fatal("failed readiness rehearsed", s, string(b))
 				}
+				rr := drafts.RehearsalResult{RehearsalID: config}
 				in = drafts.ActivationCommand{Command: f.meta(nil), DraftID: f.id, DraftRevision: 1, ReadinessCheckID: ck.CheckID, RehearsalID: rr.RehearsalID, AcceptedConfigDigest: ck.ConfigDigest, AcceptanceTextVersion: "managed-operation-v1", ConfirmActivate: true}
 			} else {
 				in = f.ready(t)

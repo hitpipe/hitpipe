@@ -182,18 +182,27 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 			if check.Passed {
 				candidate.PositiveValidUntil = &check.ExpiresAt
 				candidate.BindingCheck = &proof
+				candidate.AcceptedConfigDigest = check.ActivationPreview.AcceptedConfigDigest
 			}
 		case Rehearse:
 			if in.Command.ExpectedRevision == nil || *in.Command.ExpectedRevision != snap.Config.Revision || in.DraftRevision != snap.Config.Revision {
 				return ErrStale
 			}
+			if snap.SelectedCheck == nil || snap.SelectedCheck.Check.ActivationPreview == nil {
+				return ErrConflict
+			}
+			selected := snap.SelectedCheck
+			candidate.BindingCheck = &selected.Proof
+			candidate.ReadinessCheckID = selected.Check.CheckID
+			candidate.AcceptedConfigDigest = selected.Check.ActivationPreview.AcceptedConfigDigest
+			candidate.PositiveValidUntil = &selected.Check.ExpiresAt
 			id, e := NewID()
 			if e != nil {
 				return e
 			}
 			out := []string{}
 			for _, ex := range in.Examples {
-				out = append(out, RehearseExample(snap.Config, ex, now))
+				out = append(out, RehearseCanonical(snap.Config.DraftID, selected.Check.ActivationPreview.CanonicalConfig, ex, now))
 			}
 			view = RehearsalResult{RehearsalID: id, DraftID: r.DraftID, DraftRevision: snap.Config.Revision, ConfigDigest: snap.ConfigDigest, Results: out, LiveRequestsMade: 0}
 		}
@@ -255,7 +264,7 @@ func (s Service) readiness(r Request, in Input, g Grant, snap Snapshot, p Bindin
 	}
 	if proofErr != nil {
 		issue("OWNER_CHECK_UNAVAILABLE")
-	} else if !p.Granted || p.WorkspaceID != g.WorkspaceID || p.PrincipalID != g.PrincipalID || p.Epoch != g.Epoch || p.SourceConnectionID != str(c.SourceConnectionID) || p.DestinationConnectionID != str(c.DestinationConnectionID) || p.Mode != str(c.Mode) || p.PriceAlias != str(c.PriceAlias) || p.ListAlias != str(c.ListAlias) || p.AssigneeAlias != str(c.AssigneeAlias) || !sqlIDPattern.MatchString(p.SourceAccountID) || !sqlIDPattern.MatchString(p.DestinationWorkspaceID) || !sqlIDPattern.MatchString(p.PriceID) || !sqlIDPattern.MatchString(p.ListID) || !sqlIDPattern.MatchString(p.AssigneeID) || p.CheckedAt.IsZero() || p.CheckedAt.Before(snap.LoadedAt) || p.CheckedAt.After(now) || !p.ExpiresAt.After(now) {
+	} else if !p.Granted || p.ServiceLabel != str(c.ServiceLabel) || p.WorkspaceID != g.WorkspaceID || p.PrincipalID != g.PrincipalID || p.Epoch != g.Epoch || p.SourceConnectionID != str(c.SourceConnectionID) || p.DestinationConnectionID != str(c.DestinationConnectionID) || p.Mode != str(c.Mode) || p.PriceAlias != str(c.PriceAlias) || p.ListAlias != str(c.ListAlias) || p.AssigneeAlias != str(c.AssigneeAlias) || !sqlIDPattern.MatchString(p.SourceAccountID) || !sqlIDPattern.MatchString(p.DestinationWorkspaceID) || !sqlIDPattern.MatchString(p.PriceID) || !sqlIDPattern.MatchString(p.ListID) || !sqlIDPattern.MatchString(p.AssigneeID) || p.CheckedAt.IsZero() || p.CheckedAt.Before(snap.LoadedAt) || p.CheckedAt.After(now) || !p.ExpiresAt.After(now) {
 		issue("OWNER_BINDINGS_UNVERIFIED")
 	} else if p.ExpiresAt.Before(out.ExpiresAt) {
 		out.ExpiresAt = p.ExpiresAt
@@ -265,6 +274,13 @@ func (s Service) readiness(r Request, in Input, g Grant, snap Snapshot, p Bindin
 		return out, ErrUnavailable
 	}
 	out.Passed = len(out.Issues) == 0
+	if out.Passed {
+		preview, e := s.Codec.Preview(c, p)
+		if e != nil {
+			return out, e
+		}
+		out.ActivationPreview = &preview
+	}
 	return out, nil
 }
 
@@ -275,14 +291,26 @@ func RehearseExample(c DraftConfig, ex ScenarioExample, now time.Time) string {
 	return rehearse(c, ex, now)
 }
 func rehearse(c DraftConfig, ex ScenarioExample, now time.Time) string {
-	if !complete(c) || ex.Duplicate {
+	if !complete(c) {
+		return "WOULD_HOLD_UNKNOWN"
+	}
+	return evaluateSynthetic(c.DraftID, str(c.Mode), str(c.SourceConnectionID), ex, now)
+}
+
+// RehearseCanonical consumes the selected server snapshot, with the same pure
+// kernel and zero live ports as the original draft rehearsal.
+func RehearseCanonical(draftID string, c CanonicalAcceptedConfig, ex ScenarioExample, now time.Time) string {
+	return evaluateSynthetic(draftID, c.Mode, c.SourceConnectionID, ex, now)
+}
+func evaluateSynthetic(draftID, mode, connection string, ex ScenarioExample, now time.Time) string {
+	if ex.Duplicate {
 		return "WOULD_HOLD_UNKNOWN"
 	}
 	if len(ex.MissingContextKeys) > 0 {
 		return "WOULD_WAIT"
 	}
-	live := str(c.Mode) == "LIVE"
-	policy := eligibility.Policy{ConfigID: c.DraftID, SchemaVersion: "1.0", EvaluatorVersion: "paid-order-v1", AccountID: "synthetic_account", ConnectionID: str(c.SourceConnectionID), LiveMode: &live, PriceID: "synthetic_price", ActivationAt: now.Add(-time.Hour)}
+	live := mode == "LIVE"
+	policy := eligibility.Policy{ConfigID: draftID, SchemaVersion: "1.0", EvaluatorVersion: "paid-order-v1", AccountID: "synthetic_account", ConnectionID: connection, LiveMode: &live, PriceID: "synthetic_price", ActivationAt: now.Add(-time.Hour)}
 	// This data is explicitly hypothetical, never a verified Stripe read/proof.
 	facts := syntheticFacts(policy, ex, now)
 	result := eligibility.Evaluate(policy, facts, now)
