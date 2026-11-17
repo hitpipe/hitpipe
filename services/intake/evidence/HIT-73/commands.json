@@ -1,0 +1,73 @@
+{
+  "started_utc": "2026-11-17T11:36:22.267072+00:00",
+  "source_sha": "bff5594b0f0ba35fd66609ec576888a3d0b2b291",
+  "dirty": [],
+  "go": "go version go1.27.2 darwin/arm64",
+  "host": "macOS-26.5-arm64-arm-64bit",
+  "source_sha256": {
+    "services/intake/cmd/intake-contractcheck/main.go": "06ddbb225ec9ce0e58a7d02e284a614df1ef26527363bbc1bf611ef932249d2a",
+    "services/intake/go.mod": "415f2229879175c0180e1cf8e5cc1749c137812a071f92970a23125a52fb0dfd",
+    "services/intake/go.sum": "56124f89986c20d40fee9107d53578a3c527f3e4c965f75226cf69617f8f2e41",
+    "services/intake/internal/adapters/clock/system/clock.go": "eed73766e3d792a21a1cbd78dbe33181ff2f934a7e391b03b78f1e40ccb35068",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go": "20470bb2e7309f35a6f50cd0f885d5e7a8aa78f4566e1b362b87546a9a66ed92",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go": "a75c4a1b391edddfdc03028ddb1575d9a95d76191a65a98bac572d8ca96fd95a",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go": "5a6e183263b048197fe20babd8c57cbd7a759441dcd4f6185c200a90c3766545",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go": "867db8eeb4d3d0f3ad975caf3df182a7eb9280aebf724ed6196b0234d073a883",
+    "services/intake/internal/application/normalizesignal/normalize.go": "85b3d67ae7c0c2edfcd7de516e88fd2322a1d10f91b6a6e7136d662a17a67fca",
+    "services/intake/internal/application/normalizesignal/normalize_test.go": "e4fb60508d2bff7023dffc176295dc340fefd23c6518fe0b66747772859d1b95",
+    "services/intake/internal/application/normalizesignal/normalized_signal.schema.json": "09734b10141c62e8a9c5e854b06891d87b8237cac31e045f078703685f208cf0",
+    "services/intake/internal/domain/stripesignature/verifier.go": "0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640",
+    "services/intake/internal/domain/stripesignature/verifier_test.go": "453f5002af44e37fc01a7e5845da67e9f436921ab930ea0329bb350206ef7263"
+  },
+  "scope": "synthetic local module only; no durable receipt, HTTP ACK, external service or independent review",
+  "commands": [
+    {
+      "name": "race",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-73/services/intake",
+      "exit_code": 0,
+      "seconds": 2.651
+    },
+    {
+      "name": "vet",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-73/services/intake",
+      "exit_code": 0,
+      "seconds": 0.721
+    },
+    {
+      "name": "build",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "build",
+        "./..."
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-73/services/intake",
+      "exit_code": 0,
+      "seconds": 0.38
+    },
+    {
+      "name": "modules",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "cwd": "/Users/nic_piter/code/hitpipe-HIT-73/services/intake",
+      "exit_code": 0,
+      "seconds": 0.015
+    }
+  ],
+  "finished_utc": "2026-11-17T11:36:26.152207+00:00"
+}

@@ -102,5 +102,12 @@ HTTP-сервера. Это не квалификация безопасност
 - [Закреплённая сборка](https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json), точные go-runtime go.mod/go.sum и jcs_test.go ревизии84249ff3ba611358232294c46f6022f030ea223d.
 - Официальные описания [Stripe Event](https://docs.stripe.com/api/events/object) и [Checkout Session](https://docs.stripe.com/api/checkout/sessions/object) объясняют provider поля; не заменяют принятый внутренний контракт и не доказывают подключение.
 
-Оформление результата сервером пока UNKNOWN: запрос bootstrap13519 отправлен,
-ответ не получен. Локальная разработка и проверки не означают регистрацию или READY.
+Проверены полный ответ bootstrap13519 (части13520…13526 и квитанция13527),
+авторы и SHA-256. Протокол v2 закреплён на685e797bf32f71fd4ca42cd5f594b80912736473;
+препятствий нет. Регистрация результата и handoff READY — отдельные операции.
+
+Фактический прогон на чистом кодовом коммите bff5594b0f0ba35fd66609ec576888a3d0b2b291:
+118 успешных test/subtest событий, три пакета с тестами PASS, пропущенных тестов
+и FAIL нет. Ещё три пакета не содержат тестов; это не пропуск обязательной проверки.
+`go test -race -count=1 -json ./...`, `go vet ./...`, `go build ./...` и
+`go mod verify` завершились с кодом0. Среда Go1.27.2 darwin/arm64.
