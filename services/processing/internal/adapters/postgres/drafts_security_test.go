@@ -229,12 +229,17 @@ func TestDraftRehearsalHTTPArrayBoundsAndCanonicalZeroFalse(t *testing.T) {
 	f := newDraftFixture(t)
 	f.save(t)
 	rev := int64(1)
+	checkedStatus, checkedBody := f.call(t, drafts.Check, f.meta(&rev), nil)
+	var selected drafts.ReadinessCheck
+	if checkedStatus != 200 || json.Unmarshal(checkedBody, &selected) != nil || !selected.Passed {
+		t.Fatal(checkedStatus, string(checkedBody))
+	}
 	for _, n := range []int{1, 10, 0, 11} {
 		examples := make([]drafts.ScenarioExample, n)
 		for i := range examples {
 			examples[i] = drafts.ScenarioExample{SyntheticSessionAlias: "example_zero", AmountMinor: 0, Paid: false, Duplicate: false, MissingContextKeys: []string{}}
 		}
-		input := drafts.RehearsalRequest{Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: examples}
+		input := drafts.RehearsalRequest{ReadinessCheckID: selected.CheckID, Command: f.meta(&rev), DraftID: f.id, DraftRevision: 1, Examples: examples}
 		status, b := f.call(t, drafts.Rehearse, input, nil)
 		if n == 1 || n == 10 {
 			var out drafts.RehearsalResult

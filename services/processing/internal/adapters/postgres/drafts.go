@@ -255,6 +255,12 @@ func (d DraftStore) Load(ctx context.Context, r drafts.Request, in drafts.Input,
 			return z, e
 		}
 	}
+	if r.Kind == drafts.Rehearse && snap.Replay == nil {
+		snap.SelectedCheck, e = d.selectedCheck(ctx, tx, r, snap, in.ReadinessCheckID, g)
+		if e != nil {
+			return z, e
+		}
+	}
 	if e = tx.Commit(ctx); e != nil {
 		return z, e
 	}
@@ -315,12 +321,21 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 	if c.Config.Revision != resultRevision || r.Kind != drafts.Save && (!current.Exists || !c.ContentExpiry.Equal(current.ConfigExpiry) || c.ConfigDigest != current.ConfigDigest) {
 		return nil, drafts.ErrStale
 	}
+	if r.Kind == drafts.Rehearse {
+		selected, e := d.selectedCheck(ctx, tx, r, current, in.ReadinessCheckID, g)
+		if e != nil {
+			return nil, e
+		}
+		if expected.SelectedCheck == nil || expected.SelectedCheck.Check.CheckID != selected.Check.CheckID || c.ReadinessCheckID != selected.Check.CheckID || c.AcceptedConfigDigest != selected.Check.ActivationPreview.AcceptedConfigDigest || c.BindingCheck == nil || !drafts.SameBinding(*c.BindingCheck, selected.Proof) || !drafts.SameBinding(expected.SelectedCheck.Proof, selected.Proof) {
+			return nil, drafts.ErrConflict
+		}
+	}
 	now := row.now
 	if d.Clock.Now().After(now) {
 		now = d.Clock.Now()
 	}
 	if !now.Before(g.ExpiresAt) || !now.Before(c.ContentExpiry) || (c.PositiveValidUntil != nil && !now.Before(*c.PositiveValidUntil)) {
-		return nil, drafts.ErrUnavailable
+		return nil, drafts.ErrConflict
 	}
 	configRef := current.Root.Config
 	if r.Kind == drafts.Save {
@@ -337,7 +352,7 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 	if e != nil {
 		return nil, e
 	}
-	node := drafts.CommandNode{AuthorityEpoch: g.Epoch, BindingCheck: c.BindingCheck, Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, RequestID: in.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: r.Kind, ExpectedRevision: in.Command.ExpectedRevision, ResultRevision: resultRevision, ConfigDigest: c.ConfigDigest, Response: responseRef, Previous: current.Root.Tail}
+	node := drafts.CommandNode{ReadinessCheckID: c.ReadinessCheckID, AcceptedConfigDigest: c.AcceptedConfigDigest, AuthorityEpoch: g.Epoch, BindingCheck: c.BindingCheck, Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, RequestID: in.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: r.Kind, ExpectedRevision: in.Command.ExpectedRevision, ResultRevision: resultRevision, ConfigDigest: c.ConfigDigest, Response: responseRef, Previous: current.Root.Tail}
 	if r.Kind == drafts.Rehearse {
 		node.Examples = in.Examples
 	}
@@ -373,6 +388,16 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.user_commands(workspace_id,request_id,actor_id,digest,aggregate_id,expected_revision,result_revision,disposition,recorded_at) VALUES($1,$2,$3,$4,$5,$6,$7,'APPLIED',$8)`, r.WorkspaceID, in.Command.RequestID, g.PrincipalID, in.Digest, r.DraftID, in.Command.ExpectedRevision, resultRevision, now)
 	if e != nil {
 		return nil, e
+	}
+	var finalNow time.Time
+	if e = tx.QueryRow(ctx, `SELECT clock_timestamp()`).Scan(&finalNow); e != nil {
+		return nil, e
+	}
+	if d.Clock.Now().After(finalNow) {
+		finalNow = d.Clock.Now()
+	}
+	if !finalNow.Before(g.ExpiresAt) || !finalNow.Before(c.ContentExpiry) || (c.PositiveValidUntil != nil && !finalNow.Before(*c.PositiveValidUntil)) {
+		return nil, drafts.ErrConflict
 	}
 	if e = tx.Commit(ctx); e != nil {
 		return nil, e

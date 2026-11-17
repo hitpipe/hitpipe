@@ -1,0 +1,49 @@
+{
+  "subject": "HIT-102",
+  "materialized_result": {
+    "summary": "Незавершённая явная активация проверенного черновика; собственные компоненты проходят, интеграция выявила необходимость согласовать draft/accepted canonical digest.",
+    "implementation_status": "PARTIAL_BLOCKED_PUBLIC_CANONICAL_DIGEST_PREVIEW_GAP",
+    "tested_code_sha": "c3b0f430046d90b0d1614692df819a3c4ec0e720",
+    "base_sha": "48b2829fb37bf6048db83f5586f949dbb8883b1d",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "contract_revision": 1,
+    "integration_state": "Experimental separate stack, not merged main. Activation201 -> Intake202 -> BFF case read503; not complete."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/application/activation",
+    "services/processing/internal/adapters/activationhttp",
+    "services/processing/internal/adapters/postgres/activation.go",
+    "services/processing/internal/adapters/draftjson",
+    "services/processing/internal/adapters/drafthttp/http.go",
+    "services/processing/internal/application/drafts private ledger/examples/pure evaluator reuse and generated DTOs",
+    "services/processing/internal/testfixtures/draft.go test PKI namespace only",
+    "services/processing/scripts/postgres/verify_activation.py",
+    "services/processing/docs/HIT-102"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-102/README.md",
+    "field_map": "services/processing/docs/HIT-102/FIELD_MAP.md",
+    "commands": "services/processing/docs/HIT-102/verification/commands.json",
+    "review_commands": "services/processing/docs/HIT-102/verification/review-commands.json",
+    "full_go_race": "services/processing/docs/HIT-102/verification/go-race.stdout",
+    "full_postgres_tests": "services/processing/docs/HIT-102/verification/postgres-storage-tests.stdout",
+    "source_audit": "services/processing/docs/HIT-102/source-audit.json",
+    "captures": "services/processing/docs/HIT-102/verification/activation-api-captures.jsonl",
+    "ci": "services/processing/docs/HIT-102/verification/ci-code-evidence.json",
+    "local_result": "96-command local component run PASS;81 actual HTTPcaptures independently OASvalidated;5 supplemental commands exit0. Go1.27.2 darwin/arm64 CGO1 race/vet/build; separate linux/arm64 CGO0 actual owned PostgreSQL18.7, not Linux race.",
+    "integration_result": "FAIL, exact approved/stored vs actual canonical digest mismatch; scope decision pending; full DoD not achieved.",
+    "contract_analysis": "services/processing/docs/HIT-102/CONTRACT_COMPATIBILITY_RU.md"
+  },
+  "deviations": [
+    "Implementation incomplete pending explicit agreement on draft-to-accepted config digest mapping; no relaxation of HIT-95 validation."
+  ],
+  "known_limitations": [
+    "No full DoD,official READY,independent PASS or acceptance. This representation is a partial work record, not a claim that result registration/handoff has succeeded.",
+    "Controlled session/authority/owner-binding/actual-start ports; no live IAM/BFF/Stripe/ClickUp or production qualification.",
+    "Separate experimental integration branches, not actual main merges.",
+    "Full response is expiring owner content; metadata cannot recreate a missing/expired result.",
+    "No financial effects,pause/resume/archive,formal SQL/OAS or foreign-service changes.",
+    "User-preferred variant B matches canonical SQL/read semantics, but accepted public preparation/options outputs do not expose resolved IDs, canonical bytes or final canonical hash before explicit activation. No fabricated user approval or API extension. Lead decision required on a pre-activation canonical digest source."
+  ],
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik"
+}

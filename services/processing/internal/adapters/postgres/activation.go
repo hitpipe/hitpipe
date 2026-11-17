@@ -10,6 +10,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/activation"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
 	"github.com/jackc/pgx/v5"
+	"reflect"
 	"time"
 )
 
@@ -54,8 +55,19 @@ func (a ActivationStore) read(ctx context.Context, tx pgx.Tx, r activation.Reque
 			return s, drafts.ErrUnavailable
 		}
 	}
+
+	if !meta.exists {
+		if s.Draft.Config.Revision != in.Command.DraftRevision {
+			return s, drafts.ErrStale
+		}
+		selected, e := d.selectedCheck(ctx, tx, req, s.Draft, in.Command.ReadinessCheckID, g)
+		if e != nil {
+			return s, e
+		}
+		s.Check = selected.Check
+		s.Binding = selected.Proof
+	}
 	ref := s.Draft.Root.Tail
-	foundCheck, foundRehearsal := false, false
 	for n := 0; ref != nil && n < d.Policy.ReplayNodes; n++ {
 		raw, e := d.readFile(ctx, *ref, r.WorkspaceID, req.DraftID, s.Draft.Config.Revision, d.Clock.Now())
 		if e != nil {
@@ -74,70 +86,65 @@ func (a ActivationStore) read(ctx context.Context, tx pgx.Tx, r activation.Reque
 				return s, drafts.ErrUnavailable
 			}
 			var op drafts.Operation
-			if json.Unmarshal(body, &op) != nil || op.OperationID != node.OperationID || op.Revision != node.OperationRevision || op.AcceptedConfigDigest == nil || *op.AcceptedConfigDigest != node.ConfigDigest || node.ConfigDigest != in.Command.AcceptedConfigDigest || op.State != "ACTIVE" || op.FirstActivationAt == nil {
+			final := node.AcceptedConfigDigest
+			if final == "" {
+				final = node.ConfigDigest
+			} // unchanged historical exact receipt only
+			if json.Unmarshal(body, &op) != nil || op.OperationID != node.OperationID || op.Revision != node.OperationRevision || op.AcceptedConfigDigest == nil || *op.AcceptedConfigDigest != final || final != in.Command.AcceptedConfigDigest || op.State != "ACTIVE" || op.FirstActivationAt == nil {
 				return s, drafts.ErrUnavailable
 			}
 			s.Replay = body
 			return s, nil
 		}
-		if !meta.exists && (node.Kind == drafts.Check || node.Kind == drafts.Rehearse) && node.ResultRevision == in.Command.DraftRevision && node.ConfigDigest == in.Command.AcceptedConfigDigest {
+		if !meta.exists && node.Kind == drafts.Rehearse {
 			body, e := d.readFile(ctx, node.Response, r.WorkspaceID, req.DraftID, s.Draft.Config.Revision, d.Clock.Now())
-			if e != nil || d.Codec.ValidateResponse(node.Kind, body) != nil || !responsePins(node.Kind, body, req.DraftID, node.ResultRevision, node.ConfigDigest) {
+			if e != nil {
 				return s, drafts.ErrUnavailable
 			}
-			if node.Kind == drafts.Check {
-				var ck drafts.ReadinessCheck
-				if json.Unmarshal(body, &ck) != nil {
-					return s, drafts.ErrUnavailable
-				}
-				if ck.CheckID == in.Command.ReadinessCheckID {
-					if node.BindingCheck == nil {
-						return s, drafts.ErrConflict
-					}
-					if node.BindingCheck.PrincipalID != node.ActorID || node.BindingCheck.WorkspaceID != node.WorkspaceID || node.BindingCheck.Epoch != node.AuthorityEpoch {
-						return s, drafts.ErrUnavailable
-					}
-					s.Check = ck
-					s.Binding = *node.BindingCheck
-					foundCheck = true
-				}
-			} else {
-				var rr drafts.RehearsalResult
-				if json.Unmarshal(body, &rr) != nil {
-					return s, drafts.ErrUnavailable
-				}
-				if rr.RehearsalID == in.Command.RehearsalID {
-					original := drafts.RehearsalRequest{Command: drafts.CommandMeta{RequestID: node.RequestID, ExpectedRevision: node.ExpectedRevision}, DraftID: node.DraftID, DraftRevision: node.ResultRevision, Examples: node.Examples}
-					reconstructed, err := json.Marshal(original)
-					if err != nil {
-						return s, drafts.ErrUnavailable
-					}
-					reconstructed, err = jcs.Transform(reconstructed)
-					if err != nil || draftjson.Hash(reconstructed) != node.Digest {
-						return s, drafts.ErrUnavailable
-					}
-					s.Rehearsal = rr
-					s.Examples = node.Examples
-					s.RehearsalDigest = draftjson.Hash(body)
-					foundRehearsal = true
-				}
-			}
-			// Validate provenance against the transactionally persisted command identity.
-			check, e := loadDraftCommand(ctx, tx, r.WorkspaceID, node.RequestID)
-			if e != nil || !check.exists || check.disposition != "APPLIED" || check.actor != node.ActorID || check.aggregate != req.DraftID || check.digest != node.Digest || check.result == nil || *check.result != node.ResultRevision || !sameInt(check.expected, node.ExpectedRevision) {
+			var rr drafts.RehearsalResult
+			if json.Unmarshal(body, &rr) != nil {
 				return s, drafts.ErrUnavailable
 			}
-		}
-		if !meta.exists && foundCheck && foundRehearsal {
-			return s, nil
+			if rr.RehearsalID == in.Command.RehearsalID {
+				if d.Codec.ValidateResponse(drafts.Rehearse, body) != nil || !responsePins(drafts.Rehearse, body, req.DraftID, node.ResultRevision, node.ConfigDigest) || node.Response.Revision != node.ResultRevision {
+					return s, drafts.ErrUnavailable
+				}
+				if node.ResultRevision != in.Command.DraftRevision {
+					return s, drafts.ErrStale
+				}
+				if node.ConfigDigest != s.Draft.ConfigDigest || node.ReadinessCheckID != s.Check.CheckID || node.AcceptedConfigDigest != in.Command.AcceptedConfigDigest || node.BindingCheck == nil || node.ActorID != g.PrincipalID || node.AuthorityEpoch != g.Epoch || !drafts.SameBinding(s.Binding, *node.BindingCheck) {
+					return s, drafts.ErrConflict
+				}
+				original := drafts.RehearsalRequest{Command: drafts.CommandMeta{RequestID: node.RequestID, ExpectedRevision: node.ExpectedRevision}, DraftID: node.DraftID, DraftRevision: node.ResultRevision, Examples: node.Examples, ReadinessCheckID: node.ReadinessCheckID}
+				reconstructed, e := json.Marshal(original)
+				if e != nil {
+					return s, drafts.ErrUnavailable
+				}
+				reconstructed, e = jcs.Transform(reconstructed)
+				if e != nil || draftjson.Hash(reconstructed) != node.Digest {
+					return s, drafts.ErrUnavailable
+				}
+				check, e := loadDraftCommand(ctx, tx, r.WorkspaceID, node.RequestID)
+				if e != nil || !check.exists || check.disposition != "APPLIED" || check.actor != node.ActorID || check.aggregate != req.DraftID || check.digest != node.Digest || check.result == nil || *check.result != node.ResultRevision || !sameInt(check.expected, node.ExpectedRevision) {
+					return s, drafts.ErrUnavailable
+				}
+				s.Rehearsal = rr
+				s.Examples = node.Examples
+				s.RehearsalDigest = draftjson.Hash(body)
+				s.RehearsalReadinessID = node.ReadinessCheckID
+				s.RehearsalFinalDigest = node.AcceptedConfigDigest
+				s.RehearsalBinding = node.BindingCheck
+				return s, nil
+			}
 		}
 		ref = node.Previous
 	}
 	if ref != nil || meta.exists {
 		return s, drafts.ErrUnavailable
 	}
-	return s, nil
+	return s, drafts.ErrConflict
 }
+
 func (a ActivationStore) Load(ctx context.Context, r activation.Request, in activation.Input, g drafts.Grant) (activation.Snapshot, error) {
 	tx, e := a.Drafts.tx(ctx, r.WorkspaceID)
 	if e != nil {
@@ -200,7 +207,7 @@ func (a ActivationStore) Commit(ctx context.Context, r activation.Request, in ac
 		return nil, e
 	}
 	if !activation.FreshBinding(expected, g, p, now) {
-		return nil, drafts.ErrDenied
+		return nil, drafts.ErrConflict
 	}
 	if s.Check.CheckID != expected.Check.CheckID || !s.Check.ExpiresAt.Equal(expected.Check.ExpiresAt) || s.RehearsalDigest != expected.RehearsalDigest {
 		return nil, drafts.ErrConflict
@@ -213,14 +220,22 @@ func (a ActivationStore) Commit(ctx context.Context, r activation.Request, in ac
 		return nil, drafts.ErrConflict
 	}
 	c := s.Draft.Config
-	canonical := map[string]any{"pack_id": "PAID_ORDER_TASK_V1", "source_connection_id": p.SourceConnectionID, "destination_connection_id": p.DestinationConnectionID, "destination_workspace_id": p.DestinationWorkspaceID, "price_id": p.PriceID, "list_id": p.ListID, "assignee_id": p.AssigneeID, "mode": p.Mode, "required_context_keys": *c.RequiredContextKeys, "title_pattern": *c.TitlePattern, "service_label": *c.ServiceLabel}
-	raw, e := json.Marshal(canonical)
+	shown := s.Check.ActivationPreview
+	if shown == nil {
+		return nil, drafts.ErrConflict
+	}
+	// Rebuild only to verify the selected immutable snapshot; never replace it.
+	rebuilt, e := d.Codec.Preview(c, p)
+	if e != nil || !reflect.DeepEqual(rebuilt, *shown) || shown.AcceptedConfigDigest != in.Command.AcceptedConfigDigest {
+		return nil, drafts.ErrConflict
+	}
+	raw, e := json.Marshal(shown.CanonicalConfig)
 	if e != nil {
 		return nil, e
 	}
 	raw, e = jcs.Transform(raw)
-	if e != nil {
-		return nil, e
+	if e != nil || draftjson.Hash(raw) != shown.AcceptedConfigDigest {
+		return nil, drafts.ErrUnavailable
 	}
 	// SQL's safe_config_valid remains authoritative in addition to application checks.
 	var safe bool
@@ -247,7 +262,7 @@ func (a ActivationStore) Commit(ctx context.Context, r activation.Request, in ac
 	if first == nil {
 		first = &now
 	}
-	view := drafts.Operation{OperationID: id, Revision: rev, Name: c.Name, State: "ACTIVE", FirstActivationAt: first, AcceptedConfigID: &configID, AcceptedConfigDigest: &s.Draft.ConfigDigest, ConnectionHealth: "READY"}
+	view := drafts.Operation{OperationID: id, Revision: rev, Name: c.Name, State: "ACTIVE", FirstActivationAt: first, AcceptedConfigID: &configID, AcceptedConfigDigest: &shown.AcceptedConfigDigest, ConnectionHealth: "READY"}
 	body, e := json.Marshal(view)
 	if e != nil {
 		return nil, e
@@ -261,7 +276,7 @@ func (a ActivationStore) Commit(ctx context.Context, r activation.Request, in ac
 	if e != nil {
 		return nil, e
 	}
-	node := drafts.CommandNode{Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: c.DraftID, RequestID: in.Command.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: activation.Kind, ExpectedRevision: in.Command.Command.ExpectedRevision, ResultRevision: c.Revision, ConfigDigest: s.Draft.ConfigDigest, AuthorityEpoch: g.Epoch, BindingCheck: &p, Response: response, Previous: s.Draft.Root.Tail, OperationID: id, OperationRevision: rev}
+	node := drafts.CommandNode{ReadinessCheckID: s.Check.CheckID, AcceptedConfigDigest: shown.AcceptedConfigDigest, Format: "draft-command-v1", WorkspaceID: r.WorkspaceID, DraftID: c.DraftID, RequestID: in.Command.Command.RequestID, ActorID: g.PrincipalID, Digest: in.Digest, Kind: activation.Kind, ExpectedRevision: in.Command.Command.ExpectedRevision, ResultRevision: c.Revision, ConfigDigest: s.Draft.ConfigDigest, AuthorityEpoch: g.Epoch, BindingCheck: &p, Response: response, Previous: s.Draft.Root.Tail, OperationID: id, OperationRevision: rev}
 	rawNode, e := json.Marshal(node)
 	if e != nil {
 		return nil, e
@@ -288,7 +303,7 @@ func (a ActivationStore) Commit(ctx context.Context, r activation.Request, in ac
 	if e != nil {
 		return nil, activationSQLError(e)
 	}
-	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.accepted_configs(workspace_id,config_id,operation_id,schema_version,evaluator_version,canonical_config,digest,accepted_by,accepted_at,rehearsal_digest) VALUES($1,$2,$3,'1.0','paid-order-v1',$4,$5,$6,$7,$8)`, r.WorkspaceID, configID, id, string(raw), s.Draft.ConfigDigest, g.PrincipalID, now, s.RehearsalDigest)
+	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.accepted_configs(workspace_id,config_id,operation_id,schema_version,evaluator_version,canonical_config,digest,accepted_by,accepted_at,rehearsal_digest) VALUES($1,$2,$3,'1.0','paid-order-v1',$4,$5,$6,$7,$8)`, r.WorkspaceID, configID, id, string(raw), shown.AcceptedConfigDigest, g.PrincipalID, now, s.RehearsalDigest)
 	if e != nil {
 		return nil, activationSQLError(e)
 	}
