@@ -1,0 +1,54 @@
+{
+  "subject": "HIT-103",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "contract_revision": 1,
+    "contract_fingerprint": "7cbd968f221bac58702e9883166acc6f5dd387e008ef489ef16ad74f684a7a08",
+    "implementation_status": "IMPLEMENTED_VERIFIED_ON_LOCAL_CONTRACT_STAND",
+    "base_sha": "52779eaf8746a49256e0846a6fbdcc246ac0fa05",
+    "tested_code_sha": "d3079b493d83a4da2068584a9427fab395a778ae",
+    "integrated_test_source_sha": "b9adcebf374733fec6b8b396ad430b34cc494cef",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "summary": "Пауза DRAINING→PAUSED, проверяемый снимок очереди и безопасное возобновление исходной операции на существующем HTTPS/mTLS и PostgreSQL. Испытаны оба решения о сигналах, отказ во время паузы, чтение явного незавершённого исхода через HIT-95, восстановление полной команды после потери ACK и сохранение исходной границы."
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/drafthttp/http.go",
+    "services/processing/internal/adapters/draftjson/lifecycle.go",
+    "services/processing/internal/adapters/draftjson/schemas.json",
+    "services/processing/internal/adapters/lifecyclehttp/http.go",
+    "services/processing/internal/adapters/postgres/activation_test.go",
+    "services/processing/internal/adapters/postgres/drafts.go",
+    "services/processing/internal/adapters/postgres/lifecycle.go",
+    "services/processing/internal/adapters/postgres/lifecycle_drain.go",
+    "services/processing/internal/adapters/postgres/lifecycle_resume.go",
+    "services/processing/internal/adapters/postgres/lifecycle_test.go",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/application/drafts/boundary.go",
+    "services/processing/internal/application/drafts/service.go",
+    "services/processing/internal/application/drafts/types.go",
+    "services/processing/internal/application/drafts/wire_generated.go",
+    "services/processing/internal/application/lifecycle/lifecycle.go",
+    "services/processing/scripts/postgres/verify_lifecycle.py",
+    "services/processing/tools/drafts/generate.py",
+    "services/processing/docs/HIT-103/",
+    ".project-os/results/HIT-103.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-103/README.md",
+    "field_map": "services/processing/docs/HIT-103/FIELD_MAP.md",
+    "source_audit": "services/processing/docs/HIT-103/source-audit.json",
+    "local_protocol": "services/processing/docs/HIT-103/verification/test-evidence.json",
+    "integrated_protocol": "services/processing/docs/HIT-103/integration/test-evidence.json",
+    "integrated_http_pipeline": "services/processing/docs/HIT-103/integration/activation-pipeline.json",
+    "ci_protocol": "services/processing/docs/HIT-103/verification/ci-evidence.json",
+    "local_result": "PASS: 97 journal entries, with named expected nonzero outcomes; Go1.27.2 race/vet/build, owned PostgreSQL18.7 and real HTTPS/mTLS.",
+    "integration_result": "PASS: 98 journal entries on a separate branch. Intake409 during pause, HIT-95 history200 with PAUSE_DRAIN_UNFINISHED, Intake202 after resume.",
+    "ci": "https://github.com/hitpipe/hitpipe/actions/runs/44347795296"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Локальная композиция использует управляемые IAM grants/start gate, bindings, владельца удержанной очереди и roster воркера. Реальная распределённая эксплуатация, внешние провайдеры и недоступный сервис этой задачей не квалифицированы.",
+    "Восстановление точного ответа, имени и доказательства прежних привязок ограничено сроком уже принятого собственного содержимого HIT-102. При недоступности этого содержимого затронутый маршрут закрывается с ошибкой; долгоживущие метаданные требуют согласованного источника.",
+    "HIT-102 закрыта в Jira. PR 63 остаётся открытым. Интеграционный коммит отдельный и не является принятым main."
+  ]
+}

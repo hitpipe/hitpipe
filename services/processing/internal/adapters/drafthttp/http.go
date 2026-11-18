@@ -189,6 +189,23 @@ func Attach(server *http.Server, s drafts.Service, peer string, maxBody int64) e
 	if e != nil {
 		return e
 	}
+	if e = CheckPrivateListener(server); e != nil {
+		return e
+	}
+	previous := server.Handler
+	server.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		parts := strings.Split(r.URL.Path, "/")
+		if len(parts) >= 5 && parts[1] == "api" && parts[2] == "v1" && parts[3] == "workspaces" && len(parts) >= 6 && (parts[5] == "drafts" || parts[5] == "rehearsals") {
+			h.ServeHTTP(w, r)
+			return
+		}
+		previous.ServeHTTP(w, r)
+	})
+	return nil
+}
+
+// CheckPrivateListener validates an existing private owner listener before attaching routes.
+func CheckPrivateListener(server *http.Server) error {
 	if server == nil || server.Handler == nil {
 		return drafts.ErrUnavailable
 	}
@@ -201,14 +218,5 @@ func Attach(server *http.Server, s drafts.Service, peer string, maxBody int64) e
 	if t == nil || t.ClientCAs == nil || len(t.Certificates) == 0 || t.ClientAuth != tls.RequireAndVerifyClientCert || t.MinVersion != tls.VersionTLS13 || t.MaxVersion != tls.VersionTLS13 || t.InsecureSkipVerify || t.GetConfigForClient != nil {
 		return drafts.ErrUnavailable
 	}
-	previous := server.Handler
-	server.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		parts := strings.Split(r.URL.Path, "/")
-		if len(parts) >= 5 && parts[1] == "api" && parts[2] == "v1" && parts[3] == "workspaces" && len(parts) >= 6 && (parts[5] == "drafts" || parts[5] == "rehearsals") {
-			h.ServeHTTP(w, r)
-			return
-		}
-		previous.ServeHTTP(w, r)
-	})
 	return nil
 }

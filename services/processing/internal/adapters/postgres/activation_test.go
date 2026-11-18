@@ -43,7 +43,7 @@ func newActivationFixture(t *testing.T) activationFixture {
 	a.startActivation(t)
 	return a
 }
-func (f *activationFixture) startActivation(t *testing.T) {
+func (f *activationFixture) startActivation(t *testing.T, extra ...func(*http.Server) error) {
 	t.Helper()
 	s, e := drafthttp.NewServer("127.0.0.1:0", &tls.Config{Certificates: []tls.Certificate{f.pki.Leaf(t, "processing.test", true, false)}, ClientCAs: f.pki.Root}, f.service, "bff.test", 256<<10)
 	if e != nil {
@@ -62,6 +62,11 @@ func (f *activationFixture) startActivation(t *testing.T) {
 	}
 	if e = activationhttp.Attach(s, f.act, "bff.test", 256<<10); e != nil {
 		t.Fatal(e)
+	}
+	for _, attach := range extra {
+		if e = attach(s); e != nil {
+			t.Fatal(e)
+		}
 	}
 	l, e := net.Listen("tcp", s.Addr)
 	if e != nil {

@@ -1,0 +1,270 @@
+{
+  "activation_request": {
+    "acceptance_text_version": "managed-operation-v1",
+    "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+    "command": {
+      "request_id": "eb5814f0-7323-4f1a-adba-4bc8bfc6e3b1"
+    },
+    "confirm_activate": true,
+    "draft_id": "77f26682-2aa8-4ef7-ac00-3538f129bb6c",
+    "draft_revision": 1,
+    "readiness_check_id": "a5d755c1-9c7d-4b48-a9c7-b1f98afe0067",
+    "rehearsal_id": "dfdcd8c5-7684-4884-bb30-fefab4c3e248"
+  },
+  "actual_private_tls13_mtls_pg187_files": true,
+  "case_history_after_drain": {
+    "items": [
+      {
+        "entry_id": "f80a8d16-abef-4174-82d0-315de00ea6d5",
+        "case_id": "5da282a5-dc8a-4007-b80a-382e8d2dd974",
+        "at": "2026-11-18T16:27:06.359133Z",
+        "actor_kind": "SYSTEM",
+        "actor_id": null,
+        "old_state": null,
+        "new_state": "RECEIVED",
+        "reason_code": "SIGNAL_ADMITTED",
+        "evidence_ref": "8907eebb-23a1-4f5d-b760-3b7e5d62712a",
+        "episode_id": null,
+        "expires_at": "2027-02-16T16:27:06.359133Z"
+      },
+      {
+        "entry_id": "77326152-374e-4c00-9e83-87744db4ebeb",
+        "case_id": "5da282a5-dc8a-4007-b80a-382e8d2dd974",
+        "at": "2026-11-18T16:27:06.381127Z",
+        "actor_kind": "SYSTEM",
+        "actor_id": null,
+        "old_state": "RECEIVED",
+        "new_state": "ATTENTION",
+        "reason_code": "PAUSE_DRAIN_UNFINISHED",
+        "evidence_ref": null,
+        "episode_id": "e4d92701-9599-43b7-bc1e-7d43729b6959",
+        "expires_at": "2027-02-16T16:27:06.381127Z"
+      }
+    ],
+    "next_cursor": null
+  },
+  "getCase": {
+    "case": {
+      "case_id": "5da282a5-dc8a-4007-b80a-382e8d2dd974",
+      "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+      "config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+      "config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "state": "RECEIVED",
+      "revision": 1,
+      "owner_user_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "order_label": "Синтетическая услуга",
+      "received_at": "2026-11-18T16:27:06.359133Z",
+      "updated_at": "2026-11-18T16:27:06.359133Z",
+      "next_action": "Дело получено, ожидается проверка данных. Нужны актуальные обязательные данные; новая отправка удержана. Дело принято. Повторная проверка в этой версии не подключена. Знание о результате не установлено.",
+      "due_at": null,
+      "target_url": null,
+      "outcome_knowledge": "UNESTABLISHED"
+    },
+    "context": [],
+    "context_complete": false,
+    "context_expired": false,
+    "last_observation_at": null,
+    "observation_complete": false,
+    "available_actions": [],
+    "history_cursor": null
+  },
+  "getCaseHistory": {
+    "items": [
+      {
+        "entry_id": "f80a8d16-abef-4174-82d0-315de00ea6d5",
+        "case_id": "5da282a5-dc8a-4007-b80a-382e8d2dd974",
+        "at": "2026-11-18T16:27:06.359133Z",
+        "actor_kind": "SYSTEM",
+        "actor_id": null,
+        "old_state": null,
+        "new_state": "RECEIVED",
+        "reason_code": "SIGNAL_ADMITTED",
+        "evidence_ref": "8907eebb-23a1-4f5d-b760-3b7e5d62712a",
+        "episode_id": null,
+        "expires_at": "2027-02-16T16:27:06.359133Z"
+      }
+    ],
+    "next_cursor": null
+  },
+  "lifecycle": {
+    "active": {
+      "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "accepted_config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+      "connection_health": "UNCHECKED",
+      "drain_deadline_at": null,
+      "first_activation_at": "2026-11-18T16:27:06.353237Z",
+      "name": "Синтетический частный черновик",
+      "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+      "revision": 5,
+      "state": "ACTIVE"
+    },
+    "draining": {
+      "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "accepted_config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+      "connection_health": "UNCHECKED",
+      "drain_deadline_at": "2026-11-18T16:32:06.37138Z",
+      "first_activation_at": "2026-11-18T16:27:06.353237Z",
+      "name": "Синтетический частный черновик",
+      "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+      "revision": 2,
+      "state": "DRAINING"
+    },
+    "intake_after_resume": 202,
+    "intake_while_paused": 409,
+    "paused": {
+      "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "accepted_config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+      "connection_health": "UNCHECKED",
+      "drain_deadline_at": "2026-11-18T16:32:06.37138Z",
+      "first_activation_at": "2026-11-18T16:27:06.353237Z",
+      "name": "Синтетический частный черновик",
+      "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+      "revision": 3,
+      "state": "PAUSED"
+    },
+    "queue_decision": {
+      "Scope": {
+        "WorkspaceID": "9c0ba63e-5a99-41ae-a5ff-9a93f62997d9",
+        "OperationID": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+        "ConfigDigest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+        "PauseAcceptedAt": "2026-11-18T16:27:06.37138Z",
+        "FirstActivationAt": "2026-11-18T16:27:06.353237Z"
+      },
+      "RequestID": "1519d2ab-715c-4851-9be2-461beae1842c",
+      "SnapshotID": "fd2978db-05aa-48bd-8b68-29b519faf155",
+      "Generation": "817b94f1-f4cd-4b38-a47e-9ccb20123211",
+      "Disposition": "PROCESS_ELIGIBLE",
+      "ResultRevision": 5,
+      "SignalCount": 1,
+      "SerializedBytes": 661,
+      "OldestReceivedAt": "2026-11-18T16:27:06.378362Z",
+      "Gaps": [],
+      "ObservedAt": "2026-11-18T16:27:06.390079Z"
+    },
+    "snapshot": {
+      "created_at": "2026-11-18T16:27:06.391766Z",
+      "expires_at": "2026-11-18T16:37:06.390079Z",
+      "gaps": [],
+      "oldest_received_at": "2026-11-18T16:27:06.378362Z",
+      "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+      "revision": 4,
+      "serialized_bytes": 661,
+      "signal_count": 1,
+      "snapshot_id": "fd2978db-05aa-48bd-8b68-29b519faf155"
+    }
+  },
+  "listCases": {
+    "items": [
+      {
+        "case_id": "5da282a5-dc8a-4007-b80a-382e8d2dd974",
+        "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+        "config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+        "config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+        "state": "RECEIVED",
+        "revision": 1,
+        "owner_user_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "order_label": "Синтетическая услуга",
+        "received_at": "2026-11-18T16:27:06.359133Z",
+        "updated_at": "2026-11-18T16:27:06.359133Z",
+        "next_action": "Дело получено, ожидается проверка данных. Нужны актуальные обязательные данные; новая отправка удержана. Дело принято. Повторная проверка в этой версии не подключена. Знание о результате не установлено.",
+        "due_at": null,
+        "target_url": null,
+        "outcome_knowledge": "UNESTABLISHED"
+      }
+    ],
+    "next_cursor": null,
+    "snapshot_at": "2026-11-18T16:27:06.361417Z"
+  },
+  "operation": {
+    "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+    "accepted_config_id": "3aeaa4a4-aead-482e-a7e7-c024d7759f27",
+    "connection_health": "READY",
+    "drain_deadline_at": null,
+    "first_activation_at": "2026-11-18T16:27:06.353237Z",
+    "name": "Синтетический частный черновик",
+    "operation_id": "2286d420-b339-4d4c-afc0-f1a06c0ba6eb",
+    "revision": 1,
+    "state": "ACTIVE"
+  },
+  "readiness": {
+    "activation_preview": {
+      "accepted_config_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187",
+      "canonical_config": {
+        "assignee_id": "assignee_controlled",
+        "destination_connection_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        "destination_workspace_id": "workspace_controlled",
+        "list_id": "list_controlled",
+        "mode": "TEST",
+        "pack_id": "PAID_ORDER_TASK_V1",
+        "price_id": "price_controlled",
+        "required_context_keys": [
+          "brief"
+        ],
+        "service_label": "Синтетическая услуга",
+        "source_connection_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "title_pattern": "SERVICE_ORDER"
+      }
+    },
+    "check_id": "a5d755c1-9c7d-4b48-a9c7-b1f98afe0067",
+    "checked_at": "2026-11-18T16:27:06.319204917Z",
+    "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+    "draft_id": "77f26682-2aa8-4ef7-ac00-3538f129bb6c",
+    "draft_revision": 1,
+    "expires_at": "2026-11-18T16:28:06.319204Z",
+    "issues": [],
+    "passed": true
+  },
+  "rehearsal": {
+    "config_digest": "sha256:f298e500f9e92f632bff94af07e8c752aeb2417165202fb2f867b6e28772dbf0",
+    "draft_id": "77f26682-2aa8-4ef7-ac00-3538f129bb6c",
+    "draft_revision": 1,
+    "live_requests_made": 0,
+    "rehearsal_id": "dfdcd8c5-7684-4884-bb30-fefab4c3e248",
+    "results": [
+      "WOULD_CONFIRM",
+      "WOULD_EXCLUDE",
+      "WOULD_WAIT",
+      "WOULD_HOLD_UNKNOWN"
+    ]
+  },
+  "rehearsal_request": {
+    "command": {
+      "expected_revision": 1,
+      "request_id": "b8946c84-4ffa-4b20-a175-3c4d64810933"
+    },
+    "draft_id": "77f26682-2aa8-4ef7-ac00-3538f129bb6c",
+    "draft_revision": 1,
+    "examples": [
+      {
+        "amount_minor": 100,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_paid"
+      },
+      {
+        "amount_minor": 0,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_zero"
+      },
+      {
+        "amount_minor": 100,
+        "duplicate": false,
+        "missing_context_keys": [],
+        "paid": false,
+        "synthetic_session_alias": "example_unpaid"
+      },
+      {
+        "amount_minor": 100,
+        "duplicate": true,
+        "missing_context_keys": [],
+        "paid": true,
+        "synthetic_session_alias": "example_duplicate"
+      }
+    ],
+    "readiness_check_id": "a5d755c1-9c7d-4b48-a9c7-b1f98afe0067"
+  },
+  "sql_canonical_digest": "sha256:b727c133788564854b3c7a169061c7d24437bff203f596564bcee7d360447187"
+}
