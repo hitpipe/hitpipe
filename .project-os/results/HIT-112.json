@@ -1,0 +1,46 @@
+{
+  "subject": "HIT-112",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+    "summary": "Processing восстанавливает допущенные дела, получает свежие факты и атомарно готовит единственную доставку. Настоящий mTLS и PostgreSQL 18.7 проверены на собственном стенде.",
+    "contract_revision": 1,
+    "contract_fingerprint": "9449a85361fc49867f1b04b3c155dc56d776acec1b2ed7476789800a302a65b3",
+    "base_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/73"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/postgres/caseworker.go",
+    "services/processing/internal/adapters/postgres/caseworker_process_test.go",
+    "services/processing/internal/adapters/postgres/caseworker_test.go",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/application/evaluatepaidorder/evaluate.go",
+    "services/processing/internal/application/preparecase/prepare.go",
+    "services/processing/internal/runtime/caseworker.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/source.go",
+    "services/processing/docs/HIT-112/",
+    ".project-os/results/HIT-112.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-112/README.md",
+    "source_audit": "services/processing/docs/HIT-112/source-audit.json",
+    "test_protocol": "services/processing/docs/HIT-112/verification/test-evidence.json",
+    "ci_protocol": "services/processing/docs/HIT-112/verification/ci-evidence.json",
+    "original_postgres_output": "services/processing/docs/HIT-112/verification/postgres-storage-tests.stdout.gz",
+    "actual_stand": "PASS. TestProcessingCaseWorkerOwnedStand and storage regressions verified on owned PostgreSQL18.7, process and HTTPS/mTLS.",
+    "code_ci": [
+      "https://github.com/hitpipe/hitpipe/actions/runs/44414140750",
+      "https://github.com/hitpipe/hitpipe/actions/runs/44414129541"
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Управляемые IAM, Intake и Delivery на локальном стенде. Live IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы.",
+    "В обычном запуске HIT-111 без авторитетных входов сохраняется CLOSED.",
+    "Бизнес-таймеры возраста и ручной RECHECK оставлены HIT-114 и HIT-113."
+  ]
+}

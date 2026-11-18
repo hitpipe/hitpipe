@@ -1,0 +1,605 @@
+{
+  "task": "HIT-112",
+  "state": "PASS",
+  "clean_tested_source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+  "completed_at_utc": "2026-11-18T22:42:45.138618+00:00",
+  "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "postgres_version_stdout": "postgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)",
+  "host_go_version_stdout": "go version go1.27.2 darwin/arm64",
+  "named_process_and_storage_tests": [
+    {
+      "name": "TestProcessingCaseWorkerOwnedStand",
+      "result": "PASS"
+    },
+    {
+      "name": "TestCaseWorkerDoesNotIndexFailedAdmission",
+      "result": "PASS"
+    },
+    {
+      "name": "TestCaseWorkerConcurrentLeaseAndRLS",
+      "result": "PASS"
+    },
+    {
+      "name": "TestCaseWorkerChangesDuringReadDoNotCommit",
+      "result": "PASS"
+    },
+    {
+      "name": "TestCaseWorkerRecoversCommitOutcomeWithoutSecondIntent",
+      "result": "PASS"
+    },
+    {
+      "name": "TestProcessingExecutableOwnedStand",
+      "result": "PASS"
+    }
+  ],
+  "linux_executable": {
+    "name": "processing",
+    "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+    "sha256": "34629fcd459bef3c3c47a835558df734fcba5aca7dc24b4ea0c526b8c2d40f3b",
+    "GOOS": "linux",
+    "GOARCH": "arm64",
+    "CGO_ENABLED": "0"
+  },
+  "command_count": 98,
+  "exact_selected_commands": [
+    {
+      "label": "postgres-version",
+      "argv": [
+        "docker",
+        "exec",
+        "000a7e9d8ea829be6f68ab1c17ab96d22f1f60d25b6908ae24c1da362894ad04",
+        "postgres",
+        "--version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:41:59.235013+00:00",
+      "finished_at": "2026-11-18T22:41:59.296874+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "008-postgres-version.stdout",
+        "bytes": 52,
+        "sha256": "605b026879b9a291e0d851478a6f4dc23353423fa6f7035ce9e58a1e3a2e9e7a"
+      },
+      "stderr": {
+        "file": "008-postgres-version.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "go-version",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "version"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:04.377681+00:00",
+      "finished_at": "2026-11-18T22:42:04.385432+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "084-go-version.stdout",
+        "bytes": 33,
+        "sha256": "94e911f9fbf3c118f6a0573ab3a13fa546ad13e89ba40cf53df77e468509c92d"
+      },
+      "stderr": {
+        "file": "084-go-version.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "go-race",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker/services/processing",
+        "test",
+        "-race",
+        "-count=1",
+        "-v",
+        "./..."
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:04.387770+00:00",
+      "finished_at": "2026-11-18T22:42:08.375030+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "085-go-race.stdout",
+        "bytes": 151674,
+        "sha256": "6e24c0129a863ab12b7fd756b72a69816a1b8dcc47e1fac8f4621880f533db2e"
+      },
+      "stderr": {
+        "file": "085-go-race.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "go-vet",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker/services/processing",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:08.377298+00:00",
+      "finished_at": "2026-11-18T22:42:08.624329+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "086-go-vet.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "086-go-vet.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "go-build",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker/services/processing",
+        "build",
+        "./..."
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:44.545307+00:00",
+      "finished_at": "2026-11-18T22:42:44.962292+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "091-go-build.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "091-go-build.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "compile-runtime-linux",
+      "argv": [
+        "env",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker/services/processing",
+        "build",
+        "-ldflags",
+        "-X main.revision=0f710a6682d15b437f847376b348947cb4757c7c",
+        "-o",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-xcinmqco/processing",
+        "./cmd/processing"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:08.684500+00:00",
+      "finished_at": "2026-11-18T22:42:09.376491+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "088-compile-runtime-linux.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "088-compile-runtime-linux.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "compile-linux-test",
+      "argv": [
+        "env",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker/services/processing",
+        "test",
+        "-c",
+        "-o",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit78-test-xcinmqco/storage.test",
+        "./internal/adapters/postgres"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:09.385350+00:00",
+      "finished_at": "2026-11-18T22:42:10.178310+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "089-compile-linux-test.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "089-compile-linux-test.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "postgres-storage-tests",
+      "argv": [
+        "docker",
+        "exec",
+        "-e",
+        "HIT100_CAPTURE_FILE=/tmp/hit100-captures.jsonl",
+        "-e",
+        "HIT103_CAPTURE_FILE=/tmp/hit103-captures.jsonl",
+        "-e",
+        "HIT102_CAPTURE_FILE=/tmp/hit102-captures.jsonl",
+        "-e",
+        "HIT111_PROCESSING_BIN=/test/processing",
+        "-e",
+        "HIT78_ISOLATED_PG=1",
+        "000a7e9d8ea829be6f68ab1c17ab96d22f1f60d25b6908ae24c1da362894ad04",
+        "/test/storage.test",
+        "-test.v",
+        "-test.count=1",
+        "-test.timeout=120s"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:10.187601+00:00",
+      "finished_at": "2026-11-18T22:42:44.538932+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "090-postgres-storage-tests.stdout",
+        "bytes": 69813,
+        "sha256": "250a19e1b7dec1317f61fe0131ce6e27c4db69a797da8bf3dcc5370e7268a499"
+      },
+      "stderr": {
+        "file": "090-postgres-storage-tests.stderr",
+        "bytes": 2789,
+        "sha256": "65db74559831d8fb7e116b7d2083e2cffe59445d2fbc46e9c35fcedb9dac9327"
+      }
+    },
+    {
+      "label": "cleanup",
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "-v",
+        "000a7e9d8ea829be6f68ab1c17ab96d22f1f60d25b6908ae24c1da362894ad04"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:45.160650+00:00",
+      "finished_at": "2026-11-18T22:42:45.205312+00:00",
+      "exit_code": 0,
+      "stdout": {
+        "file": "096-cleanup.stdout",
+        "bytes": 65,
+        "sha256": "561507bc0237df9d57e0933c4044864260f770b0ce940bb9356f6a81ba17890a"
+      },
+      "stderr": {
+        "file": "096-cleanup.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "cleanup-probe",
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "000a7e9d8ea829be6f68ab1c17ab96d22f1f60d25b6908ae24c1da362894ad04"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit112-case-worker",
+      "environment": {
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.codex/tmp/arg0-macos/codex-arg0utmfwe:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "GOTOOLCHAIN": "<unset>",
+        "GOFLAGS": "<unset>",
+        "GOEXPERIMENT": "<unset>",
+        "CGO_ENABLED": "<unset>",
+        "GOMAXPROCS": "<unset>",
+        "DOCKER_HOST": "<unset>",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "source_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "tree_status_at_start": "",
+      "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+      "started_at": "2026-11-18T22:42:45.207302+00:00",
+      "finished_at": "2026-11-18T22:42:45.221233+00:00",
+      "exit_code": 1,
+      "stdout": {
+        "file": "097-cleanup-probe.stdout",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      "stderr": {
+        "file": "097-cleanup-probe.stderr",
+        "bytes": 112,
+        "sha256": "1830cdb186188174dfef00c5a28d5bd548b71c94afc19a51a0b65f12b2b5759f"
+      }
+    }
+  ],
+  "expected_nonzero": [
+    {
+      "label": "ready",
+      "exit_code": 2
+    },
+    {
+      "label": "foreign-write-hp_processing_app",
+      "exit_code": 3
+    },
+    {
+      "label": "no-scope-write-hp_processing_app",
+      "exit_code": 3
+    },
+    {
+      "label": "no-owner-role-hp_processing_app",
+      "exit_code": 3
+    },
+    {
+      "label": "config-immutable-hp_processing_app",
+      "exit_code": 3
+    },
+    {
+      "label": "foreign-write-hp_processing_worker",
+      "exit_code": 3
+    },
+    {
+      "label": "no-scope-write-hp_processing_worker",
+      "exit_code": 3
+    },
+    {
+      "label": "no-owner-role-hp_processing_worker",
+      "exit_code": 3
+    },
+    {
+      "label": "config-immutable-hp_processing_worker",
+      "exit_code": 3
+    },
+    {
+      "label": "no-global-index-app",
+      "exit_code": 3
+    },
+    {
+      "label": "session-unique",
+      "exit_code": 3
+    },
+    {
+      "label": "single-active",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-workspace_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-case_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-operation_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-config_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-source_account_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-livemode",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-session_id",
+      "exit_code": 3
+    },
+    {
+      "label": "case-pin-admitted_at",
+      "exit_code": 3
+    },
+    {
+      "label": "activation-pin-null",
+      "exit_code": 3
+    },
+    {
+      "label": "activation-pin-later",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-workspace_id",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-episode_id",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-case_id",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-started_at",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-deadline_at",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-pin-automatic_writes",
+      "exit_code": 3
+    },
+    {
+      "label": "attempt-limit",
+      "exit_code": 3
+    },
+    {
+      "label": "episode-duration",
+      "exit_code": 3
+    },
+    {
+      "label": "atomic-rollback",
+      "exit_code": 3
+    },
+    {
+      "label": "constraint-after-reconnect",
+      "exit_code": 3
+    },
+    {
+      "label": "cleanup-probe",
+      "exit_code": 1
+    }
+  ],
+  "original_file_hashes": {
+    "commands.json": "b4ca84ad19339039366a80f15f10da52d9c352c719c4846aa273d7ac7eac5a50",
+    "go-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-race.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-race.stdout": "6e24c0129a863ab12b7fd756b72a69816a1b8dcc47e1fac8f4621880f533db2e",
+    "go-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-version.stdout": "94e911f9fbf3c118f6a0573ab3a13fa546ad13e89ba40cf53df77e468509c92d",
+    "go-vet.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-vet.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "postgres-storage-tests.stderr": "65db74559831d8fb7e116b7d2083e2cffe59445d2fbc46e9c35fcedb9dac9327",
+    "postgres-storage-tests.stdout.gz": "315e5019f196fc56e6ac8b461a114c6726237b693e6a554389bdd44d61a7d4a6",
+    "postgres-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "postgres-version.stdout": "605b026879b9a291e0d851478a6f4dc23353423fa6f7035ce9e58a1e3a2e9e7a",
+    "raw-run.tar.gz": "23221dc8d78b5b054f79591491c20d94da021f278dbc08883ddaae9f744ad640",
+    "review-commands.json": "027c1b87d4e1fba2b97626b06f1b5fbeeda5edfe9c8e8def52974b0f7771217c",
+    "runtime-binary.json": "624d9bec183baf5269cc74c37b762e0cc6c963d12d42c5386cd2524e24db2d64",
+    "summary.json": "8f78e79569c24160dd6d12b8c151b4d42de9cf6f5baf0fd64011f0edb70c630d",
+    "test-binary.json": "a624648bafbe32125a3a1470cac81a45a8ffdc9b3fcfe38670fec343a2022221"
+  },
+  "verification_scope": "Owned Linux arm64 executable, TLS 1.3 mTLS and actual PostgreSQL 18.7 with Processing files. Controlled IAM/Intake/Delivery loopback, network-none container. Separate Go host race/vet/build; CI Linux race has no owned PG environment.",
+  "runner_provenance": "Unmodified HIT-111 runtime verifier from the pinned base. Original labels remain in raw output.",
+  "observed_process_results": [
+    "Committed HTTP 202 admission, original ACK replay after restart, old Session rejection.",
+    "Fresh facts sampled during TLS request, incomplete/HTTP503/unpaid, late payment opens no second case.",
+    "Same case recovered after SIGKILL and lease expiry. One persisted DeliveryIntent/episode and one Receipt; WORKING retained.",
+    "Worker sees current SQL/RLS/authority, holds unknown binding, excludes stale source starts after pause/barrier.",
+    "Admission commit failure, competing claims, stale lease and proof changes, lost response of committed decision, real commit error with retry."
+  ]
+}
