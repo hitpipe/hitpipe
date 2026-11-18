@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"encoding/pem"
 	"math/big"
 	"net"
 	"net/http"
@@ -40,7 +41,17 @@ func NewDraftPKI(t *testing.T) *DraftPKI {
 	roots.AddCert(ca)
 	return &DraftPKI{roots, ca, k}
 }
+func (p *DraftPKI) CAPEM() []byte {
+	return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: p.ca.Raw})
+}
 func (p *DraftPKI) Leaf(t *testing.T, name string, server, expired bool) tls.Certificate {
+	var ip net.IP
+	if server && name == "processing.test" {
+		ip = net.ParseIP("127.0.0.1")
+	}
+	return p.Issue(t, name, ip, server, expired)
+}
+func (p *DraftPKI) Issue(t *testing.T, name string, ip net.IP, server, expired bool) tls.Certificate {
 	t.Helper()
 	k, e := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if e != nil {
@@ -49,8 +60,8 @@ func (p *DraftPKI) Leaf(t *testing.T, name string, server, expired bool) tls.Cer
 	cert := &x509.Certificate{SerialNumber: big.NewInt(time.Now().UnixNano()), Subject: pkix.Name{CommonName: name}, DNSNames: []string{name}, NotBefore: time.Now().Add(-time.Hour), NotAfter: time.Now().Add(time.Hour), KeyUsage: x509.KeyUsageDigitalSignature, ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}}
 	if server {
 		cert.ExtKeyUsage = []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth}
-		if name == "processing.test" {
-			cert.IPAddresses = []net.IP{net.ParseIP("127.0.0.1")}
+		if ip != nil {
+			cert.IPAddresses = []net.IP{ip}
 		}
 	}
 	if expired {
