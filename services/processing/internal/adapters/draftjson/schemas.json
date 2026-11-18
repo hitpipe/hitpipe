@@ -570,5 +570,127 @@
       "accepted_config_digest"
     ],
     "type": "object"
+  },
+  "Operations": {
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "items": {
+          "$ref": "#/components/schemas/Operation"
+        },
+        "maxItems": 5,
+        "type": "array"
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "type": "object"
+  },
+  "LifecycleCommand": {
+    "additionalProperties": false,
+    "properties": {
+      "action": {
+        "enum": [
+          "PAUSE",
+          "PREPARE_RESUME",
+          "ACCEPT_RESUME",
+          "ARCHIVE"
+        ],
+        "type": "string"
+      },
+      "command": {
+        "$ref": "#/components/schemas/CommandMeta"
+      },
+      "held_disposition": {
+        "enum": [
+          "PROCESS_ELIGIBLE",
+          "DISCARD_WITH_GAP"
+        ],
+        "type": "string"
+      },
+      "reason": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "resume_snapshot_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "command",
+      "action"
+    ],
+    "type": "object"
+  },
+  "ResumeSnapshot": {
+    "additionalProperties": false,
+    "properties": {
+      "created_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "expires_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "gaps": {
+        "items": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 100,
+        "type": "array"
+      },
+      "oldest_received_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "operation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "serialized_bytes": {
+        "maximum": 16777216,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "signal_count": {
+        "maximum": 1000,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "snapshot_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "snapshot_id",
+      "operation_id",
+      "revision",
+      "signal_count",
+      "serialized_bytes",
+      "oldest_received_at",
+      "gaps",
+      "created_at",
+      "expires_at"
+    ],
+    "type": "object"
   }
 }

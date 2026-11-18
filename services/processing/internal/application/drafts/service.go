@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"sync/atomic"
 	"time"
 	"unicode"
 )
@@ -81,7 +80,7 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 			return ErrStale
 		}
 	}
-	grant, e := s.Authority.Authorize(ctx, Access{r.Kind, r.WorkspaceID, r.DraftID, r.Session, r.CSRF})
+	grant, e := s.Authority.Authorize(ctx, Access{Kind: r.Kind, WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, Session: r.Session, CSRF: r.CSRF})
 	if e != nil {
 		return e
 	}
@@ -93,33 +92,7 @@ func (s Service) Execute(ctx context.Context, r Request, emit func([]byte, int) 
 		return ErrDenied
 	}
 	protected := func(phase string, work func(context.Context) error) error {
-		bounded, cancel := context.WithTimeout(ctx, 2*time.Second)
-		defer cancel()
-		var called, active atomic.Bool
-		active.Store(true)
-		defer active.Store(false)
-		var actionErr error
-		err := s.Boundary.Start(bounded, grant, phase, func(c context.Context) error {
-			if !active.Load() || !called.CompareAndSwap(false, true) || c == nil || c.Err() != nil || bounded.Err() != nil || !valid() {
-				return ErrDenied
-			}
-			w, stop := context.WithCancel(bounded)
-			defer stop()
-			end := context.AfterFunc(c, stop)
-			defer end()
-			actionErr = work(w)
-			return actionErr
-		})
-		if actionErr != nil {
-			return actionErr
-		}
-		if err != nil {
-			return err
-		}
-		if !called.Load() || bounded.Err() != nil {
-			return ErrDenied
-		}
-		return nil
+		return Protect(ctx, s.Boundary, grant, phase, valid, work)
 	}
 	var snap Snapshot
 	if e = protected("DRAFT_SQL_CONTENT_READ", func(c context.Context) error { var e error; snap, e = s.Repository.Load(c, r, in, grant); return e }); e != nil {

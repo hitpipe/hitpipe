@@ -103,3 +103,24 @@ type ActivationPreview struct {
 	AcceptedConfigDigest string                  `json:"accepted_config_digest"`
 	CanonicalConfig      CanonicalAcceptedConfig `json:"canonical_config"`
 }
+type Operations struct {
+	Items []Operation `json:"items"`
+}
+type LifecycleCommand struct {
+	Action           string      `json:"action"`
+	Command          CommandMeta `json:"command"`
+	HeldDisposition  *string     `json:"held_disposition,omitempty"`
+	Reason           *string     `json:"reason,omitempty"`
+	ResumeSnapshotID *string     `json:"resume_snapshot_id,omitempty"`
+}
+type ResumeSnapshot struct {
+	CreatedAt        time.Time  `json:"created_at"`
+	ExpiresAt        time.Time  `json:"expires_at"`
+	Gaps             []string   `json:"gaps"`
+	OldestReceivedAt *time.Time `json:"oldest_received_at"`
+	OperationID      string     `json:"operation_id"`
+	Revision         int64      `json:"revision"`
+	SerializedBytes  int64      `json:"serialized_bytes"`
+	SignalCount      int64      `json:"signal_count"`
+	SnapshotID       string     `json:"snapshot_id"`
+}

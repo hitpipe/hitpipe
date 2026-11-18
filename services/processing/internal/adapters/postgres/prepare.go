@@ -254,16 +254,7 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 	if tag.RowsAffected() != 1 {
 		return zero, preparecase.ErrStale
 	}
-	history, e := newID()
-	if e != nil {
-		return zero, e
-	}
-	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.safety_history(workspace_id,entry_id,case_id,actor_kind,at,reason_code,old_state,new_state) VALUES($1,$2,$3,'SYSTEM',$4,$5,$6,$7)`, current.WorkspaceID, history, current.CaseID, d.At, d.Reason, current.State, d.State)
-	if e != nil {
-		return zero, e
-	}
-	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.history_content VALUES($1,$2,$3,$4,$5,$6,$7)`, current.WorkspaceID, history, d.Evidence.ID, d.Evidence.Digest, d.Evidence.Bytes, d.At, d.Evidence.ExpiresAt)
-	if e != nil {
+	if e = appendDecisionHistory(ctx, tx, current.WorkspaceID, current.CaseID, current.State, d); e != nil {
 		return zero, e
 	}
 	if ctx.Err() != nil {
@@ -278,4 +269,20 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 		result.MessageID = d.MessageID
 	}
 	return result, nil
+}
+
+func appendDecisionHistory(ctx context.Context, tx pgx.Tx, workspace, caseID, oldState string, d preparecase.Decision) error {
+	history, e := newID()
+	if e != nil {
+		return e
+	}
+	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.safety_history(workspace_id,entry_id,case_id,actor_kind,at,reason_code,old_state,new_state) VALUES($1,$2,$3,'SYSTEM',$4,$5,$6,$7)`, workspace, history, caseID, d.At, d.Reason, oldState, d.State)
+	if e != nil {
+		return e
+	}
+	_, e = tx.Exec(ctx, `INSERT INTO hp_processing.history_content VALUES($1,$2,$3,$4,$5,$6,$7)`, workspace, history, d.Evidence.ID, d.Evidence.Digest, d.Evidence.Bytes, d.At, d.Evidence.ExpiresAt)
+	if e != nil {
+		return e
+	}
+	return nil
 }

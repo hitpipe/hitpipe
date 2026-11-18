@@ -364,7 +364,7 @@ func (d DraftStore) Commit(ctx context.Context, r drafts.Request, in drafts.Inpu
 	if e != nil {
 		return nil, e
 	}
-	root := drafts.Root{Format: "draft-root-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, Revision: resultRevision, Config: configRef, ConfigDigest: c.ConfigDigest, Tail: &tail}
+	root := drafts.Root{Format: "draft-root-v1", WorkspaceID: r.WorkspaceID, DraftID: r.DraftID, Revision: resultRevision, Config: configRef, ConfigDigest: c.ConfigDigest, Tail: &tail, Lifecycle: current.Root.Lifecycle}
 	raw, e = json.Marshal(root)
 	if e != nil {
 		return nil, e

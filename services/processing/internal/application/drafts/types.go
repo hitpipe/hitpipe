@@ -50,6 +50,7 @@ type Grant struct {
 	Allowed, RevocationPending, CSRFVerified  bool
 }
 type Access struct {
+	OperationID                         string
 	Kind                                Kind
 	WorkspaceID, DraftID, Session, CSRF string
 }
@@ -92,6 +93,7 @@ type Root struct {
 	Config               Ref
 	ConfigDigest         string
 	Tail                 *Ref
+	Lifecycle            *Ref `json:",omitempty"`
 }
 type CommandNode struct {
 	ReadinessCheckID     string `json:",omitempty"`
