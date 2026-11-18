@@ -1,0 +1,58 @@
+name: hit105-email-lab
+
+services:
+  postgres:
+    image: docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f
+    environment:
+      POSTGRES_DB: hit105_keycloak
+      POSTGRES_USER: hit105
+      POSTGRES_PASSWORD: ${HIT105_DB_PASSWORD:?use tests/run.sh to generate lab credentials}
+    tmpfs:
+      - /var/lib/postgresql:size=1g
+    healthcheck:
+      test: [CMD, pg_isready, -U, hit105, -d, hit105_keycloak]
+      interval: 2s
+      timeout: 3s
+      retries: 40
+    networks: [lab]
+
+  smtp:
+    image: ghcr.io/axllent/mailpit:v1.33.1@sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce
+    environment:
+      MP_ENABLE_CHAOS: 'true'
+      MP_MAX_MESSAGES: '100'
+    ports:
+      - '127.0.0.1:18025:8025'
+    networks: [lab]
+
+  keycloak:
+    build: .
+    image: hit105-keycloak-email-code:local
+    command: [start, --optimized, --import-realm]
+    environment:
+      KC_HOSTNAME: http://127.0.0.1:18080
+      KC_HTTP_ENABLED: 'true'
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/hit105_keycloak
+      KC_DB_USERNAME: hit105
+      KC_DB_PASSWORD: ${HIT105_DB_PASSWORD:?use tests/run.sh to generate lab credentials}
+      KC_BOOTSTRAP_ADMIN_USERNAME: hit105-local-admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${HIT105_ADMIN_PASSWORD:?use tests/run.sh to generate lab credentials}
+      HITPIPE_EMAIL_CODE_KEY: ${HITPIPE_EMAIL_CODE_KEY:?use tests/run.sh to generate lab credentials}
+      HITPIPE_EMAIL_CODE_KEY_VERSION: ${HITPIPE_EMAIL_CODE_KEY_VERSION:?use tests/run.sh to generate lab credentials}
+      HITPIPE_EMAIL_RATE_KEY: ${HITPIPE_EMAIL_RATE_KEY:?use tests/run.sh to generate lab credentials}
+      JAVA_OPTS_APPEND: '-XX:-UseBASE64Intrinsics'
+    ports:
+      - '127.0.0.1:18080:8080'
+    mem_limit: 1536m
+    stop_grace_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      smtp:
+        condition: service_started
+    networks: [lab]
+
+networks:
+  lab:
+    internal: true

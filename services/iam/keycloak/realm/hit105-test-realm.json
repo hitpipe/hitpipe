@@ -1,0 +1,69 @@
+{
+  "realm": "hit105-test",
+  "displayName": "HitPipe email verification test",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "verifyEmail": false,
+  "resetPasswordAllowed": false,
+  "loginTheme": "hitpipe-email-code",
+  "emailTheme": "hitpipe-email-code",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en"],
+  "defaultLocale": "en",
+  "eventsListeners": ["hitpipe-email-code-account-events"],
+  "smtpServer": {
+    "host": "smtp",
+    "port": "1025",
+    "from": "no-reply@hit105.test",
+    "auth": "false",
+    "ssl": "false",
+    "starttls": "false",
+    "timeout": "1500",
+    "connectionTimeout": "1500",
+    "writeTimeout": "1500"
+  },
+  "requiredActions": [
+    {
+      "alias": "hitpipe-email-code",
+      "name": "Verify email with a HitPipe code",
+      "providerId": "hitpipe-email-code",
+      "enabled": true,
+      "defaultAction": true,
+      "priority": 10,
+      "config": {}
+    },
+    {
+      "alias": "VERIFY_EMAIL",
+      "name": "Verify Email",
+      "providerId": "VERIFY_EMAIL",
+      "enabled": false,
+      "defaultAction": false,
+      "priority": 50,
+      "config": {}
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "hit105-browser",
+      "name": "HIT-105 test client",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": ["http://127.0.0.1:18082/callback"],
+      "webOrigins": [],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    }
+  ]
+}
