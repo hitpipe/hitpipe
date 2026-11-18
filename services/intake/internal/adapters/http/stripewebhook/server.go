@@ -129,7 +129,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		writeFailure(w, http.StatusServiceUnavailable)
 		return
 	}
-	status := h.receive(r)
+	status := h.receive(w, r)
 	if err := controller.SetWriteDeadline(time.Now().Add(h.timeout)); err != nil {
 		return
 	}
@@ -141,7 +141,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (h handler) receive(r *http.Request) int {
+func (h handler) receive(w http.ResponseWriter, r *http.Request) int {
 	if r.TLS == nil {
 		return http.StatusUnauthorized
 	}
@@ -165,13 +165,17 @@ func (h handler) receive(r *http.Request) int {
 	if len(headers) != 1 || headers[0] == "" {
 		return http.StatusUnauthorized
 	}
-	if r.ContentLength > normalizesignal.MaxBodyBytes || len(headers[0]) > signatureLimit {
+	if len(headers[0]) > signatureLimit ||
+		(r.ContentLength > normalizesignal.MaxBodyBytes && strings.EqualFold(r.Header.Get("Expect"), "100-continue")) {
 		return http.StatusRequestEntityTooLarge
 	}
 	ctx, cancel := context.WithTimeout(r.Context(), h.timeout)
 	defer cancel()
-	raw, err := io.ReadAll(io.LimitReader(r.Body, normalizesignal.MaxBodyBytes+1))
-	if len(raw) > normalizesignal.MaxBodyBytes {
+	// Read synchronously before headers. On overflow the standard HTTP/1
+	// server marks the connection for a graceful close after delivering 413.
+	raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, normalizesignal.MaxBodyBytes))
+	var tooLarge *http.MaxBytesError
+	if errors.As(err, &tooLarge) {
 		return http.StatusRequestEntityTooLarge
 	}
 	var timeout net.Error
