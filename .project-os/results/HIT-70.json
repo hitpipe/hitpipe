@@ -1,0 +1,42 @@
+{
+  "subject": "HIT-70",
+  "materialized_result": "Исполняемая миграция HP-MVP-SQL-DELIVERY и изолированная проверка схемы на PostgreSQL 18.7 Alpine по поправке HP-CCR-POSTGRES-20261114.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/services/delivery/README.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/services/delivery/migrations/001_delivery.sql",
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/services/delivery/tests/check_schema.py",
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/services/delivery/README.md",
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/audit/DeliveryPG18720261114/postgresql.json",
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/audit/DeliveryPG18720261114/invocation.json",
+    "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/audit/DeliveryPG18720261114/cleanup-verification.json"
+  ],
+  "verification": {
+    "contract_revision": 2,
+    "amendment": "https://hitpipe.atlassian.net/browse/HIT-70?focusedCommentId=12236",
+    "code_commit": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+    "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "command": "python3 services/delivery/tests/check_schema.py --report /home/deploy/hitpipe-pg187-delivery-20261114/audit/DeliveryPG18720261114/postgresql.json",
+    "exit_code": 0,
+    "checks_passed": 415,
+    "source_audit": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/source-audit.json",
+    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/audit/DeliveryPG18720261114/postgresql.json",
+    "run_provenance": "https://github.com/hitpipe/hitpipe/blob/414aaa00fe94d602470be72769f927b266af9111/audit/DeliveryPG18720261114/invocation.json",
+    "prior_test_protocol": "https://github.com/hitpipe/hitpipe/blob/9aa807a3d6f23ecac6b649e9dd6ef3e15d5bbbba/services/delivery/evidence/postgresql.json",
+    "coverage": [
+      "Версия сервера 180007 и точные байты принятого SQL",
+      "Владельцы объектов, девять принудительных политик RLS, права ролей и изоляция рабочих областей",
+      "Уникальность lineage и сообщений, обязательное доказательство для KNOWN_NO_EFFECT, неизменность fence и запрет возврата возможного эффекта в PREPARED"
+    ],
+    "environment": "Linux amd64, Python 3.14.4, Docker 29.1.3, PostgreSQL 18.7 Alpine, образ sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366. Изолированный временный контейнер без сети, опубликованных портов и каталогов хоста.",
+    "ci": {
+      "status": "FAILURE",
+      "run": "https://github.com/hitpipe/hitpipe/actions/runs/43583684214",
+      "reason": "Учебная проверка PR12 останавливается до тестов Delivery на шаге Report actual implementation state."
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "415 проверок подтверждают локальное поведение SQL, прав ролей и RLS. Полномочия пользователя, сетевой путь, ClickUp, полный протокол отзыва, рабочее развёртывание и отдельная регрессия CVE-2026-120154 этим прогоном не проверялись.",
+    "Учебная проверка CI PR12 остаётся красной и не запускала SQL-стенд."
+  ]
+}

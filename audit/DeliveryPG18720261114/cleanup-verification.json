@@ -1,0 +1,20 @@
+{
+  "checked_utc": "2026-11-14T09:52:20.152040+00:00",
+  "container": "hit70-f30d1c63b9a0",
+  "command": [
+    "docker",
+    "container",
+    "inspect",
+    "hit70-f30d1c63b9a0"
+  ],
+  "exit_code": 1,
+  "container_absent": true,
+  "probe_response": "[]\nError response from daemon: No such container: hit70-f30d1c63b9a0",
+  "harness_finally_cleanup": [
+    "docker",
+    "rm",
+    "-f",
+    "-v",
+    "hit70-f30d1c63b9a0"
+  ]
+}
