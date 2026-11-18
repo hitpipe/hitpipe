@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { isIPv4 } from 'node:net';
 import { setTimeout as pause } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
@@ -15,7 +16,8 @@ const secrets = new Set();
 const callbacks = new Map();
 const envFile = process.env.HIT105_COMPOSE_ENV;
 const project = process.env.HIT105_COMPOSE_PROJECT;
-assert.ok(envFile && project === 'hit105-email-lab', 'Use tests/run.sh with a fresh isolated lab');
+const routeFile = process.env.HIT105_LAB_ROUTE;
+assert.ok(envFile && routeFile && project === 'hit105-email-lab', 'Use tests/run.sh with a fresh isolated lab');
 
 const fixture = Object.fromEntries(readFileSync(envFile, 'utf8').trim().split('\n').map(line => {
   const sep = line.indexOf('=');
@@ -30,11 +32,35 @@ function sanitized(error) {
     .replace(/([?&](?:code|code_verifier|session_code|password)=)[^&\s'"<>]+/gi, '$1[redacted]');
 }
 
-function compose(args, input) {
+function compose(args, input, overrides) {
   return spawnSync('docker', [
     '--host', 'unix:///var/run/docker.sock', 'compose', '--env-file', envFile,
     '--project-name', project, '-f', 'compose.yaml', ...args,
-  ], { input, encoding: 'utf8', timeout: 30_000 });
+  ], { input, env: { ...process.env, ...overrides }, encoding: 'utf8', timeout: 30_000 });
+}
+
+function isolatedAddress(service) {
+  const id = compose(['ps', '--all', '-q', service]).stdout.trim();
+  assert.match(id, /^[a-f0-9]{12,64}$/, 'Compose service has one local container');
+  const inspect = spawnSync('docker', ['--host', 'unix:///var/run/docker.sock', 'inspect', '--format',
+    '{{with index .NetworkSettings.Networks "hit105-email-lab_lab"}}{{.IPAddress}}{{end}}', id],
+  { encoding: 'utf8', timeout: 5000 });
+  const address = inspect.stdout.trim();
+  assert.ok(inspect.status === 0 && isIPv4(address), 'Container has an address in the internal lab network');
+  return address;
+}
+
+async function restartKeycloak(args, overrides) {
+  assert.equal(compose(args, undefined, overrides).status, 0, 'Isolated Keycloak service restarted');
+  writeFileSync(`${routeFile}.next`, `${isolatedAddress('keycloak')} ${isolatedAddress('smtp')}\n`, { mode: 0o600 });
+  renameSync(`${routeFile}.next`, routeFile);
+  await waitUntil(async () => {
+    try {
+      const r = await fetch(`${origin}/realms/${realm}/.well-known/openid-configuration`,
+        { signal: AbortSignal.timeout(2000) });
+      return r.ok;
+    } catch { return false; }
+  }, 'Imported realm did not recover after restart', 120_000);
 }
 
 function sql(query) {
@@ -130,7 +156,7 @@ async function startOAuth(page) {
   return state;
 }
 
-async function register(browser, whileSubmitting) {
+async function beginRegistration(browser) {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
   const state = await startOAuth(page);
@@ -150,20 +176,30 @@ async function register(browser, whileSubmitting) {
   await page.locator('input[name="email"]').fill(email);
   await page.locator('input[name="password"]').fill(password);
   await optional('password-confirm', password);
-  let actionReturned = false;
-  const complete = (async () => {
-    await page.locator('#kc-register-form [type="submit"]').click();
-    await page.locator(form).waitFor();
-    actionReturned = true;
-  })();
-  await Promise.all([complete, whileSubmitting?.(email, prior, () => actionReturned)]);
-  const rates = rateRows().filter(r => !prior.has(r.digest));
+  return { ctx, page, email, password, state, prior };
+}
+
+async function completeRegistration(page) {
+  await page.locator('#kc-register-form [type="submit"]').click();
+  await page.locator(form).waitFor();
+}
+
+function newRate(prior) {
+  const rates = rateRows().filter(row => !prior.has(row.digest));
   assert.equal(rates.length, 1, 'Registration writes a rate row for the synthetic recipient');
   assert.equal(rates[0].count, 1, 'First issue counts as an SMTP attempt');
-  const row = userRow(email);
+  return rates[0].digest;
+}
+
+async function register(browser, whileSubmitting) {
+  const u = await beginRegistration(browser);
+  let actionReturned = false;
+  const complete = completeRegistration(u.page).then(() => { actionReturned = true; });
+  await Promise.all([complete, whileSubmitting?.(u.email, u.prior, () => actionReturned)]);
+  const row = userRow(u.email);
   assert.ok(row && !row.verified && !row.consumed, 'Keycloak account remains unverified until the required action');
-  assert.ok(!callbacks.has(state), 'OIDC callback is blocked before verification');
-  return { ctx, page, email, password, state, rate: rates[0].digest };
+  assert.ok(!callbacks.has(u.state), 'OIDC callback is blocked before verification');
+  return { ...u, rate: newRate(u.prior) };
 }
 
 async function loginWithoutRegistering(browser, credentials) {
@@ -179,12 +215,19 @@ async function loginWithoutRegistering(browser, credentials) {
 
 async function submitVisible(page, code) {
   await page.locator(`${form} input[name="code"]`).fill(code);
-  await page.locator(`${form} button[name="operation"][value="verify"]`).click();
+  await clickAndWait(page, `${form} button[name="operation"][value="verify"]`);
 }
 
 async function resendVisible(page) {
-  await page.locator(`${form} button[name="operation"][value="resend"]`).click();
+  await clickAndWait(page, `${form} button[name="operation"][value="resend"]`);
   await page.locator(form).waitFor();
+}
+
+async function clickAndWait(page, selector) {
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    page.locator(selector).click(),
+  ]);
 }
 
 async function readForm(page) {
@@ -194,13 +237,22 @@ async function readForm(page) {
   }));
 }
 
-async function formPost(page, operation, code, modifications = {}, concurrency = 1, savedForm) {
+function submissionFields(request, operation, code, modifications) {
+  return { ...request.fields, operation, ...(code ? { code } : {}), ...modifications };
+}
+
+async function formResponses(page, operation, code, modifications = {}, concurrency = 1, savedForm) {
   // Use the genuine form and this browser's own cookie jar. Calling its POST
   // directly checks how the server handles stale and competing submissions.
   const request = savedForm ?? await readForm(page);
-  const payload = { ...request.fields, operation, ...(code ? { code } : {}), ...modifications };
-  const calls = Array.from({ length: concurrency }, async () => {
-    const r = await page.request.post(request.url, { form: payload, maxRedirects: 0 });
+  return Promise.all(Array.from({ length: concurrency }, () => page.request.post(request.url, {
+    form: submissionFields(request, operation, code, modifications), maxRedirects: 0,
+  })));
+}
+
+async function formPost(page, operation, code, modifications = {}, concurrency = 1, savedForm) {
+  const responses = await formResponses(page, operation, code, modifications, concurrency, savedForm);
+  return responses.map(r => {
     const location = r.headers().location;
     if (location) {
       const url = new URL(location, origin);
@@ -211,7 +263,48 @@ async function formPost(page, operation, code, modifications = {}, concurrency =
     }
     return false;
   });
-  return Promise.all(calls);
+}
+
+async function postNavigation(page, operation, code, modifications = {}, suppliedForm) {
+  const request = suppliedForm ?? await readForm(page);
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    page.evaluate(({ url, fields }) => {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = url;
+      for (const [name, value] of Object.entries(fields)) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.append(input);
+      }
+      document.body.append(form);
+      form.submit();
+    }, { url: request.url, fields: submissionFields(request, operation, code, modifications) }),
+  ]);
+}
+
+async function newerServerForm(page, responses, generation) {
+  for (const response of responses) {
+    if (response.status() !== 200) continue;
+    const state = await page.evaluate(({ markup, selector }) => {
+      const document = new DOMParser().parseFromString(markup, 'text/html');
+      const form = document.querySelector(selector);
+      if (!form) return null;
+      return { url: form.getAttribute('action'), fields: Object.fromEntries(new FormData(form)) };
+    }, { markup: await response.text(), selector: form });
+    if (state?.fields.generation === String(generation)) return state;
+  }
+  throw new Error('Neither parallel HTTP response offered a form for the committed generation');
+}
+
+async function assertSent(u) {
+  const status = await u.page.locator(form).getAttribute('data-status');
+  const allowed = ['sent', 'cooldown', 'rate_limited', 'invalid', 'locked', 'expired', 'stale', 'unavailable', 'awaiting', 'smtp_failed'];
+  assert.equal(allowed.includes(status) ? status : 'missing-or-unrecognized', 'sent',
+    `Issue status, database generation ${userRow(u.email)?.generation}, rate count ${rateFor(u.rate)?.count}`);
 }
 
 async function setChaos(recipientError) {
@@ -328,33 +421,40 @@ try {
     try {
       const code = await codeFromMail(u.email);
       const original = userRow(u.email).generation;
-      await formPost(u.page, 'resend');
+      await resendVisible(u.page);
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'cooldown');
       assert.equal(userRow(u.email).generation, original);
       assert.equal(rateFor(u.rate).count, 1);
       assert.equal((await localMessages(u.email)).length, 1);
 
       ageSends(u.rate);
       await resendVisible(u.page);
+      await assertSent(u);
       const newCode = await codeFromMail(u.email, 2);
       assert.ok(newCode !== code, 'A replacement must not reuse the previous numeric code');
       assert.equal(userRow(u.email).generation, original + 1);
-      assert.deepEqual(await formPost(u.page, 'verify', code), [false]);
+      await submitVisible(u.page, code);
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'invalid');
       assert.ok(!userRow(u.email).consumed);
-      assert.deepEqual(await formPost(u.page, 'verify', newCode, { generation: String(original) }), [false]);
+      await postNavigation(u.page, 'verify', newCode, { generation: String(original) });
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'stale');
       assert.ok(!userRow(u.email).consumed);
 
       for (let count = 3; count <= 5; count++) {
         ageSends(u.rate);
         await resendVisible(u.page);
+        await assertSent(u);
         await codeFromMail(u.email, count);
       }
       ageSends(u.rate);
       await resendVisible(u.page);
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'rate_limited');
       assert.equal(rateFor(u.rate).count, 5);
       assert.equal((await localMessages(u.email)).length, 5);
       editRate(u.rate, `SELECT array_agg(CASE WHEN ord = 1 THEN now() - interval '61 minutes'
         ELSE t END ORDER BY ord) FROM unnest(send_times) WITH ORDINALITY AS x(t, ord)`);
       await resendVisible(u.page);
+      await assertSent(u);
       await codeFromMail(u.email, 6);
       assert.equal(rateFor(u.rate).count, 5);
     } finally { await u.ctx.close(); }
@@ -381,12 +481,22 @@ try {
     try {
       const code = await codeFromMail(u.email);
       const before = userRow(u.email);
+      const flowMac = () => sql(`SELECT encode(flow_mac, 'hex') FROM hitpipe_email_code_challenge
+        WHERE user_id = ${literal(before.id)};`);
+      const originalFlow = flowMac();
       const changedEmail = `${randomBytes(8).toString('hex')}@hit105.test`;
       await changeUser(before.id, 'PUT', { email: changedEmail, emailVerified: false });
       assert.equal(userRow(changedEmail)?.id, before.id, 'Only the recipient of this synthetic user changed');
-      assert.deepEqual(await formPost(u.page, 'verify', code), [false]);
+      await postNavigation(u.page, 'verify', code);
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'stale');
       const after = userRow(changedEmail);
       assert.ok(!after.verified && !after.consumed && !callbacks.has(u.state));
+      assert.ok(flowMac() && flowMac() !== originalFlow, 'Email update revoked the outstanding flow');
+      await changeUser(before.id, 'PUT', { email: u.email, emailVerified: false });
+      assert.ok(flowMac() !== originalFlow, 'Restoring the address did not restore the old flow');
+      await postNavigation(u.page, 'verify', code);
+      assert.equal(await u.page.locator(form).getAttribute('data-status'), 'stale');
+      assert.ok(!userRow(u.email).verified && !callbacks.has(u.state));
     } finally { await u.ctx.close(); }
   });
 
@@ -396,10 +506,14 @@ try {
       await codeFromMail(u.email);
       const startGen = userRow(u.email).generation;
       ageSends(u.rate);
-      await formPost(u.page, 'resend', undefined, {}, 2);
-      await codeFromMail(u.email, 2);
+      const responses = await formResponses(u.page, 'resend', undefined, {}, 2);
+      const replacement = await codeFromMail(u.email, 2);
       assert.equal(rateFor(u.rate).count, 2);
       assert.equal(userRow(u.email).generation, startGen + 1);
+      const fresh = await newerServerForm(u.page, responses, startGen + 1);
+      await postNavigation(u.page, 'verify', replacement, {}, fresh);
+      await waitUntil(() => callbacks.get(u.state) === 1, 'Genuine refreshed form rejected the parallel-resend replacement');
+      assert.ok(userRow(u.email).verified && userRow(u.email).consumed);
     } finally { await u.ctx.close(); }
   });
 
@@ -495,6 +609,97 @@ try {
       assert.equal(userRow(u.email), null);
       assert.equal(sql(`SELECT count(*) FROM hitpipe_email_code_challenge WHERE user_id = ${literal(id)};`), '0');
     } finally { await u.ctx.close(); }
+  });
+
+  await run('restart after database issuance and before SMTP preserves cooldown and permits a later resend', async () => {
+    const u = await beginRegistration(browser);
+    let rate;
+    let generation;
+    let replied = false;
+    assert.equal(compose(['pause', 'smtp']).status, 0, 'Isolated SMTP receiver paused before issuance');
+    const pending = completeRegistration(u.page).then(() => { replied = true; }, () => undefined);
+    try {
+      const issued = await waitUntil(() => {
+        const row = userRow(u.email);
+        return row?.generation && row;
+      }, 'No committed issuance was observed before restart', 4500);
+      rate = newRate(u.prior);
+      generation = issued.generation;
+      assert.ok(!replied && !issued.verified && !issued.consumed && !callbacks.has(u.state));
+      assert.equal(compose(['kill', '-s', 'SIGKILL', 'keycloak']).status, 0, 'Only the isolated Keycloak was interrupted');
+    } finally {
+      assert.equal(compose(['unpause', 'smtp']).status, 0, 'Isolated SMTP receiver resumed');
+      await u.ctx.close();
+      await pending;
+    }
+    assert.equal((await localMessages(u.email)).length, 0, 'No SMTP message was delivered before the interruption');
+    await restartKeycloak(['start', 'keycloak']);
+    assert.equal(userRow(u.email).generation, generation, 'Issue survived the IdP process interruption');
+    const fresh = await loginWithoutRegistering(browser, u);
+    try {
+      assert.equal(await fresh.page.locator(form).getAttribute('data-status'), 'cooldown');
+      assert.equal(rateFor(rate).count, 1);
+      assert.equal((await localMessages(u.email)).length, 0);
+      ageSends(rate);
+      await resendVisible(fresh.page);
+      const code = await codeFromMail(u.email);
+      assert.equal(userRow(u.email).generation, generation + 1);
+      await submitVisible(fresh.page, code);
+      await waitUntil(() => callbacks.get(fresh.state) === 1, 'No authorization after the recovered resend');
+      assert.ok(userRow(u.email).verified && userRow(u.email).consumed);
+    } finally { await fresh.ctx.close(); }
+  });
+
+  await run('rotating the actual Keycloak code key invalidates version 1 and preserves recipient limits', async () => {
+    const u = await register(browser);
+    let fresh;
+    try {
+      const oldCode = await codeFromMail(u.email);
+      const old = userRow(u.email);
+      assert.equal(old.keyVersion, 1);
+      const newKey = randomBytes(32).toString('base64');
+      secrets.add(newKey);
+      await restartKeycloak(['up', '-d', '--no-deps', '--no-build', '--force-recreate', 'keycloak'], {
+        HITPIPE_EMAIL_CODE_KEY: newKey, HITPIPE_EMAIL_CODE_KEY_VERSION: '2',
+      });
+      fresh = await loginWithoutRegistering(browser, u);
+      assert.equal(await fresh.page.locator(form).getAttribute('data-status'), 'cooldown');
+      assert.equal(rateFor(u.rate).count, 1, 'The stable recipient ledger survived code key rotation');
+      assert.equal(userRow(u.email).keyVersion, 1, 'No refreshed code bypassed the previous cooldown');
+      await postNavigation(fresh.page, 'verify', oldCode, { generation: String(old.generation) });
+      assert.ok(!userRow(u.email).consumed && !callbacks.has(fresh.state));
+      ageSends(u.rate);
+      await resendVisible(fresh.page);
+      const currentCode = await codeFromMail(u.email, 2);
+      const current = userRow(u.email);
+      assert.equal(current.keyVersion, 2);
+      assert.equal(current.generation, old.generation + 1);
+      assert.equal(rateFor(u.rate).count, 2);
+      await submitVisible(fresh.page, currentCode);
+      await waitUntil(() => callbacks.get(fresh.state) === 1, 'No authorization after submitting the version 2 code');
+      assert.ok(userRow(u.email).verified && userRow(u.email).consumed);
+    } finally {
+      if (fresh) await fresh.ctx.close();
+      await u.ctx.close();
+    }
+  });
+
+  await run('scheduled cleanup purges only expired challenge and recipient history', async () => {
+    const old = await register(browser);
+    const active = await register(browser);
+    try {
+      await codeFromMail(old.email);
+      await codeFromMail(active.email);
+      const account = userRow(old.email);
+      sql(`UPDATE hitpipe_email_code_challenge
+        SET issued_at = now() - interval '70 minutes', expires_at = now() - interval '65 minutes'
+        WHERE user_id = ${literal(account.id)};`);
+      editRate(old.rate, `ARRAY[now() - interval '61 minutes']`);
+      await waitUntil(() => userRow(old.email)?.generation === null && !rateFor(old.rate),
+        'The running maintenance scheduler did not purge the aged rows', 100_000);
+      assert.ok(userRow(active.email)?.generation > 0 && rateFor(active.rate)?.count === 1,
+        'Maintenance preserved an unexpired challenge and its recipient history');
+    } finally { await active.ctx.close(); await old.ctx.close(); }
   });
 } catch (error) {
   if (!process.exitCode) console.error(`FAIL lab initialization: ${sanitized(error)}`);

@@ -9,6 +9,7 @@ printf '%s  %s\n' '50f9fdfa632c7721521e95afd90d8b1fd7a536e1c5845c1062a0d16ef3c00
 run_dir=$(mktemp -d)
 export HIT105_COMPOSE_ENV="$run_dir/compose.env"
 export HIT105_COMPOSE_PROJECT=hit105-email-lab
+export HIT105_LAB_ROUTE="$run_dir/loopback-targets"
 docker=(docker --host unix:///var/run/docker.sock)
 compose=("${docker[@]}" compose --env-file "$HIT105_COMPOSE_ENV" --project-name "$HIT105_COMPOSE_PROJECT" -f compose.yaml)
 compose_started=0
@@ -28,6 +29,8 @@ cleanup() {
     "${compose[@]}" down --volumes --remove-orphans >/dev/null 2>&1 || true
   fi
   if [[ -f $HIT105_COMPOSE_ENV ]]; then unlink "$HIT105_COMPOSE_ENV"; fi
+  if [[ -f $HIT105_LAB_ROUTE ]]; then unlink "$HIT105_LAB_ROUTE"; fi
+  if [[ -f $HIT105_LAB_ROUTE.next ]]; then unlink "$HIT105_LAB_ROUTE.next"; fi
   rmdir "$run_dir"
 }
 trap cleanup EXIT
@@ -61,7 +64,8 @@ lab_address() {
     '{{with index .NetworkSettings.Networks "hit105-email-lab_lab"}}{{.IPAddress}}{{end}}' "$id"
 }
 
-node tests/loopback.mjs "$(lab_address keycloak)" "$(lab_address smtp)" &
+printf '%s %s\n' "$(lab_address keycloak)" "$(lab_address smtp)" > "$HIT105_LAB_ROUTE"
+node tests/loopback.mjs "$HIT105_LAB_ROUTE" &
 loopback_pid=$!
 ready=0
 for attempt in {1..75}; do

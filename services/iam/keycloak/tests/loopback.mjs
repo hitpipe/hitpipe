@@ -1,14 +1,23 @@
 import { connect, createServer, isIPv4 } from 'node:net';
+import { readFileSync } from 'node:fs';
 
-const [keycloak, mailpit] = process.argv.slice(2);
-if (![keycloak, mailpit].every(value => value && isIPv4(value))) {
-  console.error('Lab loopback requires two addresses from the Compose network.');
-  process.exit(1);
+const route = process.argv[2];
+function addresses() {
+  const values = readFileSync(route, 'utf8').trim().split(/\s+/);
+  if (values.length !== 2 || !values.every(isIPv4)) throw new Error('Invalid Compose addresses');
+  return values;
 }
+addresses();
 
-function forward(host, port, localPort) {
+function forward(target, port, localPort) {
   const server = createServer(client => {
-    const upstream = connect({ host, port });
+    let upstream;
+    try {
+      upstream = connect({ host: addresses()[target], port });
+    } catch {
+      client.destroy();
+      return;
+    }
     client.on('error', () => upstream.destroy());
     upstream.on('error', () => client.destroy());
     client.pipe(upstream).pipe(client);
@@ -20,5 +29,5 @@ function forward(host, port, localPort) {
   server.listen(localPort, '127.0.0.1');
 }
 
-forward(keycloak, 8080, 18080);
-forward(mailpit, 8025, 18025);
+forward(0, 8080, 18080);
+forward(1, 8025, 18025);
