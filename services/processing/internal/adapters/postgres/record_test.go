@@ -3,11 +3,14 @@ package postgres
 import (
 	"context"
 	"errors"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
 	"github.com/jackc/pgx/v5"
@@ -31,6 +34,23 @@ func connect(t *testing.T) *pgx.Conn {
 	t.Cleanup(func() { c.Close(ctx) })
 	return c
 }
+func testAdmissionContent(t *testing.T) *contentfiles.Store {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), "content")
+	if e := os.Mkdir(path, 0700); e != nil {
+		t.Fatal(e)
+	}
+	files, e := contentfiles.New(path)
+	if e != nil {
+		t.Fatal(e)
+	}
+	t.Cleanup(func() { files.Close() })
+	return files
+}
+func admissionStore(t *testing.T, db Beginner) Store {
+	return Store{DB: db, Content: testAdmissionContent(t)}
+}
+
 func begin(t *testing.T, c *pgx.Conn, ws string) pgx.Tx {
 	t.Helper()
 	tx, e := c.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
@@ -80,7 +100,7 @@ func apply(t *testing.T, s admission.Signal) recordResult {
 	t.Helper()
 	c := connect(t)
 	tx := begin(t, c, s.WorkspaceID)
-	r, e := record(ctx, tx, s, op, config, owner)
+	r, e := record(ctx, tx, s, op, config, owner, testAdmissionContent(t), 90*24*time.Hour, 1)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -117,7 +137,7 @@ func TestRecordCommitRepeatConflictAndReconnect(t *testing.T) {
 	tx := begin(t, c, ws)
 	other := s
 	other.Digest = "sha256:" + strings.Repeat("b", 64)
-	if _, e := record(ctx, tx, other, op, config, owner); !errors.Is(e, errConflict) {
+	if _, e := record(ctx, tx, other, op, config, owner, testAdmissionContent(t), 90*24*time.Hour, 1); !errors.Is(e, errConflict) {
 		t.Fatalf("conflict: %v", e)
 	}
 	tx.Rollback(ctx)
@@ -165,7 +185,7 @@ func TestRecordRollbackAndCommitFailure(t *testing.T) {
 			if mode == "history_failure" {
 				s.ReceiptID = "invalid-uuid"
 			}
-			_, e := record(ctx, tx, s, op, config, owner)
+			_, e := record(ctx, tx, s, op, config, owner, testAdmissionContent(t), 90*24*time.Hour, 1)
 			if mode == "history_failure" {
 				if e == nil {
 					t.Fatal("expected failure after case insert")
@@ -220,7 +240,7 @@ func TestRecordConcurrentIdentityAndMessage(t *testing.T) {
 						errs <- e
 						return
 					}
-					r, e := record(ctx, tx, s, op, config, owner)
+					r, e := record(ctx, tx, s, op, config, owner, testAdmissionContent(t), 90*24*time.Hour, 1)
 					if e == nil {
 						e = tx.Commit(ctx)
 					}
@@ -254,7 +274,7 @@ func TestRecordRLSRejectsForeignWorkspace(t *testing.T) {
 	s := signal(t, foreign)
 	c := connect(t)
 	tx := begin(t, c, ws)
-	if _, e := record(ctx, tx, s, op, config, owner); e == nil {
+	if _, e := record(ctx, tx, s, op, config, owner, testAdmissionContent(t), 90*24*time.Hour, 1); e == nil {
 		t.Fatal("foreign write permitted")
 	}
 	tx.Rollback(ctx)

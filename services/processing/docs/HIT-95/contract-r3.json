@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "issue": "HIT-95",
+  "release": "v2",
+  "sha": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "revision": 3,
+  "fingerprint": "7b8a260e956c9d8f0fa479eb9b30c24aae6b30aca2846f88935ba7ba6e648e48",
+  "frozen_at": "2026-11-15T11:09:47.043705+00:00",
+  "sections": {
+    "WHY": "Зачем нужна задача\nДело и его история уже будут сохранены предыдущими задачами Processing, но интерфейс не сможет их прочитать без owner API. Готовим защищённое чтение собственной базы и файлов содержания по уже принятому договору, отдельно от будущего включения всей системы.",
+    "TASK": "Что сделать\nПоверх HIT-78/HIT-79 реализовать read-only прикладные проекции и внутренние HTTPS-обработчики listCases, getCase и getCaseHistory: GET /api/v1/workspaces/{workspace_id}/cases, GET /api/v1/workspaces/{workspace_id}/cases/{case_id} и GET /api/v1/workspaces/{workspace_id}/cases/{case_id}/history. Их владелец Processing, вызывающий BFF по mTLS, owner listener 8443 приватный. До SQL/content доступа нужны свежая проверка сессии/полномочий IAM и общая граница actual-start/epoch; использовать явные внедряемые порты, неизвестность закрывает чтение. Для проверки достаточно управляемого mTLS стенда и настоящих временных PostgreSQL/content. Живой IAM/BFF и их runtime gate не объявлять подключёнными.\n\nУточнение для применения после явного решения Lead:\norder_label — каталожное название услуги, а не уникальное имя покупки: accepted_configs.canonical_config.service_label именно config_id дела в том же workspace/operation после проверки digest. Сохранить значение без подстановок и усечения; действуют существующие проверки 1–120 символов и отсутствия управляющих символов. Отсутствие/повреждение метки или конфигурации даёт READ_UNAVAILABLE/503. Истечение context/history не истекает принятую конфигурацию.\nnext_action — понятное русское объяснение, не код команды и не разрешение. Статус и outcome читаются как сохранены; GET не меняет состояние и не делает provider readback. Базовые тексты состояния:\nRECEIVED — Дело получено, ожидается проверка данных.\nWAITING_DATA — Ожидаются необходимые данные.\nWORKING — Дело находится в обработке.\nUNKNOWN — Результат внешнего действия не установлен.\nATTENTION — Есть препятствие, требующее разбора.\nCONFIRMED — Результат подтверждён последней сохранённой проверкой.\nEXCLUDED — Дело исключено из обработки.\nCLOSED_WITHOUT_CONFIRMATION — Дело закрыто без подтверждения результата.\nК базовому тексту добавляется первый подходящий следующий шаг в следующем порядке:\n1. Реально подключён RECHECK, известна та же task identity, есть свежие полномочия именно на команду и выполнены её проверки → Доступна повторная проверка известной задачи ClickUp.\n2. state=UNKNOWN, outcome=POSSIBLE_EFFECT либо UNESTABLISHED с сохранённым признаком возможной отправки → Нужно установить внешний результат. Повторное создание задачи запрещено.\n3. outcome=RESULT_MISMATCH → Нужно разобрать несоответствие результата. Повторное создание задачи недоступно.\n4. Терминальное сохранённое состояние CONFIRMED, EXCLUDED или CLOSED_WITHOUT_CONFIRMATION → Дополнительных действий с делом в этой версии нет.\n5. Для незавершённого дела обязательный контекст достоверно истёк/удалён либо неполон → Нужны актуальные обязательные данные; новая отправка удержана.\n6. Сохранённая распознанная причина указывает на препятствие доступа к прежней внешней identity → Владельцу нужно восстановить доступ к прежнему подключению.\n7. state=WAITING_DATA без более приоритетной причины → Ожидаются проверенные данные. Ручное добавление данных в этой версии недоступно.\n8. state=RECEIVED либо WORKING без более приоритетной причины → Дождитесь результата обработки.\n9. Остальные допустимые сохранённые состояния → Требуется разбор сохранённой причины препятствия.\nПри POSSIBLE_EFFECT/UNKNOWN и сохранённой границе возможной отправки запрет повторного create сохраняется при любом следующем шаге, включая RECHECK. RESULT_VERIFIED обозначает последнюю сохранённую проверку, TARGET_ID_KNOWN не превращается в подтверждение. Для UNESTABLISHED без доказанной отправки явно неизвестно знание о результате, без выдуманного эффекта/допуска. Причина берётся из последней safety_history и объясняется коротким русским каталогом реальных producer reason codes; неизвестный код отмечается как нерасшифрованная сохранённая причина. Обычное expiry помечается неполнотой; оно не меняет сохранённый статус/знание. Итоговая строка не длиннее 512 символов, без provider payload, секретов и произвольной диагностики.\navailable_actions — пересечение сохранённых в MVP, фактически подключённых команд, свежих полномочий на конкретную команду и выполненных её проверок. В MVP единственный кандидат — RECHECK известной task identity; право чтения дела его не разрешает. В текущем срезе без реально подключённого recovery handler и command-authority возвращать []; это валидный полный ответ, а не 503. Установленный отказ в праве, неподтверждённую доступность и отсутствие функции в этой версии различать понятным пояснением. Не создавать новую команду в GET, не требовать ACTIVE для каждой ручной проверки: допустимые проверки PAUSED сохраняются. Закрытые/исключённые дела чтение не переоткрывает.\nУзкое исключение из прежнего запрета менять producer: исправить в том же Processing путь первого admission SIGNAL_ADMITTED. Переиспользовать HISTORY envelope/content storage HIT-79, сохранить одно действительное время и действующий expiry не позднее 90 суток, не продлевая его дублями. После file fsync → atomic rename → directory fsync в одной scoped SQL-транзакции зафиксировать inbox/case_identity/safety_history/history_content; сохранить идемпотентность, RLS и протокол durable ACK. Читающие HTTP-обработчики остаются без бизнес-записей.\nПосле достоверного expires_at подробное body не требуется для минимальной истории: возвращать сохранённые safety_history и expiry metadata, без чтения удалённого файла; nullable episode_id=null означает отсутствие сведений об эпизоде в этом минимальном представлении, а не доказанное отсутствие эпизода в прошлом. Прежние at/reason/old/new state/evidence_ref не подменять. Минимальная expiry metadata сохраняется при удалении body. Отсутствующая/повреждённая metadata или отсутствующее/повреждённое ещё не истёкшее body остаются 503. Старые записи без достоверного срока не исправлять задним числом; at+90days и новые миграции не применять.",
+    "WORK DEST": "PRIMARY UPDATE https://github.com/hitpipe/hitpipe\nМесто работы: services/processing/internal/application/**, internal/adapters/postgres/**, собственный content reader, read-only HTTP adapters и минимальная локальная композиция; тесты/инструкция в services/processing/**.\nRELATED RESULT .project-os/results/HIT-X.json — заменить HIT-X номером карточки; код, карта полей и настоящие протоколы по неизменяемым коммитам.\nDO NOT TOUCH services/iam/**, services/intake/**, services/delivery/**, клиент, formal SQL/OAS, команды записи/активации (кроме узкой записи начальной истории SIGNAL_ADMITTED, описанной в TASK) и рабочие данные.",
+    "DOD": "- Сохранены исходный SHA и reuse HIT-78/HIT-79; для каждого обязательного поля Cases/CaseSummary/CaseDetail/History/HistoryEntry указаны реальный источник и правило проекции. Отсутствующее обязательное содержание не выдумано из revision, таймера или тестового default.\n- Настоящий PostgreSQL и собственные content files дают ответы трёх принятых операций, проходящие OAS. state/outcome_knowledge, revision, UTC времена, config provenance и история соответствуют сохранённым данным; финансовый VALID/outbox commit не становятся CONFIRMED.\n- Проверены все required/null различия: due_at/target_url/last_observation_at/history_cursor/next_cursor и nullable поля истории сохраняются по схеме. Контекст не дополняется секретами/чужим payload; неподтверждённая ссылка Delivery не появляется как проверенный результат.\n- Проверены отказ/отсутствие/неверный mTLS, отсутствующая сессия, устаревшая authority/epoch, чужой workspace/case и закрытый actual-start: до чтения действует запрет. Browser supplied authority headers не принимаются за свежий ответ IAM; default разрешения отсутствует.\n- После подтверждения области SQL работает с SET LOCAL hp.workspace_id в scoped transaction. Повторное использование соединения, параллельные разные workspace и подмена case_id/cursor не раскрывают чужие строки, refs или существование скрытого ресурса; RLS проверен на настоящей роли приложения.\n- Пагинация/фильтр state/limit/cursor соответствуют принятому OAS: максимум 100 элементов, детерминированный порядок и продолжение, неверный/чужой cursor отклоняется. Read path не создаёт case/историю/intent и не изменяет бизнес-состояние.\n- Проверены повреждённый/отсутствующий/истёкший content, неверный hash, traversal/symlink, rollback, timeout/отмена и недоступная база: нет утечки/фиктивной полноты/успеха. При истёкшем содержимом сохранённое safety state не стирается, а применимая retention/expiry-on-read соблюдается.\n- Пройдены реальные mTLS/API/schema/PostgreSQL/content проверки, go test -race -count=1 ./..., go vet ./... и применимые старые тесты; сохранены SHA, среда, команды и журналы. Отчёт отделяет работающий локальный owner read API от ещё не включённых IAM/BFF/браузера.\n- Проверены настоящий admission предыдущего producer → getCaseHistory 200 без ручной подстановки metadata истории, атомарность и повторы SIGNAL_ADMITTED, точная граница expiry, повторное чтение после удаления файла, purge-before-read и перезапуск на PostgreSQL 18.7. Минимальная история и её действительный expiry сохранены, старые записи без metadata честно дают 503; неподключённые команды не выдаются как доступные.",
+    "CONTEXT": "https://github.com/hitpipe/hitpipe/blob/ce771d37505e7770003d0796ae932556d06b7bab/services/processing/README.md — проверенный main; поверх него переиспользовать фактические результаты HIT-78/HIT-79 без потери последующих изменений.\nhttps://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json — принятый пакет и полный реестр источников.\nhttps://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json — listCases/getCase/getCaseHistory, точные схемы, параметры, owner/caller/mTLS и ошибки.\nhttps://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql — case_identity, accepted_configs, case_content, safety_history/history_content и RLS.\nhttps://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md — content integrity, expiry-on-read, приватность и граница SQL/file storage.\nhttps://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md — A002/A011–013/A020–021/A025–026: владельцы, свежая authority, read model и хранение.\nDEPENDENCIES: HIT-78 / HIT-79",
+    "CONSTRAINTS": "Ограничения выполнения\nНе вводить новую схему API, RLS bypass, service-wide payload cache или разрешающую заглушку IAM. Положительные тесты используют явно обозначенные управляемые ответы auth/gate и реальные собственные SQL/content записи; production composition при неподключённых обязательных зависимостях закрыта. Если из результата предшественников нельзя честно получить обязательное поле, вернуть документированную недоступность и показать точный пробел, не менять молча договор/схему и не изобретать бизнес-правило. Согласованный контракт уже определяет интерфейс, повторное утверждение схемы другим участником не требуется.\nЯвно согласованное в TASK уточнение проекций и узкий producer repair не разрешают иные записи/команды, новые поля SQL/OAS, обращение к живым провайдерам или изменение принятого MVP.",
+    "BOUNDARIES": "Границы результата\nВходит чтение уже принадлежащих Processing дел/истории и локально проверенный приватный owner API. Не входят браузерный BFF, живой IAM control, регистрация/сессии, запись профиля, подключение Stripe/ClickUp, recovery/activation/pause, внешние наблюдения или повторная оптимизация HIT-80. Наличие обработчика не доказывает работающую сквозную интеграцию.\nТочечное исключение: совместимая запись минимальной начальной HISTORY через существующий admission producer Processing и исправление чтения после штатного expiry. Done HIT-78/HIT-79 остаются историей; изменения реализуются и проверяются в HIT-95."
+  },
+  "dod": [
+    {
+      "id": "b9f41472-fa52-49e4-b4a8-da8cd12059de",
+      "text": "Сохранены исходный SHA и reuse HIT-78/HIT-79; для каждого обязательного поля Cases/CaseSummary/CaseDetail/History/HistoryEntry указаны реальный источник и правило проекции. Отсутствующее обязательное содержание не выдумано из revision, таймера или тестового default."
+    },
+    {
+      "id": "3cf87f68-f4b9-46d5-8d51-a321406b698c",
+      "text": "Настоящий PostgreSQL и собственные content files дают ответы трёх принятых операций, проходящие OAS. state/outcome_knowledge, revision, UTC времена, config provenance и история соответствуют сохранённым данным; финансовый VALID/outbox commit не становятся CONFIRMED."
+    },
+    {
+      "id": "85960fe2-8786-4db6-aa52-fe53d72fdfa2",
+      "text": "Проверены все required/null различия: due_at/target_url/last_observation_at/history_cursor/next_cursor и nullable поля истории сохраняются по схеме. Контекст не дополняется секретами/чужим payload; неподтверждённая ссылка Delivery не появляется как проверенный результат."
+    },
+    {
+      "id": "6735d7ae-bf94-408f-82b7-bf77d744981f",
+      "text": "Проверены отказ/отсутствие/неверный mTLS, отсутствующая сессия, устаревшая authority/epoch, чужой workspace/case и закрытый actual-start: до чтения действует запрет. Browser supplied authority headers не принимаются за свежий ответ IAM; default разрешения отсутствует."
+    },
+    {
+      "id": "4655d050-7561-44a3-9ce2-36eee2be78c9",
+      "text": "После подтверждения области SQL работает с SET LOCAL hp.workspace_id в scoped transaction. Повторное использование соединения, параллельные разные workspace и подмена case_id/cursor не раскрывают чужие строки, refs или существование скрытого ресурса; RLS проверен на настоящей роли приложения."
+    },
+    {
+      "id": "a8653ea1-519c-418b-b60f-700e2fdfd308",
+      "text": "Пагинация/фильтр state/limit/cursor соответствуют принятому OAS: максимум 100 элементов, детерминированный порядок и продолжение, неверный/чужой cursor отклоняется. Read path не создаёт case/историю/intent и не изменяет бизнес-состояние."
+    },
+    {
+      "id": "9283c299-11b6-4c6e-8f16-17ed30e70822",
+      "text": "Проверены повреждённый/отсутствующий/истёкший content, неверный hash, traversal/symlink, rollback, timeout/отмена и недоступная база: нет утечки/фиктивной полноты/успеха. При истёкшем содержимом сохранённое safety state не стирается, а применимая retention/expiry-on-read соблюдается."
+    },
+    {
+      "id": "03a2dba3-4e8c-418c-8020-563c5ae4f5d8",
+      "text": "Пройдены реальные mTLS/API/schema/PostgreSQL/content проверки, go test -race -count=1 ./..., go vet ./... и применимые старые тесты; сохранены SHA, среда, команды и журналы. Отчёт отделяет работающий локальный owner read API от ещё не включённых IAM/BFF/браузера."
+    },
+    {
+      "id": "a82f2f3c-5c31-418f-bffd-95d807d38d01",
+      "text": "Проверены настоящий admission предыдущего producer → getCaseHistory 200 без ручной подстановки metadata истории, атомарность и повторы SIGNAL_ADMITTED, точная граница expiry, повторное чтение после удаления файла, purge-before-read и перезапуск на PostgreSQL 18.7. Минимальная история и её действительный expiry сохранены, старые записи без metadata честно дают 503; неподключённые команды не выдаются как доступные."
+    }
+  ],
+  "fields": {
+    "mode": "IMP",
+    "components": [
+      "Processing - Operations Core"
+    ],
+    "milestone": "UNPLANNED",
+    "phase": "P4 BUILD",
+    "parent": "HIT-63"
+  },
+  "global_authority": {
+    "schema_version": 1,
+    "fingerprint": "3a266bf530fdf3f90801a5a2d6fa08c712ffa83293361c362bad9cfb975c8b97",
+    "scope": {
+      "schema_version": 1,
+      "receipt": {
+        "issue": "HIT-95",
+        "comment_id": "11954",
+        "sha256": "d94a5a1f0bd471a83562a1a9d93093dc6b904327bc8e223e6fc1c8f858e16fe6"
+      },
+      "fingerprint": "a9160808752bbecc7ef89be69114f2bb20f61323fdfb575dbc414415273bf763"
+    },
+    "security_patch": {
+      "issue": "HIT-63",
+      "comment_id": "12229",
+      "sha256": "4ba4929659c3d3a038fff30324c73c081f15f561dc40fad34d5efa540d2582a2"
+    }
+  }
+}

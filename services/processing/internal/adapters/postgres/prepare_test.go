@@ -174,11 +174,6 @@ func prepared(t *testing.T, keys []string) preparedFixture {
 	if e = tx.Commit(ctx); e != nil {
 		t.Fatal(e)
 	}
-	raw = wire(t, ws, activation.Add(time.Minute).Format(time.RFC3339Nano), "checkout.session.completed")
-	receipt, e := admission.Admit(ctx, raw, established(ws), normalizedsignal.Decoder{}, Store{db})
-	if e != nil {
-		t.Fatal(e)
-	}
 	path := filepath.Join(t.TempDir(), "content")
 	if e = os.Mkdir(path, 0700); e != nil {
 		t.Fatal(e)
@@ -188,6 +183,11 @@ func prepared(t *testing.T, keys []string) preparedFixture {
 		t.Fatal(e)
 	}
 	t.Cleanup(func() { files.Close() })
+	raw = wire(t, ws, activation.Add(time.Minute).Format(time.RFC3339Nano), "checkout.session.completed")
+	receipt, e := admission.Admit(ctx, raw, established(ws), normalizedsignal.Decoder{}, Store{DB: db, Content: files})
+	if e != nil {
+		t.Fatal(e)
+	}
 	gate := &testBoundary{open: true, epoch: 7}
 	r := preparecase.Request{WorkspaceID: ws, CaseID: receipt.RecordID, ExpectedRevision: 1, Epoch: 7}
 	return preparedFixture{r, preparecase.Service{Repository: DecisionStore{db, files}, Content: files, Readers: fixtureReaders{}, Renderer: intent.Renderer{}, Boundary: gate, Clock: testClock{time.Now}}, files, path, gate}

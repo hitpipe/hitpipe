@@ -1,0 +1,253 @@
+{
+  "TaskObservation": {
+    "additionalProperties": false,
+    "description": "Task ID alone is not confirmation. Full destination GET and all required matches true+complete needed. Empty search is never proof of no effect.",
+    "properties": {
+      "assignee_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "case_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "complete": {
+        "type": "boolean"
+      },
+      "context_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "episode_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "evidence_expires_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "evidence_ref": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "knowledge": {
+        "enum": [
+          "KNOWN_NO_EFFECT",
+          "POSSIBLE_EFFECT",
+          "TARGET_ID_OBSERVED",
+          "RESULT_VERIFIED",
+          "RESULT_MISMATCH",
+          "INCOMPLETE"
+        ],
+        "type": "string"
+      },
+      "lineage_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "list_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "marker_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "message_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "message_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "observation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "observed_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "proof_code": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "proof_digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "schema_version": {
+        "const": "1.0",
+        "type": "string"
+      },
+      "task_id": {
+        "anyOf": [
+          {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "title_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_matches": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "message_id",
+      "message_digest",
+      "schema_version",
+      "workspace_id",
+      "case_id",
+      "lineage_id",
+      "episode_id",
+      "observation_id",
+      "knowledge",
+      "task_id",
+      "observed_at",
+      "complete",
+      "workspace_matches",
+      "list_matches",
+      "assignee_matches",
+      "title_matches",
+      "marker_matches",
+      "context_matches",
+      "proof_code",
+      "proof_digest",
+      "evidence_ref",
+      "evidence_expires_at"
+    ],
+    "type": "object"
+  },
+  "Receipt": {
+    "additionalProperties": false,
+    "properties": {
+      "disposition": {
+        "enum": [
+          "APPLIED",
+          "DUPLICATE",
+          "HELD",
+          "CONFLICT"
+        ],
+        "type": "string"
+      },
+      "message_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "record_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "message_id",
+      "disposition"
+    ],
+    "type": "object"
+  },
+  "Error": {
+    "additionalProperties": false,
+    "description": "No secrets or other-workspace existence in error text. Unknown fields fail closed.",
+    "properties": {
+      "code": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "current_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "message": {
+        "maxLength": 512,
+        "type": "string"
+      },
+      "request_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "retry_after_seconds": {
+        "maximum": 3600,
+        "minimum": 0,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "request_id"
+    ],
+    "type": "object"
+  }
+}

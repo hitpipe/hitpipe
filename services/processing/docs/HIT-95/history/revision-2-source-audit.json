@@ -1,0 +1,42 @@
+{
+  "task": "HIT-95",
+  "state": "PARTIAL_BLOCKED_SOURCE_GAPS",
+  "recorded_at": "2026-11-15T09:35:30.930317+00:00",
+  "base_sha": "3bae6417421465868c432fe18b379d46be6144aa",
+  "tested_code_sha": "444aa011080cc7b321e3f37b0a0d0d5bb1f0e9de",
+  "actual_main_observed": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "reuse": {
+    "HIT-78": "Done, PR50 OPEN,c218eb3d87c1df51d999d955d263b9d410f77bd7 included in PR52 ancestry",
+    "HIT-79": "Done, PR52 OPEN, exact3bae641 reused; admission/financial/decision/outbox/content writer unchanged",
+    "HIT-80": "Separate PR53 preserved; optimization not repeated or force-integrated"
+  },
+  "contract_revision": 2,
+  "protocol_pin": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "oas": {
+    "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+  },
+  "migration": {
+    "sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+    "unchanged": true
+  },
+  "postgres_adoption": "https://hitpipe.atlassian.net/browse/HIT-95?focusedCommentId=12254",
+  "postgres_image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "user_decision": "2026-11-15 chat: no pinned order_label source/next_action rule exists; continue independent work, no invented values, SQL/OAS change, full DoD or READY; prepare specific Lead question.",
+  "not_registered_as_completed_result": true,
+  "environments": "Go1.27.2 darwin/arm64 host race/vet with DB tests explicitly skipped. Go1.27.2 linux/arm64 CGO0 actual isolated PG18.7+mTLS/content tests; no Linux race claim.",
+  "unchanged_code_proof": "supplemental/commands.json: migration, domain, financial/admission/preparation writers, go.mod/go.sum, other services, common CI unchanged.",
+  "schema_validation": "Stdlib closed subset validator of the exact OAS; unsupported schema keywords fail; real captured History200 x2, Cases200 empty filtered set only, Error503/400/403. No nonempty Cases/CaseDetail200 evidence invented.",
+  "source_gap_proof": {
+    "order_label": "No column/metadata emitted by78/79 for the required field. No synthetic service_label/SessionID/revision replacement.",
+    "next_action": "No accepted rule or emitted data. Presentation has no default; request fails503.",
+    "initial_history_expiry": "record.go admission writes safety_history without history_content. Expires_at is required in OAS; no at+90d fabrication. Such real predecessor histories fail503."
+  },
+  "test_fixture_note": "Positive history fixtures explicitly INSERT their own new history_content metadata and actual owner files in fresh owned DB. This is controlled complete input, not proof that the old admission writer supplies it. Existing test workspaces with unmodified admission rows are separately checked503.",
+  "runtime_limits": [
+    "No live IAM/BFF/browser, credentials, production runtime epoch/fencing or full integration qualification.",
+    "No working data or preexisting DSN accepted by runner; owned network-none container removed.",
+    "Private literal IP8443 composition only; loopback port0 solely for tests. No serving entry point with permissive authority/gate stubs."
+  ],
+  "full_dod_ready": false
+}

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/admission"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -15,14 +16,20 @@ type Beginner interface {
 
 // Store requires an explicitly configured Processing application-role connection
 // source. It never creates databases, installs bindings or activates operations.
-type Store struct{ DB Beginner }
+type Store struct {
+	DB      Beginner
+	Content preparecase.Content
+	// Zero uses the accepted 90-day ceiling. An explicit shorter retention may be
+	// used by deployment/tests, never extended by replay. No public input sets it.
+	HistoryRetention time.Duration
+}
 
 func (db Store) Accept(ctx context.Context, s admission.Signal, c admission.EstablishedContext) (admission.Receipt, error) {
 	zero := admission.Receipt{}
 	if e := c.Check(s); e != nil {
 		return zero, e
 	}
-	if db.DB == nil {
+	if db.DB == nil || db.Content == nil || db.HistoryRetention < 0 || db.HistoryRetention > 90*24*time.Hour {
 		return zero, admission.ErrNotAdmissible
 	}
 	tx, e := db.DB.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
@@ -59,17 +66,24 @@ func (db Store) Accept(ctx context.Context, s admission.Signal, c admission.Esta
  ON (a.workspace_id,a.operation_id,a.config_id)=(o.workspace_id,o.operation_id,o.selected_config_id)
  WHERE o.workspace_id=$1 AND o.operation_id=$2 FOR UPDATE OF o`, c.WorkspaceID, c.OperationID).Scan(&state, &config, &owner, &revision, &first)
 	if errors.Is(e, pgx.ErrNoRows) {
-		return zero, admission.ErrNotAdmissible
+		return zero, admission.ErrNotFound
 	}
 	if e != nil {
 		return zero, e
 	}
 	// source_created_at is Session.created from Event.data.object.created, NOT
 	// Event.created: Lead decision HIT-78 comment 12171 / HIT-73 comment 12172.
-	if state != "ACTIVE" || first == nil || revision != c.ExpectedRevision || s.SourceCreatedAt.Before(*first) {
+	if revision != c.ExpectedRevision {
+		return zero, admission.ErrStaleRevision
+	}
+	if state != "ACTIVE" || first == nil || s.SourceCreatedAt.Before(*first) {
 		return zero, admission.ErrNotAdmissible
 	}
-	r, e := record(ctx, tx, s, c.OperationID, config, owner)
+	retention := db.HistoryRetention
+	if retention == 0 {
+		retention = 90 * 24 * time.Hour
+	}
+	r, e := record(ctx, tx, s, c.OperationID, config, owner, db.Content, retention, revision)
 	if e != nil {
 		return zero, e
 	}
