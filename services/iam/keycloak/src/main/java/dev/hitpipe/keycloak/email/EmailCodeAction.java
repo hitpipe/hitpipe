@@ -5,6 +5,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -103,11 +104,12 @@ final class EmailCodeAction implements RequiredActionProvider {
                 // The issue transaction has closed. Mail transport never holds a database lock.
                 auth.setAuthNote(DELIVERY, DELIVERY_UNKNOWN);
                 try {
+                    Map<String, Object> mailAttributes = new HashMap<>();
+                    mailAttributes.put("verificationCode", issue.code());
                     context.getSession().getProvider(EmailTemplateProvider.class)
                             .setRealm(context.getRealm())
                             .setUser(context.getUser())
-                            .send("hpEmailCodeSubject", "hitpipe-email-code.ftl",
-                                    Map.of("verificationCode", issue.code()), input.email());
+                            .send("hpEmailCodeSubject", "hitpipe-email-code.ftl", mailAttributes, input.email());
                 } catch (EmailException | RuntimeException exception) {
                     LOG.log(System.Logger.Level.WARNING, "Email code delivery could not be confirmed");
                     challenge(context, DELIVERY_UNKNOWN, null);
