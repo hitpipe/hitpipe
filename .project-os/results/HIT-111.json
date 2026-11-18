@@ -1,0 +1,52 @@
+{
+  "subject": "HIT-111",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+    "summary": "Единый исполняемый сервис Processing с собственными PostgreSQL 18.7 и файлами, строгим TLS 1.3, единственным HIT-69 startgate, прежними HTTP slice, отправщиком и остановкой.",
+    "contract_revision": 1,
+    "contract_fingerprint": "ba730271dfb71bf71adde963e5300305132eb47a868e671bafdcb68a065c7c84",
+    "base_sha": "1bbb3567c042a1ac79f21d69f78d71e8a4fef41e",
+    "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/72"
+  },
+  "changed_artifacts": [
+    "services/processing/cmd/processing/main.go",
+    "services/processing/docs/HIT-111/RUN_RU.md",
+    "services/processing/docs/HIT-111/processing.example.json",
+    "services/processing/go.mod",
+    "services/processing/internal/adapters/draftjson/schemas.json",
+    "services/processing/internal/adapters/postgres/lifecycle_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/application/drafts/wire_generated.go",
+    "services/processing/internal/runtime/access.go",
+    "services/processing/internal/runtime/config.go",
+    "services/processing/internal/runtime/iam.go",
+    "services/processing/internal/runtime/queue.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/source.go",
+    "services/processing/internal/testfixtures/draft.go",
+    "services/processing/scripts/postgres/verify_runtime.py",
+    "services/processing/tools/drafts/generate.py",
+    "services/processing/docs/HIT-111/",
+    ".project-os/results/HIT-111.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-111/README.md",
+    "runbook": "services/processing/docs/HIT-111/RUN_RU.md",
+    "configuration_template": "services/processing/docs/HIT-111/processing.example.json",
+    "source_audit": "services/processing/docs/HIT-111/source-audit.json",
+    "test_protocol": "services/processing/docs/HIT-111/verification/test-evidence.json",
+    "original_process_log": "services/processing/docs/HIT-111/verification/postgres-storage-tests.stdout.gz",
+    "ci_protocol": "services/processing/docs/HIT-111/verification/ci-evidence.json",
+    "actual_stand": "PASS; 98 command records including expected negative SQL checks. Separate clean Go race/vet/build and real Linux arm64 process/HTTP/mTLS/PG18.7/files.",
+    "code_ci": "https://github.com/hitpipe/hitpipe/actions/runs/44392292963"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Внешние участники в проверенном запуске управляемые. Обычный запуск остаётся CLOSED без авторитетных источников CSRF/привязок/очереди/roster.",
+    "SourceFacts подключён как готовая фабрика по принятому маршруту; автоматическое финансовое продвижение нового дела и RECHECK относятся к последующим задачам.",
+    "Реальные IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы; работающие среды и секреты не использовались."
+  ]
+}
