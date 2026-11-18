@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "source_sha": "444aa011080cc7b321e3f37b0a0d0d5bb1f0e9de",
+  "tree_status_at_start": "",
+  "runner_sha256": "734219685fd66fe6f05be639f6163a7b5b7781e4a36a6ff68ef2f66204bb13e9",
+  "migration_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+  "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+  "database": "hit78",
+  "container": "005ee0001926a8411302cc9be48785c92a5afedd7e1c0e1fa62377157039317c",
+  "finished_at": "2026-11-15T09:30:04.357572+00:00",
+  "scope": "INDEPENDENT_READ_PATHS_VERIFIED / FULL_DOD_BLOCKED: actual private TLS1.3 BFF mTLS fixture, fresh controlled IAM/epoch, real PG18.7 RLS/read-only transactions/content; history200 with explicitly persisted synthetic history expiry metadata, missing predecessor expiry503, nonempty list/detail503 until Lead settles order_label/next_action. Host Go1.27.2 race/vet; Linux CGO0 actual DB binary, no Linux race claim. No actual IAM/BFF or production gate qualification.",
+  "task": "HIT-95",
+  "full_dod_ready": false,
+  "blockers": [
+    "approved source of order_label absent",
+    "approved projection rule for next_action absent",
+    "HIT78 initial history has no persisted history_content.expires_at; such history returns503"
+  ]
+}

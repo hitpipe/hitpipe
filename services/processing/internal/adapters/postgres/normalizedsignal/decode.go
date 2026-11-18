@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"io"
 	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/gowebpki/jcs"
@@ -24,6 +25,10 @@ type Decoder struct{}
 
 var uuidPattern = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
 var digestPattern = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
+
+// RFC3339 wire syntax; time.Time additionally validates calendar/time values.
+// Go's parser alone also permits comma fractions and out-of-range zone offsets.
+var dateTimePattern = regexp.MustCompile(`^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?(Z|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$`)
 
 var fields = map[string]bool{
 	"message_id": true, "message_digest": true, "schema_version": true,
@@ -88,6 +93,12 @@ func (Decoder) Decode(raw []byte) (Signal, error) {
 	if json.Unmarshal(raw, &zero) != nil {
 		return Signal{}, ErrInvalidSignal
 	}
+	for _, name := range []string{"source_created_at", "first_received_at", "expires_at"} {
+		var wire string
+		if json.Unmarshal(members[name], &wire) != nil || !dateTimePattern.MatchString(wire) {
+			return Signal{}, ErrInvalidSignal
+		}
+	}
 	for _, id := range []string{zero.MessageID, zero.WorkspaceID, zero.ConnectionID, zero.ReceiptID} {
 		if !uuidPattern.MatchString(id) {
 			return Signal{}, ErrInvalidSignal
@@ -119,5 +130,9 @@ func (Decoder) Decode(raw []byte) (Signal, error) {
 	if zero.Digest != "sha256:"+hex.EncodeToString(sum[:]) {
 		return Signal{}, ErrInvalidSignal
 	}
+	// PostgreSQL UUID scope and owned-content origin use the same UUID identity.
+	// Digest remains over the original bytes, before this identity normalization.
+	zero.WorkspaceID = strings.ToLower(zero.WorkspaceID)
+	zero.ConnectionID = strings.ToLower(zero.ConnectionID)
 	return zero, nil
 }

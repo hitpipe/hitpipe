@@ -1,0 +1,170 @@
+=== RUN   TestAdmissionActivationBoundary
+=== RUN   TestAdmissionActivationBoundary/before
+=== RUN   TestAdmissionActivationBoundary/exact
+=== RUN   TestAdmissionActivationBoundary/after
+=== RUN   TestAdmissionActivationBoundary/old_session_late_payment
+--- PASS: TestAdmissionActivationBoundary (0.03s)
+    --- PASS: TestAdmissionActivationBoundary/before (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/exact (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/after (0.01s)
+    --- PASS: TestAdmissionActivationBoundary/old_session_late_payment (0.01s)
+=== RUN   TestAdmissionRejectsContextAndLocalState
+=== RUN   TestAdmissionRejectsContextAndLocalState/authority
+=== RUN   TestAdmissionRejectsContextAndLocalState/binding
+=== RUN   TestAdmissionRejectsContextAndLocalState/connection
+=== RUN   TestAdmissionRejectsContextAndLocalState/account
+=== RUN   TestAdmissionRejectsContextAndLocalState/livemode
+=== RUN   TestAdmissionRejectsContextAndLocalState/workspace
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_operation
+=== RUN   TestAdmissionRejectsContextAndLocalState/paused
+=== RUN   TestAdmissionRejectsContextAndLocalState/draft
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_config
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_activation
+=== RUN   TestAdmissionRejectsContextAndLocalState/stale_revision
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_wire
+=== RUN   TestAdmissionRejectsContextAndLocalState/missing_time
+=== RUN   TestAdmissionRejectsContextAndLocalState/invalid_time
+--- PASS: TestAdmissionRejectsContextAndLocalState (0.07s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/authority (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/binding (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/connection (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/account (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/livemode (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/workspace (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_operation (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/paused (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/draft (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_config (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_activation (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/stale_revision (0.01s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_wire (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/missing_time (0.00s)
+    --- PASS: TestAdmissionRejectsContextAndLocalState/invalid_time (0.00s)
+=== RUN   TestAdmissionReplayAfterLifecycleAndNewConnection
+--- PASS: TestAdmissionReplayAfterLifecycleAndNewConnection (0.01s)
+=== RUN   TestAdmissionCommitFailureNeverAcknowledges
+--- PASS: TestAdmissionCommitFailureNeverAcknowledges (0.01s)
+=== RUN   TestAdmissionTwoSignalsOnePinnedCase
+--- PASS: TestAdmissionTwoSignalsOnePinnedCase (0.01s)
+=== RUN   TestAdmissionConcurrentAndDigestConflict
+--- PASS: TestAdmissionConcurrentAndDigestConflict (0.01s)
+=== RUN   TestPreparationPaidReplayAndRestart
+--- PASS: TestPreparationPaidReplayAndRestart (0.01s)
+=== RUN   TestPreparationUnpaidThenPaidSamePins
+--- PASS: TestPreparationUnpaidThenPaidSamePins (0.01s)
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/unknown
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/expired
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/cancel
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/authority
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/epoch
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/stale_case
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context
+=== RUN   TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read
+--- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled (0.07s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/unknown (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/expired (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/mismatch (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/cancel (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/authority (0.00s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/epoch (0.00s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/pause (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/stale_case (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/pause_after_source (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/missing_context (0.01s)
+    --- PASS: TestPreparationUnknownExpiredMismatchedAndCanceled/revoked_after_read (0.01s)
+=== RUN   TestPreparationConcurrentCASOneIntent
+--- PASS: TestPreparationConcurrentCASOneIntent (0.01s)
+=== RUN   TestPreparationCommitFailureAndLostAck
+=== RUN   TestPreparationCommitFailureAndLostAck/rollback_at_commit
+=== RUN   TestPreparationCommitFailureAndLostAck/lost_ack_after_commit
+--- PASS: TestPreparationCommitFailureAndLostAck (0.03s)
+    --- PASS: TestPreparationCommitFailureAndLostAck/rollback_at_commit (0.01s)
+    --- PASS: TestPreparationCommitFailureAndLostAck/lost_ack_after_commit (0.01s)
+=== RUN   TestPreparationActualReaderNoNetworkUnderRowLock
+--- PASS: TestPreparationActualReaderNoNetworkUnderRowLock (0.01s)
+=== RUN   TestPreparationFileFaultsBeforeSQL
+=== RUN   TestPreparationFileFaultsBeforeSQL/write
+=== RUN   TestPreparationFileFaultsBeforeSQL/file-fsync
+=== RUN   TestPreparationFileFaultsBeforeSQL/rename
+=== RUN   TestPreparationFileFaultsBeforeSQL/directory-fsync
+=== RUN   TestPreparationFileFaultsBeforeSQL/history-file
+--- PASS: TestPreparationFileFaultsBeforeSQL (0.03s)
+    --- PASS: TestPreparationFileFaultsBeforeSQL/write (0.01s)
+    --- PASS: TestPreparationFileFaultsBeforeSQL/file-fsync (0.01s)
+    --- PASS: TestPreparationFileFaultsBeforeSQL/rename (0.01s)
+    --- PASS: TestPreparationFileFaultsBeforeSQL/directory-fsync (0.01s)
+    --- PASS: TestPreparationFileFaultsBeforeSQL/history-file (0.01s)
+=== RUN   TestPreparationContentAvailabilityAndGuards
+=== RUN   TestPreparationContentAvailabilityAndGuards/valid_context
+=== RUN   TestPreparationContentAvailabilityAndGuards/short_context
+=== RUN   TestPreparationContentAvailabilityAndGuards/missing
+=== RUN   TestPreparationContentAvailabilityAndGuards/corrupt
+=== RUN   TestPreparationContentAvailabilityAndGuards/expired
+=== RUN   TestPreparationContentAvailabilityAndGuards/possible_effect
+=== RUN   TestPreparationContentAvailabilityAndGuards/existing_task
+--- PASS: TestPreparationContentAvailabilityAndGuards (0.06s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/valid_context (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/short_context (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/missing (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/corrupt (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/expired (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/possible_effect (0.01s)
+    --- PASS: TestPreparationContentAvailabilityAndGuards/existing_task (0.01s)
+=== RUN   TestPreparationProcessCrashAfterSQLCommit
+--- PASS: TestPreparationProcessCrashAfterSQLCommit (0.02s)
+=== RUN   TestReadHistoryActualStoragePaginationAndGaps
+--- PASS: TestReadHistoryActualStoragePaginationAndGaps (0.03s)
+=== RUN   TestReadHistoryParallelWorkspacesAndNoBusinessWrites
+--- PASS: TestReadHistoryParallelWorkspacesAndNoBusinessWrites (0.02s)
+=== RUN   TestReadCaseSQLKeysetAndReadonlyOnActualRole
+--- PASS: TestReadCaseSQLKeysetAndReadonlyOnActualRole (0.02s)
+=== RUN   TestReadContentFaultsAndSQLCancellation
+=== RUN   TestReadContentFaultsAndSQLCancellation/missing
+=== RUN   TestReadContentFaultsAndSQLCancellation/corrupt
+=== RUN   TestReadContentFaultsAndSQLCancellation/wrong_hash
+=== RUN   TestReadContentFaultsAndSQLCancellation/symlink
+=== RUN   TestReadContentFaultsAndSQLCancellation/expired
+=== RUN   TestReadContentFaultsAndSQLCancellation/wrong_owner
+=== RUN   TestReadContentFaultsAndSQLCancellation/timeout
+=== RUN   TestReadContentFaultsAndSQLCancellation/cancel_before
+=== RUN   TestReadContentFaultsAndSQLCancellation/rollback
+=== RUN   TestReadContentFaultsAndSQLCancellation/unavailable_db
+--- PASS: TestReadContentFaultsAndSQLCancellation (0.12s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/missing (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/corrupt (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/wrong_hash (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/symlink (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/expired (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/wrong_owner (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/timeout (0.03s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/cancel_before (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/rollback (0.01s)
+    --- PASS: TestReadContentFaultsAndSQLCancellation/unavailable_db (0.01s)
+=== RUN   TestReadActualMTLSPostgresContentComposition
+--- PASS: TestReadActualMTLSPostgresContentComposition (0.03s)
+=== RUN   TestRecordCommitRepeatConflictAndReconnect
+--- PASS: TestRecordCommitRepeatConflictAndReconnect (0.02s)
+=== RUN   TestRecordRollbackAndCommitFailure
+=== RUN   TestRecordRollbackAndCommitFailure/rollback
+=== RUN   TestRecordRollbackAndCommitFailure/commit_failure
+=== RUN   TestRecordRollbackAndCommitFailure/history_failure
+--- PASS: TestRecordRollbackAndCommitFailure (0.02s)
+    --- PASS: TestRecordRollbackAndCommitFailure/rollback (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/commit_failure (0.01s)
+    --- PASS: TestRecordRollbackAndCommitFailure/history_failure (0.00s)
+=== RUN   TestRecordConcurrentIdentityAndMessage
+=== RUN   TestRecordConcurrentIdentityAndMessage/two_messages
+=== RUN   TestRecordConcurrentIdentityAndMessage/same_message
+--- PASS: TestRecordConcurrentIdentityAndMessage (0.01s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/two_messages (0.01s)
+    --- PASS: TestRecordConcurrentIdentityAndMessage/same_message (0.01s)
+=== RUN   TestRecordRLSRejectsForeignWorkspace
+--- PASS: TestRecordRLSRejectsForeignWorkspace (0.01s)
+=== RUN   TestEnvironment
+    record_test.go:265: go1.27.2 linux arm64 isolated_pg=1
+--- PASS: TestEnvironment (0.00s)
+PASS
