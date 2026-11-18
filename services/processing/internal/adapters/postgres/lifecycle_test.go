@@ -27,6 +27,9 @@ type controlledQueue struct {
 	now              func() time.Time
 	current          lifecycle.QueueEvidence
 	missing, changed bool
+	held             []admission.Signal
+	applied          map[string]bool
+	discarded        int64
 }
 
 func (q *controlledQueue) Capture(_ context.Context, _ drafts.Grant, s lifecycle.QueueScope) (lifecycle.QueueEvidence, error) {
@@ -38,9 +41,19 @@ func (q *controlledQueue) Capture(_ context.Context, _ drafts.Grant, s lifecycle
 	q.current.Scope = s
 	q.current.ObservedAt = q.now().UTC().Truncate(time.Microsecond)
 	q.current.ExpiresAt = q.current.ObservedAt.Add(10 * time.Minute)
-	if q.current.SignalCount > 0 {
-		oldest := q.current.ObservedAt.Add(-time.Minute)
-		q.current.OldestReceivedAt = &oldest
+	q.current.SignalCount = int64(len(q.held))
+	q.current.SerializedBytes = 0
+	q.current.OldestReceivedAt = nil
+	for _, signal := range q.held {
+		payload, err := json.Marshal(signal)
+		if err != nil {
+			return lifecycle.QueueEvidence{}, err
+		}
+		q.current.SerializedBytes += int64(len(payload))
+		if q.current.OldestReceivedAt == nil || signal.FirstReceivedAt.Before(*q.current.OldestReceivedAt) {
+			oldest := signal.FirstReceivedAt.UTC().Truncate(time.Microsecond)
+			q.current.OldestReceivedAt = &oldest
+		}
 	}
 	return q.current, nil
 }
@@ -55,6 +68,32 @@ func (q *controlledQueue) WithCurrent(ctx context.Context, _ drafts.Grant, e lif
 		return drafts.ErrConflict
 	}
 	return f(ctx)
+}
+
+// apply is the stand's queue-owner action. It uses the exact durable
+// decision read back from Processing and never touches an external provider.
+func (q *controlledQueue) apply(decision lifecycle.ResumeDecision) ([]admission.Signal, error) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if q.applied[decision.RequestID] {
+		return nil, nil
+	}
+	if decision.Generation != q.current.Generation || decision.SignalCount != int64(len(q.held)) ||
+		decision.SerializedBytes != q.current.SerializedBytes || !decision.Scope.PauseAcceptedAt.Equal(q.current.Scope.PauseAcceptedAt) {
+		return nil, drafts.ErrConflict
+	}
+	var release []admission.Signal
+	switch decision.Disposition {
+	case lifecycle.Process:
+		release = append(release, q.held...)
+	case lifecycle.Discard:
+		q.discarded += decision.SignalCount
+	default:
+		return nil, drafts.ErrConflict
+	}
+	q.applied[decision.RequestID] = true
+	q.held = nil
+	return release, nil
 }
 
 type lifecycleFixture struct {
@@ -79,7 +118,7 @@ func newLifecycleFixture(t *testing.T) *lifecycleFixture {
 	}
 	x := &lifecycleFixture{activationFixture: f, op: op, lifecycle: LifecycleStore{Drafts: f.repo},
 		queue: &controlledQueue{now: time.Now, current: lifecycle.QueueEvidence{Generation: generation, Complete: true,
-			SignalCount: 2, SerializedBytes: 321, Gaps: []string{"Known earlier expiry: one signal"}}}}
+			Gaps: []string{"Known earlier expiry: one signal"}}, applied: make(map[string]bool)}}
 	x.startLifecycle(t)
 	return x
 }
@@ -210,7 +249,7 @@ func (f *lifecycleFixture) signal(t *testing.T, creation time.Time, session stri
 		t.Fatal(err)
 	}
 	return admission.Signal{WorkspaceID: f.workspace, MessageID: id, ReceiptID: id, ConnectionID: config,
-		Digest: "sha256:" + strings.Repeat("e", 64), AccountID: "acct_controlled", SessionID: session, SourceCreatedAt: creation}
+		Digest: "sha256:" + strings.Repeat("e", 64), AccountID: "acct_controlled", SessionID: session, SourceCreatedAt: creation, FirstReceivedAt: time.Now().UTC()}
 }
 
 func TestLifecyclePauseDrainAndResumeBothDispositions(t *testing.T) {
@@ -253,6 +292,8 @@ func TestLifecyclePauseDrainAndResumeBothDispositions(t *testing.T) {
 			if _, err = f.admit(t, held, draining.Revision); !errors.Is(err, admission.ErrNotAdmissible) {
 				t.Fatal("new admission during drain", err)
 			}
+			old := f.signal(t, original.FirstActivationAt.Add(-time.Second), "cs_old_late_payment")
+			f.queue.held = []admission.Signal{held, old}
 			f.change(t, f.command(lifecycle.Prepare, draining.Revision), 409)
 			// New server and content instance must preserve the drain boundary.
 			f.restart(t, draftTestDB{})
@@ -289,7 +330,7 @@ func TestLifecyclePauseDrainAndResumeBothDispositions(t *testing.T) {
 			prep := f.command(lifecycle.Prepare, paused.Revision)
 			f.change(t, prep, 202)
 			p := f.snapshot(t)
-			if p.Revision != 4 || p.SignalCount != 2 || p.SerializedBytes != 321 || p.OldestReceivedAt == nil || len(p.Gaps) != 1 {
+			if p.Revision != 4 || p.SignalCount != 2 || p.SerializedBytes != f.queue.current.SerializedBytes || p.OldestReceivedAt == nil || len(p.Gaps) != 1 {
 				t.Fatalf("snapshot mismatch: %+v", p)
 			}
 			cmd := f.command(lifecycle.Accept, p.Revision)
@@ -307,30 +348,35 @@ func TestLifecyclePauseDrainAndResumeBothDispositions(t *testing.T) {
 			f.restart(t, draftTestDB{})
 			decision, err := f.lifecycle.CommittedResume(ctx, f.workspace, original.OperationID, cmd.Command.RequestID, f.queue.current.Generation)
 			if err != nil || decision.Disposition != disposition || decision.SignalCount != 2 ||
-				decision.SerializedBytes != 321 || decision.ResultRevision != 5 || !decision.Scope.FirstActivationAt.Equal(*original.FirstActivationAt) {
+				decision.SerializedBytes != p.SerializedBytes || decision.ResultRevision != 5 || !decision.Scope.FirstActivationAt.Equal(*original.FirstActivationAt) {
 				t.Fatalf("missing exact owner disposition %+v: %v", decision, err)
 			}
 			if b := f.change(t, cmd, 202); !bytes.Equal(b, resume) {
 				t.Fatal("lost full resume result on replay")
 			}
+			released, err := f.queue.apply(decision)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if again, err := f.queue.apply(decision); err != nil || len(again) != 0 {
+				t.Fatal("owner applied the decision twice", again, err)
+			}
 			if disposition == lifecycle.Process {
-				old := f.signal(t, original.FirstActivationAt.Add(-time.Second), "cs_old")
-				if _, err = f.admit(t, old, decision.ResultRevision); !errors.Is(err, admission.ErrNotAdmissible) {
+				if len(released) != 2 {
+					t.Fatal("owner did not release the exact generation", released)
+				}
+				if _, err = f.admit(t, released[1], decision.ResultRevision); !errors.Is(err, admission.ErrNotAdmissible) {
 					t.Fatal("old Session admitted", err)
 				}
-				if _, err = f.admit(t, held, decision.ResultRevision); err != nil {
+				if _, err = f.admit(t, released[0], decision.ResultRevision); err != nil {
 					t.Fatal("eligible held signal not admitted", err)
 				}
 				dup, err := f.admit(t, f.signal(t, *original.FirstActivationAt, "cs_before_pause"), decision.ResultRevision)
 				if err != nil || dup.RecordID != accepted.RecordID {
 					t.Fatal("resume generated second case", dup, err)
 				}
-			} else {
-				// Intake owns discarding. Processing retains the factual scope,
-				// oldest timestamp, count and prior gaps of the durable choice.
-				if decision.OldestReceivedAt == nil || len(decision.Gaps) != 1 {
-					t.Fatal("discard lost known gap basis", decision)
-				}
+			} else if len(released) != 0 || f.queue.discarded != 2 || decision.OldestReceivedAt == nil || len(decision.Gaps) != 1 {
+				t.Fatal("discard lost the known gap basis or released signals", decision)
 			}
 		})
 	}
