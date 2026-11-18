@@ -41,10 +41,17 @@ type Request struct {
 // pure evaluator. Result is financial knowledge only; callers own all results.
 // A failed/canceled read yields INCOMPLETE; no case or provider state is written.
 func EvaluatePaidOrder(ctx context.Context, r Request, reader SourceFactsReader) eligibility.Result {
+	return EvaluatePaidOrderAtRead(ctx, r, reader, func() time.Time { return r.Now })
+}
+
+// EvaluatePaidOrderAtRead samples the decision clock after reading facts. A
+// provider may collect the proof during this request, so its completed_at
+// need not precede the start of the request.
+func EvaluatePaidOrderAtRead(ctx context.Context, r Request, reader SourceFactsReader, now func() time.Time) eligibility.Result {
 	if !eligibility.ValidatePolicy(r.Policy) || r.CaseID == "" || r.SessionID == "" || r.Now.IsZero() {
 		return eligibility.Result{Status: eligibility.Incomplete, Reason: "INVALID_CONTEXT"}
 	}
-	if ctx.Err() != nil || reader == nil {
+	if ctx.Err() != nil || reader == nil || now == nil {
 		return eligibility.Result{Status: eligibility.Incomplete, Reason: "READER_UNAVAILABLE"}
 	}
 	q := Query{CaseID: r.CaseID, SessionID: r.SessionID, ConfigID: r.Policy.ConfigID, AccountID: r.Policy.AccountID, ConnectionID: r.Policy.ConnectionID, LiveMode: *r.Policy.LiveMode}
@@ -58,5 +65,5 @@ func EvaluatePaidOrder(ctx context.Context, r Request, reader SourceFactsReader)
 	if s.Facts.CaseID != r.CaseID || s.Facts.SessionID != r.SessionID {
 		return eligibility.Result{Status: eligibility.Incomplete, Reason: "IDENTITY_MISMATCH"}
 	}
-	return eligibility.Evaluate(r.Policy, s.Facts, r.Now)
+	return eligibility.Evaluate(r.Policy, s.Facts, now())
 }

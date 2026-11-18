@@ -1,0 +1,185 @@
+{
+  "task": "HIT-112",
+  "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+  "base_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+  "base_branch": "work/HIT-111-processing-runtime",
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "contract_revision": 1,
+  "contract_fingerprint": "9449a85361fc49867f1b04b3c155dc56d776acec1b2ed7476789800a302a65b3",
+  "protocol_sha": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "runtime_candidate": {
+    "issue": "HIT-111",
+    "sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "pr": 72,
+    "state": "OPEN",
+    "draft": true,
+    "jira": "Готово",
+    "independent_review": "14274",
+    "verdict": "PASS WITH NOTES",
+    "checked_dod": "8/8"
+  },
+  "dependencies": [
+    {
+      "issue": "HIT-103",
+      "sha": "5e1c8805c34f24f045a0315765df4b280ca5f9a9",
+      "pr": 71,
+      "state": "OPEN",
+      "jira": "Готово",
+      "included": true
+    },
+    {
+      "issue": "HIT-104",
+      "sha": "ce6afe4ff78559920646aaca1de4ca90d0531734",
+      "pr": 62,
+      "state": "OPEN",
+      "jira": "Готово",
+      "included": true
+    },
+    {
+      "issue": "HIT-79",
+      "sha": "3bae6417421465868c432fe18b379d46be6144aa",
+      "pr": 52,
+      "state": "OPEN",
+      "jira": "Готово",
+      "included": true
+    },
+    {
+      "issue": "HIT-98",
+      "sha": "d53f42b0803c2c9ec51364faa117a7d4e886abb7",
+      "pr": 57,
+      "state": "OPEN",
+      "jira": "Готово",
+      "included": true
+    },
+    {
+      "issue": "HIT-77",
+      "sha": "b31a3adae4fac625c97fd903e13f9aad8d6ca771",
+      "pr": 48,
+      "state": "OPEN",
+      "reuse": "SourceFacts files byte-identical at HIT-111 head. Source path last changed at 4c21dc30aa0a9b9c6efc75546d1d868535641125; PR 48 itself is not an ancestor."
+    }
+  ],
+  "changed_code_paths": [
+    "services/processing/internal/adapters/postgres/caseworker.go",
+    "services/processing/internal/adapters/postgres/caseworker_process_test.go",
+    "services/processing/internal/adapters/postgres/caseworker_test.go",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/application/evaluatepaidorder/evaluate.go",
+    "services/processing/internal/application/preparecase/prepare.go",
+    "services/processing/internal/runtime/caseworker.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/source.go"
+  ],
+  "unchanged_against_base": [
+    "services/processing/scripts/migrations",
+    "services/processing/internal/domain/eligibility",
+    "services/processing/internal/adapters/intake/sourcefacts",
+    "services/processing/internal/adapters/postgres/admit.go",
+    "services/processing/internal/adapters/postgres/record.go",
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/application/dispatchintent",
+    "services/platform",
+    ".github/workflows"
+  ],
+  "input_manifest": [
+    {
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63#project-os-parent-contract",
+      "sha256": "dcbe170db9e5636dcef9e71955ca5a7614bc06663461e470e8ba3b8c5a27c3d0",
+      "version": "0b58228cfb0d2365e0669781327dbda646b9ae9115e9c4d6322c871637688a95"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/326eeec90e299a6149b570fbf6cac20c532f1395/contracts/hitpipe/mvp-2026-10-31/phase-candidates/product.json",
+      "sha256": "b26f006489f874f55db37217a03f7ab8ea4862e7f09001055f173570d6753d72",
+      "version": "326eeec90e299a6149b570fbf6cac20c532f1395",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+      "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md",
+      "sha256": "7fa61bb6fa150c033c87c9b8fc2fa9ef06bb0bc7d87132a88229a783c6923c7d",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+      "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md",
+      "sha256": "a1cbc99e4d5450d77d47a1967155d0e0288775eacadd22b313fc58d4e8f86741",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10908",
+      "sha256": "310d84fd402ec9b3391c81e525aacc9e38104d31f73d0caab406f3753a7af999",
+      "version": "2026-10-31T11:29:51.893+0300"
+    },
+    {
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10859",
+      "sha256": "f87f2618eaf4bf17f4e8117477f56a0b6e1d2df7ac044d580e316d75837360b7",
+      "version": "2026-10-30T17:34:17.216+0300"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+      "sha256": "ea552ae1906ae7998687fcdd6ea0b13ac8a9a31630c6f4cf8b82ba7867bfd8f4",
+      "version": "0ff88d118e39a5dfaa34540c0d621649c34655a7",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+      "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a",
+      "version": "b2461564e4355ea5a72a55a30a635655397c463b",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+      "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+      "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+      "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md",
+      "sha256": "3cb6bbbf3c7cbd59a846e50596593d71c8f8208981ecfe2dd06f0f694d64436f",
+      "version": "d9eb399d9cc0528f1beae6153851ab5020741ea5",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/postgres-18.7-images.json",
+      "sha256": "29531e2c28678b5e5e7052ba416a83d6535176da7127a43bc032e10aaae7301e",
+      "version": "d9eb399d9cc0528f1beae6153851ab5020741ea5",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/postgresql-18.7-advisory.json",
+      "sha256": "32bdf1c7c25ca1ab4827b8e20676456b4844e176be3b09df11a4be9d1970f3f4",
+      "version": "d9eb399d9cc0528f1beae6153851ab5020741ea5",
+      "verification": "Git bytes verified"
+    },
+    {
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=12229",
+      "sha256": "03ca0fbf428204b97e2f84accd8fda6aa0a9394ce8d43181cd1ecf955f05c939",
+      "version": "2026-11-14T13:04:16.240+0300"
+    }
+  ]
+}

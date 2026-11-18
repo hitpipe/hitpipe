@@ -44,14 +44,15 @@ type clock struct{}
 func (clock) Now() time.Time { return time.Now().UTC() }
 
 type Runtime struct {
-	a             *access
-	servers       []*http.Server
-	pool          []*pgxpool.Pool
-	files         *contentfiles.Store
-	sender        dispatchintent.Service
-	lifecycle     postgres.LifecycleStore
-	SourceReaders preparecase.Readers
-	logger        *slog.Logger
+	a           *access
+	servers     []*http.Server
+	pool        []*pgxpool.Pool
+	files       *contentfiles.Store
+	sender      dispatchintent.Service
+	lifecycle   postgres.LifecycleStore
+	caseReaders sourceReaders
+	caseJobs    postgres.CaseJobStore
+	logger      *slog.Logger
 }
 
 func newPool(ctx context.Context, path, dbName, role string, size int32, stand bool) (*pgxpool.Pool, error) {
@@ -239,7 +240,8 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 	rt.sender = dispatchintent.Service{Repository: jobStore{DispatchStore: postgres.DispatchStore{DB: worker}, a: dispatch},
 		Content: dispatchContent{Content: rt.files, a: dispatch}, Decoder: deliveryhttp.Codec{}, Sender: send, Boundary: dispatch, Clock: serviceClock,
 		Policy: dispatchintent.Policy{Batch: 5, MaxAttempts: 3, Lease: 10 * time.Second, RequestTimeout: 1500 * time.Millisecond, BaseBackoff: time.Second, MaxBackoff: 5 * time.Second}, Jitter: dispatchintent.CryptoJitter}
-	rt.SourceReaders = sourceReaders{a: rt.a, origin: c.Intake.Origin, transport: outbound(c.Intake, outCA, clientCert)}
+	rt.caseJobs = postgres.CaseJobStore{DB: worker}
+	rt.caseReaders = sourceReaders{a: rt.a, origin: c.Intake.Origin, transport: outbound(c.Intake, outCA, clientCert), jobs: rt.caseJobs}
 	success = true
 	return rt, nil
 }
@@ -407,6 +409,7 @@ func (rt *Runtime) work(ctx context.Context, stop <-chan struct{}) {
 			if err == nil {
 				_ = rt.a.start(c, w, p.principal, p.epoch, func(x context.Context) error { return rt.lifecycle.Drain(x, w) })
 			}
+			rt.advanceCase(ctx, w)
 			c = withPermit(ctx)
 			destination := rt.a.stand[w].config.Destination
 			p, err = rt.a.local(c, w, "CONNECTOR_WRITE", &destination)

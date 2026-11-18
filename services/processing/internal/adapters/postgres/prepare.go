@@ -132,6 +132,10 @@ func (db DecisionStore) Load(ctx context.Context, r preparecase.Request) (prepar
 	return c, nil
 }
 func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d preparecase.Decision, now time.Time) (preparecase.Result, error) {
+	return db.commit(ctx, expected, d, now, nil)
+}
+
+func (db DecisionStore) commit(ctx context.Context, expected preparecase.Case, d preparecase.Decision, now time.Time, claim *CaseClaim) (preparecase.Result, error) {
 	zero := preparecase.Result{}
 	if db.DB == nil || db.Content == nil || now.IsZero() || d.At.IsZero() || d.At.After(now) || d.Evidence.Class != "HISTORY" {
 		return zero, preparecase.ErrHold
@@ -185,12 +189,27 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 		return zero, e
 	}
 	defer tx.Rollback(ctx)
+	if claim != nil {
+		if e = claim.check(ctx, tx, true); e != nil {
+			return zero, e
+		}
+	}
 	current, e := loadCase(ctx, tx, expected.Request, true)
 	if e != nil {
 		return zero, e
 	}
 	if current.Revision != expected.Revision || current.Revision != expected.ExpectedRevision || current.OperationRevision != expected.OperationRevision || current.ConfigID != expected.ConfigID || current.ConfigDigest != expected.ConfigDigest || current.OwnerID != expected.OwnerID || current.State != expected.State || current.LineageID != "" || current.Fenced || (current.Outcome != "UNESTABLISHED" && current.Outcome != "NO_EFFECT") {
 		return zero, preparecase.ErrStale
+	}
+	// Admission serializes through the same operation row. A payment signal
+	// committed while facts were read must get its own current decision.
+	if claim != nil {
+		if d.At.Before(claim.signalAt) {
+			return zero, preparecase.ErrStale
+		}
+		if e = claim.checkCase(ctx, tx); e != nil {
+			return zero, e
+		}
 	}
 	var operation string
 	var dbNow time.Time
@@ -256,6 +275,11 @@ func (db DecisionStore) Commit(ctx context.Context, expected preparecase.Case, d
 	}
 	if e = appendDecisionHistory(ctx, tx, current.WorkspaceID, current.CaseID, current.State, d); e != nil {
 		return zero, e
+	}
+	if claim != nil {
+		if e = claim.complete(ctx, tx); e != nil {
+			return zero, e
+		}
 	}
 	if ctx.Err() != nil {
 		return zero, ctx.Err()

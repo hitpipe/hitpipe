@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/intake/sourcefacts"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/evaluatepaidorder"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
@@ -15,11 +16,16 @@ type sourceReaders struct {
 	a         *access
 	origin    string
 	transport *http.Transport
+	jobs      postgres.CaseJobStore
+	claim     postgres.CaseClaim
 }
 
 func (s sourceReaders) ForCase(ctx context.Context, c preparecase.Case, r preparecase.Request) (evaluatepaidorder.SourceFactsReader, error) {
 	w, ok := s.a.stand[r.WorkspaceID]
-	if !ok || c.OwnerID != w.config.Owner || c.Policy.ConnectionID != w.config.Source || c.AccountID != w.config.Account || c.Live != (w.config.Mode == "LIVE") {
+	if !ok || r != s.claim.Request || c.OwnerID != w.config.Owner || c.Policy.ConnectionID != w.config.Source ||
+		c.Mapping.DestinationConnectionID != w.config.Destination || c.Mapping.DestinationWorkspaceID != w.config.DestinationWorkspace ||
+		c.Mapping.PriceID != w.config.Price || c.Mapping.ListID != w.config.List || c.Mapping.AssigneeID != w.config.Assignee ||
+		c.AccountID != w.config.Account || c.Live != (w.config.Mode == "LIVE") {
 		return nil, preparecase.ErrHold
 	}
 	id, err := drafts.NewID()
@@ -27,6 +33,9 @@ func (s sourceReaders) ForCase(ctx context.Context, c preparecase.Case, r prepar
 		return nil, err
 	}
 	deadline := time.Now().Add(protectedTime)
+	if s.claim.Until().Before(deadline) {
+		deadline = s.claim.Until()
+	}
 	if !c.EpisodeDeadlineAt.IsZero() && c.EpisodeDeadlineAt.Before(deadline) {
 		deadline = c.EpisodeDeadlineAt
 	}
@@ -37,8 +46,22 @@ func (s sourceReaders) ForCase(ctx context.Context, c preparecase.Case, r prepar
 
 func (s sourceReaders) Start(ctx context.Context, c sourcefacts.CallerContext, f func() error) error {
 	w, ok := s.a.stand[c.WorkspaceID]
-	if !ok || c.ConnectionID != w.config.Source || c.AccountID != w.config.Account {
+	if !ok || s.a.stopping.Load() || c.WorkspaceID != s.claim.WorkspaceID || c.CaseID != s.claim.CaseID ||
+		c.ExpectedEpoch != s.claim.Epoch || c.ConnectionID != w.config.Source || c.AccountID != w.config.Account {
 		return preparecase.ErrHold
 	}
-	return s.a.start(ctx, c.WorkspaceID, w.config.Owner, c.ExpectedEpoch, func(context.Context) error { return f() })
+	request := withPermit(ctx)
+	p, err := s.a.local(request, c.WorkspaceID, "CONNECTOR_READ", &c.ConnectionID)
+	if err != nil || p.epoch != c.ExpectedEpoch {
+		return preparecase.ErrHold
+	}
+	return s.a.start(request, c.WorkspaceID, w.config.Owner, c.ExpectedEpoch, func(x context.Context) error {
+		if err := s.jobs.CheckStart(x, s.claim); err != nil {
+			return err
+		}
+		if x.Err() != nil || !time.Now().Before(s.claim.Until()) {
+			return preparecase.ErrStale
+		}
+		return f()
+	})
 }

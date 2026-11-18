@@ -47,6 +47,9 @@ type processStand struct {
 	waitDelivery                                               atomic.Bool
 	workspaces                                                 map[string]string
 	pauseHandshake                                             atomic.Bool
+	pauseSourceHandshake                                       atomic.Bool
+	manualCases                                                map[string]bool
+	intakeReply                                                http.HandlerFunc
 	handshakeEntered                                           chan struct{}
 	handshakeProceed                                           chan struct{}
 	denials                                                    []drafts.DenyEpochSnapshot
@@ -98,9 +101,13 @@ func (s *processStand) peer(address, name string, h http.HandlerFunc) {
 	cfg := &tls.Config{Certificates: []tls.Certificate{s.pki.Issue(s.t, name, net.ParseIP(host), true, false)},
 		ClientCAs: s.pki.Root, ClientAuth: tls.RequireAndVerifyClientCert, MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13,
 		NextProtos: []string{"http/1.1"}}
-	if name == "delivery.test" {
+	if name == "delivery.test" || name == "intake.test" {
 		cfg.GetConfigForClient = func(*tls.ClientHelloInfo) (*tls.Config, error) {
-			if s.pauseHandshake.CompareAndSwap(true, false) {
+			pause := &s.pauseHandshake
+			if name == "intake.test" {
+				pause = &s.pauseSourceHandshake
+			}
+			if pause.CompareAndSwap(true, false) {
 				close(s.handshakeEntered)
 				select {
 				case <-s.handshakeProceed:
@@ -159,7 +166,8 @@ func (s *processStand) iam(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(400)
 			return
 		}
-		if !s.iamOpen.Load() || s.workspaces[in.WorkspaceID] == "" || r.Header.Get("X-HitPipe-Session") != s.token {
+		if !s.iamOpen.Load() || s.workspaces[in.WorkspaceID] == "" || r.Header.Get("X-HitPipe-Session") != s.token ||
+			(in.Action == "CASE_READ" && s.manualCases[in.WorkspaceID]) {
 			w.WriteHeader(403)
 			return
 		}
@@ -269,7 +277,13 @@ func createProcessStand(t *testing.T, binary, files string, workspaces map[strin
 	}
 	s.stand = s.json("stand.json", map[string]any{"workspaces": slots})
 	s.peer("127.0.0.2:8443", "iam.test", s.iam)
-	s.peer("127.0.0.3:8443", "intake.test", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(503) })
+	s.peer("127.0.0.3:8443", "intake.test", func(w http.ResponseWriter, r *http.Request) {
+		if s.intakeReply == nil {
+			w.WriteHeader(503)
+			return
+		}
+		s.intakeReply(w, r)
+	})
 	s.peer("127.0.0.4:8443", "delivery.test", s.delivery)
 	return s
 }
@@ -371,8 +385,11 @@ func (s *processStand) command(path string, value any, id string, want int) []by
 }
 
 func (s *processStand) activate(f draftFixture) (drafts.ActivationCommand, drafts.Operation) {
+	return s.activateWithConfig(f, f.config())
+}
+
+func (s *processStand) activateWithConfig(f draftFixture, c drafts.DraftConfig) (drafts.ActivationCommand, drafts.Operation) {
 	s.t.Helper()
-	c := f.config()
 	c.PriceAlias, c.ListAlias, c.AssigneeAlias, c.ServiceLabel = draftString("price_alias"), draftString("list_alias"), draftString("assignee_alias"), draftString("Synthetic service")
 	rev := int64(1)
 	draft := drafts.DraftWrite{Config: c, Command: f.meta(nil)}
@@ -424,6 +441,7 @@ func TestProcessingExecutableOwnedStand(t *testing.T) {
 		p.service.Repository = DecisionStore{DB: connect(t), Content: f.files}
 	}
 	stand := createProcessStand(t, binary, f.path, map[string]string{f.workspace: "acct_controlled", barrierScope.workspace: "acct_controlled", job.request.WorkspaceID: "acct_synthetic", other.request.WorkspaceID: "acct_synthetic", blocked.request.WorkspaceID: "acct_synthetic"})
+	stand.manualCases = map[string]bool{job.request.WorkspaceID: true, other.request.WorkspaceID: true, blocked.request.WorkspaceID: true}
 	// The local database deliberately has no TLS endpoint. Without explicitly
 	// enabling the loopback test process it cannot start.
 	var refusal *exec.ExitError
