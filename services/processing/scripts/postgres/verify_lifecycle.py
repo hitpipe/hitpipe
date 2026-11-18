@@ -31,6 +31,10 @@ class Run(verify_drafts.Run):
             "docker", "exec", self.container, "cat", "/tmp/hit103-captures.jsonl",
         ])
         (self.output / "lifecycle-api-captures.jsonl").write_bytes(capture.stdout)
+        pipeline = self.command("integrated-lifecycle-pipeline", [
+            "docker", "exec", self.container, "cat", "/tmp/activation-pipeline.json",
+        ])
+        (self.output / "activation-pipeline.json").write_bytes(pipeline.stdout)
 
     def main(self):
         super().main()
