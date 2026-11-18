@@ -1,0 +1,124 @@
+{
+  "source_sha": "17cc3c46a102251c07262d1c2bbb4d5f6ca01e6f",
+  "dirty": [],
+  "go": "go version go1.27.2 darwin/arm64",
+  "host": "macOS-26.5-arm64-arm-64bit",
+  "image": "docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "started_utc": "2026-11-18T14:15:19Z",
+  "scope": "local synthetic receipt; not HTTP/network sender/Processing/IAM/runtime/disk qualification",
+  "commands": [
+    {
+      "name": "generation",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/nic_piter/code/hitpipe-HIT-117/services/intake/tools/generate_sourcefacts.py",
+        "--check",
+        "--gofmt",
+        "/private/tmp/hit73-toolchain/go/bin/gofmt"
+      ],
+      "exit_code": 0,
+      "seconds": 0.087
+    },
+    {
+      "name": "unit",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 4.094
+    },
+    {
+      "name": "integration",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-tags=integration",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 14.425
+    },
+    {
+      "name": "vet",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "vet",
+        "-tags=integration",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 1.787
+    },
+    {
+      "name": "build",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "build",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 0.343
+    },
+    {
+      "name": "modules",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit_code": 0,
+      "seconds": 0.327
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/nic_piter/code/hitpipe-HIT-117/services/intake/tools/check_postgres.py"
+      ],
+      "exit_code": 0,
+      "seconds": 62.169
+    }
+  ],
+  "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+  "python": "3.12.6 (v3.12.6:a4a2d2b0d85, Sep  6 2024, 16:08:03) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "source_hashes": {
+    "go.mod": "cb29fa1e28450164fc476a616299d1313b114bf4b8c4bd15bb7af23ea102952f",
+    "go.sum": "a25891aa838a4c490568e2be37d5d5f681dab49954c8cf0f8f00d8e73fdf71cc",
+    "internal/adapters/contentfacts/content.go": "73c0c554230f4bb6b3735f97db3aec935c93138427119922b8bf432a7a4e237e",
+    "internal/adapters/contentstore/store.go": "73469b0fc92af528829f28ab1ad960b8024c34c7bb4409372d12b1767a0da211",
+    "internal/adapters/contentstore/store_test.go": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811",
+    "internal/adapters/http/sourcefacts/server.go": "464fb207f350e23b2abbf954986bfe0da737bb66a5747bc91180b087417f120f",
+    "internal/adapters/postgres/facts/repository.go": "90959de3bf75012340325681e5294457ec315e1a7ac3bf632d76b9f5203ef45a",
+    "internal/adapters/stripe/client.go": "3c8363422e93f480a357bf78705664242bb37cf4ee8f4e57e1fd7775abb92503",
+    "internal/adapters/stripe/client_test.go": "286ca28d61743627e51765cdcc28b804f79a6b211cd471c7d18bb65329b550c8",
+    "internal/application/readsourcefacts/service.go": "d1ec69c2635a4ff14c5ef2e18ee1f1d6037dbc47b749df5aef5a2ede97bbd1e5",
+    "internal/domain/sourcefacts/codec.go": "ec8eab666345bc2d6da28f8fee143b46e800af308c37eb38db6651719c97850e",
+    "internal/domain/sourcefacts/codec_test.go": "5490d751256467c6ef383b3389417742c051c94afdd2bfc91620190553fbf0fd",
+    "internal/domain/sourcefacts/schema.json": "cb7a0a99310f3596228caa9235f10bb79d646edea7d9957c01c8daa558c9f04d",
+    "internal/domain/sourcefacts/types_generated.go": "686a39d8aaa53d089b18226ccd3d8b0d0c9f8e5a625db11b4021b8a2e1aaa35a",
+    "migrations/0001_intake.sql": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+    "tests/postgres/bootstrap.sql": "e1e0bbd693bfbc09551a8f2adda43c627b8578663e869ce9c02f50167e0c8eab",
+    "tests/sourcefacts/faults_test.go": "130e09d34c6e325329fbed0146122a7cf869f65fce94a997df9de862c7b1b04c",
+    "tests/sourcefacts/integration_test.go": "9d1cc2e8aaae918ac4cb07d6fd2d90c8e07e1fbf7170addffc86ae4a05453444",
+    "tools/check_postgres.py": "c19bf42cbc77153d3314106b0ba6bd594af52479eaced50100ff035c4f3849bd",
+    "tools/check_sourcefacts.py": "e7112b0bf3792a7b07e18a6cc62121a725b01088bc11dd08fbc427778c51ec00",
+    "tools/generate_sourcefacts.py": "c0f100ed2a63a78eb937e47926966f2640c689fc719d9aa638c05a29b21f8887"
+  },
+  "storage_settings": {
+    "fsync": "on",
+    "full_page_writes": "on",
+    "synchronous_commit": "on"
+  },
+  "postgres": "18.7",
+  "state": "PASSED",
+  "owned_container_removed": true,
+  "finished_utc": "2026-11-18T14:49:55Z"
+}
