@@ -77,7 +77,7 @@ public final class EmailCodeActionFactory implements RequiredActionFactory {
                 store.deleteUser(removed.getKeycloakSession(), removed.getRealm().getId(), removed.getUser().getId());
             }
         });
-        long interval = Duration.ofMinutes(10).toMillis();
+        long interval = Duration.ofMinutes(1).toMillis();
         KeycloakModelUtils.runJobInTransaction(factory, session -> session.getProvider(TimerProvider.class)
                 .scheduleTask(tx -> store.purge(tx, clock.instant()), interval, PURGE));
     }

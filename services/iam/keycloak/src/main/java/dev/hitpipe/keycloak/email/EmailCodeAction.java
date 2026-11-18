@@ -94,9 +94,11 @@ final class EmailCodeAction implements RequiredActionProvider {
             return;
         }
         AuthenticationSessionModel auth = context.getAuthenticationSession();
+        if (issue.generation() > 0) {
+            auth.setAuthNote(GENERATION, Long.toString(issue.generation()));
+        }
         switch (issue.status()) {
             case ISSUED -> {
-                auth.setAuthNote(GENERATION, Long.toString(issue.generation()));
                 setRetryAt(auth, issue.retryAt());
                 // The issue transaction has closed. Mail transport never holds a database lock.
                 auth.setAuthNote(DELIVERY, DELIVERY_UNKNOWN);
@@ -127,9 +129,8 @@ final class EmailCodeAction implements RequiredActionProvider {
     }
 
     private void verify(RequiredActionContext context, String generationText, String code) {
-        AuthenticationSessionModel auth = context.getAuthenticationSession();
         long generation = generation(generationText);
-        if (generation < 1 || generation != generation(auth.getAuthNote(GENERATION))) {
+        if (generation < 1) {
             challenge(context, STALE, null);
             return;
         }

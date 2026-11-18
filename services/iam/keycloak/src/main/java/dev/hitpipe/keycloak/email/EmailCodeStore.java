@@ -73,10 +73,11 @@ public final class EmailCodeStore {
             byte[] recipient = codes.recipientMac(context);
             List<Instant> sends = lockRate(connection, context.realmId(), recipient, issuedAt);
             Challenge previous = lockChallenge(connection, context);
-            if (previous != null && previous.consumedAt() == null
-                    && (previous.keyVersion() != codes.keyVersion()
-                    || !EmailCodes.matches(previous.emailMac(), codes.emailMac(context))
-                    || !EmailCodes.matches(previous.flowMac(), codes.flowMac(context)))) {
+            boolean sameContext = previous != null && previous.keyVersion() == codes.keyVersion()
+                    && EmailCodes.matches(previous.emailMac(), codes.emailMac(context))
+                    && EmailCodes.matches(previous.flowMac(), codes.flowMac(context));
+            long activeGeneration = sameContext && previous.consumedAt() == null ? previous.generation() : 0;
+            if (previous != null && previous.consumedAt() == null && !sameContext) {
                 // A new email/authentication flow revokes the previous challenge even during cooldown.
                 try (PreparedStatement statement = connection.prepareStatement("""
                         UPDATE hitpipe_email_code_challenge SET flow_mac = ?
@@ -89,20 +90,18 @@ public final class EmailCodeStore {
                 }
             }
             if (sends.size() >= MAX_SENDS) {
-                return notIssued(IssueStatus.RATE_LIMIT, sends.get(0).plus(WINDOW));
+                return new IssueResult(IssueStatus.RATE_LIMIT, activeGeneration, null, null,
+                        sends.get(0).plus(WINDOW));
             }
             if (!sends.isEmpty()) {
                 Instant retryAt = sends.get(sends.size() - 1).plus(COOLDOWN);
                 if (issuedAt.isBefore(retryAt)) {
-                    return notIssued(IssueStatus.COOLDOWN, retryAt);
+                    return new IssueResult(IssueStatus.COOLDOWN, activeGeneration, null, null, retryAt);
                 }
             }
 
             long generation = previous == null ? 1 : Math.addExact(previous.generation(), 1);
             Instant expiresAt = issuedAt.plus(TTL);
-            boolean sameContext = previous != null && previous.keyVersion() == codes.keyVersion()
-                    && EmailCodes.matches(previous.emailMac(), codes.emailMac(context))
-                    && EmailCodes.matches(previous.flowMac(), codes.flowMac(context));
             String code = sameContext
                     ? codes.generateReplacementCode(context, previous.generation(), previous.expiresAt(), previous.codeMac())
                     : codes.generateCode();
