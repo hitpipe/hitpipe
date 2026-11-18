@@ -199,6 +199,20 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 		t.Fatal("Delivery route did not survive attachment", res.StatusCode, string(body))
 	}
 	flow := lifecycleFixture{activationFixture: f, op: operation, lifecycle: lifecycleRepo, queue: queue}
+	// The integrated reader uses PostgreSQL time. Give the existing
+	// admitted episode an already-due deadline within its 300 second bound.
+	episode, e := newID()
+	if e != nil {
+		t.Fatal(e)
+	}
+	tx = begin(t, connect(t), f.workspace)
+	if _, e = tx.Exec(ctx, `INSERT INTO hp_processing.episodes(workspace_id,episode_id,case_id,started_at,deadline_at)
+     VALUES($1,$2,$3,statement_timestamp(),statement_timestamp())`, f.workspace, episode, cases.Items[0].CaseID); e != nil {
+		t.Fatal(e)
+	}
+	if e = tx.Commit(ctx); e != nil {
+		t.Fatal(e)
+	}
 	pause := flow.command(lifecycle.Pause, operation.Revision)
 	flow.change(t, pause, 202)
 	draining := flow.list(t)
@@ -237,9 +251,7 @@ func TestActivationExperimentalStackOnePrivateListener(t *testing.T) {
 	}
 	queue.held = append(queue.held, held)
 
-	drain := lifecycleRepo
-	drain.Drafts.Clock = testClock{func() time.Time { return *draining.DrainDeadlineAt }}
-	if e = drain.Drain(ctx, f.workspace); e != nil {
+	if e = lifecycleRepo.Drain(ctx, f.workspace); e != nil {
 		t.Fatal(e)
 	}
 	paused := flow.list(t)
