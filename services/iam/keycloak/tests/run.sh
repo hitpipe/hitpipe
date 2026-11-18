@@ -9,8 +9,10 @@ printf '%s  %s\n' '50f9fdfa632c7721521e95afd90d8b1fd7a536e1c5845c1062a0d16ef3c00
 run_dir=$(mktemp -d)
 export HIT105_COMPOSE_ENV="$run_dir/compose.env"
 export HIT105_COMPOSE_PROJECT=hit105-email-lab
-compose=(docker --host unix:///var/run/docker.sock compose --env-file "$HIT105_COMPOSE_ENV" --project-name "$HIT105_COMPOSE_PROJECT" -f compose.yaml)
+docker=(docker --host unix:///var/run/docker.sock)
+compose=("${docker[@]}" compose --env-file "$HIT105_COMPOSE_ENV" --project-name "$HIT105_COMPOSE_PROJECT" -f compose.yaml)
 compose_started=0
+loopback_pid=
 
 # Compose gives ambient environment variables precedence. Remove only the lab
 # variable names so an existing caller's credentials cannot enter the stand.
@@ -18,6 +20,10 @@ unset HIT105_DB_PASSWORD HIT105_ADMIN_PASSWORD HITPIPE_EMAIL_CODE_KEY \
   HITPIPE_EMAIL_CODE_KEY_VERSION HITPIPE_EMAIL_RATE_KEY
 
 cleanup() {
+  if [[ -n $loopback_pid ]]; then
+    kill "$loopback_pid" 2>/dev/null || true
+    wait "$loopback_pid" 2>/dev/null || true
+  fi
   if [[ $compose_started == 1 ]]; then
     "${compose[@]}" down --volumes --remove-orphans >/dev/null 2>&1 || true
   fi
@@ -44,10 +50,25 @@ fi
 "${compose[@]}" config --quiet
 compose_started=1
 "${compose[@]}" up --build -d
+
+# An internal Docker bridge has no published ports. Inspect only addresses in
+# this lab's network and forward the two browser-facing services on VM loopback.
+lab_address() {
+  local id
+  id=$("${compose[@]}" ps --all -q "$1")
+  [[ -n $id ]] || return 1
+  "${docker[@]}" inspect --format \
+    '{{with index .NetworkSettings.Networks "hit105-email-lab_lab"}}{{.IPAddress}}{{end}}' "$id"
+}
+
+node tests/loopback.mjs "$(lab_address keycloak)" "$(lab_address smtp)" &
+loopback_pid=$!
 ready=0
 for attempt in {1..75}; do
+  if ! kill -0 "$loopback_pid" 2>/dev/null; then break; fi
   if curl --silent --fail --max-time 2 -o /dev/null \
-      http://127.0.0.1:18080/realms/hit105-test/.well-known/openid-configuration; then
+      http://127.0.0.1:18080/realms/hit105-test/.well-known/openid-configuration \
+    && curl --silent --fail --max-time 2 -o /dev/null http://127.0.0.1:18025/readyz; then
     ready=1
     break
   fi
@@ -68,7 +89,7 @@ fi
 java_version=$("${compose[@]}" exec -T keycloak java -version 2>&1)
 keycloak_version=$("${compose[@]}" exec -T keycloak /opt/keycloak/bin/kc.sh --version 2>&1)
 postgres_version=$("${compose[@]}" exec -T postgres psql -X -qAt -U hit105 -d hit105_keycloak -c 'SHOW server_version')
-mailpit_version=$("${compose[@]}" exec -T smtp /mailpit --version)
+mailpit_version=$("${compose[@]}" exec -T smtp /mailpit version --no-release-check)
 printf '%s\n%s\nPostgreSQL %s\n%s\n' "$java_version" "$keycloak_version" "$postgres_version" "$mailpit_version"
 [[ $java_version =~ version\ \"21[.\"] ]]
 [[ $keycloak_version =~ Keycloak\ 26\.8\.1($|[[:space:]]) ]]

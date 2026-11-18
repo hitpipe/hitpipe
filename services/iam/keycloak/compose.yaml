@@ -21,8 +21,8 @@ services:
     environment:
       MP_ENABLE_CHAOS: 'true'
       MP_MAX_MESSAGES: '100'
-    ports:
-      - '127.0.0.1:18025:8025'
+      MP_DISABLE_VERSION_CHECK: 'true'
+      MP_SMTP_DISABLE_RDNS: 'true'
     networks: [lab]
 
   keycloak:
@@ -42,8 +42,6 @@ services:
       HITPIPE_EMAIL_CODE_KEY_VERSION: ${HITPIPE_EMAIL_CODE_KEY_VERSION:?use tests/run.sh to generate lab credentials}
       HITPIPE_EMAIL_RATE_KEY: ${HITPIPE_EMAIL_RATE_KEY:?use tests/run.sh to generate lab credentials}
       JAVA_OPTS_APPEND: '-XX:-UseBASE64Intrinsics'
-    ports:
-      - '127.0.0.1:18080:8080'
     mem_limit: 1536m
     stop_grace_period: 30s
     depends_on:
