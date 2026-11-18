@@ -1,0 +1,96 @@
+{
+  "subject": "HIT-107",
+  "authorship": "Codex по поручению Budykins; план подтверждён, запись Jira 14324.",
+  "materialized_result": {
+    "summary": "Protected Stripe-signed POST with verified installation, current-admission gate and ACK only after durable receipt.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "20aa3946ac6f5e6a7d82469bbee5a95d3b4cd3d7",
+    "reuse": [
+      {
+        "task": "HIT-71",
+        "pr": 47,
+        "state": "open",
+        "merged": false,
+        "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+        "reuse": "exact migration and bootstrap SQL"
+      },
+      {
+        "task": "HIT-73",
+        "pr": 65,
+        "state": "open",
+        "merged": false,
+        "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864",
+        "reuse": "signature verifier and normalizer; only error classification added"
+      },
+      {
+        "task": "HIT-74",
+        "pr": 66,
+        "state": "open",
+        "merged": false,
+        "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+        "reuse": "file durability and readback; HIT-86 already aliases shared contentref.Ref"
+      },
+      {
+        "task": "HIT-86",
+        "pr": 67,
+        "state": "open",
+        "merged": false,
+        "sha": "a3357b3fe6d3abcc8c03726656a7f20077582f11",
+        "reuse": "tested durable repository, quota, replay and content composition; receive exposes bounded rejection classes"
+      }
+    ],
+    "report": "services/intake/evidence/HIT-107/README.md"
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/internal/adapters/http/stripewebhook/server.go",
+    "services/intake/internal/adapters/postgres/receipt/webhook_integration_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/receivesignal/receive.go",
+    "services/intake/tools/check_receipt.py",
+    "services/intake/evidence/HIT-107/README.md",
+    "services/intake/evidence/HIT-107/artifacts.json",
+    "services/intake/evidence/HIT-107/build.stderr",
+    "services/intake/evidence/HIT-107/build.stdout",
+    "services/intake/evidence/HIT-107/commands.json",
+    "services/intake/evidence/HIT-107/integration.stderr",
+    "services/intake/evidence/HIT-107/integration.stdout",
+    "services/intake/evidence/HIT-107/modules.stderr",
+    "services/intake/evidence/HIT-107/modules.stdout",
+    "services/intake/evidence/HIT-107/schema.stderr",
+    "services/intake/evidence/HIT-107/schema.stdout",
+    "services/intake/evidence/HIT-107/source-audit.json",
+    "services/intake/evidence/HIT-107/test-transcript.txt",
+    "services/intake/evidence/HIT-107/unit.stderr",
+    "services/intake/evidence/HIT-107/unit.stdout",
+    "services/intake/evidence/HIT-107/vet.stderr",
+    "services/intake/evidence/HIT-107/vet.stdout",
+    ".project-os/results/HIT-107.json"
+  ],
+  "verification": {
+    "results": "All six commands exit 0 at clean tested SHA: 132 unit, 189 integration including unit, 377 SQL, vet, build, module verification. Zero failed or skipped test events.",
+    "protocol": "services/intake/evidence/HIT-107/commands.json",
+    "transcript": "services/intake/evidence/HIT-107/test-transcript.txt",
+    "raw_logs": [
+      "services/intake/evidence/HIT-107/unit.stdout",
+      "services/intake/evidence/HIT-107/integration.stdout",
+      "services/intake/evidence/HIT-107/schema.stdout"
+    ],
+    "dod_ids": [
+      "3bfdc0e7-422b-406c-ad29-7bb3eac3de5d",
+      "00e9e605-dd84-482c-924d-1c35c9387d76",
+      "5a18ac66-e86f-4342-826c-33e93eaec03c",
+      "2aaca5ed-b23c-4e01-93c8-ed6579da25dc",
+      "8f9fb5b3-0c14-4a44-9874-8d9c7fed037d",
+      "a0247437-fa3f-4463-9bf1-ee05a6be3fed",
+      "e132f7f4-d1bf-42ef-811a-fa51dfecb62d",
+      "5ae93f48-d040-4a5b-adde-692fa417a8a1"
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Настоящий Stripe, рабочие секреты/установка, IAM и runtime допуска не подключены. Порты установки и допуска в стенде управляемые.",
+    "HTTPS проверен на loopback с проверяемым сертификатом. Edge, промышленное развёртывание, SQL TLS и восстановление после потери питания не проверялись.",
+    "HTTP 204 подтверждает локальный приём. Сетевая доставка в Processing, sender, внешние действия и Stripe-to-ClickUp не входят в HIT-107."
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "source_sha": "20aa3946ac6f5e6a7d82469bbee5a95d3b4cd3d7",
+  "dirty": [],
+  "go": "go version go1.27.2 darwin/arm64",
+  "host": "macOS-26.5-arm64-arm-64bit",
+  "image": "docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "started_utc": "2026-11-18T23:54:45Z",
+  "scope": "loopback Stripe-signed HTTPS and local receipt with synthetic installation, PostgreSQL and files; no live Stripe, sender, Processing, IAM or deployment",
+  "commands": [
+    {
+      "name": "unit",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 2.618
+    },
+    {
+      "name": "integration",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "test",
+        "-tags=integration",
+        "-race",
+        "-count=1",
+        "-json",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 8.211
+    },
+    {
+      "name": "vet",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "vet",
+        "-tags=integration",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 0.374
+    },
+    {
+      "name": "build",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "build",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 0.09
+    },
+    {
+      "name": "modules",
+      "argv": [
+        "/tmp/hit73-toolchain/go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit_code": 0,
+      "seconds": 0.262
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/nic_piter/code/hitpipe-HIT-107/services/intake/tools/check_postgres.py"
+      ],
+      "exit_code": 0,
+      "seconds": 29.242
+    }
+  ],
+  "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+  "python": "3.12.6 (v3.12.6:a4a2d2b0d85, Sep  6 2024, 16:08:03) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "source_hashes": {
+    "go.mod": "cb29fa1e28450164fc476a616299d1313b114bf4b8c4bd15bb7af23ea102952f",
+    "go.sum": "a25891aa838a4c490568e2be37d5d5f681dab49954c8cf0f8f00d8e73fdf71cc",
+    "internal/adapters/clock/system/clock.go": "eed73766e3d792a21a1cbd78dbe33181ff2f934a7e391b03b78f1e40ccb35068",
+    "internal/adapters/contentstore/store.go": "cf71442ca8c668e345970d3010f3e06f6927a6701bc11203d88f726b4b5842e5",
+    "internal/adapters/contentstore/store_test.go": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811",
+    "internal/adapters/fixtures/signingsecrets/file.go": "20470bb2e7309f35a6f50cd0f885d5e7a8aa78f4566e1b362b87546a9a66ed92",
+    "internal/adapters/http/stripewebhook/server.go": "1b74c0e4de2540c566b7684e379fc4411c213178b04c7ac1d1a62e52af57ee62",
+    "internal/adapters/postgres/receipt/commit_loss_integration_test.go": "9a3cb76763e6913b7400236e073f5a1581177f28de27af2273f730e83b9d5f53",
+    "internal/adapters/postgres/receipt/receipt_integration_test.go": "9c6cfb224928f7c3872e2340c60aeff4d74fa39fe57324b99b3eab2f82a665c7",
+    "internal/adapters/postgres/receipt/repository.go": "13cb9716db48011307e44ebce50de6688c0e132eea73a6e4c03248516fa3d06c",
+    "internal/adapters/postgres/receipt/webhook_integration_test.go": "57904f1d243f68dcae6507a55f511bf00def9d869f3154bc36b765553c2c5948",
+    "internal/application/authenticatewebhook/authenticate.go": "a75c4a1b391edddfdc03028ddb1575d9a95d76191a65a98bac572d8ca96fd95a",
+    "internal/application/authenticatewebhook/authenticate_test.go": "5a6e183263b048197fe20babd8c57cbd7a759441dcd4f6185c200a90c3766545",
+    "internal/application/normalizesignal/jcs_contract_test.go": "867db8eeb4d3d0f3ad975caf3df182a7eb9280aebf724ed6196b0234d073a883",
+    "internal/application/normalizesignal/normalize.go": "62d3291ce15e8dd517d7969e7bdfc69d81583c13e7703fd8e0e48291b9e591f9",
+    "internal/application/normalizesignal/normalize_test.go": "e4fb60508d2bff7023dffc176295dc340fefd23c6518fe0b66747772859d1b95",
+    "internal/application/normalizesignal/normalized_signal.schema.json": "09734b10141c62e8a9c5e854b06891d87b8237cac31e045f078703685f208cf0",
+    "internal/application/receivesignal/receive.go": "6216f2bdcf64b3d7e45b736f4d3cbdd71d32f506b7057f5d6b05a69c808c2d8d",
+    "internal/domain/contentref/ref.go": "81337115adb96f47b09a4c52267fa099516727fd462449b65fec1bfed7409cfc",
+    "internal/domain/stripesignature/verifier.go": "0cc138639531dae97ccff253208e494fe39ac7029bb16bc3bcc046752c964640",
+    "internal/domain/stripesignature/verifier_test.go": "453f5002af44e37fc01a7e5845da67e9f436921ab930ea0329bb350206ef7263",
+    "migrations/0001_intake.sql": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+    "tests/postgres/bootstrap.sql": "e1e0bbd693bfbc09551a8f2adda43c627b8578663e869ce9c02f50167e0c8eab",
+    "tools/check_postgres.py": "c19bf42cbc77153d3314106b0ba6bd594af52479eaced50100ff035c4f3849bd",
+    "tools/check_receipt.py": "9d45336a03d95b8a8170f493ca742375c0e6bb041f4a06342295dd972d1a645f"
+  },
+  "storage_settings": {
+    "fsync": "on",
+    "full_page_writes": "on",
+    "synchronous_commit": "on"
+  },
+  "postgres": "18.7",
+  "state": "PASSED",
+  "owned_container_removed": true,
+  "finished_utc": "2026-11-18T23:55:29Z"
+}
