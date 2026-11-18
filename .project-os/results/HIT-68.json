@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-68",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Добавлен read-only PostgreSQL адаптер существующего SessionLookup для минимального sessionpolicy.Snapshot; существующие policy и AuthenticateSession переиспользованы без изменения. По SHA-256 точных байтов opaque session выполняется свежий SELECT из принадлежащей IAM hp_iam.sessions. Публичный session UUID не подменяет секрет.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_commit": "dd726339b5b9f5e62cb2150d801a40d05c319294",
+    "code_commit": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/43",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/README.md"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/README.md",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/README.md"
+    },
+    {
+      "path": "services/iam/go.mod",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/go.mod"
+    },
+    {
+      "path": "services/iam/go.sum",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/go.sum"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/README.md",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/internal/adapters/postgres/sessionlookup/README.md"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/lookup.go",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/internal/adapters/postgres/sessionlookup/lookup.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/lookup_integration_test.go",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/internal/adapters/postgres/sessionlookup/lookup_integration_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/lookup_test.go",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/internal/adapters/postgres/sessionlookup/lookup_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/testdata/iam.sql",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/internal/adapters/postgres/sessionlookup/testdata/iam.sql"
+    },
+    {
+      "path": "services/iam/tools/check_postgres_session_lookup.py",
+      "version": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/5b3a482e3c2e094322e0a9daf1d4566dd261aec9/services/iam/tools/check_postgres_session_lookup.py"
+    },
+    {
+      "path": ".github/workflows/pr12-dk.yml",
+      "version": "556f4efda270e934d587aefa9dfe9f31c83a96da",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/556f4efda270e934d587aefa9dfe9f31c83a96da/.github/workflows/pr12-dk.yml"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "5b3a482e3c2e094322e0a9daf1d4566dd261aec9",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/verification.json",
+    "protocol_version": "323b23a723471bd2dbd962c633b8358280a0ceb7",
+    "test_evidence": [
+      "EVID-001"
+    ],
+    "source_evidence": [
+      "EVID-002",
+      "EVID-003"
+    ],
+    "environment": "Go 1.27.2, PostgreSQL 18.6 exact pinned image, Linux amd64; dedicated ephemeral database with complete canonical IAM SQL, isolated loopback endpoint, non-superuser hp_iam_app login with default_transaction_read_only=on. GOMAXPROCS=1, go -p 1.",
+    "commands": [
+      {
+        "command": "go test -p 1 -count=1 ./...",
+        "result": "Все шесть пакетов IAM прошли",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/unit.log"
+      },
+      {
+        "command": "go test -p 1 -tags=integration -race -count=1 -v ./...",
+        "result": "Девять проверок PostgreSQL и существующие тесты IAM прошли без пропуска и без обнаруженных гонок",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/postgres-race.log"
+      },
+      {
+        "command": "go vet -p 1 -tags=integration ./...",
+        "result": "exit 0",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/vet.log"
+      },
+      {
+        "command": "go build -p 1 ./...",
+        "result": "exit 0",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/build.log"
+      }
+    ],
+    "checked_behavior": [
+      "Точная проекция признаков и сроков существующей записи; missing возвращает Found=false.",
+      "Commit изменения revoked_at виден следующему чтению без кеша; прежняя policy отклоняет отозванную сессию.",
+      "Повторные чтения не меняют данные и MVCC-версии строк.",
+      "Ошибка прав базы, отменённый или заблокированный запрос, внутренний deadline, закрытый пул и nil context не дают действительную сессию.",
+      "Ошибки имеют ограниченные безопасные коды; секрет, reference, session UUID и сырые сообщения базы не раскрываются.",
+      "Конкурентные чтения возвращают независимые значения."
+    ],
+    "reproduce": "python3 services/iam/tools/check_postgres_session_lookup.py",
+    "sandbox_cleanup": "Созданные этим прогоном контейнер и сеть удалены.",
+    "source_tree_sha256": "740bd85ab690f7a239808ab5a0dc705d972377abef696137f07f0296b864b312",
+    "github_actions": {
+      "run_id": 43151006002,
+      "ref": "https://github.com/hitpipe/hitpipe/actions/runs/43151006002",
+      "checked_revision": "556f4efda270e934d587aefa9dfe9f31c83a96da",
+      "conclusion": "success",
+      "postgres_cases_passed": 9,
+      "source_tree_sha256": "740bd85ab690f7a239808ab5a0dc705d972377abef696137f07f0296b864b312",
+      "artifact_sha256_verified": true,
+      "scope": "Тот же текущий IAM и полная схема PostgreSQL; обычные тесты, race, vet и build. Это независимый запуск CI, не вердикт Project OS Reviewer."
+    }
+  },
+  "deviations": {
+    "scope_changes": "Адаптер и его проверки находятся в services/iam; legacy root module, Keycloak, другие сервисы, рабочие данные и исторические отчёты не менялись. Для проверки текущей реализации также исправлен только .github/workflows/pr12-dk.yml.",
+    "known_release_input": "У принятого Go 1.27.2 есть зарегистрированные Go advisories GO-2026-6859 (net/http) и GO-2026-6809 (crypto/x509). Закреплённый cohort не менялся; перед рабочим развёртыванием требуется штатно разрешить его обновление. В этой задаче HTTP-сервер и TLS рабочего соединения не подключены; анализ достижимости уязвимых функций и security qualification не заявляются.",
+    "security_note_ref": "https://github.com/hitpipe/hitpipe/blob/323b23a723471bd2dbd962c633b8358280a0ceb7/services/iam/evidence/HIT-68/security-note.json",
+    "ci_archive_conflict": "Прежняя активная CI требовала точного совпадения текущего IAM с module_files закрытого лабораторного отчёта и отвергала любое дальнейшее развитие. Архивные отчёты сохранены. Теперь IAM job выполняет настоящий одноразовый PostgreSQL/race/vet/build сценарий текущего сервиса; идентификатор check pr12-iam сохранён для защиты ветки. Другие workflow не менялись."
+  },
+  "limitations": [
+    "Тесты подтверждают отдельный адаптер на настоящей изолированной PostgreSQL. Они не подтверждают работающий вход/OIDC, бизнес-полномочия, доверенный источник времени, общий протокол отзыва и start gate, рабочий TLS или развёртывание.",
+    "Фиксированные часы в тестах — синтетическая зависимость. Отзыв тестовой строки выполняет fixture administrator, не адаптер.",
+    "Runtime pool принадлежит IAM caller; обязательные актуальные grants, service authority, clock health и безопасное рабочее соединение остаются отдельными подключениями.",
+    "Независимый Reviewer, личный переход в In Review и человеческое принятие задачи этим результатом не подменяются."
+  ]
+}

@@ -1,0 +1,192 @@
+=== RUN   TestDiagnosticValid
+--- PASS: TestDiagnosticValid (0.00s)
+=== RUN   TestDiagnosticMalformedAndCanary
+=== RUN   TestDiagnosticMalformedAndCanary/null_root
+=== RUN   TestDiagnosticMalformedAndCanary/missing_now
+=== RUN   TestDiagnosticMalformedAndCanary/trailing
+=== RUN   TestDiagnosticMalformedAndCanary/large_offset
+=== RUN   TestDiagnosticMalformedAndCanary/oversize
+=== RUN   TestDiagnosticMalformedAndCanary/nested_case
+=== RUN   TestDiagnosticMalformedAndCanary/extra
+=== RUN   TestDiagnosticMalformedAndCanary/duplicate
+=== RUN   TestDiagnosticMalformedAndCanary/bad_version
+=== RUN   TestDiagnosticMalformedAndCanary/bad_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/comma_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/broken
+=== RUN   TestDiagnosticMalformedAndCanary/case_mismatched_key
+=== RUN   TestDiagnosticMalformedAndCanary/unknown_null_timestamp
+=== RUN   TestDiagnosticMalformedAndCanary/invalid_UTF8
+=== RUN   TestDiagnosticMalformedAndCanary/null_bool
+--- PASS: TestDiagnosticMalformedAndCanary (0.01s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_root (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/missing_now (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/trailing (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/large_offset (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/oversize (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/nested_case (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/extra (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/duplicate (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_version (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/bad_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/comma_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/broken (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/case_mismatched_key (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/unknown_null_timestamp (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/invalid_UTF8 (0.00s)
+    --- PASS: TestDiagnosticMalformedAndCanary/null_bool (0.00s)
+=== RUN   TestDiagnosticConfigAndVersion
+--- PASS: TestDiagnosticConfigAndVersion (0.00s)
+=== RUN   TestDiagnosticDeniedIsSuccessfulEvaluation
+--- PASS: TestDiagnosticDeniedIsSuccessfulEvaluation (0.00s)
+=== RUN   TestDiagnosticCompositionAndUnavailableClock
+--- PASS: TestDiagnosticCompositionAndUnavailableClock (0.00s)
+=== RUN   TestOutputFailureReturnsErrorWithoutLeaking
+--- PASS: TestOutputFailureReturnsErrorWithoutLeaking (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.025s
+=== RUN   TestSystemClockRequiresAttestation
+--- PASS: TestSystemClockRequiresAttestation (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.012s
+=== RUN   TestSameConsumerContractWithBothAdapters
+=== RUN   TestSameConsumerContractWithBothAdapters/file/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/file/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/file/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/file/error
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/normal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/idle_equal
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/unknown
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/revoked
+=== RUN   TestSameConsumerContractWithBothAdapters/fixed/error
+--- PASS: TestSameConsumerContractWithBothAdapters (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/file/error (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/normal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/idle_equal (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/unknown (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/revoked (0.00s)
+    --- PASS: TestSameConsumerContractWithBothAdapters/fixed/error (0.00s)
+=== RUN   TestFileReloadFixedOwnershipAndConcurrency
+--- PASS: TestFileReloadFixedOwnershipAndConcurrency (0.00s)
+=== RUN   TestAdapterFailureAndBoundaryInputs
+--- PASS: TestAdapterFailureAndBoundaryInputs (0.00s)
+=== RUN   TestReaderFailureAndUnknownProjection
+--- PASS: TestReaderFailureAndUnknownProjection (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.021s
+=== RUN   TestPostgresExactSnapshotAndExistingConsumer
+--- PASS: TestPostgresExactSnapshotAndExistingConsumer (0.03s)
+=== RUN   TestPostgresMissingSessionIsNotFound
+--- PASS: TestPostgresMissingSessionIsNotFound (0.02s)
+=== RUN   TestPostgresNextReadObservesRevocation
+--- PASS: TestPostgresNextReadObservesRevocation (0.02s)
+=== RUN   TestPostgresReadsNeverModifyOrRenewSession
+--- PASS: TestPostgresReadsNeverModifyOrRenewSession (0.06s)
+=== RUN   TestPostgresErrorsAreSanitizedAndNeverValid
+--- PASS: TestPostgresErrorsAreSanitizedAndNeverValid (0.02s)
+=== RUN   TestPostgresInFlightCancellationFailsClosed
+--- PASS: TestPostgresInFlightCancellationFailsClosed (0.08s)
+=== RUN   TestPostgresInternalDeadlineBoundsBlockedRead
+--- PASS: TestPostgresInternalDeadlineBoundsBlockedRead (2.04s)
+=== RUN   TestPostgresConcurrentReadsReturnIndependentValues
+--- PASS: TestPostgresConcurrentReadsReturnIndependentValues (0.10s)
+=== RUN   TestPostgresCancelledContextAndClosedPool
+--- PASS: TestPostgresCancelledContextAndClosedPool (0.04s)
+=== RUN   TestReferenceUsesExactOpaqueSecret
+--- PASS: TestReferenceUsesExactOpaqueSecret (0.00s)
+=== RUN   TestNewRejectsMissingOrOversizedPool
+--- PASS: TestNewRejectsMissingOrOversizedPool (0.00s)
+=== RUN   TestZeroLookupFailsClosed
+--- PASS: TestZeroLookupFailsClosed (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	3.447s
+=== RUN   TestDependenciesAndInvalidRequests
+--- PASS: TestDependenciesAndInvalidRequests (0.00s)
+=== RUN   TestPortErrorsDoNotAllowOrLeak
+=== RUN   TestPortErrorsDoNotAllowOrLeak/lookup
+=== RUN   TestPortErrorsDoNotAllowOrLeak/clock
+=== RUN   TestPortErrorsDoNotAllowOrLeak/untrusted
+=== RUN   TestPortErrorsDoNotAllowOrLeak/zero_clock
+--- PASS: TestPortErrorsDoNotAllowOrLeak (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/lookup (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/clock (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/untrusted (0.00s)
+    --- PASS: TestPortErrorsDoNotAllowOrLeak/zero_clock (0.00s)
+=== RUN   TestClockReadAfterLookupAndCancellation
+=== RUN   TestClockReadAfterLookupAndCancellation/none
+=== RUN   TestClockReadAfterLookupAndCancellation/before
+=== RUN   TestClockReadAfterLookupAndCancellation/lookup
+=== RUN   TestClockReadAfterLookupAndCancellation/clock
+--- PASS: TestClockReadAfterLookupAndCancellation (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/none (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/before (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/lookup (0.00s)
+    --- PASS: TestClockReadAfterLookupAndCancellation/clock (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.014s
+=== RUN   TestEvaluateValid
+--- PASS: TestEvaluateValid (0.00s)
+=== RUN   TestEvaluateUnknown
+--- PASS: TestEvaluateUnknown (0.00s)
+=== RUN   TestEvaluateIdleBoundary
+=== RUN   TestEvaluateIdleBoundary/before
+=== RUN   TestEvaluateIdleBoundary/equal
+=== RUN   TestEvaluateIdleBoundary/after
+--- PASS: TestEvaluateIdleBoundary (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/before (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/equal (0.00s)
+    --- PASS: TestEvaluateIdleBoundary/after (0.00s)
+=== RUN   TestEvaluateAbsoluteBoundary
+--- PASS: TestEvaluateAbsoluteBoundary (0.00s)
+=== RUN   TestEvaluateRevoked
+--- PASS: TestEvaluateRevoked (0.00s)
+=== RUN   TestEvaluateInvalidChronology
+=== RUN   TestEvaluateInvalidChronology/zero_creation
+=== RUN   TestEvaluateInvalidChronology/zero_absolute
+=== RUN   TestEvaluateInvalidChronology/zero_idle
+=== RUN   TestEvaluateInvalidChronology/idle_equals_creation
+=== RUN   TestEvaluateInvalidChronology/idle_exceeds_absolute
+=== RUN   TestEvaluateInvalidChronology/lifetime_above_cap
+=== RUN   TestEvaluateInvalidChronology/far_future
+=== RUN   TestEvaluateInvalidChronology/unsupported_year
+=== RUN   TestEvaluateInvalidChronology/absolute_equals_creation
+--- PASS: TestEvaluateInvalidChronology (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/zero_idle (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_equals_creation (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/idle_exceeds_absolute (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/lifetime_above_cap (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/far_future (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/unsupported_year (0.00s)
+    --- PASS: TestEvaluateInvalidChronology/absolute_equals_creation (0.00s)
+=== RUN   TestEvaluateClockAndFutureCreation
+--- PASS: TestEvaluateClockAndFutureCreation (0.00s)
+=== RUN   TestEvaluateDeterministicImmutable
+--- PASS: TestEvaluateDeterministicImmutable (0.00s)
+=== RUN   TestEvaluateRenewedIdleAndOffsets
+--- PASS: TestEvaluateRenewedIdleAndOffsets (0.00s)
+=== RUN   TestDecisionRejectsMixedStateAndReason
+--- PASS: TestDecisionRejectsMixedStateAndReason (0.00s)
+=== RUN   TestDecisionTablePrecedence
+--- PASS: TestDecisionTablePrecedence (0.00s)
+=== RUN   FuzzValidityInvariants
+=== RUN   FuzzValidityInvariants/seed#0
+=== RUN   FuzzValidityInvariants/seed#1
+=== RUN   FuzzValidityInvariants/seed#2
+=== RUN   FuzzValidityInvariants/seed#3
+=== RUN   FuzzValidityInvariants/seed#4
+--- PASS: FuzzValidityInvariants (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#0 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#1 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#2 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#3 (0.00s)
+    --- PASS: FuzzValidityInvariants/seed#4 (0.00s)
+=== RUN   ExampleEvaluate
+--- PASS: ExampleEvaluate (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.016s
