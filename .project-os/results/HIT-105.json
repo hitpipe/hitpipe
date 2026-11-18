@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-105",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Добавлено обязательное подтверждение email кодом в Keycloak 26.8.1. Регистрация и одноразовое подтверждение через реальное SMTP-письмо прошли на отдельном тестовом realm с PostgreSQL 18.7.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_commit": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "code_commit": "bb347e0e4385c56cc7721830314c3464b19e3e2f",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/69",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/README.md"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/keycloak",
+      "version": "bb347e0e4385c56cc7721830314c3464b19e3e2f",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/bb347e0e4385c56cc7721830314c3464b19e3e2f/services/iam/keycloak"
+    },
+    {
+      "path": "services/iam/docs/HIT-105-keycloak-email-code.md",
+      "version": "bb347e0e4385c56cc7721830314c3464b19e3e2f",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/bb347e0e4385c56cc7721830314c3464b19e3e2f/services/iam/docs/HIT-105-keycloak-email-code.md"
+    },
+    {
+      "path": "services/iam/evidence/HIT-105/verification.json",
+      "version": "d6ca30c4abe36af9fed3a698d63edffdfae3ab9e",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/verification.json"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "bb347e0e4385c56cc7721830314c3464b19e3e2f",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/verification.json",
+    "protocol_version": "d6ca30c4abe36af9fed3a698d63edffdfae3ab9e",
+    "environment": "Ubuntu 24.04.5 amd64, отдельная VM; Keycloak 26.8.1, OpenJDK 21.0.12.1, PostgreSQL 18.7, Mailpit 1.33.1 и Chromium 159 под Playwright 1.65.1.",
+    "commands": [
+      {
+        "command": "npm --prefix tests ci --no-audit --no-fund",
+        "result": "exit 0"
+      },
+      {
+        "command": "./tests/run.sh",
+        "result": "exit 0; 15 браузерных и интеграционных сценариев прошли",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/browser-postgres-smtp.log"
+      },
+      {
+        "command": "mvn --batch-mode --no-transfer-progress package",
+        "result": "exit 0; 15 JUnit тестов прошли",
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/maven-test-summary.log"
+      }
+    ],
+    "checked_behavior": [
+      "public registration, genuine SMTP, keyboard submit and one-time verification",
+      "five wrong codes lock the challenge; the real code cannot unlock it",
+      "expired challenge and unknown key version fail closed without consuming a code",
+      "resend enforces cooldown and rolling cap; changing generation invalidates the older code",
+      "a second browser flow keeps the rate limit and cannot use the first flow code",
+      "a changed Keycloak email invalidates the outstanding code",
+      "two parallel resends yield one replacement and one actual SMTP message",
+      "two parallel submits yield exactly one authorization and one database consumption",
+      "an actual database rollback leaves both verification markers unset",
+      "actual SMTP 451 leaves the account unverified and retains cooldown",
+      "SMTP greeting timeout cannot hold the rate and challenge row locks",
+      "deleting an IdP user removes their challenge",
+      "restart after database issuance and before SMTP preserves cooldown and permits a later resend",
+      "rotating the actual Keycloak code key invalidates version 1 and preserves recipient limits",
+      "scheduled cleanup purges only expired challenge and recipient history"
+    ],
+    "sandbox_cleanup": "No named lab containers, volumes, network or loopback listeners remained",
+    "test_evidence": [
+      "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/browser-postgres-smtp.log",
+      "https://github.com/hitpipe/hitpipe/blob/d6ca30c4abe36af9fed3a698d63edffdfae3ab9e/services/iam/evidence/HIT-105/maven-test-summary.log"
+    ],
+    "source_evidence": [
+      "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/keycloak-email.sql"
+    ]
+  },
+  "deviations": [],
+  "limitations": [
+    "Стенд использует локальный SMTP-приёмник и временный IdP.",
+    "Выдача сессии HitPipe, рабочий OIDC callback, BFF и внешняя доставка почты относятся к отдельным задачам."
+  ]
+}
