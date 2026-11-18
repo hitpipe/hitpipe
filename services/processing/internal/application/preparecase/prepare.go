@@ -84,7 +84,7 @@ func (s Service) Prepare(ctx context.Context, r Request) (Result, error) {
 		return zero, ErrHold
 	}
 	capture := &captured{r: reader}
-	financial := evaluatepaidorder.EvaluatePaidOrder(ctx, evaluatepaidorder.Request{Policy: c.Policy, CaseID: c.CaseID, SessionID: c.SessionID, Now: now}, capture)
+	financial := evaluatepaidorder.EvaluatePaidOrderAtRead(ctx, evaluatepaidorder.Request{Policy: c.Policy, CaseID: c.CaseID, SessionID: c.SessionID, Now: now}, capture, s.Clock.Now)
 	if ctx.Err() != nil {
 		return zero, ctx.Err()
 	}
