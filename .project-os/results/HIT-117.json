@@ -3,7 +3,7 @@
   "materialized_result": {
     "summary": "Private readSourceFacts only Processing mTLS; bounded Stripe HTTPS reads, exact SourceFacts/UNKNOWN/JCS/time and original PostgreSQL/content composition. Explicit authority/credential/start ports, no permissive production default.",
     "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
-    "tested_code_sha": "251909683310e24d338771f1ab331984f08c2ef9",
+    "tested_code_sha": "17cc3c46a102251c07262d1c2bbb4d5f6ca01e6f",
     "report": "services/intake/evidence/HIT-117/README.md",
     "reuse": [
       {
@@ -33,6 +33,7 @@
   },
   "changed_artifacts": [
     ".github/workflows/pr12-nb.yml",
+    ".project-os/results/HIT-117.json",
     "services/intake/README.md",
     "services/intake/docs/HIT-71/README.md",
     "services/intake/docs/HIT-71/RESULT_RU.md",
@@ -48,6 +49,26 @@
     "services/intake/docs/HIT-71/verification/diff-check.stdout",
     "services/intake/docs/HIT-71/verification/postgres.stderr",
     "services/intake/docs/HIT-71/verification/postgres.stdout",
+    "services/intake/evidence/HIT-117/GO-2026-6859.json",
+    "services/intake/evidence/HIT-117/README.md",
+    "services/intake/evidence/HIT-117/artifacts.json",
+    "services/intake/evidence/HIT-117/build.stderr",
+    "services/intake/evidence/HIT-117/build.stdout",
+    "services/intake/evidence/HIT-117/commands.json",
+    "services/intake/evidence/HIT-117/generation.stderr",
+    "services/intake/evidence/HIT-117/generation.stdout",
+    "services/intake/evidence/HIT-117/integration.stderr",
+    "services/intake/evidence/HIT-117/integration.stdout",
+    "services/intake/evidence/HIT-117/modules.stderr",
+    "services/intake/evidence/HIT-117/modules.stdout",
+    "services/intake/evidence/HIT-117/schema.stderr",
+    "services/intake/evidence/HIT-117/schema.stdout",
+    "services/intake/evidence/HIT-117/source-audit.json",
+    "services/intake/evidence/HIT-117/test-transcript.txt",
+    "services/intake/evidence/HIT-117/unit.stderr",
+    "services/intake/evidence/HIT-117/unit.stdout",
+    "services/intake/evidence/HIT-117/vet.stderr",
+    "services/intake/evidence/HIT-117/vet.stdout",
     "services/intake/go.mod",
     "services/intake/go.sum",
     "services/intake/internal/adapters/contentfacts/content.go",
@@ -81,7 +102,7 @@
       "services/intake/evidence/HIT-117/schema.stdout"
     ],
     "source_audit": "services/intake/evidence/HIT-117/source-audit.json",
-    "results": "All7commands exit0 at clean 251909683310e24d338771f1ab331984f08c2ef9: generation,unit-race24PASS,integration-race84PASS includesunit,vet/build/modules,377SQL. No failed/skipped tests, sourcehashes unchanged, owned sandbox removed.",
+    "results": "All7commands exit0 at clean 17cc3c46a102251c07262d1c2bbb4d5f6ca01e6f: generation,unit-race25PASS,integration-race86PASS includesunit,vet/build/modules,377SQL. No failed/skipped tests, sourcehashes unchanged, owned sandbox removed.",
     "scope": "Real controlled HTTPS/mTLS Stripe and private Intake listeners; own PostgreSQL18.7/app role/forced RLS/files. Fixture Authority/Credentials/Start not real installation/runtime.",
     "dod_ids": [
       "3c013a9e-173a-4954-8efb-04b4697a66b7",

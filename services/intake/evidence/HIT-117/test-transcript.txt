@@ -1,10 +1,10 @@
-HIT-117 — factual execution transcript, clean source 251909683310e24d338771f1ab331984f08c2ef9
+HIT-117 — factual execution transcript, clean source 17cc3c46a102251c07262d1c2bbb4d5f6ca01e6f
 Go: go version go1.27.2 darwin/arm64
 PostgreSQL: 18.7
 Image: docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
 Host: macOS-26.5-arm64-arm-64bit
 Python tool: 3.12.6 (v3.12.6:a4a2d2b0d85, Sep  6 2024, 16:08:03) [Clang 13.0.0 (clang-1300.0.29.30)]
-Start: 2026-11-18T13:54:40Z; finish: 2026-11-18T13:55:27Z
+Start: 2026-11-18T14:15:19Z; finish: 2026-11-18T14:49:55Z
 git status at invocation: clean; all captured source hashes unchanged at completion.
 Storage settings: {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}; owned container removed: True.
 
@@ -16,8 +16,8 @@ build: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "build", "./..."]
 modules: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "mod", "verify"]
 schema: exit 0; ["/Library/Frameworks/Python.framework/Versions/3.12/bin/python3", "/Users/nic_piter/code/hitpipe-HIT-117/services/intake/tools/check_postgres.py"]
 
-unit -race: 24 PASS test/subtest events; failures=0; skipped tests=0.
-integration -race: 84 PASS test/subtest events (includes unit); failures=0; skipped tests=0.
+unit -race: 25 PASS test/subtest events; failures=0; skipped tests=0.
+integration -race: 86 PASS test/subtest events (includes unit); failures=0; skipped tests=0.
 PASS TestIntegrationRefundsDisputesAndPartialLists/refund
 PASS TestIntegrationRefundsDisputesAndPartialLists/dispute
 PASS TestIntegrationRefundsDisputesAndPartialLists/pending-refund
@@ -41,14 +41,15 @@ PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/oldest-expired
 PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/validity-cap
 PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds
 PASS TestIntegrationHTTPSPostgresContentAndRecovery
-PASS TestIntegrationStrictRequestDenialsBeforeNetwork/fraction
-PASS TestIntegrationStrictRequestDenialsBeforeNetwork/unknown-scope
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/uuid
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/non-RFC3339-deadline
 PASS TestIntegrationStrictRequestDenialsBeforeNetwork/oversized
 PASS TestIntegrationStrictRequestDenialsBeforeNetwork/unknown
 PASS TestIntegrationStrictRequestDenialsBeforeNetwork/duplicate
-PASS TestIntegrationStrictRequestDenialsBeforeNetwork/null
-PASS TestIntegrationStrictRequestDenialsBeforeNetwork/uuid
 PASS TestIntegrationStrictRequestDenialsBeforeNetwork/epoch
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/fraction
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/unknown-scope
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/null
 PASS TestIntegrationStrictRequestDenialsBeforeNetwork
 PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/missing-capture
 PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/null-mode
