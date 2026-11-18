@@ -239,7 +239,7 @@ func (f *lifecycleFixture) snapshot(t *testing.T) drafts.ResumeSnapshot {
 
 func (f *lifecycleFixture) admit(t *testing.T, s admission.Signal, rev int64) (admission.Receipt, error) {
 	t.Helper()
-	return (Store{DB: draftTestDB{}}).Accept(ctx, s, admission.EstablishedContext{WorkspaceID: f.workspace, OperationID: f.op.OperationID,
+	return (Store{DB: draftTestDB{}, Content: f.files}).Accept(ctx, s, admission.EstablishedContext{WorkspaceID: f.workspace, OperationID: f.op.OperationID,
 		ExpectedRevision: rev, ConnectionID: s.ConnectionID, AccountID: s.AccountID, AuthorityVerified: true})
 }
 

@@ -692,5 +692,433 @@
       "expires_at"
     ],
     "type": "object"
+  },
+  "RuntimeRegistration": {
+    "additionalProperties": false,
+    "properties": {
+      "boot_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "certificate_fingerprint": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "generation": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "runtime_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "service": {
+        "enum": [
+          "IAM",
+          "INTAKE",
+          "PROCESSING",
+          "DELIVERY",
+          "BFF",
+          "AI"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "runtime_id",
+      "service",
+      "generation",
+      "boot_id",
+      "certificate_fingerprint"
+    ],
+    "type": "object"
+  },
+  "RuntimeSnapshot": {
+    "additionalProperties": false,
+    "properties": {
+      "boot_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "denials": {
+        "items": {
+          "$ref": "#/components/schemas/DenyEpochSnapshot"
+        },
+        "maxItems": 10000,
+        "type": "array"
+      },
+      "gate": {
+        "enum": [
+          "CLOSED",
+          "SYNCING",
+          "OPEN"
+        ],
+        "type": "string"
+      },
+      "generation": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "runtime_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "snapshot_revision": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "runtime_id",
+      "generation",
+      "boot_id",
+      "snapshot_revision",
+      "denials",
+      "gate"
+    ],
+    "type": "object"
+  },
+  "DenyEpochSnapshot": {
+    "additionalProperties": false,
+    "properties": {
+      "accepted_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "effective_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "revocation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "scope": {
+        "enum": [
+          "SESSION",
+          "MEMBERSHIP",
+          "CONNECTION",
+          "WORKSPACE"
+        ],
+        "type": "string"
+      },
+      "subject_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "workspace_id",
+      "scope",
+      "subject_id",
+      "epoch",
+      "revocation_id",
+      "accepted_at",
+      "effective_at"
+    ],
+    "type": "object"
+  },
+  "AuthorizeRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "action": {
+        "enum": [
+          "PROFILE_READ",
+          "PROFILE_WRITE",
+          "WORKSPACE_READ",
+          "WORKSPACE_MANAGE",
+          "CONFIG_READ",
+          "CONFIG_WRITE",
+          "ACTIVATE",
+          "CASE_READ",
+          "CASE_CONTEXT_WRITE",
+          "CASE_RECOVER",
+          "OWNER_CLOSE",
+          "EXPORT",
+          "CONNECTOR_READ",
+          "CONNECTOR_WRITE",
+          "AI_PREPARE"
+        ],
+        "type": "string"
+      },
+      "resource_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "runtime_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "action",
+      "resource_id",
+      "runtime_id"
+    ],
+    "type": "object"
+  },
+  "Authorization": {
+    "additionalProperties": false,
+    "properties": {
+      "allowed": {
+        "type": "boolean"
+      },
+      "checked_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "principal_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "revocation_pending": {
+        "type": "boolean"
+      },
+      "role": {
+        "enum": [
+          "OWNER",
+          "OPERATOR",
+          "READER"
+        ],
+        "type": "string"
+      },
+      "session_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "allowed",
+      "epoch",
+      "checked_at",
+      "revocation_pending"
+    ],
+    "type": "object"
+  },
+  "BarrierCommand": {
+    "additionalProperties": false,
+    "properties": {
+      "boot_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "deadline_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "generation": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "revocation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "scope": {
+        "enum": [
+          "SESSION",
+          "MEMBERSHIP",
+          "CONNECTION",
+          "WORKSPACE"
+        ],
+        "type": "string"
+      },
+      "subject_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "target_runtime_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "target_runtime_id",
+      "boot_id",
+      "generation",
+      "revocation_id",
+      "workspace_id",
+      "scope",
+      "subject_id",
+      "epoch",
+      "deadline_at"
+    ],
+    "type": "object"
+  },
+  "BarrierAck": {
+    "additionalProperties": false,
+    "properties": {
+      "acknowledged_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "applied_epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "boot_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "generation": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "old_start_sections_drained": {
+        "const": true,
+        "type": "boolean"
+      },
+      "revocation_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "runtime_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "scope": {
+        "enum": [
+          "SESSION",
+          "MEMBERSHIP",
+          "CONNECTION",
+          "WORKSPACE"
+        ],
+        "type": "string"
+      },
+      "subject_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "workspace_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "revocation_id",
+      "runtime_id",
+      "boot_id",
+      "workspace_id",
+      "scope",
+      "subject_id",
+      "generation",
+      "applied_epoch",
+      "old_start_sections_drained",
+      "acknowledged_at"
+    ],
+    "type": "object"
+  },
+  "Health": {
+    "additionalProperties": false,
+    "description": "Liveness is not customer business readiness or achieved SLO.",
+    "properties": {
+      "build_revision": {
+        "pattern": "^[a-f0-9]{40}$",
+        "type": "string"
+      },
+      "checked_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "protocol_version": {
+        "const": "1.0",
+        "type": "string"
+      },
+      "service": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "LIVE",
+          "READY",
+          "DEGRADED",
+          "CLOSED"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "service",
+      "build_revision",
+      "protocol_version",
+      "checked_at"
+    ],
+    "type": "object"
   }
 }

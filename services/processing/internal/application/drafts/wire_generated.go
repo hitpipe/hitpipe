@@ -124,3 +124,73 @@ type ResumeSnapshot struct {
 	SignalCount      int64      `json:"signal_count"`
 	SnapshotID       string     `json:"snapshot_id"`
 }
+type RuntimeRegistration struct {
+	BootID                 string `json:"boot_id"`
+	CertificateFingerprint string `json:"certificate_fingerprint"`
+	Generation             int64  `json:"generation"`
+	RuntimeID              string `json:"runtime_id"`
+	Service                string `json:"service"`
+}
+type RuntimeSnapshot struct {
+	BootID           string              `json:"boot_id"`
+	Denials          []DenyEpochSnapshot `json:"denials"`
+	Gate             string              `json:"gate"`
+	Generation       int64               `json:"generation"`
+	RuntimeID        string              `json:"runtime_id"`
+	SnapshotRevision int64               `json:"snapshot_revision"`
+}
+type DenyEpochSnapshot struct {
+	AcceptedAt   time.Time  `json:"accepted_at"`
+	EffectiveAt  *time.Time `json:"effective_at"`
+	Epoch        int64      `json:"epoch"`
+	RevocationID string     `json:"revocation_id"`
+	Scope        string     `json:"scope"`
+	SubjectID    string     `json:"subject_id"`
+	WorkspaceID  *string    `json:"workspace_id"`
+}
+type AuthorizeRequest struct {
+	Action      string  `json:"action"`
+	ResourceID  *string `json:"resource_id"`
+	RuntimeID   string  `json:"runtime_id"`
+	WorkspaceID string  `json:"workspace_id"`
+}
+type Authorization struct {
+	Allowed           bool      `json:"allowed"`
+	CheckedAt         time.Time `json:"checked_at"`
+	Epoch             int64     `json:"epoch"`
+	PrincipalID       *string   `json:"principal_id,omitempty"`
+	RevocationPending bool      `json:"revocation_pending"`
+	Role              *string   `json:"role,omitempty"`
+	SessionID         *string   `json:"session_id,omitempty"`
+	WorkspaceID       *string   `json:"workspace_id,omitempty"`
+}
+type BarrierCommand struct {
+	BootID          string    `json:"boot_id"`
+	DeadlineAt      time.Time `json:"deadline_at"`
+	Epoch           int64     `json:"epoch"`
+	Generation      int64     `json:"generation"`
+	RevocationID    string    `json:"revocation_id"`
+	Scope           string    `json:"scope"`
+	SubjectID       string    `json:"subject_id"`
+	TargetRuntimeID string    `json:"target_runtime_id"`
+	WorkspaceID     *string   `json:"workspace_id"`
+}
+type BarrierAck struct {
+	AcknowledgedAt          time.Time `json:"acknowledged_at"`
+	AppliedEpoch            int64     `json:"applied_epoch"`
+	BootID                  string    `json:"boot_id"`
+	Generation              int64     `json:"generation"`
+	OldStartSectionsDrained bool      `json:"old_start_sections_drained"`
+	RevocationID            string    `json:"revocation_id"`
+	RuntimeID               string    `json:"runtime_id"`
+	Scope                   string    `json:"scope"`
+	SubjectID               string    `json:"subject_id"`
+	WorkspaceID             *string   `json:"workspace_id"`
+}
+type Health struct {
+	BuildRevision   string    `json:"build_revision"`
+	CheckedAt       time.Time `json:"checked_at"`
+	ProtocolVersion string    `json:"protocol_version"`
+	Service         string    `json:"service"`
+	Status          string    `json:"status"`
+}
