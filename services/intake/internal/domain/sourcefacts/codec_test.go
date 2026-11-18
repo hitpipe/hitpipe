@@ -54,3 +54,15 @@ func TestIntegerRejectsStringsAndHugeExponent(t *testing.T) {
 		t.Fatal("zero exponent")
 	}
 }
+
+func TestRequestRejectsNonRFC3339GoExtensions(t *testing.T) {
+	base := `{"workspace_id":"11111111-1111-4111-8111-111111111111","connection_id":"22222222-2222-4222-8222-222222222222","case_id":"33333333-3333-4333-8333-333333333333","session_id":"opaque","expected_epoch":1,"deadline_at":"TIME"}`
+	for _, stamp := range []string{"2027-01-01T00:00:00+24:00", "2027-01-01T00:00:00+00:60", "2027-01-01T00:00:00,123Z", "2027-01-01T0:00:00Z"} {
+		if _, e := DecodeRequest([]byte(strings.Replace(base, "TIME", stamp, 1))); e == nil {
+			t.Fatal("non RFC3339 accepted", stamp)
+		}
+	}
+	if _, e := DecodeRequest([]byte(strings.Replace(base, "TIME", "2027-01-01T00:00:00.123456789+03:00", 1))); e != nil {
+		t.Fatal("valid RFC3339 denied", e)
+	}
+}

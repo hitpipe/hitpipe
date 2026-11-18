@@ -416,7 +416,14 @@ func (noopProvider) Read(context.Context, sf.Request, app.Binding, app.Guard) (s
 func TestIntegrationStrictRequestDenialsBeforeNetwork(t *testing.T) {
 	f := newFixture(t, nil)
 	base, _ := json.Marshal(f.request())
-	tests := map[string][]byte{"unknown": []byte(strings.Replace(string(base), `"case_id":`, `"extra":true,"case_id":`, 1)), "duplicate": []byte(strings.Replace(string(base), `"case_id":`, `"case_id":"`+caseID+`","case_id":`, 1)), "null": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":null`, 1)), "uuid": []byte(strings.Replace(string(base), caseID, "bad", 1)), "epoch": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":0`, 1)), "fraction": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":1.5`, 1)), "unknown-scope": []byte(strings.Replace(string(base), ws, "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", 1)), "oversized": bytes.Repeat([]byte(" "), 8193)}
+	tests := map[string][]byte{"unknown": []byte(strings.Replace(string(base), `"case_id":`, `"extra":true,"case_id":`, 1)), "duplicate": []byte(strings.Replace(string(base), `"case_id":`, `"case_id":"`+caseID+`","case_id":`, 1)), "null": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":null`, 1)), "uuid": []byte(strings.Replace(string(base), caseID, "bad", 1)), "epoch": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":0`, 1)), "non-RFC3339-deadline": func() []byte {
+		var m map[string]any
+		json.Unmarshal(base, &m)
+		m["deadline_at"] = "2027-01-01T00:00:00+24:00"
+		b, _ := json.Marshal(m)
+		return b
+	}(),
+		"fraction": []byte(strings.Replace(string(base), `"expected_epoch":1`, `"expected_epoch":1.5`, 1)), "unknown-scope": []byte(strings.Replace(string(base), ws, "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", 1)), "oversized": bytes.Repeat([]byte(" "), 8193)}
 	for name, b := range tests {
 		t.Run(name, func(t *testing.T) {
 			status, _ := f.callBytes(b)

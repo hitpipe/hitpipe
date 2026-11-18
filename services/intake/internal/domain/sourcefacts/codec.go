@@ -21,6 +21,10 @@ import (
 //go:embed schema.json
 var schemas []byte
 var ErrShape = errors.New("invalid_source_facts_shape")
+
+// The standard Go parser accepts comma fractions, one-digit hours and zone
+// offsets 24:00/00:60. RFC3339 wire shape must be checked before time.Parse.
+var dateTime = regexp.MustCompile(`^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?(Z|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$`)
 var uuid = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
 
 func UUID(s string) bool { return uuid.MatchString(s) }
@@ -150,6 +154,9 @@ func valid(raw, rule json.RawMessage) bool {
 			return false
 		}
 		if r.Format == "date-time" {
+			if !dateTime.MatchString(s) {
+				return false
+			}
 			t, e := time.Parse(time.RFC3339Nano, s)
 			if e != nil || t.Year() < 1 || t.Year() > 9999 || len(strings.Split(s, "T")[0]) != 10 {
 				return false
