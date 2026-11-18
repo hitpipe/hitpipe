@@ -500,3 +500,93 @@ func TestLifecycleConcurrentPauseCASAndLostCommit(t *testing.T) {
 		t.Fatal(fmt.Sprintf("resume replay changed state: %+v", op))
 	}
 }
+
+func TestLifecyclePauseSerializesWithAdmission(t *testing.T) {
+	f := newLifecycleFixture(t)
+	c := connect(t)
+	block := begin(t, c, f.workspace)
+	if _, err := block.Exec(ctx, `SELECT operation_id FROM hp_processing.operations WHERE workspace_id=$1 AND operation_id=$2 FOR UPDATE`, f.workspace, f.op.OperationID); err != nil {
+		t.Fatal(err)
+	}
+	signal := f.signal(t, *f.op.FirstActivationAt, "cs_racing")
+	post := f.command(lifecycle.Pause, 1)
+	raw, _ := json.Marshal(post)
+	start := make(chan struct{})
+	paused := make(chan error, 1)
+	admitted := make(chan error, 1)
+	go func() {
+		<-start
+		status, b, err := f.http(http.MethodPost, "/"+f.op.OperationID+"/lifecycle", raw, post.Command.RequestID, nil)
+		if err == nil && status != 202 {
+			err = fmt.Errorf("pause HTTP %d: %s", status, b)
+		}
+		paused <- err
+	}()
+	go func() {
+		<-start
+		_, err := f.admit(t, signal, 1)
+		admitted <- err
+	}()
+	close(start)
+	if err := block.Commit(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if err := <-paused; err != nil {
+		t.Fatal(err)
+	}
+	admissionErr := <-admitted
+	if admissionErr != nil && !errors.Is(admissionErr, admission.ErrNotAdmissible) {
+		t.Fatal(admissionErr)
+	}
+	check := begin(t, c, f.workspace)
+	defer check.Rollback(ctx)
+	var cases int
+	var allBefore bool
+	if err := check.QueryRow(ctx, `SELECT count(k.case_id),COALESCE(bool_and(k.admitted_at<=o.pause_accepted_at),true)
+ FROM hp_processing.operations o LEFT JOIN hp_processing.case_identity k USING(workspace_id,operation_id)
+ WHERE o.workspace_id=$1 AND o.operation_id=$2`, f.workspace, f.op.OperationID).Scan(&cases, &allBefore); err != nil {
+		t.Fatal(err)
+	}
+	if !allBefore || admissionErr == nil && cases != 1 || admissionErr != nil && cases != 0 {
+		t.Fatal("inconsistent admissible work around PAUSE", cases, allBefore, admissionErr)
+	}
+}
+
+func TestLifecycleContentFailureRollbackAndWorkerRecovery(t *testing.T) {
+	f := newLifecycleFixture(t)
+	pause := f.command(lifecycle.Pause, 1)
+	f.files.Step = func(stage string) error {
+		if stage == "directory-fsync" {
+			return errors.New("controlled lifecycle file completion failure")
+		}
+		return nil
+	}
+	f.change(t, pause, 503)
+	f.files.Step = nil
+	if current := f.list(t); current.State != "ACTIVE" || current.Revision != 1 {
+		t.Fatal("failed durable write changed operation", current)
+	}
+	f.change(t, pause, 202)
+	// The recovery loop reads already committed DRAINING from the original DB.
+	recovered := f.lifecycle
+	tickCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	done := make(chan error, 1)
+	go func() {
+		done <- recovered.RunDrain(tickCtx, func(context.Context) ([]string, error) { return []string{f.workspace}, nil }, func(error) {})
+	}()
+	limit := time.After(3 * time.Second)
+	tick := time.NewTicker(10 * time.Millisecond)
+	defer tick.Stop()
+	for f.list(t).State != "PAUSED" {
+		select {
+		case <-limit:
+			t.Fatal("drain runner did not settle operation")
+		case <-tick.C:
+		}
+	}
+	cancel()
+	if err := <-done; !errors.Is(err, context.Canceled) {
+		t.Fatal(err)
+	}
+}
