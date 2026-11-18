@@ -3,6 +3,7 @@ package postgres
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -387,6 +388,21 @@ func TestLifecycleWrongSnapshotBindingAndAuthority(t *testing.T) {
 	path := "/" + f.op.OperationID + "/lifecycle"
 	pause := f.command(lifecycle.Pause, 1)
 	raw, _ := json.Marshal(pause)
+	genuine := f.client
+	for _, peer := range []string{"intake.test", ""} {
+		transport := f.pki.Transport(t)
+		transport.TLSClientConfig.Certificates = nil
+		if peer != "" {
+			transport.TLSClientConfig.Certificates = []tls.Certificate{f.pki.Leaf(t, peer, false, false)}
+		}
+		f.client = &http.Client{Transport: transport, Timeout: time.Second}
+		status, _, err := f.http(http.MethodPost, path, raw, pause.Command.RequestID, nil)
+		transport.CloseIdleConnections()
+		if peer == "" && err == nil || peer != "" && (err != nil || status != 403) {
+			t.Fatalf("unexpected caller result for %q: %d, %v", peer, status, err)
+		}
+	}
+	f.client = genuine
 	for _, check := range []struct {
 		headers map[string]string
 		status  int
@@ -415,6 +431,9 @@ func TestLifecycleWrongSnapshotBindingAndAuthority(t *testing.T) {
 	f.queue.current.Complete = true
 	f.change(t, f.command(lifecycle.Prepare, 3), 202)
 	p := f.snapshot(t)
+	if p.SignalCount != 0 || p.SerializedBytes != 0 || p.OldestReceivedAt != nil {
+		t.Fatal("authoritative empty snapshot not retained", p)
+	}
 	held := lifecycle.Discard
 	accept := f.command(lifecycle.Accept, 4)
 	accept.HeldDisposition = &held
