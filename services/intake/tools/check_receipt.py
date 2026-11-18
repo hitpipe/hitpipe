@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""HIT-86: only a new owned PostgreSQL18.7 sandbox; never an external DSN."""
+"""Intake receipt and webhook tests use only a new PostgreSQL 18.7 sandbox."""
 import argparse,hashlib,json,os,pathlib,platform,subprocess,time,uuid,sys
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 IMAGE='docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73'
-a=argparse.ArgumentParser();a.add_argument('--go',default='go');a.add_argument('--output',type=pathlib.Path,default=ROOT/'evidence/HIT-86');args=a.parse_args();out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
+a=argparse.ArgumentParser();a.add_argument('--go',default='go');a.add_argument('--output',type=pathlib.Path,default=ROOT/'evidence/HIT-107');args=a.parse_args();out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
 env=dict(os.environ,GOTOOLCHAIN='local')
 def run(cmd,**kw):return subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,env=env,timeout=180,**kw)
 def require(r):
  if r.returncode:raise RuntimeError('sandbox setup failed: '+r.stderr[-2000:])
  return r.stdout.strip()
 version=require(run([args.go,'version']));assert version.startswith('go version go1.27.2 ')
-name='hit86-'+uuid.uuid4().hex[:12];started=False
-report={'source_sha':require(run(['git','rev-parse','HEAD'])),'dirty':require(run(['git','status','--porcelain'])).splitlines(),'go':version,'host':platform.platform(),'image':IMAGE,'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'scope':'local synthetic receipt; not HTTP/network sender/Processing/IAM/runtime/disk qualification','commands':[]}
+name='hit107-'+uuid.uuid4().hex[:12];started=False
+report={'source_sha':require(run(['git','rev-parse','HEAD'])),'dirty':require(run(['git','status','--porcelain'])).splitlines(),'go':version,'host':platform.platform(),'image':IMAGE,'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'scope':'loopback Stripe-signed HTTPS and local receipt with synthetic installation, PostgreSQL and files; no live Stripe, sender, Processing, IAM or deployment','commands':[]}
 migration_sha=hashlib.sha256((ROOT/'migrations/0001_intake.sql').read_bytes()).hexdigest()
 assert migration_sha=='0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093'
 report['migration_sha256']=migration_sha
@@ -39,7 +39,7 @@ try:
   before=time.monotonic();r=run(cmd);(out/(label+'.stdout')).write_text(r.stdout);(out/(label+'.stderr')).write_text(r.stderr);report['commands'].append({'name':label,'argv':cmd,'exit_code':r.returncode,'seconds':round(time.monotonic()-before,3)});print(label,'exit',r.returncode,flush=True)
   if r.returncode:raise RuntimeError(label+' failed; inspect saved logs')
   if label=='integration':
-   records=[json.loads(l) for l in r.stdout.splitlines()];assert any(x.get('Test','').startswith('TestIntegration') and x.get('Action')=='pass' for x in records);assert not any(x.get('Test','').startswith('TestIntegration') and x.get('Action')=='skip' for x in records)
+   records=[json.loads(l) for l in r.stdout.splitlines()];assert any(x.get('Test','').startswith('TestIntegrationWebhook') and x.get('Action')=='pass' for x in records);assert not any(x.get('Test','').startswith('TestIntegration') and x.get('Action')=='skip' for x in records)
  assert all(hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==h for p,h in report['source_hashes'].items())
  report['state']='PASSED'
 except Exception as e:
