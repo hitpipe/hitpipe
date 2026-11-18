@@ -1,0 +1,161 @@
+{
+  "task": "HIT-117",
+  "main_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_code_sha": "251909683310e24d338771f1ab331984f08c2ef9",
+  "consent": "План подтверждаю",
+  "consent_comment": "13945",
+  "reuse": [
+    {
+      "task": "HIT-71",
+      "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+      "pr": 47,
+      "state": "open",
+      "merged": false,
+      "reused": "original migration bytes/bootstrap/schema tests"
+    },
+    {
+      "task": "HIT-74",
+      "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+      "pr": 66,
+      "state": "open",
+      "merged": false,
+      "reused": "original contentstore/store.go and tests, unchanged"
+    }
+  ],
+  "consumer_reference": {
+    "task": "HIT-77",
+    "sha": "b31a3adae4fac625c97fd903e13f9aad8d6ca771",
+    "result_read": true,
+    "reader_source_read": true,
+    "modified": false
+  },
+  "bootstrap": {
+    "request": "13944",
+    "receipt": "13955",
+    "part_ids": [
+      "13946",
+      "13947",
+      "13948",
+      "13949",
+      "13950",
+      "13951",
+      "13952",
+      "13953",
+      "13954"
+    ],
+    "canonical_sha256": "5435a049d915a1059b5f75b5f5f0f5ee36d34544b3ecf81df22d057bc998a243",
+    "protocol_pin": {
+      "release": "v2",
+      "sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+    },
+    "service_author_and_update_author_verified": true,
+    "all_pages_and_unique_markers_verified": true
+  },
+  "source_refs": {
+    "architecture_registry": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+    "architecture": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+    "oas": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "persistence": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+    "stack": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json"
+  },
+  "schema_extraction": "SourceReadRequest and SourceFacts semantically identical to pinned OAS; generated Go with runtime strict validation, generation --check passed",
+  "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+  "contentstore_sha256": "73469b0fc92af528829f28ab1ad960b8024c34c7bb4409372d12b1767a0da211",
+  "changed_code_paths": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/README.md",
+    "services/intake/docs/HIT-71/README.md",
+    "services/intake/docs/HIT-71/RESULT_RU.md",
+    "services/intake/docs/HIT-71/postgres-18.7.json",
+    "services/intake/docs/HIT-71/source-audit.json",
+    "services/intake/docs/HIT-71/verification-18.7/commands.json",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stdout",
+    "services/intake/docs/HIT-71/verification/commands.json",
+    "services/intake/docs/HIT-71/verification/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification/postgres.stderr",
+    "services/intake/docs/HIT-71/verification/postgres.stdout",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/internal/adapters/contentfacts/content.go",
+    "services/intake/internal/adapters/contentstore/store.go",
+    "services/intake/internal/adapters/contentstore/store_test.go",
+    "services/intake/internal/adapters/http/sourcefacts/server.go",
+    "services/intake/internal/adapters/postgres/facts/repository.go",
+    "services/intake/internal/adapters/stripe/client.go",
+    "services/intake/internal/adapters/stripe/client_test.go",
+    "services/intake/internal/application/readsourcefacts/service.go",
+    "services/intake/internal/domain/sourcefacts/codec.go",
+    "services/intake/internal/domain/sourcefacts/codec_test.go",
+    "services/intake/internal/domain/sourcefacts/schema.json",
+    "services/intake/internal/domain/sourcefacts/types_generated.go",
+    "services/intake/migrations/0001_intake.sql",
+    "services/intake/tests/postgres/bootstrap.sql",
+    "services/intake/tests/sourcefacts/faults_test.go",
+    "services/intake/tests/sourcefacts/integration_test.go",
+    "services/intake/tools/check_postgres.py",
+    "services/intake/tools/check_sourcefacts.py",
+    "services/intake/tools/generate_sourcefacts.py"
+  ],
+  "source_hashes": {
+    "go.mod": "cb29fa1e28450164fc476a616299d1313b114bf4b8c4bd15bb7af23ea102952f",
+    "go.sum": "a25891aa838a4c490568e2be37d5d5f681dab49954c8cf0f8f00d8e73fdf71cc",
+    "internal/adapters/contentfacts/content.go": "73c0c554230f4bb6b3735f97db3aec935c93138427119922b8bf432a7a4e237e",
+    "internal/adapters/contentstore/store.go": "73469b0fc92af528829f28ab1ad960b8024c34c7bb4409372d12b1767a0da211",
+    "internal/adapters/contentstore/store_test.go": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811",
+    "internal/adapters/http/sourcefacts/server.go": "464fb207f350e23b2abbf954986bfe0da737bb66a5747bc91180b087417f120f",
+    "internal/adapters/postgres/facts/repository.go": "90959de3bf75012340325681e5294457ec315e1a7ac3bf632d76b9f5203ef45a",
+    "internal/adapters/stripe/client.go": "3c8363422e93f480a357bf78705664242bb37cf4ee8f4e57e1fd7775abb92503",
+    "internal/adapters/stripe/client_test.go": "286ca28d61743627e51765cdcc28b804f79a6b211cd471c7d18bb65329b550c8",
+    "internal/application/readsourcefacts/service.go": "d1ec69c2635a4ff14c5ef2e18ee1f1d6037dbc47b749df5aef5a2ede97bbd1e5",
+    "internal/domain/sourcefacts/codec.go": "271c90fa0db54389307add2c5684becbf05456bad807e7e7afa632ccb3340207",
+    "internal/domain/sourcefacts/codec_test.go": "6527b27ba9ec5862e71352b78e07c389c4721a1afeb8a3a3dc02a16b7a234413",
+    "internal/domain/sourcefacts/schema.json": "cb7a0a99310f3596228caa9235f10bb79d646edea7d9957c01c8daa558c9f04d",
+    "internal/domain/sourcefacts/types_generated.go": "686a39d8aaa53d089b18226ccd3d8b0d0c9f8e5a625db11b4021b8a2e1aaa35a",
+    "migrations/0001_intake.sql": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+    "tests/postgres/bootstrap.sql": "e1e0bbd693bfbc09551a8f2adda43c627b8578663e869ce9c02f50167e0c8eab",
+    "tests/sourcefacts/faults_test.go": "130e09d34c6e325329fbed0146122a7cf869f65fce94a997df9de862c7b1b04c",
+    "tests/sourcefacts/integration_test.go": "d70f9d68f4b5d13db844aac2743a0c880a69ad21a6a8fc7db4c98b4629951b87",
+    "tools/check_postgres.py": "c19bf42cbc77153d3314106b0ba6bd594af52479eaced50100ff035c4f3849bd",
+    "tools/check_sourcefacts.py": "e7112b0bf3792a7b07e18a6cc62121a725b01088bc11dd08fbc427778c51ec00",
+    "tools/generate_sourcefacts.py": "c0f100ed2a63a78eb937e47926966f2640c689fc719d9aa638c05a29b21f8887"
+  },
+  "dod": [
+    {
+      "id": "3c013a9e-173a-4954-8efb-04b4697a66b7",
+      "text": "Зафиксированы исходный main, фактически использованные SHA HIT-71/HIT-74, готовые собственные компоненты и изменённые пути. Выполненная миграция и файловое хранилище переиспользованы; отсутствие в main не привело к повторной реализации."
+    },
+    {
+      "id": "ea6a6498-7f16-4d1d-9232-4b588f9845e2",
+      "text": "Настоящий приватный HTTPS/mTLS обработчик принимает точный SourceReadRequest только от разрешённого Processing. Чужой/просроченный сертификат, неизвестное поле, неподходящие UUID/epoch/deadline и несовпадающий контекст отклоняются до положительного ответа."
+    },
+    {
+      "id": "572ad2b0-5cd0-431b-a83d-19742a893028",
+      "text": "Управляемый Stripe HTTPS-сервер получает только принятые ограниченные read-запросы для проверенной установки. Текущие полномочия, connection epoch и допуск фактического сетевого старта проверяются до каждого запроса; неподключённый интерфейс или смена области закрывают чтение. TLS, hostname, deadlines и отсутствие redirects/скрытых повторов проверены."
+    },
+    {
+      "id": "2630af1d-362a-4908-9db7-c18411df17c4",
+      "text": "Возвращаемый SourceFacts сохраняет точную схему, null/UNKNOWN и полную связь workspace/account/test-live/Session/case/connection. Проверены payment mode, paid, amount/currency, количество и полнота line items, fixed Price, связанный платёж, capture/refund/dispute; отсутствие существенного факта не подменяется ожидаемым положительным значением."
+    },
+    {
+      "id": "06a6b580-59a5-45a5-bc04-5e9c47048f75",
+      "text": "Проверены пагинация/неполный ответ, 429, недоступность, ошибка разбора и отмена. complete и исходы не завышаются; valid_until не выходит за oldest mandatory fact +10 секунд и исходный deadline. Новые сроки/пороги не вводятся, чтение не обещает атомарность Stripe и ClickUp."
+    },
+    {
+      "id": "01462165-3b87-4980-9287-cfd624144b8e",
+      "text": "Контрольная сумма и время фактов проверяются по принятому формату. Собственное содержимое сохраняется/читается с действительными ссылками, сроками и изоляцией HIT-74; credential и provider payload не попадают в SQL, общие логи, имя файла или ответ об ошибке."
+    },
+    {
+      "id": "b0220c7c-2714-461e-a860-a67f5ebf30bb",
+      "text": "Настоящие HTTP/PostgreSQL/content проверки подтверждают раздельность workspace, неверный account/test-live, ошибку БД/файлов, истечение и изменение context между чтениями. Нет создания signals/outbox, HTTP webhook приёма, нового дела или внешней записи."
+    },
+    {
+      "id": "6cc7cc9f-f41e-4448-bfc4-e43bc873fcdb",
+      "text": "Выполнены применимые прежние тесты, go test -race -count=1 ./..., go vet ./... и сборка; сохранены SHA, PostgreSQL18.7, среда, команды, коды завершения и журналы. Русский отчёт показывает подтверждённые и неизвестные факты, отделяет управляемый Stripe/context/gate от реального подключения."
+    }
+  ],
+  "bounds": "Only Intake and its own CI/result. No HIT-86/107 receive or webhook dependency, no other services/platform/DDL/API edits. No real credential/installation/runtime or provider integration qualification."
+}

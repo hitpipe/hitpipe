@@ -1,0 +1,87 @@
+HIT-117 — factual execution transcript, clean source 251909683310e24d338771f1ab331984f08c2ef9
+Go: go version go1.27.2 darwin/arm64
+PostgreSQL: 18.7
+Image: docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
+Host: macOS-26.5-arm64-arm-64bit
+Python tool: 3.12.6 (v3.12.6:a4a2d2b0d85, Sep  6 2024, 16:08:03) [Clang 13.0.0 (clang-1300.0.29.30)]
+Start: 2026-11-18T13:54:40Z; finish: 2026-11-18T13:55:27Z
+git status at invocation: clean; all captured source hashes unchanged at completion.
+Storage settings: {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}; owned container removed: True.
+
+generation: exit 0; ["/Library/Frameworks/Python.framework/Versions/3.12/bin/python3", "/Users/nic_piter/code/hitpipe-HIT-117/services/intake/tools/generate_sourcefacts.py", "--check", "--gofmt", "/private/tmp/hit73-toolchain/go/bin/gofmt"]
+unit: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "test", "-race", "-count=1", "-json", "./..."]
+integration: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "test", "-tags=integration", "-race", "-count=1", "-json", "./..."]
+vet: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "vet", "-tags=integration", "./..."]
+build: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "build", "./..."]
+modules: exit 0; ["/tmp/hit73-toolchain/go/bin/go", "mod", "verify"]
+schema: exit 0; ["/Library/Frameworks/Python.framework/Versions/3.12/bin/python3", "/Users/nic_piter/code/hitpipe-HIT-117/services/intake/tools/check_postgres.py"]
+
+unit -race: 24 PASS test/subtest events; failures=0; skipped tests=0.
+integration -race: 84 PASS test/subtest events (includes unit); failures=0; skipped tests=0.
+PASS TestIntegrationRefundsDisputesAndPartialLists/refund
+PASS TestIntegrationRefundsDisputesAndPartialLists/dispute
+PASS TestIntegrationRefundsDisputesAndPartialLists/pending-refund
+PASS TestIntegrationRefundsDisputesAndPartialLists/partial-refunds
+PASS TestIntegrationRefundsDisputesAndPartialLists/partial-disputes
+PASS TestIntegrationRefundsDisputesAndPartialLists/wrong-refund-link
+PASS TestIntegrationRefundsDisputesAndPartialLists/duplicate-list
+PASS TestIntegrationRefundsDisputesAndPartialLists/two-items-paginated
+PASS TestIntegrationRefundsDisputesAndPartialLists/malformed-list
+PASS TestIntegrationRefundsDisputesAndPartialLists
+PASS TestIntegrationTLSHostnameAndNoUnwiredDefaults
+PASS TestIntegrationFileDatabaseAndStoredIntegrityFailures/put
+PASS TestIntegrationFileDatabaseAndStoredIntegrityFailures/read
+PASS TestIntegrationFileDatabaseAndStoredIntegrityFailures/database
+PASS TestIntegrationFileDatabaseAndStoredIntegrityFailures/persisted-content-readback
+PASS TestIntegrationFileDatabaseAndStoredIntegrityFailures
+PASS TestIntegrationCancellationAndFactsExpiry
+PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/epoch
+PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/db-revocation
+PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/oldest-expired
+PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds/validity-cap
+PASS TestIntegrationEpochDatabaseRevocationAndValidityBounds
+PASS TestIntegrationHTTPSPostgresContentAndRecovery
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/fraction
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/unknown-scope
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/oversized
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/unknown
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/duplicate
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/null
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/uuid
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork/epoch
+PASS TestIntegrationStrictRequestDenialsBeforeNetwork
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/missing-capture
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/null-mode
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/unknown-payment-status
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/unpaid
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/uncaptured
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/recurring-price
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/different-currency
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented/no-linked-payment
+PASS TestIntegrationUnknownAndNegativeFactsNeverInvented
+PASS TestIntegrationProviderIdentityAndContextMismatch/account
+PASS TestIntegrationProviderIdentityAndContextMismatch/mode
+PASS TestIntegrationProviderIdentityAndContextMismatch/unknown-mode
+PASS TestIntegrationProviderIdentityAndContextMismatch/session
+PASS TestIntegrationProviderIdentityAndContextMismatch/payment-link
+PASS TestIntegrationProviderIdentityAndContextMismatch
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/302
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/307
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/429
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/500
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/body-bound
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry/timeout
+PASS TestIntegrationNetworkFailuresNoRedirectOrRetry
+PASS TestIntegrationPaginationCannotOverstateCompleteness
+PASS TestIntegrationActualStartGateAndChangesBetweenReads/revoke-after-credential-before-connect
+PASS TestIntegrationActualStartGateAndChangesBetweenReads/scope-changed-between-reads
+PASS TestIntegrationActualStartGateAndChangesBetweenReads/protected-response-start
+PASS TestIntegrationActualStartGateAndChangesBetweenReads
+PASS TestIntegrationConcurrentWorkspaceIsolationAndNoIngressWrites
+schema: 377 isolated PostgreSQL checks passed; original DDL and app roles/RLS retained.
+SourceFacts generated representations drift check: passed.
+Actual loopback HTTPS/mTLS and managed Stripe HTTPS servers, real own PostgreSQL and files.
+Authority/credential/start gate explicitly injected by controlled fixture, NOT real IAM/installation/runtime. No signals/outbox/new case/external write.
+No production disk, live Stripe/ClickUp or security qualification. No independent Reviewer/human acceptance.
+
+Original raw logs and commands are in this same immutable directory; SHA256 index: artifacts.json.
