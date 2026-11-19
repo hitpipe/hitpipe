@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-106",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Добавлен браузерный HTTPS-вход через Keycloak 26.8.1 с выдачей непрозрачной сессии HitPipe. Регистрация с email-кодом и вход подтверждённого пользователя проверены с Mailpit и настоящей PostgreSQL 18.7.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
+    "code_commit": "4c165aaee969becf9a314b85e198d84949247796",
+    "review_base_ref": "codex/hit-106-dependencies",
+    "review_head_ref": "codex/hit-106-oidc-login",
+    "dependency_heads": {
+      "HIT-68": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "HIT-81_PR55": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "HIT-82_PR56": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+      "HIT-83_PR60": "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
+      "HIT-105_PR69": "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd"
+    },
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/README.md"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/internal/adapters/http",
+      "version": "4c165aaee969becf9a314b85e198d84949247796",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4c165aaee969becf9a314b85e198d84949247796/services/iam/internal/adapters/http"
+    },
+    {
+      "path": "services/iam/internal/adapters/oidc",
+      "version": "4c165aaee969becf9a314b85e198d84949247796",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4c165aaee969becf9a314b85e198d84949247796/services/iam/internal/adapters/oidc"
+    },
+    {
+      "path": "services/iam/internal/application/oidclogin",
+      "version": "4c165aaee969becf9a314b85e198d84949247796",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4c165aaee969becf9a314b85e198d84949247796/services/iam/internal/application/oidclogin"
+    },
+    {
+      "path": "services/iam/tools/hit106-lab",
+      "version": "4c165aaee969becf9a314b85e198d84949247796",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4c165aaee969becf9a314b85e198d84949247796/services/iam/tools/hit106-lab"
+    },
+    {
+      "path": "services/iam/evidence/HIT-106/verification.json",
+      "version": "acee2d4e7625f2e4c6622e3404df6f95cc2dc491",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/verification.json"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "4c165aaee969becf9a314b85e198d84949247796",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/verification.json",
+    "protocol_version": "acee2d4e7625f2e4c6622e3404df6f95cc2dc491",
+    "environment": "Отдельная Ubuntu 24.04.5 VM, Go 1.27.2, Keycloak 26.8.1, PostgreSQL 18.7, Chromium 159 и Mailpit 1.33.1.",
+    "commands": [
+      {
+        "command": "npm ci --no-audit --no-fund (services/iam/tools/hit106-lab)",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/browser.log"
+      },
+      {
+        "command": "HIT106_ISOLATED_LAB=1 ./run.sh (services/iam/tools/hit106-lab)",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/browser.log"
+      },
+      {
+        "command": "go test -race -count=1 ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/go.log"
+      },
+      {
+        "command": "go vet ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/go.log"
+      },
+      {
+        "command": "go build ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/go.log"
+      },
+      {
+        "command": "go vet -tags hit106lab ./tools/hit106-server",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/go.log"
+      },
+      {
+        "command": "go build -tags hit106lab -o /work/hit106/hit106-browser-check-4c165aa ./tools/hit106-server",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/go.log"
+      },
+      {
+        "command": "python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/prior-suite-4c165aa",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/postgres-driver.log"
+      }
+    ],
+    "browser_scenarios": [
+      "HTTPS registration requires email-code, then issues one real IAM session",
+      "concurrent replay of the completed callback creates no independent sessions",
+      "an existing session cannot be replaced without the revocation coordinator",
+      "the confirmed user signs in again with a fresh attempt and the same principal",
+      "foreign or missing state and browser authority assertions do not create a session",
+      "cancelling an attempt also blocks a later genuine IdP callback for that state",
+      "a genuine callback after IAM restart fails with the lost one-use attempt",
+      "a genuine unverified-email claim from the test IdP cannot create a session"
+    ],
+    "postgres_transaction_proof": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/postgres/postgres-race.log"
+  },
+  "deviations": [],
+  "limitations": [
+    "Проверка выполнялась в изолированном realm с тестовым SMTP и локальными CA, часами, сроками и полномочиями. Рабочая конфигурация требует собственных доверенных подключений.",
+    "Профиль, GET session, доставка CSRF, BFF, logout, координатор rotation/revoke и рабочее развёртывание относятся к отдельным задачам."
+  ]
+}
