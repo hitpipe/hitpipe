@@ -1,0 +1,49 @@
+{
+  "subject": "HIT-114",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+    "summary": "Таймеры Processing применяют сохранённый срок WORKING и длительность непрерывного WAITING_DATA, защищают установленное знание и показывают причину через существующие чтения.",
+    "contract_revision": 1,
+    "contract_fingerprint": "0f7bdb4560cb1fde9b26d8bd6b7a2a385658a772b07b448ad5b7162a610ade52",
+    "base_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/78"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/casereadhttp/http.go",
+    "services/processing/internal/adapters/postgres/caseworker.go",
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/adapters/postgres/prepare_test.go",
+    "services/processing/internal/adapters/postgres/read_cases.go",
+    "services/processing/internal/adapters/postgres/timeouts.go",
+    "services/processing/internal/adapters/postgres/timeouts_process_test.go",
+    "services/processing/internal/adapters/postgres/timeouts_test.go",
+    "services/processing/internal/application/casetimeouts/timeout.go",
+    "services/processing/internal/application/readcases/presentation.go",
+    "services/processing/internal/application/readcases/read.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/timeouts.go",
+    "services/processing/docs/HIT-114/",
+    ".project-os/results/HIT-114.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-114/README.md",
+    "timing_map": "services/processing/docs/HIT-114/timing-map.md",
+    "source_audit": "services/processing/docs/HIT-114/source-audit.json",
+    "test_protocol": "services/processing/docs/HIT-114/verification/test-evidence.json",
+    "ci_protocol": "services/processing/docs/HIT-114/verification/ci-evidence.json",
+    "original_postgres_output": "services/processing/docs/HIT-114/verification/postgres-storage-tests.stdout.gz",
+    "actual_stand": "PASS. TestProcessingCaseTimeoutsOwnedStand plus exact deadline, concurrency, lease and predecessor regressions on owned PG18.7, mTLS and Linux executable.",
+    "code_ci": [
+      "https://github.com/hitpipe/hitpipe/actions/runs/44597605354",
+      "https://github.com/hitpipe/hitpipe/actions/runs/44597582040"
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Управляемые IAM, Intake, Delivery на стенде. Проверка локальных правил по делу, эксплуатационные SLO и живые провайдеры вне стенда.",
+    "Обычный режим HIT-111 требует авторитетных источников доступа и привязок."
+  ]
+}
