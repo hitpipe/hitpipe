@@ -129,3 +129,4 @@ node --version
 
 HOME="$browser_home" XDG_CONFIG_HOME="$browser_home/.config" XDG_DATA_HOME="$browser_home/.local/share" \
   PLAYWRIGHT_BROWSERS_PATH="$browser_cache" NODE_EXTRA_CA_CERTS="$HIT106_LAB_DIR/ca.pem" node "$source_dir/browser.mjs"
+"$HIT106_LAB_DIR/iam-browser" check-policy

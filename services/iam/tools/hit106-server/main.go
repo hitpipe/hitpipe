@@ -130,6 +130,28 @@ func (labGuard) Check(ctx context.Context, identity issuesession.Identity) (issu
 	return issuesession.GuardDecision{State: issuesession.IssuanceAllowed, Epoch: 1}, nil
 }
 
+func openLabAppPool(ctx context.Context) (*pgxpool.Pool, error) {
+	appPassword, err := fixtureSecret("HIT106_IAM_APP_PASSWORD")
+	if err != nil {
+		return nil, err
+	}
+	config, err := pgxpool.ParseConfig("postgres://hit106_iam_app" + databaseAddress)
+	if err != nil {
+		return nil, errors.New("invalid lab application configuration")
+	}
+	config.ConnConfig.Password = appPassword
+	config.MaxConns = 5
+	pool, err := pgxpool.NewWithConfig(ctx, config)
+	if err != nil {
+		return nil, errors.New("create local lab pool failed")
+	}
+	if err := pool.Ping(ctx); err != nil {
+		pool.Close()
+		return nil, errors.New("connect to local IAM PostgreSQL failed")
+	}
+	return pool, nil
+}
+
 func serve(dir string) error {
 	if !filepath.IsAbs(dir) {
 		return errors.New("HIT106_LAB_DIR must locate a generated fixture")
@@ -146,26 +168,13 @@ func serve(dir string) error {
 	if err != nil {
 		return err
 	}
-	appPassword, err := fixtureSecret("HIT106_IAM_APP_PASSWORD")
+	db, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	pool, err := openLabAppPool(db)
+	cancel()
 	if err != nil {
 		return err
 	}
-	config, err := pgxpool.ParseConfig("postgres://hit106_iam_app" + databaseAddress)
-	if err != nil {
-		return errors.New("invalid lab application configuration")
-	}
-	config.ConnConfig.Password = appPassword
-	config.MaxConns = 5
-	db, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	pool, err := pgxpool.NewWithConfig(db, config)
-	if err != nil {
-		return errors.New("create local lab pool failed")
-	}
 	defer pool.Close()
-	if err := pool.Ping(db); err != nil {
-		return errors.New("connect to local IAM PostgreSQL failed")
-	}
 	oidcConfig := oidc.Config{
 		Issuer: idpIssuer, AuthorizationEndpoint: idpIssuer + "/protocol/openid-connect/auth",
 		TokenEndpoint: idpIssuer + "/protocol/openid-connect/token", JWKSURI: idpIssuer + "/protocol/openid-connect/certs",
@@ -176,7 +185,7 @@ func serve(dir string) error {
 		return ctx.Err() == nil && !now.IsZero()
 	})
 	login, err := httpauth.NewOIDC(oidcConfig, pool, clock, labGuard{}, issuesession.Policy{
-		AbsoluteLifetime: 24 * time.Hour, IdleLifetime: 8 * time.Hour,
+		AbsoluteLifetime: labAbsoluteLifetime, IdleLifetime: labIdleLifetime,
 	}, completionPath)
 	if err != nil {
 		return fmt.Errorf("configure the lab login: %w", err)
@@ -244,8 +253,9 @@ func serve(dir string) error {
 }
 
 func run() error {
+	const usage = "usage: iam-browser migrate|serve|check-policy"
 	if len(os.Args) != 2 {
-		return errors.New("usage: iam-browser migrate|serve")
+		return errors.New(usage)
 	}
 	switch os.Args[1] {
 	case "migrate":
@@ -254,8 +264,12 @@ func run() error {
 		return migration(ctx)
 	case "serve":
 		return serve(os.Getenv("HIT106_LAB_DIR"))
+	case "check-policy":
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		return checkPolicy(ctx)
 	default:
-		return errors.New("usage: iam-browser migrate|serve")
+		return errors.New(usage)
 	}
 }
 
