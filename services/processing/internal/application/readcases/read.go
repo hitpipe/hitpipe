@@ -37,6 +37,8 @@ type Grant struct {
 	WorkspaceID, PrincipalID string
 	Epoch                    int64
 	ExpiresAt                time.Time
+	RecoverConnection        string
+	RecoverUntil             time.Time
 }
 type Authority interface {
 	Authorize(context.Context, Request) (Grant, error)

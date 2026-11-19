@@ -24,9 +24,10 @@ type OwnedContent interface {
 // CaseReadStore uses only the owner database and files. Presentation has no
 // fallback for required fields missing from the predecessor result.
 type CaseReadStore struct {
-	DB      Beginner
-	Content OwnedContent
-	Cursors readcases.CursorKey
+	DB              Beginner
+	Content         OwnedContent
+	Cursors         readcases.CursorKey
+	RecoveryEnabled bool
 }
 
 func (db CaseReadStore) Read(ctx context.Context, r readcases.Request, g readcases.Grant) (any, error) {
@@ -70,7 +71,7 @@ func (db CaseReadStore) Read(ctx context.Context, r readcases.Request, g readcas
 	if r.Kind == readcases.History {
 		out, e = db.readHistory(ctx, tx, r, p, now)
 	} else {
-		out, e = db.readCases(ctx, tx, r, p, now)
+		out, e = db.readCases(ctx, tx, r, p, now, g)
 	}
 	if e != nil {
 		return nil, e
@@ -91,7 +92,7 @@ const caseReadSQL = `SELECT k.case_id::text,k.operation_id::text,k.config_id::te
  WHERE k.workspace_id=$1 AND ($2='' OR k.case_id::text=$2) AND ($3='' OR k.state=$3) AND k.admitted_at<=$4
  AND ($5::timestamptz IS NULL OR (k.admitted_at,k.case_id)>($5::timestamptz,$6::uuid)) ORDER BY k.admitted_at,k.case_id LIMIT $7`
 
-func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Request, p readcases.Page, now time.Time) (any, error) {
+func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Request, p readcases.Page, now time.Time, g readcases.Grant) (any, error) {
 	limit := r.Limit
 	if r.Kind == readcases.Detail {
 		limit = 1
@@ -168,6 +169,16 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 			return nil, e
 		}
 		labels, e := readcases.Project(rec)
+		if db.RecoveryEnabled {
+			available := false
+			if r.Kind == readcases.Detail && rec.KnownTaskID != nil && g.RecoverConnection != "" && now.Before(g.RecoverUntil) {
+				if c, err := readKnownCase(ctx, tx, r.WorkspaceID, rec.Summary.CaseID, g.PrincipalID, false); err == nil {
+					_, err = c.checkLineage(ctx, tx, db.Content, g.RecoverConnection, now)
+					available = err == nil
+				}
+			}
+			labels, e = readcases.ProjectRecovery(rec, available)
+		}
 		if e != nil {
 			return nil, e
 		}

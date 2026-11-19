@@ -28,6 +28,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/observationjson"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/normalizedsignal"
+	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/recheckhttp"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/activation"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/dispatchintent"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
@@ -36,6 +37,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/receivesignals"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/recheck"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -49,6 +51,7 @@ type Runtime struct {
 	pool        []*pgxpool.Pool
 	files       *contentfiles.Store
 	sender      dispatchintent.Service
+	queries     dispatchintent.Service
 	lifecycle   postgres.LifecycleStore
 	caseReaders sourceReaders
 	caseJobs    postgres.CaseJobStore
@@ -185,8 +188,11 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 		Boundary: draftsAdapter, Bindings: draftsAdapter, Clock: serviceClock, Codec: draftjson.ActivationCodec{}}
 	life := lifecycle.Service{Repository: rt.lifecycle, Authority: draftsAdapter, Boundary: draftsAdapter, Bindings: draftsAdapter,
 		Queue: standQueue{stand}, Clock: serviceClock, Codec: draftjson.Codec{}}
-	read := readcases.Service{Repository: postgres.CaseReadStore{DB: app, Content: rt.files, Cursors: cursor},
-		Authority: cases, Boundary: cases, Clock: serviceClock}
+	caseStore := postgres.CaseReadStore{DB: app, Content: rt.files, Cursors: cursor, RecoveryEnabled: true}
+	read := readcases.Service{Repository: caseStore, Authority: cases, Boundary: cases, Clock: serviceClock}
+	recoverAccess := recoveryAccess{rt.a}
+	recover := recheck.Service{Repository: postgres.RecheckStore{CaseReadStore: caseStore, Files: rt.files},
+		Authority: recoverAccess, Boundary: recoverAccess, Codec: recheckhttp.Codec{}, Clock: serviceClock}
 	receive := receivesignals.Service{Contexts: intake, Boundary: intake, Clock: serviceClock,
 		Decoder: normalizedsignal.Decoder{}, Store: postgres.Store{DB: app, Content: rt.files}}
 	observe := observations.Service{Repository: postgres.ObservationStore{DB: app, Content: rt.files, HistoryRetention: ttl},
@@ -208,6 +214,9 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 		return nil, err
 	}
 	if err = intakehttp.Attach(business, receive, c.Intake.Name); err != nil {
+		return nil, err
+	}
+	if err = recheckhttp.Attach(business, recover, c.BFFName); err != nil {
 		return nil, err
 	}
 	oh, err := observationhttp.New(observe, c.Delivery.Name, limitBody)
@@ -237,9 +246,17 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 	if err != nil {
 		return nil, err
 	}
-	rt.sender = dispatchintent.Service{Repository: jobStore{DispatchStore: postgres.DispatchStore{DB: worker}, a: dispatch},
+	jobs := postgres.DispatchStore{DB: worker}
+	rt.sender = dispatchintent.Service{Repository: jobStore{Repository: jobs, a: dispatch},
 		Content: dispatchContent{Content: rt.files, a: dispatch}, Decoder: deliveryhttp.Codec{}, Sender: send, Boundary: dispatch, Clock: serviceClock,
 		Policy: dispatchintent.Policy{Batch: 5, MaxAttempts: 3, Lease: 10 * time.Second, RequestTimeout: 1500 * time.Millisecond, BaseBackoff: time.Second, MaxBackoff: 5 * time.Second}, Jitter: dispatchintent.CryptoJitter}
+	q := queryAccess{rt.a}
+	rt.queries = rt.sender
+	rt.queries.Repository = jobStore{Repository: postgres.RecheckDispatch{DispatchStore: jobs}, a: q}
+	rt.queries.Decoder = deliveryhttp.QueryCodec{}
+	rt.queries.Sender = deliveryhttp.QuerySender{Transport: send, Apply: q.apply(observe)}
+	rt.queries.Boundary = q
+	rt.queries.Policy.Batch = 1
 	rt.caseJobs = postgres.CaseJobStore{DB: worker}
 	rt.caseReaders = sourceReaders{a: rt.a, origin: c.Intake.Origin, transport: outbound(c.Intake, outCA, clientCert), jobs: rt.caseJobs}
 	success = true
@@ -247,8 +264,8 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 }
 
 type jobStore struct {
-	postgres.DispatchStore
-	a dispatchAccess
+	dispatchintent.Repository
+	a dispatchintent.Boundary
 }
 
 func (j jobStore) Jobs(ctx context.Context, w string, n int) ([]dispatchintent.Job, error) {
@@ -259,7 +276,7 @@ func (j jobStore) Jobs(ctx context.Context, w string, n int) ([]dispatchintent.J
 	var jobs []dispatchintent.Job
 	err := j.a.Start(ctx, dispatchintent.Claim{Request: dispatchintent.Request{WorkspaceID: w, Epoch: h.permit.epoch}}, func(c context.Context) error {
 		var e error
-		jobs, e = j.DispatchStore.Jobs(c, w, n)
+		jobs, e = j.Repository.Jobs(c, w, n)
 		return e
 	})
 	return jobs, err
@@ -410,6 +427,7 @@ func (rt *Runtime) work(ctx context.Context, stop <-chan struct{}) {
 				_ = rt.a.start(c, w, p.principal, p.epoch, func(x context.Context) error { return rt.lifecycle.Drain(x, w) })
 			}
 			rt.advanceCase(ctx, w)
+			rt.advanceRecheck(ctx, w)
 			c = withPermit(ctx)
 			destination := rt.a.stand[w].config.Destination
 			p, err = rt.a.local(c, w, "CONNECTOR_WRITE", &destination)

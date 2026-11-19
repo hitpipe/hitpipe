@@ -33,6 +33,9 @@ func (d DispatchStore) tx(ctx context.Context, ws string) (pgx.Tx, error) {
 	return tx, nil
 }
 func (d DispatchStore) Index(ctx context.Context, r dispatchintent.Request, limit int) error {
+	return d.index(ctx, r, limit, "DELIVERY_INTENT")
+}
+func (d DispatchStore) index(ctx context.Context, r dispatchintent.Request, limit int, kind string) error {
 	if r.WorkspaceID == "" || r.Epoch < 1 || limit < 1 || limit > 100 {
 		return dispatchintent.ErrHeld
 	}
@@ -41,7 +44,7 @@ func (d DispatchStore) Index(ctx context.Context, r dispatchintent.Request, limi
 		return e
 	}
 	defer tx.Rollback(ctx)
-	rows, e := tx.Query(ctx, `SELECT message_id::text,next_attempt_at FROM hp_processing.outbox WHERE workspace_id=$1 AND kind='DELIVERY_INTENT' AND state IN('PENDING','CLAIMED') ORDER BY next_attempt_at,message_id LIMIT $2`, r.WorkspaceID, limit)
+	rows, e := tx.Query(ctx, `SELECT message_id::text,next_attempt_at FROM hp_processing.outbox WHERE workspace_id=$1 AND kind=$3 AND state IN('PENDING','CLAIMED') ORDER BY next_attempt_at,message_id LIMIT $2`, r.WorkspaceID, limit, kind)
 	if e != nil {
 		return e
 	}
@@ -64,7 +67,7 @@ func (d DispatchStore) Index(ctx context.Context, r dispatchintent.Request, limi
 		return e
 	}
 	for _, j := range jobs {
-		tag, e := tx.Exec(ctx, `INSERT INTO hp_processing.job_index(job_id,workspace_id,kind,due_at) VALUES($1,$2,'DELIVERY_INTENT',$3) ON CONFLICT(job_id) DO UPDATE SET due_at=EXCLUDED.due_at WHERE job_index.workspace_id=EXCLUDED.workspace_id AND job_index.kind=EXCLUDED.kind`, j.id, r.WorkspaceID, j.at)
+		tag, e := tx.Exec(ctx, `INSERT INTO hp_processing.job_index(job_id,workspace_id,kind,due_at) VALUES($1,$2,$4,$3) ON CONFLICT(job_id) DO UPDATE SET due_at=EXCLUDED.due_at WHERE job_index.workspace_id=EXCLUDED.workspace_id AND job_index.kind=EXCLUDED.kind`, j.id, r.WorkspaceID, j.at, kind)
 		if e != nil {
 			return e
 		}
@@ -75,6 +78,9 @@ func (d DispatchStore) Index(ctx context.Context, r dispatchintent.Request, limi
 	return tx.Commit(ctx)
 }
 func (d DispatchStore) Jobs(ctx context.Context, workspace string, limit int) ([]dispatchintent.Job, error) {
+	return d.jobs(ctx, workspace, limit, "DELIVERY_INTENT")
+}
+func (d DispatchStore) jobs(ctx context.Context, workspace string, limit int, kind string) ([]dispatchintent.Job, error) {
 	if limit < 1 || limit > 100 {
 		return nil, dispatchintent.ErrHeld
 	}
@@ -83,7 +89,7 @@ func (d DispatchStore) Jobs(ctx context.Context, workspace string, limit int) ([
 		return nil, e
 	}
 	defer tx.Rollback(ctx)
-	rows, e := tx.Query(ctx, `SELECT workspace_id::text,job_id::text FROM hp_processing.job_index WHERE ($2='' OR workspace_id::text=$2) AND kind='DELIVERY_INTENT' AND due_at<=clock_timestamp() AND (lease_until IS NULL OR lease_until<=clock_timestamp()) ORDER BY due_at,job_id LIMIT $1`, limit, workspace)
+	rows, e := tx.Query(ctx, `SELECT workspace_id::text,job_id::text FROM hp_processing.job_index WHERE ($2='' OR workspace_id::text=$2) AND kind=$3 AND due_at<=clock_timestamp() AND (lease_until IS NULL OR lease_until<=clock_timestamp()) ORDER BY due_at,job_id LIMIT $1`, limit, workspace, kind)
 	if e != nil {
 		return nil, e
 	}
@@ -114,10 +120,11 @@ type dispatchRow struct {
 	now      time.Time
 	jobToken *string
 	jobLease *time.Time
+	current  bool
 }
 
 func dispatchLoad(ctx context.Context, tx pgx.Tx, r dispatchintent.Request, id string, lock bool) (dispatchRow, error) {
-	x := dispatchRow{c: dispatchintent.Claim{Request: r, MessageID: id}}
+	x := dispatchRow{c: dispatchintent.Claim{Request: r, MessageID: id}, current: true}
 	c := &x.c
 	var token *string
 	var lease *time.Time
@@ -157,7 +164,13 @@ func dispatchLoad(ctx context.Context, tx pgx.Tx, r dispatchintent.Request, id s
 	}
 	return x, nil
 }
+
+type dispatchLoader func(context.Context, pgx.Tx, dispatchintent.Request, string, bool) (dispatchRow, error)
+
 func (d DispatchStore) Claim(ctx context.Context, r dispatchintent.Request, id string, lease time.Duration) (dispatchintent.Claim, error) {
+	return d.claim(ctx, r, id, lease, dispatchLoad)
+}
+func (d DispatchStore) claim(ctx context.Context, r dispatchintent.Request, id string, lease time.Duration, load dispatchLoader) (dispatchintent.Claim, error) {
 	zero := dispatchintent.Claim{}
 	if r.WorkspaceID == "" || id == "" || r.Epoch < 1 || lease <= 0 {
 		return zero, dispatchintent.ErrHeld
@@ -167,7 +180,7 @@ func (d DispatchStore) Claim(ctx context.Context, r dispatchintent.Request, id s
 		return zero, e
 	}
 	defer tx.Rollback(ctx)
-	x, e := dispatchLoad(ctx, tx, r, id, true)
+	x, e := load(ctx, tx, r, id, true)
 	if e != nil {
 		return zero, e
 	}
@@ -199,21 +212,27 @@ func owned(x dispatchRow, c dispatchintent.Claim) bool {
 	return x.state == "CLAIMED" && x.c == c && x.now.Before(c.LeaseUntil) && x.jobToken != nil && *x.jobToken == c.Token && x.jobLease != nil && x.jobLease.Equal(c.LeaseUntil)
 }
 func (d DispatchStore) Check(ctx context.Context, c dispatchintent.Claim) error {
+	return d.check(ctx, c, dispatchLoad)
+}
+func (d DispatchStore) check(ctx context.Context, c dispatchintent.Claim, load dispatchLoader) error {
 	tx, e := d.tx(ctx, c.WorkspaceID)
 	if e != nil {
 		return e
 	}
 	defer tx.Rollback(ctx)
-	x, e := dispatchLoad(ctx, tx, c.Request, c.MessageID, false)
+	x, e := load(ctx, tx, c.Request, c.MessageID, false)
 	if e != nil {
 		return e
 	}
-	if !owned(x, c) || !x.now.Before(c.Ref.ExpiresAt) || !x.now.Before(c.DeadlineAt) {
+	if !owned(x, c) || !x.current || !x.now.Before(c.Ref.ExpiresAt) || !x.now.Before(c.DeadlineAt) {
 		return dispatchintent.ErrStale
 	}
 	return tx.Commit(ctx)
 }
 func (d DispatchStore) Finish(ctx context.Context, c dispatchintent.Claim, state string, next time.Time) error {
+	return d.finish(ctx, c, state, next, dispatchLoad)
+}
+func (d DispatchStore) finish(ctx context.Context, c dispatchintent.Claim, state string, next time.Time, load dispatchLoader) error {
 	if state != "ACKED" && state != "HELD" && state != "PENDING" {
 		return dispatchintent.ErrHeld
 	}
@@ -222,7 +241,7 @@ func (d DispatchStore) Finish(ctx context.Context, c dispatchintent.Claim, state
 		return e
 	}
 	defer tx.Rollback(ctx)
-	x, e := dispatchLoad(ctx, tx, c.Request, c.MessageID, true)
+	x, e := load(ctx, tx, c.Request, c.MessageID, true)
 	if e != nil {
 		return e
 	}

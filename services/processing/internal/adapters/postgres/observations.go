@@ -88,13 +88,13 @@ func observationCase(ctx context.Context, tx pgx.Tx, o observations.TaskObservat
 	}
 	return s, nil
 }
-func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observations.TaskObservation, s *observations.Snapshot, now time.Time) error {
+func observationLineage(ctx context.Context, tx pgx.Tx, content OwnedContent, o observations.TaskObservation, s *observations.Snapshot, now time.Time) (time.Time, error) {
 	if s.LineageID == "" || !strings.EqualFold(s.LineageID, o.LineageID) {
-		return observations.ErrConflict
+		return time.Time{}, observations.ErrConflict
 	}
 	var exists bool
 	if e := tx.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM hp_processing.outbox WHERE workspace_id=$1 AND message_id=$2 AND kind='DELIVERY_INTENT')`, s.WorkspaceID, s.LineageID).Scan(&exists); e != nil || !exists {
-		return observations.ErrConflict
+		return time.Time{}, observations.ErrConflict
 	}
 	// The immutable HIT-79 HISTORY binds lineage to episode after the shorter
 	// intent-payload TTL. No read/renewal of expired intent payload is attempted.
@@ -103,11 +103,11 @@ func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observation
 	ref.Class = "HISTORY"
 	e := tx.QueryRow(ctx, `SELECT c.detail_ref::text,c.detail_sha256,c.detail_bytes,c.expires_at,h.at FROM hp_processing.safety_history h JOIN hp_processing.history_content c ON (h.workspace_id,h.entry_id)=(c.workspace_id,c.entry_id) WHERE h.workspace_id=$1 AND h.case_id=$2 AND h.reason_code='FINANCIAL_ELIGIBILITY_ONLY' AND h.new_state='WORKING' ORDER BY h.at DESC,h.entry_id DESC LIMIT 1`, s.WorkspaceID, s.CaseID).Scan(&ref.ID, &ref.Digest, &ref.Bytes, &ref.ExpiresAt, &at)
 	if e != nil || !ref.ExpiresAt.After(now) {
-		return observations.ErrUnavailable
+		return time.Time{}, observations.ErrUnavailable
 	}
-	b, e := db.Content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: s.WorkspaceID, CaseID: s.CaseID, Revision: s.Revision}, now)
+	b, e := content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: s.WorkspaceID, CaseID: s.CaseID, Revision: s.Revision}, now)
 	if e != nil {
-		return observations.ErrUnavailable
+		return time.Time{}, observations.ErrUnavailable
 	}
 	var h struct {
 		CaseID   string
@@ -116,19 +116,27 @@ func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observation
 		Decision preparecase.Decision
 	}
 	if json.Unmarshal(b, &h) != nil || h.CaseID != s.CaseID || h.Revision < 1 || h.Revision > s.Revision || h.Scope.WorkspaceID != s.WorkspaceID || h.Scope.OperationID != s.OperationID || h.Scope.ConfigID != s.ConfigID || h.Scope.OwnerID != s.OwnerID || h.Decision.LineageID != s.LineageID || h.Decision.MessageID != s.LineageID || !strings.EqualFold(h.Decision.EpisodeID, o.EpisodeID) || h.Decision.Intent == nil || !h.Decision.At.UTC().Truncate(time.Microsecond).Equal(at) {
-		return observations.ErrConflict
+		return time.Time{}, observations.ErrConflict
 	}
 	s.EpisodeID = h.Decision.EpisodeID
 	var latest string
 	e = tx.QueryRow(ctx, `SELECT episode_id::text,started_at FROM hp_processing.episodes WHERE workspace_id=$1 AND case_id=$2 ORDER BY started_at DESC,episode_id DESC LIMIT 1`, s.WorkspaceID, s.CaseID).Scan(&latest, &s.EpisodeStartedAt)
 	if e != nil || latest != s.EpisodeID {
-		return observations.ErrStale
+		return time.Time{}, observations.ErrStale
+	}
+
+	return ref.ExpiresAt, nil
+}
+
+func (db ObservationStore) binding(ctx context.Context, tx pgx.Tx, o observations.TaskObservation, s *observations.Snapshot, now time.Time) error {
+	if _, e := observationLineage(ctx, tx, db.Content, o, s, now); e != nil {
+		return e
 	}
 
 	var observedRef preparecase.Ref
 	observedRef.Class = "HISTORY"
 	var received time.Time
-	e = tx.QueryRow(ctx, `SELECT h.at,c.detail_ref::text,c.detail_sha256,c.detail_bytes,c.expires_at FROM hp_processing.safety_history h JOIN hp_processing.history_content c ON (h.workspace_id,h.entry_id)=(c.workspace_id,c.entry_id) WHERE h.workspace_id=$1 AND h.case_id=$2 AND h.reason_code IN('DELIVERY_RESULT_VERIFIED','DELIVERY_TARGET_ID_OBSERVED','DELIVERY_POSSIBLE_EFFECT','DELIVERY_RESULT_MISMATCH','DELIVERY_INCOMPLETE','DELIVERY_KNOWN_NO_EFFECT') ORDER BY h.at DESC,h.entry_id DESC LIMIT 1`, s.WorkspaceID, s.CaseID).Scan(&received, &observedRef.ID, &observedRef.Digest, &observedRef.Bytes, &observedRef.ExpiresAt)
+	e := tx.QueryRow(ctx, `SELECT h.at,c.detail_ref::text,c.detail_sha256,c.detail_bytes,c.expires_at FROM hp_processing.safety_history h JOIN hp_processing.history_content c ON (h.workspace_id,h.entry_id)=(c.workspace_id,c.entry_id) WHERE h.workspace_id=$1 AND h.case_id=$2 AND h.reason_code IN('DELIVERY_RESULT_VERIFIED','DELIVERY_TARGET_ID_OBSERVED','DELIVERY_POSSIBLE_EFFECT','DELIVERY_RESULT_MISMATCH','DELIVERY_INCOMPLETE','DELIVERY_KNOWN_NO_EFFECT') ORDER BY h.at DESC,h.entry_id DESC LIMIT 1`, s.WorkspaceID, s.CaseID).Scan(&received, &observedRef.ID, &observedRef.Digest, &observedRef.Bytes, &observedRef.ExpiresAt)
 	if e != nil && !errors.Is(e, pgx.ErrNoRows) {
 		return observations.ErrUnavailable
 	}
