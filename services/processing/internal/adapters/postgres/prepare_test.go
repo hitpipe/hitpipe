@@ -149,10 +149,14 @@ type preparedFixture struct {
 
 func prepared(t *testing.T, keys []string) preparedFixture {
 	t.Helper()
+	return preparedSince(t, keys, time.Now().UTC().Add(-2*time.Hour).Truncate(time.Second))
+}
+
+func preparedSince(t *testing.T, keys []string, activation time.Time) preparedFixture {
+	t.Helper()
 	db := connect(t)
 	ws, _ := newID()
 	tx := begin(t, db, ws)
-	activation := time.Now().UTC().Add(-2 * time.Hour).Truncate(time.Second)
 	cfg := map[string]any{"pack_id": "PAID_ORDER_TASK_V1", "source_connection_id": config, "destination_connection_id": destination, "destination_workspace_id": "cu_synthetic", "price_id": "price_fixed", "list_id": "list_synthetic", "assignee_id": "assignee_synthetic", "mode": "TEST", "required_context_keys": keys, "title_pattern": "SERVICE_ORDER", "service_label": "Synthetic service"}
 	raw, _ := json.Marshal(cfg)
 	canonical, e := jcs.Transform(raw)

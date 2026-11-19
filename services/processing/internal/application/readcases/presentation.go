@@ -2,6 +2,8 @@ package readcases
 
 import (
 	"encoding/json"
+
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/casetimeouts"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -21,6 +23,13 @@ type reasonInfo struct {
 // is not fabricated proof of a denied connection. No current producer persists a
 // specific access-denial reason; the conditional priority6 remains conservative.
 var reasonCatalog = map[string]reasonInfo{
+	casetimeouts.WorkingElapsed:   {"Истёк срок обработки. Внешний исход требует проверки.", false},
+	casetimeouts.WaitingElapsed:   {"Проверенные данные не поступили за 24 часа непрерывного ожидания.", false},
+	casetimeouts.HistoryMissing:   {"Не найдена запись о начале текущего состояния. Действие удержано.", false},
+	casetimeouts.HistoryInvalid:   {"Данные о начале текущего состояния недоступны или несогласованны. Действие удержано.", false},
+	casetimeouts.HistoryExpired:   {"Подробности начала текущего состояния просрочены. Действие удержано.", false},
+	casetimeouts.EpisodeMissing:   {"Не найден открытый эпизод обработки. Действие удержано.", false},
+	casetimeouts.EpisodeInvalid:   {"Времена или связь эпизода обработки несогласованны. Действие удержано.", false},
 	"DELIVERY_RESULT_VERIFIED":    {"Результат проверен Delivery.", false},
 	"DELIVERY_TARGET_ID_OBSERVED": {"Наблюдался ID задачи.", false},
 	"DELIVERY_POSSIBLE_EFFECT":    {"Внешняя запись могла состояться.", false},

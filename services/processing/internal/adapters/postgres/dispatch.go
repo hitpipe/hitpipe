@@ -78,12 +78,17 @@ func (d DispatchStore) Jobs(ctx context.Context, workspace string, limit int) ([
 	if limit < 1 || limit > 100 {
 		return nil, dispatchintent.ErrHeld
 	}
-	tx, e := d.tx(ctx, "")
+	tx, e := d.tx(ctx, workspace)
 	if e != nil {
 		return nil, e
 	}
 	defer tx.Rollback(ctx)
-	rows, e := tx.Query(ctx, `SELECT workspace_id::text,job_id::text FROM hp_processing.job_index WHERE ($2='' OR workspace_id::text=$2) AND kind='DELIVERY_INTENT' AND due_at<=clock_timestamp() AND (lease_until IS NULL OR lease_until<=clock_timestamp()) ORDER BY due_at,job_id LIMIT $1`, limit, workspace)
+	rows, e := tx.Query(ctx, `SELECT j.workspace_id::text,j.job_id::text FROM hp_processing.job_index j
+ WHERE ($2='' OR j.workspace_id::text=$2) AND j.kind='DELIVERY_INTENT' AND j.due_at<=clock_timestamp()
+ AND (j.lease_until IS NULL OR j.lease_until<=clock_timestamp())
+ AND ($2='' OR EXISTS(SELECT 1 FROM hp_processing.outbox o WHERE o.workspace_id=j.workspace_id AND o.message_id=j.job_id
+   AND o.kind=j.kind AND o.state IN('PENDING','CLAIMED')))
+ ORDER BY j.due_at,j.job_id LIMIT $1`, limit, workspace)
 	if e != nil {
 		return nil, e
 	}

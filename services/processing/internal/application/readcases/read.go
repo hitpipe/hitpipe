@@ -6,6 +6,8 @@ import (
 	"context"
 	"errors"
 	"time"
+
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/casetimeouts"
 )
 
 var (
@@ -15,6 +17,7 @@ var (
 	ErrNotFound        = errors.New("NOT_FOUND")
 	ErrUnavailable     = errors.New("READ_UNAVAILABLE")
 	ErrExpired         = errors.New("CONTENT_EXPIRED")
+	ErrFutureHistory   = errors.New(casetimeouts.HistoryInvalid)
 )
 
 type Kind byte

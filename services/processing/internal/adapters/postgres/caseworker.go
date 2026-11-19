@@ -41,6 +41,14 @@ const eligibleCase = `
      AND h.old_state IN ('RECEIVED','WAITING_DATA') AND h.new_state='WAITING_DATA'
  ),'-infinity')))
  AND NOT EXISTS (
+   SELECT 1 FROM hp_processing.safety_history d
+   WHERE d.workspace_id=k.workspace_id AND d.case_id=k.case_id AND d.old_state=k.state AND d.new_state=k.state
+     AND d.reason_code LIKE 'CASE\_TIMER\_%' AND d.at >= COALESCE((
+       SELECT max(h.at) FROM hp_processing.safety_history h
+       WHERE h.workspace_id=k.workspace_id AND h.case_id=k.case_id AND h.old_state IS DISTINCT FROM h.new_state
+     ),'-infinity')
+ )
+ AND NOT EXISTS (
    SELECT 1 FROM hp_processing.episodes e WHERE e.workspace_id=k.workspace_id AND e.case_id=k.case_id
    AND (e.completed_at IS NOT NULL OR e.deadline_at<=clock_timestamp())
  )
