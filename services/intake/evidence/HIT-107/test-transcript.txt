@@ -1,14 +1,14 @@
-HIT-107: verified run 2026-11-18T23:54:45Z to 2026-11-18T23:55:29Z
-Source 20aa3946ac6f5e6a7d82469bbee5a95d3b4cd3d7; clean at invocation; source hashes unchanged.
+HIT-107: verified run 2026-11-18T23:59:40Z to 2026-11-19T00:00:24Z
+Source c067d03beb91e9510c917c781065f55c3582170a; clean at invocation; source hashes unchanged.
 go version go1.27.2 darwin/arm64; macOS-26.5-arm64-arm-64bit; PostgreSQL 18.7
 Image docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
 Durability settings {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}; owned container removed.
-unit, exit=0, 2.618s: /tmp/hit73-toolchain/go/bin/go test -race -count=1 -json ./...
-integration, exit=0, 8.211s: /tmp/hit73-toolchain/go/bin/go test -tags=integration -race -count=1 -json ./...
-vet, exit=0, 0.374s: /tmp/hit73-toolchain/go/bin/go vet -tags=integration ./...
-build, exit=0, 0.09s: /tmp/hit73-toolchain/go/bin/go build ./...
-modules, exit=0, 0.262s: /tmp/hit73-toolchain/go/bin/go mod verify
-schema, exit=0, 29.242s: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-107/services/intake/tools/check_postgres.py
+unit, exit=0, 3.3s: /tmp/hit73-toolchain/go/bin/go test -race -count=1 -json ./...
+integration, exit=0, 8.617s: /tmp/hit73-toolchain/go/bin/go test -tags=integration -race -count=1 -json ./...
+vet, exit=0, 0.425s: /tmp/hit73-toolchain/go/bin/go vet -tags=integration ./...
+build, exit=0, 0.124s: /tmp/hit73-toolchain/go/bin/go build ./...
+modules, exit=0, 0.276s: /tmp/hit73-toolchain/go/bin/go mod verify
+schema, exit=0, 28.591s: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-107/services/intake/tools/check_postgres.py
 132 unit and 189 integration pass events (integration includes unit); 0 fail, 0 skip. 377 SQL checks passed.
 HTTP cases observed in integration.stdout:
 TestIntegrationWebhookCommitBeforeACKAndReplay
@@ -22,4 +22,5 @@ TestIntegrationWebhookExactLimits
 401 forged/missing/altered signature; 400 signed malformed/unsupported event; 403 mismatched/revoked authority; 412 stale revision; 413 body/header limit; 429 both quotas; 503 missing durability.
 Exact 256 KiB passes at +300 seconds; replay outside tolerance fails.
 Prior component checks cover file write/fsync/rename failures and lost PostgreSQL COMMIT response. HTTP cases cover content port failure, database unavailable, uncertain commit and post-commit loss.
+Linux CI initially observed a connection reset at the declared body limit; corrected synchronous bounded HTTP read and graceful 413 close. Previous source/report and CI run 44424996798 are retained.
 No live setup, credentials, production runtime or Processing delivery.
