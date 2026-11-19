@@ -20,6 +20,22 @@ import (
 
 const MaxBodyBytes = 256 * 1024
 
+// Categories let downstream callers report bounded errors without inspecting
+// input, dependencies, or human-readable error strings.
+var (
+	ErrAuthentication = errors.New("webhook authentication rejected")
+	ErrInvalidEvent   = errors.New("webhook event invalid")
+	ErrContext        = errors.New("webhook event context denied")
+)
+
+type classifiedError struct {
+	code     string
+	category error
+}
+
+func (e classifiedError) Error() string { return e.code }
+func (e classifiedError) Unwrap() error { return e.category }
+
 // Binding must come from the endpoint owner's checked installation, not from
 // headers or JSON. Nil Livemode and empty APIVersion are unknown, never defaults.
 // ConnectedAccount requires Event.account; DirectAccount requires it absent.
@@ -105,7 +121,12 @@ func (c Consumer) Normalize(ctx context.Context, in Input) (*Signal, error) {
 	raw := append([]byte(nil), in.RawBody...)
 	a := c.auth.Authenticate(ctx, authenticatewebhook.Input{InstallationID: in.Binding.InstallationID, RawBody: raw, Signature: in.Signature})
 	if a.Webhook == nil || a.Outcome.Status != stripesignature.Verified {
-		return nil, errors.New("authentication_failed")
+		switch a.Outcome.Reason {
+		case stripesignature.ReasonSecretUnavailable, stripesignature.ReasonClockUnavailable:
+			return nil, errors.New("authentication_failed")
+		default:
+			return nil, classifiedError{"authentication_failed", ErrAuthentication}
+		}
 	}
 	if ctx.Err() != nil {
 		return nil, errors.New("cancelled")
@@ -117,7 +138,7 @@ func (c Consumer) Normalize(ctx context.Context, in Input) (*Signal, error) {
 	}
 	observed := time.Unix(now, 0)
 	if !uuid(b.WorkspaceID, false) || !uuid(b.ConnectionID, false) || !opaque(b.StripeAccountID) || b.Livemode == nil || b.APIVersion == "" || (b.AccountScope != DirectAccount && b.AccountScope != ConnectedAccount) {
-		return nil, errors.New("binding_unknown")
+		return nil, classifiedError{"binding_unknown", ErrContext}
 	}
 	if !uuid(r.MessageID, true) || !uuid(r.ReceiptID, false) || !validTime(r.FirstReceivedAt) || !validTime(r.ExpiresAt) || !r.ExpiresAt.After(r.FirstReceivedAt) || r.ExpiresAt.Sub(r.FirstReceivedAt) > 72*time.Hour || r.FirstReceivedAt.After(observed) || !r.ExpiresAt.After(observed) {
 		return nil, errors.New("receipt_invalid")
@@ -125,78 +146,78 @@ func (c Consumer) Normalize(ctx context.Context, in Input) (*Signal, error) {
 	// Pinned RFC8785 implementation rejects duplicate keys, invalid UTF-8,
 	// unpaired surrogates, trailing JSON and nonfinite numbers before projection.
 	if !utf8.Valid(raw) || !json.Valid(raw) {
-		return nil, errors.New("event_shape")
+		return nil, classifiedError{"event_shape", ErrInvalidEvent}
 	}
 	if _, err := jcs.Transform(raw); err != nil {
-		return nil, errors.New("event_shape")
+		return nil, classifiedError{"event_shape", ErrInvalidEvent}
 	}
 	event, err := object(raw)
 	if err != nil {
 		return nil, err
 	}
 	if !allowed(event, eventFields) {
-		return nil, errors.New("event_fields")
+		return nil, classifiedError{"event_fields", ErrInvalidEvent}
 	}
 	id, ok := textField(event, "id")
 	if !ok || !opaque(id) {
-		return nil, errors.New("event_id")
+		return nil, classifiedError{"event_id", ErrInvalidEvent}
 	}
 	kind, ok := textField(event, "object")
 	if !ok || kind != "event" {
-		return nil, errors.New("event_shape")
+		return nil, classifiedError{"event_shape", ErrInvalidEvent}
 	}
 	version, ok := textField(event, "api_version")
 	if !ok || version != b.APIVersion {
-		return nil, errors.New("api_version")
+		return nil, classifiedError{"api_version", ErrInvalidEvent}
 	}
 	eventType, ok := textField(event, "type")
 	if !ok || !supported(eventType) {
-		return nil, errors.New("event_type")
+		return nil, classifiedError{"event_type", ErrInvalidEvent}
 	}
 	mode, ok := boolField(event, "livemode")
 	if !ok || mode != *b.Livemode {
-		return nil, errors.New("event_context")
+		return nil, classifiedError{"event_context", ErrContext}
 	}
 	account, present := event["account"]
 	if b.AccountScope == ConnectedAccount {
 		var value string
 		if !present || json.Unmarshal(account, &value) != nil || value != b.StripeAccountID {
-			return nil, errors.New("event_context")
+			return nil, classifiedError{"event_context", ErrContext}
 		}
 	} else if present {
-		return nil, errors.New("event_context")
+		return nil, classifiedError{"event_context", ErrContext}
 	}
 	// Organization context is not an account binding supported by this boundary.
 	if v, exists := event["context"]; exists && string(v) != "null" {
-		return nil, errors.New("event_context")
+		return nil, classifiedError{"event_context", ErrContext}
 	}
 	if _, ok := unixField(event, "created"); !ok {
-		return nil, errors.New("event_created")
+		return nil, classifiedError{"event_created", ErrInvalidEvent}
 	}
 	data, err := object(event["data"])
 	if err != nil || !allowed(data, "object previous_attributes") {
-		return nil, errors.New("event_shape")
+		return nil, classifiedError{"event_shape", ErrInvalidEvent}
 	}
 	session, err := object(data["object"])
 	if err != nil || !allowed(session, sessionFields) {
-		return nil, errors.New("session_shape")
+		return nil, classifiedError{"session_shape", ErrInvalidEvent}
 	}
 	objectType, ok := textField(session, "object")
 	if !ok || objectType != "checkout.session" {
-		return nil, errors.New("session_shape")
+		return nil, classifiedError{"session_shape", ErrInvalidEvent}
 	}
 	sessionID, ok := textField(session, "id")
 	if !ok || !opaque(sessionID) {
-		return nil, errors.New("session_id")
+		return nil, classifiedError{"session_id", ErrInvalidEvent}
 	}
 	sessionMode, ok := boolField(session, "livemode")
 	if !ok || sessionMode != mode {
-		return nil, errors.New("session_context")
+		return nil, classifiedError{"session_context", ErrContext}
 	}
 	// HIT-78 comment 12171: ONLY Session.created, never Event.created/receipt time.
 	created, ok := unixField(session, "created")
 	if !ok {
-		return nil, errors.New("session_created")
+		return nil, classifiedError{"session_created", ErrInvalidEvent}
 	}
 	s := &Signal{MessageID: r.MessageID, SchemaVersion: "1.0", WorkspaceID: b.WorkspaceID, ConnectionID: b.ConnectionID, StripeAccountID: b.StripeAccountID, Livemode: mode, SessionID: sessionID, EventID: id, EventType: eventType, SourceCreatedAt: time.Unix(created, 0).UTC().Format(time.RFC3339), FirstReceivedAt: r.FirstReceivedAt.UTC().Format(time.RFC3339Nano), ExpiresAt: r.ExpiresAt.UTC().Format(time.RFC3339Nano), ReceiptID: r.ReceiptID}
 	// Omit the digest property entirely, not an empty digest string.
@@ -230,7 +251,7 @@ func supported(s string) bool {
 func object(raw []byte) (map[string]json.RawMessage, error) {
 	var m map[string]json.RawMessage
 	if len(raw) == 0 || json.Unmarshal(raw, &m) != nil || m == nil {
-		return nil, errors.New("event_shape")
+		return nil, classifiedError{"event_shape", ErrInvalidEvent}
 	}
 	return m, nil
 }

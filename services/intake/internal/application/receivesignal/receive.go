@@ -20,12 +20,14 @@ import (
 )
 
 var (
-	ErrUnavailable = errors.New("receipt unavailable")
-	ErrContext     = errors.New("connection unavailable")
-	ErrConflict    = errors.New("receipt identity conflict")
-	ErrIncomplete  = errors.New("receipt incomplete or expired")
-	ErrQuota       = errors.New("receipt capacity exceeded")
-	ErrUncertain   = errors.New("commit outcome unconfirmed")
+	ErrUnavailable    = errors.New("receipt unavailable")
+	ErrAuthentication = normalizesignal.ErrAuthentication
+	ErrInvalidEvent   = normalizesignal.ErrInvalidEvent
+	ErrContext        = errors.New("connection unavailable")
+	ErrConflict       = errors.New("receipt identity conflict")
+	ErrIncomplete     = errors.New("receipt incomplete or expired")
+	ErrQuota          = errors.New("receipt capacity exceeded")
+	ErrUncertain      = errors.New("commit outcome unconfirmed")
 )
 
 type Clock interface {
@@ -143,7 +145,14 @@ func (c *Consumer) Receive(ctx context.Context, d Delivery) (*normalizesignal.Si
 	input := normalizesignal.Input{RawBody: d.RawBody, Signature: d.Signature, Binding: d.Connection.Binding, Receipt: normalizesignal.Receipt{MessageID: id, ReceiptID: id, FirstReceivedAt: now.UTC(), ExpiresAt: now.Add(c.retention).UTC()}}
 	candidate, e := c.normalize.Normalize(ctx, input)
 	if e != nil {
-		return nil, ErrUnavailable
+		switch {
+		case errors.Is(e, normalizesignal.ErrAuthentication), errors.Is(e, normalizesignal.ErrInvalidEvent):
+			return nil, e
+		case errors.Is(e, normalizesignal.ErrContext):
+			return nil, ErrContext
+		default:
+			return nil, ErrUnavailable
+		}
 	}
 	var result *normalizesignal.Signal
 	e = c.repo.WithSession(ctx, func(session Session) error {
