@@ -10,6 +10,7 @@ import (
 
 	"github.com/gowebpki/jcs"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/casetimeouts"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
 	"github.com/jackc/pgx/v5"
@@ -122,6 +123,10 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 			records = append(records, rec)
 			break
 		}
+		if at != nil && at.After(now) && (s.State == "WORKING" || s.State == "WAITING_DATA") {
+			rows.Close()
+			return nil, readcases.ErrFutureHistory
+		}
 		if at == nil || state == nil || reason == nil || *state != s.State || at.Before(s.ReceivedAt) || at.After(now) || s.Revision < 1 || s.Revision > 9007199254740991 {
 			rows.Close()
 			return nil, readcases.ErrUnavailable
@@ -166,6 +171,24 @@ func (db CaseReadStore) readCases(ctx context.Context, tx pgx.Tx, r readcases.Re
 	for _, rec := range records {
 		if e = db.loadReadContext(ctx, tx, r.WorkspaceID, &rec, now); e != nil {
 			return nil, e
+		}
+		if rec.Summary.State == "WORKING" || rec.Summary.State == "WAITING_DATA" {
+			rec.Summary.DueAt = nil
+			if !casetimeouts.SourceHeld(rec.LatestReason) {
+				source, err := loadTimeoutSource(ctx, tx, r.WorkspaceID, rec.Summary.CaseID, rec.Summary.State)
+				if err != nil {
+					return nil, readcases.ErrUnavailable
+				}
+				due, problem := source.Deadline(now)
+				if problem == "" {
+					problem = source.checkContent(ctx, db.Content, r.WorkspaceID, rec.Summary.CaseID, rec.Summary.Revision, now)
+				}
+				if problem == "" {
+					rec.Summary.DueAt = optionalDue(due.UTC())
+				} else {
+					rec.LatestReason = problem
+				}
+			}
 		}
 		labels, e := readcases.Project(rec)
 		if e != nil {
@@ -281,12 +304,18 @@ func (db CaseReadStore) loadReadContext(ctx context.Context, tx pgx.Tx, ws strin
 
 func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.Request, p readcases.Page, now time.Time) (any, error) {
 	var revision int64
-	e := tx.QueryRow(ctx, `SELECT revision FROM hp_processing.case_identity WHERE workspace_id=$1 AND case_id=$2`, r.WorkspaceID, r.CaseID).Scan(&revision)
+	var future bool
+	e := tx.QueryRow(ctx, `SELECT k.revision,k.state IN('WORKING','WAITING_DATA') AND EXISTS(
+ SELECT 1 FROM hp_processing.safety_history h WHERE h.workspace_id=k.workspace_id AND h.case_id=k.case_id AND h.at>$3)
+ FROM hp_processing.case_identity k WHERE k.workspace_id=$1 AND k.case_id=$2`, r.WorkspaceID, r.CaseID, now).Scan(&revision, &future)
 	if errors.Is(e, pgx.ErrNoRows) {
 		return nil, readcases.ErrNotFound
 	}
 	if e != nil {
 		return nil, readcases.ErrUnavailable
+	}
+	if future {
+		return nil, readcases.ErrFutureHistory
 	}
 	var after *time.Time
 	var id *string

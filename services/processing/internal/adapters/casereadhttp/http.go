@@ -62,6 +62,7 @@ type wireError struct {
 
 func fail(w http.ResponseWriter, e error) {
 	status, code := 503, "READ_UNAVAILABLE"
+	message := "Request could not be completed"
 	switch {
 	case errors.Is(e, readcases.ErrInvalid):
 		status, code = 400, "INVALID_REQUEST"
@@ -71,6 +72,9 @@ func fail(w http.ResponseWriter, e error) {
 		status, code = 403, "READ_DENIED"
 	case errors.Is(e, readcases.ErrNotFound):
 		status, code = 404, "NOT_FOUND"
+	case errors.Is(e, readcases.ErrFutureHistory):
+		code = readcases.ErrFutureHistory.Error()
+		message = "A case history timestamp is ahead of the current clock"
 	}
 	var b [16]byte
 	if _, e := rand.Read(b[:]); e != nil {
@@ -83,7 +87,7 @@ func fail(w http.ResponseWriter, e error) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Cache-Control", "no-store")
 	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(wireError{code, "Request could not be completed", id})
+	_ = json.NewEncoder(w).Encode(wireError{code, message, id})
 }
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// VerifiedChains is produced by actual TLS verification, never by a header.
