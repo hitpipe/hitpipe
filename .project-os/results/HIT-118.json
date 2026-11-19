@@ -1,0 +1,116 @@
+{
+  "subject": "HIT-118",
+  "authorship": "Codex по поручению Budykins, согласие сохранено в Jira 14373.",
+  "materialized_result": {
+    "summary": "Scoped bounded Intake sender for durable NormalizedSignal; exact mTLS request, current authority, leases, retry and verified Receipt.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "ed9fe7e63c71203fa12b15e2f38ab0ca45486351",
+    "reuse": [
+      {
+        "task": "HIT-86",
+        "pr": 67,
+        "sha": "a3357b3fe6d3abcc8c03726656a7f20077582f11",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "branch base; durable receive/outbox and existing SQL/content tests"
+      },
+      {
+        "task": "HIT-71",
+        "pr": 47,
+        "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "inherited migration, roles, test schema"
+      },
+      {
+        "task": "HIT-73",
+        "pr": 65,
+        "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "inherited normalization and signature checking"
+      },
+      {
+        "task": "HIT-74",
+        "pr": 66,
+        "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "inherited store and contentref alias from HIT-86"
+      },
+      {
+        "task": "HIT-87",
+        "pr": 68,
+        "sha": "e630039d3788da5153c5c2d21305f605aa16f43e",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "exact accepted production HMAC patch and tests from 7f688aa, cherry-pick 667320c; benchmark files stay in PR68"
+      },
+      {
+        "task": "HIT-104",
+        "pr": 62,
+        "sha": "ce6afe4ff78559920646aaca1de4ca90d0531734",
+        "state": "OPEN",
+        "merged": false,
+        "reuse": "read actual result and Processing HTTP handler, fixture follows accepted OAS; no code transplanted or production receiver launched"
+      }
+    ],
+    "report": "services/intake/evidence/HIT-118/README.md"
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/internal/adapters/postgres/outbox/repository.go",
+    "services/intake/internal/adapters/postgres/receipt/sendoutbox_integration_test.go",
+    "services/intake/internal/adapters/processing/client.go",
+    "services/intake/internal/application/sendoutbox/worker.go",
+    "services/intake/internal/domain/stripesignature/stream_test.go",
+    "services/intake/internal/domain/stripesignature/verifier.go",
+    "services/intake/tools/check_receipt.py",
+    "services/intake/evidence/HIT-118/README.md",
+    "services/intake/evidence/HIT-118/artifacts.json",
+    "services/intake/evidence/HIT-118/build.stderr",
+    "services/intake/evidence/HIT-118/build.stdout",
+    "services/intake/evidence/HIT-118/commands.json",
+    "services/intake/evidence/HIT-118/integration.stderr",
+    "services/intake/evidence/HIT-118/integration.stdout",
+    "services/intake/evidence/HIT-118/modules.stderr",
+    "services/intake/evidence/HIT-118/modules.stdout",
+    "services/intake/evidence/HIT-118/schema.stderr",
+    "services/intake/evidence/HIT-118/schema.stdout",
+    "services/intake/evidence/HIT-118/source-audit.json",
+    "services/intake/evidence/HIT-118/test-transcript.txt",
+    "services/intake/evidence/HIT-118/unit.stderr",
+    "services/intake/evidence/HIT-118/unit.stdout",
+    "services/intake/evidence/HIT-118/vet.stderr",
+    "services/intake/evidence/HIT-118/vet.stdout",
+    ".project-os/results/HIT-118.json"
+  ],
+  "verification": {
+    "results": "134 unit and 192 integration successful test/subtest events (integration includes unit); zero failed/skipped. 377 SQL checks.",
+    "protocol": "services/intake/evidence/HIT-118/commands.json",
+    "transcript": "services/intake/evidence/HIT-118/test-transcript.txt",
+    "raw_logs": [
+      "services/intake/evidence/HIT-118/unit.stdout",
+      "services/intake/evidence/HIT-118/integration.stdout",
+      "services/intake/evidence/HIT-118/schema.stdout"
+    ],
+    "dod_ids": [
+      "a9028cca-7dbf-47e1-973b-c2acacf549eb",
+      "82499fa8-08f9-430d-8637-0802af3cda92",
+      "bb870bea-f1e6-4318-ae91-3267125e7f44",
+      "414f7df7-6b16-4f9a-96b1-0a5f3723d4ba",
+      "1883fd9a-21aa-4f57-9ddc-38348ced621e",
+      "60fb8a08-44a4-4d38-8172-04e37b5256b9",
+      "580cf589-f409-4ec4-8be8-4d66d307f980",
+      "73962431-8223-4b36-9d30-b5c49b7281a1"
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Установка, секреты Stripe, рабочий IAM и runtime допуска отсутствуют в стенде. Допуск предоставляется только явно внедрённым портом; внедрённый в тестах владелец полномочий управляемый.",
+    "Управляемый Processing проверял настоящий loopback HTTPS/mTLS и долговременный commit синтетического inbox. Код HIT-104 прочитан как образец действующего контракта; полноценная сборка и развёртывание Processing не выполнялись.",
+    "ACKED означает установленную квитанцию Processing, в том числе HELD у получателя. Он не присваивает финансовый исход, case state или Delivery/ClickUp.",
+    "Сценарии PostgreSQL использовали временный кластер и тестовые файлы. Промышленный диск, потеря питания, SQL TLS, нагрузка и сквозная интеграция не проверялись.",
+    "Тестовые параметры batch/lease/backoff задаются явно в композиции, без новых требований MVP. Worker вызывается ограниченными порциями из доверенного runtime; сетевой планировщик и рабочее provisioning не добавлены."
+  ]
+}

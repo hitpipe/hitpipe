@@ -1,0 +1,24 @@
+HIT-118 verified run 2026-11-19T01:15:45Z to 2026-11-19T01:16:33Z
+Source ed9fe7e63c71203fa12b15e2f38ab0ca45486351; clean at invocation; source hashes unchanged.
+go version go1.27.2 darwin/arm64; macOS-26.5-arm64-arm-64bit; PostgreSQL 18.7
+Image docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
+Durability settings {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}; owned container removed.
+unit, exit=0, 2.858s: /tmp/hit73-toolchain/go/bin/go test -race -count=1 -json ./...
+integration, exit=0, 7.302s: /tmp/hit73-toolchain/go/bin/go test -tags=integration -race -count=1 -json ./...
+vet, exit=0, 0.385s: /tmp/hit73-toolchain/go/bin/go vet -tags=integration ./...
+build, exit=0, 0.093s: /tmp/hit73-toolchain/go/bin/go build ./...
+modules, exit=0, 0.259s: /tmp/hit73-toolchain/go/bin/go mod verify
+schema, exit=0, 34.719s: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-118/services/intake/tools/check_postgres.py
+134 unit and 192 integration successful test/subtest events (integration includes unit); zero failed/skipped. 377 SQL checks.
+Integration tests for HIT-118:
+TestIntegrationSenderLostACKAndRestart
+TestIntegrationSenderLeaseAndScope
+TestIntegrationSenderReceipts
+TestIntegrationSenderFailClosed
+TestIntegrationSenderCommitFailure
+TestIntegrationSenderRetryBudgetAndReconnect
+6 concurrent workers reap one current claim. Reclaim gets a new token; old or foreign scope cannot finish. No network holds a SQL transaction.
+Original bytes survive receiver SQL commit with HTTP ACK loss; restarted worker resends same ID, digest and times; one durable inbox row and one outbox.
+Real TLS 1.3 mutual verification; incorrect server identity, gate denial before connect, changed epoch, expired or changed file, cancellation and db failure do not send a payload.
+Exact Receipt outcomes, wrong ID, duplicate keys, invalid JSON, redirect, rate limiting, HTTP and TCP failures, bounded retries and local commit failure verified.
+Configured test authority and controlled Processing are not deployed IAM, Stripe, Processing business handling, or ClickUp.
