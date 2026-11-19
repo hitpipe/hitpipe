@@ -1,4 +1,4 @@
-name: Intake — current receipt checks
+name: Intake — current outbox delivery checks
 on:
   pull_request:
   push:
@@ -22,7 +22,7 @@ jobs:
           cache: false
       - name: Obtain pinned sandbox image
         run: docker pull docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
-      - name: Verify current Intake receipt
+      - name: Verify Intake receipt and outbox delivery
         run: python3 services/intake/tools/check_receipt.py --output /tmp/intake-receipt-verification
       - uses: actions/upload-artifact@v4
         if: always()
@@ -31,4 +31,4 @@ jobs:
           path: /tmp/intake-receipt-verification
       - name: Verification scope
         if: always()
-        run: echo 'Local synthetic receipt with isolated PostgreSQL only; no public HTTP, network sender, Processing, IAM/runtime, production disk or Stripe-to-ClickUp qualification.' >> "$GITHUB_STEP_SUMMARY"
+        run: echo 'Isolated PostgreSQL and files with controlled Processing over HTTPS/mTLS. Live IAM, the provider, network deployment and financial decisions are outside this check.' >> "$GITHUB_STEP_SUMMARY"
