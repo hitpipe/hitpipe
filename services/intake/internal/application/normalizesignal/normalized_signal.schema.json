@@ -1,0 +1,85 @@
+{
+  "additionalProperties": false,
+  "description": "Minimal whitelist; no arbitrary metadata, customer/contact/brief. Event signature verified before durable intake, same account+mode bounded and immutable. Digest computed over canonical payload excluding message_digest.",
+  "properties": {
+    "connection_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_id": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_type": {
+      "enum": [
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded",
+        "checkout.session.async_payment_failed"
+      ],
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "first_received_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "livemode": {
+      "type": "boolean"
+    },
+    "message_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "receipt_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "session_id": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "stripe_account_id": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "workspace_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "message_id",
+    "message_digest",
+    "schema_version",
+    "workspace_id",
+    "connection_id",
+    "stripe_account_id",
+    "livemode",
+    "session_id",
+    "event_id",
+    "event_type",
+    "source_created_at",
+    "first_received_at",
+    "expires_at",
+    "receipt_id"
+  ],
+  "type": "object"
+}

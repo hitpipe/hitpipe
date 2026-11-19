@@ -1,0 +1,381 @@
+{"image": "docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73", "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093", "network": "none", "storage": "tmpfs", "host_ports": []}
+server_version=18.7
+migration applied by hp_intake_migrator
+PASS 001 migration version
+PASS 002 all ten tables owned by migrator
+PASS 003 eight forced RLS tables and policies
+PASS 004 two trigger functions owned by migrator
+PASS 005 two enabled triggers
+PASS 006 all roles constrained
+PASS 007 three named partial indexes
+PASS 008 grant hp_intake_app source_connections SELECT
+PASS 009 grant hp_intake_app source_connections INSERT
+PASS 010 grant hp_intake_app source_connections UPDATE
+PASS 011 grant hp_intake_app source_connections DELETE
+PASS 012 grant hp_intake_app source_connections TRUNCATE
+PASS 013 grant hp_intake_app source_connections REFERENCES
+PASS 014 grant hp_intake_app source_connections TRIGGER
+PASS 015 grant hp_intake_app connection_secrets SELECT
+PASS 016 grant hp_intake_app connection_secrets INSERT
+PASS 017 grant hp_intake_app connection_secrets UPDATE
+PASS 018 grant hp_intake_app connection_secrets DELETE
+PASS 019 grant hp_intake_app connection_secrets TRUNCATE
+PASS 020 grant hp_intake_app connection_secrets REFERENCES
+PASS 021 grant hp_intake_app connection_secrets TRIGGER
+PASS 022 grant hp_intake_app ingress_quota SELECT
+PASS 023 grant hp_intake_app ingress_quota INSERT
+PASS 024 grant hp_intake_app ingress_quota UPDATE
+PASS 025 grant hp_intake_app ingress_quota DELETE
+PASS 026 grant hp_intake_app ingress_quota TRUNCATE
+PASS 027 grant hp_intake_app ingress_quota REFERENCES
+PASS 028 grant hp_intake_app ingress_quota TRIGGER
+PASS 029 grant hp_intake_app signals SELECT
+PASS 030 grant hp_intake_app signals INSERT
+PASS 031 grant hp_intake_app signals UPDATE
+PASS 032 grant hp_intake_app signals DELETE
+PASS 033 grant hp_intake_app signals TRUNCATE
+PASS 034 grant hp_intake_app signals REFERENCES
+PASS 035 grant hp_intake_app signals TRIGGER
+PASS 036 grant hp_intake_app source_facts SELECT
+PASS 037 grant hp_intake_app source_facts INSERT
+PASS 038 grant hp_intake_app source_facts UPDATE
+PASS 039 grant hp_intake_app source_facts DELETE
+PASS 040 grant hp_intake_app source_facts TRUNCATE
+PASS 041 grant hp_intake_app source_facts REFERENCES
+PASS 042 grant hp_intake_app source_facts TRIGGER
+PASS 043 grant hp_intake_app gap_markers SELECT
+PASS 044 grant hp_intake_app gap_markers INSERT
+PASS 045 grant hp_intake_app gap_markers UPDATE
+PASS 046 grant hp_intake_app gap_markers DELETE
+PASS 047 grant hp_intake_app gap_markers TRUNCATE
+PASS 048 grant hp_intake_app gap_markers REFERENCES
+PASS 049 grant hp_intake_app gap_markers TRIGGER
+PASS 050 grant hp_intake_app inbox SELECT
+PASS 051 grant hp_intake_app inbox INSERT
+PASS 052 grant hp_intake_app inbox UPDATE
+PASS 053 grant hp_intake_app inbox DELETE
+PASS 054 grant hp_intake_app inbox TRUNCATE
+PASS 055 grant hp_intake_app inbox REFERENCES
+PASS 056 grant hp_intake_app inbox TRIGGER
+PASS 057 grant hp_intake_app outbox SELECT
+PASS 058 grant hp_intake_app outbox INSERT
+PASS 059 grant hp_intake_app outbox UPDATE
+PASS 060 grant hp_intake_app outbox DELETE
+PASS 061 grant hp_intake_app outbox TRUNCATE
+PASS 062 grant hp_intake_app outbox REFERENCES
+PASS 063 grant hp_intake_app outbox TRIGGER
+PASS 064 grant hp_intake_app schema_version SELECT
+PASS 065 grant hp_intake_app schema_version INSERT
+PASS 066 grant hp_intake_app schema_version UPDATE
+PASS 067 grant hp_intake_app schema_version DELETE
+PASS 068 grant hp_intake_app schema_version TRUNCATE
+PASS 069 grant hp_intake_app schema_version REFERENCES
+PASS 070 grant hp_intake_app schema_version TRIGGER
+PASS 071 grant hp_intake_app job_index SELECT
+PASS 072 grant hp_intake_app job_index INSERT
+PASS 073 grant hp_intake_app job_index UPDATE
+PASS 074 grant hp_intake_app job_index DELETE
+PASS 075 grant hp_intake_app job_index TRUNCATE
+PASS 076 grant hp_intake_app job_index REFERENCES
+PASS 077 grant hp_intake_app job_index TRIGGER
+PASS 078 no direct function execution hp_intake_app maintain_signal_quota()
+PASS 079 no direct function execution hp_intake_app immutable_receipt()
+PASS 080 no role escalation hp_intake_app -> hp_intake_migrator
+PASS 081 no role escalation hp_intake_app -> hp_intake_worker
+PASS 082 no role escalation hp_intake_app -> hp_intake_purge
+PASS 083 no schema creation hp_intake_app
+PASS 084 no DDL hp_intake_app
+PASS 085 no version write hp_intake_app
+PASS 086 grant hp_intake_worker source_connections SELECT
+PASS 087 grant hp_intake_worker source_connections INSERT
+PASS 088 grant hp_intake_worker source_connections UPDATE
+PASS 089 grant hp_intake_worker source_connections DELETE
+PASS 090 grant hp_intake_worker source_connections TRUNCATE
+PASS 091 grant hp_intake_worker source_connections REFERENCES
+PASS 092 grant hp_intake_worker source_connections TRIGGER
+PASS 093 grant hp_intake_worker connection_secrets SELECT
+PASS 094 grant hp_intake_worker connection_secrets INSERT
+PASS 095 grant hp_intake_worker connection_secrets UPDATE
+PASS 096 grant hp_intake_worker connection_secrets DELETE
+PASS 097 grant hp_intake_worker connection_secrets TRUNCATE
+PASS 098 grant hp_intake_worker connection_secrets REFERENCES
+PASS 099 grant hp_intake_worker connection_secrets TRIGGER
+PASS 100 grant hp_intake_worker ingress_quota SELECT
+PASS 101 grant hp_intake_worker ingress_quota INSERT
+PASS 102 grant hp_intake_worker ingress_quota UPDATE
+PASS 103 grant hp_intake_worker ingress_quota DELETE
+PASS 104 grant hp_intake_worker ingress_quota TRUNCATE
+PASS 105 grant hp_intake_worker ingress_quota REFERENCES
+PASS 106 grant hp_intake_worker ingress_quota TRIGGER
+PASS 107 grant hp_intake_worker signals SELECT
+PASS 108 grant hp_intake_worker signals INSERT
+PASS 109 grant hp_intake_worker signals UPDATE
+PASS 110 grant hp_intake_worker signals DELETE
+PASS 111 grant hp_intake_worker signals TRUNCATE
+PASS 112 grant hp_intake_worker signals REFERENCES
+PASS 113 grant hp_intake_worker signals TRIGGER
+PASS 114 grant hp_intake_worker source_facts SELECT
+PASS 115 grant hp_intake_worker source_facts INSERT
+PASS 116 grant hp_intake_worker source_facts UPDATE
+PASS 117 grant hp_intake_worker source_facts DELETE
+PASS 118 grant hp_intake_worker source_facts TRUNCATE
+PASS 119 grant hp_intake_worker source_facts REFERENCES
+PASS 120 grant hp_intake_worker source_facts TRIGGER
+PASS 121 grant hp_intake_worker gap_markers SELECT
+PASS 122 grant hp_intake_worker gap_markers INSERT
+PASS 123 grant hp_intake_worker gap_markers UPDATE
+PASS 124 grant hp_intake_worker gap_markers DELETE
+PASS 125 grant hp_intake_worker gap_markers TRUNCATE
+PASS 126 grant hp_intake_worker gap_markers REFERENCES
+PASS 127 grant hp_intake_worker gap_markers TRIGGER
+PASS 128 grant hp_intake_worker inbox SELECT
+PASS 129 grant hp_intake_worker inbox INSERT
+PASS 130 grant hp_intake_worker inbox UPDATE
+PASS 131 grant hp_intake_worker inbox DELETE
+PASS 132 grant hp_intake_worker inbox TRUNCATE
+PASS 133 grant hp_intake_worker inbox REFERENCES
+PASS 134 grant hp_intake_worker inbox TRIGGER
+PASS 135 grant hp_intake_worker outbox SELECT
+PASS 136 grant hp_intake_worker outbox INSERT
+PASS 137 grant hp_intake_worker outbox UPDATE
+PASS 138 grant hp_intake_worker outbox DELETE
+PASS 139 grant hp_intake_worker outbox TRUNCATE
+PASS 140 grant hp_intake_worker outbox REFERENCES
+PASS 141 grant hp_intake_worker outbox TRIGGER
+PASS 142 grant hp_intake_worker schema_version SELECT
+PASS 143 grant hp_intake_worker schema_version INSERT
+PASS 144 grant hp_intake_worker schema_version UPDATE
+PASS 145 grant hp_intake_worker schema_version DELETE
+PASS 146 grant hp_intake_worker schema_version TRUNCATE
+PASS 147 grant hp_intake_worker schema_version REFERENCES
+PASS 148 grant hp_intake_worker schema_version TRIGGER
+PASS 149 grant hp_intake_worker job_index SELECT
+PASS 150 grant hp_intake_worker job_index INSERT
+PASS 151 grant hp_intake_worker job_index UPDATE
+PASS 152 grant hp_intake_worker job_index DELETE
+PASS 153 grant hp_intake_worker job_index TRUNCATE
+PASS 154 grant hp_intake_worker job_index REFERENCES
+PASS 155 grant hp_intake_worker job_index TRIGGER
+PASS 156 no direct function execution hp_intake_worker maintain_signal_quota()
+PASS 157 no direct function execution hp_intake_worker immutable_receipt()
+PASS 158 no role escalation hp_intake_worker -> hp_intake_migrator
+PASS 159 no role escalation hp_intake_worker -> hp_intake_app
+PASS 160 no role escalation hp_intake_worker -> hp_intake_purge
+PASS 161 no schema creation hp_intake_worker
+PASS 162 no DDL hp_intake_worker
+PASS 163 no version write hp_intake_worker
+PASS 164 grant hp_intake_purge source_connections SELECT
+PASS 165 grant hp_intake_purge source_connections INSERT
+PASS 166 grant hp_intake_purge source_connections UPDATE
+PASS 167 grant hp_intake_purge source_connections DELETE
+PASS 168 grant hp_intake_purge source_connections TRUNCATE
+PASS 169 grant hp_intake_purge source_connections REFERENCES
+PASS 170 grant hp_intake_purge source_connections TRIGGER
+PASS 171 grant hp_intake_purge connection_secrets SELECT
+PASS 172 grant hp_intake_purge connection_secrets INSERT
+PASS 173 grant hp_intake_purge connection_secrets UPDATE
+PASS 174 grant hp_intake_purge connection_secrets DELETE
+PASS 175 grant hp_intake_purge connection_secrets TRUNCATE
+PASS 176 grant hp_intake_purge connection_secrets REFERENCES
+PASS 177 grant hp_intake_purge connection_secrets TRIGGER
+PASS 178 grant hp_intake_purge ingress_quota SELECT
+PASS 179 grant hp_intake_purge ingress_quota INSERT
+PASS 180 grant hp_intake_purge ingress_quota UPDATE
+PASS 181 grant hp_intake_purge ingress_quota DELETE
+PASS 182 grant hp_intake_purge ingress_quota TRUNCATE
+PASS 183 grant hp_intake_purge ingress_quota REFERENCES
+PASS 184 grant hp_intake_purge ingress_quota TRIGGER
+PASS 185 grant hp_intake_purge signals SELECT
+PASS 186 grant hp_intake_purge signals INSERT
+PASS 187 grant hp_intake_purge signals UPDATE
+PASS 188 grant hp_intake_purge signals DELETE
+PASS 189 grant hp_intake_purge signals TRUNCATE
+PASS 190 grant hp_intake_purge signals REFERENCES
+PASS 191 grant hp_intake_purge signals TRIGGER
+PASS 192 grant hp_intake_purge source_facts SELECT
+PASS 193 grant hp_intake_purge source_facts INSERT
+PASS 194 grant hp_intake_purge source_facts UPDATE
+PASS 195 grant hp_intake_purge source_facts DELETE
+PASS 196 grant hp_intake_purge source_facts TRUNCATE
+PASS 197 grant hp_intake_purge source_facts REFERENCES
+PASS 198 grant hp_intake_purge source_facts TRIGGER
+PASS 199 grant hp_intake_purge gap_markers SELECT
+PASS 200 grant hp_intake_purge gap_markers INSERT
+PASS 201 grant hp_intake_purge gap_markers UPDATE
+PASS 202 grant hp_intake_purge gap_markers DELETE
+PASS 203 grant hp_intake_purge gap_markers TRUNCATE
+PASS 204 grant hp_intake_purge gap_markers REFERENCES
+PASS 205 grant hp_intake_purge gap_markers TRIGGER
+PASS 206 grant hp_intake_purge inbox SELECT
+PASS 207 grant hp_intake_purge inbox INSERT
+PASS 208 grant hp_intake_purge inbox UPDATE
+PASS 209 grant hp_intake_purge inbox DELETE
+PASS 210 grant hp_intake_purge inbox TRUNCATE
+PASS 211 grant hp_intake_purge inbox REFERENCES
+PASS 212 grant hp_intake_purge inbox TRIGGER
+PASS 213 grant hp_intake_purge outbox SELECT
+PASS 214 grant hp_intake_purge outbox INSERT
+PASS 215 grant hp_intake_purge outbox UPDATE
+PASS 216 grant hp_intake_purge outbox DELETE
+PASS 217 grant hp_intake_purge outbox TRUNCATE
+PASS 218 grant hp_intake_purge outbox REFERENCES
+PASS 219 grant hp_intake_purge outbox TRIGGER
+PASS 220 grant hp_intake_purge schema_version SELECT
+PASS 221 grant hp_intake_purge schema_version INSERT
+PASS 222 grant hp_intake_purge schema_version UPDATE
+PASS 223 grant hp_intake_purge schema_version DELETE
+PASS 224 grant hp_intake_purge schema_version TRUNCATE
+PASS 225 grant hp_intake_purge schema_version REFERENCES
+PASS 226 grant hp_intake_purge schema_version TRIGGER
+PASS 227 grant hp_intake_purge job_index SELECT
+PASS 228 grant hp_intake_purge job_index INSERT
+PASS 229 grant hp_intake_purge job_index UPDATE
+PASS 230 grant hp_intake_purge job_index DELETE
+PASS 231 grant hp_intake_purge job_index TRUNCATE
+PASS 232 grant hp_intake_purge job_index REFERENCES
+PASS 233 grant hp_intake_purge job_index TRIGGER
+PASS 234 no direct function execution hp_intake_purge maintain_signal_quota()
+PASS 235 no direct function execution hp_intake_purge immutable_receipt()
+PASS 236 no role escalation hp_intake_purge -> hp_intake_migrator
+PASS 237 no role escalation hp_intake_purge -> hp_intake_app
+PASS 238 no role escalation hp_intake_purge -> hp_intake_worker
+PASS 239 no schema creation hp_intake_purge
+PASS 240 no DDL hp_intake_purge
+PASS 241 no version write hp_intake_purge
+PASS 242 owner also subject to forced RLS
+PASS 243 actual login hp_intake_app
+PASS 244 no scope hp_intake_app source_connections
+PASS 245 own scope hp_intake_app source_connections
+PASS 246 other rows hidden hp_intake_app source_connections
+PASS 247 no scope hp_intake_app connection_secrets
+PASS 248 own scope hp_intake_app connection_secrets
+PASS 249 other rows hidden hp_intake_app connection_secrets
+PASS 250 no scope hp_intake_app ingress_quota
+PASS 251 own scope hp_intake_app ingress_quota
+PASS 252 other rows hidden hp_intake_app ingress_quota
+PASS 253 no scope hp_intake_app signals
+PASS 254 own scope hp_intake_app signals
+PASS 255 other rows hidden hp_intake_app signals
+PASS 256 no scope hp_intake_app source_facts
+PASS 257 own scope hp_intake_app source_facts
+PASS 258 other rows hidden hp_intake_app source_facts
+PASS 259 no scope hp_intake_app gap_markers
+PASS 260 own scope hp_intake_app gap_markers
+PASS 261 other rows hidden hp_intake_app gap_markers
+PASS 262 no scope hp_intake_app inbox
+PASS 263 own scope hp_intake_app inbox
+PASS 264 other rows hidden hp_intake_app inbox
+PASS 265 no scope hp_intake_app outbox
+PASS 266 own scope hp_intake_app outbox
+PASS 267 other rows hidden hp_intake_app outbox
+PASS 268 foreign insert rejected hp_intake_app
+PASS 269 foreign update changes zero rows hp_intake_app
+PASS 270 own update works hp_intake_app
+PASS 271 actual login hp_intake_worker
+PASS 272 no scope hp_intake_worker source_connections
+PASS 273 own scope hp_intake_worker source_connections
+PASS 274 other rows hidden hp_intake_worker source_connections
+PASS 275 no scope hp_intake_worker connection_secrets
+PASS 276 own scope hp_intake_worker connection_secrets
+PASS 277 other rows hidden hp_intake_worker connection_secrets
+PASS 278 no scope hp_intake_worker ingress_quota
+PASS 279 own scope hp_intake_worker ingress_quota
+PASS 280 other rows hidden hp_intake_worker ingress_quota
+PASS 281 no scope hp_intake_worker signals
+PASS 282 own scope hp_intake_worker signals
+PASS 283 other rows hidden hp_intake_worker signals
+PASS 284 no scope hp_intake_worker source_facts
+PASS 285 own scope hp_intake_worker source_facts
+PASS 286 other rows hidden hp_intake_worker source_facts
+PASS 287 no scope hp_intake_worker gap_markers
+PASS 288 own scope hp_intake_worker gap_markers
+PASS 289 other rows hidden hp_intake_worker gap_markers
+PASS 290 no scope hp_intake_worker inbox
+PASS 291 own scope hp_intake_worker inbox
+PASS 292 other rows hidden hp_intake_worker inbox
+PASS 293 no scope hp_intake_worker outbox
+PASS 294 own scope hp_intake_worker outbox
+PASS 295 other rows hidden hp_intake_worker outbox
+PASS 296 foreign insert rejected hp_intake_worker
+PASS 297 foreign update changes zero rows hp_intake_worker
+PASS 298 own update works hp_intake_worker
+PASS 299 actual login hp_intake_purge
+PASS 300 no scope hp_intake_purge source_connections
+PASS 301 own scope hp_intake_purge source_connections
+PASS 302 other rows hidden hp_intake_purge source_connections
+PASS 303 no scope hp_intake_purge connection_secrets
+PASS 304 own scope hp_intake_purge connection_secrets
+PASS 305 other rows hidden hp_intake_purge connection_secrets
+PASS 306 no scope hp_intake_purge ingress_quota
+PASS 307 own scope hp_intake_purge ingress_quota
+PASS 308 other rows hidden hp_intake_purge ingress_quota
+PASS 309 no scope hp_intake_purge signals
+PASS 310 own scope hp_intake_purge signals
+PASS 311 other rows hidden hp_intake_purge signals
+PASS 312 no scope hp_intake_purge source_facts
+PASS 313 own scope hp_intake_purge source_facts
+PASS 314 other rows hidden hp_intake_purge source_facts
+PASS 315 no scope hp_intake_purge gap_markers
+PASS 316 own scope hp_intake_purge gap_markers
+PASS 317 other rows hidden hp_intake_purge gap_markers
+PASS 318 no scope hp_intake_purge inbox
+PASS 319 own scope hp_intake_purge inbox
+PASS 320 other rows hidden hp_intake_purge inbox
+PASS 321 no scope hp_intake_purge outbox
+PASS 322 own scope hp_intake_purge outbox
+PASS 323 other rows hidden hp_intake_purge outbox
+PASS 324 foreign insert rejected hp_intake_purge
+PASS 325 foreign update changes zero rows hp_intake_purge
+PASS 326 own update works hp_intake_purge
+PASS 327 purge can delete own markers
+PASS 328 delete denied hp_intake_app source_connections
+PASS 329 delete denied hp_intake_app connection_secrets
+PASS 330 delete denied hp_intake_app ingress_quota
+PASS 331 delete denied hp_intake_app signals
+PASS 332 delete denied hp_intake_app source_facts
+PASS 333 delete denied hp_intake_app gap_markers
+PASS 334 delete denied hp_intake_app inbox
+PASS 335 delete denied hp_intake_app outbox
+PASS 336 facts update denied hp_intake_app
+PASS 337 delete denied hp_intake_worker source_connections
+PASS 338 delete denied hp_intake_worker connection_secrets
+PASS 339 delete denied hp_intake_worker ingress_quota
+PASS 340 delete denied hp_intake_worker signals
+PASS 341 delete denied hp_intake_worker source_facts
+PASS 342 delete denied hp_intake_worker gap_markers
+PASS 343 delete denied hp_intake_worker inbox
+PASS 344 delete denied hp_intake_worker outbox
+PASS 345 facts update denied hp_intake_worker
+PASS 346 purge facts insert denied
+PASS 347 purge facts update denied
+PASS 348 app cannot read global job index
+PASS 349 global metadata index hp_intake_worker
+PASS 350 global metadata index hp_intake_purge
+PASS 351 scope resets after commit
+PASS 352 insert updates quota
+PASS 353 duplicate per connection rejected
+PASS 354 same event allowed on different connection
+PASS 355 immutable workspace_id
+PASS 356 immutable signal_id
+PASS 357 immutable connection_id
+PASS 358 immutable event_id
+PASS 359 immutable session_id
+PASS 360 immutable first_received_at
+PASS 361 immutable expires_at
+PASS 362 72 hour boundary accepted
+PASS 363 72 hour overflow rejected
+PASS 364 individual size 0 rejected
+PASS 365 individual size 16777217 rejected
+PASS 366 16 MiB exact boundary
+PASS 367 aggregate bytes overflow
+PASS 368 1000 held signals accepted
+PASS 369 1001st signal rejected
+PASS 370 state release subtracts quota
+PASS 371 retained size update adjusts quota
+PASS 372 purge delete subtracts quota
+PASS 373 applied signals do not use held quota
+PASS 374 no test writes persisted
+PASS 375 concurrent app/worker cannot exceed 1000
+PASS 376 concurrent duplicate consumes one slot
+PASS 377 cleanup leaves zero held quota
+PASS: 377 isolated PostgreSQL checks; no webhook, file durability, user authorization or deployment claim.
