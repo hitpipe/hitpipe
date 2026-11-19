@@ -175,7 +175,15 @@ func (r casesAccess) Authorize(ctx context.Context, q readcases.Request) (readca
 			return readcases.Grant{}, readcases.ErrUnavailable
 		}
 	}
-	return readcases.Grant{WorkspaceID: p.workspace, PrincipalID: p.principal, Epoch: p.epoch, ExpiresAt: p.expires}, nil
+	g := readcases.Grant{WorkspaceID: p.workspace, PrincipalID: p.principal, Epoch: p.epoch, ExpiresAt: p.expires}
+	if q.Kind == readcases.Detail {
+		permission, connection, e := r.a.recoveryPermit(withPermit(ctx), q.WorkspaceID, q.CaseID, q.Session)
+		if e == nil && permission.epoch == p.epoch && permission.principal == p.principal {
+			g.RecoverConnection = connection
+			g.RecoverUntil = permission.expires
+		}
+	}
+	return g, nil
 }
 
 func (r casesAccess) Start(ctx context.Context, g readcases.Grant, _ string, f func(context.Context) error) error {

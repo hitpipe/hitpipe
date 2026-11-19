@@ -1120,5 +1120,79 @@
       "checked_at"
     ],
     "type": "object"
+  },
+  "RecoveryCommand": {
+    "additionalProperties": false,
+    "properties": {
+      "action": {
+        "enum": [
+          "RECHECK",
+          "BIND_TASK",
+          "CLOSE_WITHOUT_CONFIRMATION",
+          "CONTINUE_SAFE",
+          "RECONSIDER",
+          "REOPEN_CLOSED"
+        ],
+        "type": "string"
+      },
+      "command": {
+        "$ref": "#/components/schemas/CommandMeta"
+      },
+      "native_task_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "reason": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "command",
+      "action",
+      "reason"
+    ],
+    "type": "object"
+  },
+  "DeliveryQuery": {
+    "additionalProperties": false,
+    "properties": {
+      "case_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "deadline_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "expected_connection_epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "lineage_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "native_task_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "case_id",
+      "lineage_id",
+      "expected_connection_epoch",
+      "deadline_at"
+    ],
+    "type": "object"
   }
 }

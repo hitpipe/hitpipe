@@ -50,6 +50,8 @@ type processStand struct {
 	pauseSourceHandshake                                       atomic.Bool
 	manualCases                                                map[string]bool
 	intakeReply                                                http.HandlerFunc
+	queryReply                                                 http.HandlerFunc
+	denyRecover                                                atomic.Bool
 	handshakeEntered                                           chan struct{}
 	handshakeProceed                                           chan struct{}
 	denials                                                    []drafts.DenyEpochSnapshot
@@ -167,7 +169,7 @@ func (s *processStand) iam(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !s.iamOpen.Load() || s.workspaces[in.WorkspaceID] == "" || r.Header.Get("X-HitPipe-Session") != s.token ||
-			(in.Action == "CASE_READ" && s.manualCases[in.WorkspaceID]) {
+			(in.Action == "CASE_READ" && s.manualCases[in.WorkspaceID]) || (in.Action == "CASE_RECOVER" && s.denyRecover.Load()) {
 			w.WriteHeader(403)
 			return
 		}
@@ -180,6 +182,10 @@ func (s *processStand) iam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *processStand) delivery(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/internal/v1/delivery-query" && s.queryReply != nil {
+		s.queryReply(w, r)
+		return
+	}
 	if r.URL.Path != "/internal/v1/delivery-intents" || r.Method != "POST" {
 		w.WriteHeader(404)
 		return

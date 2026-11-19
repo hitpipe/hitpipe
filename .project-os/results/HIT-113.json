@@ -1,0 +1,58 @@
+{
+  "subject": "HIT-113",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+    "summary": "Processing принимает RECHECK сохранённой task identity и доставляет типизированный read-only запрос. Валидный TaskObservation применяет существующий HIT-99. Квалифицированы настоящий PostgreSQL 18.7, процесс и mTLS.",
+    "contract_revision": 1,
+    "contract_fingerprint": "a86588178d202552f2f9f9bb2c7f9d75fa6c28c2990d0d4e6ccb496e989dcfd1",
+    "base_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/76"
+  },
+  "changed_artifacts": [
+    "services/processing/internal/adapters/contentfiles/store.go",
+    "services/processing/internal/adapters/deliveryhttp/query.go",
+    "services/processing/internal/adapters/deliveryhttp/send.go",
+    "services/processing/internal/adapters/draftjson/schemas.json",
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/adapters/postgres/observations.go",
+    "services/processing/internal/adapters/postgres/read_cases.go",
+    "services/processing/internal/adapters/postgres/recheck.go",
+    "services/processing/internal/adapters/postgres/recheck_dispatch.go",
+    "services/processing/internal/adapters/postgres/recheck_process_test.go",
+    "services/processing/internal/adapters/postgres/recheck_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/adapters/recheckhttp/http.go",
+    "services/processing/internal/application/dispatchintent/dispatch.go",
+    "services/processing/internal/application/drafts/wire_generated.go",
+    "services/processing/internal/application/readcases/presentation.go",
+    "services/processing/internal/application/readcases/read.go",
+    "services/processing/internal/application/recheck/recheck.go",
+    "services/processing/internal/runtime/access.go",
+    "services/processing/internal/runtime/recheck.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/tools/drafts/generate.py",
+    "services/processing/docs/HIT-113/",
+    ".project-os/results/HIT-113.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-113/README.md",
+    "field_map": "services/processing/docs/HIT-113/field-map.md",
+    "source_audit": "services/processing/docs/HIT-113/source-audit.json",
+    "test_protocol": "services/processing/docs/HIT-113/verification/test-evidence.json",
+    "ci_protocol": "services/processing/docs/HIT-113/verification/ci-evidence.json",
+    "original_postgres_output": "services/processing/docs/HIT-113/verification/postgres-storage-tests.stdout.gz",
+    "actual_stand": "PASS. TestProcessingRecheckOwnedStand plus rollback/replay/concurrency and predecessor regressions on owned PG18.7, mTLS and Linux executable.",
+    "code_ci": [
+      "https://github.com/hitpipe/hitpipe/actions/runs/44501255421",
+      "https://github.com/hitpipe/hitpipe/actions/runs/44501245262"
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Управляемые IAM, Intake, Delivery на стенде. Живой ClickUp, credentials и распределённый барьер не квалифицированы.",
+    "Обычный режим HIT-111 требует авторитетных источников доступа и привязок."
+  ]
+}
