@@ -1,0 +1,113 @@
+{
+  "subject": "HIT-86",
+  "materialized_result": {
+    "summary": "Локальный надёжный приём проверенного Stripe-сигнала: fsync ограниченного JCS-сообщения до короткой SQL-транзакции signals+outbox, повторы/квоты/восстановление без ложного успеха.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "86660a01d8b691ac2c693f962d04ab2404883060",
+    "code_url": "https://github.com/hitpipe/hitpipe/blob/86660a01d8b691ac2c693f962d04ab2404883060/services/intake/internal/application/receivesignal/receive.go",
+    "report": "services/intake/evidence/HIT-86/README.md",
+    "reuse": [
+      {
+        "task": "HIT-71",
+        "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+        "pr": 47,
+        "merged": false
+      },
+      {
+        "task": "HIT-73",
+        "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864",
+        "pr": 65,
+        "merged": false
+      },
+      {
+        "task": "HIT-74",
+        "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+        "pr": 66,
+        "merged": false
+      }
+    ]
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/README.md",
+    "services/intake/docs/HIT-71/README.md",
+    "services/intake/docs/HIT-71/RESULT_RU.md",
+    "services/intake/docs/HIT-71/postgres-18.7.json",
+    "services/intake/docs/HIT-71/source-audit.json",
+    "services/intake/docs/HIT-71/verification-18.7/commands.json",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stderr",
+    "services/intake/docs/HIT-71/verification-18.7/postgres.stdout",
+    "services/intake/docs/HIT-71/verification/commands.json",
+    "services/intake/docs/HIT-71/verification/diff-check.stderr",
+    "services/intake/docs/HIT-71/verification/diff-check.stdout",
+    "services/intake/docs/HIT-71/verification/postgres.stderr",
+    "services/intake/docs/HIT-71/verification/postgres.stdout",
+    "services/intake/evidence/HIT-86/README.md",
+    "services/intake/evidence/HIT-86/source-audit.json",
+    "services/intake/go.mod",
+    "services/intake/go.sum",
+    "services/intake/internal/adapters/clock/system/clock.go",
+    "services/intake/internal/adapters/contentstore/store.go",
+    "services/intake/internal/adapters/contentstore/store_test.go",
+    "services/intake/internal/adapters/fixtures/signingsecrets/file.go",
+    "services/intake/internal/adapters/postgres/receipt/commit_loss_integration_test.go",
+    "services/intake/internal/adapters/postgres/receipt/receipt_integration_test.go",
+    "services/intake/internal/adapters/postgres/receipt/repository.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate.go",
+    "services/intake/internal/application/authenticatewebhook/authenticate_test.go",
+    "services/intake/internal/application/normalizesignal/jcs_contract_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/normalizesignal/normalize_test.go",
+    "services/intake/internal/application/normalizesignal/normalized_signal.schema.json",
+    "services/intake/internal/application/receivesignal/receive.go",
+    "services/intake/internal/domain/contentref/ref.go",
+    "services/intake/internal/domain/stripesignature/verifier.go",
+    "services/intake/internal/domain/stripesignature/verifier_test.go",
+    "services/intake/migrations/0001_intake.sql",
+    "services/intake/tests/postgres/bootstrap.sql",
+    "services/intake/tools/check_postgres.py",
+    "services/intake/tools/check_receipt.py"
+  ],
+  "verification": {
+    "source_sha": "86660a01d8b691ac2c693f962d04ab2404883060",
+    "environment": "Go1.27.2 darwin/arm64; pgx5.11.0/JCS1.0.2; exact PostgreSQL18.7 Alpine in owned sandbox; synthetic events and temporary workspace-only content roots",
+    "protocol": "services/intake/evidence/HIT-86/commands.json",
+    "source_audit": "services/intake/evidence/HIT-86/source-audit.json",
+    "logs": [
+      "services/intake/evidence/HIT-86/unit.stdout",
+      "services/intake/evidence/HIT-86/integration.stdout",
+      "services/intake/evidence/HIT-86/vet.stdout",
+      "services/intake/evidence/HIT-86/build.stdout",
+      "services/intake/evidence/HIT-86/modules.stdout",
+      "services/intake/evidence/HIT-86/schema.stdout"
+    ],
+    "results": "All six commands exit0: unit -race (132 PASS test/subtest events), integration -race (164 PASS including existing unit tests), vet, build, modules, 377 SQL checks. No failures/skipped tests. Clean source at invocation, hashes unchanged at completion; owned containers removed.",
+    "coverage": "Durable file before SQL; JCS bytes/digest readback; sequential/concurrent cross-instance retries; connection/workspace separation; RLS and scope/lease reset; invalid/revoked/unknown connection; rollback/orphan and cleanup exclusion; true loopback PG COMMIT response loss after server commit; fresh pool/root handle recovery; concurrent count and byte quotas; expiry, EXPIRED and unavailable content; all three OAS event types with no payment decision.",
+    "dod_ids": [
+      "629311d9-17d9-481d-843b-893f7550b391",
+      "77d1f5dd-24ba-4595-90fd-91f551731581",
+      "d0fe0c5e-d056-4871-9d1c-542d4d8d94b8",
+      "0b00186f-46ee-4de7-bf88-3ae581b6a778",
+      "1f49199c-78f0-40a7-8eb8-dbe31d2d56d7",
+      "401d226e-7a4e-45a1-99a7-c4b019b7d695",
+      "42704196-3eb7-465a-9805-9706a53c9b5e",
+      "a4ab7a45-4526-403f-9943-e9c74d248cb9"
+    ],
+    "compact_transcript": "services/intake/evidence/HIT-86/test-transcript.txt",
+    "raw_logs_version": "a68e89bb36c784ede258a2090a61e54df62b214a",
+    "evidence_presentation": "Compact factual transcript replaces oversized TEST evidence for review budget; raw logs and original registration/history preserved; code/tests unchanged."
+  },
+  "deviations": [],
+  "known_limitations": [
+    "No public HTTP webhook, sender, real Processing, IAM/runtime authority, Stripe facts, activation or ClickUp action. Outbox is not a Processing acknowledgement.",
+    "Tmpfs and local fsync/transport tests do not qualify production disk/power-loss/flush/backup or deployed Stripe-to-ClickUp flow.",
+    "Explicit checked connection/clock inputs and workspace-only root remain required; all publishers/cleanup must use the same DB lease. This baseline serializes publication and makes no throughput claim.",
+    "One UUIDv4 links existing signal_id/receipt_id/message_id without DDL change; Stripe dedup remains UNIQUE(workspace_id,connection_id,event_id). First age is fixed at whole-second precision and never refreshed on replay.",
+    "Dedicated PostgreSQL CVE reproduction/security qualification not performed. Approved18.7 and original DDL retained.",
+    "Independent review and human acceptance not performed."
+  ],
+  "authorship": "Codex по поручению Budykins; план подтверждён в рабочей сессии и записан Jira13669."
+}
