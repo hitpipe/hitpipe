@@ -55,6 +55,7 @@ fi
 mkdir -m 0755 "$HIT106_LAB_DIR/realm-import" "$HIT106_LAB_DIR/idp-tls"
 node "$source_dir/realm.mjs" "$iam_dir/keycloak/realm/hit105-test-realm.json" \
   "$HIT106_LAB_DIR/realm-import/hit106-test-realm.json"
+chmod 0444 "$HIT106_LAB_DIR/realm-import/hit106-test-realm.json"
 
 openssl req -x509 -newkey rsa:2048 -nodes -sha256 -days 1 -subj '/CN=HitPipe disposable lab CA' \
   -addext 'basicConstraints=critical,CA:TRUE,pathlen:0' -addext 'keyUsage=critical,keyCertSign,cRLSign' \

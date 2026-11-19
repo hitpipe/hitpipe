@@ -98,7 +98,7 @@ async function stopIAM() {
   if (!child || child.exitCode !== null || child.signalCode !== null || !child.pid) return;
   const stopped = once(child, 'exit');
   child.kill('SIGTERM');
-  if (!await Promise.race([stopped.then(() => true), pause(5000, false)])) {
+  if (!await Promise.race([stopped.then(() => true), pause(5000, false, { ref: false })])) {
     child.kill('SIGKILL');
     await stopped;
   }
@@ -169,6 +169,7 @@ async function expectIssued(u, response) {
 
 async function begin(page) {
   const response = page.waitForResponse(r => r.url() === `${app}/auth/login` && r.request().method() === 'GET');
+  const idpRequest = page.waitForRequest(r => r.url().startsWith(`${authorize}?`));
   await page.goto(`${app}/auth/login`, { waitUntil: 'domcontentloaded' });
   const started = await response;
   assert.equal(started.status(), 302, 'GET /auth/login starts the code flow');
@@ -188,7 +189,14 @@ async function begin(page) {
   const challenge = query.get('code_challenge');
   assert.ok(state && nonce && state !== nonce && /^[A-Za-z0-9_-]{43}$/.test(challenge ?? ''),
     'Login supplied independent state and nonce plus an S256 challenge');
-  return { state, nonce, challenge };
+  const cookies = (await page.context().cookies(app)).filter(cookie => cookie.name.startsWith('__Host-hp_oidc_'));
+  assert.equal(cookies.length, 1, 'The browser retained exactly one host-only attempt binding');
+  const [binding] = cookies;
+  remember(binding.value);
+  assert.ok(binding.httpOnly && binding.secure && binding.sameSite === 'Lax' && binding.domain === '127.0.0.2');
+  const outbound = await (await idpRequest).headerValue('cookie');
+  assert.ok(!outbound?.includes('__Host-hp_'), 'IAM cookies do not travel to the IdP');
+  return { state, nonce, challenge, binding };
 }
 
 function observeCallback(page) {
@@ -296,13 +304,14 @@ try {
   });
 
   await check('concurrent replay of the completed callback creates no independent sessions', async () => {
-    const u = await newBrowser(browser);
+    const retries = await Promise.all([newBrowser(browser), newBrowser(browser)]);
     try {
-      const responses = await Promise.all([1, 2].map(() => u.context.request.get(replay, { maxRedirects: 0 })));
+      await Promise.all(retries.map(u => u.context.addCookies([firstAttempt.binding])));
+      const responses = await Promise.all(retries.map(u => u.context.request.get(replay, { maxRedirects: 0 })));
       for (const response of responses) await expectDenied(response, 400);
-      await expectSession(u.context, false);
+      for (const u of retries) await expectSession(u.context, false);
       await expectCounts(1, 1);
-    } finally { await u.context.close(); }
+    } finally { await Promise.all(retries.map(u => u.context.close())); }
   });
 
   await check('an existing session cannot be replaced without the revocation coordinator', async () => {
@@ -348,9 +357,10 @@ try {
   await check('cancelling an attempt also blocks a later genuine IdP callback for that state', async () => {
     const u = await newBrowser(browser);
     try {
-      const { state } = await begin(u.page);
+      const { state, binding } = await begin(u.page);
       const denied = await u.context.request.get(callback, { maxRedirects: 0, params: { state, error: 'access_denied' } });
       await expectDenied(denied, 400);
+      await u.context.addCookies([binding]);
       const finish = observeCallback(u.page);
       await browserLogin(u.page, account);
       const response = await finish;
@@ -407,7 +417,8 @@ try {
       await expectCounts(1, 2);
     } finally {
       await u.context.close();
-      assert.equal((await admin(actionPath, 'PUT', action)).status, 204, 'Required action restored in the temporary realm');
+      const restoreAdmin = await keycloakAdmin();
+      assert.equal((await restoreAdmin(actionPath, 'PUT', action)).status, 204, 'Required action restored in the temporary realm');
     }
   });
 } catch (error) {
