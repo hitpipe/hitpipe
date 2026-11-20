@@ -447,8 +447,8 @@ func TestReadContentFaultsAndSQLCancellation(t *testing.T) {
 			}
 			decisionCounts(t, r.WorkspaceID, 0, wantHistory, 0)
 			if mode == "expired" {
-				if _, e := os.Stat(path); !os.IsNotExist(e) {
-					t.Fatal("expired file retained", e)
+				if _, e := os.Stat(path); e != nil {
+					t.Fatal("expiry read physically removed content", e)
 				}
 			}
 		})

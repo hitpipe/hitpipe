@@ -136,7 +136,7 @@ func TestRevision3AdmissionCrashThenHTTPExpiryPurgeAndRestart(t *testing.T) {
 	if !reflect.DeepEqual(expired, original) {
 		t.Fatal("expiry changed minimum history")
 	}
-	if e = f.files.PurgeExpired(time.Now().UTC()); e != nil {
+	if e = expireFixtureFiles(f.path, time.Now().UTC()); e != nil {
 		t.Fatal(e)
 	}
 	if _, e = os.Stat(filepath.Join(f.path, ref.ID)); !os.IsNotExist(e) {

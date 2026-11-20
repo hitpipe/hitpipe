@@ -88,7 +88,7 @@ func TestRevision3PinnedLabelContextExpiryPausedAndNoCommands(t *testing.T) {
 		t.Fatal(e)
 	}
 	tx.Commit(ctx)
-	if e = f.files.PurgeExpired(time.Now().UTC()); e != nil {
+	if e = expireFixtureFiles(f.path, time.Now().UTC()); e != nil {
 		t.Fatal(e)
 	}
 	d = get()

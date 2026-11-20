@@ -56,7 +56,7 @@ func TestReadOwnedCausalScopeIntegrityExpiryAndTraversal(t *testing.T) {
 	if _, e := s.ReadOwned(context.Background(), ref, origin, ref.ExpiresAt); !errors.Is(e, readcases.ErrExpired) {
 		t.Fatal(e)
 	}
-	if _, e := os.Stat(filepath.Join(p, ref.ID)); !os.IsNotExist(e) {
-		t.Fatal("expiry-on-read did not remove authenticated expired body", e)
+	if _, e := os.Stat(filepath.Join(p, ref.ID)); e != nil {
+		t.Fatal("expiry read physically removed content", e)
 	}
 }

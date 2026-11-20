@@ -613,7 +613,7 @@ func TestActivationExpiredPurgedAndMissingContentNeverReconstructs(t *testing.T)
 				f.act.Clock = clock
 				f.authority.expiry = time.Now().Add(4 * time.Hour)
 			case "purged":
-				if e := f.files.PurgeExpired(time.Now().Add(2 * time.Hour)); e != nil {
+				if e := expireFixtureFiles(f.path, time.Now().Add(2 * time.Hour)); e != nil {
 					t.Fatal("purge", e)
 				}
 			case "corrupted_root":
