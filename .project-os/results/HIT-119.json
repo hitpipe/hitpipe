@@ -88,7 +88,10 @@
     "services/intake/evidence/HIT-119/unit.stdout",
     "services/intake/evidence/HIT-119/vet.stderr",
     "services/intake/evidence/HIT-119/vet.stdout",
-    ".project-os/results/HIT-119.json"
+    ".project-os/results/HIT-119.json",
+    "services/intake/evidence/HIT-119/composition-adapters.diff",
+    "services/intake/evidence/HIT-119/wire-contract.json",
+    "services/intake/evidence/HIT-119/test-event-ledger.txt"
   ],
   "verification": {
     "results": "8 commands exit 0; 145 unit and 290 integration pass events (integration includes unit), zero fail or skip, 377 SQL checks.",
@@ -107,7 +110,15 @@
       "59e4d991-de57-43b6-821f-ad3ccd3257db",
       "2c974cc9-34df-403b-a71f-7dc69f64449b",
       "893ea95b-462b-42ec-b74e-d87358a8fb0d"
-    ]
+    ],
+    "rework": {
+      "review_receipt": "14953",
+      "original_published_sha": "85d9e89a4d67c4739c90dac74f119b403628a8f4",
+      "implementation_and_test_source_unchanged": true,
+      "checksummed_test_event_ledger": "services/intake/evidence/HIT-119/test-event-ledger.txt",
+      "source_comparison": "services/intake/evidence/HIT-119/composition-adapters.diff",
+      "wire_contract": "services/intake/evidence/HIT-119/wire-contract.json"
+    }
   },
   "deviations": [],
   "known_limitations": [

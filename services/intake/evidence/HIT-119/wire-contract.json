@@ -1,0 +1,645 @@
+{
+  "oas": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+  "operations": {
+    "/webhooks/stripe/{endpoint_id}": {
+      "operationId": "receiveStripeWebhook",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "endpoint_id",
+          "required": true,
+          "schema": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        {
+          "in": "header",
+          "name": "Stripe-Signature",
+          "required": true,
+          "schema": {
+            "maxLength": 2048,
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "contentEncoding": "binary",
+              "description": "Raw signed bytes, NOT a JSON string encoding; max256KiB measured on incoming bytes. Signature verification precedes deserialization.",
+              "format": "binary",
+              "maxLength": 262144,
+              "type": "string"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "204": {
+          "$ref": "#/components/responses/MvpR015"
+        },
+        "400": {
+          "$ref": "#/components/responses/MvpR004"
+        },
+        "401": {
+          "$ref": "#/components/responses/MvpR009"
+        },
+        "403": {
+          "$ref": "#/components/responses/MvpR002"
+        },
+        "404": {
+          "$ref": "#/components/responses/MvpR005"
+        },
+        "409": {
+          "$ref": "#/components/responses/MvpR008"
+        },
+        "412": {
+          "$ref": "#/components/responses/MvpR007"
+        },
+        "413": {
+          "$ref": "#/components/responses/MvpR006"
+        },
+        "429": {
+          "$ref": "#/components/responses/MvpR003"
+        },
+        "503": {
+          "$ref": "#/components/responses/MvpR010"
+        }
+      },
+      "security": [],
+      "metadata": {
+        "x-hitpipe-behavior": "HP-BP-002",
+        "x-hitpipe-callers": [
+          "EDGE"
+        ],
+        "x-hitpipe-interface": "HP-IF-003",
+        "x-hitpipe-listener-port": 8443,
+        "x-hitpipe-owner": "INTAKE",
+        "x-hitpipe-public-ingress": "STRIPE_SIGNED"
+      }
+    },
+    "/internal/v1/source-facts/read": {
+      "operationId": "readSourceFacts",
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/MvpP002"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SourceReadRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceFacts"
+              }
+            }
+          },
+          "description": "Successful bounded result"
+        },
+        "400": {
+          "$ref": "#/components/responses/MvpR004"
+        },
+        "401": {
+          "$ref": "#/components/responses/MvpR009"
+        },
+        "403": {
+          "$ref": "#/components/responses/MvpR002"
+        },
+        "404": {
+          "$ref": "#/components/responses/MvpR005"
+        },
+        "409": {
+          "$ref": "#/components/responses/MvpR008"
+        },
+        "412": {
+          "$ref": "#/components/responses/MvpR007"
+        },
+        "413": {
+          "$ref": "#/components/responses/MvpR006"
+        },
+        "429": {
+          "$ref": "#/components/responses/MvpR003"
+        },
+        "503": {
+          "$ref": "#/components/responses/MvpR010"
+        }
+      },
+      "security": [
+        {
+          "mtls": []
+        }
+      ],
+      "metadata": {
+        "x-hitpipe-behavior": "HP-BP-002",
+        "x-hitpipe-callers": [
+          "PROCESSING"
+        ],
+        "x-hitpipe-interface": "HP-IF-005",
+        "x-hitpipe-listener-port": 8443,
+        "x-hitpipe-owner": "INTAKE"
+      }
+    },
+    "/internal/v1/intake-signals": {
+      "operationId": "receiveNormalizedSignal",
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/MvpP002"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NormalizedSignal"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "202": {
+          "$ref": "#/components/responses/MvpR013"
+        },
+        "400": {
+          "$ref": "#/components/responses/MvpR004"
+        },
+        "401": {
+          "$ref": "#/components/responses/MvpR009"
+        },
+        "403": {
+          "$ref": "#/components/responses/MvpR002"
+        },
+        "404": {
+          "$ref": "#/components/responses/MvpR005"
+        },
+        "409": {
+          "$ref": "#/components/responses/MvpR008"
+        },
+        "412": {
+          "$ref": "#/components/responses/MvpR007"
+        },
+        "413": {
+          "$ref": "#/components/responses/MvpR006"
+        },
+        "429": {
+          "$ref": "#/components/responses/MvpR003"
+        },
+        "503": {
+          "$ref": "#/components/responses/MvpR010"
+        }
+      },
+      "security": [
+        {
+          "mtls": []
+        }
+      ],
+      "metadata": {
+        "x-hitpipe-behavior": "HP-BP-003",
+        "x-hitpipe-callers": [
+          "INTAKE"
+        ],
+        "x-hitpipe-interface": "HP-IF-004",
+        "x-hitpipe-listener-port": 8443,
+        "x-hitpipe-owner": "PROCESSING"
+      }
+    }
+  },
+  "schemas": {
+    "SourceReadRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "connection_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "deadline_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expected_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "session_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "connection_id",
+        "session_id",
+        "case_id",
+        "expected_epoch",
+        "deadline_at"
+      ],
+      "type": "object"
+    },
+    "SourceFacts": {
+      "additionalProperties": false,
+      "description": "Unknown is explicit and NEVER permission. full strict guard in BP002/BP003. Valid_until <=oldest mandatory fact+10s. Snapshot cannot make Stripe/ClickUp atomic.",
+      "properties": {
+        "all_currencies_equal": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount_captured": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount_received": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount_refunded": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount_total": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "case_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "charge_captured": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "charge_succeeded": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "connection_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "disputed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facts_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "line_item_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "line_items_complete": {
+          "type": "boolean"
+        },
+        "livemode": {
+          "type": "boolean"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "payment",
+                "subscription",
+                "setup",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "oldest_observed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "payment_intent_status": {
+          "enum": [
+            "succeeded",
+            "other",
+            "UNKNOWN"
+          ],
+          "type": "string"
+        },
+        "payment_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "paid",
+                "unpaid",
+                "no_payment_required",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "price_id": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "session_created_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "session_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "stripe_account_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "facts_id",
+        "case_id",
+        "connection_id",
+        "stripe_account_id",
+        "livemode",
+        "session_id",
+        "session_created_at",
+        "mode",
+        "payment_status",
+        "currency",
+        "amount_total",
+        "line_items_complete",
+        "line_item_count",
+        "price_id",
+        "quantity",
+        "payment_intent_status",
+        "amount_received",
+        "charge_succeeded",
+        "charge_captured",
+        "amount_captured",
+        "amount_refunded",
+        "disputed",
+        "all_currencies_equal",
+        "complete",
+        "oldest_observed_at",
+        "completed_at",
+        "valid_until",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "NormalizedSignal": {
+      "additionalProperties": false,
+      "description": "Minimal whitelist; no arbitrary metadata, customer/contact/brief. Event signature verified before durable intake, same account+mode bounded and immutable. Digest computed over canonical payload excluding message_digest.",
+      "properties": {
+        "connection_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "event_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "event_type": {
+          "enum": [
+            "checkout.session.completed",
+            "checkout.session.async_payment_succeeded",
+            "checkout.session.async_payment_failed"
+          ],
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "first_received_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "livemode": {
+          "type": "boolean"
+        },
+        "message_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "message_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "receipt_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "type": "string"
+        },
+        "session_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "stripe_account_id": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message_id",
+        "message_digest",
+        "schema_version",
+        "workspace_id",
+        "connection_id",
+        "stripe_account_id",
+        "livemode",
+        "session_id",
+        "event_id",
+        "event_type",
+        "source_created_at",
+        "first_received_at",
+        "expires_at",
+        "receipt_id"
+      ],
+      "type": "object"
+    },
+    "Receipt": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "enum": [
+            "APPLIED",
+            "DUPLICATE",
+            "HELD",
+            "CONFLICT"
+          ],
+          "type": "string"
+        },
+        "message_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "record_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "revision": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "message_id",
+        "disposition"
+      ],
+      "type": "object"
+    }
+  },
+  "comparison": "The pinned SourceReadRequest and SourceFacts schemas equal the actual embedded schema exactly. The shared TLS listener verifies any presented cert, and the existing facts route insists on verified TLS 1.3, single Processing DNS SAN, no URI/IP SAN. Webhook relies on its checked endpoint and Stripe signature. Sender uses the Processing TLS identity and exact Receipt contract."
+}
