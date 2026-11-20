@@ -2,7 +2,10 @@ module github.com/hitpipe/hitpipe/services/iam
 
 go 1.27.2
 
-require github.com/jackc/pgx/v5 v5.11.0
+require (
+	github.com/hitpipe/hitpipe/services/platform v0.0.0
+	github.com/jackc/pgx/v5 v5.11.0
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -12,3 +15,5 @@ require (
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 )
+
+replace github.com/hitpipe/hitpipe/services/platform => ../platform

@@ -1,0 +1,24 @@
+ef60917ce511bd0c9ff33c41af6129162d0831eb
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.071s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.037s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.021s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/privateiam	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.032s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	1.388s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	1.026s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.022s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.287s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.020s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.064s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.020s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0

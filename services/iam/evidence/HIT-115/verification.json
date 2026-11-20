@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-115",
+  "tested_commit": "ef60917ce511bd0c9ff33c41af6129162d0831eb",
+  "combined_base": "addf9e4a5362c98c58c4cee15d81d9463e6cde07",
+  "frozen_jira_contract": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "openapi_and_iam_sql_commit": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+  "environment": {
+    "guest": "Dedicated libvirt/KVM Ubuntu 24.04.5 LTS amd64, 4 vCPU / 4 GiB",
+    "go": "go version go1.27.2 linux/amd64",
+    "postgres": "18.7",
+    "postgres_oci": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "transport": "TLS 1.3 with a fresh disposable CA, verified SAN, exact client leaf fingerprint, loopback-only IAM8443"
+  },
+  "commands": [
+    {
+      "command": "CGO_ENABLED=1 python3 services/iam/tools/check_authorization.py --evidence-dir /work/hit115/exact-ef60917ce5/iam",
+      "exit_code": 0,
+      "log": "integration-summary.log"
+    },
+    {
+      "command": "(services/iam) go test -race -count=1 ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "(services/iam) go vet ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "(services/iam) go build ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "python3 services/platform/tools/check_start_gate.py --evidence-dir /work/hit115/exact-ef60917ce5/platform",
+      "exit_code": 0,
+      "log": "platform/verification.json"
+    }
+  ],
+  "postgres_protocol": "iam/verification.json",
+  "platform_protocol": "platform/verification.json",
+  "actual_hit115_passes": [
+    "TestPostgresPrivateIAMEndToEnd",
+    "TestPostgresPrivateIAMNormalListener",
+    "TestPostgresPrivateIAMRestartAndPoolFailure",
+    "TestPostgresPrivateIAMCancelConcurrencyAndCurrentDenials",
+    "TestPostgresRuntimeAccessRosterAndOpen",
+    "TestPostgresRuntimeAccessConcurrencyAndFencing",
+    "TestPostgresRuntimeAccessSQLFailures",
+    "TestPostgresRuntimeAccessDenialOverflow"
+  ],
+  "cleanup": "cleanup.log",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 8356,
+      "sha256": "74045ac89f74f1bc35ef48a96246ccf6ab73966e3a0f2be68605561986a19c7f"
+    },
+    {
+      "path": "cleanup.log",
+      "bytes": 72,
+      "sha256": "5966c418812d4eb9d488b8282677b10af4e54f0d215545c28e4f3c6b85953d67"
+    },
+    {
+      "path": "dependency-readback.json",
+      "bytes": 4813,
+      "sha256": "3c753b7de7d4f4f275ac458b367c5ed6c8aebe4567ef27be63896dec1773f799"
+    },
+    {
+      "path": "go.log",
+      "bytes": 1372,
+      "sha256": "2cf9b8fb029f59fdacbc076dfcbb4a3a7e0b47378463dc5b8e0607d8140e3a12"
+    },
+    {
+      "path": "iam/bootstrap-roles.log",
+      "bytes": 16,
+      "sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322"
+    },
+    {
+      "path": "iam/build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "iam/migration-install.log",
+      "bytes": 114,
+      "sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+    },
+    {
+      "path": "iam/migration-repeat.log",
+      "bytes": 122,
+      "sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+    },
+    {
+      "path": "iam/migration-role-tcp.log",
+      "bytes": 39,
+      "sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+    },
+    {
+      "path": "iam/migration-startup-role.log",
+      "bytes": 35,
+      "sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+    },
+    {
+      "path": "iam/postgres-race.log",
+      "bytes": 62357,
+      "sha256": "b68f5a9266389444af338209b15b0a290675d524f17559e0e853e08ae12a3916"
+    },
+    {
+      "path": "iam/read-only-lookup.log",
+      "bytes": 23,
+      "sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76"
+    },
+    {
+      "path": "iam/test-logins.log",
+      "bytes": 48,
+      "sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7"
+    },
+    {
+      "path": "iam/unit.log",
+      "bytes": 1244,
+      "sha256": "7a3b8c6f62b5c8e354971bfe436abd8ca175a7ecc30a20c60c213849ab89ebf9"
+    },
+    {
+      "path": "iam/verification.json",
+      "bytes": 6254,
+      "sha256": "df722cbb5fa3ea44a7e9a59e54c98c55a950bf413c348efdf8111236f4a1e3e9"
+    },
+    {
+      "path": "iam/vet.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "integration-summary.log",
+      "bytes": 4156,
+      "sha256": "791c7a5a0a7ba68d1967809d8df40f96d572f7c806becf9e9c181e73d2441c14"
+    },
+    {
+      "path": "platform/build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "platform/race.log",
+      "bytes": 67,
+      "sha256": "c0c51b0d3eab1254d4b5acc7e0a86d6fca8ad6dca2a5900db0d093a38139555e"
+    },
+    {
+      "path": "platform/unit.log",
+      "bytes": 4904,
+      "sha256": "b289356cca118e0ec84137af1d232dd631172caae4f4ea47de617be7b0c58438"
+    },
+    {
+      "path": "platform/verification.json",
+      "bytes": 2447,
+      "sha256": "bad718536c3824749ec2a2afd9532bbedee7aa24cb4f263a443560969a26d416"
+    },
+    {
+      "path": "platform/vet.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "runtime.log",
+      "bytes": 240,
+      "sha256": "97cec9dd665966d88deebb12754d9e700e60a4dbd1a308946b611d827fc6ea63"
+    }
+  ]
+}

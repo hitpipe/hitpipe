@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-115",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Добавлены два приватных mTLS маршрута IAM8443. Регистрация проверяет инвентарь и записывает идентичность в PostgreSQL. Действующая авторизация IAM использует собственные текущие SQL-факты и один общий локальный startgate, который удерживается до фактического старта ответа.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "addf9e4a5362c98c58c4cee15d81d9463e6cde07",
+    "code_commit": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+    "review_base_ref": "codex/hit-115-dependencies",
+    "review_head_ref": "codex/hit-115-private-iam",
+    "dependency_pulls": [
+      {
+        "baseRefOid": "dd726339b5b9f5e62cb2150d801a40d05c319294",
+        "headRefOid": "873f70fb82e9c1ecbcc00797952a3c398dc69f98",
+        "mergeCommit": {
+          "oid": "ce771d37505e7770003d0796ae932556d06b7bab"
+        },
+        "mergedAt": "2026-11-13T10:07:11Z",
+        "number": 43,
+        "state": "MERGED",
+        "url": "https://github.com/hitpipe/hitpipe/pull/43"
+      },
+      {
+        "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+        "headRefOid": "fa01ea89ff72dcaaecef9c53f9fe1ffa41dea519",
+        "mergeCommit": null,
+        "mergedAt": null,
+        "number": 46,
+        "state": "OPEN",
+        "url": "https://github.com/hitpipe/hitpipe/pull/46"
+      },
+      {
+        "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+        "headRefOid": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+        "mergeCommit": null,
+        "mergedAt": null,
+        "number": 55,
+        "state": "OPEN",
+        "url": "https://github.com/hitpipe/hitpipe/pull/55"
+      },
+      {
+        "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+        "headRefOid": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+        "mergeCommit": null,
+        "mergedAt": null,
+        "number": 56,
+        "state": "OPEN",
+        "url": "https://github.com/hitpipe/hitpipe/pull/56"
+      },
+      {
+        "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+        "headRefOid": "fba9d664862adedd3df305e18e3c03fb95e0f95c",
+        "mergeCommit": null,
+        "mergedAt": null,
+        "number": 61,
+        "state": "OPEN",
+        "url": "https://github.com/hitpipe/hitpipe/pull/61"
+      }
+    ],
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/README.md"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/go.mod",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/go.mod"
+    },
+    {
+      "path": "services/iam/internal/application/runtimeaccess",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/application/runtimeaccess"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/privateiam",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/adapters/http/privateiam"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/adapters/composition/privateiam"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/runtimeaccess",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/adapters/postgres/runtimeaccess"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/authorization/workspace.go",
+      "version": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/adapters/postgres/authorization/workspace.go"
+    },
+    {
+      "path": "services/iam/evidence/HIT-115",
+      "version": "ced6a1c9044316bc9e5eed5820f1124fd0c69e61",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/ced6a1c9044316bc9e5eed5820f1124fd0c69e61/services/iam/evidence/HIT-115"
+    },
+    {
+      "path": "services/iam/evidence/HIT-115/rework-14949",
+      "version": "2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/verification.json",
+    "protocol_version": "2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff",
+    "environment": {
+      "guest": "Dedicated libvirt/KVM Ubuntu 24.04.5 LTS amd64, 4 vCPU / 4 GiB",
+      "go": "go version go1.27.2 linux/amd64",
+      "postgres": "18.7",
+      "postgres_oci": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+      "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+      "transport": "TLS 1.3 with a fresh disposable CA, verified SAN, exact client leaf fingerprint, loopback-only IAM8443"
+    },
+    "commands": [
+      {
+        "command": "CGO_ENABLED=1 python3 services/iam/tools/check_authorization.py --evidence-dir /work/hit115/exact-0ff7f039cc/iam",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/integration-summary.log"
+      },
+      {
+        "command": "go test -p 1 -tags=integration -race -count=1 -v ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/iam/postgres-race.log"
+      },
+      {
+        "command": "go test -race -count=1 ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/go.log"
+      },
+      {
+        "command": "go vet ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/go.log"
+      },
+      {
+        "command": "go build ./...",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/go.log"
+      },
+      {
+        "command": "python3 services/platform/tools/check_start_gate.py --evidence-dir /work/hit115/exact-0ff7f039cc/platform",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/platform/verification.json"
+      }
+    ],
+    "actual_hit115_passes": [
+      "TestPostgresPrivateIAMEndToEnd",
+      "TestPostgresPrivateIAMNormalListener",
+      "TestPostgresPrivateIAMRestartAndPoolFailure",
+      "TestPostgresPrivateIAMCancelConcurrencyAndCurrentDenials",
+      "TestPostgresRuntimeAccessRosterAndOpen",
+      "TestPostgresRuntimeAccessConcurrencyAndFencing",
+      "TestPostgresRuntimeAccessSQLFailures",
+      "TestPostgresRuntimeAccessDenialOverflow"
+    ],
+    "full_integration_log": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/iam/postgres-race.log",
+    "dependency_readback": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/dependency-readback.json",
+    "cleanup": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/cleanup.log",
+    "authorize_mtls_cases": {
+      "passed": 25,
+      "accepted": 2,
+      "rejected_before_backend": 23
+    },
+    "review_integration_log": "https://github.com/hitpipe/hitpipe/blob/2e4c433e5cf7f9ebec326fd809499cdf85ffd8ff/services/iam/evidence/HIT-115/rework-14949/review-postgres-race.log"
+  },
+  "deviations": [],
+  "limitations": [
+    "Положительный сетевой сценарий проверен для провизионированной загрузки IAM с фактически применённым локальным снимком и управляемым владельцем одного тестового дела.",
+    "Регистрация чужого процесса сохраняет закрытое состояние до собственного boot-specific подтверждения. Реальные owner resolvers, удалённый gate и полноценное распределённое подтверждение отзыва находятся за границами задачи.",
+    "Принятый протокол не задаёт отображение MEMBERSHIP subject_id на составной ключ членства. Соответствующая область при таком запрете консервативно закрывается."
+  ],
+  "rework": {
+    "previous_independent_review": "https://hitpipe.atlassian.net/browse/HIT-115?focusedCommentId=14949",
+    "previous_tested_commit": "ef60917ce511bd0c9ff33c41af6129162d0831eb",
+    "previous_result_head": "c8f3e83d7426dcab6ba733c2116b402094556bd9",
+    "previous_human_report": "https://github.com/hitpipe/hitpipe/blob/ced6a1c9044316bc9e5eed5820f1124fd0c69e61/services/iam/evidence/HIT-115/README.md",
+    "strict_validator": "https://github.com/hitpipe/hitpipe/blob/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/application/authorizeaction/request_json.go",
+    "mTLS_case_source": "https://github.com/hitpipe/hitpipe/blob/0ff7f039ccaf450d60a59cd9cc0504c13e032b08/services/iam/internal/adapters/http/privateiam/authorize_body_test.go"
+  }
+}
