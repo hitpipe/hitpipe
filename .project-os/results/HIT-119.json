@@ -1,0 +1,130 @@
+{
+  "subject": "HIT-119",
+  "authorship": "Codex по поручению Budykins, план подтверждён и записан в Jira 14643.",
+  "materialized_result": {
+    "summary": "One executable Intake with shared listener, app/worker pools and workspace content; integrated signed webhook, mTLS facts and bounded outbox lifecycle.",
+    "base_sha": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "b4c4387d13cdcd41ca08cf64d80192d4d1e58b69",
+    "reuse": {
+      "HIT-107": {
+        "jira": "Done",
+        "pr": 74,
+        "merged": false,
+        "sha": "d563083d37a0b38027f1afd60b1aff0c66e6d3a8",
+        "changed_after_reuse": [
+          "services/intake/internal/adapters/http/stripewebhook/server.go"
+        ]
+      },
+      "HIT-117": {
+        "jira": "Done",
+        "pr": 70,
+        "merged": false,
+        "sha": "b3013c31beee8740698b6f310792e5fb2d911751",
+        "changed_after_reuse": [
+          "services/intake/internal/adapters/http/sourcefacts/server.go",
+          "services/intake/internal/adapters/postgres/facts/repository.go"
+        ]
+      },
+      "HIT-118": {
+        "jira": "Done",
+        "pr": 75,
+        "merged": false,
+        "sha": "a1fca79ead8bb24cb7f0802e062e09bafb92733c",
+        "changed_after_reuse": []
+      },
+      "HIT-87": {
+        "pr": 68,
+        "merged": false,
+        "sha": "e630039d3788da5153c5c2d21305f605aa16f43e",
+        "accepted_patch_already_in_HIT-118": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+        "changed_after_reuse": []
+      }
+    },
+    "report": "services/intake/evidence/HIT-119/README.md"
+  },
+  "changed_artifacts": [
+    ".github/workflows/pr12-nb.yml",
+    "services/intake/cmd/intake/main.go",
+    "services/intake/internal/adapters/contentfacts/content.go",
+    "services/intake/internal/adapters/http/sourcefacts/server.go",
+    "services/intake/internal/adapters/http/stripewebhook/server.go",
+    "services/intake/internal/adapters/postgres/facts/repository.go",
+    "services/intake/internal/adapters/postgres/receipt/webhook_integration_test.go",
+    "services/intake/internal/adapters/stripe/client.go",
+    "services/intake/internal/adapters/stripe/client_test.go",
+    "services/intake/internal/application/normalizesignal/normalize.go",
+    "services/intake/internal/application/readsourcefacts/service.go",
+    "services/intake/internal/application/receivesignal/receive.go",
+    "services/intake/internal/domain/sourcefacts/codec.go",
+    "services/intake/internal/domain/sourcefacts/codec_test.go",
+    "services/intake/internal/domain/sourcefacts/schema.json",
+    "services/intake/internal/domain/sourcefacts/types_generated.go",
+    "services/intake/internal/intakeruntime/config.go",
+    "services/intake/internal/intakeruntime/run.go",
+    "services/intake/internal/intakeruntime/sandbox.go",
+    "services/intake/tests/process/intake_test.go",
+    "services/intake/tests/sourcefacts/faults_test.go",
+    "services/intake/tests/sourcefacts/integration_test.go",
+    "services/intake/tools/check_receipt.py",
+    "services/intake/tools/generate_sourcefacts.py",
+    "services/intake/evidence/HIT-119/README.md",
+    "services/intake/evidence/HIT-119/artifacts.json",
+    "services/intake/evidence/HIT-119/build.stderr",
+    "services/intake/evidence/HIT-119/build.stdout",
+    "services/intake/evidence/HIT-119/commands.json",
+    "services/intake/evidence/HIT-119/executable.stderr",
+    "services/intake/evidence/HIT-119/executable.stdout",
+    "services/intake/evidence/HIT-119/generation.stderr",
+    "services/intake/evidence/HIT-119/generation.stdout",
+    "services/intake/evidence/HIT-119/integration.stderr",
+    "services/intake/evidence/HIT-119/integration.stdout",
+    "services/intake/evidence/HIT-119/modules.stderr",
+    "services/intake/evidence/HIT-119/modules.stdout",
+    "services/intake/evidence/HIT-119/schema.stderr",
+    "services/intake/evidence/HIT-119/schema.stdout",
+    "services/intake/evidence/HIT-119/source-audit.json",
+    "services/intake/evidence/HIT-119/test-transcript.txt",
+    "services/intake/evidence/HIT-119/unit.stderr",
+    "services/intake/evidence/HIT-119/unit.stdout",
+    "services/intake/evidence/HIT-119/vet.stderr",
+    "services/intake/evidence/HIT-119/vet.stdout",
+    ".project-os/results/HIT-119.json",
+    "services/intake/evidence/HIT-119/composition-adapters.diff",
+    "services/intake/evidence/HIT-119/wire-contract.json",
+    "services/intake/evidence/HIT-119/test-event-ledger.txt"
+  ],
+  "verification": {
+    "results": "8 commands exit 0; 145 unit and 290 integration pass events (integration includes unit), zero fail or skip, 377 SQL checks.",
+    "protocol": "services/intake/evidence/HIT-119/commands.json",
+    "transcript": "services/intake/evidence/HIT-119/test-transcript.txt",
+    "raw_logs": [
+      "services/intake/evidence/HIT-119/unit.stdout",
+      "services/intake/evidence/HIT-119/integration.stdout",
+      "services/intake/evidence/HIT-119/schema.stdout"
+    ],
+    "dod_ids": [
+      "9b03b0dd-2b0b-4051-a21c-5fe411b833f3",
+      "31c78658-ec6e-44b2-b092-4ad0a10cf616",
+      "e50c4943-da80-452f-a3b3-d45783732bde",
+      "3655f11c-29d4-4ea8-bb6a-11b81190cac9",
+      "59e4d991-de57-43b6-821f-ad3ccd3257db",
+      "2c974cc9-34df-403b-a71f-7dc69f64449b",
+      "893ea95b-462b-42ec-b74e-d87358a8fb0d"
+    ],
+    "rework": {
+      "review_receipt": "14953",
+      "original_published_sha": "85d9e89a4d67c4739c90dac74f119b403628a8f4",
+      "implementation_and_test_source_unchanged": true,
+      "checksummed_test_event_ledger": "services/intake/evidence/HIT-119/test-event-ledger.txt",
+      "source_comparison": "services/intake/evidence/HIT-119/composition-adapters.diff",
+      "wire_contract": "services/intake/evidence/HIT-119/wire-contract.json"
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Обычный запуск закрыт до появления настоящих портов установки, полномочий и допуска. Тестовый профиль допускает только 127.0.0.1 и собственную тестовую базу.",
+    "Тестовые Stripe, Processing и полномочия управляемые. Промышленная установка, IAM/control, хранение рабочих секретов, deployment и финансовая обработка не проверялись.",
+    "Проверен перезапуск на сохранённых PostgreSQL и каталоге содержимого. Потеря всего хранилища, продакшен-диск, очистка по срокам и эксплуатационная квалификация вне задачи.",
+    "До 8 HTTP-обработчиков, один цикл отправки и параметры таймеров относятся к стенду. Новых продуктовых порогов и маршрутов нет."
+  ]
+}

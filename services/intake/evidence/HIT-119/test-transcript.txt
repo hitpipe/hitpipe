@@ -1,0 +1,26 @@
+HIT-119 verified run 2026-11-19T20:20:59Z to 2026-11-19T20:22:20Z
+Source b4c4387d13cdcd41ca08cf64d80192d4d1e58b69; clean at invocation; source hashes unchanged.
+go version go1.27.2 darwin/arm64; macOS-26.5-arm64-arm-64bit; PostgreSQL 18.7
+Image docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
+Durability settings {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}; owned container removed.
+generation, exit=0, 0.063s: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-119/services/intake/tools/generate_sourcefacts.py --check --gofmt /tmp/hit73-toolchain/go/bin/gofmt
+executable, exit=0, 1.498s: /tmp/hit73-toolchain/go/bin/go build -race -o /var/folders/kz/kqgp1js55fn4_rnn24ym2f780000gn/T/hit119-bin-7f4h_0sk/intake ./cmd/intake
+unit, exit=0, 5.559s: /tmp/hit73-toolchain/go/bin/go test -race -count=1 -json ./...
+integration, exit=0, 38.499s: /tmp/hit73-toolchain/go/bin/go test -p=1 -tags=integration -race -count=1 -json ./...
+vet, exit=0, 0.495s: /tmp/hit73-toolchain/go/bin/go vet -tags=integration ./...
+build, exit=0, 1.355s: /tmp/hit73-toolchain/go/bin/go build ./...
+modules, exit=0, 0.247s: /tmp/hit73-toolchain/go/bin/go mod verify
+schema, exit=0, 30.478s: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-119/services/intake/tools/check_postgres.py
+8 commands exit 0; 145 unit and 290 integration pass events (integration includes unit), zero fail or skip, 377 SQL checks.
+Process-level witness from integration.stdout:
+=== RUN   TestIntegrationIntakeExecutable
+intake_test.go:389: binary rejected closed ordinary mode, missing fields, non-loopback, conflict, duplicate and unknown secret field
+intake_test.go:448: SIGTERM exit 0; process log: "intake sandbox listening\nintake sandbox stopped\n"
+intake_test.go:485: SIGTERM exit 0; process log: "intake sandbox listening\nintake sandbox stopped\n"
+intake_test.go:486: one signed webhook, mTLS-only source facts, SQL/file readback, interrupted receipt and restarted delivery; original ID and bytes preserved
+--- PASS: TestIntegrationIntakeExecutable (7.40s)
+Exact signed HTTP route and actual Processing mTLS-only private route served from one TLS listener.
+Foreign or missing cert denied; correct cert returns complete facts from controlled Stripe HTTPS.
+Processing persists one fixture receipt before lost HTTP response; live Intake can still read facts.
+After SIGTERM and restart, expired lease retries identical bytes and ID, receives DUPLICATE, and records ACKED.
+No production authority, installation, runtime control or deployment evidence.

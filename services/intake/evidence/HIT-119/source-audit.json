@@ -1,0 +1,347 @@
+{
+  "main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_code_sha": "b4c4387d13cdcd41ca08cf64d80192d4d1e58b69",
+  "reuse": {
+    "HIT-107": {
+      "jira": "Done",
+      "pr": 74,
+      "merged": false,
+      "sha": "d563083d37a0b38027f1afd60b1aff0c66e6d3a8",
+      "changed_after_reuse": [
+        "services/intake/internal/adapters/http/stripewebhook/server.go"
+      ]
+    },
+    "HIT-117": {
+      "jira": "Done",
+      "pr": 70,
+      "merged": false,
+      "sha": "b3013c31beee8740698b6f310792e5fb2d911751",
+      "changed_after_reuse": [
+        "services/intake/internal/adapters/http/sourcefacts/server.go",
+        "services/intake/internal/adapters/postgres/facts/repository.go"
+      ]
+    },
+    "HIT-118": {
+      "jira": "Done",
+      "pr": 75,
+      "merged": false,
+      "sha": "a1fca79ead8bb24cb7f0802e062e09bafb92733c",
+      "changed_after_reuse": []
+    },
+    "HIT-87": {
+      "pr": 68,
+      "merged": false,
+      "sha": "e630039d3788da5153c5c2d21305f605aa16f43e",
+      "accepted_patch_already_in_HIT-118": "7f688aa26b4e96c19e39f906a5ffaa51a7ce3a12",
+      "changed_after_reuse": []
+    }
+  },
+  "bootstrap": {
+    "request": "14555",
+    "receipt": "14564",
+    "parts": 8,
+    "sha256": "cff987b5d1a9b7292688c65e5d1d81659dfbe0031b7e73c627bb2a8cd5eaf70a",
+    "protocol": {
+      "release": "v2",
+      "sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+    }
+  },
+  "sources": [
+    {
+      "id": "global",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b"
+    },
+    {
+      "id": "discovery",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "7fa61bb6fa150c033c87c9b8fc2fa9ef06bb0bc7d87132a88229a783c6923c7d"
+    },
+    {
+      "id": "product",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3"
+    },
+    {
+      "id": "architecture",
+      "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+      "revision": "b2461564e4355ea5a72a55a30a635655397c463b",
+      "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a"
+    },
+    {
+      "id": "interface",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+    },
+    {
+      "id": "persistence",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb"
+    },
+    {
+      "id": "stack",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
+    },
+    {
+      "id": "comparison",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "a1cbc99e4d5450d77d47a1967155d0e0288775eacadd22b313fc58d4e8f86741"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+      "revision": "0ff88d118e39a5dfaa34540c0d621649c34655a7",
+      "sha256": "ea552ae1906ae7998687fcdd6ea0b13ac8a9a31630c6f4cf8b82ba7867bfd8f4"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/intake.sql",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093"
+    },
+    {
+      "ref": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md",
+      "revision": "d9eb399d9cc0528f1beae6153851ab5020741ea5",
+      "sha256": "3cb6bbbf3c7cbd59a846e50596593d71c8f8208981ecfe2dd06f0f694d64436f"
+    }
+  ],
+  "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+  "source_recovery": "Task bootstrap runtime reported Product:SOURCE_UNAVAILABLE with no embedded sources. The package manifest above and its GitHub sources were read directly at exact revisions and checked against the recorded hashes. Jira admission references remain listed separately.",
+  "jira_manifest_refs": [
+    "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10908",
+    "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10859"
+  ],
+  "comparison": [
+    {
+      "task": "HIT-107",
+      "path": "services/intake/internal/adapters/http/stripewebhook/server.go",
+      "dependency_sha256": "9c794d43c8716e8bf74a23fe1f173c7143acf27adec2ab1a51104a2f7020b490",
+      "tested_sha256": "3ee6133c28f6287aac2ced4fc0a81c8a74d80067f7500b924c926b780ee05581",
+      "comparison": "adapted",
+      "reason": "NewHandler exposes the existing signed handler and retains the standalone wrapper. Signature, raw request, gate and durable ACK unchanged."
+    },
+    {
+      "task": "HIT-107",
+      "path": "services/intake/internal/adapters/postgres/receipt/webhook_integration_test.go",
+      "dependency_sha256": "57904f1d243f68dcae6507a55f511bf00def9d869f3154bc36b765553c2c5948",
+      "tested_sha256": "57904f1d243f68dcae6507a55f511bf00def9d869f3154bc36b765553c2c5948",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-107",
+      "path": "services/intake/internal/application/normalizesignal/normalize.go",
+      "dependency_sha256": "62d3291ce15e8dd517d7969e7bdfc69d81583c13e7703fd8e0e48291b9e591f9",
+      "tested_sha256": "62d3291ce15e8dd517d7969e7bdfc69d81583c13e7703fd8e0e48291b9e591f9",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-107",
+      "path": "services/intake/internal/application/receivesignal/receive.go",
+      "dependency_sha256": "6216f2bdcf64b3d7e45b736f4d3cbdd71d32f506b7057f5d6b05a69c808c2d8d",
+      "tested_sha256": "6216f2bdcf64b3d7e45b736f4d3cbdd71d32f506b7057f5d6b05a69c808c2d8d",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/adapters/contentfacts/content.go",
+      "dependency_sha256": "73c0c554230f4bb6b3735f97db3aec935c93138427119922b8bf432a7a4e237e",
+      "tested_sha256": "73c0c554230f4bb6b3735f97db3aec935c93138427119922b8bf432a7a4e237e",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/adapters/http/sourcefacts/server.go",
+      "dependency_sha256": "464fb207f350e23b2abbf954986bfe0da737bb66a5747bc91180b087417f120f",
+      "tested_sha256": "f18010a55d5d6f8d54ad9ee399640d076f51b08e6603580b4d3c58f47472fa4c",
+      "comparison": "adapted",
+      "reason": "NewHandler exposes existing codec and request path, adds the same exact Processing SAN check at the route boundary (optional verified client cert on the shared listener), retains strict handshake on the standalone wrapper."
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/adapters/postgres/facts/repository.go",
+      "dependency_sha256": "90959de3bf75012340325681e5294457ec315e1a7ac3bf632d76b9f5203ef45a",
+      "tested_sha256": "3cfe4b4a0500e99de98f0aad096a76a3ab8bd036cea5c5c60663c6f32fde6d5b",
+      "comparison": "adapted",
+      "reason": "FromPool borrows the app pool. Existing constructor remains owner; SQL operations and migrations unchanged."
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/adapters/stripe/client.go",
+      "dependency_sha256": "3c8363422e93f480a357bf78705664242bb37cf4ee8f4e57e1fd7775abb92503",
+      "tested_sha256": "3c8363422e93f480a357bf78705664242bb37cf4ee8f4e57e1fd7775abb92503",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/adapters/stripe/client_test.go",
+      "dependency_sha256": "286ca28d61743627e51765cdcc28b804f79a6b211cd471c7d18bb65329b550c8",
+      "tested_sha256": "286ca28d61743627e51765cdcc28b804f79a6b211cd471c7d18bb65329b550c8",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/application/readsourcefacts/service.go",
+      "dependency_sha256": "d1ec69c2635a4ff14c5ef2e18ee1f1d6037dbc47b749df5aef5a2ede97bbd1e5",
+      "tested_sha256": "d1ec69c2635a4ff14c5ef2e18ee1f1d6037dbc47b749df5aef5a2ede97bbd1e5",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/domain/sourcefacts/codec.go",
+      "dependency_sha256": "ec8eab666345bc2d6da28f8fee143b46e800af308c37eb38db6651719c97850e",
+      "tested_sha256": "ec8eab666345bc2d6da28f8fee143b46e800af308c37eb38db6651719c97850e",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/domain/sourcefacts/codec_test.go",
+      "dependency_sha256": "5490d751256467c6ef383b3389417742c051c94afdd2bfc91620190553fbf0fd",
+      "tested_sha256": "5490d751256467c6ef383b3389417742c051c94afdd2bfc91620190553fbf0fd",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/domain/sourcefacts/types_generated.go",
+      "dependency_sha256": "686a39d8aaa53d089b18226ccd3d8b0d0c9f8e5a625db11b4021b8a2e1aaa35a",
+      "tested_sha256": "686a39d8aaa53d089b18226ccd3d8b0d0c9f8e5a625db11b4021b8a2e1aaa35a",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/internal/domain/sourcefacts/schema.json",
+      "dependency_sha256": "cb7a0a99310f3596228caa9235f10bb79d646edea7d9957c01c8daa558c9f04d",
+      "tested_sha256": "cb7a0a99310f3596228caa9235f10bb79d646edea7d9957c01c8daa558c9f04d",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/tests/sourcefacts/faults_test.go",
+      "dependency_sha256": "130e09d34c6e325329fbed0146122a7cf869f65fce94a997df9de862c7b1b04c",
+      "tested_sha256": "130e09d34c6e325329fbed0146122a7cf869f65fce94a997df9de862c7b1b04c",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/tests/sourcefacts/integration_test.go",
+      "dependency_sha256": "9d1cc2e8aaae918ac4cb07d6fd2d90c8e07e1fbf7170addffc86ae4a05453444",
+      "tested_sha256": "9d1cc2e8aaae918ac4cb07d6fd2d90c8e07e1fbf7170addffc86ae4a05453444",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-117",
+      "path": "services/intake/tools/generate_sourcefacts.py",
+      "dependency_sha256": "c0f100ed2a63a78eb937e47926966f2640c689fc719d9aa638c05a29b21f8887",
+      "tested_sha256": "c0f100ed2a63a78eb937e47926966f2640c689fc719d9aa638c05a29b21f8887",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/adapters/postgres/outbox/repository.go",
+      "dependency_sha256": "5b746ff183189aa5f9f30da20f29479c8b1c2c296e0113f3d3292937fa464292",
+      "tested_sha256": "5b746ff183189aa5f9f30da20f29479c8b1c2c296e0113f3d3292937fa464292",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/adapters/postgres/receipt/sendoutbox_integration_test.go",
+      "dependency_sha256": "bfd986640ae1617bd7f547e080b50e6aaef2123f948a4e46db726c25af3679f9",
+      "tested_sha256": "bfd986640ae1617bd7f547e080b50e6aaef2123f948a4e46db726c25af3679f9",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/adapters/processing/client.go",
+      "dependency_sha256": "36d3b9d7c260e2e00eb76cf831c681822d78464eef878ede0bb06c090d80f144",
+      "tested_sha256": "36d3b9d7c260e2e00eb76cf831c681822d78464eef878ede0bb06c090d80f144",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/application/sendoutbox/worker.go",
+      "dependency_sha256": "bc30041ce0a55f3be1ead8da46c2210f8d480d8195f86bf6005168203ddd8e5f",
+      "tested_sha256": "bc30041ce0a55f3be1ead8da46c2210f8d480d8195f86bf6005168203ddd8e5f",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/adapters/contentstore/store.go",
+      "dependency_sha256": "cf71442ca8c668e345970d3010f3e06f6927a6701bc11203d88f726b4b5842e5",
+      "tested_sha256": "cf71442ca8c668e345970d3010f3e06f6927a6701bc11203d88f726b4b5842e5",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/internal/adapters/contentstore/store_test.go",
+      "dependency_sha256": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811",
+      "tested_sha256": "578cab72db555d6bc6850e2393a3d5374486ddf8a0a62dabbe737f98b578e811",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/migrations/0001_intake.sql",
+      "dependency_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+      "tested_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/go.mod",
+      "dependency_sha256": "cb29fa1e28450164fc476a616299d1313b114bf4b8c4bd15bb7af23ea102952f",
+      "tested_sha256": "cb29fa1e28450164fc476a616299d1313b114bf4b8c4bd15bb7af23ea102952f",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-118",
+      "path": "services/intake/go.sum",
+      "dependency_sha256": "a25891aa838a4c490568e2be37d5d5f681dab49954c8cf0f8f00d8e73fdf71cc",
+      "tested_sha256": "a25891aa838a4c490568e2be37d5d5f681dab49954c8cf0f8f00d8e73fdf71cc",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-87",
+      "path": "services/intake/internal/domain/stripesignature/verifier.go",
+      "dependency_sha256": "3cffbe06f4e441d288d154a17b2f4b18bc6b94e04d53bf4c27a5aa3b69b68a7b",
+      "tested_sha256": "3cffbe06f4e441d288d154a17b2f4b18bc6b94e04d53bf4c27a5aa3b69b68a7b",
+      "comparison": "identical",
+      "reason": null
+    },
+    {
+      "task": "HIT-87",
+      "path": "services/intake/internal/domain/stripesignature/stream_test.go",
+      "dependency_sha256": "7a3efcca58c1491bd699831f082a1114d512e4700641044193db4e064313a147",
+      "tested_sha256": "7a3efcca58c1491bd699831f082a1114d512e4700641044193db4e064313a147",
+      "comparison": "identical",
+      "reason": null
+    }
+  ],
+  "dependency_diffs": "composition-adapters.diff contains all and only the three changes against individually pinned sources; files marked identical match byte-for-byte."
+}

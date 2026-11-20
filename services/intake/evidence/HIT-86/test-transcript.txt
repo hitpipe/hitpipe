@@ -1,0 +1,72 @@
+HIT-86 — factual execution transcript (compact index, raw logs preserved)
+Tested clean code SHA: 86660a01d8b691ac2c693f962d04ab2404883060
+Published original logs: a68e89bb36c784ede258a2090a61e54df62b214a
+Go: go version go1.27.2 darwin/arm64
+PostgreSQL: 18.7
+Image: docker.io/library/postgres@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73
+Started UTC: 2026-11-17T21:13:28Z
+Finished UTC: 2026-11-17T21:14:06Z
+Source tree at invocation: clean; source hashes unchanged at completion.
+Owned containers removed: True
+
+unit: exit 0; /tmp/hit73-toolchain/go/bin/go test -race -count=1 -json ./...
+integration: exit 0; /tmp/hit73-toolchain/go/bin/go test -tags=integration -race -count=1 -json ./...
+vet: exit 0; /tmp/hit73-toolchain/go/bin/go vet -tags=integration ./...
+build: exit 0; /tmp/hit73-toolchain/go/bin/go build ./...
+modules: exit 0; /tmp/hit73-toolchain/go/bin/go mod verify
+schema: exit 0; /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Users/nic_piter/code/hitpipe-HIT-86/services/intake/tools/check_postgres.py
+unit: 132 PASS test/subtest events; failures=0; skipped tests=0
+integration: 164 PASS test/subtest events; failures=0; skipped tests=0
+PASS TestIntegrationActualLostPostgresCommitResponse
+PASS TestIntegrationCommitFilesDigestAndReplay/checkout.session.completed
+PASS TestIntegrationCommitFilesDigestAndReplay/checkout.session.async_payment_succeeded
+PASS TestIntegrationCommitFilesDigestAndReplay/checkout.session.async_payment_failed
+PASS TestIntegrationCommitFilesDigestAndReplay
+PASS TestIntegrationConcurrentEventsAndInstances
+PASS TestIntegrationRejectContextIdentityAndShape/shape
+PASS TestIntegrationRejectContextIdentityAndShape/unknown-mode
+PASS TestIntegrationRejectContextIdentityAndShape/wrong-account
+PASS TestIntegrationRejectContextIdentityAndShape/wrong-workspace
+PASS TestIntegrationRejectContextIdentityAndShape/unknown-epoch
+PASS TestIntegrationRejectContextIdentityAndShape/wrong-epoch
+PASS TestIntegrationRejectContextIdentityAndShape/signature
+PASS TestIntegrationRejectContextIdentityAndShape
+PASS TestIntegrationRollbackUnknownCommitAndCleanup/after_signal
+PASS TestIntegrationRollbackUnknownCommitAndCleanup/before_commit
+PASS TestIntegrationRollbackUnknownCommitAndCleanup/after_commit
+PASS TestIntegrationRollbackUnknownCommitAndCleanup
+PASS TestIntegrationExpiryMissingContentAndRLS
+PASS TestIntegrationConcurrentQuotaBoundaries/count
+PASS TestIntegrationConcurrentQuotaBoundaries/bytes
+PASS TestIntegrationConcurrentQuotaBoundaries
+PASS TestIntegrationFileBeforeTransactionAndFailure
+PASS TestIntegrationConnectionAndWorkspaceSeparation
+PASS TestIntegrationRecoveryWithNewPoolAndFiles
+PASS TestIntegrationRevocationBetweenFileAndCommit
+PASS TestIntegrationLeaseAndScopeResetAfterRollback
+PASS TestIntegrationContentLostOrExpiredBeforeSQL/missing
+PASS TestIntegrationContentLostOrExpiredBeforeSQL/expired
+PASS TestIntegrationContentLostOrExpiredBeforeSQL
+PASS TestIntegrationCleanupWaitsForUncommittedFile
+PASS TestIntegrationExpiredStateIsNotReadableReceipt
+schema: PASS: 377 isolated PostgreSQL checks; no webhook, file durability, user authorization or deployment claim.
+
+Raw immutable protocol/logs (not source files masquerading as execution):
+SHA256 commands.json 1017e87d73632004f3edf682493907c35ca2d3c113d5fff56b253a2b4718e993
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/commands.json
+SHA256 unit.stdout 5700666a1d10dc96fa710f4780eaef13fb74b3891623ae8e2dcf0b734e0fd3a2
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/unit.stdout
+SHA256 integration.stdout 1f438049aa069c19be012469e35cdb47673cff991e90ab44a487025dce953e87
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/integration.stdout
+SHA256 schema.stdout 19c19ba5db0b2ed098dce24fc4b8e9eea2843723cb9e239d71cb54307c69c206
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/schema.stdout
+SHA256 vet.stderr e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/vet.stderr
+SHA256 build.stderr e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/build.stderr
+SHA256 modules.stdout b4537ed75f533f993f371954de47e42a793b8e5b0587577de7e27fb3e50696bd
+https://github.com/hitpipe/hitpipe/blob/a68e89bb36c784ede258a2090a61e54df62b214a/services/intake/evidence/HIT-86/modules.stdout
+
+Scope: synthetic local Intake receipt with real isolated PostgreSQL and temporary files.
+No public HTTP, sender, Processing, IAM/runtime, production disk/power-loss or Stripe-to-ClickUp qualification.
+No independent Reviewer PASS or human acceptance.

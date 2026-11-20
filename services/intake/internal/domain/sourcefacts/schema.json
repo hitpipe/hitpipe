@@ -1,0 +1,307 @@
+{
+  "SourceFacts": {
+    "additionalProperties": false,
+    "description": "Unknown is explicit and NEVER permission. full strict guard in BP002/BP003. Valid_until <=oldest mandatory fact+10s. Snapshot cannot make Stripe/ClickUp atomic.",
+    "properties": {
+      "all_currencies_equal": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "amount_captured": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "amount_received": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "amount_refunded": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "amount_total": {
+        "anyOf": [
+          {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "case_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "charge_captured": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "charge_succeeded": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "complete": {
+        "type": "boolean"
+      },
+      "completed_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "currency": {
+        "anyOf": [
+          {
+            "pattern": "^[a-z]{3}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "digest": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "disputed": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "facts_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "line_item_count": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "line_items_complete": {
+        "type": "boolean"
+      },
+      "livemode": {
+        "type": "boolean"
+      },
+      "mode": {
+        "anyOf": [
+          {
+            "enum": [
+              "payment",
+              "subscription",
+              "setup",
+              "UNKNOWN"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "oldest_observed_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "payment_intent_status": {
+        "enum": [
+          "succeeded",
+          "other",
+          "UNKNOWN"
+        ],
+        "type": "string"
+      },
+      "payment_status": {
+        "anyOf": [
+          {
+            "enum": [
+              "paid",
+              "unpaid",
+              "no_payment_required",
+              "UNKNOWN"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "price_id": {
+        "anyOf": [
+          {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "quantity": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "session_created_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "session_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "stripe_account_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "valid_until": {
+        "format": "date-time",
+        "type": "string"
+      }
+    },
+    "required": [
+      "facts_id",
+      "case_id",
+      "connection_id",
+      "stripe_account_id",
+      "livemode",
+      "session_id",
+      "session_created_at",
+      "mode",
+      "payment_status",
+      "currency",
+      "amount_total",
+      "line_items_complete",
+      "line_item_count",
+      "price_id",
+      "quantity",
+      "payment_intent_status",
+      "amount_received",
+      "charge_succeeded",
+      "charge_captured",
+      "amount_captured",
+      "amount_refunded",
+      "disputed",
+      "all_currencies_equal",
+      "complete",
+      "oldest_observed_at",
+      "completed_at",
+      "valid_until",
+      "digest"
+    ],
+    "type": "object"
+  },
+  "SourceReadRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "case_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "connection_id": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "deadline_at": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "expected_epoch": {
+        "maximum": 9007199254740991,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "session_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "connection_id",
+      "session_id",
+      "case_id",
+      "expected_epoch",
+      "deadline_at"
+    ],
+    "type": "object"
+  }
+}

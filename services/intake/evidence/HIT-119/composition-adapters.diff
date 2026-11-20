@@ -1,0 +1,125 @@
+diff --git a/services/intake/internal/adapters/http/stripewebhook/server.go b/services/intake/internal/adapters/http/stripewebhook/server.go
+index ec9c4e7..527ce7d 100644
+--- a/services/intake/internal/adapters/http/stripewebhook/server.go
++++ b/services/intake/internal/adapters/http/stripewebhook/server.go
+@@ -67,2 +67 @@ func New(cfg *tls.Config, timeout time.Duration, installs Installations, gate St
+-	if cfg == nil || len(cfg.Certificates) == 0 || cfg.GetConfigForClient != nil ||
+-		timeout <= 0 || missing(installs) || missing(gate) || len(receivers) == 0 {
++	if cfg == nil || len(cfg.Certificates) == 0 || cfg.GetConfigForClient != nil {
+@@ -71,6 +70,3 @@ func New(cfg *tls.Config, timeout time.Duration, installs Installations, gate St
+-	owners := make(map[string]*receivesignal.Consumer, len(receivers))
+-	for workspace, receiver := range receivers {
+-		if workspace == "" || receiver == nil {
+-			return nil, errors.New("invalid workspace receiver")
+-		}
+-		owners[workspace] = receiver
++	h, err := NewHandler(timeout, installs, gate, receivers)
++	if err != nil {
++		return nil, err
+@@ -86 +81,0 @@ func New(cfg *tls.Config, timeout time.Duration, installs Installations, gate St
+-	h := handler{timeout: timeout, installs: installs, gate: gate, receivers: owners}
+@@ -95,0 +91,15 @@ func New(cfg *tls.Config, timeout time.Duration, installs Installations, gate St
++// NewHandler exposes the signed route for the shared Intake listener.
++func NewHandler(timeout time.Duration, installs Installations, gate StartGate, receivers map[string]*receivesignal.Consumer) (http.Handler, error) {
++	if timeout <= 0 || missing(installs) || missing(gate) || len(receivers) == 0 {
++		return nil, errors.New("webhook dependencies required")
++	}
++	owners := make(map[string]*receivesignal.Consumer, len(receivers))
++	for workspace, receiver := range receivers {
++		if workspace == "" || receiver == nil {
++			return nil, errors.New("invalid workspace receiver")
++		}
++		owners[workspace] = receiver
++	}
++	return handler{timeout: timeout, installs: installs, gate: gate, receivers: owners}, nil
++}
++
+diff --git a/services/intake/internal/adapters/http/sourcefacts/server.go b/services/intake/internal/adapters/http/sourcefacts/server.go
+index 9a1f7fb..be741f7 100644
+--- a/services/intake/internal/adapters/http/sourcefacts/server.go
++++ b/services/intake/internal/adapters/http/sourcefacts/server.go
+@@ -36,5 +36 @@ func New(address, processingDNS string, cfg *tls.Config, service *app.Service, b
+-		if len(c.VerifiedChains) == 0 || len(c.PeerCertificates) == 0 {
+-			return app.Fail("caller")
+-		}
+-		leaf := c.PeerCertificates[0]
+-		if len(leaf.DNSNames) != 1 || leaf.DNSNames[0] != processingDNS || len(leaf.URIs) != 0 || len(leaf.IPAddresses) != 0 {
++		if !processingPeer(&c, processingDNS) {
+@@ -48 +44,16 @@ func New(address, processingDNS string, cfg *tls.Config, service *app.Service, b
+-	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++	h, err := NewHandler(processingDNS, service, bodyLimit)
++	if err != nil {
++		return nil, err
++	}
++	srv := &http.Server{Addr: address, Handler: h, TLSConfig: t, ReadHeaderTimeout: 2 * time.Second, ReadTimeout: 2 * time.Second, IdleTimeout: 2 * time.Second, MaxHeaderBytes: 16 * 1024, ErrorLog: log.New(io.Discard, "", 0)}
++	srv.SetKeepAlivesEnabled(false)
++	return &Server{srv, t}, nil
++}
++
++// NewHandler keeps peer authorization at the route boundary, including when
++// another signed route on the same listener accepts connections without mTLS.
++func NewHandler(processingDNS string, service *app.Service, bodyLimit int64) (http.Handler, error) {
++	if processingDNS == "" || service == nil || bodyLimit <= 0 || bodyLimit >= 1<<31 {
++		return nil, app.Fail("dependency")
++	}
++	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+@@ -55 +66 @@ func New(address, processingDNS string, cfg *tls.Config, service *app.Service, b
+-		if r.TLS == nil || len(r.TLS.VerifiedChains) == 0 {
++		if !processingPeer(r.TLS, processingDNS) {
+@@ -116,4 +127 @@ func New(address, processingDNS string, cfg *tls.Config, service *app.Service, b
+-	})
+-	srv := &http.Server{Addr: address, Handler: h, TLSConfig: t, ReadHeaderTimeout: 2 * time.Second, ReadTimeout: 2 * time.Second, IdleTimeout: 2 * time.Second, MaxHeaderBytes: 16 * 1024, ErrorLog: log.New(io.Discard, "", 0)}
+-	srv.SetKeepAlivesEnabled(false)
+-	return &Server{srv, t}, nil
++	}), nil
+@@ -120,0 +129,10 @@ func New(address, processingDNS string, cfg *tls.Config, service *app.Service, b
++
++func processingPeer(c *tls.ConnectionState, name string) bool {
++	if c == nil || c.Version != tls.VersionTLS13 || len(c.VerifiedChains) == 0 || len(c.PeerCertificates) == 0 {
++		return false
++	}
++	leaf := c.PeerCertificates[0]
++	return len(leaf.DNSNames) == 1 && leaf.DNSNames[0] == name &&
++		len(leaf.URIs) == 0 && len(leaf.IPAddresses) == 0
++}
++
+diff --git a/services/intake/internal/adapters/postgres/facts/repository.go b/services/intake/internal/adapters/postgres/facts/repository.go
+index 33693ad..df642af 100644
+--- a/services/intake/internal/adapters/postgres/facts/repository.go
++++ b/services/intake/internal/adapters/postgres/facts/repository.go
+@@ -13 +13,4 @@ import (
+-type Repository struct{ pool *pgxpool.Pool }
++type Repository struct {
++	pool  *pgxpool.Pool
++	owned bool
++}
+@@ -26,0 +30,14 @@ func New(ctx context.Context, dsn string) (*Repository, error) {
++	r, e := FromPool(ctx, p)
++	if e != nil {
++		p.Close()
++		return nil, e
++	}
++	r.owned = true
++	return r, nil
++}
++
++// FromPool borrows the process-wide Intake app pool.
++func FromPool(ctx context.Context, p *pgxpool.Pool) (*Repository, error) {
++	if p == nil || p.Config().MaxConns > 10 {
++		return nil, app.Fail("database")
++	}
+@@ -28 +45 @@ func New(ctx context.Context, dsn string) (*Repository, error) {
+-	e = p.QueryRow(ctx, `SELECT NOT rolsuper AND NOT rolbypassrls AND NOT pg_has_role(current_user,'hp_intake_migrator','MEMBER') AND pg_has_role(current_user,'hp_intake_app','MEMBER') FROM pg_roles WHERE rolname=current_user`).Scan(&allowed)
++	e := p.QueryRow(ctx, `SELECT NOT rolsuper AND NOT rolbypassrls AND NOT pg_has_role(current_user,'hp_intake_migrator','MEMBER') AND pg_has_role(current_user,'hp_intake_app','MEMBER') FROM pg_roles WHERE rolname=current_user`).Scan(&allowed)
+@@ -30 +46,0 @@ func New(ctx context.Context, dsn string) (*Repository, error) {
+-		p.Close()
+@@ -33 +49,6 @@ func New(ctx context.Context, dsn string) (*Repository, error) {
+-	return &Repository{p}, nil
++	return &Repository{pool: p}, nil
++}
++func (r *Repository) Close() {
++	if r.owned {
++		r.pool.Close()
++	}
+@@ -35 +55,0 @@ func New(ctx context.Context, dsn string) (*Repository, error) {
+-func (r *Repository) Close() { r.pool.Close() }

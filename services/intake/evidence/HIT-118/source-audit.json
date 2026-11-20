@@ -1,0 +1,107 @@
+{
+  "main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_code_sha": "ed9fe7e63c71203fa12b15e2f38ab0ca45486351",
+  "reuse": [
+    {
+      "task": "HIT-86",
+      "pr": 67,
+      "sha": "a3357b3fe6d3abcc8c03726656a7f20077582f11",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "branch base; durable receive/outbox and existing SQL/content tests"
+    },
+    {
+      "task": "HIT-71",
+      "pr": 47,
+      "sha": "9af6ba6d1b1619d4f3df04059adc186cfaa5c01a",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "inherited migration, roles, test schema"
+    },
+    {
+      "task": "HIT-73",
+      "pr": 65,
+      "sha": "551399a8efeeb266f6f417a097c5cf2b6db08864",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "inherited normalization and signature checking"
+    },
+    {
+      "task": "HIT-74",
+      "pr": 66,
+      "sha": "22a99989f1f4fb3a73747647eef98c20b508cd0c",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "inherited store and contentref alias from HIT-86"
+    },
+    {
+      "task": "HIT-87",
+      "pr": 68,
+      "sha": "e630039d3788da5153c5c2d21305f605aa16f43e",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "exact accepted production HMAC patch and tests from 7f688aa, cherry-pick 667320c; benchmark files stay in PR68"
+    },
+    {
+      "task": "HIT-104",
+      "pr": 62,
+      "sha": "ce6afe4ff78559920646aaca1de4ca90d0531734",
+      "state": "OPEN",
+      "merged": false,
+      "reuse": "read actual result and Processing HTTP handler, fixture follows accepted OAS; no code transplanted or production receiver launched"
+    }
+  ],
+  "bootstrap": {
+    "request": "14372",
+    "receipt": "14383",
+    "parts": 9,
+    "sha256": "1af0eec72a6447798d4b8024592eae62de5d6b20e62c43ee7994f90471b3d7e6",
+    "protocol": {
+      "release": "v2",
+      "sha": "685e797bf32f71fd4ca42cd5f594b80912736473"
+    }
+  },
+  "sources": [
+    {
+      "fingerprint": "bf99e01de5a782b40b2ab744d2447fa58c6666582576554f89c851c4f54f15cc",
+      "ref": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+      "version": "\"cd0816b801eec326e5558d64ebb17d406b7e97fe\""
+    },
+    {
+      "fingerprint": "a61c183f8d06f947524e4aaa0f891fec8ff42a22762568a4ece3eaf36d1575be",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+      "version": "\"fb96264a86c4a3ea2ed3c642be1b819277d0a8cc\""
+    },
+    {
+      "fingerprint": "cc5a1de14819dd17ee941382e6e37b449f2327f3e77fc3f03e29f326ad21fa31",
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63#project-os-parent-contract",
+      "version": "0b58228cfb0d2365e0669781327dbda646b9ae9115e9c4d6322c871637688a95"
+    },
+    {
+      "fingerprint": "89f81c26670d3574a8a0c4a350aa7e15a0acd96133da66fe1a7be80db914aeed",
+      "ref": "https://github.com/hitpipe/project-os/blob/326eeec90e299a6149b570fbf6cac20c532f1395/contracts/hitpipe/mvp-2026-10-31/phase-candidates/product.json",
+      "version": "326eeec90e299a6149b570fbf6cac20c532f1395"
+    },
+    {
+      "fingerprint": "b4fc21c2c8d813b406dab1328288880f28feff6d1bae3c04c350d7d96f5bbbbb",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40"
+    },
+    {
+      "fingerprint": "2d707d93615fd4ad85b95e2ed35472f789f8bedbc0b547c0be413c8f00ce7057",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40"
+    },
+    {
+      "fingerprint": "d7b32c7ad4fe8d99fd0caa554816351b26727f0e67d1f9d54cdf8391de68caf2",
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md",
+      "version": "fedbe40bb597e25f66aeb1172af3ff7459c81b40"
+    },
+    {
+      "fingerprint": "860328779c94017d8b9e42648e4119402db5dc47a2cf1ad683bb7c229f53fc0e",
+      "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10908",
+      "version": "2026-10-31T11:29:51.893+0300"
+    }
+  ],
+  "migration_sha256": "0d477eac94bf5dd9a861c614b9970a7f828558ae5a7663874b62475f26247093"
+}
