@@ -18,16 +18,31 @@ class Run(verify_purge.Run):
 
     def command(self, label, args, *rest, **kwargs):
         args = [*args]
-        if label == "postgres-storage-tests":
-            args[2:2] = ["-e", "HIT127_CAPTURE_FILE=/tmp/hit127-diagnostics.jsonl"]
+        if label == "go-race":
+            args.remove("-v")
         return super().command(label, args, *rest, **kwargs)
 
     def checks(self):
         super().checks()
-        result = self.command("diagnostic-runtime-capture", [
-            "docker", "exec", self.container, "cat", "/tmp/hit127-diagnostics.jsonl",
+        # Capture the new evidence from the same compiled source and pinned
+        # database, using a separately recorded run of the complete HIT-127 tests.
+        self.command("diagnostic-postgres-tests", [
+            "docker", "exec", "-e", "HIT78_ISOLATED_PG=1",
+            "-e", "HIT111_PROCESSING_BIN=/test/processing",
+            "-e", "HIT126_PURGE_BIN=/test/processing-purge",
+            "-e", "HIT127_CAPTURE_FILE=/tmp/hit127-diagnostics.jsonl",
+            "-e", "HIT127_HTTP_CAPTURE_FILE=/tmp/hit127-http.jsonl",
+            self.container, "/test/storage.test", "-test.v", "-test.count=1",
+            "-test.timeout=45s",
+            "-test.run=^Test(DiagnosticSampleBoundedAndScoped|ProcessingDiagnosticsOwnedStand|ProcessingPurgeOwnedStand)$",
         ])
-        (self.output / "diagnostic-runtime.jsonl").write_bytes(result.stdout)
+        self.command("diagnostic-race-tests", [
+            self.go, "-C", str(pathlib.Path(__file__).resolve().parents[2]),
+            "test", "-race", "-count=1", "-v", "-run=^TestDiagnosticsBoundsAndOpaqueIDs$", "./internal/runtime",
+        ])
+        for label, name in (("diagnostic-runtime-capture", "hit127-diagnostics.jsonl"),
+                            ("diagnostic-http-capture", "hit127-http.jsonl")):
+            self.command(label, ["docker", "exec", self.container, "cat", f"/tmp/{name}"])
 
     def main(self):
         super().main()

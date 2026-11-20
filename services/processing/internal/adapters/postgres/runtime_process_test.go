@@ -354,7 +354,7 @@ func (s *processStand) must(peer, port, method, path string, b []byte, h map[str
 	return out
 }
 
-func (s *processStand) pollHealth(process *processingChild, stage string) {
+func (s *processStand) pollHealth(process *processingChild, stage string) (int, []byte) {
 	s.t.Helper()
 	timeout := time.After(8 * time.Second)
 	for {
@@ -370,7 +370,7 @@ func (s *processStand) pollHealth(process *processingChild, stage string) {
 		status, out, err := s.call("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil)
 		var h drafts.Health
 		if err == nil && status == 200 && draftjson.Validate("Health", out) == nil && json.Unmarshal(out, &h) == nil && h.Status == stage {
-			return
+			return status, out
 		}
 		time.Sleep(40 * time.Millisecond)
 	}

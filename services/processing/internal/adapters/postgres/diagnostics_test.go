@@ -101,6 +101,42 @@ func awaitDiagnostic(t *testing.T, p *processingChild, what string, matches func
 	return nil
 }
 
+const diagnosticHealthPath = "/internal/v1/health/processing"
+
+type diagnosticHTTPResponse struct {
+	Scenario string `json:"scenario"`
+	Method   string `json:"method"`
+	Path     string `json:"path"`
+	Peer     string `json:"peer"`
+	Status   int    `json:"http_status"`
+	Body     string `json:"response_body"`
+}
+
+// Validate the bytes received from the process and exercise both directions
+// of the closed schema. The modified copies are never captured as responses.
+func checkDiagnosticHealth(t *testing.T, raw []byte, stage string) {
+	t.Helper()
+	var fields map[string]json.RawMessage
+	if draftjson.Validate("Health", raw) != nil || json.Unmarshal(raw, &fields) != nil ||
+		len(fields) != 5 || string(fields["status"]) != `"`+stage+`"` ||
+		string(fields["service"]) != `"PROCESSING"` {
+		t.Fatal("technical health changed", string(raw))
+	}
+	for _, key := range []string{"status", "service", "build_revision", "protocol_version", "checked_at"} {
+		value := fields[key]
+		delete(fields, key)
+		missing := marshalProcess(t, fields)
+		if draftjson.Validate("Health", missing) == nil {
+			t.Fatal("schema allowed missing required property", key)
+		}
+		fields[key] = value
+	}
+	fields["confirmed_delivery"] = json.RawMessage("true")
+	if draftjson.Validate("Health", marshalProcess(t, fields)) == nil {
+		t.Fatal("schema allowed an extra property")
+	}
+}
+
 func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	binary, purge := os.Getenv("HIT111_PROCESSING_BIN"), os.Getenv("HIT126_PURGE_BIN")
 	if binary == "" || purge == "" {
@@ -110,6 +146,23 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	workspace, caseID := f.request.WorkspaceID, f.request.CaseID
 	stand := createProcessStand(t, binary, f.path, map[string]string{workspace: "acct_synthetic"})
 	stand.queryReply = func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusForbidden) }
+	var httpLog bytes.Buffer
+	capture := func(scenario, route, peer string, status int, body []byte) {
+		t.Helper()
+		row := diagnosticHTTPResponse{
+			Scenario: scenario, Method: http.MethodGet, Path: route,
+			Peer: peer, Status: status, Body: string(body),
+		}
+		if err := json.NewEncoder(&httpLog).Encode(row); err != nil {
+			t.Fatal(err)
+		}
+	}
+	captureHealth := func(process *processingChild, scenario, stage string) {
+		t.Helper()
+		status, raw := stand.pollHealth(process, stage)
+		checkDiagnosticHealth(t, raw, stage)
+		capture(scenario, diagnosticHealthPath, "OPS", status, raw)
+	}
 
 	// Keep a known expired lease from the earlier intent. The UNKNOWN case
 	// cannot claim it. The real runtime owns the metadata visible in this scope.
@@ -128,12 +181,12 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	}
 
 	proc := stand.boot("diagnostics-before-restart.log")
-	stand.pollHealth(proc, "CLOSED")
+	captureHealth(proc, "closed_before_fresh_iam_snapshot", "CLOSED")
 	awaitDiagnostic(t, proc, "closed barrier", func(e logEvent) bool {
 		return e["msg"] == "processing barrier diagnostic" && e["barrier"] == "CLOSED"
 	})
 	stand.iamOpen.Store(true)
-	stand.pollHealth(proc, "READY")
+	captureHealth(proc, "ready_after_gate_open", "READY")
 	awaitDiagnostic(t, proc, "open barrier", func(e logEvent) bool {
 		return e["msg"] == "processing barrier diagnostic" && e["barrier"] == "OPEN"
 	})
@@ -213,13 +266,12 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 			e.count("cases", "unknown") == 0
 	})
 
-	health := stand.must("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 200)
-	var fields logEvent
-	if draftjson.Validate("Health", health) != nil || json.Unmarshal(health, &fields) != nil ||
-		len(fields) != 5 || fields["status"] != "READY" {
-		t.Fatal("technical health changed", string(health))
+	captureHealth(proc, "ready_with_held_outbox_and_attention_case", "READY")
+	deniedStatus, denied, err := stand.call("delivery.test", "9444", http.MethodGet, diagnosticHealthPath, nil, nil)
+	if err != nil || deniedStatus != 403 || draftjson.Validate("Error", denied) != nil {
+		t.Fatal("non-OPS health response", deniedStatus, err)
 	}
-	stand.must("delivery.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 403)
+	capture("non_ops_peer_denied", diagnosticHealthPath, "DELIVERY", deniedStatus, denied)
 
 	purgeCmd := exec.Command(purge, "--local-stand", "--content-dir", f.path, "--workspace", workspace)
 	purgeCmd.Env = append(os.Environ(), "HITPIPE_PURGE_DSN=host=/var/run/postgresql dbname=hit78 sslmode=disable user=hp_processing_purge")
@@ -242,7 +294,12 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	if err = os.Remove(filepath.Join(f.path, detail)); err != nil {
 		t.Fatal(err)
 	}
-	stand.must("bff.test", "8443", "GET", casePath+"/history", nil, map[string]string{"X-HitPipe-Session": stand.token, "X-CSRF-Token": stand.csrf}, 503)
+	status, unavailable, err := stand.call("bff.test", "8443", http.MethodGet, casePath+"/history", nil,
+		map[string]string{"X-HitPipe-Session": stand.token, "X-CSRF-Token": stand.csrf})
+	if err != nil || status != 503 || draftjson.Validate("Error", unavailable) != nil {
+		t.Fatal("history response after file failure", status, err)
+	}
+	capture("owned_file_unavailable", "/api/v1/workspaces/{workspaceId}/cases/{caseId}/history", "BFF", status, unavailable)
 	awaitDiagnostic(t, proc, "content file failure", func(e logEvent) bool { return e["reason"] == "content_unavailable" })
 
 	// PostgreSQL rejects worker job reads on the disposable database. Both
@@ -262,7 +319,7 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	}
 	<-proc.done
 	restart := stand.boot("diagnostics-after-restart.log")
-	stand.pollHealth(restart, "READY")
+	captureHealth(restart, "ready_after_process_restart", "READY")
 	awaitDiagnostic(t, restart, "PostgreSQL failure", func(e logEvent) bool { return e["reason"] == "postgres_unavailable" })
 	awaitDiagnostic(t, restart, "job index recovery failure", func(e logEvent) bool { return e["reason"] == "job_recovery_failed" })
 	if _, err = admin.Exec(ctx, restoreJobs); err != nil {
@@ -281,11 +338,11 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
  WHERE usename='hp_processing_worker' AND application_name='hitpipe-processing'`); err != nil {
 		t.Fatal(err)
 	}
-	stand.pollHealth(restart, "DEGRADED")
+	captureHealth(restart, "degraded_on_worker_postgres_connection_failure", "DEGRADED")
 	if _, err = admin.Exec(ctx, "ALTER ROLE hp_processing_worker LOGIN"); err != nil {
 		t.Fatal(err)
 	}
-	stand.pollHealth(restart, "READY")
+	captureHealth(restart, "ready_after_worker_postgres_reconnect", "READY")
 	if err = restart.cmd.Process.Signal(syscall.SIGTERM); err != nil {
 		t.Fatal(err)
 	}
@@ -305,10 +362,15 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 		}
 		runtimeLog = append(runtimeLog, raw...)
 	}
-	for _, marker := range []string{stand.token, stand.csrf, stand.session, "acct_synthetic", "86synthetic99",
-		"HIT127_PRIVATE_OBSERVATION_BODY", "private_key", "payload", "csrf", "host=/var/run", "session_id"} {
-		if bytes.Contains(runtimeLog, []byte(marker)) || bytes.Contains(purgeLog, []byte(marker)) {
-			t.Fatalf("diagnostics exposed a forbidden fixture marker or field: %q", marker)
+	for _, stream := range [][]byte{runtimeLog, purgeLog, httpLog.Bytes()} {
+		lower := bytes.ToLower(stream)
+		for _, marker := range []string{stand.token, stand.csrf, stand.session, "acct_synthetic", "86synthetic99",
+			"hit127_private_observation_body", "private_key", "payload", "csrf", "host=/var/run", "session_id",
+			"authorization", "set-cookie", "password", "secret", "api_key", "access_token", "bearer ",
+			"-----begin ", "sk_live_", "sk_test_", "whsec_"} {
+			if bytes.Contains(lower, []byte(strings.ToLower(marker))) {
+				t.Fatal("a diagnostic or HTTP capture contained a forbidden field or fixture value")
+			}
 		}
 	}
 	if n := bytes.Count(runtimeLog, []byte(`"msg":"processing observation committed"`)); n != 1 {
@@ -319,6 +381,12 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	if destination := os.Getenv("HIT127_HTTP_CAPTURE_FILE"); destination != "" {
+		if err := os.WriteFile(destination, httpLog.Bytes(), 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Log("HTTP PASS: captured actual Health CLOSED/READY/DEGRADED/recovered and mTLS denial; missing each required field and an extra property were rejected by the pinned validator")
 	t.Logf("Observed live inbox age %.0f ms, outbox due lag %.0f ms, job due lag %.0f ms and committed observation age %.0f ms.",
 		q.count("inbox", "max_age_ms"), q.count("outbox", "max_due_lag_ms"), q.count("jobs", "max_due_lag_ms"), evt["observation_age_ms"])
 	t.Log("PROCESS PASS: CLOSED/OPEN and exact Health, actual HELD/UNKNOWN, changed outbox/jobs, observation replay, expired lease, content and PostgreSQL faults, purge reason, restart and log privacy")
