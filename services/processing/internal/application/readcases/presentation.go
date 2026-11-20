@@ -10,8 +10,16 @@ import (
 )
 
 // Lead HIT-95/12640, CCR revision3. These are display explanations, never command
-// authority. The current slice has no recovery handler or command-authority port.
+// authority. Only a qualified server-side availability check enables RECHECK.
 func Project(r Record) (Labels, error) { return project(r, commandStatus{}) }
+
+// ProjectRecovery keeps list projections useful without treating a workspace
+// read grant as authority for every case. Only a qualified detail enables RECHECK.
+func ProjectRecovery(r Record, available bool) (Labels, error) {
+	known := r.KnownTaskID != nil && *r.KnownTaskID != ""
+	return project(r, commandStatus{implemented: true, authorityKnown: available, authorized: available,
+		checksKnown: available, checksPassed: available, sameIdentity: known})
+}
 
 type commandStatus struct{ implemented, authorityKnown, authorized, checksKnown, checksPassed, sameIdentity bool }
 type reasonInfo struct {
@@ -23,6 +31,7 @@ type reasonInfo struct {
 // is not fabricated proof of a denied connection. No current producer persists a
 // specific access-denial reason; the conditional priority6 remains conservative.
 var reasonCatalog = map[string]reasonInfo{
+	"RECHECK_ACCEPTED":            {"Запрос на повторную проверку принят.", false},
 	casetimeouts.WorkingElapsed:   {"Истёк срок обработки. Внешний исход требует проверки.", false},
 	casetimeouts.WaitingElapsed:   {"Проверенные данные не поступили за 24 часа непрерывного ожидания.", false},
 	casetimeouts.HistoryMissing:   {"Не найдена запись о начале текущего состояния. Действие удержано.", false},

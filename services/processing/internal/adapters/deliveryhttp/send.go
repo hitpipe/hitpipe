@@ -16,7 +16,7 @@ import (
 )
 
 type Sender struct {
-	endpoint   string
+	origin     string
 	transport  *http.Transport
 	maxReceipt int64
 	clock      dispatchintent.Clock
@@ -41,16 +41,30 @@ func New(origin string, t *http.Transport, maxReceipt int64, clock dispatchinten
 	t.ForceAttemptHTTP2 = false
 	t.Protocols = new(http.Protocols)
 	t.Protocols.SetHTTP1(true)
-	return &Sender{u.Scheme + "://" + u.Host + "/internal/v1/delivery-intents", t, maxReceipt, clock}, nil
+	return &Sender{u.Scheme + "://" + u.Host, t, maxReceipt, clock}, nil
 }
 func (s *Sender) Send(ctx context.Context, c dispatchintent.Claim, m dispatchintent.Message, b dispatchintent.Boundary) (dispatchintent.Receipt, error) {
+	out, raw, err := s.exchange(ctx, c, m, b, "/internal/v1/delivery-intents", http.StatusAccepted)
+	if err != nil || out.HTTPStatus != http.StatusAccepted {
+		if err != nil {
+			return out, dispatchintent.ErrHeld
+		}
+		return out, nil
+	}
+	receipt, e := decodeReceipt(raw, c.MessageID)
+	receipt.HTTPStatus = out.HTTPStatus
+	receipt.RetryAfter = out.RetryAfter
+	return receipt, e
+}
+
+func (s *Sender) exchange(ctx context.Context, c dispatchintent.Claim, m dispatchintent.Message, b dispatchintent.Boundary, path string, success int) (dispatchintent.Receipt, []byte, error) {
 	zero := dispatchintent.Receipt{}
 	if s == nil || ctx == nil || dispatchintent.Missing(b) || len(m.Body) == 0 {
-		return zero, dispatchintent.ErrHeld
+		return zero, nil, dispatchintent.ErrHeld
 	}
-	req, e := http.NewRequestWithContext(ctx, http.MethodPost, s.endpoint, bytes.NewReader(m.Body))
+	req, e := http.NewRequestWithContext(ctx, http.MethodPost, s.origin+path, bytes.NewReader(m.Body))
 	if e != nil {
-		return zero, dispatchintent.ErrHeld
+		return zero, nil, dispatchintent.ErrHeld
 	}
 	req.GetBody = nil
 	req.Header.Set("Content-Type", "application/json")
@@ -81,10 +95,10 @@ func (s *Sender) Send(ctx context.Context, c dispatchintent.Claim, m dispatchint
 	// New non-reusing HTTP/1 connection + GetBody=nil prevents hidden POST replay.
 	resp, e := t.RoundTrip(req)
 	if e != nil {
-		return zero, dispatchintent.ErrHeld
+		return zero, nil, e
 	}
 	if resp.Body == nil {
-		return zero, dispatchintent.ErrHeld
+		return zero, nil, dispatchintent.ErrHeld
 	}
 	defer resp.Body.Close()
 	out := dispatchintent.Receipt{HTTPStatus: resp.StatusCode}
@@ -96,21 +110,18 @@ func (s *Sender) Send(ctx context.Context, c dispatchintent.Claim, m dispatchint
 			out.RetryAfter = at
 		}
 	}
-	if resp.StatusCode != http.StatusAccepted {
-		return out, nil
+	if resp.StatusCode != success {
+		return out, nil, nil
 	}
 	media, _, e := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 	if e != nil || media != "application/json" || resp.Header.Get("Content-Encoding") != "" || resp.ContentLength > s.maxReceipt {
-		return out, dispatchintent.ErrHeld
+		return out, nil, dispatchintent.ErrHeld
 	}
 	raw, e := io.ReadAll(io.LimitReader(resp.Body, s.maxReceipt+1))
 	if e != nil || int64(len(raw)) > s.maxReceipt || ctx.Err() != nil {
-		return out, dispatchintent.ErrHeld
+		return out, nil, dispatchintent.ErrHeld
 	}
-	receipt, e := decodeReceipt(raw, c.MessageID)
-	receipt.HTTPStatus = out.HTTPStatus
-	receipt.RetryAfter = out.RetryAfter
-	return receipt, e
+	return out, raw, nil
 }
 
 type guardedConn struct {

@@ -25,6 +25,8 @@ type Claim struct {
 	Request
 	MessageID, Token, CaseID, OperationID, ConfigID, ConfigDigest, OwnerID, ConnectionID, EpisodeID, LineageID, Digest string
 	Revision                                                                                                           int64
+	NativeTaskID                                                                                                       string
+	AcceptedAt                                                                                                         time.Time
 	Ref                                                                                                                preparecase.Ref
 	LeaseUntil, DeadlineAt                                                                                             time.Time
 	Attempts                                                                                                           int

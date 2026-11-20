@@ -194,3 +194,17 @@ type Health struct {
 	Service         string    `json:"service"`
 	Status          string    `json:"status"`
 }
+type RecoveryCommand struct {
+	Action       string      `json:"action"`
+	Command      CommandMeta `json:"command"`
+	NativeTaskID *string     `json:"native_task_id,omitempty"`
+	Reason       string      `json:"reason"`
+}
+type DeliveryQuery struct {
+	CaseID                  string    `json:"case_id"`
+	DeadlineAt              time.Time `json:"deadline_at"`
+	ExpectedConnectionEpoch int64     `json:"expected_connection_epoch"`
+	LineageID               string    `json:"lineage_id"`
+	NativeTaskID            *string   `json:"native_task_id,omitempty"`
+	WorkspaceID             string    `json:"workspace_id"`
+}
