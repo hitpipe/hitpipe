@@ -86,7 +86,8 @@ func (rt *Runtime) advanceRecheck(ctx context.Context, workspace string) {
 	if err != nil {
 		return
 	}
-	out, _ := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})
+	out, err := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})
+	rt.diag.dispatchFault(recheckInterrupted, workspace, err)
 	for _, v := range out {
 		rt.logger.Info("processing recheck outbox transition", "request_id", v.MessageID, "state", v.State, "disposition", v.Disposition)
 	}

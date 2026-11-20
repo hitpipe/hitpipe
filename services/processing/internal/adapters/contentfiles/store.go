@@ -30,10 +30,11 @@ const maxBody = 65536
 // Store owns an existing private directory. Step is optional fault injection;
 // it can only fail a write, never authorize an action or override an IO error.
 type Store struct {
-	mu    sync.Mutex
-	root  *os.Root
-	lease *os.File
-	Step  func(string) error
+	mu      sync.Mutex
+	root    *os.Root
+	lease   *os.File
+	Step    func(string) error
+	OnFault func() // set before sharing the store with a runtime
 }
 type header struct {
 	Origin  preparecase.Origin `json:"origin"`
@@ -109,7 +110,7 @@ func (s *Store) syncDir() error {
 func validClass(c string) bool {
 	return c == "DELIVERY_INTENT" || c == "DELIVERY_QUERY" || c == "HISTORY" || c == "CASE_CONTEXT" || c == "DRAFT_DATA"
 }
-func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (preparecase.Ref, error) {
+func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (_ preparecase.Ref, err error) {
 	zero := preparecase.Ref{}
 	// Persist exactly the precision representable by PostgreSQL timestamptz.
 	// Round down, never extend a caller's hard expiry or a source-proof deadline.
@@ -117,6 +118,7 @@ func (s *Store) Write(ctx context.Context, b []byte, class string, origin prepar
 	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || !validClass(class) || !validOrigin(origin) || len(b) < 1 || len(b) > maxBody || now.IsZero() || !expiry.After(now) || expiry.After(now.Add(90*24*time.Hour)) {
 		return zero, preparecase.ErrContent
 	}
+	defer s.reportFault(ctx, &err)
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	id, e := UUID()
@@ -175,11 +177,18 @@ func (s *Store) Write(ctx context.Context, b []byte, class string, origin prepar
 	}
 	return ref, nil
 }
-func (s *Store) read(id string) (header, []byte, error) {
+func (s *Store) reportFault(ctx context.Context, err *error) {
+	if s.OnFault != nil && *err != nil && (ctx == nil || ctx.Err() == nil) {
+		s.OnFault()
+	}
+}
+
+func (s *Store) read(id string) (_ header, _ []byte, err error) {
 	zero := header{}
 	if !idPattern.MatchString(strings.TrimSuffix(id, ".pending")) {
 		return zero, nil, preparecase.ErrContent
 	}
+	defer s.reportFault(nil, &err)
 	f, e := s.root.OpenFile(id, os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
 	if e != nil {
 		return zero, nil, preparecase.ErrContent

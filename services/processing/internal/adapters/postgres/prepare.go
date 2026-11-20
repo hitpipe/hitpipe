@@ -20,7 +20,11 @@ type DecisionStore struct {
 }
 
 func scoped(ctx context.Context, db Beginner, ws string) (pgx.Tx, error) {
-	tx, e := db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
+	return scopedWithMode(ctx, db, ws, "")
+}
+
+func scopedWithMode(ctx context.Context, db Beginner, ws string, mode pgx.TxAccessMode) (pgx.Tx, error) {
+	tx, e := db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted, AccessMode: mode})
 	if e != nil {
 		return nil, e
 	}

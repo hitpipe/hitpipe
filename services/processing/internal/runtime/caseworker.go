@@ -3,6 +3,7 @@ package runtime
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent"
@@ -52,16 +53,19 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {
 		return
 	}
 	var claim postgres.CaseClaim
+	fault := barrierDenied
 	err = rt.a.start(c, workspace, p.principal, p.epoch, func(c context.Context) error {
+		fault = jobRecoveryFailed
 		if err := rt.caseJobs.Index(c, workspace, 5); err != nil {
 			return err
 		}
+		fault = jobClaimFailed
 		var err error
 		claim, err = rt.caseJobs.Claim(c, workspace, p.epoch)
 		return err
 	})
 	if err != nil {
-		rt.logger.Warn("processing case worker could not claim work")
+		rt.diag.fault(fault, workspace, "", "")
 		return
 	}
 	if claim.CaseID == "" {
@@ -82,8 +86,10 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {
 	}
 	result, err := service.Prepare(bounded, claim.Request)
 	switch {
+	case err != nil && !time.Now().Before(claim.Until()):
+		rt.diag.fault(leaseExpired, workspace, claim.CaseID, "")
 	case errors.Is(err, preparecase.ErrStale):
-		rt.logger.Info("processing case worker lost current claim", "case_id", claim.CaseID)
+		rt.diag.fault(leaseStale, workspace, claim.CaseID, "")
 	case errors.Is(err, preparecase.ErrHold), errors.Is(err, drafts.ErrDenied):
 		rt.logger.Info("processing case worker held", "case_id", claim.CaseID)
 	case err != nil:

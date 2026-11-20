@@ -295,7 +295,7 @@ func TestObservationCommitAckLossAndRealProcessCrash(t *testing.T) {
 			t.Fatal(e)
 		}
 		grant := observations.Grant{WorkspaceID: o.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Minute), Allowed: true}
-		service := observations.Service{Repository: ObservationStore{observationAckDB{connect(t), true}, files, time.Hour}, Authority: &observationAuthority{grant: grant}, Boundary: &observationGate{epoch: 7}, Clock: testClock{time.Now}, Codec: observationjson.Codec{}}
+		service := observations.Service{Repository: ObservationStore{DB: observationAckDB{connect(t), true}, Content: files, HistoryRetention: time.Hour}, Authority: &observationAuthority{grant: grant}, Boundary: &observationGate{epoch: 7}, Clock: testClock{time.Now}, Codec: observationjson.Codec{}}
 		e = service.Execute(ctx, raw, func(observations.Receipt) error { t.Fatal("response emitted before crash"); return nil })
 		t.Fatalf("commit/crash not reached %v", e)
 	}
