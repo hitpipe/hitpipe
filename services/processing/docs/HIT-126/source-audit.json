@@ -1,0 +1,128 @@
+{
+  "task": "HIT-126",
+  "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+  "source_base": "e381972ab7ceb8913e345852c8e073998ec59afe",
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "master_prompt_sha": "efb776ecf1f836bf7735cb69ff5bc4a45f74d8a1",
+  "protocol_pin": "685e797bf32f71fd4ca42cd5f594b80912736473",
+  "contract_revision": 1,
+  "contract_fingerprint": "7bed9e9a200f0705cf7b9f2e8400de10e4fdc0fa44bb39ced6b8f49ac958564a",
+  "official_card_comment": "14581",
+  "dependencies": {
+    "HIT-114": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-112-case-worker",
+        "headRefName": "work/HIT-114-case-timeouts",
+        "headRefOid": "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 78,
+        "state": "OPEN",
+        "title": "HIT-114: предельные сроки дела Processing",
+        "url": "https://github.com/hitpipe/hitpipe/pull/78"
+      },
+      "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+      "present_in_main": false
+    },
+    "HIT-113": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-112-case-worker",
+        "headRefName": "work/HIT-113-recheck-known-task",
+        "headRefOid": "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 76,
+        "state": "OPEN",
+        "title": "HIT-113: повторная проверка известной задачи ClickUp",
+        "url": "https://github.com/hitpipe/hitpipe/pull/76"
+      },
+      "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+      "present_in_main": false
+    },
+    "HIT-111": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-111-pinned-base",
+        "headRefName": "work/HIT-111-processing-runtime",
+        "headRefOid": "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 72,
+        "state": "OPEN",
+        "title": "HIT-111: исполняемый процесс Processing с общим допуском",
+        "url": "https://github.com/hitpipe/hitpipe/pull/72"
+      },
+      "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+      "present_in_main": false
+    }
+  },
+  "base_parents": [
+    "33d2c8da52585bcdc2216df9d2033f9089209edb",
+    "dd1a36f6529f57d7452a27b615b6cad18b1288bd"
+  ],
+  "resolved_conflicts": [
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/application/readcases/presentation.go",
+    "services/processing/internal/runtime/runtime.go"
+  ],
+  "authority": {
+    "global": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b"
+    },
+    "product": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3"
+    },
+    "architecture": {
+      "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+      "revision": "b2461564e4355ea5a72a55a30a635655397c463b",
+      "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a"
+    },
+    "persistence": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb"
+    },
+    "stack": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
+    }
+  },
+  "schema_copy_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+  "new_changes": [
+    "services/processing/cmd/processing-purge/main.go",
+    "services/processing/internal/adapters/contentfiles/draft.go",
+    "services/processing/internal/adapters/contentfiles/maintenance.go",
+    "services/processing/internal/adapters/contentfiles/maintenance_test.go",
+    "services/processing/internal/adapters/contentfiles/read_owned.go",
+    "services/processing/internal/adapters/contentfiles/read_owned_test.go",
+    "services/processing/internal/adapters/contentfiles/store.go",
+    "services/processing/internal/adapters/contentfiles/store_test.go",
+    "services/processing/internal/adapters/postgres/activation_test.go",
+    "services/processing/internal/adapters/postgres/drafts_security_test.go",
+    "services/processing/internal/adapters/postgres/expiry_fixture_test.go",
+    "services/processing/internal/adapters/postgres/history_api_revision3_test.go",
+    "services/processing/internal/adapters/postgres/history_revision3_test.go",
+    "services/processing/internal/adapters/postgres/intake_faults_test.go",
+    "services/processing/internal/adapters/postgres/observation_faults_test.go",
+    "services/processing/internal/adapters/postgres/projection_revision3_test.go",
+    "services/processing/internal/adapters/postgres/purge.go",
+    "services/processing/internal/adapters/postgres/purge_test.go",
+    "services/processing/internal/adapters/postgres/read_cases_test.go",
+    "services/processing/scripts/postgres/verify_purge.py"
+  ],
+  "unchanged_contracts": [
+    "OAS",
+    "formal SQL and its migration copy",
+    "retention and TTL policy",
+    "financial rules",
+    "CI workflows"
+  ],
+  "verified_utc": "2026-11-20T13:27:43.435876+00:00"
+}

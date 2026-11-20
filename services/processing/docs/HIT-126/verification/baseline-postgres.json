@@ -1,0 +1,66 @@
+{
+  "summary": {
+    "status": "PASS",
+    "source_sha": "e381972ab7ceb8913e345852c8e073998ec59afe",
+    "tree_status_at_start": "?? services/processing/scripts/postgres/__pycache__/\n",
+    "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+    "migration_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+    "image": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "database": "hit78",
+    "container": "d3f2f554b8a213c646c1e4b1b43a87423a1e5679709e9b431fe72a1d36c770b1",
+    "finished_at": "2026-11-20T13:19:51.686172+00:00",
+    "scope": "Owned PG18.7 and content. Actual standalone Linux executable, private HTTPS/mTLS, controlled IAM/Intake/Delivery, one HIT-69 gate, durable sender, kill/restart and graceful SIGTERM. Host race/vet/build separate.",
+    "task": "HIT-111",
+    "local_verification_complete": true,
+    "project_os_handoff_ready": "NOT_EVALUATED_BY_RUNNER"
+  },
+  "command": {
+    "label": "postgres-storage-tests",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "HIT100_CAPTURE_FILE=/tmp/hit100-captures.jsonl",
+      "-e",
+      "HIT103_CAPTURE_FILE=/tmp/hit103-captures.jsonl",
+      "-e",
+      "HIT102_CAPTURE_FILE=/tmp/hit102-captures.jsonl",
+      "-e",
+      "HIT111_PROCESSING_BIN=/test/processing",
+      "-e",
+      "HIT78_ISOLATED_PG=1",
+      "d3f2f554b8a213c646c1e4b1b43a87423a1e5679709e9b431fe72a1d36c770b1",
+      "/test/storage.test",
+      "-test.v",
+      "-test.count=1",
+      "-test.timeout=120s"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit126-purge-baseline",
+    "environment": {
+      "PATH": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.14/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/Users/tima/.codex/tmp/arg0-macos/codex-arg0vBHkhG:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/tima/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+      "GOTOOLCHAIN": "<unset>",
+      "GOFLAGS": "<unset>",
+      "GOEXPERIMENT": "<unset>",
+      "CGO_ENABLED": "<unset>",
+      "GOMAXPROCS": "<unset>",
+      "DOCKER_HOST": "<unset>",
+      "PYTHONDONTWRITEBYTECODE": "<unset>"
+    },
+    "source_sha": "e381972ab7ceb8913e345852c8e073998ec59afe",
+    "tree_status_at_start": "?? services/processing/scripts/postgres/__pycache__/\n",
+    "runner_sha256": "0744289a7350e215a18736835d56f6eceed24b5833a71439d4db51be38bd5aae",
+    "started_at": "2026-11-20T13:18:49.858582+00:00",
+    "finished_at": "2026-11-20T13:19:50.455722+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "090-postgres-storage-tests.stdout",
+      "bytes": 72922,
+      "sha256": "64c3327167beccc89982b6e45ce9ec141563702d45ebc6204d021feb9d10444e"
+    },
+    "stderr": {
+      "file": "090-postgres-storage-tests.stderr",
+      "bytes": 2902,
+      "sha256": "2dcd1df25e96326488bd3b57753ff122f6cfa32959164b1af184551c91e93620"
+    }
+  }
+}
