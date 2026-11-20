@@ -1,14 +1,11 @@
 {
   "task": "HIT-127",
-  "contract_revision": 1,
-  "contract_fingerprint": "4bc9b0983e0250104c9557f34237aafb0a36dc25f65af5e381ead8e3b85ecb46",
-  "manual_card_comment": "14582",
-  "protocol_pin": "685e797bf32f71fd4ca42cd5f594b80912736473",
-  "master_prompt_sha": "efb776ecf1f836bf7735cb69ff5bc4a45f74d8a1",
-  "source_base": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
-  "tested_code_sha": "f1ddceeda0a61b7a7fd58a79d9b3616d4d614702",
-  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
-  "sources": {
+  "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+  "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+  "previous_tested_code_sha": "f1ddceeda0a61b7a7fd58a79d9b3616d4d614702",
+  "overhauled_package": "fdda9d1da3f5d0697b0a8811585aa2f8988964e2",
+  "independent_review": "HIT-127#15172",
+  "retained_contracts": {
     "global": {
       "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
       "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
@@ -40,12 +37,39 @@
       "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
     }
   },
-  "baseline_review": {
-    "issue": "HIT-126",
-    "id": "15122",
-    "author": "712020:587adcd1-4f1b-40a6-aa6b-04fbd97a21af",
-    "verified_criteria": "6/6"
+  "patch": {
+    "path": "review/exact-source.diff",
+    "sha256": "43448d180cf3884cb22bbd1afa31f758d1edc2adf4806ee2c4c045ca770fed96",
+    "reconstructed_tree": "d26943ba56e3c067332636fb089b6365270b3452",
+    "applied_with": "git apply --cached --check --binary"
   },
+  "changed_source_paths": [
+    "services/processing/cmd/processing-purge/main.go",
+    "services/processing/internal/adapters/contentfiles/store.go",
+    "services/processing/internal/adapters/postgres/diagnostics.go",
+    "services/processing/internal/adapters/postgres/diagnostics_test.go",
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/adapters/postgres/observation_faults_test.go",
+    "services/processing/internal/adapters/postgres/observations.go",
+    "services/processing/internal/adapters/postgres/observations_test.go",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/runtime/caseworker.go",
+    "services/processing/internal/runtime/diagnostics.go",
+    "services/processing/internal/runtime/diagnostics_test.go",
+    "services/processing/internal/runtime/recheck.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/timeouts.go",
+    "services/processing/scripts/postgres/verify_diagnostics.py"
+  ],
+  "rework_source_paths": [
+    "services/processing/internal/adapters/postgres/diagnostics_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/scripts/postgres/verify_diagnostics.py"
+  ],
+  "health_handler_sha256": "ad9e7a7a11097647ef8c16a1988f88f38ee8d6e77a43f8f00e0f0387c4e432b0",
+  "processing_sql_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+  "all_direct_review_sources_chars": 145500,
   "dependencies": {
     "HIT-126": {
       "jira_status": "Готово",
@@ -128,34 +152,5 @@
       "present_in_main": false
     }
   },
-  "changed_code_paths": [
-    "services/processing/cmd/processing-purge/main.go",
-    "services/processing/internal/adapters/contentfiles/store.go",
-    "services/processing/internal/adapters/postgres/diagnostics.go",
-    "services/processing/internal/adapters/postgres/diagnostics_test.go",
-    "services/processing/internal/adapters/postgres/dispatch.go",
-    "services/processing/internal/adapters/postgres/observation_faults_test.go",
-    "services/processing/internal/adapters/postgres/observations.go",
-    "services/processing/internal/adapters/postgres/observations_test.go",
-    "services/processing/internal/adapters/postgres/prepare.go",
-    "services/processing/internal/runtime/caseworker.go",
-    "services/processing/internal/runtime/diagnostics.go",
-    "services/processing/internal/runtime/diagnostics_test.go",
-    "services/processing/internal/runtime/recheck.go",
-    "services/processing/internal/runtime/runtime.go",
-    "services/processing/internal/runtime/timeouts.go",
-    "services/processing/scripts/postgres/verify_diagnostics.py"
-  ],
-  "preserved": {
-    "health_handler_sha256": "d24c07077a743fce05dd4abd84f42fc70b4385b5ea8ad6579cabd363a05df1cb",
-    "migration_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
-    "scope": [
-      "formal OAS",
-      "formal SQL",
-      "financial rules",
-      "TTL",
-      "global CI"
-    ]
-  },
-  "verified_utc": "2026-11-20T15:01:13.125532+00:00"
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab"
 }

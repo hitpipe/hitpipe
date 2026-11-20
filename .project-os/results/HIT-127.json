@@ -6,13 +6,15 @@
   },
   "materialized_result": {
     "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_AND_POSTGRES_STAND",
-    "summary": "Собственная scoped диагностика очередей, age наблюдения, гарды и безопасные причины отказов из работающего Processing. Health и финансовая семантика сохранены.",
+    "summary": "Рабочая диагностика Processing с фактическими очередями и отказами. В пакет повторного ревью вложены точный diff, полные целевые журналы, реальные HTTP-ответы Health и полный протокол.",
     "contract_revision": 1,
     "contract_fingerprint": "4bc9b0983e0250104c9557f34237aafb0a36dc25f65af5e381ead8e3b85ecb46",
     "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
     "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
-    "tested_code_sha": "f1ddceeda0a61b7a7fd58a79d9b3616d4d614702",
-    "pull_request": "https://github.com/hitpipe/hitpipe/pull/82"
+    "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/82",
+    "rework_of": "fdda9d1da3f5d0697b0a8811585aa2f8988964e2",
+    "review_findings_comment": "15172"
   },
   "changed_artifacts": [
     "services/processing/cmd/processing-purge/main.go",
@@ -24,6 +26,7 @@
     "services/processing/internal/adapters/postgres/observations.go",
     "services/processing/internal/adapters/postgres/observations_test.go",
     "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
     "services/processing/internal/runtime/caseworker.go",
     "services/processing/internal/runtime/diagnostics.go",
     "services/processing/internal/runtime/diagnostics_test.go",
@@ -45,9 +48,13 @@
     "test_protocol": "services/processing/docs/HIT-127/verification/test-evidence.json",
     "ci_protocol": "services/processing/docs/HIT-127/verification/ci-evidence.json",
     "code_ci": [
-      "https://github.com/hitpipe/hitpipe/actions/runs/44758551245",
-      "https://github.com/hitpipe/hitpipe/actions/runs/44758538715"
-    ]
+      "https://github.com/hitpipe/hitpipe/actions/runs/44797634267",
+      "https://github.com/hitpipe/hitpipe/actions/runs/44797621844"
+    ],
+    "source_diff": "services/processing/docs/HIT-127/review/exact-source.diff",
+    "reviewable_process_and_http": "services/processing/docs/HIT-127/review/process-and-http.md",
+    "reviewable_health_and_runbook": "services/processing/docs/HIT-127/review/operations.md",
+    "reviewable_commands": "services/processing/docs/HIT-127/review/commands-and-output.md"
   },
   "known_limitations": [
     "Локальные ограниченные выборки, измерения на изолированном стенде и управляемых mTLS-соседях.",
