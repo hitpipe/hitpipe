@@ -127,7 +127,8 @@ func (h handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	var input authorizeaction.Request
-	if json.Unmarshal(body, &input) != nil {
+	// Reuse HIT-84's strict required/null, duplicate-key and unknown-field validator.
+	if input.UnmarshalJSON(body) != nil {
 		writeBackendError(writer, request, requestID, runtimeaccess.ErrInvalid)
 		return
 	}
