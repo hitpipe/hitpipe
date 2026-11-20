@@ -1,0 +1,76 @@
+=== RUN   TestAdversarialConcurrentActualStartsAfterAcknowledgedBarrier
+--- PASS: TestAdversarialConcurrentActualStartsAfterAcknowledgedBarrier (0.00s)
+=== RUN   TestAdversarialNewSnapshotAndLargerEpochCannotRegrant
+--- PASS: TestAdversarialNewSnapshotAndLargerEpochCannotRegrant (0.00s)
+=== RUN   TestAdversarialGlobalSessionDenialAndWorkspaceIsolation
+--- PASS: TestAdversarialGlobalSessionDenialAndWorkspaceIsolation (0.00s)
+=== RUN   TestAdversarialOwnedSnapshotAndAckCopies
+--- PASS: TestAdversarialOwnedSnapshotAndAckCopies (0.00s)
+=== RUN   TestAdversarialCancelledBarrierCannotAcknowledgeBlockedStart
+--- PASS: TestAdversarialCancelledBarrierCannotAcknowledgeBlockedStart (0.00s)
+=== RUN   TestAdversarialAlreadyStartedWorkMayFinishAfterAck
+--- PASS: TestAdversarialAlreadyStartedWorkMayFinishAfterAck (0.00s)
+=== RUN   TestAdversarialAllAuthoritySubjectsCheckedBeforeCallback
+--- PASS: TestAdversarialAllAuthoritySubjectsCheckedBeforeCallback (0.00s)
+=== RUN   TestAdversarialLateBarrierCannotLeaveKnownRevocationOpen
+--- PASS: TestAdversarialLateBarrierCannotLeaveKnownRevocationOpen (0.00s)
+=== RUN   TestUnitClosedAndExplicitAuthority
+--- PASS: TestUnitClosedAndExplicitAuthority (0.00s)
+=== RUN   TestUnitIdentityAndSafeIntegers
+=== RUN   TestUnitIdentityAndSafeIntegers/zero_generation
+=== RUN   TestUnitIdentityAndSafeIntegers/unsafe_generation
+=== RUN   TestUnitIdentityAndSafeIntegers/empty_runtime
+=== RUN   TestUnitIdentityAndSafeIntegers/malformed_boot
+=== RUN   TestUnitIdentityAndSafeIntegers/wrong_runtime
+=== RUN   TestUnitIdentityAndSafeIntegers/wrong_boot
+=== RUN   TestUnitIdentityAndSafeIntegers/wrong_generation
+=== RUN   TestUnitIdentityAndSafeIntegers/zero_revision
+=== RUN   TestUnitIdentityAndSafeIntegers/unsafe_revision
+=== RUN   TestUnitIdentityAndSafeIntegers/unknown_gate
+--- PASS: TestUnitIdentityAndSafeIntegers (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/zero_generation (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/unsafe_generation (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/empty_runtime (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/malformed_boot (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/wrong_runtime (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/wrong_boot (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/wrong_generation (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/zero_revision (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/unsafe_revision (0.00s)
+    --- PASS: TestUnitIdentityAndSafeIntegers/unknown_gate (0.00s)
+=== RUN   TestUnitSnapshotAtomicityAndMonotonicDenials
+--- PASS: TestUnitSnapshotAtomicityAndMonotonicDenials (0.00s)
+=== RUN   TestUnitBarrierScopeIsolationAndGlobalSession
+=== RUN   TestUnitBarrierScopeIsolationAndGlobalSession/other_workspace
+=== RUN   TestUnitBarrierScopeIsolationAndGlobalSession/other_subject
+=== RUN   TestUnitBarrierScopeIsolationAndGlobalSession/other_scope
+--- PASS: TestUnitBarrierScopeIsolationAndGlobalSession (0.00s)
+    --- PASS: TestUnitBarrierScopeIsolationAndGlobalSession/other_workspace (0.00s)
+    --- PASS: TestUnitBarrierScopeIsolationAndGlobalSession/other_subject (0.00s)
+    --- PASS: TestUnitBarrierScopeIsolationAndGlobalSession/other_scope (0.00s)
+=== RUN   TestUnitBarrierReplayConflictAndCopiedState
+--- PASS: TestUnitBarrierReplayConflictAndCopiedState (0.00s)
+=== RUN   TestUnitLostAckReplayAfterOriginalDeadline
+--- PASS: TestUnitLostAckReplayAfterOriginalDeadline (0.02s)
+=== RUN   TestUnitStartCallbackFailureAndPanicReleaseLock
+--- PASS: TestUnitStartCallbackFailureAndPanicReleaseLock (0.00s)
+=== RUN   TestUnitTimeoutNeverAcknowledgesUndrainedSection
+--- PASS: TestUnitTimeoutNeverAcknowledgesUndrainedSection (0.02s)
+=== RUN   TestUnitExpiredValidBarrierRetainsScopedDenialWithoutAck
+--- PASS: TestUnitExpiredValidBarrierRetainsScopedDenialWithoutAck (0.00s)
+=== RUN   TestUnitInterruptedBarrierHoldsProcessAcrossOpenSnapshot
+--- PASS: TestUnitInterruptedBarrierHoldsProcessAcrossOpenSnapshot (0.00s)
+=== RUN   TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime
+=== RUN   TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/runtime
+=== RUN   TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/boot
+=== RUN   TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/generation
+--- PASS: TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime (0.00s)
+    --- PASS: TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/runtime (0.00s)
+    --- PASS: TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/boot (0.00s)
+    --- PASS: TestUnitForeignExpiredBarrierDoesNotHoldCurrentRuntime/generation (0.00s)
+=== RUN   TestUnitNewBootAndZeroGateFailClosed
+--- PASS: TestUnitNewBootAndZeroGateFailClosed (0.00s)
+=== RUN   TestUnitSnapshotCopiesCallerOwnedPointers
+--- PASS: TestUnitSnapshotCopiesCallerOwnedPointers (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/platform/startgate	0.050s

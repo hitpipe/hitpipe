@@ -1,0 +1,36 @@
+name: Platform — локальная защита начала работы
+on:
+  pull_request:
+  push:
+    branches: [main, 'work/**']
+    paths:
+      - 'services/platform/**'
+      - '.github/workflows/platform.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  start-gate:
+    name: platform-start-gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+          cache: false
+      - name: Проверить текущий модуль Platform, гонки и сборку
+        run: python3 services/platform/tools/check_start_gate.py --evidence-dir "$RUNNER_TEMP/platform-checks"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: platform-start-gate-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/platform-checks
+          if-no-files-found: error
+      - name: Область проверки
+        if: always()
+        run: |
+          echo 'Проверяется один локальный процесс на управляемых входах. Полный отзыв доступа между сервисами, сетевая/базовая изоляция, работа реального транспорта и соблюдение срока в рабочем окружении этим запуском не подтверждаются.' >> "$GITHUB_STEP_SUMMARY"
