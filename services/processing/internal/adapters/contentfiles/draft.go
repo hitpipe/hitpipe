@@ -18,9 +18,6 @@ func (s *Store) ReadDraft(ctx context.Context, ref drafts.Ref, origin preparecas
 		return nil, drafts.ErrUnavailable
 	}
 	if !now.Before(ref.ExpiresAt) {
-		if e = s.root.Remove(ref.ID); e == nil {
-			e = s.syncDir()
-		}
 		return nil, drafts.ErrUnavailable
 	}
 	if ctx.Err() != nil {

@@ -384,7 +384,7 @@ func TestObservationExpiryPurgeAndMinimalReadAfterRestart(t *testing.T) {
 	first := f.apply(t, o, 202, "short_owned_history")
 	f.readAPI(t, "before_owned_history_expiry")
 	time.Sleep(400 * time.Millisecond)
-	if e := f.files.PurgeExpired(time.Now()); e != nil {
+	if e := expireFixtureFiles(f.path, time.Now()); e != nil {
 		t.Fatal(e)
 	}
 	files, e := contentfiles.New(f.path)

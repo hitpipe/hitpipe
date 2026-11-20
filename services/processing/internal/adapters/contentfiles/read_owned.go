@@ -10,7 +10,7 @@ import (
 )
 
 // ReadOwned additionally checks the durable causal owner metadata before exposing
-// or purging content. A guessed/ref-swapped ID cannot expose a foreign body.
+// content. A guessed/ref-swapped ID cannot expose a foreign body.
 // The origin revision is a ceiling: context can predate the current case revision.
 func (s *Store) ReadOwned(ctx context.Context, ref preparecase.Ref, origin preparecase.Origin, now time.Time) ([]byte, error) {
 	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || now.IsZero() || !validOrigin(origin) {
@@ -24,12 +24,6 @@ func (s *Store) ReadOwned(ctx context.Context, ref preparecase.Ref, origin prepa
 		return nil, readcases.ErrUnavailable
 	}
 	if !now.Before(ref.ExpiresAt) {
-		if e = s.root.Remove(ref.ID); e != nil {
-			return nil, readcases.ErrUnavailable
-		}
-		if e = s.syncDir(); e != nil {
-			return nil, readcases.ErrUnavailable
-		}
 		return nil, readcases.ErrExpired
 	}
 	if ctx.Err() != nil {

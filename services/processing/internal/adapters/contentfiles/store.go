@@ -30,9 +30,10 @@ const maxBody = 65536
 // Store owns an existing private directory. Step is optional fault injection;
 // it can only fail a write, never authorize an action or override an IO error.
 type Store struct {
-	mu   sync.Mutex
-	root *os.Root
-	Step func(string) error
+	mu    sync.Mutex
+	root  *os.Root
+	lease *os.File
+	Step  func(string) error
 }
 type header struct {
 	Origin  preparecase.Origin `json:"origin"`
@@ -41,6 +42,10 @@ type header struct {
 }
 
 func New(path string) (*Store, error) {
+	return openStore(path, syscall.LOCK_SH)
+}
+
+func openStore(path string, mode int) (*Store, error) {
 	absolute, e := filepath.Abs(path)
 	if e != nil {
 		return nil, preparecase.ErrContent
@@ -58,15 +63,22 @@ func New(path string) (*Store, error) {
 		root.Close()
 		return nil, preparecase.ErrContent
 	}
-	defer f.Close()
 	stat, e := f.Stat()
 	if e != nil || !stat.IsDir() || stat.Mode().Perm() != 0700 {
+		f.Close()
 		root.Close()
 		return nil, preparecase.ErrContent
 	}
-	return &Store{root: root}, nil
+	// The stable directory inode is shared for the lifetime of any runtime
+	// using it, including the commit after Write returns its new reference.
+	if e = syscall.Flock(int(f.Fd()), mode|syscall.LOCK_NB); e != nil {
+		f.Close()
+		root.Close()
+		return nil, fmt.Errorf("content directory unavailable: %w", e)
+	}
+	return &Store{root: root, lease: f}, nil
 }
-func (s *Store) Close() error { return s.root.Close() }
+func (s *Store) Close() error { return errors.Join(s.root.Close(), s.lease.Close()) }
 func UUID() (string, error) {
 	var b [16]byte
 	if _, e := rand.Read(b[:]); e != nil {
@@ -168,7 +180,7 @@ func (s *Store) read(id string) (header, []byte, error) {
 	if !idPattern.MatchString(strings.TrimSuffix(id, ".pending")) {
 		return zero, nil, preparecase.ErrContent
 	}
-	f, e := s.root.OpenFile(id, os.O_RDONLY|syscall.O_NOFOLLOW, 0)
+	f, e := s.root.OpenFile(id, os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
 	if e != nil {
 		return zero, nil, preparecase.ErrContent
 	}
@@ -209,55 +221,9 @@ func (s *Store) Read(ctx context.Context, ref preparecase.Ref, now time.Time) ([
 		return nil, preparecase.ErrContent
 	}
 	if !now.Before(h.Ref.ExpiresAt) {
-		if e = s.root.Remove(ref.ID); e == nil {
-			e = s.syncDir()
-		}
-		return nil, errors.Join(preparecase.ErrContent, e)
+		return nil, preparecase.ErrContent
 	}
 	return b, nil
-}
-
-// PurgeExpired enforces the durable metadata expiry even without SQL access.
-// It never treats an unexpired orphan/unknown commit as proof of no SQL ref.
-// Malformed metadata is reported as an incident; it is never reinterpreted.
-func (s *Store) PurgeExpired(now time.Time) error {
-	if now.IsZero() {
-		return preparecase.ErrContent
-	}
-	f, e := s.root.Open(".")
-	if e != nil {
-		return e
-	}
-	defer f.Close()
-	entries, e := f.ReadDir(-1)
-	if e != nil {
-		return e
-	}
-	var result error
-	changed := false
-	for _, entry := range entries {
-		if !idPattern.MatchString(strings.TrimSuffix(entry.Name(), ".pending")) {
-			continue
-		}
-		h, _, e := s.read(entry.Name())
-		if e != nil {
-			result = errors.Join(result, e)
-			if h.Ref.ExpiresAt.IsZero() {
-				continue
-			}
-		}
-		if !now.Before(h.Ref.ExpiresAt) {
-			if e = s.root.Remove(entry.Name()); e != nil {
-				result = errors.Join(result, e)
-			} else {
-				changed = true
-			}
-		}
-	}
-	if changed {
-		result = errors.Join(result, s.syncDir())
-	}
-	return result
 }
 
 var originID = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)

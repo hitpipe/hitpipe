@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -77,7 +78,7 @@ func TestFaultStepsNeverReturnAcceptedRef(t *testing.T) {
 				t.Fatal("fault positively acknowledged")
 			}
 			restarted := open(t, p)
-			if e = restarted.PurgeExpired(now.Add(2 * time.Second)); e != nil {
+			if e = restarted.purgeExpiredFixture(now.Add(2 * time.Second)); e != nil {
 				t.Fatal(e)
 			}
 			entries, e := os.ReadDir(p)
@@ -120,7 +121,7 @@ func TestExpiryCorruptionTraversalAndSymlink(t *testing.T) {
 		t.Fatal("corrupt digest accepted")
 	}
 	// Intact protected expiry metadata still bounds a corrupt body without SQL.
-	_ = s.PurgeExpired(now.Add(2 * time.Minute))
+	_ = s.purgeExpiredFixture(now.Add(2 * time.Minute))
 	if _, e = os.Stat(filepath.Join(p, ref.ID)); !os.IsNotExist(e) {
 		t.Fatal("expired corrupt body retained")
 	}
@@ -131,8 +132,8 @@ func TestExpiryCorruptionTraversalAndSymlink(t *testing.T) {
 	if _, e = s.Read(ctx, ref, now.Add(time.Second)); e == nil {
 		t.Fatal("expiry equality allowed")
 	}
-	if _, e = os.Stat(filepath.Join(p, ref.ID)); !os.IsNotExist(e) {
-		t.Fatal("expired content still exists")
+	if _, e = os.Stat(filepath.Join(p, ref.ID)); e != nil {
+		t.Fatal("expiry read physically removed content", e)
 	}
 	wide := filepath.Join(t.TempDir(), "wide")
 	os.Mkdir(wide, 0755)
@@ -149,7 +150,7 @@ func TestUncertainCommitOrphanRetainedUntilExpiry(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	if e = s.PurgeExpired(now); e != nil {
+	if e = s.purgeExpiredFixture(now); e != nil {
 		t.Fatal(e)
 	}
 	if _, e = os.Stat(filepath.Join(p, ref.ID)); e != nil {
@@ -226,7 +227,7 @@ func TestCrashBetweenFileSteps(t *testing.T) {
 				t.Fatal("unacknowledged crash file missing", files, e)
 			}
 			s := open(t, p)
-			if e = s.PurgeExpired(time.Now().Add(2 * time.Minute)); e != nil {
+			if e = s.purgeExpiredFixture(time.Now().Add(2 * time.Minute)); e != nil {
 				t.Fatal(e)
 			}
 			files, _ = os.ReadDir(p)
@@ -239,4 +240,44 @@ func TestCrashBetweenFileSteps(t *testing.T) {
 
 func fixtureOrigin() preparecase.Origin {
 	return preparecase.Origin{WorkspaceID: "11111111-1111-4111-8111-111111111111", CaseID: "22222222-2222-4222-8222-222222222222", Revision: 1}
+}
+
+func (s *Store) purgeExpiredFixture(now time.Time) error {
+	if now.IsZero() {
+		return preparecase.ErrContent
+	}
+	f, e := s.root.Open(".")
+	if e != nil {
+		return e
+	}
+	defer f.Close()
+	entries, e := f.ReadDir(-1)
+	if e != nil {
+		return e
+	}
+	var result error
+	changed := false
+	for _, entry := range entries {
+		if !idPattern.MatchString(strings.TrimSuffix(entry.Name(), ".pending")) {
+			continue
+		}
+		h, _, e := s.read(entry.Name())
+		if e != nil {
+			result = errors.Join(result, e)
+			if h.Ref.ExpiresAt.IsZero() {
+				continue
+			}
+		}
+		if !now.Before(h.Ref.ExpiresAt) {
+			if e = s.root.Remove(entry.Name()); e != nil {
+				result = errors.Join(result, e)
+			} else {
+				changed = true
+			}
+		}
+	}
+	if changed {
+		result = errors.Join(result, s.syncDir())
+	}
+	return result
 }

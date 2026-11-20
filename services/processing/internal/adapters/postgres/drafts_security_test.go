@@ -207,7 +207,7 @@ func TestDraftContentExpiryPurgeAndReopenCannotFabricateDraft(t *testing.T) {
 	if status != 503 {
 		t.Fatal("expired draft returned", status, string(b))
 	}
-	if e := f.files.PurgeExpired(time.Now()); e != nil {
+	if e := expireFixtureFiles(f.path, time.Now()); e != nil {
 		t.Fatal(e)
 	}
 	fresh, e := contentfiles.New(f.path)

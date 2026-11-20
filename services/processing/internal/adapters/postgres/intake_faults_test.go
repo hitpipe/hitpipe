@@ -141,7 +141,7 @@ func TestIntakeHTTPDurableFileFailuresAndExpiryRestart(t *testing.T) {
 	raw := intakeWire(t, f.ws, nil)
 	first := f.apply(t, raw, 202, "short_expiring_history")
 	time.Sleep(400 * time.Millisecond)
-	if e := f.files.PurgeExpired(time.Now()); e != nil {
+	if e := expireFixtureFiles(f.path, time.Now()); e != nil {
 		t.Fatal(e)
 	}
 	files, e := contentfiles.New(f.path)

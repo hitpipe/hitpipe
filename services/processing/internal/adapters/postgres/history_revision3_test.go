@@ -122,7 +122,7 @@ func TestRevision3ActualAdmissionHistoryReplayExpiryPurgeRestart(t *testing.T) {
 	}
 	// Minimal200 must not depend on the expired file, whether purge happens first
 	// or after the first read, and duplicate ACK must not regenerate it.
-	if e = f.files.PurgeExpired(time.Now().UTC()); e != nil {
+	if e = expireFixtureFiles(f.path, time.Now().UTC()); e != nil {
 		t.Fatal(e)
 	}
 	if _, e = os.Stat(filepath.Join(f.path, ref.ID)); !os.IsNotExist(e) {

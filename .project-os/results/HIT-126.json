@@ -1,0 +1,60 @@
+{
+  "subject": "HIT-126",
+  "authorship": {
+    "human_owner": "Тимофей Патрушев / Tim1hik",
+    "executor": "Codex по делегации владельца"
+  },
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_POSTGRES_AND_CONTENT_STAND",
+    "summary": "Пакетная физическая очистка истёкшего содержимого Processing через отдельно разрешённую роль, с повторной проверкой refs и сохранением safety. Истёкшая доставка удерживается.",
+    "contract_revision": 1,
+    "contract_fingerprint": "7bed9e9a200f0705cf7b9f2e8400de10e4fdc0fa44bb39ced6b8f49ac958564a",
+    "base_sha": "e381972ab7ceb8913e345852c8e073998ec59afe",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/81"
+  },
+  "changed_artifacts": [
+    "services/processing/cmd/processing-purge/main.go",
+    "services/processing/internal/adapters/contentfiles/draft.go",
+    "services/processing/internal/adapters/contentfiles/maintenance.go",
+    "services/processing/internal/adapters/contentfiles/maintenance_test.go",
+    "services/processing/internal/adapters/contentfiles/read_owned.go",
+    "services/processing/internal/adapters/contentfiles/read_owned_test.go",
+    "services/processing/internal/adapters/contentfiles/store.go",
+    "services/processing/internal/adapters/contentfiles/store_test.go",
+    "services/processing/internal/adapters/postgres/activation_test.go",
+    "services/processing/internal/adapters/postgres/drafts_security_test.go",
+    "services/processing/internal/adapters/postgres/expiry_fixture_test.go",
+    "services/processing/internal/adapters/postgres/history_api_revision3_test.go",
+    "services/processing/internal/adapters/postgres/history_revision3_test.go",
+    "services/processing/internal/adapters/postgres/intake_faults_test.go",
+    "services/processing/internal/adapters/postgres/observation_faults_test.go",
+    "services/processing/internal/adapters/postgres/projection_revision3_test.go",
+    "services/processing/internal/adapters/postgres/purge.go",
+    "services/processing/internal/adapters/postgres/purge_test.go",
+    "services/processing/internal/adapters/postgres/read_cases_test.go",
+    "services/processing/scripts/postgres/verify_purge.py",
+    "services/processing/docs/HIT-126",
+    ".project-os/results/HIT-126.json"
+  ],
+  "deviations": [],
+  "verification": {
+    "actual_stand": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "source_audit": "services/processing/docs/HIT-126/source-audit.json",
+    "report": "services/processing/docs/HIT-126/README.md",
+    "runbook": "services/processing/docs/HIT-126/RUN_RU.md",
+    "retention_map": "services/processing/docs/HIT-126/retention-map.md",
+    "test_protocol": "services/processing/docs/HIT-126/verification/test-evidence.json",
+    "ci_protocol": "services/processing/docs/HIT-126/verification/ci-evidence.json",
+    "code_ci": [
+      "https://github.com/hitpipe/hitpipe/actions/runs/44744088636",
+      "https://github.com/hitpipe/hitpipe/actions/runs/44744081639"
+    ]
+  },
+  "known_limitations": [
+    "Очистка проверена на локальном одноразовом стенде с одной выделенной базой и каталогом. Рабочие данные не использовались.",
+    "Точные версии HIT-111, HIT-113 и HIT-114 входят в изолированную проверенную базу; их ветки не слиты в main.",
+    "Неверифицируемые файлы остаются для разбирательства. Для прежних процессов без файловой блокировки требуется остановка перед очисткой."
+  ]
+}
