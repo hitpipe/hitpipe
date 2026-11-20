@@ -161,19 +161,28 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	if held.count("outbox", "rows") <= q.count("outbox", "rows") || held.count("jobs", "rows") != q.count("jobs", "rows") {
 		t.Fatal("held outbox did not retain the measured independent job population", q, held)
 	}
-	// Remove the predecessor's obsolete index row during a real transaction;
-	// unlike the outbox, job_index is reconstruction metadata, not history.
+	// Keep the unresolved intent and stop its reindexing. Let a real sample
+	// attest the committed change before deleting the now-obsolete job entry.
+	tx, err = worker.tx(ctx, workspace)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer tx.Rollback(ctx)
+	if _, err = tx.Exec(ctx, `UPDATE hp_processing.outbox SET state='HELD' WHERE workspace_id=$1 AND message_id=$2`, workspace, f.lineage); err != nil {
+		t.Fatal(err)
+	}
+	if err = tx.Commit(ctx); err != nil {
+		t.Fatal(err)
+	}
+	awaitDiagnostic(t, proc, "both outbox rows held", func(e logEvent) bool {
+		return e["msg"] == "processing queue sample" && e.count("outbox", "held") == 2
+	})
 	tx, err = worker.tx(ctx, workspace)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer tx.Rollback(ctx)
 	if _, err = tx.Exec(ctx, `DELETE FROM hp_processing.job_index WHERE workspace_id=$1 AND job_id=$2`, workspace, f.lineage); err != nil {
-		t.Fatal(err)
-	}
-	// The old outbox is still an unresolved effect. Keep its identity while
-	// moving its maintenance state to HELD so indexing does not recreate it.
-	if _, err = tx.Exec(ctx, `UPDATE hp_processing.outbox SET state='HELD' WHERE workspace_id=$1 AND message_id=$2`, workspace, f.lineage); err != nil {
 		t.Fatal(err)
 	}
 	if err = tx.Commit(ctx); err != nil {
@@ -233,7 +242,7 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	if err = os.Remove(filepath.Join(f.path, detail)); err != nil {
 		t.Fatal(err)
 	}
-	stand.must("bff.test", "8443", "GET", casePath+"/history", nil, map[string]string{"X-HitPipe-Session": stand.token}, 503)
+	stand.must("bff.test", "8443", "GET", casePath+"/history", nil, map[string]string{"X-HitPipe-Session": stand.token, "X-CSRF-Token": stand.csrf}, 503)
 	awaitDiagnostic(t, proc, "content file failure", func(e logEvent) bool { return e["reason"] == "content_unavailable" })
 
 	// PostgreSQL refuses two real worker operations while job_index is locked.
