@@ -26,6 +26,7 @@ const (
 	jobClaimFailed
 	leaseExpired
 	leaseStale
+	dispatchHeld
 	outboxInterrupted
 	recheckInterrupted
 	timerInterrupted
@@ -40,6 +41,7 @@ var faultNames = [faultCount]string{
 	jobClaimFailed:     "job_claim_failed",
 	leaseExpired:       "lease_expired",
 	leaseStale:         "lease_stale",
+	dispatchHeld:       "dispatch_held",
 	outboxInterrupted:  "outbox_interrupted",
 	recheckInterrupted: "recheck_interrupted",
 	timerInterrupted:   "timer_interrupted",
@@ -163,14 +165,13 @@ func (rt *Runtime) sampleScope(ctx context.Context, workspace string) {
 		return
 	}
 	var sample postgres.QueueSample
-	started := false
+	var sampleErr error
 	err = rt.a.start(ctx, workspace, p.principal, p.epoch, func(c context.Context) error {
-		started = true
-		sample, err = (postgres.DispatchStore{DB: rt.caseJobs.DB}).SampleQueues(c, workspace)
-		return err
+		sample, sampleErr = (postgres.DispatchStore{DB: rt.caseJobs.DB}).SampleQueues(c, workspace)
+		return sampleErr
 	})
 	if err != nil {
-		if started {
+		if sampleErr != nil {
 			rt.diag.fault(sqlUnavailable, workspace, "", "")
 		} else {
 			rt.diag.fault(barrierDenied, workspace, "", "")
@@ -208,7 +209,9 @@ func (d *diagnostics) dispatchFault(code diagnosticFault, workspace string, err 
 	case err == nil:
 	case errors.Is(err, dispatchintent.ErrStale):
 		d.fault(leaseStale, workspace, "", "")
-	case errors.Is(err, dispatchintent.ErrHeld), errors.Is(err, drafts.ErrDenied):
+	case errors.Is(err, dispatchintent.ErrHeld):
+		d.fault(dispatchHeld, workspace, "", "")
+	case errors.Is(err, drafts.ErrDenied):
 		d.fault(barrierDenied, workspace, "", "")
 	default:
 		d.fault(code, workspace, "", "")

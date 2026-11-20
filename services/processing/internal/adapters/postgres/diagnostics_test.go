@@ -245,22 +245,18 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	stand.must("bff.test", "8443", "GET", casePath+"/history", nil, map[string]string{"X-HitPipe-Session": stand.token, "X-CSRF-Token": stand.csrf}, 503)
 	awaitDiagnostic(t, proc, "content file failure", func(e logEvent) bool { return e["reason"] == "content_unavailable" })
 
-	// PostgreSQL refuses two real worker operations while job_index is locked.
-	// The restarted process recovers its diagnostics from durable SQL after
-	// rollback, without copying samples or counting an old HTTP response.
+	// PostgreSQL rejects worker job reads on the disposable database. Both
+	// the index rebuild and the separate sample fail at the actual SQL path.
 	admin, err := pgx.Connect(ctx, "host=/var/run/postgresql user=postgres dbname=hit78 sslmode=disable")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer admin.Close(ctx)
-	lock, err := admin.Begin(ctx)
-	if err != nil {
+	const restoreJobs = "GRANT SELECT ON hp_processing.job_index TO hp_processing_worker"
+	if _, err = admin.Exec(ctx, "REVOKE SELECT ON hp_processing.job_index FROM hp_processing_worker"); err != nil {
 		t.Fatal(err)
 	}
-	defer lock.Rollback(ctx)
-	if _, err = lock.Exec(ctx, `SET LOCAL lock_timeout='2s'; LOCK TABLE hp_processing.job_index IN ACCESS EXCLUSIVE MODE`); err != nil {
-		t.Fatal(err)
-	}
+	defer admin.Exec(ctx, restoreJobs)
 	if err = proc.cmd.Process.Kill(); err != nil {
 		t.Fatal(err)
 	}
@@ -269,7 +265,7 @@ func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
 	stand.pollHealth(restart, "READY")
 	awaitDiagnostic(t, restart, "PostgreSQL failure", func(e logEvent) bool { return e["reason"] == "postgres_unavailable" })
 	awaitDiagnostic(t, restart, "job index recovery failure", func(e logEvent) bool { return e["reason"] == "job_recovery_failed" })
-	if err = lock.Rollback(ctx); err != nil {
+	if _, err = admin.Exec(ctx, restoreJobs); err != nil {
 		t.Fatal(err)
 	}
 	awaitDiagnostic(t, restart, "restored durable sample", func(e logEvent) bool {
