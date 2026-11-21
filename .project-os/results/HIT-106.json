@@ -3,11 +3,11 @@
   "subject": "HIT-106",
   "mode": "IMP",
   "materialized_result": {
-    "summary": "Добавлен браузерный HTTPS-вход через Keycloak 26.8.1 с выдачей непрозрачной сессии HitPipe. Регистрация с email-кодом и вход подтверждённого пользователя проверены с Mailpit и настоящей PostgreSQL 18.7.",
+    "summary": "Браузерный HTTPS-вход через Keycloak 26.8.1 выдаёт непрозрачную сессию HitPipe. На отдельном стенде проверены одноразовый email-код и независимые аккаунты с одинаковым подтверждённым адресом.",
     "repository": "https://github.com/hitpipe/hitpipe",
     "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
     "base_commit": "32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
-    "code_commit": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
+    "code_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
     "review_base_ref": "codex/hit-106-dependencies",
     "review_head_ref": "codex/hit-106-oidc-login",
     "dependency_heads": {
@@ -17,90 +17,120 @@
       "HIT-83_PR60": "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
       "HIT-105_PR69": "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd"
     },
-    "human_report": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/README.md"
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/README.md"
   },
   "changed_artifacts": [
     {
       "path": "services/iam/internal/adapters/http",
-      "version": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/b50c35cdffc5465604b26080ceab347e2f2e85c2/services/iam/internal/adapters/http"
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/adapters/http"
     },
     {
       "path": "services/iam/internal/adapters/oidc",
-      "version": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/b50c35cdffc5465604b26080ceab347e2f2e85c2/services/iam/internal/adapters/oidc"
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/adapters/oidc"
     },
     {
       "path": "services/iam/internal/application/oidclogin",
-      "version": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/b50c35cdffc5465604b26080ceab347e2f2e85c2/services/iam/internal/application/oidclogin"
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/application/oidclogin"
     },
     {
       "path": "services/iam/tools/hit106-lab",
-      "version": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/b50c35cdffc5465604b26080ceab347e2f2e85c2/services/iam/tools/hit106-lab"
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-lab"
     },
     {
       "path": "services/iam/tools/hit106-server",
-      "version": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/b50c35cdffc5465604b26080ceab347e2f2e85c2/services/iam/tools/hit106-server"
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-server"
     },
     {
-      "path": "services/iam/evidence/HIT-106/rework",
-      "version": "669706673f57e1a8c1d66d97a5640b94c3c34db8",
-      "ref": "https://github.com/hitpipe/hitpipe/tree/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework"
+      "path": "services/iam/tools/hit106-lab/same-email-scenario.mjs",
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-lab/same-email-scenario.mjs"
+    },
+    {
+      "path": "services/iam/tools/hit106-lab/email-code-scenarios.mjs",
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-lab/email-code-scenarios.mjs"
+    },
+    {
+      "path": "services/iam/tools/hit106-server/identity.go",
+      "version": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-server/identity.go"
+    },
+    {
+      "path": "services/iam/evidence/HIT-106/rework-15362",
+      "version": "8b1294f24de4543ac95b918e47527c0233968195",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362"
     }
   ],
   "verification": {
-    "tested_code_commit": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
-    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/verification.json",
-    "protocol_version": "669706673f57e1a8c1d66d97a5640b94c3c34db8",
+    "tested_code_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/verification.json",
+    "protocol_version": "8b1294f24de4543ac95b918e47527c0233968195",
     "environment": "Отдельная Ubuntu 24.04.5 VM, Go 1.27.2, Keycloak 26.8.1, PostgreSQL 18.7, Chromium 159 и Mailpit 1.33.1.",
     "commands": [
       {
-        "command": "npm ci --no-audit --no-fund (services/iam/tools/hit106-lab)",
+        "command": "npm ci --no-audit --no-fund",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/browser.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/browser.log"
       },
       {
-        "command": "HIT106_ISOLATED_LAB=1 ./run.sh (services/iam/tools/hit106-lab)",
+        "command": "env HIT106_ISOLATED_LAB=1 ./run.sh",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/browser.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/browser.log"
       },
       {
         "command": "go test -race -count=1 ./...",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
         "command": "go vet ./...",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
         "command": "go build ./...",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
         "command": "go vet -tags hit106lab ./tools/hit106-server",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
-        "command": "go build -tags hit106lab -o /work/hit106/rework-b50c35c/iam-browser-check ./tools/hit106-server",
+        "command": "go build -tags hit106lab -o /work/hit106/4d8c977260.K32vk1/iam-browser-check ./tools/hit106-server",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
         "command": "bash -n tools/hit106-lab/run.sh",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/go.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
       },
       {
-        "command": "python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/prior-rework-b50c35c",
+        "command": "node --check tools/hit106-lab/browser.mjs",
         "exit_code": 0,
-        "log_ref": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/postgres-driver.log"
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
+      },
+      {
+        "command": "node --check tools/hit106-lab/email-code-scenarios.mjs",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
+      },
+      {
+        "command": "node --check tools/hit106-lab/same-email-scenario.mjs",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/go.log"
+      },
+      {
+        "command": "python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/4d8c977260.K32vk1/postgres",
+        "exit_code": 0,
+        "log_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/postgres-driver.log"
       }
     ],
     "browser_scenarios": [
@@ -111,25 +141,37 @@
       "foreign or missing state and browser authority assertions do not create a session",
       "cancelling an attempt also blocks a later genuine IdP callback for that state",
       "a genuine callback after IAM restart fails with the lost one-use attempt",
-      "a genuine unverified-email claim from the test IdP cannot create a session"
+      "a genuine unverified-email claim from the test IdP cannot create a session",
+      "HTTPS email code rejects wrong digits and locks after five attempts, including the genuine code",
+      "HTTPS email code rejects the expired genuine mail without consuming it or signing in",
+      "HTTPS email-code resend enforces cooldown, invalidates old digits and rejects reuse after verification",
+      "HTTPS email code enforces five sends in the rolling hour and accepts a send when the oldest leaves the window",
+      "two concurrent HTTPS submissions of one genuine email code yield exactly one authorization and one IAM session",
+      "two Keycloak subjects with the same verified email remain distinct HitPipe principals"
     ],
-    "postgres_transaction_proof": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/postgres/postgres-race.log",
+    "postgres_transaction_proof": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/postgres/postgres-race.log",
     "session_policy_output": [
-      "HIT-106 session policy verified PostgreSQL rows=2 absolute=24h0m0s idle=8h0m0s",
+      "HIT-106 session policy verified PostgreSQL rows=7 absolute=24h0m0s idle=8h0m0s",
       "Synthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired"
+    ],
+    "review_transcript": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/review-transcript.txt",
+    "postgres_protocol": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/postgres/verification.json",
+    "browser_full_log": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/browser.log",
+    "postgres_skipped": [
+      "TestHIT82LatencySamples"
     ]
   },
   "deviations": [],
   "limitations": [
-    "Проверка выполнялась в изолированном realm с тестовым SMTP и локальными CA, часами, сроками и полномочиями. Рабочая конфигурация требует собственных доверенных подключений.",
+    "Сценарии работают на одноразовом Keycloak с тестовой CA и SMTP. Для проверки истечения кода и повторной отправки только временные отметки тестовых записей сдвигались в PostgreSQL. Одинаковый email разрешался локально для заключительного сценария.",
     "Профиль, GET session, доставка CSRF, BFF, logout, координатор rotation/revoke и рабочее развёртывание относятся к отдельным задачам."
   ],
   "rework": {
-    "previous_independent_review": "https://hitpipe.atlassian.net/browse/HIT-106?focusedCommentId=14742",
-    "previous_tested_code_commit": "4c165aaee969becf9a314b85e198d84949247796",
-    "previous_reviewed_pr_head": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
-    "previous_human_report": "https://github.com/hitpipe/hitpipe/blob/acee2d4e7625f2e4c6622e3404df6f95cc2dc491/services/iam/evidence/HIT-106/README.md",
-    "summary": "В пакет независимого ревью добавлены прямые ссылки на исходники, тесты, журналы и проверку зависимостей. Тестовый сервер сверяет сроки выданных сессий в PostgreSQL с действующей sessionpolicy.",
+    "previous_independent_review": "https://hitpipe.atlassian.net/browse/HIT-106?focusedCommentId=15362",
+    "previous_tested_code_commit": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
+    "previous_reviewed_pr_head": "df4d3ad7833a829b88f93bbeade5bbfa6775d261",
+    "previous_human_report": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/README.md",
+    "summary": "После FAIL №15362 выполнены браузерные проверки двух разных субъектов с одинаковым email и сценарии HP-MVP-A-010. Изменения этого раунда относятся к тестовому стенду и протоколам.",
     "dependency_readback": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/dependency-readback.json"
   }
 }
