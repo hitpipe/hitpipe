@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-82",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Убрано повторное кодирование SHA-256 при чтении сессии. Последовательные valid/unknown/revoked: на128байт и2выделения памяти меньше; отдельный декодер160→0байт и3→0выделений. Ускорение SQL по времени не установлено. Семантика доступа сохранена.",
+    "baseline_commit": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "code_commit": "aadbe3a3c857a603756566f00588ec8a9e8dc112",
+    "evidence_commit": "66ccbb8c01e5c665d98efaed451f74cae76bbee3",
+    "report": "https://github.com/hitpipe/hitpipe/blob/66ccbb8c01e5c665d98efaed451f74cae76bbee3/services/iam/evidence/HIT-82/README.md"
+  },
+  "changed_artifacts": {
+    "code_version": "aadbe3a3c857a603756566f00588ec8a9e8dc112",
+    "code_paths": [
+      "services/iam/internal/adapters/postgres/sessionlookup/lookup.go",
+      "services/iam/internal/adapters/postgres/sessionlookup/reference_decode_test.go",
+      "services/iam/internal/adapters/postgres/sessionlookup/lookup_benchmark_test.go",
+      "services/iam/internal/adapters/postgres/sessionlookup/lookup_benchmark_integration_test.go",
+      "services/iam/tools/check_postgres_session_lookup.py",
+      "services/iam/tools/measure_session_lookup.py",
+      "services/iam/tools/prepare_session_lookup_baseline.py"
+    ],
+    "evidence_manifest": "https://github.com/hitpipe/hitpipe/blob/66ccbb8c01e5c665d98efaed451f74cae76bbee3/services/iam/evidence/HIT-82/artifact-manifest.json",
+    "comparison": "https://github.com/hitpipe/hitpipe/blob/66ccbb8c01e5c665d98efaed451f74cae76bbee3/services/iam/evidence/HIT-82/summary.json"
+  },
+  "verification": {
+    "correctness": "unit; PostgreSQL18.7 -race; vet; build: exit0,47верхних проверок и107PASS с подслучаями,0SKIP; немедленная видимость отзыва, bounded pool5, ошибки/отмена, данные строк не меняются.",
+    "protocol": "https://github.com/hitpipe/hitpipe/blob/66ccbb8c01e5c665d98efaed451f74cae76bbee3/services/iam/evidence/HIT-82/verification.json",
+    "measurements": "5пар запусков с чередованием; 1000операций на сценарий; отдельно CPU/alloc profiles и по1000сырых задержек с500прогревами для valid/unknown/revoked/canceled/concurrent.",
+    "measurement_protocol": "https://github.com/hitpipe/hitpipe/blob/66ccbb8c01e5c665d98efaed451f74cae76bbee3/services/iam/evidence/HIT-82/measurement.json",
+    "same_environment": "Go1.27.2, pgx5.11.0, PostgreSQL18.7 exactAlpinepin,1vCPU; SQL и Lookup исходной версии не изменены, одинаковый тестовый стенд; имена синтетических строк новые в каждом запуске."
+  },
+  "deviations": [
+    "Изменение PostgreSQL18.6→18.7 — ранее принятая узкая поправка; обе версии измерены на18.7.",
+    "Первый прогон прервался из-за заполнения диска после4успешных проверок; после освобождения места полный прогон повторён успешно.",
+    "Пять повторов относятся к Go benchmarks; процентили из одного набора1000вызовов на сценарий. Время колеблется; заявлена экономия памяти, а не рост пропускной способности сервера.",
+    "sessionpolicy, SQL, Go/pgx и рабочие базы не менялись; результат не зависит от миграцииHIT-81."
+  ]
+}

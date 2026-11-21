@@ -1,0 +1,4 @@
+{"name": "unit", "command": ["go", "test", "-p", "1", "-count=1", "./..."], "exit_code": 0, "elapsed_seconds": 134.471, "log": "unit.log", "log_sha256": "344809aa4e066196ef80ac4b386c57c606ace43f8ec53b1ba506dc72dfb7757c"}
+{"name": "postgres-race", "command": ["go", "test", "-p", "1", "-tags=integration", "-race", "-count=1", "-v", "./..."], "exit_code": 0, "elapsed_seconds": 164.1, "log": "postgres-race.log", "log_sha256": "f71c04fe4f5020066793e88c933997bb9639d231be2204da24a11b9a1a4a59e3"}
+{"name": "vet", "command": ["go", "vet", "-p", "1", "-tags=integration", "./..."], "exit_code": 0, "elapsed_seconds": 19.531, "log": "vet.log", "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"name": "build", "command": ["go", "build", "-p", "1", "./..."], "exit_code": 0, "elapsed_seconds": 2.226, "log": "build.log", "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}

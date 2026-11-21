@@ -1,0 +1,23 @@
+File: lookup.test
+Build ID: d5f8036353063140b5b61f81e411c3ddea3ae971
+Type: cpu
+Time: 2026-11-15 14:24:59 UTC
+Duration: 2.16s, Total samples = 1810ms (83.66%)
+Showing nodes accounting for 1490ms, 82.32% of 1810ms total
+Showing top 15 nodes out of 91
+      flat  flat%   sum%        cum   cum%
+     390ms 21.55% 21.55%      390ms 21.55%  encoding/hex.Encode (inline)
+     300ms 16.57% 38.12%      300ms 16.57%  encoding/hex.Decode
+     170ms  9.39% 47.51%      600ms 33.15%  runtime.mallocgcSmallNoScanSC6
+     100ms  5.52% 53.04%      110ms  6.08%  runtime.typePointers.next
+      90ms  4.97% 58.01%      140ms  7.73%  runtime.scanblock
+      80ms  4.42% 62.43%      890ms 49.17%  runtime.mallocgc
+      70ms  3.87% 66.30%       70ms  3.87%  memeqbody
+      70ms  3.87% 70.17%      210ms 11.60%  runtime.mallocgcSmallNoScanSC4
+      50ms  2.76% 72.93%       70ms  3.87%  runtime.tryDeferToSpanScan
+      40ms  2.21% 75.14%     1770ms 97.79%  github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup.legacyDecodeReference
+      30ms  1.66% 76.80%     1810ms   100%  github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup.BenchmarkReferenceDecode.func1
+      30ms  1.66% 78.45%      580ms 32.04%  runtime.makeslice
+      30ms  1.66% 80.11%      180ms  9.94%  runtime.scanObject
+      20ms  1.10% 81.22%      540ms 29.83%  encoding/hex.DecodeString
+      20ms  1.10% 82.32%       30ms  1.66%  runtime.gcmarknewobject

@@ -2,7 +2,24 @@
 
 HIT-19 / Feature HIT-11, MANUAL_LAB_PR12. Author-owner: Дмитрий Карачебан; agent implementation: Codex. This is reusable IAM logic with a synthetic diagnostic executable, not a deployed authentication service.
 
-## Текущая доработка: HIT-68
+## Текущая доработка: HIT-81 — собственная схема базы
+
+Добавлены отдельная установка точной принятой схемы IAM и проверки изоляции
+данных на одноразовой PostgreSQL **18.7**. Роли владельца схемы, приложения,
+обработчика и очистки разделены. Повторный запуск распознаёт установленную версию.
+Подробности и границы —
+[`internal/adapters/postgres/migrations`](internal/adapters/postgres/migrations/README.md).
+
+```sh
+python3 services/iam/tools/check_iam_schema.py --evidence-dir /tmp/hit81-check
+```
+
+Команда запускается из корня репозитория; нужны Go **1.27.2** и Docker.
+Используйте новый пустой каталог протоколов для каждого запуска. Проверка включает
+уже существующий SessionLookup; старое имя команды ниже сохранено для CI и
+выполняет тот же актуальный проход. Рабочие базы и другие сервисы не используются.
+
+## Переиспользованный результат HIT-68
 
 Добавлен read-only PostgreSQL адаптер существующего `SessionLookup`:
 [`internal/adapters/postgres/sessionlookup`](internal/adapters/postgres/sessionlookup/README.md).

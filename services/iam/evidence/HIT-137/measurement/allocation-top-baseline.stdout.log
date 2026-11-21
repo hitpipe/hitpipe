@@ -1,0 +1,38 @@
+File: profile.test
+Build ID: cceb15908ef5e9f051bc30998ffa5792ccb6684d
+Type: alloc_space
+Time: 2026-11-21 05:30:22 UTC
+Showing nodes accounting for 24308.56kB, 97.22% of 25004.67kB total
+Dropped 425 nodes (cum <= 125.02kB)
+Showing top 30 nodes out of 71
+      flat  flat%   sum%        cum   cum%
+ 3378.09kB 13.51% 13.51%  3378.09kB 13.51%  github.com/jackc/pgx/v5.(*Conn).getRows
+ 3007.28kB 12.03% 25.54%  3007.50kB 12.03%  context.(*cancelCtx).propagateCancel
+ 2252.91kB  9.01% 34.55%  2252.91kB  9.01%  encoding/hex.EncodeToString (inline)
+ 2158.05kB  8.63% 43.18% 20684.81kB 82.72%  github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup.(*Lookup).Lookup
+ 1879.38kB  7.52% 50.69%  3195.47kB 12.78%  context.WithDeadlineCause
+ 1694.25kB  6.78% 57.47%  6206.16kB 24.82%  github.com/jackc/pgx/v5/pgconn/ctxwatch.(*ContextWatcher).Watch
+ 1506.75kB  6.03% 63.49%  4513.50kB 18.05%  context.AfterFunc
+ 1316.70kB  5.27% 68.76%  1316.70kB  5.27%  time.newTimer
+ 1315.78kB  5.26% 74.02%  1315.78kB  5.26%  context.(*cancelCtx).Done
+ 1152.30kB  4.61% 78.63%  1152.30kB  4.61%  runtime/pprof.StartCPUProfile
+ 1126.19kB  4.50% 83.14%  1759.87kB  7.04%  github.com/jackc/pgx/v5.(*baseRows).Scan
+  656.66kB  2.63% 85.76%   656.66kB  2.63%  encoding/hex.DecodeString
+  493.50kB  1.97% 87.73%   493.50kB  1.97%  github.com/jackc/pgx/v5/pgxpool.(*connResource).getPoolRow (inline)
+  422.25kB  1.69% 89.42%   422.25kB  1.69%  github.com/jackc/pgx/v5/pgtype.TryWrapBuiltinTypeScanPlan
+  322.59kB  1.29% 90.71%   322.59kB  1.29%  github.com/jackc/pgx/v5/internal/stmtcache.NewLRUCache (inline)
+     320kB  1.28% 91.99%      320kB  1.28%  compress/flate.(*fastGen).addBlock
+     264kB  1.06% 93.05%   474.62kB  1.90%  compress/flate.NewWriter
+  217.03kB  0.87% 93.92%   217.03kB  0.87%  runtime/pprof.allFrames
+  211.50kB  0.85% 94.76%   211.50kB  0.85%  github.com/jackc/pgx/v5/pgxpool.(*connResource).getConn (inline)
+  211.25kB  0.84% 95.61%   211.25kB  0.84%  github.com/jackc/pgx/v5/pgtype.(*TimestamptzCodec).PlanScan
+  143.60kB  0.57% 96.18%   200.08kB   0.8%  runtime/pprof.(*profileBuilder).emitLocation
+     136kB  0.54% 96.73%      136kB  0.54%  compress/flate.newFastEnc (inline)
+      64kB  0.26% 96.98%   210.62kB  0.84%  compress/flate.(*compressor).init
+   38.91kB  0.16% 97.14%   633.62kB  2.53%  github.com/jackc/pgx/v5/pgxpool.NewWithConfig.func3
+    9.56kB 0.038% 97.18%   585.16kB  2.34%  github.com/jackc/pgx/v5.connect
+    6.38kB 0.025% 97.20%   150.02kB   0.6%  github.com/jackc/pgx/v5/pgtype.initDefaultMap
+    2.72kB 0.011% 97.21%   152.74kB  0.61%  github.com/jackc/pgx/v5/pgtype.NewMap
+    0.48kB 0.0019% 97.21%   418.27kB  1.67%  runtime/pprof.(*profileBuilder).appendLocsForStack
+    0.31kB 0.0012% 97.22%  5328.58kB 21.31%  testing.(*B).RunParallel.func1
+    0.14kB 0.00056% 97.22% 15338.62kB 61.34%  github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup.BenchmarkPostgresLookup.func1

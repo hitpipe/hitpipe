@@ -1,0 +1,39 @@
+File: profile.test
+Build ID: 04adcc530eaa2bfe27f69615aa8bf1d2ed15c865
+Type: cpu
+Time: 2026-11-21 05:30:51 UTC
+Duration: 4.99s, Total samples = 3.14s (62.90%)
+Showing nodes accounting for 2.73s, 86.94% of 3.14s total
+Dropped 79 nodes (cum <= 0.02s)
+Showing top 30 nodes out of 151
+      flat  flat%   sum%        cum   cum%
+     0.64s 20.38% 20.38%      0.64s 20.38%  runtime.(*mspan).specialFindSplicePoint (inline)
+     0.40s 12.74% 33.12%      0.40s 12.74%  internal/runtime/syscall/linux.Syscall6
+     0.37s 11.78% 44.90%      0.98s 31.21%  runtime.pcvalue
+     0.37s 11.78% 56.69%      0.46s 14.65%  runtime.step
+     0.10s  3.18% 59.87%      0.10s  3.18%  runtime.(*moduledata).textAddr
+     0.10s  3.18% 63.06%      1.41s 44.90%  runtime.tracebackPCs
+     0.09s  2.87% 65.92%      0.09s  2.87%  runtime.readvarint (inline)
+     0.08s  2.55% 68.47%      0.08s  2.55%  runtime.findfunc
+     0.06s  1.91% 70.38%      0.56s 17.83%  runtime.(*unwinder).resolveInternal
+     0.06s  1.91% 72.29%      0.72s 22.93%  runtime.addspecial
+     0.04s  1.27% 73.57%      0.14s  4.46%  runtime.funcInfo.entry (inline)
+     0.03s  0.96% 74.52%      2.96s 94.27%  github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup.(*Lookup).Lookup
+     0.03s  0.96% 75.48%      0.05s  1.59%  runtime.(*unwinder).symPC
+     0.03s  0.96% 76.43%      0.03s  0.96%  runtime.cgoTracebackAvailable (inline)
+     0.03s  0.96% 77.39%      0.03s  0.96%  runtime.futex
+     0.03s  0.96% 78.34%      0.03s  0.96%  runtime.lock2
+     0.03s  0.96% 79.30%      0.51s 16.24%  runtime.newInlineUnwinder
+     0.03s  0.96% 80.25%      0.03s  0.96%  runtime.stkbucket
+     0.02s  0.64% 80.89%      0.80s 25.48%  github.com/jackc/pgx/v5/pgtype.(*Map).planScan
+     0.02s  0.64% 81.53%      0.12s  3.82%  internal/poll.(*FD).Read
+     0.02s  0.64% 82.17%      0.02s  0.64%  runtime.(*mProfCycleHolder).read (inline)
+     0.02s  0.64% 82.80%      0.03s  0.96%  runtime.(*unwinder).initAt
+     0.02s  0.64% 83.44%      0.66s 21.02%  runtime.(*unwinder).next
+     0.02s  0.64% 84.08%      0.02s  0.64%  runtime.acquirem (inline)
+     0.02s  0.64% 84.71%      1.46s 46.50%  runtime.callers.func1
+     0.02s  0.64% 85.35%      0.02s  0.64%  runtime.funcdata (inline)
+     0.02s  0.64% 85.99%      0.02s  0.64%  runtime.unlock2
+     0.01s  0.32% 86.31%      0.12s  3.82%  github.com/jackc/pgx/v5.(*Conn).getRows
+     0.01s  0.32% 86.62%         1s 31.85%  github.com/jackc/pgx/v5.(*connRow).Scan
+     0.01s  0.32% 86.94%      0.15s  4.78%  github.com/jackc/pgx/v5/pgconn.(*PgConn).receiveMessage
