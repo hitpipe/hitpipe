@@ -1,0 +1,15 @@
+goos: linux
+goarch: amd64
+pkg: github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup
+cpu: 12th Gen Intel(R) Core(TM) i7-12700H
+BenchmarkPostgresLookup/valid         	    1000	    191261 ns/op	    1813 B/op	      28 allocs/op
+BenchmarkPostgresLookup/unknown       	    1000	    181089 ns/op	    1613 B/op	      20 allocs/op
+BenchmarkPostgresLookup/revoked       	    1000	    185978 ns/op	    1813 B/op	      28 allocs/op
+BenchmarkPostgresLookup/canceled      	    1000	       134.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkPostgresLookup/parallel_valid_pool5         	    1000	    177926 ns/op	    1819 B/op	      28 allocs/op
+BenchmarkReferenceDecode/valid                       	    1000	       217.2 ns/op	     160 B/op	       3 allocs/op
+BenchmarkReferenceDecode/uppercase                   	    1000	       301.7 ns/op	     160 B/op	       3 allocs/op
+BenchmarkReferenceDecode/malformed                   	    1000	        47.83 ns/op	      32 B/op	       1 allocs/op
+BenchmarkReferenceDecode/short                       	    1000	         6.548 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	0.880s

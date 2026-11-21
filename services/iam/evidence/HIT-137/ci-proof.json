@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-137",
+  "pr_url": "https://github.com/hitpipe/hitpipe/pull/83",
+  "head_sha": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+  "run_id": 44870917423,
+  "run_attempt": 1,
+  "url": "https://github.com/hitpipe/hitpipe/actions/runs/44870917423",
+  "job_id": 136745018575,
+  "job_url": "https://github.com/hitpipe/hitpipe/actions/runs/44870917423/job/136745018575",
+  "event": "pull_request",
+  "status": "completed",
+  "conclusion": "success",
+  "started_at": "2026-11-21T05:26:48Z",
+  "completed_at": "2026-11-21T05:28:51Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-11-21T05:26:48Z",
+      "completed_at": "2026-11-21T05:26:51Z"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-11-21T05:26:51Z",
+      "completed_at": "2026-11-21T05:26:56Z"
+    },
+    {
+      "name": "Run actions/setup-go@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-11-21T05:26:56Z",
+      "completed_at": "2026-11-21T05:27:02Z"
+    },
+    {
+      "name": "Проверить текущий IAM, PostgreSQL, гонки и сборку",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-11-21T05:27:02Z",
+      "completed_at": "2026-11-21T05:28:48Z"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-11-21T05:28:48Z",
+      "completed_at": "2026-11-21T05:28:49Z"
+    },
+    {
+      "name": "Область проверки",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6,
+      "started_at": "2026-11-21T05:28:49Z",
+      "completed_at": "2026-11-21T05:28:49Z"
+    },
+    {
+      "name": "Post Run actions/setup-go@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11,
+      "started_at": "2026-11-21T05:28:49Z",
+      "completed_at": "2026-11-21T05:28:49Z"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 12,
+      "started_at": "2026-11-21T05:28:49Z",
+      "completed_at": "2026-11-21T05:28:50Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13,
+      "started_at": "2026-11-21T05:28:50Z",
+      "completed_at": "2026-11-21T05:28:50Z"
+    }
+  ],
+  "workflow": {
+    "path": ".github/workflows/pr12-dk.yml",
+    "sha256": "6a55c137f0e21f4a0a9b6eac73b9d71956ef9ed0334c81bfe3ae8df7b0e75142",
+    "command": "python3 services/iam/tools/check_postgres_session_lookup.py --evidence-dir \"$RUNNER_TEMP/iam-postgres-checks\"",
+    "mode": "standard"
+  },
+  "artifact": {
+    "name": "iam-postgres-28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+    "id": 14694230757,
+    "bytes": 7208,
+    "sha256": "3fd69655222be62738c0e1ff4ef2d7a45f323f346f4ac2ed1ab0f2a518bc11bc",
+    "github_digest": "sha256:3fd69655222be62738c0e1ff4ef2d7a45f323f346f4ac2ed1ab0f2a518bc11bc",
+    "verification_json_sha256": "d4b0cca693977be549004b24dbfde34a7e811b1a4c8434d208f6a8bea9381279"
+  },
+  "verification": {
+    "task": "HIT-81",
+    "schema_version": 1,
+    "started_at_utc": "2026-11-21T05:27:02Z",
+    "source_commit": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+    "source_tree_sha256": "048c82668cfc80c5f666aab3a59755469261a38c82531af640e0b84b38c2a72c",
+    "go_version": "go version go1.27.2 linux/amd64",
+    "platform": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.39",
+    "cpu_count": 4,
+    "execution_limits": {
+      "GOMAXPROCS": 1,
+      "GOGC": 50,
+      "go_build_parallelism": 1,
+      "postgres_memory_mib": 256,
+      "postgres_cpus": 0.5
+    },
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "scope": "Isolated IAM schema migration, role permissions, row isolation, constraints and transaction checks, plus the existing session lookup and consumer; not live IAM, login, trusted time or deployment qualification",
+    "checks": [
+      {
+        "name": "bootstrap-roles",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-3be8847a0cae",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_3be8847a0cae"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.038,
+        "log": "bootstrap-roles.log",
+        "log_sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322",
+        "stdin_sha256": "e67a1c56e3b1a1a98ee73ea4f746e8ca43cf9334c3c7878e899ff17b502a3673"
+      },
+      {
+        "name": "test-logins",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-3be8847a0cae",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_3be8847a0cae"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.034,
+        "log": "test-logins.log",
+        "log_sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7",
+        "stdin_sha256": "a9ca152c541da9642457da816f627ed4f0e3f4d759929edb8c02fea031913827"
+      },
+      {
+        "name": "migration-role-tcp",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-3be8847a0cae",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_3be8847a0cae",
+          "-Atc",
+          "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.046,
+        "log": "migration-role-tcp.log",
+        "log_sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+      },
+      {
+        "name": "migration-startup-role",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "--env",
+          "PGOPTIONS=-c role=hp_iam_migrator",
+          "hit81-pg-3be8847a0cae",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_3be8847a0cae",
+          "-Atc",
+          "SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.034,
+        "log": "migration-startup-role.log",
+        "log_sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+      },
+      {
+        "name": "migration-install",
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 29.607,
+        "log": "migration-install.log",
+        "log_sha256": "32aae76dab5d92160b07064ebe2ed832e3a50b3173a1a964cf1b84d385fa4aa8"
+      },
+      {
+        "name": "migration-repeat",
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.09,
+        "log": "migration-repeat.log",
+        "log_sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+      },
+      {
+        "name": "read-only-lookup",
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit81-pg-3be8847a0cae",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_3be8847a0cae"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.037,
+        "log": "read-only-lookup.log",
+        "log_sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76",
+        "stdin_sha256": "aa9ac4f7ebcb8e8116afce0064242fe5605ca63ef37d3a0f7807ccd7e7ebf383"
+      },
+      {
+        "name": "unit",
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 8.934,
+        "log": "unit.log",
+        "log_sha256": "455c79a169f8da433d70742fa2b7d26c1f9dd683ac9154aba4f38e423aad4836"
+      },
+      {
+        "name": "postgres-race",
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-tags=integration",
+          "-race",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 52.836,
+        "log": "postgres-race.log",
+        "log_sha256": "44c72fa87eacb9529e08927b22f29a566e6107499e510646634fcf3f5d3c04a3"
+      },
+      {
+        "name": "vet",
+        "command": [
+          "go",
+          "vet",
+          "-p",
+          "1",
+          "-tags=integration",
+          "./..."
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 4.099,
+        "log": "vet.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "build",
+        "command": [
+          "go",
+          "build",
+          "-p",
+          "1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.813,
+        "log": "build.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "state": "PASSED",
+    "postgres_version": "18.7",
+    "host_loopback_tcp_probe": {
+      "host": "127.0.0.1",
+      "state": "PASSED"
+    },
+    "test_container_removed": true,
+    "test_network_removed": true,
+    "finished_at_utc": "2026-11-21T05:28:48Z"
+  },
+  "race_top_level_passes": 65,
+  "iam_schema_top_level_passes": 17,
+  "lookup_top_level_passes": 9,
+  "verified_race_cases": [
+    "TestIAMSchemaMigrationRefusesInvalidExistingState/foreign_owner",
+    "TestIAMSchemaMigrationRefusesInvalidExistingState/missing_rls",
+    "TestIAMSchemaMigrationRefusesInvalidExistingState/weakened_policy",
+    "TestIAMSchemaMigrationRefusesInvalidExistingState/widened_grant",
+    "TestIAMSchemaMigrationRepeatOnFreshConnection",
+    "TestIAMSchemaOwnerCannotBypassForcedRLS",
+    "TestIAMSchemaRoleSeparationAndOwnership",
+    "TestIAMSchemaRuntimePrivilegeMatrix",
+    "TestIAMSchemaTenantRLSReadAndWriteIsolation",
+    "TestPostgresExactSnapshotAndExistingConsumer"
+  ],
+  "race_skipped": [
+    {
+      "test": "TestHIT82LatencySamples",
+      "reason": "latency sampling is explicit opt-in"
+    }
+  ],
+  "measurement_output_present": false
+}

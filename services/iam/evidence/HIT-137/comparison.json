@@ -1,0 +1,1295 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "candidate_commit": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+  "postgres_version": "18.7",
+  "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "go_version": "go version go1.27.2 linux/amd64",
+  "started_at_utc": "2026-11-21T05:29:53Z",
+  "finished_at_utc": "2026-11-21T05:30:57Z",
+  "host": {
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logical_cpu_count": 4,
+    "load_average_start": [
+      0.37548828125,
+      0.3291015625,
+      0.16162109375
+    ],
+    "load_average_finish": [
+      0.91064453125,
+      0.494140625,
+      0.23193359375
+    ]
+  },
+  "method": {
+    "repetitions_per_variant": 5,
+    "iteration_order": [
+      "baseline,candidate",
+      "candidate,baseline",
+      "baseline,candidate",
+      "candidate,baseline",
+      "baseline,candidate"
+    ],
+    "bench_iterations": 1000,
+    "profile_iterations": 3000,
+    "go_test_parallelism": 1,
+    "GOMAXPROCS": "1",
+    "GOGC": "50",
+    "database": "same disposable synthetic fixture",
+    "warmup": "Shared benchmark/test harness; no unrecorded prewarming runs",
+    "timing_claim": "Measurements on a shared limited host, not a production throughput guarantee"
+  },
+  "verification_command_count": 11,
+  "measurement_command_count": 18,
+  "postgres_lookup": {
+    "valid": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            205581.0,
+            202059.0,
+            189190.0,
+            191261.0,
+            194973.0
+          ],
+          "median": 194973.0,
+          "min": 189190.0,
+          "max": 205581.0
+        },
+        "candidate": {
+          "samples": [
+            207847.0,
+            201294.0,
+            227674.0,
+            196935.0,
+            229627.0
+          ],
+          "median": 207847.0,
+          "min": 196935.0,
+          "max": 229627.0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            2266.0,
+            -765.0,
+            38484.0,
+            5674.0,
+            34654.0
+          ],
+          "median": 5674.0,
+          "min": -765.0,
+          "max": 38484.0
+        },
+        "candidate_lower_pairs": 1,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            1813,
+            1813,
+            1813,
+            1813,
+            1813
+          ],
+          "median": 1813,
+          "min": 1813,
+          "max": 1813
+        },
+        "candidate": {
+          "samples": [
+            1685,
+            1685,
+            1685,
+            1685,
+            1685
+          ],
+          "median": 1685,
+          "min": 1685,
+          "max": 1685
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -128,
+            -128,
+            -128,
+            -128,
+            -128
+          ],
+          "median": -128,
+          "min": -128,
+          "max": -128
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            28,
+            28,
+            28,
+            28,
+            28
+          ],
+          "median": 28,
+          "min": 28,
+          "max": 28
+        },
+        "candidate": {
+          "samples": [
+            26,
+            26,
+            26,
+            26,
+            26
+          ],
+          "median": 26,
+          "min": 26,
+          "max": 26
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -2,
+            -2,
+            -2,
+            -2,
+            -2
+          ],
+          "median": -2,
+          "min": -2,
+          "max": -2
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "unknown": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            174423.0,
+            165625.0,
+            201818.0,
+            181089.0,
+            181628.0
+          ],
+          "median": 181089.0,
+          "min": 165625.0,
+          "max": 201818.0
+        },
+        "candidate": {
+          "samples": [
+            174565.0,
+            179879.0,
+            179826.0,
+            181665.0,
+            202440.0
+          ],
+          "median": 179879.0,
+          "min": 174565.0,
+          "max": 202440.0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            142.0,
+            14254.0,
+            -21992.0,
+            576.0,
+            20812.0
+          ],
+          "median": 576.0,
+          "min": -21992.0,
+          "max": 20812.0
+        },
+        "candidate_lower_pairs": 1,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            1613,
+            1613,
+            1613,
+            1613,
+            1613
+          ],
+          "median": 1613,
+          "min": 1613,
+          "max": 1613
+        },
+        "candidate": {
+          "samples": [
+            1485,
+            1485,
+            1485,
+            1485,
+            1485
+          ],
+          "median": 1485,
+          "min": 1485,
+          "max": 1485
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -128,
+            -128,
+            -128,
+            -128,
+            -128
+          ],
+          "median": -128,
+          "min": -128,
+          "max": -128
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            20,
+            20,
+            20,
+            20,
+            20
+          ],
+          "median": 20,
+          "min": 20,
+          "max": 20
+        },
+        "candidate": {
+          "samples": [
+            18,
+            18,
+            18,
+            18,
+            18
+          ],
+          "median": 18,
+          "min": 18,
+          "max": 18
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -2,
+            -2,
+            -2,
+            -2,
+            -2
+          ],
+          "median": -2,
+          "min": -2,
+          "max": -2
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "revoked": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            183900.0,
+            176631.0,
+            190614.0,
+            185978.0,
+            187376.0
+          ],
+          "median": 185978.0,
+          "min": 176631.0,
+          "max": 190614.0
+        },
+        "candidate": {
+          "samples": [
+            184752.0,
+            187515.0,
+            173374.0,
+            193610.0,
+            192189.0
+          ],
+          "median": 187515.0,
+          "min": 173374.0,
+          "max": 193610.0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            852.0,
+            10884.0,
+            -17240.0,
+            7632.0,
+            4813.0
+          ],
+          "median": 4813.0,
+          "min": -17240.0,
+          "max": 10884.0
+        },
+        "candidate_lower_pairs": 1,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            1813,
+            1813,
+            1813,
+            1813,
+            1813
+          ],
+          "median": 1813,
+          "min": 1813,
+          "max": 1813
+        },
+        "candidate": {
+          "samples": [
+            1685,
+            1685,
+            1685,
+            1685,
+            1685
+          ],
+          "median": 1685,
+          "min": 1685,
+          "max": 1685
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -128,
+            -128,
+            -128,
+            -128,
+            -128
+          ],
+          "median": -128,
+          "min": -128,
+          "max": -128
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            28,
+            28,
+            28,
+            28,
+            28
+          ],
+          "median": 28,
+          "min": 28,
+          "max": 28
+        },
+        "candidate": {
+          "samples": [
+            26,
+            26,
+            26,
+            26,
+            26
+          ],
+          "median": 26,
+          "min": 26,
+          "max": 26
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -2,
+            -2,
+            -2,
+            -2,
+            -2
+          ],
+          "median": -2,
+          "min": -2,
+          "max": -2
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "canceled": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            137.4,
+            159.8,
+            137.8,
+            134.7,
+            137.9
+          ],
+          "median": 137.8,
+          "min": 134.7,
+          "max": 159.8
+        },
+        "candidate": {
+          "samples": [
+            138.0,
+            123.8,
+            122.8,
+            136.8,
+            148.6
+          ],
+          "median": 136.8,
+          "min": 122.8,
+          "max": 148.6
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            0.5999999999999943,
+            -36.000000000000014,
+            -15.000000000000014,
+            2.1000000000000227,
+            10.699999999999989
+          ],
+          "median": 0.5999999999999943,
+          "min": -36.000000000000014,
+          "max": 10.699999999999989
+        },
+        "candidate_lower_pairs": 2,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_lower_pairs": 0,
+        "equal_pairs": 5,
+        "observed_ranges_overlap": true
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_lower_pairs": 0,
+        "equal_pairs": 5,
+        "observed_ranges_overlap": true
+      }
+    },
+    "parallel_valid_pool5": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            200758.0,
+            230451.0,
+            223525.0,
+            177926.0,
+            216264.0
+          ],
+          "median": 216264.0,
+          "min": 177926.0,
+          "max": 230451.0
+        },
+        "candidate": {
+          "samples": [
+            177578.0,
+            239053.0,
+            191399.0,
+            234493.0,
+            195531.0
+          ],
+          "median": 195531.0,
+          "min": 177578.0,
+          "max": 239053.0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -23180.0,
+            8602.0,
+            -32126.0,
+            56567.0,
+            -20733.0
+          ],
+          "median": -20733.0,
+          "min": -32126.0,
+          "max": 56567.0
+        },
+        "candidate_lower_pairs": 3,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            1811,
+            1834,
+            1834,
+            1819,
+            1819
+          ],
+          "median": 1819,
+          "min": 1811,
+          "max": 1834
+        },
+        "candidate": {
+          "samples": [
+            1691,
+            1698,
+            1693,
+            1698,
+            1691
+          ],
+          "median": 1693,
+          "min": 1691,
+          "max": 1698
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -120,
+            -136,
+            -141,
+            -121,
+            -128
+          ],
+          "median": -128,
+          "min": -141,
+          "max": -120
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            28,
+            28,
+            28,
+            28,
+            28
+          ],
+          "median": 28,
+          "min": 28,
+          "max": 28
+        },
+        "candidate": {
+          "samples": [
+            26,
+            26,
+            26,
+            26,
+            26
+          ],
+          "median": 26,
+          "min": 26,
+          "max": 26
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -2,
+            -2,
+            -2,
+            -2,
+            -2
+          ],
+          "median": -2,
+          "min": -2,
+          "max": -2
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    }
+  },
+  "reference_decode": {
+    "valid": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            318.1,
+            363.3,
+            288.3,
+            217.2,
+            330.5
+          ],
+          "median": 318.1,
+          "min": 217.2,
+          "max": 363.3
+        },
+        "candidate": {
+          "samples": [
+            151.5,
+            134.1,
+            151.6,
+            151.9,
+            237.7
+          ],
+          "median": 151.6,
+          "min": 134.1,
+          "max": 237.7
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -166.60000000000002,
+            -229.20000000000002,
+            -136.70000000000002,
+            -65.29999999999998,
+            -92.80000000000001
+          ],
+          "median": -136.70000000000002,
+          "min": -229.20000000000002,
+          "max": -65.29999999999998
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": true
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            160,
+            160,
+            160,
+            160,
+            160
+          ],
+          "median": 160,
+          "min": 160,
+          "max": 160
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -160,
+            -160,
+            -160,
+            -160,
+            -160
+          ],
+          "median": -160,
+          "min": -160,
+          "max": -160
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -3,
+            -3,
+            -3,
+            -3,
+            -3
+          ],
+          "median": -3,
+          "min": -3,
+          "max": -3
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "uppercase": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            250.6,
+            311.9,
+            277.1,
+            301.7,
+            319.0
+          ],
+          "median": 301.7,
+          "min": 250.6,
+          "max": 319.0
+        },
+        "candidate": {
+          "samples": [
+            9.824,
+            8.653,
+            9.754,
+            10.1,
+            15.66
+          ],
+          "median": 9.824,
+          "min": 8.653,
+          "max": 15.66
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -240.77599999999998,
+            -303.24699999999996,
+            -267.346,
+            -291.59999999999997,
+            -303.34
+          ],
+          "median": -291.59999999999997,
+          "min": -303.34,
+          "max": -240.77599999999998
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            160,
+            160,
+            160,
+            160,
+            160
+          ],
+          "median": 160,
+          "min": 160,
+          "max": 160
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -160,
+            -160,
+            -160,
+            -160,
+            -160
+          ],
+          "median": -160,
+          "min": -160,
+          "max": -160
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -3,
+            -3,
+            -3,
+            -3,
+            -3
+          ],
+          "median": -3,
+          "min": -3,
+          "max": -3
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "malformed": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            48.73,
+            63.29,
+            49.56,
+            47.83,
+            70.93
+          ],
+          "median": 49.56,
+          "min": 47.83,
+          "max": 70.93
+        },
+        "candidate": {
+          "samples": [
+            9.715,
+            8.28,
+            9.747,
+            9.592,
+            15.52
+          ],
+          "median": 9.715,
+          "min": 8.28,
+          "max": 15.52
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -39.015,
+            -55.01,
+            -39.813,
+            -38.238,
+            -55.41000000000001
+          ],
+          "median": -39.813,
+          "min": -55.41000000000001,
+          "max": -38.238
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "median": 32,
+          "min": 32,
+          "max": 32
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -32,
+            -32,
+            -32,
+            -32,
+            -32
+          ],
+          "median": -32,
+          "min": -32,
+          "max": -32
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "median": 1,
+          "min": 1,
+          "max": 1
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "median": -1,
+          "min": -1,
+          "max": -1
+        },
+        "candidate_lower_pairs": 5,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      }
+    },
+    "short": {
+      "ns_per_op": {
+        "baseline": {
+          "samples": [
+            6.519,
+            6.631,
+            6.515,
+            6.548,
+            6.592
+          ],
+          "median": 6.548,
+          "min": 6.515,
+          "max": 6.631
+        },
+        "candidate": {
+          "samples": [
+            8.9,
+            7.66,
+            8.778,
+            8.794,
+            10.36
+          ],
+          "median": 8.794,
+          "min": 7.66,
+          "max": 10.36
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            2.3810000000000002,
+            1.029,
+            2.263000000000001,
+            2.2460000000000004,
+            3.768
+          ],
+          "median": 2.263000000000001,
+          "min": 1.029,
+          "max": 3.768
+        },
+        "candidate_lower_pairs": 0,
+        "equal_pairs": 0,
+        "observed_ranges_overlap": false
+      },
+      "bytes_per_op": {
+        "baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_lower_pairs": 0,
+        "equal_pairs": 5,
+        "observed_ranges_overlap": true
+      },
+      "allocs_per_op": {
+        "baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_minus_baseline": {
+          "samples": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "candidate_lower_pairs": 0,
+        "equal_pairs": 5,
+        "observed_ranges_overlap": true
+      }
+    }
+  },
+  "latency_ns": {
+    "baseline": {
+      "valid": {
+        "p50_ns": 178100,
+        "p95_ns": 216121,
+        "p99_ns": 278707,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 5312.933566924604
+      },
+      "unknown": {
+        "p50_ns": 176828,
+        "p95_ns": 207397,
+        "p99_ns": 284603,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 5487.864966823908
+      },
+      "revoked": {
+        "p50_ns": 188411,
+        "p95_ns": 218048,
+        "p99_ns": 244111,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 5228.377954088442
+      },
+      "canceled": {
+        "p50_ns": 166,
+        "p95_ns": 225,
+        "p99_ns": 277,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 2571851.0898218993
+      },
+      "parallel_valid_pool5": {
+        "p50_ns": 364417,
+        "p95_ns": 781264,
+        "p99_ns": 37154910,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 5,
+        "throughput_operations_per_second": 3850.985989315817
+      }
+    },
+    "candidate": {
+      "valid": {
+        "p50_ns": 189047,
+        "p95_ns": 442108,
+        "p99_ns": 787713,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 4444.895650740724
+      },
+      "unknown": {
+        "p50_ns": 182804,
+        "p95_ns": 215491,
+        "p99_ns": 231052,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 5378.015868276817
+      },
+      "revoked": {
+        "p50_ns": 191417,
+        "p95_ns": 233972,
+        "p99_ns": 268486,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 5094.703481557838
+      },
+      "canceled": {
+        "p50_ns": 165,
+        "p95_ns": 178,
+        "p99_ns": 244,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 1,
+        "throughput_operations_per_second": 2379184.986391062
+      },
+      "parallel_valid_pool5": {
+        "p50_ns": 442519,
+        "p95_ns": 1465024,
+        "p99_ns": 32587383,
+        "count": 1000,
+        "warmup_count": 500,
+        "workers": 5,
+        "throughput_operations_per_second": 3651.861552494575
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "measurement/verification.json": "73a3e4586dafdca5a55824227c3ecafe7b1c6578c5da9ecdf0b3dd48793cf08b",
+    "measurement/measurement.json": "d11d86791030ec41ea871c1fe588c1df724b382f3230d5cc1de011139f78df6b",
+    "measurement/bench-01-baseline.log": "f91ed5074a84c3c090aacc81f25c4c9f9476042e6ee6575217c2ba65ada896c5",
+    "measurement/bench-01-candidate.log": "de4f72b6dd999a56f87404db7b612aaabe6a64d12b507f20dfa73a7b42560780",
+    "measurement/bench-02-candidate.log": "6656b9ee42fa4d8cbebd3ace9264273ecf1370ea9df5e22f40f90e22eb2ae9f2",
+    "measurement/bench-02-baseline.log": "001a85b850ca8e06f9c8d284d6af748af98954d1914b83e7615000ab3724ea7a",
+    "measurement/bench-03-baseline.log": "deff5e784bda35e5c82e56a9cb52c737b4862fbf9469307a24f692eec0ca1634",
+    "measurement/bench-03-candidate.log": "7efdf1e21d52cc3e71219b6de76b848f6172dff29de1b84a29cb3b1a795ba81f",
+    "measurement/bench-04-candidate.log": "c26696a10a3532f37b0f50dd6d672ba8e063af441d2579fdd554aed8cce4bb6f",
+    "measurement/bench-04-baseline.log": "1f0464c748da72a42fc136d7ec1db154bbb9684fcb23fc27420570c94b4b70ac",
+    "measurement/bench-05-baseline.log": "d752a8740b00228ca7e2e8d9694ba5446830eb146ba4594d27a686f9d17dfbeb",
+    "measurement/bench-05-candidate.log": "d2d34534fc8e0370526ec67aae692242a4b5fe437be6b159cb952b19cd58aec5",
+    "measurement/latency-baseline.log": "27f8004dc267dac88ec2dbefaa731b2f425dee74017aeb2624b0cded968e214a",
+    "measurement/profile-baseline.log": "217fb24a0dc4515912327ffc92f3c2f1f02a82ea4fb4d63cacec5ac7c2354e45",
+    "measurement/cpu-top-baseline.log": "f776a3ca23b0c00b40038cab439b9f5352f9b4eab53ab86fb91ebb41e698e2e3",
+    "measurement/allocation-top-baseline.log": "8fa9169ef7c9acd7f501ce39d2e61a02340c10a05e929fc8de3e6f81c9e1ed37",
+    "measurement/latency-candidate.log": "2bafea3a97c823e905b78598a014bdad077b0ccc32df268dfe68b17ffce14d16",
+    "measurement/profile-candidate.log": "07085793c76bcc3438cf5e062e74e65a64def1d7d675e53dfe94ee8e87b85049",
+    "measurement/cpu-top-candidate.log": "b15d8c21149b0cd7b0d8a8901c2dd0b404a17134be65535050d06a47cf07c31a",
+    "measurement/allocation-top-candidate.log": "a9e45d3b28d88835c2d716ec5370c59202ecb1874e44b432eb29b1a981f1430f",
+    "measurement/baseline/latency-samples.json": "9b395e514bc048bc9c9890c5ac4040d6d21cb468000c903a94b4f1df9a130947",
+    "measurement/candidate/latency-samples.json": "b859fb283d4a3ce88decaf101f1c2ab090dc9cfc4ceb84500edc8a347eaeedac"
+  }
+}
