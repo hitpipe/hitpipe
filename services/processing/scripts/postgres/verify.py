@@ -21,6 +21,7 @@ MIGRATIONS=MODULE/'scripts/migrations'
 def now(): return dt.datetime.now(dt.timezone.utc).isoformat()
 
 class Run:
+ command_timeout=180
  def __init__(self,output):
   self.output=output;output.mkdir(parents=True,exist_ok=False)
   self.records=[];self.name='hit76-'+uuid.uuid4().hex;self.db='hit76_'+uuid.uuid4().hex
@@ -30,7 +31,7 @@ class Run:
   self.script_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
  def command(self,label,args,stdin=None,required=True):
   started=now()
-  r=subprocess.run(args,input=stdin,capture_output=True,cwd=REPO,timeout=180)
+  r=subprocess.run(args,input=stdin,capture_output=True,cwd=REPO,timeout=self.command_timeout)
   entry={'label':label,'argv':args,'cwd':str(REPO),'environment':'Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.','source_sha':self.source,'tree_status_at_start':self.tree_status,'runner_sha256':self.script_sha256,'started_at':started,'finished_at':now(),'exit_code':r.returncode}
   for kind,b in [('stdin',stdin),('stdout',r.stdout),('stderr',r.stderr)]:
    if b is not None:
