@@ -41,6 +41,8 @@ def main(*, task="HIT-81", schema_checks=True):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--go", default="go", help="Path to the accepted Go 1.27.2 binary")
     parser.add_argument("--evidence-dir", type=Path, default=IAM / "evidence" / task)
+    parser.add_argument("--measure-baseline", type=Path,
+                        help="Compare with the prepared local HIT-82 baseline worktree")
     args = parser.parse_args()
     if hashlib.sha256(SQL.read_bytes()).hexdigest() != SQL_SHA256:
         parser.error("IAM fixture differs from the complete accepted SQL source")
@@ -173,6 +175,8 @@ def main(*, task="HIT-81", schema_checks=True):
         reader_role = "CREATE ROLE hp_hit68_lookup LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS IN ROLE hp_iam_app;\n"
         reader_role += "ALTER ROLE hp_hit68_lookup SET default_transaction_read_only=on;\n"
         check_command("read-only-lookup", psql, data=reader_role)
+        if args.measure_baseline is not None:
+            environment["HITPIPE_IAM_BENCH_OUTPUT_DIR"] = str(evidence / "race-samples")
         commands = [
             ("unit", [args.go, "test", "-p", "1", "-count=1", "./..."]),
             ("postgres-race", [args.go, "test", "-p", "1", "-tags=integration", "-race", "-count=1", "-v", "./..."]),
@@ -186,6 +190,11 @@ def main(*, task="HIT-81", schema_checks=True):
                 raise RuntimeError("required real PostgreSQL tests did not run")
             if schema_checks and label == "postgres-race" and ("--- SKIP: TestIAMSchema" in log or "--- PASS: TestIAMSchema" not in log):
                 raise RuntimeError("required IAM schema and permission tests did not run")
+        if args.measure_baseline is not None:
+            from measure_session_lookup import measure
+
+            measure(args.go, environment, evidence, args.measure_baseline)
+            result["measurement"] = "measurement.json"
         if source_digest() != result["source_tree_sha256"]:
             raise RuntimeError("source files changed during the checks")
         result["state"] = "PASSED"
