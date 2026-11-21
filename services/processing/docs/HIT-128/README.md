@@ -11,3 +11,7 @@ Codex по делегации Тимофея Патрушева (`Tim1hik`). [HI
 ## Доказательства к повторной проверке
 
 Полные тексты и записи для [замечаний №15740](https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15740) относятся к тому же проверенному исходнику `c426dc4`. [Исходники](review-15740/source-files.md) · [Точный патч](review-15740/exact-source.diff) · [Оригинальные команды, race, vet и сборка](review-15740/local-execution.md) · [Фактические результаты GitHub Actions](review-15740/ci-execution.md) · [Сверка шести норм](review-15740/contract-conformance.md)
+
+## Происхождение зависимостей
+
+По [протоколу №15797](https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15797) все шесть DoD получили PASS. Доказательства происхождения зависимостей дополнены без изменения проверенного исходника. [Таблица включения](review-15797/dependency-chain.md) · [Зарегистрируемый результат с оригинальными результатами задач и полным выводом команд](../../../../.project-os/results/HIT-128.json)
