@@ -1,0 +1,11 @@
+=== RUN   TestDiagnosticSampleBoundedAndScoped
+--- PASS: TestDiagnosticSampleBoundedAndScoped (0.02s)
+=== RUN   TestProcessingDiagnosticsOwnedStand
+    diagnostics_test.go:389: HTTP PASS: captured actual Health CLOSED/READY/DEGRADED/recovered and mTLS denial; missing each required field and an extra property were rejected by the pinned validator
+    diagnostics_test.go:390: Observed live inbox age 2046 ms, outbox due lag 2042 ms, job due lag 2042 ms and committed observation age 708 ms.
+    diagnostics_test.go:392: PROCESS PASS: CLOSED/OPEN and exact Health, actual HELD/UNKNOWN, changed outbox/jobs, observation replay, expired lease, content and PostgreSQL faults, purge reason, restart and log privacy
+--- PASS: TestProcessingDiagnosticsOwnedStand (14.15s)
+=== RUN   TestProcessingPurgeOwnedStand
+    purge_test.go:236: expired pending/claimed messages held before unlink; process exit after commit, restart and idempotent bounded sweep; live SQL ref and foreign file preserved; safety identity and command keys retained
+--- PASS: TestProcessingPurgeOwnedStand (0.15s)
+PASS

@@ -1,0 +1,1197 @@
+diff --git a/services/processing/cmd/processing-purge/main.go b/services/processing/cmd/processing-purge/main.go
+index 817c64f54eebf143d81d9c01cb475f3a0b081602..981ba7fbdc06da1e22d70d8827ec14bed703fc45 100644
+--- a/services/processing/cmd/processing-purge/main.go
++++ b/services/processing/cmd/processing-purge/main.go
+@@ -8,6 +8,7 @@ import (
+ 	"errors"
+ 	"flag"
+ 	"fmt"
++	"log/slog"
+ 	"net"
+ 	"os"
+ 	"os/signal"
+@@ -58,24 +59,25 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int
+ 		fmt.Fprintln(os.Stderr, errOptions)
+ 		return 2
+ 	}
++	log := slog.New(slog.NewJSONHandler(os.Stderr, nil))
+ 	files, err := contentfiles.OpenMaintenance(path)
+ 	if err != nil {
+-		fmt.Fprintln(os.Stderr, "private Processing content directory unavailable or busy")
++		log.Warn("private Processing content directory unavailable or busy", "reason", "purge_volume_unavailable", "workspace_id", workspace)
+ 		return 1
+ 	}
+ 	defer files.Close()
+ 	conn, err := pgx.ConnectConfig(ctx, cfg)
+ 	if err != nil {
+-		fmt.Fprintln(os.Stderr, "local Processing database unavailable")
++		log.Warn("local Processing database unavailable", "reason", "purge_postgres_unavailable", "workspace_id", workspace)
+ 		return 1
+ 	}
+ 	defer conn.Close(context.Background())
+ 	result, err := (postgres.PurgeStore{DB: conn, Files: files}).Run(ctx, workspace, limit)
+ 	if err != nil {
+ 		if errors.Is(err, postgres.ErrPurgeScope) {
+-			fmt.Fprintln(os.Stderr, postgres.ErrPurgeScope)
++			log.Warn(postgres.ErrPurgeScope.Error(), "reason", "purge_scope_denied", "workspace_id", workspace)
+ 		} else {
+-			fmt.Fprintln(os.Stderr, "processing purge incomplete; review local state before repeating")
++			log.Warn("processing purge incomplete; review local state before repeating", "reason", "purge_incomplete", "workspace_id", workspace)
+ 		}
+ 		return 1
+ 	}
+diff --git a/services/processing/internal/adapters/contentfiles/store.go b/services/processing/internal/adapters/contentfiles/store.go
+index 25376a04c3d489547a250d215fab98dd0bfffe42..5b2f3557d20fc080f92b7010770ae0d6d68c1abd 100644
+--- a/services/processing/internal/adapters/contentfiles/store.go
++++ b/services/processing/internal/adapters/contentfiles/store.go
+@@ -30,10 +30,11 @@ const maxBody = 65536
+ // Store owns an existing private directory. Step is optional fault injection;
+ // it can only fail a write, never authorize an action or override an IO error.
+ type Store struct {
+-	mu    sync.Mutex
+-	root  *os.Root
+-	lease *os.File
+-	Step  func(string) error
++	mu      sync.Mutex
++	root    *os.Root
++	lease   *os.File
++	Step    func(string) error
++	OnFault func() // set before sharing the store with a runtime
+ }
+ type header struct {
+ 	Origin  preparecase.Origin `json:"origin"`
+@@ -109,7 +110,7 @@ func (s *Store) syncDir() error {
+ func validClass(c string) bool {
+ 	return c == "DELIVERY_INTENT" || c == "DELIVERY_QUERY" || c == "HISTORY" || c == "CASE_CONTEXT" || c == "DRAFT_DATA"
+ }
+-func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (preparecase.Ref, error) {
++func (s *Store) Write(ctx context.Context, b []byte, class string, origin preparecase.Origin, expiry, now time.Time) (_ preparecase.Ref, err error) {
+ 	zero := preparecase.Ref{}
+ 	// Persist exactly the precision representable by PostgreSQL timestamptz.
+ 	// Round down, never extend a caller's hard expiry or a source-proof deadline.
+@@ -117,6 +118,7 @@ func (s *Store) Write(ctx context.Context, b []byte, class string, origin prepar
+ 	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || !validClass(class) || !validOrigin(origin) || len(b) < 1 || len(b) > maxBody || now.IsZero() || !expiry.After(now) || expiry.After(now.Add(90*24*time.Hour)) {
+ 		return zero, preparecase.ErrContent
+ 	}
++	defer s.reportFault(ctx, &err)
+ 	s.mu.Lock()
+ 	defer s.mu.Unlock()
+ 	id, e := UUID()
+@@ -175,11 +177,18 @@ func (s *Store) Write(ctx context.Context, b []byte, class string, origin prepar
+ 	}
+ 	return ref, nil
+ }
+-func (s *Store) read(id string) (header, []byte, error) {
++func (s *Store) reportFault(ctx context.Context, err *error) {
++	if s.OnFault != nil && *err != nil && (ctx == nil || ctx.Err() == nil) {
++		s.OnFault()
++	}
++}
++
++func (s *Store) read(id string) (_ header, _ []byte, err error) {
+ 	zero := header{}
+ 	if !idPattern.MatchString(strings.TrimSuffix(id, ".pending")) {
+ 		return zero, nil, preparecase.ErrContent
+ 	}
++	defer s.reportFault(nil, &err)
+ 	f, e := s.root.OpenFile(id, os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
+ 	if e != nil {
+ 		return zero, nil, preparecase.ErrContent
+diff --git a/services/processing/internal/adapters/postgres/diagnostics.go b/services/processing/internal/adapters/postgres/diagnostics.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..abafb0400f25e5d27e7ffc9de5975c03a2b7e77c
+--- /dev/null
++++ b/services/processing/internal/adapters/postgres/diagnostics.go
+@@ -0,0 +1,74 @@
++package postgres
++
++import (
++	"context"
++
++	"github.com/jackc/pgx/v5"
++)
++
++const DiagnosticSampleLimit = 100
++
++// QueueSample is a bounded count of stored rows within one existing worker
++// scope. Nullable ages distinguish absent rows from a measured zero.
++type QueueSample struct {
++	InboxRows, OutboxRows, JobRows, CaseRows                                  int
++	InboxHeld, OutboxPending, OutboxClaimed, OutboxHeld, OutboxAcked, JobsDue int
++	ExpiredJobLeases, ExpiredOutboxLeases, WaitingData, Attention, Unknown    int
++	InboxAge, OutboxAge, OutboxDueLag, JobDueLag                              *int64
++	ExpiredJobID, ExpiredOutboxID                                             string
++}
++
++// SampleQueues is called inside the runtime's authorized workspace start.
++// job_index has no RLS, so its explicit workspace predicate is essential.
++func (d DispatchStore) SampleQueues(ctx context.Context, workspace string) (QueueSample, error) {
++	var sample QueueSample
++	tx, err := d.txWithMode(ctx, workspace, pgx.ReadOnly)
++	if err != nil {
++		return sample, err
++	}
++	defer tx.Rollback(ctx)
++	err = tx.QueryRow(ctx, `WITH stamp AS (SELECT statement_timestamp() AS now),
++ inbox AS (SELECT received_at,disposition FROM hp_processing.inbox
++   WHERE workspace_id=$1 ORDER BY message_id LIMIT $2),
++ outbox AS (SELECT message_id,created_at,next_attempt_at,state,lease_until FROM hp_processing.outbox
++   WHERE workspace_id=$1 ORDER BY message_id LIMIT $2),
++ jobs AS (SELECT job_id,due_at,lease_until,claim_token IS NOT NULL AS has_claim FROM hp_processing.job_index
++   WHERE workspace_id=$1 ORDER BY due_at,job_id LIMIT $2),
++ cases AS (SELECT state FROM hp_processing.case_identity
++   WHERE workspace_id=$1 ORDER BY case_id LIMIT $2)
++ SELECT
++ (SELECT count(*) FROM inbox),
++ (SELECT count(*) FROM outbox),
++ (SELECT count(*) FROM jobs),
++ (SELECT count(*) FROM cases),
++ (SELECT count(*) FROM inbox WHERE disposition='HELD'),
++ (SELECT count(*) FROM outbox WHERE state='PENDING'),
++ (SELECT count(*) FROM outbox WHERE state='CLAIMED'),
++ (SELECT count(*) FROM outbox WHERE state='HELD'),
++ (SELECT count(*) FROM outbox WHERE state='ACKED'),
++ (SELECT count(*) FROM jobs WHERE due_at<=now),
++ (SELECT count(*) FROM jobs WHERE has_claim AND lease_until<=now),
++ (SELECT count(*) FROM outbox WHERE state='CLAIMED' AND lease_until<=now),
++ (SELECT count(*) FROM cases WHERE state='WAITING_DATA'),
++ (SELECT count(*) FROM cases WHERE state='ATTENTION'),
++ (SELECT count(*) FROM cases WHERE state='UNKNOWN'),
++ (SELECT (extract(epoch FROM now-least(now,min(received_at)))*1000)::bigint
++  FROM inbox WHERE isfinite(received_at) HAVING count(*)>0),
++ (SELECT (extract(epoch FROM now-least(now,min(created_at)))*1000)::bigint
++  FROM outbox WHERE isfinite(created_at) AND state IN ('PENDING','CLAIMED','HELD') HAVING count(*)>0),
++ (SELECT (extract(epoch FROM now-min(next_attempt_at))*1000)::bigint
++  FROM outbox WHERE isfinite(next_attempt_at) AND next_attempt_at<=now AND state IN ('PENDING','CLAIMED') HAVING count(*)>0),
++ (SELECT (extract(epoch FROM now-min(due_at))*1000)::bigint
++  FROM jobs WHERE isfinite(due_at) AND due_at<=now HAVING count(*)>0),
++ COALESCE((SELECT job_id::text FROM jobs WHERE has_claim AND lease_until<=now ORDER BY job_id LIMIT 1),''),
++ COALESCE((SELECT message_id::text FROM outbox WHERE state='CLAIMED' AND lease_until<=now ORDER BY message_id LIMIT 1),'')
++ FROM stamp`, workspace, DiagnosticSampleLimit).Scan(
++		&sample.InboxRows, &sample.OutboxRows, &sample.JobRows, &sample.CaseRows,
++		&sample.InboxHeld, &sample.OutboxPending, &sample.OutboxClaimed, &sample.OutboxHeld, &sample.OutboxAcked, &sample.JobsDue,
++		&sample.ExpiredJobLeases, &sample.ExpiredOutboxLeases, &sample.WaitingData, &sample.Attention, &sample.Unknown,
++		&sample.InboxAge, &sample.OutboxAge, &sample.OutboxDueLag, &sample.JobDueLag, &sample.ExpiredJobID, &sample.ExpiredOutboxID)
++	if err != nil {
++		return QueueSample{}, err
++	}
++	return sample, tx.Commit(ctx)
++}
+diff --git a/services/processing/internal/adapters/postgres/diagnostics_test.go b/services/processing/internal/adapters/postgres/diagnostics_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f7a4972e34e4fd3b63adb1d3852354df1cdb658
+--- /dev/null
++++ b/services/processing/internal/adapters/postgres/diagnostics_test.go
+@@ -0,0 +1,393 @@
++package postgres
++
++import (
++	"bytes"
++	"encoding/json"
++	"net/http"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"strings"
++	"syscall"
++	"testing"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson"
++	"github.com/jackc/pgx/v5"
++)
++
++func TestDiagnosticSampleBoundedAndScoped(t *testing.T) {
++	app := connect(t)
++	workspace, _ := newID()
++	foreign, _ := newID()
++	worker := DispatchStore{DB: dispatchTestDB{}}
++	insert := func(ws string, count int, age time.Duration) {
++		t.Helper()
++		tx := begin(t, app, ws)
++		defer tx.Rollback(ctx)
++		for range count {
++			id, _ := newID()
++			if _, err := tx.Exec(ctx, `INSERT INTO hp_processing.inbox(workspace_id,message_id,digest,disposition,received_at)
++ VALUES($1,$2,$3,'HELD',$4)`, ws, id, "sha256:"+strings.Repeat("b", 64), time.Now().Add(-age)); err != nil {
++				t.Fatal(err)
++			}
++		}
++		if err := tx.Commit(ctx); err != nil {
++			t.Fatal(err)
++		}
++	}
++	insert(workspace, DiagnosticSampleLimit+7, 10*time.Second)
++	insert(foreign, 1, 20*time.Hour)
++	id, _ := newID()
++	tx, err := worker.tx(ctx, foreign)
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer tx.Rollback(ctx)
++	if _, err = tx.Exec(ctx, `INSERT INTO hp_processing.job_index(job_id,workspace_id,kind,due_at,claim_token,lease_until)
++ VALUES($1,$2,'DELIVERY_INTENT',clock_timestamp()-interval '12 hours',$1,clock_timestamp()-interval '11 hours')`, id, foreign); err != nil {
++		t.Fatal(err)
++	}
++	if err = tx.Commit(ctx); err != nil {
++		t.Fatal(err)
++	}
++	s, err := worker.SampleQueues(ctx, workspace)
++	if err != nil || s.InboxRows != DiagnosticSampleLimit || s.InboxHeld != DiagnosticSampleLimit ||
++		s.InboxAge == nil || *s.InboxAge < 9_000 || *s.InboxAge > 30_000 || s.JobRows != 0 ||
++		s.ExpiredJobLeases != 0 || s.OutboxAge != nil || s.JobDueLag != nil {
++		t.Fatalf("wrong scoped bounded sample %+v %v", s, err)
++	}
++	s, err = worker.SampleQueues(ctx, foreign)
++	if err != nil || s.InboxRows != 1 || s.InboxAge == nil || *s.InboxAge < 70_000_000 ||
++		s.JobRows != 1 || s.ExpiredJobLeases != 1 || s.JobDueLag == nil || *s.JobDueLag < 43_000_000 {
++		t.Fatalf("foreign workspace did not obtain its own metadata %+v %v", s, err)
++	}
++	if _, err = (DispatchStore{DB: app}).SampleQueues(ctx, workspace); err == nil {
++		t.Fatal("app could read the worker job diagnostics")
++	}
++}
++
++type logEvent map[string]any
++
++func (e logEvent) count(group, field string) float64 {
++	g, _ := e[group].(map[string]any)
++	value, _ := g[field].(float64)
++	return value
++}
++
++func readDiagnosticEvents(path string) (out []logEvent) {
++	raw, _ := os.ReadFile(path)
++	for _, line := range bytes.Split(raw, []byte{'\n'}) {
++		var e logEvent
++		if json.Unmarshal(line, &e) == nil {
++			out = append(out, e)
++		}
++	}
++	return
++}
++
++func awaitDiagnostic(t *testing.T, p *processingChild, what string, matches func(logEvent) bool) logEvent {
++	t.Helper()
++	deadline := time.Now().Add(9 * time.Second)
++	for time.Now().Before(deadline) {
++		for _, e := range readDiagnosticEvents(p.logPath) {
++			if matches(e) {
++				return e
++			}
++		}
++		time.Sleep(25 * time.Millisecond)
++	}
++	t.Fatalf("missing diagnostic %s: %v", what, readDiagnosticEvents(p.logPath))
++	return nil
++}
++
++const diagnosticHealthPath = "/internal/v1/health/processing"
++
++type diagnosticHTTPResponse struct {
++	Scenario string `json:"scenario"`
++	Method   string `json:"method"`
++	Path     string `json:"path"`
++	Peer     string `json:"peer"`
++	Status   int    `json:"http_status"`
++	Body     string `json:"response_body"`
++}
++
++// Validate the bytes received from the process and exercise both directions
++// of the closed schema. The modified copies are never captured as responses.
++func checkDiagnosticHealth(t *testing.T, raw []byte, stage string) {
++	t.Helper()
++	var fields map[string]json.RawMessage
++	if draftjson.Validate("Health", raw) != nil || json.Unmarshal(raw, &fields) != nil ||
++		len(fields) != 5 || string(fields["status"]) != `"`+stage+`"` ||
++		string(fields["service"]) != `"PROCESSING"` {
++		t.Fatal("technical health changed", string(raw))
++	}
++	for _, key := range []string{"status", "service", "build_revision", "protocol_version", "checked_at"} {
++		value := fields[key]
++		delete(fields, key)
++		missing := marshalProcess(t, fields)
++		if draftjson.Validate("Health", missing) == nil {
++			t.Fatal("schema allowed missing required property", key)
++		}
++		fields[key] = value
++	}
++	fields["confirmed_delivery"] = json.RawMessage("true")
++	if draftjson.Validate("Health", marshalProcess(t, fields)) == nil {
++		t.Fatal("schema allowed an extra property")
++	}
++}
++
++func TestProcessingDiagnosticsOwnedStand(t *testing.T) {
++	binary, purge := os.Getenv("HIT111_PROCESSING_BIN"), os.Getenv("HIT126_PURGE_BIN")
++	if binary == "" || purge == "" {
++		t.Skip("requires the owned Processing PostgreSQL and purge/runtime binaries")
++	}
++	f, revision := knownFixture(t)
++	workspace, caseID := f.request.WorkspaceID, f.request.CaseID
++	stand := createProcessStand(t, binary, f.path, map[string]string{workspace: "acct_synthetic"})
++	stand.queryReply = func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusForbidden) }
++	var httpLog bytes.Buffer
++	capture := func(scenario, route, peer string, status int, body []byte) {
++		t.Helper()
++		row := diagnosticHTTPResponse{
++			Scenario: scenario, Method: http.MethodGet, Path: route,
++			Peer: peer, Status: status, Body: string(body),
++		}
++		if err := json.NewEncoder(&httpLog).Encode(row); err != nil {
++			t.Fatal(err)
++		}
++	}
++	captureHealth := func(process *processingChild, scenario, stage string) {
++		t.Helper()
++		status, raw := stand.pollHealth(process, stage)
++		checkDiagnosticHealth(t, raw, stage)
++		capture(scenario, diagnosticHealthPath, "OPS", status, raw)
++	}
++
++	// Keep a known expired lease from the earlier intent. The UNKNOWN case
++	// cannot claim it. The real runtime owns the metadata visible in this scope.
++	worker := DispatchStore{DB: dispatchTestDB{}}
++	tx, err := worker.tx(ctx, workspace)
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer tx.Rollback(ctx)
++	if _, err = tx.Exec(ctx, `INSERT INTO hp_processing.job_index(job_id,workspace_id,kind,due_at,claim_token,lease_until)
++ VALUES($1,$2,'DELIVERY_INTENT',clock_timestamp()-interval'5 seconds',$1,clock_timestamp()-interval'1 second')`, f.lineage, workspace); err != nil {
++		t.Fatal(err)
++	}
++	if err = tx.Commit(ctx); err != nil {
++		t.Fatal(err)
++	}
++
++	proc := stand.boot("diagnostics-before-restart.log")
++	captureHealth(proc, "closed_before_fresh_iam_snapshot", "CLOSED")
++	awaitDiagnostic(t, proc, "closed barrier", func(e logEvent) bool {
++		return e["msg"] == "processing barrier diagnostic" && e["barrier"] == "CLOSED"
++	})
++	stand.iamOpen.Store(true)
++	captureHealth(proc, "ready_after_gate_open", "READY")
++	awaitDiagnostic(t, proc, "open barrier", func(e logEvent) bool {
++		return e["msg"] == "processing barrier diagnostic" && e["barrier"] == "OPEN"
++	})
++	q := awaitDiagnostic(t, proc, "pending intent, expired job, UNKNOWN and positive ages", func(e logEvent) bool {
++		return e["workspace_id"] == workspace && e["msg"] == "processing queue sample" &&
++			e.count("outbox", "pending") >= 1 && e.count("inbox", "max_age_ms") > 0 &&
++			e.count("outbox", "max_due_lag_ms") > 0 && e.count("jobs", "max_due_lag_ms") > 0 &&
++			e.count("jobs", "expired_leases") == 1 && e["expired_job_id"] == f.lineage && e.count("cases", "unknown") == 1
++	})
++	if q["sample_limit"] != float64(DiagnosticSampleLimit) {
++		t.Fatal("wrong reported sample cap", q)
++	}
++	awaitDiagnostic(t, proc, "expired lease reason", func(e logEvent) bool { return e["reason"] == "lease_expired" })
++
++	request, _ := newID()
++	casePath := "/api/v1/workspaces/" + workspace + "/cases/" + caseID
++	stand.command(casePath+"/recovery", recheckCommand(t, request, revision), request, 202)
++	waitRecheckOutbox(t, workspace, request, "HELD", 1, 5*time.Second)
++	awaitDiagnostic(t, proc, "real held query", func(e logEvent) bool {
++		return e["msg"] == "processing recheck outbox transition" && e["request_id"] == request && e["state"] == "HELD"
++	})
++	held := awaitDiagnostic(t, proc, "outbox held snapshot", func(e logEvent) bool {
++		return e["msg"] == "processing queue sample" && e.count("outbox", "held") >= 1
++	})
++	if held.count("outbox", "rows") <= q.count("outbox", "rows") || held.count("jobs", "rows") != q.count("jobs", "rows") {
++		t.Fatal("held outbox did not retain the measured independent job population", q, held)
++	}
++	// Keep the unresolved intent and stop its reindexing. Let a real sample
++	// attest the committed change before deleting the now-obsolete job entry.
++	tx, err = worker.tx(ctx, workspace)
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer tx.Rollback(ctx)
++	if _, err = tx.Exec(ctx, `UPDATE hp_processing.outbox SET state='HELD' WHERE workspace_id=$1 AND message_id=$2`, workspace, f.lineage); err != nil {
++		t.Fatal(err)
++	}
++	if err = tx.Commit(ctx); err != nil {
++		t.Fatal(err)
++	}
++	awaitDiagnostic(t, proc, "both outbox rows held", func(e logEvent) bool {
++		return e["msg"] == "processing queue sample" && e.count("outbox", "held") == 2
++	})
++	tx, err = worker.tx(ctx, workspace)
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer tx.Rollback(ctx)
++	if _, err = tx.Exec(ctx, `DELETE FROM hp_processing.job_index WHERE workspace_id=$1 AND job_id=$2`, workspace, f.lineage); err != nil {
++		t.Fatal(err)
++	}
++	if err = tx.Commit(ctx); err != nil {
++		t.Fatal(err)
++	}
++	awaitDiagnostic(t, proc, "job backlog changed after commit", func(e logEvent) bool {
++		return e["msg"] == "processing queue sample" && e.count("jobs", "expired_leases") == 0 &&
++			e.count("outbox", "held") == 2 && e.count("jobs", "rows") < held.count("jobs", "rows")
++	})
++
++	observed := f.observation(t, "RESULT_MISMATCH")
++	no := false
++	observed.ListMatches = &no
++	observed.ProofCode = "HIT127_PRIVATE_OBSERVATION_BODY"
++	observed.ObservedAt = time.Now().UTC().Add(-700 * time.Millisecond)
++	body := observationWire(t, observed)
++	stand.must("delivery.test", "8443", "POST", "/internal/v1/delivery-observations", body, nil, 202)
++	stand.must("delivery.test", "8443", "POST", "/internal/v1/delivery-observations", body, nil, 202)
++	evt := awaitDiagnostic(t, proc, "committed observation", func(e logEvent) bool {
++		return e["msg"] == "processing observation committed" && e["message_id"] == observed.MessageID
++	})
++	if age, ok := evt["observation_age_ms"].(float64); !ok || age < 700 || age > 5000 ||
++		evt["effect_id"] != f.lineage || evt["case_id"] != caseID || evt["case_state"] != "ATTENTION" {
++		t.Fatal("wrong observation metric", evt)
++	}
++	awaitDiagnostic(t, proc, "persisted ATTENTION", func(e logEvent) bool {
++		return e["msg"] == "processing queue sample" && e.count("cases", "attention") == 1 &&
++			e.count("cases", "unknown") == 0
++	})
++
++	captureHealth(proc, "ready_with_held_outbox_and_attention_case", "READY")
++	deniedStatus, denied, err := stand.call("delivery.test", "9444", http.MethodGet, diagnosticHealthPath, nil, nil)
++	if err != nil || deniedStatus != 403 || draftjson.Validate("Error", denied) != nil {
++		t.Fatal("non-OPS health response", deniedStatus, err)
++	}
++	capture("non_ops_peer_denied", diagnosticHealthPath, "DELIVERY", deniedStatus, denied)
++
++	purgeCmd := exec.Command(purge, "--local-stand", "--content-dir", f.path, "--workspace", workspace)
++	purgeCmd.Env = append(os.Environ(), "HITPIPE_PURGE_DSN=host=/var/run/postgresql dbname=hit78 sslmode=disable user=hp_processing_purge")
++	purgeLog, err := purgeCmd.CombinedOutput()
++	var purgeEvent logEvent
++	if err == nil || json.Unmarshal(purgeLog, &purgeEvent) != nil || purgeEvent["reason"] != "purge_volume_unavailable" {
++		t.Fatalf("expected structured purge failure: %s %v", purgeLog, err)
++	}
++
++	// An absent authenticated file causes a real HTTP fault and local log.
++	app := connect(t)
++	tx = begin(t, app, workspace)
++	var detail string
++	if err = tx.QueryRow(ctx, `SELECT c.detail_ref::text FROM hp_processing.history_content c
++ JOIN hp_processing.inbox i ON (i.workspace_id,i.record_id)=(c.workspace_id,c.entry_id)
++ WHERE i.workspace_id=$1 AND i.message_id=$2`, workspace, observed.MessageID).Scan(&detail); err != nil {
++		t.Fatal(err)
++	}
++	_ = tx.Rollback(ctx)
++	if err = os.Remove(filepath.Join(f.path, detail)); err != nil {
++		t.Fatal(err)
++	}
++	status, unavailable, err := stand.call("bff.test", "8443", http.MethodGet, casePath+"/history", nil,
++		map[string]string{"X-HitPipe-Session": stand.token, "X-CSRF-Token": stand.csrf})
++	if err != nil || status != 503 || draftjson.Validate("Error", unavailable) != nil {
++		t.Fatal("history response after file failure", status, err)
++	}
++	capture("owned_file_unavailable", "/api/v1/workspaces/{workspaceId}/cases/{caseId}/history", "BFF", status, unavailable)
++	awaitDiagnostic(t, proc, "content file failure", func(e logEvent) bool { return e["reason"] == "content_unavailable" })
++
++	// PostgreSQL rejects worker job reads on the disposable database. Both
++	// the index rebuild and the separate sample fail at the actual SQL path.
++	admin, err := pgx.Connect(ctx, "host=/var/run/postgresql user=postgres dbname=hit78 sslmode=disable")
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer admin.Close(ctx)
++	const restoreJobs = "GRANT SELECT ON hp_processing.job_index TO hp_processing_worker"
++	if _, err = admin.Exec(ctx, "REVOKE SELECT ON hp_processing.job_index FROM hp_processing_worker"); err != nil {
++		t.Fatal(err)
++	}
++	defer admin.Exec(ctx, restoreJobs)
++	if err = proc.cmd.Process.Kill(); err != nil {
++		t.Fatal(err)
++	}
++	<-proc.done
++	restart := stand.boot("diagnostics-after-restart.log")
++	captureHealth(restart, "ready_after_process_restart", "READY")
++	awaitDiagnostic(t, restart, "PostgreSQL failure", func(e logEvent) bool { return e["reason"] == "postgres_unavailable" })
++	awaitDiagnostic(t, restart, "job index recovery failure", func(e logEvent) bool { return e["reason"] == "job_recovery_failed" })
++	if _, err = admin.Exec(ctx, restoreJobs); err != nil {
++		t.Fatal(err)
++	}
++	awaitDiagnostic(t, restart, "restored durable sample", func(e logEvent) bool {
++		return e["msg"] == "processing queue sample" && e.count("outbox", "held") == 2 && e.count("cases", "attention") == 1
++	})
++	// Fault the technical worker connection on this disposable database.
++	// Restore the role before the remaining suite uses the container.
++	if _, err = admin.Exec(ctx, "ALTER ROLE hp_processing_worker NOLOGIN"); err != nil {
++		t.Fatal(err)
++	}
++	defer admin.Exec(ctx, "ALTER ROLE hp_processing_worker LOGIN")
++	if _, err = admin.Exec(ctx, `SELECT pg_terminate_backend(pid) FROM pg_stat_activity
++ WHERE usename='hp_processing_worker' AND application_name='hitpipe-processing'`); err != nil {
++		t.Fatal(err)
++	}
++	captureHealth(restart, "degraded_on_worker_postgres_connection_failure", "DEGRADED")
++	if _, err = admin.Exec(ctx, "ALTER ROLE hp_processing_worker LOGIN"); err != nil {
++		t.Fatal(err)
++	}
++	captureHealth(restart, "ready_after_worker_postgres_reconnect", "READY")
++	if err = restart.cmd.Process.Signal(syscall.SIGTERM); err != nil {
++		t.Fatal(err)
++	}
++	select {
++	case err = <-restart.done:
++		if err != nil {
++			t.Fatal(err)
++		}
++	case <-time.After(8 * time.Second):
++		t.Fatal("diagnostics worker prevented orderly shutdown")
++	}
++	var runtimeLog []byte
++	for _, p := range []*processingChild{proc, restart} {
++		raw, err := os.ReadFile(p.logPath)
++		if err != nil {
++			t.Fatal(err)
++		}
++		runtimeLog = append(runtimeLog, raw...)
++	}
++	for _, stream := range [][]byte{runtimeLog, purgeLog, httpLog.Bytes()} {
++		lower := bytes.ToLower(stream)
++		for _, marker := range []string{stand.token, stand.csrf, stand.session, "acct_synthetic", "86synthetic99",
++			"hit127_private_observation_body", "private_key", "payload", "csrf", "host=/var/run", "session_id",
++			"authorization", "set-cookie", "password", "secret", "api_key", "access_token", "bearer ",
++			"-----begin ", "sk_live_", "sk_test_", "whsec_"} {
++			if bytes.Contains(lower, []byte(strings.ToLower(marker))) {
++				t.Fatal("a diagnostic or HTTP capture contained a forbidden field or fixture value")
++			}
++		}
++	}
++	if n := bytes.Count(runtimeLog, []byte(`"msg":"processing observation committed"`)); n != 1 {
++		t.Fatal("replay or restart duplicated observation event", n)
++	}
++	if destination := os.Getenv("HIT127_CAPTURE_FILE"); destination != "" {
++		if err := os.WriteFile(destination, append(runtimeLog, purgeLog...), 0600); err != nil {
++			t.Fatal(err)
++		}
++	}
++	if destination := os.Getenv("HIT127_HTTP_CAPTURE_FILE"); destination != "" {
++		if err := os.WriteFile(destination, httpLog.Bytes(), 0600); err != nil {
++			t.Fatal(err)
++		}
++	}
++	t.Log("HTTP PASS: captured actual Health CLOSED/READY/DEGRADED/recovered and mTLS denial; missing each required field and an extra property were rejected by the pinned validator")
++	t.Logf("Observed live inbox age %.0f ms, outbox due lag %.0f ms, job due lag %.0f ms and committed observation age %.0f ms.",
++		q.count("inbox", "max_age_ms"), q.count("outbox", "max_due_lag_ms"), q.count("jobs", "max_due_lag_ms"), evt["observation_age_ms"])
++	t.Log("PROCESS PASS: CLOSED/OPEN and exact Health, actual HELD/UNKNOWN, changed outbox/jobs, observation replay, expired lease, content and PostgreSQL faults, purge reason, restart and log privacy")
++}
+diff --git a/services/processing/internal/adapters/postgres/dispatch.go b/services/processing/internal/adapters/postgres/dispatch.go
+index 3c2c311a817d3ce3ef65ea9d9d414c2386a86d7e..40c7628bbda41640a8c1343661c84963bd322373 100644
+--- a/services/processing/internal/adapters/postgres/dispatch.go
++++ b/services/processing/internal/adapters/postgres/dispatch.go
+@@ -17,10 +17,14 @@ import (
+ type DispatchStore struct{ DB Beginner }
+ 
+ func (d DispatchStore) tx(ctx context.Context, ws string) (pgx.Tx, error) {
++	return d.txWithMode(ctx, ws, "")
++}
++
++func (d DispatchStore) txWithMode(ctx context.Context, ws string, mode pgx.TxAccessMode) (pgx.Tx, error) {
+ 	if d.DB == nil {
+ 		return nil, dispatchintent.ErrHeld
+ 	}
+-	tx, e := scoped(ctx, d.DB, ws)
++	tx, e := scopedWithMode(ctx, d.DB, ws, mode)
+ 	if e != nil {
+ 		return nil, e
+ 	}
+diff --git a/services/processing/internal/adapters/postgres/observation_faults_test.go b/services/processing/internal/adapters/postgres/observation_faults_test.go
+index c5905cc5bf5b776d4405246e36aafb92a217f287..47baa6ce5d53266174bc6da6089445c984fda006 100644
+--- a/services/processing/internal/adapters/postgres/observation_faults_test.go
++++ b/services/processing/internal/adapters/postgres/observation_faults_test.go
+@@ -295,7 +295,7 @@ func TestObservationCommitAckLossAndRealProcessCrash(t *testing.T) {
+ 			t.Fatal(e)
+ 		}
+ 		grant := observations.Grant{WorkspaceID: o.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Minute), Allowed: true}
+-		service := observations.Service{Repository: ObservationStore{observationAckDB{connect(t), true}, files, time.Hour}, Authority: &observationAuthority{grant: grant}, Boundary: &observationGate{epoch: 7}, Clock: testClock{time.Now}, Codec: observationjson.Codec{}}
++		service := observations.Service{Repository: ObservationStore{DB: observationAckDB{connect(t), true}, Content: files, HistoryRetention: time.Hour}, Authority: &observationAuthority{grant: grant}, Boundary: &observationGate{epoch: 7}, Clock: testClock{time.Now}, Codec: observationjson.Codec{}}
+ 		e = service.Execute(ctx, raw, func(observations.Receipt) error { t.Fatal("response emitted before crash"); return nil })
+ 		t.Fatalf("commit/crash not reached %v", e)
+ 	}
+diff --git a/services/processing/internal/adapters/postgres/observations.go b/services/processing/internal/adapters/postgres/observations.go
+index 313fdc4d3404462b51ef03d933df9d88e7bb3285..8457a7f461557b6175ccefcd8b2b4e5f3da906f3 100644
+--- a/services/processing/internal/adapters/postgres/observations.go
++++ b/services/processing/internal/adapters/postgres/observations.go
+@@ -17,10 +17,20 @@ type ObservationContent interface {
+ 	Write(context.Context, []byte, string, preparecase.Origin, time.Time, time.Time) (preparecase.Ref, error)
+ 	ReadOwned(context.Context, preparecase.Ref, preparecase.Origin, time.Time) ([]byte, error)
+ }
++
++// CommittedObservation carries only opaque correlation IDs and safe values
++// derived from the transaction, excluding the observation or evidence body.
++type CommittedObservation struct {
++	WorkspaceID, CaseID, MessageID, EffectID string
++	Disposition, State                       string
++	Age                                      time.Duration
++}
++
+ type ObservationStore struct {
+ 	DB               Beginner
+ 	Content          ObservationContent
+ 	HistoryRetention time.Duration
++	OnCommit         func(CommittedObservation)
+ }
+ 
+ func (db ObservationStore) tx(ctx context.Context, ws string) (pgx.Tx, error) {
+@@ -282,5 +292,12 @@ func (db ObservationStore) Commit(ctx context.Context, o observations.TaskObserv
+ 	if e = tx.Commit(ctx); e != nil {
+ 		return z, observations.ErrUnavailable
+ 	}
++	if db.OnCommit != nil {
++		db.OnCommit(CommittedObservation{
++			WorkspaceID: current.WorkspaceID, CaseID: current.CaseID, MessageID: o.MessageID,
++			EffectID: current.LineageID, Disposition: change.Disposition, State: change.State,
++			Age: now.Sub(o.ObservedAt),
++		})
++	}
+ 	return observations.Receipt{MessageID: o.MessageID, Disposition: change.Disposition}, nil
+ }
+diff --git a/services/processing/internal/adapters/postgres/observations_test.go b/services/processing/internal/adapters/postgres/observations_test.go
+index b96da1731718be2dc2e8b7af343bce5938851dac..e06f0e97090e482030e22abc7c3420670ec5b8df 100644
+--- a/services/processing/internal/adapters/postgres/observations_test.go
++++ b/services/processing/internal/adapters/postgres/observations_test.go
+@@ -77,7 +77,7 @@ func newObservation(t *testing.T) observationFixture {
+ 		t.Fatal(e)
+ 	}
+ 	pool := newObservationPool(t, 3)
+-	repo := ObservationStore{pool, f.files, time.Hour}
++	repo := ObservationStore{DB: pool, Content: f.files, HistoryRetention: time.Hour}
+ 	authority := &observationAuthority{grant: observations.Grant{WorkspaceID: f.request.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}}
+ 	gate := &observationGate{epoch: 7}
+ 	pki := testfixtures.NewObservationPKI(t)
+diff --git a/services/processing/internal/adapters/postgres/prepare.go b/services/processing/internal/adapters/postgres/prepare.go
+index 45b39c4f5ae85967285c32521712e972d2bf55a7..05c8caf6a9101858051e0b322c1d2adeba280169 100644
+--- a/services/processing/internal/adapters/postgres/prepare.go
++++ b/services/processing/internal/adapters/postgres/prepare.go
+@@ -20,7 +20,11 @@ type DecisionStore struct {
+ }
+ 
+ func scoped(ctx context.Context, db Beginner, ws string) (pgx.Tx, error) {
+-	tx, e := db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
++	return scopedWithMode(ctx, db, ws, "")
++}
++
++func scopedWithMode(ctx context.Context, db Beginner, ws string, mode pgx.TxAccessMode) (pgx.Tx, error) {
++	tx, e := db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted, AccessMode: mode})
+ 	if e != nil {
+ 		return nil, e
+ 	}
+diff --git a/services/processing/internal/adapters/postgres/runtime_process_test.go b/services/processing/internal/adapters/postgres/runtime_process_test.go
+index 333ace35668dd79e807078f16339a6affb8cc819..f0cc8f803d3df86d2559015d8fac5ec721d29777 100644
+--- a/services/processing/internal/adapters/postgres/runtime_process_test.go
++++ b/services/processing/internal/adapters/postgres/runtime_process_test.go
+@@ -354,7 +354,7 @@ func (s *processStand) must(peer, port, method, path string, b []byte, h map[str
+ 	return out
+ }
+ 
+-func (s *processStand) pollHealth(process *processingChild, stage string) {
++func (s *processStand) pollHealth(process *processingChild, stage string) (int, []byte) {
+ 	s.t.Helper()
+ 	timeout := time.After(8 * time.Second)
+ 	for {
+@@ -370,7 +370,7 @@ func (s *processStand) pollHealth(process *processingChild, stage string) {
+ 		status, out, err := s.call("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil)
+ 		var h drafts.Health
+ 		if err == nil && status == 200 && draftjson.Validate("Health", out) == nil && json.Unmarshal(out, &h) == nil && h.Status == stage {
+-			return
++			return status, out
+ 		}
+ 		time.Sleep(40 * time.Millisecond)
+ 	}
+diff --git a/services/processing/internal/runtime/caseworker.go b/services/processing/internal/runtime/caseworker.go
+index 84d855654ae46f80bd466522052f9827f766e617..3f4a2277f8e92f95ab88fe1d19e739d378ba0352 100644
+--- a/services/processing/internal/runtime/caseworker.go
++++ b/services/processing/internal/runtime/caseworker.go
+@@ -3,6 +3,7 @@ package runtime
+ import (
+ 	"context"
+ 	"errors"
++	"time"
+ 
+ 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
+ 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres/intent"
+@@ -52,16 +53,19 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {
+ 		return
+ 	}
+ 	var claim postgres.CaseClaim
++	fault := barrierDenied
+ 	err = rt.a.start(c, workspace, p.principal, p.epoch, func(c context.Context) error {
++		fault = jobRecoveryFailed
+ 		if err := rt.caseJobs.Index(c, workspace, 5); err != nil {
+ 			return err
+ 		}
++		fault = jobClaimFailed
+ 		var err error
+ 		claim, err = rt.caseJobs.Claim(c, workspace, p.epoch)
+ 		return err
+ 	})
+ 	if err != nil {
+-		rt.logger.Warn("processing case worker could not claim work")
++		rt.diag.fault(fault, workspace, "", "")
+ 		return
+ 	}
+ 	if claim.CaseID == "" {
+@@ -82,8 +86,10 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {
+ 	}
+ 	result, err := service.Prepare(bounded, claim.Request)
+ 	switch {
++	case err != nil && !time.Now().Before(claim.Until()):
++		rt.diag.fault(leaseExpired, workspace, claim.CaseID, "")
+ 	case errors.Is(err, preparecase.ErrStale):
+-		rt.logger.Info("processing case worker lost current claim", "case_id", claim.CaseID)
++		rt.diag.fault(leaseStale, workspace, claim.CaseID, "")
+ 	case errors.Is(err, preparecase.ErrHold), errors.Is(err, drafts.ErrDenied):
+ 		rt.logger.Info("processing case worker held", "case_id", claim.CaseID)
+ 	case err != nil:
+diff --git a/services/processing/internal/runtime/diagnostics.go b/services/processing/internal/runtime/diagnostics.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..aaa214dbd7deb48c3ad2884462c05535a02b3c14
+--- /dev/null
++++ b/services/processing/internal/runtime/diagnostics.go
+@@ -0,0 +1,219 @@
++package runtime
++
++import (
++	"context"
++	"errors"
++	"log/slog"
++	"slices"
++	"sync"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/platform/startgate"
++	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
++	"github.com/hitpipe/hitpipe/services/processing/internal/application/dispatchintent"
++	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
++)
++
++const sampleInterval = 2 * time.Second
++const sampleBudget = 350 * time.Millisecond
++
++type diagnosticFault uint8
++
++const (
++	sqlUnavailable diagnosticFault = iota
++	contentUnavailable
++	jobRecoveryFailed
++	jobClaimFailed
++	leaseExpired
++	leaseStale
++	dispatchHeld
++	outboxInterrupted
++	recheckInterrupted
++	timerInterrupted
++	barrierDenied
++	faultCount
++)
++
++var faultNames = [faultCount]string{
++	sqlUnavailable:     "postgres_unavailable",
++	contentUnavailable: "content_unavailable",
++	jobRecoveryFailed:  "job_recovery_failed",
++	jobClaimFailed:     "job_claim_failed",
++	leaseExpired:       "lease_expired",
++	leaseStale:         "lease_stale",
++	dispatchHeld:       "dispatch_held",
++	outboxInterrupted:  "outbox_interrupted",
++	recheckInterrupted: "recheck_interrupted",
++	timerInterrupted:   "timer_interrupted",
++	barrierDenied:      "barrier_denied",
++}
++
++type diagnostics struct {
++	logger             *slog.Logger
++	mu                 sync.Mutex
++	last               [faultCount]time.Time
++	observationWindow  time.Time
++	observationCount   int
++	observationSkipped int
++}
++
++func (d *diagnostics) fault(code diagnosticFault, workspace, caseID, messageID string) {
++	now := time.Now()
++	d.mu.Lock()
++	if now.Sub(d.last[code]) < sampleInterval {
++		d.mu.Unlock()
++		return
++	}
++	d.last[code] = now
++	d.mu.Unlock()
++	attrs := []slog.Attr{slog.String("reason", faultNames[code])}
++	attrs = appendOpaque(attrs, "workspace_id", workspace)
++	attrs = appendOpaque(attrs, "case_id", caseID)
++	attrs = appendOpaque(attrs, "message_id", messageID)
++	d.logger.LogAttrs(context.Background(), slog.LevelWarn, "processing diagnostic fault", attrs...)
++}
++
++func appendOpaque(attrs []slog.Attr, key, id string) []slog.Attr {
++	if drafts.UUID(id) {
++		return append(attrs, slog.String(key, id))
++	}
++	return attrs
++}
++
++func (d *diagnostics) observation(c postgres.CommittedObservation) {
++	const maxPerInterval = 16
++	var skipped int
++	now := time.Now()
++	d.mu.Lock()
++	if now.Sub(d.observationWindow) >= sampleInterval {
++		skipped = d.observationSkipped
++		d.observationWindow = now
++		d.observationCount, d.observationSkipped = 0, 0
++	}
++	if d.observationCount >= maxPerInterval {
++		d.observationSkipped++
++		d.mu.Unlock()
++		return
++	}
++	d.observationCount++
++	d.mu.Unlock()
++	attrs := []slog.Attr{slog.Int64("observation_age_ms", c.Age.Milliseconds()),
++		slog.String("disposition", c.Disposition), slog.String("case_state", c.State),
++		slog.Int("skipped_previous_window", skipped)}
++	attrs = appendOpaque(attrs, "workspace_id", c.WorkspaceID)
++	attrs = appendOpaque(attrs, "case_id", c.CaseID)
++	attrs = appendOpaque(attrs, "message_id", c.MessageID)
++	attrs = appendOpaque(attrs, "effect_id", c.EffectID)
++	d.logger.LogAttrs(context.Background(), slog.LevelInfo, "processing observation committed", attrs...)
++}
++
++func (rt *Runtime) watchDiagnostics(ctx context.Context, stop <-chan struct{}) {
++	scopes := make([]string, 0, len(rt.a.stand))
++	for workspace := range rt.a.stand {
++		scopes = append(scopes, workspace)
++	}
++	slices.Sort(scopes)
++	tick := time.NewTimer(sampleInterval)
++	defer tick.Stop()
++	var lastGate string
++	for {
++		gate := rt.sampleGate(ctx)
++		if gate != lastGate {
++			rt.logger.Info("processing barrier diagnostic", "barrier", gate)
++			lastGate = gate
++		}
++		if gate == string(startgate.Open) {
++			for _, workspace := range scopes {
++				rt.sampleScope(ctx, workspace)
++			}
++		}
++		tick.Reset(sampleInterval)
++		select {
++		case <-stop:
++			return
++		case <-ctx.Done():
++			return
++		case <-tick.C:
++		}
++	}
++}
++
++func (rt *Runtime) sampleGate(ctx context.Context) string {
++	ctx, cancel := context.WithTimeout(ctx, sampleBudget)
++	defer cancel()
++	state, err := rt.a.gate.State(ctx)
++	if err != nil {
++		return "UNAVAILABLE"
++	}
++	switch state {
++	case startgate.Open, startgate.Closed, startgate.Syncing:
++		return string(state)
++	default:
++		return "UNAVAILABLE"
++	}
++}
++
++func (rt *Runtime) sampleScope(ctx context.Context, workspace string) {
++	ctx, cancel := context.WithTimeout(withPermit(ctx), sampleBudget)
++	defer cancel()
++	// Reuse the configured owner scope and the existing worker role. There
++	// are no global tenant scans, new permissions, locks or network actions
++	// inside the SQL snapshot.
++	p, err := rt.a.local(ctx, workspace, "ACTIVATE", nil)
++	if err != nil {
++		rt.diag.fault(barrierDenied, workspace, "", "")
++		return
++	}
++	var sample postgres.QueueSample
++	var sampleErr error
++	err = rt.a.start(ctx, workspace, p.principal, p.epoch, func(c context.Context) error {
++		sample, sampleErr = (postgres.DispatchStore{DB: rt.caseJobs.DB}).SampleQueues(c, workspace)
++		return sampleErr
++	})
++	if err != nil {
++		if sampleErr != nil {
++			rt.diag.fault(sqlUnavailable, workspace, "", "")
++		} else {
++			rt.diag.fault(barrierDenied, workspace, "", "")
++		}
++		return
++	}
++	if sample.ExpiredJobLeases != 0 || sample.ExpiredOutboxLeases != 0 {
++		rt.diag.fault(leaseExpired, workspace, "", sample.ExpiredOutboxID)
++	}
++	rt.diag.sample(workspace, sample)
++}
++
++func (d *diagnostics) sample(workspace string, s postgres.QueueSample) {
++	const limit = postgres.DiagnosticSampleLimit
++	attrs := []slog.Attr{
++		slog.Int("sample_limit", limit), slog.Int64("interval_ms", sampleInterval.Milliseconds()),
++		slog.Group("inbox", "rows", s.InboxRows, "cap_reached", s.InboxRows == limit, "held", s.InboxHeld,
++			"max_age_ms", s.InboxAge),
++		slog.Group("outbox", "rows", s.OutboxRows, "cap_reached", s.OutboxRows == limit, "pending", s.OutboxPending,
++			"claimed", s.OutboxClaimed, "held", s.OutboxHeld, "acked", s.OutboxAcked, "expired_leases", s.ExpiredOutboxLeases,
++			"max_age_ms", s.OutboxAge, "max_due_lag_ms", s.OutboxDueLag),
++		slog.Group("jobs", "rows", s.JobRows, "cap_reached", s.JobRows == limit, "due", s.JobsDue,
++			"expired_leases", s.ExpiredJobLeases, "max_due_lag_ms", s.JobDueLag),
++		slog.Group("cases", "rows", s.CaseRows, "cap_reached", s.CaseRows == limit, "waiting_data", s.WaitingData,
++			"attention", s.Attention, "unknown", s.Unknown),
++	}
++	attrs = appendOpaque(attrs, "workspace_id", workspace)
++	attrs = appendOpaque(attrs, "expired_job_id", s.ExpiredJobID)
++	attrs = appendOpaque(attrs, "expired_message_id", s.ExpiredOutboxID)
++	d.logger.LogAttrs(context.Background(), slog.LevelInfo, "processing queue sample", attrs...)
++}
++
++func (d *diagnostics) dispatchFault(code diagnosticFault, workspace string, err error) {
++	switch {
++	case err == nil:
++	case errors.Is(err, dispatchintent.ErrStale):
++		d.fault(leaseStale, workspace, "", "")
++	case errors.Is(err, dispatchintent.ErrHeld):
++		d.fault(dispatchHeld, workspace, "", "")
++	case errors.Is(err, drafts.ErrDenied):
++		d.fault(barrierDenied, workspace, "", "")
++	default:
++		d.fault(code, workspace, "", "")
++	}
++}
+diff --git a/services/processing/internal/runtime/diagnostics_test.go b/services/processing/internal/runtime/diagnostics_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..9b2eb47e74d6557800f7ed5e7a8cd598e8c2e590
+--- /dev/null
++++ b/services/processing/internal/runtime/diagnostics_test.go
+@@ -0,0 +1,52 @@
++package runtime
++
++import (
++	"bytes"
++	"encoding/json"
++	"log/slog"
++	"testing"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
++)
++
++func TestDiagnosticsBoundsAndOpaqueIDs(t *testing.T) {
++	var out bytes.Buffer
++	d := diagnostics{logger: slog.New(slog.NewJSONHandler(&out, nil))}
++	c := postgres.CommittedObservation{WorkspaceID: "private-token", CaseID: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
++		Age: 200 * time.Millisecond, Disposition: "APPLIED", State: "UNKNOWN"}
++	for range 30 {
++		d.observation(c)
++		d.fault(contentUnavailable, "private-token", c.CaseID, "external-session")
++	}
++	// Move to the next interval without a sleeping clock dependency.
++	d.observationWindow = time.Now().Add(-sampleInterval)
++	d.observation(c)
++	if bytes.Contains(out.Bytes(), []byte("private-token")) || bytes.Contains(out.Bytes(), []byte("external-session")) {
++		t.Fatal("non-opaque values reached the log")
++	}
++	var observations, faults int
++	for _, row := range bytes.Split(bytes.TrimSpace(out.Bytes()), []byte{'\n'}) {
++		var e map[string]any
++		if err := json.Unmarshal(row, &e); err != nil {
++			t.Fatal(err)
++		}
++		if e["case_id"] != c.CaseID {
++			t.Fatal("missing safe correlation ID", e)
++		}
++		if e["reason"] == "content_unavailable" {
++			faults++
++			continue
++		}
++		if e["observation_age_ms"] != float64(200) {
++			t.Fatal("invalid measured value", e)
++		}
++		observations++
++		if observations == 17 && e["skipped_previous_window"] != float64(14) {
++			t.Fatal("sampling loss was not reported", e)
++		}
++	}
++	if observations != 17 || faults != 1 {
++		t.Fatal("diagnostic rate limit did not apply", observations, faults)
++	}
++}
+diff --git a/services/processing/internal/runtime/recheck.go b/services/processing/internal/runtime/recheck.go
+index ead75b4b85fafe67a439df9789081f4fb36a973a..86ee1800f0e7cecbc94289e18c4b502907c87faf 100644
+--- a/services/processing/internal/runtime/recheck.go
++++ b/services/processing/internal/runtime/recheck.go
+@@ -86,7 +86,8 @@ func (rt *Runtime) advanceRecheck(ctx context.Context, workspace string) {
+ 	if err != nil {
+ 		return
+ 	}
+-	out, _ := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})
++	out, err := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})
++	rt.diag.dispatchFault(recheckInterrupted, workspace, err)
+ 	for _, v := range out {
+ 		rt.logger.Info("processing recheck outbox transition", "request_id", v.MessageID, "state", v.State, "disposition", v.Disposition)
+ 	}
+diff --git a/services/processing/internal/runtime/runtime.go b/services/processing/internal/runtime/runtime.go
+index 4d7e72f62843aa3890e4534e22411543c8c179a0..ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6 100644
+--- a/services/processing/internal/runtime/runtime.go
++++ b/services/processing/internal/runtime/runtime.go
+@@ -57,6 +57,7 @@ type Runtime struct {
+ 	caseJobs    postgres.CaseJobStore
+ 	timeouts    postgres.CaseTimeoutStore
+ 	logger      *slog.Logger
++	diag        diagnostics
+ }
+ 
+ func newPool(ctx context.Context, path, dbName, role string, size int32, stand bool) (*pgxpool.Pool, error) {
+@@ -138,7 +139,7 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
+ 		return nil, ErrConfig
+ 	}
+ 
+-	rt := &Runtime{logger: logger}
++	rt := &Runtime{logger: logger, diag: diagnostics{logger: logger}}
+ 	success := false
+ 	defer func() {
+ 		if !success {
+@@ -149,11 +150,13 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
+ 	defer cancel()
+ 	app, err := newPool(startup, c.AppDSN, c.OwnerDB, "hp_processing_app", c.Connections-c.Connections/2, standPath != "")
+ 	if err != nil {
++		rt.diag.fault(sqlUnavailable, "", "", "")
+ 		return nil, err
+ 	}
+ 	rt.pool = append(rt.pool, app)
+ 	worker, err := newPool(startup, c.WorkerDSN, c.OwnerDB, "hp_processing_worker", c.Connections/2, standPath != "")
+ 	if err != nil {
++		rt.diag.fault(sqlUnavailable, "", "", "")
+ 		return nil, err
+ 	}
+ 	rt.pool = append(rt.pool, worker)
+@@ -162,8 +165,10 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
+ 	}
+ 	rt.files, err = contentfiles.New(c.Content)
+ 	if err != nil {
++		rt.diag.fault(contentUnavailable, "", "", "")
+ 		return nil, ErrConfig
+ 	}
++	rt.files.OnFault = func() { rt.diag.fault(contentUnavailable, "", "", "") }
+ 	key, err := readSecret(c.CursorKey, 32)
+ 	if err != nil {
+ 		return nil, err
+@@ -196,7 +201,7 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
+ 		Authority: recoverAccess, Boundary: recoverAccess, Codec: recheckhttp.Codec{}, Clock: serviceClock}
+ 	receive := receivesignals.Service{Contexts: intake, Boundary: intake, Clock: serviceClock,
+ 		Decoder: normalizedsignal.Decoder{}, Store: postgres.Store{DB: app, Content: rt.files}}
+-	observe := observations.Service{Repository: postgres.ObservationStore{DB: app, Content: rt.files, HistoryRetention: ttl},
++	observe := observations.Service{Repository: postgres.ObservationStore{DB: app, Content: rt.files, HistoryRetention: ttl, OnCommit: rt.diag.observation},
+ 		Authority: obs, Boundary: obs, Clock: serviceClock, Codec: observationjson.Codec{}}
+ 	serveTLS := &tls.Config{Certificates: []tls.Certificate{serverCert}, ClientCAs: inCA,
+ 		ClientAuth: tls.RequireAndVerifyClientCert, MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13, NextProtos: []string{"http/1.1"}}
+@@ -347,6 +352,7 @@ func (rt *Runtime) Serve(ctx context.Context) error {
+ 	var bg sync.WaitGroup
+ 	bg.Go(func() { rt.registration(workerCtx, stop) })
+ 	bg.Go(func() { rt.work(workerCtx, stop) })
++	bg.Go(func() { rt.watchDiagnostics(workerCtx, stop) })
+ 	var runErr error
+ 	select {
+ 	case <-ctx.Done():
+@@ -437,9 +443,10 @@ func (rt *Runtime) work(ctx context.Context, stop <-chan struct{}) {
+ 			if err != nil {
+ 				continue
+ 			}
+-			out, _ := rt.sender.RunScope(c, dispatchintent.Request{WorkspaceID: w, Epoch: p.epoch})
++			out, err := rt.sender.RunScope(c, dispatchintent.Request{WorkspaceID: w, Epoch: p.epoch})
++			rt.diag.dispatchFault(outboxInterrupted, w, err)
+ 			for _, v := range out {
+-				rt.logger.Info("processing outbox transition", "message_id", v.MessageID, "state", v.State)
++				rt.logger.Info("processing outbox transition", "message_id", v.MessageID, "state", v.State, "reason", v.Disposition)
+ 			}
+ 		}
+ 	}
+diff --git a/services/processing/internal/runtime/timeouts.go b/services/processing/internal/runtime/timeouts.go
+index 54baece7ffdb1a3798f4b1d9adc0b52db4817425..2086539582cd5919cc2b920d27fbf9e3afcf6052 100644
+--- a/services/processing/internal/runtime/timeouts.go
++++ b/services/processing/internal/runtime/timeouts.go
+@@ -40,6 +40,6 @@ func (rt *Runtime) advanceTimeout(ctx context.Context, workspace string) {
+ 		return nil
+ 	})
+ 	if err != nil {
+-		rt.logger.Warn("processing case timer interrupted")
++		rt.diag.fault(timerInterrupted, workspace, "", "")
+ 	}
+ }
+diff --git a/services/processing/scripts/postgres/verify_diagnostics.py b/services/processing/scripts/postgres/verify_diagnostics.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..58a190e9b500f21647d416511c37251c0701b2bd
+--- /dev/null
++++ b/services/processing/scripts/postgres/verify_diagnostics.py
+@@ -0,0 +1,60 @@
++#!/usr/bin/env python3
++"""Qualify runtime diagnostics on Processing's disposable PostgreSQL stand."""
++
++import argparse
++import hashlib
++import json
++import pathlib
++import uuid
++
++import verify_purge
++
++
++class Run(verify_purge.Run):
++    def __init__(self, output, go):
++        super().__init__(output, go)
++        self.name = "hit127-" + uuid.uuid4().hex
++        self.script_sha256 = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
++
++    def command(self, label, args, *rest, **kwargs):
++        args = [*args]
++        if label == "go-race":
++            args.remove("-v")
++        return super().command(label, args, *rest, **kwargs)
++
++    def checks(self):
++        super().checks()
++        # Capture the new evidence from the same compiled source and pinned
++        # database, using a separately recorded run of the complete HIT-127 tests.
++        self.command("diagnostic-postgres-tests", [
++            "docker", "exec", "-e", "HIT78_ISOLATED_PG=1",
++            "-e", "HIT111_PROCESSING_BIN=/test/processing",
++            "-e", "HIT126_PURGE_BIN=/test/processing-purge",
++            "-e", "HIT127_CAPTURE_FILE=/tmp/hit127-diagnostics.jsonl",
++            "-e", "HIT127_HTTP_CAPTURE_FILE=/tmp/hit127-http.jsonl",
++            self.container, "/test/storage.test", "-test.v", "-test.count=1",
++            "-test.timeout=45s",
++            "-test.run=^Test(DiagnosticSampleBoundedAndScoped|ProcessingDiagnosticsOwnedStand|ProcessingPurgeOwnedStand)$",
++        ])
++        self.command("diagnostic-race-tests", [
++            self.go, "-C", str(pathlib.Path(__file__).resolve().parents[2]),
++            "test", "-race", "-count=1", "-v", "-run=^TestDiagnosticsBoundsAndOpaqueIDs$", "./internal/runtime",
++        ])
++        for label, name in (("diagnostic-runtime-capture", "hit127-diagnostics.jsonl"),
++                            ("diagnostic-http-capture", "hit127-http.jsonl")):
++            self.command(label, ["docker", "exec", self.container, "cat", f"/tmp/{name}"])
++
++    def main(self):
++        super().main()
++        path = self.output / "summary.json"
++        summary = json.loads(path.read_text())
++        summary.update(task="HIT-127", scope="Actual Processing executable, TLS/mTLS HTTP, queue diagnostics, PostgreSQL 18.7 and owned file faults, restart and stderr purge diagnostics on a disposable stand; host race/vet/build.")
++        path.write_text(json.dumps(summary, indent=2) + "\n")
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--output", required=True, type=pathlib.Path)
++    parser.add_argument("--go", required=True, type=pathlib.Path)
++    options = parser.parse_args()
++    Run(options.output.resolve(), options.go).main()

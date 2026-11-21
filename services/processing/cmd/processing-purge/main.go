@@ -8,6 +8,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log/slog"
 	"net"
 	"os"
 	"os/signal"
@@ -58,24 +59,25 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int
 		fmt.Fprintln(os.Stderr, errOptions)
 		return 2
 	}
+	log := slog.New(slog.NewJSONHandler(os.Stderr, nil))
 	files, err := contentfiles.OpenMaintenance(path)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "private Processing content directory unavailable or busy")
+		log.Warn("private Processing content directory unavailable or busy", "reason", "purge_volume_unavailable", "workspace_id", workspace)
 		return 1
 	}
 	defer files.Close()
 	conn, err := pgx.ConnectConfig(ctx, cfg)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "local Processing database unavailable")
+		log.Warn("local Processing database unavailable", "reason", "purge_postgres_unavailable", "workspace_id", workspace)
 		return 1
 	}
 	defer conn.Close(context.Background())
 	result, err := (postgres.PurgeStore{DB: conn, Files: files}).Run(ctx, workspace, limit)
 	if err != nil {
 		if errors.Is(err, postgres.ErrPurgeScope) {
-			fmt.Fprintln(os.Stderr, postgres.ErrPurgeScope)
+			log.Warn(postgres.ErrPurgeScope.Error(), "reason", "purge_scope_denied", "workspace_id", workspace)
 		} else {
-			fmt.Fprintln(os.Stderr, "processing purge incomplete; review local state before repeating")
+			log.Warn("processing purge incomplete; review local state before repeating", "reason", "purge_incomplete", "workspace_id", workspace)
 		}
 		return 1
 	}

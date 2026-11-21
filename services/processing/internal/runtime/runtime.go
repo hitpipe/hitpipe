@@ -57,6 +57,7 @@ type Runtime struct {
 	caseJobs    postgres.CaseJobStore
 	timeouts    postgres.CaseTimeoutStore
 	logger      *slog.Logger
+	diag        diagnostics
 }
 
 func newPool(ctx context.Context, path, dbName, role string, size int32, stand bool) (*pgxpool.Pool, error) {
@@ -138,7 +139,7 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 		return nil, ErrConfig
 	}
 
-	rt := &Runtime{logger: logger}
+	rt := &Runtime{logger: logger, diag: diagnostics{logger: logger}}
 	success := false
 	defer func() {
 		if !success {
@@ -149,11 +150,13 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 	defer cancel()
 	app, err := newPool(startup, c.AppDSN, c.OwnerDB, "hp_processing_app", c.Connections-c.Connections/2, standPath != "")
 	if err != nil {
+		rt.diag.fault(sqlUnavailable, "", "", "")
 		return nil, err
 	}
 	rt.pool = append(rt.pool, app)
 	worker, err := newPool(startup, c.WorkerDSN, c.OwnerDB, "hp_processing_worker", c.Connections/2, standPath != "")
 	if err != nil {
+		rt.diag.fault(sqlUnavailable, "", "", "")
 		return nil, err
 	}
 	rt.pool = append(rt.pool, worker)
@@ -162,8 +165,10 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 	}
 	rt.files, err = contentfiles.New(c.Content)
 	if err != nil {
+		rt.diag.fault(contentUnavailable, "", "", "")
 		return nil, ErrConfig
 	}
+	rt.files.OnFault = func() { rt.diag.fault(contentUnavailable, "", "", "") }
 	key, err := readSecret(c.CursorKey, 32)
 	if err != nil {
 		return nil, err
@@ -196,7 +201,7 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 		Authority: recoverAccess, Boundary: recoverAccess, Codec: recheckhttp.Codec{}, Clock: serviceClock}
 	receive := receivesignals.Service{Contexts: intake, Boundary: intake, Clock: serviceClock,
 		Decoder: normalizedsignal.Decoder{}, Store: postgres.Store{DB: app, Content: rt.files}}
-	observe := observations.Service{Repository: postgres.ObservationStore{DB: app, Content: rt.files, HistoryRetention: ttl},
+	observe := observations.Service{Repository: postgres.ObservationStore{DB: app, Content: rt.files, HistoryRetention: ttl, OnCommit: rt.diag.observation},
 		Authority: obs, Boundary: obs, Clock: serviceClock, Codec: observationjson.Codec{}}
 	serveTLS := &tls.Config{Certificates: []tls.Certificate{serverCert}, ClientCAs: inCA,
 		ClientAuth: tls.RequireAndVerifyClientCert, MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13, NextProtos: []string{"http/1.1"}}
@@ -347,6 +352,7 @@ func (rt *Runtime) Serve(ctx context.Context) error {
 	var bg sync.WaitGroup
 	bg.Go(func() { rt.registration(workerCtx, stop) })
 	bg.Go(func() { rt.work(workerCtx, stop) })
+	bg.Go(func() { rt.watchDiagnostics(workerCtx, stop) })
 	var runErr error
 	select {
 	case <-ctx.Done():
@@ -437,9 +443,10 @@ func (rt *Runtime) work(ctx context.Context, stop <-chan struct{}) {
 			if err != nil {
 				continue
 			}
-			out, _ := rt.sender.RunScope(c, dispatchintent.Request{WorkspaceID: w, Epoch: p.epoch})
+			out, err := rt.sender.RunScope(c, dispatchintent.Request{WorkspaceID: w, Epoch: p.epoch})
+			rt.diag.dispatchFault(outboxInterrupted, w, err)
 			for _, v := range out {
-				rt.logger.Info("processing outbox transition", "message_id", v.MessageID, "state", v.State)
+				rt.logger.Info("processing outbox transition", "message_id", v.MessageID, "state", v.State, "reason", v.Disposition)
 			}
 		}
 	}

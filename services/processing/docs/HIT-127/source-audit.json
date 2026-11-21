@@ -1,0 +1,156 @@
+{
+  "task": "HIT-127",
+  "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+  "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+  "previous_tested_code_sha": "f1ddceeda0a61b7a7fd58a79d9b3616d4d614702",
+  "overhauled_package": "fdda9d1da3f5d0697b0a8811585aa2f8988964e2",
+  "independent_review": "HIT-127#15172",
+  "retained_contracts": {
+    "global": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b"
+    },
+    "product": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3"
+    },
+    "architecture": {
+      "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+      "revision": "b2461564e4355ea5a72a55a30a635655397c463b",
+      "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a"
+    },
+    "interface": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+    },
+    "persistence": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb"
+    },
+    "stack": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+      "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+      "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
+    }
+  },
+  "patch": {
+    "path": "review/exact-source.diff",
+    "sha256": "43448d180cf3884cb22bbd1afa31f758d1edc2adf4806ee2c4c045ca770fed96",
+    "reconstructed_tree": "d26943ba56e3c067332636fb089b6365270b3452",
+    "applied_with": "git apply --cached --check --binary"
+  },
+  "changed_source_paths": [
+    "services/processing/cmd/processing-purge/main.go",
+    "services/processing/internal/adapters/contentfiles/store.go",
+    "services/processing/internal/adapters/postgres/diagnostics.go",
+    "services/processing/internal/adapters/postgres/diagnostics_test.go",
+    "services/processing/internal/adapters/postgres/dispatch.go",
+    "services/processing/internal/adapters/postgres/observation_faults_test.go",
+    "services/processing/internal/adapters/postgres/observations.go",
+    "services/processing/internal/adapters/postgres/observations_test.go",
+    "services/processing/internal/adapters/postgres/prepare.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/internal/runtime/caseworker.go",
+    "services/processing/internal/runtime/diagnostics.go",
+    "services/processing/internal/runtime/diagnostics_test.go",
+    "services/processing/internal/runtime/recheck.go",
+    "services/processing/internal/runtime/runtime.go",
+    "services/processing/internal/runtime/timeouts.go",
+    "services/processing/scripts/postgres/verify_diagnostics.py"
+  ],
+  "rework_source_paths": [
+    "services/processing/internal/adapters/postgres/diagnostics_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/scripts/postgres/verify_diagnostics.py"
+  ],
+  "health_handler_sha256": "ad9e7a7a11097647ef8c16a1988f88f38ee8d6e77a43f8f00e0f0387c4e432b0",
+  "processing_sql_sha256": "a4f89c9b78a09c6d548422d661d9dcab7171e87397dbb2ebb2f7bc7f9958bb93",
+  "all_direct_review_sources_chars": 145500,
+  "dependencies": {
+    "HIT-126": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-126-purge-base",
+        "headRefName": "work/HIT-126-retention-purge",
+        "headRefOid": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 81,
+        "state": "OPEN",
+        "title": "HIT-126: безопасная очистка истёкшего содержимого Processing",
+        "url": "https://github.com/hitpipe/hitpipe/pull/81"
+      },
+      "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+      "present_in_main": false
+    },
+    "HIT-114": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-112-case-worker",
+        "headRefName": "work/HIT-114-case-timeouts",
+        "headRefOid": "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 78,
+        "state": "OPEN",
+        "title": "HIT-114: предельные сроки дела Processing",
+        "url": "https://github.com/hitpipe/hitpipe/pull/78"
+      },
+      "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+      "present_in_main": false
+    },
+    "HIT-113": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-112-case-worker",
+        "headRefName": "work/HIT-113-recheck-known-task",
+        "headRefOid": "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 76,
+        "state": "OPEN",
+        "title": "HIT-113: повторная проверка известной задачи ClickUp",
+        "url": "https://github.com/hitpipe/hitpipe/pull/76"
+      },
+      "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+      "present_in_main": false
+    },
+    "HIT-112": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-111-processing-runtime",
+        "headRefName": "work/HIT-112-case-worker",
+        "headRefOid": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 73,
+        "state": "OPEN",
+        "title": "HIT-112: продвижение принятых дел в Processing",
+        "url": "https://github.com/hitpipe/hitpipe/pull/73"
+      },
+      "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "present_in_main": false
+    },
+    "HIT-111": {
+      "jira_status": "Готово",
+      "pr": {
+        "baseRefName": "work/HIT-111-pinned-base",
+        "headRefName": "work/HIT-111-processing-runtime",
+        "headRefOid": "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "isDraft": true,
+        "mergeCommit": null,
+        "number": 72,
+        "state": "OPEN",
+        "title": "HIT-111: исполняемый процесс Processing с общим допуском",
+        "url": "https://github.com/hitpipe/hitpipe/pull/72"
+      },
+      "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+      "present_in_main": false
+    }
+  },
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab"
+}

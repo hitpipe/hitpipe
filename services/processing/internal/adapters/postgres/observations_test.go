@@ -77,7 +77,7 @@ func newObservation(t *testing.T) observationFixture {
 		t.Fatal(e)
 	}
 	pool := newObservationPool(t, 3)
-	repo := ObservationStore{pool, f.files, time.Hour}
+	repo := ObservationStore{DB: pool, Content: f.files, HistoryRetention: time.Hour}
 	authority := &observationAuthority{grant: observations.Grant{WorkspaceID: f.request.WorkspaceID, PrincipalID: owner, OwnerID: owner, OperationID: op, ConnectionID: destination, Epoch: 7, ExpiresAt: time.Now().Add(time.Hour), Allowed: true}}
 	gate := &observationGate{epoch: 7}
 	pki := testfixtures.NewObservationPKI(t)

@@ -1,0 +1,106 @@
+{
+  "task": "HIT-127",
+  "tested_source_sha": "4da48202e77131427730b1827df9ee81940e559a",
+  "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+  "status": "PASS",
+  "count": 103,
+  "process_and_http": "review/process-and-http.md",
+  "full_command_log": "verification/commands.json",
+  "scope": "Pinned PostgreSQL 18.7, actual local Linux mTLS process, controlled peers; Darwin host race/vet/build.",
+  "measured_before": {
+    "time": "2026-11-20T18:58:27.032570092Z",
+    "level": "INFO",
+    "msg": "processing queue sample",
+    "sample_limit": 100,
+    "interval_ms": 2000,
+    "inbox": {
+      "rows": 2,
+      "cap_reached": false,
+      "held": 0,
+      "max_age_ms": 2046
+    },
+    "outbox": {
+      "rows": 1,
+      "cap_reached": false,
+      "pending": 1,
+      "claimed": 0,
+      "held": 0,
+      "acked": 0,
+      "expired_leases": 0,
+      "max_age_ms": 2042,
+      "max_due_lag_ms": 2042
+    },
+    "jobs": {
+      "rows": 1,
+      "cap_reached": false,
+      "due": 1,
+      "expired_leases": 1,
+      "max_due_lag_ms": 2042
+    },
+    "cases": {
+      "rows": 1,
+      "cap_reached": false,
+      "waiting_data": 0,
+      "attention": 0,
+      "unknown": 1
+    },
+    "workspace_id": "75eaa7df-dbab-4b58-91aa-bdc353904238",
+    "expired_job_id": "e648472a-eaad-4d7b-bcbb-da2bf9755453"
+  },
+  "measured_after": {
+    "time": "2026-11-20T18:58:33.046145804Z",
+    "level": "INFO",
+    "msg": "processing queue sample",
+    "sample_limit": 100,
+    "interval_ms": 2000,
+    "inbox": {
+      "rows": 2,
+      "cap_reached": false,
+      "held": 0,
+      "max_age_ms": 8060
+    },
+    "outbox": {
+      "rows": 2,
+      "cap_reached": false,
+      "pending": 0,
+      "claimed": 0,
+      "held": 2,
+      "acked": 0,
+      "expired_leases": 0,
+      "max_age_ms": 8057,
+      "max_due_lag_ms": null
+    },
+    "jobs": {
+      "rows": 0,
+      "cap_reached": false,
+      "due": 0,
+      "expired_leases": 0,
+      "max_due_lag_ms": null
+    },
+    "cases": {
+      "rows": 1,
+      "cap_reached": false,
+      "waiting_data": 0,
+      "attention": 0,
+      "unknown": 1
+    },
+    "workspace_id": "75eaa7df-dbab-4b58-91aa-bdc353904238"
+  },
+  "age_at_commit_ms": 708,
+  "observed_health": [
+    "CLOSED",
+    "DEGRADED",
+    "READY"
+  ],
+  "observed_faults": [
+    "content_unavailable",
+    "dispatch_held",
+    "job_recovery_failed",
+    "lease_expired",
+    "outbox_interrupted",
+    "postgres_unavailable",
+    "purge_volume_unavailable",
+    "recheck_interrupted",
+    "timer_interrupted"
+  ]
+}

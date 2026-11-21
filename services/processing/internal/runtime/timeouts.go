@@ -40,6 +40,6 @@ func (rt *Runtime) advanceTimeout(ctx context.Context, workspace string) {
 		return nil
 	})
 	if err != nil {
-		rt.logger.Warn("processing case timer interrupted")
+		rt.diag.fault(timerInterrupted, workspace, "", "")
 	}
 }

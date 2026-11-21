@@ -17,10 +17,14 @@ import (
 type DispatchStore struct{ DB Beginner }
 
 func (d DispatchStore) tx(ctx context.Context, ws string) (pgx.Tx, error) {
+	return d.txWithMode(ctx, ws, "")
+}
+
+func (d DispatchStore) txWithMode(ctx context.Context, ws string, mode pgx.TxAccessMode) (pgx.Tx, error) {
 	if d.DB == nil {
 		return nil, dispatchintent.ErrHeld
 	}
-	tx, e := scoped(ctx, d.DB, ws)
+	tx, e := scopedWithMode(ctx, d.DB, ws, mode)
 	if e != nil {
 		return nil, e
 	}

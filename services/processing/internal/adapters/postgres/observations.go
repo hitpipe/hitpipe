@@ -17,10 +17,20 @@ type ObservationContent interface {
 	Write(context.Context, []byte, string, preparecase.Origin, time.Time, time.Time) (preparecase.Ref, error)
 	ReadOwned(context.Context, preparecase.Ref, preparecase.Origin, time.Time) ([]byte, error)
 }
+
+// CommittedObservation carries only opaque correlation IDs and safe values
+// derived from the transaction, excluding the observation or evidence body.
+type CommittedObservation struct {
+	WorkspaceID, CaseID, MessageID, EffectID string
+	Disposition, State                       string
+	Age                                      time.Duration
+}
+
 type ObservationStore struct {
 	DB               Beginner
 	Content          ObservationContent
 	HistoryRetention time.Duration
+	OnCommit         func(CommittedObservation)
 }
 
 func (db ObservationStore) tx(ctx context.Context, ws string) (pgx.Tx, error) {
@@ -281,6 +291,13 @@ func (db ObservationStore) Commit(ctx context.Context, o observations.TaskObserv
 	}
 	if e = tx.Commit(ctx); e != nil {
 		return z, observations.ErrUnavailable
+	}
+	if db.OnCommit != nil {
+		db.OnCommit(CommittedObservation{
+			WorkspaceID: current.WorkspaceID, CaseID: current.CaseID, MessageID: o.MessageID,
+			EffectID: current.LineageID, Disposition: change.Disposition, State: change.State,
+			Age: now.Sub(o.ObservedAt),
+		})
 	}
 	return observations.Receipt{MessageID: o.MessageID, Disposition: change.Disposition}, nil
 }

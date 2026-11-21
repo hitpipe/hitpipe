@@ -1,0 +1,387 @@
+{
+  "task": "HIT-127",
+  "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+  "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+  "checks": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T19:00:05Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797634243/job/136501214518",
+      "name": "pr12-iam",
+      "startedAt": "2026-11-20T18:57:34Z",
+      "status": "COMPLETED",
+      "workflowName": "IAM — проверки текущей реализации"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T18:57:45Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797634256/job/136501214546",
+      "name": "pr12-delivery",
+      "startedAt": "2026-11-20T18:57:34Z",
+      "status": "COMPLETED",
+      "workflowName": "PR12 delivery — bootstrap or submitted component checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T18:57:40Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797634301/job/136501214390",
+      "name": "pr12-intake",
+      "startedAt": "2026-11-20T18:57:34Z",
+      "status": "COMPLETED",
+      "workflowName": "PR12 intake — bootstrap or submitted component checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T18:59:52Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797634267/job/136501214566",
+      "name": "pr12-processing",
+      "startedAt": "2026-11-20T18:57:34Z",
+      "status": "COMPLETED",
+      "workflowName": "PR12 processing — bootstrap or submitted component checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T18:59:17Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797621844/job/136501169621",
+      "name": "pr12-processing",
+      "startedAt": "2026-11-20T18:57:29Z",
+      "status": "COMPLETED",
+      "workflowName": "PR12 processing — bootstrap or submitted component checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-11-20T18:58:27Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/hitpipe/hitpipe/actions/runs/44797634265/job/136501214561",
+      "name": "platform-start-gate",
+      "startedAt": "2026-11-20T18:57:35Z",
+      "status": "COMPLETED",
+      "workflowName": "Platform — локальная защита начала работы"
+    }
+  ],
+  "processing_runs": [
+    {
+      "run": {
+        "conclusion": "success",
+        "createdAt": "2026-11-20T18:57:31Z",
+        "event": "pull_request",
+        "headSha": "4da48202e77131427730b1827df9ee81940e559a",
+        "jobs": [
+          {
+            "completedAt": "2026-11-20T18:59:52Z",
+            "conclusion": "success",
+            "databaseId": 136501214566,
+            "name": "pr12-processing",
+            "startedAt": "2026-11-20T18:57:34Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-11-20T18:57:36Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-11-20T18:57:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:38Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v4",
+                "number": 2,
+                "startedAt": "2026-11-20T18:57:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:38Z",
+                "conclusion": "success",
+                "name": "Verify bootstrap documentation and frozen copies",
+                "number": 3,
+                "startedAt": "2026-11-20T18:57:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:38Z",
+                "conclusion": "success",
+                "name": "Verify bootstrap wrapper boundaries (not student tests)",
+                "number": 4,
+                "startedAt": "2026-11-20T18:57:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:38Z",
+                "conclusion": "success",
+                "name": "Report actual implementation state",
+                "number": 5,
+                "startedAt": "2026-11-20T18:57:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:46Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-go@v5",
+                "number": 6,
+                "startedAt": "2026-11-20T18:57:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:58:18Z",
+                "conclusion": "success",
+                "name": "Run actual named tests when module exists",
+                "number": 7,
+                "startedAt": "2026-11-20T18:57:46Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:58:28Z",
+                "conclusion": "success",
+                "name": "Run declared diagnostic smoke in both modes",
+                "number": 8,
+                "startedAt": "2026-11-20T18:58:18Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:48Z",
+                "conclusion": "success",
+                "name": "Race and mutation sensitivity for Processing",
+                "number": 9,
+                "startedAt": "2026-11-20T18:58:28Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:49Z",
+                "conclusion": "success",
+                "name": "Run actions/upload-artifact@v4",
+                "number": 10,
+                "startedAt": "2026-11-20T18:59:48Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:49Z",
+                "conclusion": "success",
+                "name": "Scope of this job",
+                "number": 11,
+                "startedAt": "2026-11-20T18:59:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:49Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-go@v5",
+                "number": 21,
+                "startedAt": "2026-11-20T18:59:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:50Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v4",
+                "number": 22,
+                "startedAt": "2026-11-20T18:59:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:50Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 23,
+                "startedAt": "2026-11-20T18:59:50Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/hitpipe/hitpipe/actions/runs/44797634267/job/136501214566"
+          }
+        ],
+        "status": "completed",
+        "updatedAt": "2026-11-20T18:59:53Z",
+        "url": "https://github.com/hitpipe/hitpipe/actions/runs/44797634267"
+      },
+      "log": "github-processing-pull_request.log.gz",
+      "stdout_sha256": "07aab415e8edb30098d88de109b69f53f98f9421c7626c687cb4adf9c4558f95",
+      "compressed_sha256": "a62b0617f5389f6cc7ad9f2caa6b6d4fe959de236b5d77a67477985105419d51",
+      "observed_commands": [
+        "pr12-processing\tRun actions/checkout@v4\t﻿2026-11-20T18:57:36.1988251Z ##[group]Run actions/checkout@v4",
+        "pr12-processing\tVerify bootstrap documentation and frozen copies\t﻿2026-11-20T18:57:38.0429972Z ##[group]Run python3 tools/pr12/workspace.py validate",
+        "pr12-processing\tVerify bootstrap wrapper boundaries (not student tests)\t﻿2026-11-20T18:57:38.2133977Z ##[group]Run python3 tools/pr12/test_workspace.py",
+        "pr12-processing\tReport actual implementation state\t﻿2026-11-20T18:57:38.3336683Z ##[group]Run python3 tools/pr12/workspace.py status processing",
+        "pr12-processing\tRun actions/setup-go@v5\t﻿2026-11-20T18:57:38.4528576Z ##[group]Run actions/setup-go@v5",
+        "pr12-processing\tRun actions/setup-go@v5\t2026-11-20T18:57:38.5827218Z Setup go version spec 1.27.2",
+        "pr12-processing\tRun actions/setup-go@v5\t2026-11-20T18:57:46.6694467Z go version go1.27.2 linux/amd64",
+        "pr12-processing\tRun actual named tests when module exists\t﻿2026-11-20T18:57:46.8171578Z ##[group]Run set -o pipefail",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:57:46.8611528Z + go version",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:57:46.9197258Z + go vet ./...",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:58:07.7462118Z + go test -count=1 -json -coverprofile=/home/runner/work/hitpipe/hitpipe/.pr12-build/processing.cover ./...",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t﻿2026-11-20T18:58:18.9123348Z ##[group]Run python3 tools/pr12/workspace.py smoke processing --require",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:18.9549597Z + go version",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:18.9753184Z + go build -ldflags -X main.version=pr12 -X main.commit=6d903867a3baa06f5bf25d791b5c360e5bf56fba -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:22.9940873Z + go build -ldflags -X main.version=pr12 -X main.commit=6d903867a3baa06f5bf25d791b5c360e5bf56fba -X main.dirty=false -X main.buildMode=release -trimpath -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck",
+        "pr12-processing\tRace and mutation sensitivity for Processing\t﻿2026-11-20T18:58:28.4756199Z ##[group]Run cd services/processing",
+        "pr12-processing\tRun actions/upload-artifact@v4\t﻿2026-11-20T18:59:48.7215899Z ##[group]Run actions/upload-artifact@v4",
+        "pr12-processing\tScope of this job\t﻿2026-11-20T18:59:49.8085844Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> \"$GITHUB_STEP_SUMMARY\""
+      ]
+    },
+    {
+      "run": {
+        "conclusion": "success",
+        "createdAt": "2026-11-20T18:57:26Z",
+        "event": "push",
+        "headSha": "4da48202e77131427730b1827df9ee81940e559a",
+        "jobs": [
+          {
+            "completedAt": "2026-11-20T18:59:17Z",
+            "conclusion": "success",
+            "databaseId": 136501169621,
+            "name": "pr12-processing",
+            "startedAt": "2026-11-20T18:57:29Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-11-20T18:57:32Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-11-20T18:57:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:36Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v4",
+                "number": 2,
+                "startedAt": "2026-11-20T18:57:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:36Z",
+                "conclusion": "success",
+                "name": "Verify bootstrap documentation and frozen copies",
+                "number": 3,
+                "startedAt": "2026-11-20T18:57:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:37Z",
+                "conclusion": "success",
+                "name": "Verify bootstrap wrapper boundaries (not student tests)",
+                "number": 4,
+                "startedAt": "2026-11-20T18:57:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:37Z",
+                "conclusion": "success",
+                "name": "Report actual implementation state",
+                "number": 5,
+                "startedAt": "2026-11-20T18:57:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:57:44Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-go@v5",
+                "number": 6,
+                "startedAt": "2026-11-20T18:57:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:58:07Z",
+                "conclusion": "success",
+                "name": "Run actual named tests when module exists",
+                "number": 7,
+                "startedAt": "2026-11-20T18:57:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:58:14Z",
+                "conclusion": "success",
+                "name": "Run declared diagnostic smoke in both modes",
+                "number": 8,
+                "startedAt": "2026-11-20T18:58:07Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:14Z",
+                "conclusion": "success",
+                "name": "Race and mutation sensitivity for Processing",
+                "number": 9,
+                "startedAt": "2026-11-20T18:58:14Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:15Z",
+                "conclusion": "success",
+                "name": "Run actions/upload-artifact@v4",
+                "number": 10,
+                "startedAt": "2026-11-20T18:59:14Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:15Z",
+                "conclusion": "success",
+                "name": "Scope of this job",
+                "number": 11,
+                "startedAt": "2026-11-20T18:59:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:15Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-go@v5",
+                "number": 21,
+                "startedAt": "2026-11-20T18:59:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:15Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v4",
+                "number": 22,
+                "startedAt": "2026-11-20T18:59:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-11-20T18:59:15Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 23,
+                "startedAt": "2026-11-20T18:59:15Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/hitpipe/hitpipe/actions/runs/44797621844/job/136501169621"
+          }
+        ],
+        "status": "completed",
+        "updatedAt": "2026-11-20T18:59:18Z",
+        "url": "https://github.com/hitpipe/hitpipe/actions/runs/44797621844"
+      },
+      "log": "github-processing-push.log.gz",
+      "stdout_sha256": "24f339a89e92b3ea470b12fb2504bc1a81acf9b4d5efb4d6fd7131c0618fcfcf",
+      "compressed_sha256": "bf43ddc5671b136411e6b302f5c1f08dacdce92574bce25a25561b231175333e",
+      "observed_commands": [
+        "pr12-processing\tRun actions/checkout@v4\t﻿2026-11-20T18:57:32.2600804Z ##[group]Run actions/checkout@v4",
+        "pr12-processing\tVerify bootstrap documentation and frozen copies\t﻿2026-11-20T18:57:36.4552568Z ##[group]Run python3 tools/pr12/workspace.py validate",
+        "pr12-processing\tVerify bootstrap wrapper boundaries (not student tests)\t﻿2026-11-20T18:57:36.8740713Z ##[group]Run python3 tools/pr12/test_workspace.py",
+        "pr12-processing\tReport actual implementation state\t﻿2026-11-20T18:57:37.1194613Z ##[group]Run python3 tools/pr12/workspace.py status processing",
+        "pr12-processing\tRun actions/setup-go@v5\t﻿2026-11-20T18:57:37.2122880Z ##[group]Run actions/setup-go@v5",
+        "pr12-processing\tRun actions/setup-go@v5\t2026-11-20T18:57:37.3092803Z Setup go version spec 1.27.2",
+        "pr12-processing\tRun actions/setup-go@v5\t2026-11-20T18:57:42.3081656Z go version go1.27.2 linux/amd64",
+        "pr12-processing\tRun actual named tests when module exists\t﻿2026-11-20T18:57:44.0395839Z ##[group]Run set -o pipefail",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:57:44.0764150Z + go version",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:57:44.1217912Z + go vet ./...",
+        "pr12-processing\tRun actual named tests when module exists\t2026-11-20T18:57:58.9844346Z + go test -count=1 -json -coverprofile=/home/runner/work/hitpipe/hitpipe/.pr12-build/processing.cover ./...",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t﻿2026-11-20T18:58:07.0787518Z ##[group]Run python3 tools/pr12/workspace.py smoke processing --require",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:07.1141385Z + go version",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:07.2386401Z + go build -ldflags -X main.version=pr12 -X main.commit=4da48202e77131427730b1827df9ee81940e559a -X main.dirty=false -X main.buildMode=dev -gcflags=all=-N -l -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/dev/processing-contractcheck ./cmd/processing-contractcheck",
+        "pr12-processing\tRun declared diagnostic smoke in both modes\t2026-11-20T18:58:10.1009324Z + go build -ldflags -X main.version=pr12 -X main.commit=4da48202e77131427730b1827df9ee81940e559a -X main.dirty=false -X main.buildMode=release -trimpath -o /home/runner/work/hitpipe/hitpipe/.pr12-build/processing/release/processing-contractcheck ./cmd/processing-contractcheck",
+        "pr12-processing\tRace and mutation sensitivity for Processing\t﻿2026-11-20T18:58:14.2611215Z ##[group]Run cd services/processing",
+        "pr12-processing\tRun actions/upload-artifact@v4\t﻿2026-11-20T18:59:14.7385660Z ##[group]Run actions/upload-artifact@v4",
+        "pr12-processing\tScope of this job\t﻿2026-11-20T18:59:15.6449664Z ##[group]Run echo 'Missing component = NOT_IMPLEMENTED / student checks NOT_RUN. Green bootstrap is not laboratory PASS, human review, merge, or acceptance.' >> \"$GITHUB_STEP_SUMMARY\""
+      ]
+    }
+  ]
+}
