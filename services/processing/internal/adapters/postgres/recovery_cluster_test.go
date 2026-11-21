@@ -16,7 +16,7 @@ import (
 
 const recoveryHost = "127.0.0.5"
 const recoveryPort = "55432"
-const recoveryDB = "hit128_restore"
+const recoveryDB = "hit128-restore"
 
 type recoveryCluster struct {
 	socket, ca string
@@ -88,8 +88,9 @@ func createRecoveryCluster(t *testing.T, stand *processStand) recoveryCluster {
 		return recoveryCommand(t, exec.Command("psql", append([]string{"-X", "-v", "ON_ERROR_STOP=1", "-d", conn}, args...)...))
 	}
 	psql("postgres", "postgres", "-f", "/migrations/roles.sql")
-	psql("postgres", "postgres", "-c", "CREATE DATABASE "+recoveryDB+" OWNER hp_processing_owner")
-	psql("postgres", "postgres", "-c", "REVOKE ALL ON DATABASE "+recoveryDB+" FROM PUBLIC; GRANT CONNECT ON DATABASE "+recoveryDB+" TO hp_processing_app,hp_processing_migrator,hp_processing_worker,hp_processing_purge")
+	db := pgx.Identifier{recoveryDB}.Sanitize()
+	psql("postgres", "postgres", "-c", "CREATE DATABASE "+db+" OWNER hp_processing_owner")
+	psql("postgres", "postgres", "-c", "REVOKE ALL ON DATABASE "+db+" FROM PUBLIC; GRANT CONNECT ON DATABASE "+db+" TO hp_processing_app,hp_processing_migrator,hp_processing_worker,hp_processing_purge")
 	psql("hp_processing_migrator", recoveryDB, "-f", "/migrations/apply.sql")
 
 	check := "SELECT system_identifier FROM pg_control_system()"
