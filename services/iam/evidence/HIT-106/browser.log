@@ -1,0 +1,113 @@
+HIT-106 source commit: 4c165aaee969becf9a314b85e198d84949247796
+go version go1.27.2 linux/amd64
+v22.23.5
+10.9.9
+
+added 2 packages in 702ms
+#1 [internal] load local bake definitions
+#1 reading from stdin 585B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 925B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#3 DONE 0.1s
+
+#4 [internal] load metadata for quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+#4 DONE 0.1s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 115B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [stage-1 1/4] FROM quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+#7 resolve quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244 0.1s done
+#7 DONE 0.1s
+
+#8 [provider 1/5] FROM docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#8 resolve docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237 0.1s done
+#8 DONE 0.1s
+
+#6 [internal] load build context
+#6 transferring context: 69.34kB done
+#6 DONE 0.0s
+
+#9 [provider 2/5] WORKDIR /build
+#9 CACHED
+
+#10 [provider 3/5] COPY pom.xml .
+#10 CACHED
+
+#11 [provider 4/5] COPY src ./src
+#11 CACHED
+
+#12 [provider 5/5] RUN --mount=type=cache,id=hit105-email-maven,target=/root/.m2/repository,sharing=locked     mvn --batch-mode --no-transfer-progress package
+#12 CACHED
+
+#13 [stage-1 3/4] COPY --chown=1000:0 --chmod=0644 realm/hit105-test-realm.json /opt/keycloak/data/import/hit105-test-realm.json
+#13 CACHED
+
+#14 [stage-1 2/4] COPY --from=provider --chown=1000:0 --chmod=0644 /build/target/hitpipe-keycloak-email-code.jar /opt/keycloak/providers/hitpipe-keycloak-email-code.jar
+#14 CACHED
+
+#15 [stage-1 4/4] RUN chmod 0755 /opt/keycloak/data/import     && touch -m --date=@1794873600 /opt/keycloak/providers/hitpipe-keycloak-email-code.jar     && /opt/keycloak/bin/kc.sh build --db=postgres
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:a20ac6f7993e302d28ab0e876367a2297a24d601b832ddbe1a09ca6e543ed7f4 done
+#16 exporting config sha256:37b54dbdf3718852b6fe7515fbbb95297f5e408cca29776a74956c42d2d3da08 done
+#16 exporting attestation manifest sha256:54d03e2372998be90a863f6690a1c8b083063f344072cdb47392508a784add5b 0.1s done
+#16 exporting manifest list sha256:6a22c9fa926296af5a9907e30c9fbe937a2bab233a34161a6072b25b4c563e22
+#16 exporting manifest list sha256:6a22c9fa926296af5a9907e30c9fbe937a2bab233a34161a6072b25b4c563e22 0.0s done
+#16 naming to docker.io/library/hit106-keycloak-email-code:local done
+#16 unpacking to docker.io/library/hit106-keycloak-email-code:local 0.0s done
+#16 DONE 0.2s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ hit106-keycloak-email-code:local  Built
+ Network hit106-browser-lab_lab  Creating
+ Network hit106-browser-lab_lab  Created
+ Container hit106-browser-lab-smtp-1  Creating
+ Container hit106-browser-lab-idp-db-1  Creating
+ Container hit106-browser-lab-iam-db-1  Creating
+ Container hit106-browser-lab-smtp-1  Created
+ Container hit106-browser-lab-idp-db-1  Created
+ Container hit106-browser-lab-idp-1  Creating
+ Container hit106-browser-lab-iam-db-1  Created
+ Container hit106-browser-lab-idp-1  Created
+ Container hit106-browser-lab-iam-db-1  Starting
+ Container hit106-browser-lab-smtp-1  Starting
+ Container hit106-browser-lab-idp-db-1  Starting
+ Container hit106-browser-lab-smtp-1  Started
+ Container hit106-browser-lab-idp-db-1  Started
+ Container hit106-browser-lab-idp-db-1  Waiting
+ Container hit106-browser-lab-iam-db-1  Started
+ Container hit106-browser-lab-idp-db-1  Healthy
+ Container hit106-browser-lab-idp-1  Starting
+ Container hit106-browser-lab-idp-1  Started
+IAM PostgreSQL 18.7 migration: installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7
+IAM PostgreSQL 18.7 migration: already_installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7
+Appending additional Java properties to JAVA_OPTS
+Keycloak 26.8.1
+JVM: 21.0.12.1 (Red Hat, Inc. OpenJDK 64-Bit Server VM 21.0.12.1+1-LTS)
+OS: Linux 6.8.0-147-generic amd64
+postgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)
+postgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)
+/mailpit v1.33.1 compiled with go1.27.3 on linux/amd64
+v22.23.5
+Chromium 159.0.8154.6 (verified local CA; HTTPS errors enforced)
+PASS HTTPS registration requires email-code, then issues one real IAM session
+PASS concurrent replay of the completed callback creates no independent sessions
+PASS an existing session cannot be replaced without the revocation coordinator
+PASS the confirmed user signs in again with a fresh attempt and the same principal
+PASS foreign or missing state and browser authority assertions do not create a session
+PASS cancelling an attempt also blocks a later genuine IdP callback for that state
+PASS a genuine callback after IAM restart fails with the lost one-use attempt
+PASS a genuine unverified-email claim from the test IdP cannot create a session
