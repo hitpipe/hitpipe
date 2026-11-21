@@ -1,0 +1,65 @@
+{
+  "subject": "HIT-148",
+  "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
+  "materialized_result": {
+    "implementation_status": "BLOCKED_NO_AUTHORITATIVE_CASE_DELETION_RECORD",
+    "summary": "Проверенные источники не предоставляют Processing подтверждённую запись об удалении одного дела. Адресный режим не добавлен. Проверены отказ существующей CLI от произвольного case_id и регрессии прежней очистки и восстановления на изолированных PostgreSQL 18.7.",
+    "contract_revision": 1,
+    "contract_fingerprint": "3a6464941171fc63b0cf84708cbee37c1a1a9ff2a4a42fa3822783a239c27299",
+    "base_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+    "tested_code_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab"
+  },
+  "dependencies": [
+    {
+      "issue": "HIT-126",
+      "tested_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-126?focusedCommentId=15122",
+      "inclusion": "Exact Git ancestor of base_sha"
+    },
+    {
+      "issue": "HIT-128",
+      "tested_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15934",
+      "inclusion": "Exact Git ancestor of base_sha with an empty Processing code diff"
+    }
+  ],
+  "changed_artifacts": [
+    ".project-os/results/HIT-148.json",
+    "services/processing/docs/HIT-148/README.md",
+    "services/processing/docs/HIT-148/boundary-commands.json",
+    "services/processing/docs/HIT-148/verification.md"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-148/README.md",
+    "boundary_commands": "services/processing/docs/HIT-148/boundary-commands.json",
+    "baseline_execution": "services/processing/docs/HIT-148/verification.md"
+  },
+  "dod_evidence": [
+    {
+      "id": "8d0d1da9-f5a3-484e-8d94-7b99e7bedb42",
+      "observed_local": "BLOCKED",
+      "observation": "Прежняя CLI отклонила неподдерживаемый case_id для двух синтетических областей. Ролевые проверки прежней очистки прошли на PostgreSQL 18.7. Проверка роли и области для действующего адресного допуска не выполнена."
+    },
+    {
+      "id": "5f9f0546-97ad-4d41-b2bc-ea98fc50a2f7",
+      "observed_local": "BLOCKED",
+      "observation": "Регрессия прежней очистки прошла. Адресное удаление по запросу владельца не выполнялось."
+    },
+    {
+      "id": "a021aaf4-88eb-4cbe-9819-360f189411aa",
+      "observed_local": "BLOCKED",
+      "observation": "Регрессии прежнего восстановления и чтения прошли. Повтор адресной операции и чтение после неё не проверены."
+    },
+    {
+      "id": "e24b6b04-15fa-4c03-8df2-0e991331d222",
+      "observed_local": "BLOCKED",
+      "observation": "Отсутствие доступного принятого case-level допуска зафиксировано. Адресный режим выключен. Повторное применение реального допуска до serving не проверено."
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Для реализации нужны принятый источник, привязка подтверждённой записи к workspace/case и поколению, способ проверки действительности и правила повторного применения после восстановления.",
+    "CI и тесты предшественников не подтверждают DoD адресного удаления. Нового API, DDL, роли, рабочих удалений или внешних эффектов нет."
+  ]
+}
