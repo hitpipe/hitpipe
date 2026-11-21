@@ -1,0 +1,392 @@
+{
+  "issue": "HIT-148",
+  "source_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "scope": "Static contract lookup and existing CLI rejection. No database or deletion.",
+  "outcome": "PASS",
+  "details": {
+    "predecessor_purge_sha256": "d88fe519cbadd5a39983eb6faaadfce38154f07599c78f09773c514cf297cd13",
+    "synthetic_sentinel_files_before": {
+      "synthetic-sentinel": "2165361c77c75cb78e769cdb4a444ccf055e5eab792c6701b7af817f04c80f93"
+    },
+    "synthetic_sentinel_files_after": {
+      "synthetic-sentinel": "2165361c77c75cb78e769cdb4a444ccf055e5eab792c6701b7af817f04c80f93"
+    }
+  },
+  "commands": [
+    {
+      "label": "clean-source-head",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.407799+00:00",
+      "finished_at": "2026-11-21T16:43:10.416168+00:00",
+      "exit_code": 0,
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3\n",
+      "stderr": "",
+      "stdout_sha256": "0dd5f7b807456390115f369f0d28ea559985b725a87218fea5dd113b52735a11",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "clean-source-tree",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.416288+00:00",
+      "finished_at": "2026-11-21T16:43:10.433872+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-126-in-base",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.433984+00:00",
+      "finished_at": "2026-11-21T16:43:10.444643+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-126-outside-main",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "ce771d37505e7770003d0796ae932556d06b7bab"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.444738+00:00",
+      "finished_at": "2026-11-21T16:43:10.469502+00:00",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128-in-base",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.469620+00:00",
+      "finished_at": "2026-11-21T16:43:10.476553+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128-outside-main",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "ce771d37505e7770003d0796ae932556d06b7bab"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.476633+00:00",
+      "finished_at": "2026-11-21T16:43:10.485523+00:00",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "no-processing-code-diff-from-tested-HIT-128",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing",
+        ":(exclude)services/processing/docs"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.485653+00:00",
+      "finished_at": "2026-11-21T16:43:10.494489+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "processing-no-registration-or-inventory-match",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-i",
+        "-E",
+        "deletion[_/-]?(id|overlay|receipt|deny|inventory)|delete[_-]?case[_-]?content",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing",
+        ":(exclude)services/processing/docs"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.494581+00:00",
+      "finished_at": "2026-11-21T16:43:10.528590+00:00",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "workspace-only-IAM-overlays",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "CREATE TABLE deletion_(overlays|receipts)",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "--",
+        "contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.528690+00:00",
+      "finished_at": "2026-11-21T16:43:10.537639+00:00",
+      "exit_code": 0,
+      "stdout": "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:23:CREATE TABLE deletion_overlays(workspace_id uuid PRIMARY KEY,deletion_id uuid NOT NULL UNIQUE,confirmed_at timestamptz NOT NULL,active_deadline_at timestamptz NOT NULL,backup_deadline_at timestamptz NOT NULL,status text NOT NULL CHECK(status IN('CLOSING','PURGING','ACTIVE_PURGED','BACKUPS_PURGED','INCIDENT')),CHECK(active_deadline_at<=confirmed_at+interval'7days'),CHECK(backup_deadline_at<=confirmed_at+interval'35days'));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:24:CREATE TABLE deletion_receipts(workspace_id uuid NOT NULL,service text NOT NULL,active_purged_at timestamptz,backup_last_copy_expires_at timestamptz,receipt_digest text NOT NULL,PRIMARY KEY(workspace_id,service),FOREIGN KEY(workspace_id) REFERENCES deletion_overlays(workspace_id));\n",
+      "stderr": "",
+      "stdout_sha256": "52bbe73a8336bfe32ea1a20abf83700c4b11dd60d53d7b34ece44da7cc29d19d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "Processing-DDL-table-names",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-o",
+        "-E",
+        "^CREATE TABLE [a-z_]+",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "--",
+        "contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.537743+00:00",
+      "finished_at": "2026-11-21T16:43:10.544503+00:00",
+      "exit_code": 0,
+      "stdout": "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:15:CREATE TABLE schema_version\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:29:CREATE TABLE operations\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:32:CREATE TABLE drafts\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:33:CREATE TABLE accepted_configs\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:35:CREATE TABLE case_identity\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:36:CREATE TABLE episodes\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:40:CREATE TABLE case_content\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:51:CREATE TABLE safety_history\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:52:CREATE TABLE history_content\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:53:CREATE TABLE user_commands\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:54:CREATE TABLE notifications\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:62:CREATE TABLE inbox\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:63:CREATE TABLE outbox\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:66:CREATE TABLE job_index\n",
+      "stderr": "",
+      "stdout_sha256": "b30c0fc0f6f795510ed710ffeeb3d0da9530e9837d31e47286506aa580391c7c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "normative-architecture",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "^HP-MVP-A-02[67]:",
+        "b2461564e4355ea5a72a55a30a635655397c463b",
+        "--",
+        "contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.544588+00:00",
+      "finished_at": "2026-11-21T16:43:10.550955+00:00",
+      "exit_code": 0,
+      "stdout": "b2461564e4355ea5a72a55a30a635655397c463b:contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md:79:HP-MVP-A-026: Retention/удаление полностью сохраняют GLOBAL_NFR. Raw input штатно не хранится; если диагностика действительно включена, TTL≤24ч и purge≤1ч. Normalized held signal≤72ч; context/free text и обычная история≤90сут, known rejection aggregate≤30сут. Повторы не продлевают TTL. Минимальные identity/outcome/ambiguous-write safety и принятые configs сохраняются до удаления workspace без payload/AI/customer brief. Обслуживаемая процедура владельца применяет case-content deletion и полное workspace erasure с deny/revoke/intake cutoff: доступные active copies≤7сут, recovery/service copies≤35сут; старый webhook не возрождает workspace. Восстановление копии повторно применяет deletion/deny до открытия serving. Внешние Stripe/ClickUp объекты вследствие этого не удаляются.\nb2461564e4355ea5a72a55a30a635655397c463b:contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md:81:HP-MVP-A-027: Backup — выборочный logical safety/config/deletion inventory с TTL21сут; secret и expiring-content volumes, full physical snapshots и WAL archives исключены. Restore начинается CLOSED, проверяет generation, deletion/deny, minimal effect knowledge и provider identity, затем согласованно регистрирует runtime. RPO0 относится только к объявленному контролируемому restart/temporary DB failure при исправных PG/content volumes, не к потере всего storage. Потерянные/старые/неустановленные данные удерживают затронутые actions, сохраняют UNKNOWN/reconnect и никогда не разрешают слепой create. Квалификация проверяет interrupted write, removed content, revoked access, backup restore и несовпадение generation.\n",
+      "stderr": "",
+      "stdout_sha256": "a5bc931a795d12e1452cdf5a1162fe8bfb1aaf058f728f2d13768aaaa66093ff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "existing-recovery-stated-boundary",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "рабочий реестр удалений|отдельный протокол удаления|рабочая проверка сведений об удалениях",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing/docs/HIT-128/RUN_RU.md",
+        "services/processing/docs/HIT-128/review-15740/contract-conformance.md"
+      ],
+      "explicit_environment": {},
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.551050+00:00",
+      "finished_at": "2026-11-21T16:43:10.559692+00:00",
+      "exit_code": 0,
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/docs/HIT-128/RUN_RU.md:38:Для рабочего восстановления требуются актуальные данные о поколении, удалениях и отзывах, подтверждение минимального знания о возможном эффекте и проверенная идентичность провайдеров. Неподтверждённые области должны оставаться закрытыми. Автоматическая загрузка рабочего архива, новый формат резервных копий и отдельный протокол удаления в HIT-128 не вводятся.\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/docs/HIT-128/review-15740/contract-conformance.md:39:Сроки переносятся без пересчёта. READ_UNAVAILABLE при пропавшем или повреждённом файле подтверждён двумя ответами 503. Истёкшая деталь возвращала минимальные метаданные без чтения тела. Purge вернул `{\"held\":0,\"removed\":2}`. Тест подтвердил отсутствие истёкшего файла и сироты, равенство метаданных истории до и после очистки, сохранение expiry и отказ повторно применить снимок к заполненной цели. Отзыв отдельной области перенесён через доверенный IAM-снимок. Полное стирание workspace, рабочий реестр удалений и сроки удаления резервных копий выходят за границу данной локальной проверки. [Expiry-on-read](https://github.com/hitpipe/hitpipe/blob/c426dc400a4bec03fafba72e2a5780c9d85af1e2/services/processing/internal/adapters/postgres/read_cases.go#L370-L407) · [Проверки повреждения и очистки](https://github.com/hitpipe/hitpipe/blob/c426dc400a4bec03fafba72e2a5780c9d85af1e2/services/processing/internal/adapters/postgres/recovery_process_test.go#L353-L432)\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/docs/HIT-128/review-15740/contract-conformance.md:43:Тестовый перенос одного SQL scope допускается в пустую область второго кластера. Повтор импорта отклоняется. Идентичность дела и конфигурации, command/inbox, связь с уже известным эффектом и необратимый fence сохранены. Незавершённые create/query становятся HELD, срок и число попыток сохраняются, старые claim и lease очищаются. Ни ACKED, ни CONFIRMED из переноса не возникают. Проверены отдельный кластер, CLOSED до свежего снимка, неверное поколение, отозванная область, повтор, недоступное содержимое и граница сбоя. Целевой провайдер управляемый. Backup TTL 21 день и рабочая проверка сведений об удалениях, реальной provider identity, RPO и эксплуатационном RTO здесь не квалифицированы. [Трансформация outbox и транзакция](https://github.com/hitpipe/hitpipe/blob/c426dc400a4bec03fafba72e2a5780c9d85af1e2/services/processing/internal/adapters/postgres/recovery_sql_test.go#L29-L127) · [Восстановленное состояние](https://github.com/hitpipe/hitpipe/blob/c426dc400a4bec03fafba72e2a5780c9d85af1e2/services/processing/internal/adapters/postgres/recovery_process_test.go#L278-L352)\n",
+      "stderr": "",
+      "stdout_sha256": "1a19ba788706ee78f6a1e3ba7711ad8d182e77d6978491b57733a86eeff83da8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "go-version",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion/services/processing",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "version"
+      ],
+      "explicit_environment": {
+        "GOTOOLCHAIN": "local",
+        "GOWORK": "off"
+      },
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.560589+00:00",
+      "finished_at": "2026-11-21T16:43:10.566603+00:00",
+      "exit_code": 0,
+      "stdout": "go version go1.27.2 darwin/arm64\n",
+      "stderr": "",
+      "stdout_sha256": "94e911f9fbf3c118f6a0573ab3a13fa546ad13e89ba40cf53df77e468509c92d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "build-existing-purge",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion/services/processing",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "build",
+        "-trimpath",
+        "-o",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge",
+        "./cmd/processing-purge"
+      ],
+      "explicit_environment": {
+        "GOTOOLCHAIN": "local",
+        "GOWORK": "off"
+      },
+      "environment_scope": "explicit overrides only",
+      "started_at": "2026-11-21T16:43:10.566691+00:00",
+      "finished_at": "2026-11-21T16:43:13.758088+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "existing-purge-help",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion/services/processing",
+      "argv": [
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge",
+        "--help"
+      ],
+      "explicit_environment": {
+        "PATH": "/bin:/usr/bin",
+        "LC_ALL": "C"
+      },
+      "environment_scope": "complete",
+      "started_at": "2026-11-21T16:43:13.758125+00:00",
+      "finished_at": "2026-11-21T16:43:14.075130+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Usage of /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge:\n  -content-dir string\n    \tabsolute path to the private local Processing content directory\n  -limit int\n    \tmaximum rows held and maximum files unlinked per batch (default 100)\n  -local-stand\n    \tconfirm isolated local stand\n  -workspace string\n    \texplicit authorized local workspace UUID\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a7fb586286163bb260f8f2312e1b031d18d49af3994b4491686bbda48083eaea"
+    },
+    {
+      "label": "operator-case-id-rejected-1",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion/services/processing",
+      "argv": [
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge",
+        "--local-stand",
+        "--content-dir",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/content",
+        "--workspace",
+        "10000000-0000-4000-8000-000000000001",
+        "--case-id",
+        "20000000-0000-4000-8000-000000000001"
+      ],
+      "explicit_environment": {
+        "PATH": "/bin:/usr/bin",
+        "LC_ALL": "C"
+      },
+      "environment_scope": "complete",
+      "started_at": "2026-11-21T16:43:14.075195+00:00",
+      "finished_at": "2026-11-21T16:43:14.087950+00:00",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "flag provided but not defined: -case-id\nUsage of /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge:\n  -content-dir string\n    \tabsolute path to the private local Processing content directory\n  -limit int\n    \tmaximum rows held and maximum files unlinked per batch (default 100)\n  -local-stand\n    \tconfirm isolated local stand\n  -workspace string\n    \texplicit authorized local workspace UUID\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a9ae9b67dd16dac3ff47f2c7c500274c785f8e1d07cb14fc4a9aaa77f22b848a"
+    },
+    {
+      "label": "operator-case-id-rejected-2",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion/services/processing",
+      "argv": [
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge",
+        "--local-stand",
+        "--content-dir",
+        "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/content",
+        "--workspace",
+        "10000000-0000-4000-8000-000000000002",
+        "--case-id",
+        "20000000-0000-4000-8000-000000000001"
+      ],
+      "explicit_environment": {
+        "PATH": "/bin:/usr/bin",
+        "LC_ALL": "C"
+      },
+      "environment_scope": "complete",
+      "started_at": "2026-11-21T16:43:14.088011+00:00",
+      "finished_at": "2026-11-21T16:43:14.098179+00:00",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "flag provided but not defined: -case-id\nUsage of /var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit148-reject-51ickxml/processing-purge:\n  -content-dir string\n    \tabsolute path to the private local Processing content directory\n  -limit int\n    \tmaximum rows held and maximum files unlinked per batch (default 100)\n  -local-stand\n    \tconfirm isolated local stand\n  -workspace string\n    \texplicit authorized local workspace UUID\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a9ae9b67dd16dac3ff47f2c7c500274c785f8e1d07cb14fc4a9aaa77f22b848a"
+    }
+  ]
+}
