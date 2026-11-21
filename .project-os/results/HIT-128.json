@@ -1,0 +1,74 @@
+{
+  "subject": "HIT-128",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_IN_OWNED_RECOVERY_TEST",
+    "summary": "Локальное контролируемое восстановление минимального SQL состояния Processing в отдельную PostgreSQL 18.7. Сохранены fence, сроки и идентичность, проверены прерывание, закрытие и отсутствие повторного эффекта.",
+    "contract_revision": 1,
+    "contract_fingerprint": "d0167eadb24c7ab367dd3c87b5f5d2bfa4e588515e0c72c708eb38dd9604de3d",
+    "base_sha": "19831026d635dd74d4b54dd4acd93e53319c182e",
+    "tested_code_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/85"
+  },
+  "changed_artifacts": [
+    "services/processing/scripts/recovery/verify_recovery.py",
+    "services/processing/internal/adapters/postgres/recovery_cluster_test.go",
+    "services/processing/internal/adapters/postgres/recovery_sql_test.go",
+    "services/processing/internal/adapters/postgres/recovery_process_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/docs/HIT-128/",
+    ".project-os/results/HIT-128.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-128/README.md",
+    "runbook": "services/processing/docs/HIT-128/RUN_RU.md",
+    "test_protocol": "services/processing/docs/HIT-128/verification/test-evidence.md",
+    "original_run": "services/processing/docs/HIT-128/verification/original-run.tar.gz",
+    "source_audit": "services/processing/docs/HIT-128/verification/source-evidence.md",
+    "ci_protocol": "services/processing/docs/HIT-128/verification/ci-evidence.md"
+  },
+  "dod_evidence": [
+    {
+      "id": "f73726ee-60fe-4afc-aa58-332fe6a55a16",
+      "obligation": "Проверено: записаны точные SHA/версии, разрешённый состав восстановления и команды; не скопированы expiring payload/PII/секреты или чужая БД вопреки принятой политике.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "ba4fc241-d02f-4cb9-bfdc-e8e7f66a53e0",
+      "obligation": "Проверено на отдельной настоящей PostgreSQL: сохранённые case/config/command/inbox/effect identity и fence восстанавливаются без второго дела, intent или повторного create.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "6a4084cf-dd29-4f1e-9287-905236635e05",
+      "obligation": "Проверено: старые lease/claim/epoch не открывают новый старт после restart; свежая регистрация/снимок обязательны, отсутствие доверенного входа оставляет обычный запуск закрытым.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "cc9731b4-6474-4127-b70e-890d98a049b2",
+      "obligation": "Проверено: действительные собственные refs читаются, а отсутствующие/повреждённые/истёкшие данные не выданы за полноценный контекст/доказательство. Очистка и restore не воскрешают истёкший payload и не продлевают сроки.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "1539d937-f9f8-42f3-88cc-04342c3ce92b",
+      "obligation": "Проверено: crash на границе file/SQL commit, повтор восстановления и незавершённый outbox дают один корректный сохранённый исход или явное удержание; нет ACKED/CONFIRMED из самого факта restore.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "2441ed09-ad3c-4da1-b54c-f1b2b9c59033",
+      "obligation": "Проверено: сценарий действительно исполняется над собранным процессом и своим хранилищем, регрессии/race/vet/build проходят; сохранены команды/SHA/журналы и инструкция. Полученное локальное время восстановления не названо доказанным эксплуатационным RTO.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Управляемые mTLS контрагенты, два изолированных кластера PostgreSQL, TEST на Linux arm64. Обычный режим закрыт без авторитетных входов. Эксплуатационный RTO и внешний end-to-end вне проверки.",
+    "Сценарий не принимает рабочий DSN или архив и не реализует общий протокол backup, erase или распределённого fencing."
+  ]
+}
