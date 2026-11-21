@@ -28,7 +28,7 @@ docker buildx build --load --platform linux/arm64 --provenance=false --sbom=fals
 docker image save --output /absolute/path/to/processing-image.tar "hitpipe-processing:$source_sha"
 ```
 
-На другом стенде той же платформы сверьте SHA-256 полученного файла с записью отправителя перед загрузкой. `archive_sha256` относится ко всему tar-файлу, `manifest_digest` — к платформенному манифесту, а `config_digest` соответствует локальному `docker image inspect --format '{{.Id}}'`.
+На другом стенде той же платформы сверьте SHA-256 полученного файла с записью отправителя перед загрузкой. `archive_sha256` относится ко всему tar-файлу, `manifest_digest` — к платформенному манифесту, а `config_digest` — к конфигурации. С Docker 29 и хранилищем containerd локальный ID может совпасть с digest манифеста. Runner сверяет фактически возвращённый ID с обоими значениями и записывает его отдельно.
 
 ```sh
 docker image load --input /absolute/path/to/processing-image.tar

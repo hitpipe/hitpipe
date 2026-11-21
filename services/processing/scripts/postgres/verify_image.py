@@ -128,12 +128,14 @@ class ImageRun(Run):
             metadata = json.loads(meta.read_text())
             if metadata["containerimage.digest"] != self.identity["manifest_digest"]:
                 raise AssertionError("build and archived manifests differ")
-            (self.output / "image-identity.json").write_text(json.dumps(self.identity, indent=2) + "\n")
             self.docker("remove-built-tag", "image", "rm", self.tag)
             self.docker("load-image", "image", "load", "--input", str(archive))
-            launched_id = self.docker("loaded-config-id", "image", "inspect", "--format", "{{.Id}}", self.tag)
-            if launched_id.stdout.decode().strip() != self.identity["config_digest"]:
-                raise AssertionError("the imported image configuration differs")
+            inspection = self.docker("loaded-image-id", "image", "inspect", "--format", "{{.Id}}", self.tag)
+            self.loaded_id = inspection.stdout.decode().strip()
+            if self.loaded_id not in {self.identity["config_digest"], self.identity["manifest_digest"]}:
+                raise AssertionError("the imported image does not match the archive")
+            self.identity["engine_image_id"] = self.loaded_id
+            (self.output / "image-identity.json").write_text(json.dumps(self.identity, indent=2) + "\n")
             self.command("build-test-driver",
                          ["env", "GOOS=linux", "GOARCH=" + architecture, "CGO_ENABLED=0",
                           *toolchain, "-C", "services/processing", "test", "-c",
@@ -185,7 +187,7 @@ class ImageRun(Run):
         wanted = {target: ("volume", volume, target == CONTENT) for target, volume in self.volumes.items()}
         if (user != UID or not readonly or pid == "host" or privileged or network != "container:" + self.container
                 or caps != ["ALL"] or sec != ["no-new-privileges:true"] or actual != wanted
-                or image != self.identity["config_digest"]):
+                or image not in {self.loaded_id, self.identity["manifest_digest"], self.identity["config_digest"]}):
             raise AssertionError("running container does not match the required isolation")
         top = self.docker("processing-real-uid-" + number, "top", self.app_name, "-eo", "uid,pid,comm")
         _, process = top.stdout.splitlines()
