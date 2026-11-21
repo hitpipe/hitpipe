@@ -18,7 +18,8 @@
     "services/processing/internal/adapters/postgres/recovery_process_test.go",
     "services/processing/internal/adapters/postgres/runtime_process_test.go",
     "services/processing/docs/HIT-128/",
-    ".project-os/results/HIT-128.json"
+    ".project-os/results/HIT-128.json",
+    "services/processing/docs/HIT-128/review-15740/"
   ],
   "verification": {
     "report": "services/processing/docs/HIT-128/README.md",
@@ -26,14 +27,18 @@
     "test_protocol": "services/processing/docs/HIT-128/verification/test-evidence.md",
     "original_run": "services/processing/docs/HIT-128/verification/original-run.tar.gz",
     "source_audit": "services/processing/docs/HIT-128/verification/source-evidence.md",
-    "ci_protocol": "services/processing/docs/HIT-128/verification/ci-evidence.md"
+    "ci_protocol": "services/processing/docs/HIT-128/review-15740/ci-execution.md",
+    "source_files": "services/processing/docs/HIT-128/review-15740/source-files.md",
+    "exact_diff": "services/processing/docs/HIT-128/review-15740/exact-source.diff",
+    "local_execution": "services/processing/docs/HIT-128/review-15740/local-execution.md",
+    "canonical_contract_check": "services/processing/docs/HIT-128/review-15740/contract-conformance.md"
   },
   "dod_evidence": [
     {
       "id": "f73726ee-60fe-4afc-aa58-332fe6a55a16",
       "obligation": "Проверено: записаны точные SHA/версии, разрешённый состав восстановления и команды; не скопированы expiring payload/PII/секреты или чужая БД вопреки принятой политике.",
       "observed_local": "PASS",
-      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+      "source": "services/processing/docs/HIT-128/review-15740/source-files.md"
     },
     {
       "id": "ba4fc241-d02f-4cb9-bfdc-e8e7f66a53e0",
@@ -63,12 +68,55 @@
       "id": "2441ed09-ad3c-4da1-b54c-f1b2b9c59033",
       "obligation": "Проверено: сценарий действительно исполняется над собранным процессом и своим хранилищем, регрессии/race/vet/build проходят; сохранены команды/SHA/журналы и инструкция. Полученное локальное время восстановления не названо доказанным эксплуатационным RTO.",
       "observed_local": "PASS",
-      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+      "source": "services/processing/docs/HIT-128/review-15740/local-execution.md"
     }
   ],
   "deviations": [],
   "known_limitations": [
     "Управляемые mTLS контрагенты, два изолированных кластера PostgreSQL, TEST на Linux arm64. Обычный режим закрыт без авторитетных входов. Эксплуатационный RTO и внешний end-to-end вне проверки.",
     "Сценарий не принимает рабочий DSN или архив и не реализует общий протокол backup, erase или распределённого fencing."
-  ]
+  ],
+  "review_rework": {
+    "review_comment": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15740",
+    "scope": "Evidence only. The original tested source and its four previously confirmed criteria remain unchanged.",
+    "original_tested_code_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+    "previous_independent_verdict": "FAIL, 4/6; re-review pending",
+    "snapshot_sources": [
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/ci-execution.md",
+        "sha256": "5c186f329dd3da2a90c0f1289ce792cdf94d179f6ee2537ca603c883e5871d5c",
+        "characters": 33004
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/contract-conformance.md",
+        "sha256": "7f87745f23c129bdd6e444324f5d347a4545ee22337612a3f76cb62e75ab4755",
+        "characters": 10301
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/exact-source.diff",
+        "sha256": "e09ecf6812fb3bce67a6c4ba9ddf05cabd923f84c82c1572b33e95110c21fbd1",
+        "characters": 38905
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/local-execution.md",
+        "sha256": "fff9a6825c89a18e5a362ce8d900652ef35e9fae0a31a1915d5ecf7e5ece0f71",
+        "characters": 45233
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/source-files.md",
+        "sha256": "8e9bd6ca0cc56fff9c5efb9b2801d70f7b4d846350b49bafdd4ac03894712f91",
+        "characters": 35974
+      },
+      {
+        "path": "services/processing/docs/HIT-128/RUN_RU.md",
+        "sha256": "f07c4d1bafeb2b42a3b078804818227df2680bd61179ae1ca297d2a2eb739d70",
+        "characters": 3851
+      },
+      {
+        "path": "services/processing/docs/HIT-128/verification/test-evidence.md",
+        "sha256": "a04dfc2fbd6d69a8c8394f9979c9d686a2247f767223a3f67a4ecff5fde15f15",
+        "characters": 8651
+      }
+    ]
+  }
 }
