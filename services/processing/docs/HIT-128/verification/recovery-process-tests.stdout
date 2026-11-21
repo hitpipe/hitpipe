@@ -1,0 +1,50 @@
+=== RUN   TestProcessingRecoveryOwnedStand
+    recovery_process_test.go:201: original OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:36.429584966Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    recovery_process_test.go:203: original OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:37.452858383Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    recovery_process_test.go:242: SIGKILL after durable file and before SQL COMMIT: durable orphan present, both SQL rows absent
+    recovery_process_test.go:263: Processing stopped by SIGKILL
+    recovery_process_test.go:266: cold restart, same database OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:37.755637967Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    recovery_process_test.go:268: Processing stopped by SIGKILL
+    recovery_process_test.go:287: scoped SELECT hp_processing.operations: rows=1
+    recovery_process_test.go:287: scoped SELECT hp_processing.accepted_configs: rows=1
+    recovery_process_test.go:287: scoped SELECT hp_processing.case_identity: rows=1
+    recovery_process_test.go:287: scoped SELECT hp_processing.episodes: rows=1
+    recovery_process_test.go:287: scoped SELECT hp_processing.case_content: rows=0
+    recovery_process_test.go:287: scoped SELECT hp_processing.safety_history: rows=5
+    recovery_process_test.go:287: scoped SELECT hp_processing.history_content: rows=5
+    recovery_process_test.go:287: scoped SELECT hp_processing.user_commands: rows=1
+    recovery_process_test.go:287: scoped SELECT hp_processing.inbox: rows=3
+    recovery_process_test.go:287: scoped SELECT hp_processing.outbox: rows=2
+    recovery_process_test.go:288: source intent state=CLAIMED lease=true attempts=1; known identity and fence persisted
+    recovery_process_test.go:290: exit=0 /usr/bin/chown -R postgres:postgres /tmp/hit128-target-205525127
+    recovery_process_test.go:290: exit=0 /usr/sbin/runuser -u postgres -- /usr/lib/postgresql/18/bin/initdb -D /tmp/hit128-target-205525127/data --auth-local=trust --auth-host=trust
+    recovery_process_test.go:290: exit=0 /usr/sbin/runuser -u postgres -- /usr/lib/postgresql/18/bin/pg_ctl -D /tmp/hit128-target-205525127/data -l /tmp/hit128-target-205525127/postgres.log -o -k /tmp/hit128-target-205525127 -p 55432 -h 127.0.0.5 -c fsync=on -c full_page_writes=on -c synchronous_commit=on -c ssl=on -c ssl_cert_file=/tmp/hit128-target-205525127/server.crt -c ssl_key_file=/tmp/hit128-target-205525127/server.key -w start
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -X -v ON_ERROR_STOP=1 -d host=/tmp/hit128-target-205525127 port=55432 dbname=postgres sslmode=disable user=postgres -f /migrations/roles.sql
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -X -v ON_ERROR_STOP=1 -d host=/tmp/hit128-target-205525127 port=55432 dbname=postgres sslmode=disable user=postgres -c CREATE DATABASE "hit128-restore" OWNER hp_processing_owner
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -X -v ON_ERROR_STOP=1 -d host=/tmp/hit128-target-205525127 port=55432 dbname=postgres sslmode=disable user=postgres -c REVOKE ALL ON DATABASE "hit128-restore" FROM PUBLIC; GRANT CONNECT ON DATABASE "hit128-restore" TO hp_processing_app,hp_processing_migrator,hp_processing_worker,hp_processing_purge
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -X -v ON_ERROR_STOP=1 -d host=/tmp/hit128-target-205525127 port=55432 dbname=hit128-restore sslmode=disable user=hp_processing_migrator -f /migrations/apply.sql
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -XAt -U postgres -d postgres -c SELECT system_identifier FROM pg_control_system()
+    recovery_process_test.go:290: exit=0 /usr/bin/psql -X -v ON_ERROR_STOP=1 -d host=/tmp/hit128-target-205525127 port=55432 dbname=postgres sslmode=disable user=postgres -At -c SELECT system_identifier FROM pg_control_system()
+    recovery_process_test.go:290: different cluster system identifiers: source=7710526668357406772 target=7710526714150498525
+    recovery_process_test.go:291: target PostgreSQL server_version_num=180007 fsync=on full_page_writes=on synchronous_commit=on TLS verified
+    recovery_process_test.go:318: target PostgreSQL server_version_num=180007 fsync=on full_page_writes=on synchronous_commit=on TLS verified
+    recovery_process_test.go:322: restore identity/config/command/inbox/effect and fence preserved; create/recheck HELD, old claim has no job, expiry and attempts unchanged; repeat refused; foreign scope rolled back
+    recovery_process_test.go:326: ordinary configuration without authoritative stand inputs OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:38.323129217Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    recovery_process_test.go:328: Processing stopped by SIGKILL
+    recovery_process_test.go:333: target with stale boot snapshot OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:38.452451425Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    recovery_process_test.go:338: target with wrong generation OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:39.467235676Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    recovery_process_test.go:340: target with fresh boot and generation OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:40.360508009Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    recovery_process_test.go:352: fresh registration required; revoked workspace denied at epochs 7 and 9; command, observation and exact Intake receipt replay succeeded
+    recovery_process_test.go:369: Processing stopped by SIGKILL
+    recovery_process_test.go:384: target, one missing detail OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:40.45165376Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    recovery_process_test.go:393: live refs read successfully; expired detail is metadata-only; missing and corrupt live refs each returned HTTP 503 READ_UNAVAILABLE
+    recovery_process_test.go:394: Processing stopped by SIGKILL
+    recovery_process_test.go:403: exit=0 /test/processing-purge --local-stand --content-dir /tmp/TestProcessingRecoveryOwnedStand2389188595/001/content --workspace f0cda04d-8914-4845-8937-57e42af43b24 --limit 100
+    recovery_process_test.go:407: purge result: {"held":0,"removed":2}
+    recovery_process_test.go:420: target after expiry cleanup OPS mTLS HTTP 200 {"build_revision":"c426dc400a4bec03fafba72e2a5780c9d85af1e2","checked_at":"2026-11-21T07:41:40.512013885Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    recovery_process_test.go:426: Processing stopped by SIGKILL
+    recovery_process_test.go:427: purge removed expired bytes while preserving the exact public history metadata and expiry
+    recovery_process_test.go:432: RECOVERY PASS: live provider create calls=1, no promoted ACK/CONFIRMED, cleanup preserved fence, duration_local_ms=4182
+    recovery_cluster_test.go:81: exit=0 /usr/sbin/runuser -u postgres -- /usr/lib/postgresql/18/bin/pg_ctl -D /tmp/hit128-target-205525127/data -m fast -w stop
+--- PASS: TestProcessingRecoveryOwnedStand (4.29s)
+PASS

@@ -1,0 +1,1788 @@
+{
+  "basis_of_remediation": "Independent review #15797: all 6/6 DoD passed; the remaining finding is provenance of the six dependencies.",
+  "checked_utc": "2026-11-21T09:46:29.891557+00:00",
+  "c426dc4": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+  "c394de8": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f",
+  "pr": 85,
+  "pr_base": "19831026d635dd74d4b54dd4acd93e53319c182e",
+  "dependencies": {
+    "HIT-111": {
+      "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+      "registered_projection_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/49229e1db3f371a051a022ea9e31951dd558eecb/.project-os/results/HIT-111.json",
+      "registered_result_fingerprint": "018b9da4634ef3c3d3603add4044f58389a515259d272fa4b7545cc3ab065f5b",
+      "registered_result_blob": "0419a5be287bddebfc5a78fbc073169aaa7c8719",
+      "registered_result_file_sha256": "bf726f69fe7276dc0adbb73f82bc2ad2dafe8d3ca9d523e723807dadaef9f4ab",
+      "registered_result": {
+        "subject": "HIT-111",
+        "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+          "summary": "Единый исполняемый сервис Processing с собственными PostgreSQL 18.7 и файлами, строгим TLS 1.3, единственным HIT-69 startgate, прежними HTTP slice, отправщиком и остановкой.",
+          "contract_revision": 1,
+          "contract_fingerprint": "ba730271dfb71bf71adde963e5300305132eb47a868e671bafdcb68a065c7c84",
+          "base_sha": "1bbb3567c042a1ac79f21d69f78d71e8a4fef41e",
+          "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/72"
+        },
+        "changed_artifacts": [
+          "services/processing/cmd/processing/main.go",
+          "services/processing/docs/HIT-111/RUN_RU.md",
+          "services/processing/docs/HIT-111/processing.example.json",
+          "services/processing/go.mod",
+          "services/processing/internal/adapters/draftjson/schemas.json",
+          "services/processing/internal/adapters/postgres/lifecycle_test.go",
+          "services/processing/internal/adapters/postgres/runtime_process_test.go",
+          "services/processing/internal/application/drafts/wire_generated.go",
+          "services/processing/internal/runtime/access.go",
+          "services/processing/internal/runtime/config.go",
+          "services/processing/internal/runtime/iam.go",
+          "services/processing/internal/runtime/queue.go",
+          "services/processing/internal/runtime/runtime.go",
+          "services/processing/internal/runtime/source.go",
+          "services/processing/internal/testfixtures/draft.go",
+          "services/processing/scripts/postgres/verify_runtime.py",
+          "services/processing/tools/drafts/generate.py",
+          "services/processing/docs/HIT-111/",
+          ".project-os/results/HIT-111.json"
+        ],
+        "verification": {
+          "report": "services/processing/docs/HIT-111/README.md",
+          "runbook": "services/processing/docs/HIT-111/RUN_RU.md",
+          "configuration_template": "services/processing/docs/HIT-111/processing.example.json",
+          "source_audit": "services/processing/docs/HIT-111/source-audit.json",
+          "test_protocol": "services/processing/docs/HIT-111/verification/test-evidence.json",
+          "original_process_log": "services/processing/docs/HIT-111/verification/postgres-storage-tests.stdout.gz",
+          "ci_protocol": "services/processing/docs/HIT-111/verification/ci-evidence.json",
+          "actual_stand": "PASS; 98 command records including expected negative SQL checks. Separate clean Go race/vet/build and real Linux arm64 process/HTTP/mTLS/PG18.7/files.",
+          "code_ci": "https://github.com/hitpipe/hitpipe/actions/runs/44392292963"
+        },
+        "deviations": [],
+        "known_limitations": [
+          "Внешние участники в проверенном запуске управляемые. Обычный запуск остаётся CLOSED без авторитетных источников CSRF/привязок/очереди/roster.",
+          "SourceFacts подключён как готовая фабрика по принятому маршруту; автоматическое финансовое продвижение нового дела и RECHECK относятся к последующим задачам.",
+          "Реальные IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы; работающие среды и секреты не использовались."
+        ]
+      },
+      "review": {
+        "comment_id": "14258",
+        "packet_fingerprint": "97ec0ada7ff208f47f061d4f3581f395050ba1ebffeec0cbabb1d03c9eee456c",
+        "verdict": "PASS WITH NOTES",
+        "criteria_pass": 8,
+        "tested_code_sha_verified_against_review": "b2e823012854575146595b01a6f56d5ac677fc44",
+        "notes": [
+          "Внешние участники (IAM, Intake, Delivery, Stripe, ClickUp) в проверенном запуске были управляемыми заглушками в изолированном контейнере. Обычный запуск сервиса остаётся CLOSED до появления авторитетных источников CSRF, привязок, очереди и roster — это ожидаемое ограничение текущего среза.",
+          "SourceFacts подключён как готовая фабрика транспорта по принятому маршруту; автоматическое финансовое продвижение нового дела и операция RECHECK относятся к последующим задачам и не блокируют текущую приёмку.",
+          "Реальные IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы в этом запуске; рабочие окружения и секреты не использовались. Это честно отражено в отчёте и не нарушает границ задачи."
+        ]
+      },
+      "file_blobs": {
+        "cmd/processing/main.go": {
+          "original": "48335af3cd2c24cb372fffbc0392552ba84b56f6",
+          "c426dc4": "48335af3cd2c24cb372fffbc0392552ba84b56f6",
+          "c394de8": "48335af3cd2c24cb372fffbc0392552ba84b56f6"
+        },
+        "internal/runtime/config.go": {
+          "original": "13852b29fe1d2b32374907d67f63236b518fabec",
+          "c426dc4": "13852b29fe1d2b32374907d67f63236b518fabec",
+          "c394de8": "13852b29fe1d2b32374907d67f63236b518fabec"
+        },
+        "internal/runtime/iam.go": {
+          "original": "0336b808d1e50340568892f29e27c9fde181d8c8",
+          "c426dc4": "0336b808d1e50340568892f29e27c9fde181d8c8",
+          "c394de8": "0336b808d1e50340568892f29e27c9fde181d8c8"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingExecutableOwnedStand"
+    },
+    "HIT-112": {
+      "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+      "registered_projection_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/3b542e88447f41f8287cc0507814de3f3a330cc6/.project-os/results/HIT-112.json",
+      "registered_result_fingerprint": "f5597c9da8be42b727592849717b50ed2c29793e1917cb2534fb4f0d04ceff6b",
+      "registered_result_blob": "837e45140b7670bc9da0804ce1aac82051007e10",
+      "registered_result_file_sha256": "0f2d2ad85cb28e57ef65220d8a7edcc33978e73da6cc5cded34a8b4c57713985",
+      "registered_result": {
+        "subject": "HIT-112",
+        "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+          "summary": "Processing восстанавливает допущенные дела, получает свежие факты и атомарно готовит единственную доставку. Настоящий mTLS и PostgreSQL 18.7 проверены на собственном стенде.",
+          "contract_revision": 1,
+          "contract_fingerprint": "9449a85361fc49867f1b04b3c155dc56d776acec1b2ed7476789800a302a65b3",
+          "base_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+          "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/73"
+        },
+        "changed_artifacts": [
+          "services/processing/internal/adapters/postgres/caseworker.go",
+          "services/processing/internal/adapters/postgres/caseworker_process_test.go",
+          "services/processing/internal/adapters/postgres/caseworker_test.go",
+          "services/processing/internal/adapters/postgres/prepare.go",
+          "services/processing/internal/adapters/postgres/runtime_process_test.go",
+          "services/processing/internal/application/evaluatepaidorder/evaluate.go",
+          "services/processing/internal/application/preparecase/prepare.go",
+          "services/processing/internal/runtime/caseworker.go",
+          "services/processing/internal/runtime/runtime.go",
+          "services/processing/internal/runtime/source.go",
+          "services/processing/docs/HIT-112/",
+          ".project-os/results/HIT-112.json"
+        ],
+        "verification": {
+          "report": "services/processing/docs/HIT-112/README.md",
+          "source_audit": "services/processing/docs/HIT-112/source-audit.json",
+          "test_protocol": "services/processing/docs/HIT-112/verification/test-evidence.json",
+          "ci_protocol": "services/processing/docs/HIT-112/verification/ci-evidence.json",
+          "original_postgres_output": "services/processing/docs/HIT-112/verification/postgres-storage-tests.stdout.gz",
+          "actual_stand": "PASS. TestProcessingCaseWorkerOwnedStand and storage regressions verified on owned PostgreSQL18.7, process and HTTPS/mTLS.",
+          "code_ci": [
+            "https://github.com/hitpipe/hitpipe/actions/runs/44414140750",
+            "https://github.com/hitpipe/hitpipe/actions/runs/44414129541"
+          ]
+        },
+        "deviations": [],
+        "known_limitations": [
+          "Управляемые IAM, Intake и Delivery на локальном стенде. Live IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы.",
+          "В обычном запуске HIT-111 без авторитетных входов сохраняется CLOSED.",
+          "Бизнес-таймеры возраста и ручной RECHECK оставлены HIT-114 и HIT-113."
+        ]
+      },
+      "review": {
+        "comment_id": "14400",
+        "packet_fingerprint": "083d668d58f74bcf710446ee95c3d1841821b1754b336ab6bff50347ed7d3710",
+        "verdict": "PASS WITH NOTES",
+        "criteria_pass": 8,
+        "tested_code_sha_verified_against_review": "0f710a6682d15b437f847376b348947cb4757c7c",
+        "notes": [
+          "Управляемые IAM, Intake и Delivery на локальном стенде. Live IAM/BFF/Stripe/ClickUp и распределённый fencing не квалифицированы — это известное ограничение стенда, не блокирующее выполнение DOD.",
+          "В обычном запуске HIT-111 без авторитетных входов сохраняется состояние CLOSED — ожидаемое поведение по дизайну, не нарушает критерии задачи.",
+          "Бизнес-таймеры возраста дела и ручной RECHECK оставлены для последующих задач HIT-114 и HIT-113 — это согласованная граница текущего среза."
+        ]
+      },
+      "file_blobs": {
+        "internal/adapters/postgres/caseworker.go": {
+          "original": "b3047429b1d804fa5cb1ef9594cd363cabf25a47",
+          "c426dc4": "541f8d4cdd0e2ff829436ebc8b977a901d3d22d3",
+          "c394de8": "541f8d4cdd0e2ff829436ebc8b977a901d3d22d3"
+        },
+        "internal/runtime/caseworker.go": {
+          "original": "84d855654ae46f80bd466522052f9827f766e617",
+          "c426dc4": "3f4a2277f8e92f95ab88fe1d19e739d378ba0352",
+          "c394de8": "3f4a2277f8e92f95ab88fe1d19e739d378ba0352"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingCaseWorkerOwnedStand"
+    },
+    "HIT-113": {
+      "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+      "registered_projection_sha": "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/dd1a36f6529f57d7452a27b615b6cad18b1288bd/.project-os/results/HIT-113.json",
+      "registered_result_fingerprint": "6998afbcaabc192c6947e86f15b57175c9723e6093d607e982d7c43a1b27e881",
+      "registered_result_blob": "ae3939ee23c564c451589310bd4f40a1cce0779f",
+      "registered_result_file_sha256": "d9564c32f46e8568ef2172c7cb668c36d4e5aba4b5a1517e91c75ec889593ff1",
+      "registered_result": {
+        "subject": "HIT-113",
+        "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+          "summary": "Processing принимает RECHECK сохранённой task identity и доставляет типизированный read-only запрос. Валидный TaskObservation применяет существующий HIT-99. Квалифицированы настоящий PostgreSQL 18.7, процесс и mTLS.",
+          "contract_revision": 1,
+          "contract_fingerprint": "a86588178d202552f2f9f9bb2c7f9d75fa6c28c2990d0d4e6ccb496e989dcfd1",
+          "base_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/76"
+        },
+        "changed_artifacts": [
+          "services/processing/internal/adapters/contentfiles/store.go",
+          "services/processing/internal/adapters/deliveryhttp/query.go",
+          "services/processing/internal/adapters/deliveryhttp/send.go",
+          "services/processing/internal/adapters/draftjson/schemas.json",
+          "services/processing/internal/adapters/postgres/dispatch.go",
+          "services/processing/internal/adapters/postgres/observations.go",
+          "services/processing/internal/adapters/postgres/read_cases.go",
+          "services/processing/internal/adapters/postgres/recheck.go",
+          "services/processing/internal/adapters/postgres/recheck_dispatch.go",
+          "services/processing/internal/adapters/postgres/recheck_process_test.go",
+          "services/processing/internal/adapters/postgres/recheck_test.go",
+          "services/processing/internal/adapters/postgres/runtime_process_test.go",
+          "services/processing/internal/adapters/recheckhttp/http.go",
+          "services/processing/internal/application/dispatchintent/dispatch.go",
+          "services/processing/internal/application/drafts/wire_generated.go",
+          "services/processing/internal/application/readcases/presentation.go",
+          "services/processing/internal/application/readcases/read.go",
+          "services/processing/internal/application/recheck/recheck.go",
+          "services/processing/internal/runtime/access.go",
+          "services/processing/internal/runtime/recheck.go",
+          "services/processing/internal/runtime/runtime.go",
+          "services/processing/tools/drafts/generate.py",
+          "services/processing/docs/HIT-113/",
+          ".project-os/results/HIT-113.json"
+        ],
+        "verification": {
+          "report": "services/processing/docs/HIT-113/README.md",
+          "field_map": "services/processing/docs/HIT-113/field-map.md",
+          "source_audit": "services/processing/docs/HIT-113/source-audit.json",
+          "test_protocol": "services/processing/docs/HIT-113/verification/test-evidence.json",
+          "ci_protocol": "services/processing/docs/HIT-113/verification/ci-evidence.json",
+          "original_postgres_output": "services/processing/docs/HIT-113/verification/postgres-storage-tests.stdout.gz",
+          "actual_stand": "PASS. TestProcessingRecheckOwnedStand plus rollback/replay/concurrency and predecessor regressions on owned PG18.7, mTLS and Linux executable.",
+          "code_ci": [
+            "https://github.com/hitpipe/hitpipe/actions/runs/44501255421",
+            "https://github.com/hitpipe/hitpipe/actions/runs/44501245262"
+          ]
+        },
+        "deviations": [],
+        "known_limitations": [
+          "Управляемые IAM, Intake, Delivery на стенде. Живой ClickUp, credentials и распределённый барьер не квалифицированы.",
+          "Обычный режим HIT-111 требует авторитетных источников доступа и привязок."
+        ]
+      },
+      "review": {
+        "comment_id": "14534",
+        "packet_fingerprint": "e04d1f645eea96b4eb6fa42d7092a3aebf2de0fc30436679c747a3e2107ea525",
+        "verdict": "PASS",
+        "criteria_pass": 8,
+        "tested_code_sha_verified_against_review": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+        "notes": []
+      },
+      "file_blobs": {
+        "internal/adapters/postgres/recheck.go": {
+          "original": "80ecf221f184607e82683550634c37f15710df78",
+          "c426dc4": "80ecf221f184607e82683550634c37f15710df78",
+          "c394de8": "80ecf221f184607e82683550634c37f15710df78"
+        },
+        "internal/runtime/recheck.go": {
+          "original": "ead75b4b85fafe67a439df9789081f4fb36a973a",
+          "c426dc4": "86ee1800f0e7cecbc94289e18c4b502907c87faf",
+          "c394de8": "86ee1800f0e7cecbc94289e18c4b502907c87faf"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingRecheckOwnedStand"
+    },
+    "HIT-114": {
+      "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+      "registered_projection_sha": "33d2c8da52585bcdc2216df9d2033f9089209edb",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/33d2c8da52585bcdc2216df9d2033f9089209edb/.project-os/results/HIT-114.json",
+      "registered_result_fingerprint": "a01ad3417f64161f797620a2857cc160b741a41bb43d365d3dc39c93a25d5e05",
+      "registered_result_blob": "1508011ebfccadd5f6dbc0857178bc7ec3c9d187",
+      "registered_result_file_sha256": "1689257e471f9787deb05f97899dc8a17c453cddc5f7a18b408163ce5095a780",
+      "registered_result": {
+        "subject": "HIT-114",
+        "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_STAND",
+          "summary": "Таймеры Processing применяют сохранённый срок WORKING и длительность непрерывного WAITING_DATA, защищают установленное знание и показывают причину через существующие чтения.",
+          "contract_revision": 1,
+          "contract_fingerprint": "0f7bdb4560cb1fde9b26d8bd6b7a2a385658a772b07b448ad5b7162a610ade52",
+          "base_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/78"
+        },
+        "changed_artifacts": [
+          "services/processing/internal/adapters/casereadhttp/http.go",
+          "services/processing/internal/adapters/postgres/caseworker.go",
+          "services/processing/internal/adapters/postgres/dispatch.go",
+          "services/processing/internal/adapters/postgres/prepare_test.go",
+          "services/processing/internal/adapters/postgres/read_cases.go",
+          "services/processing/internal/adapters/postgres/timeouts.go",
+          "services/processing/internal/adapters/postgres/timeouts_process_test.go",
+          "services/processing/internal/adapters/postgres/timeouts_test.go",
+          "services/processing/internal/application/casetimeouts/timeout.go",
+          "services/processing/internal/application/readcases/presentation.go",
+          "services/processing/internal/application/readcases/read.go",
+          "services/processing/internal/runtime/runtime.go",
+          "services/processing/internal/runtime/timeouts.go",
+          "services/processing/docs/HIT-114/",
+          ".project-os/results/HIT-114.json"
+        ],
+        "verification": {
+          "report": "services/processing/docs/HIT-114/README.md",
+          "timing_map": "services/processing/docs/HIT-114/timing-map.md",
+          "source_audit": "services/processing/docs/HIT-114/source-audit.json",
+          "test_protocol": "services/processing/docs/HIT-114/verification/test-evidence.json",
+          "ci_protocol": "services/processing/docs/HIT-114/verification/ci-evidence.json",
+          "original_postgres_output": "services/processing/docs/HIT-114/verification/postgres-storage-tests.stdout.gz",
+          "actual_stand": "PASS. TestProcessingCaseTimeoutsOwnedStand plus exact deadline, concurrency, lease and predecessor regressions on owned PG18.7, mTLS and Linux executable.",
+          "code_ci": [
+            "https://github.com/hitpipe/hitpipe/actions/runs/44597605354",
+            "https://github.com/hitpipe/hitpipe/actions/runs/44597582040"
+          ]
+        },
+        "deviations": [],
+        "known_limitations": [
+          "Управляемые IAM, Intake, Delivery на стенде. Проверка локальных правил по делу, эксплуатационные SLO и живые провайдеры вне стенда.",
+          "Обычный режим HIT-111 требует авторитетных источников доступа и привязок."
+        ]
+      },
+      "review": {
+        "comment_id": "14726",
+        "packet_fingerprint": "1e4456aa4cd6988962f390446a5a9497f9a01215e647f2782fad9dcbc7de46fa",
+        "verdict": "PASS",
+        "criteria_pass": 8,
+        "tested_code_sha_verified_against_review": "dd05559bc911437d33c0c2582b604d2f2728d362",
+        "notes": []
+      },
+      "file_blobs": {
+        "internal/adapters/postgres/timeouts.go": {
+          "original": "c319df7375f0bb62e36d63c6ea5033dff03e571e",
+          "c426dc4": "c319df7375f0bb62e36d63c6ea5033dff03e571e",
+          "c394de8": "c319df7375f0bb62e36d63c6ea5033dff03e571e"
+        },
+        "internal/runtime/timeouts.go": {
+          "original": "54baece7ffdb1a3798f4b1d9adc0b52db4817425",
+          "c426dc4": "2086539582cd5919cc2b920d27fbf9e3afcf6052",
+          "c394de8": "2086539582cd5919cc2b920d27fbf9e3afcf6052"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingCaseTimeoutsOwnedStand"
+    },
+    "HIT-126": {
+      "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+      "registered_projection_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/d450efc7cfc11f8155a476304aced96dad0ebaf6/.project-os/results/HIT-126.json",
+      "registered_result_fingerprint": "47e3caad04fe96e000881af06628111a7a242d68d95619731b129a890e785cf4",
+      "registered_result_blob": "a816950a26e4dbb007adb994e35997c38d786be2",
+      "registered_result_file_sha256": "982b609dbfd21e6e530f0c5a27d507d23e778461e4559f422be48d530139813e",
+      "registered_result": {
+        "subject": "HIT-126",
+        "authorship": {
+          "human_owner": "Тимофей Патрушев / Tim1hik",
+          "executor": "Codex по делегации владельца"
+        },
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_POSTGRES_AND_CONTENT_STAND",
+          "summary": "Пакетная физическая очистка истёкшего содержимого Processing через отдельно разрешённую роль, с повторной проверкой refs и сохранением safety. Истёкшая доставка удерживается.",
+          "contract_revision": 1,
+          "contract_fingerprint": "7bed9e9a200f0705cf7b9f2e8400de10e4fdc0fa44bb39ced6b8f49ac958564a",
+          "base_sha": "e381972ab7ceb8913e345852c8e073998ec59afe",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/81"
+        },
+        "changed_artifacts": [
+          "services/processing/cmd/processing-purge/main.go",
+          "services/processing/internal/adapters/contentfiles/draft.go",
+          "services/processing/internal/adapters/contentfiles/maintenance.go",
+          "services/processing/internal/adapters/contentfiles/maintenance_test.go",
+          "services/processing/internal/adapters/contentfiles/read_owned.go",
+          "services/processing/internal/adapters/contentfiles/read_owned_test.go",
+          "services/processing/internal/adapters/contentfiles/store.go",
+          "services/processing/internal/adapters/contentfiles/store_test.go",
+          "services/processing/internal/adapters/postgres/activation_test.go",
+          "services/processing/internal/adapters/postgres/drafts_security_test.go",
+          "services/processing/internal/adapters/postgres/expiry_fixture_test.go",
+          "services/processing/internal/adapters/postgres/history_api_revision3_test.go",
+          "services/processing/internal/adapters/postgres/history_revision3_test.go",
+          "services/processing/internal/adapters/postgres/intake_faults_test.go",
+          "services/processing/internal/adapters/postgres/observation_faults_test.go",
+          "services/processing/internal/adapters/postgres/projection_revision3_test.go",
+          "services/processing/internal/adapters/postgres/purge.go",
+          "services/processing/internal/adapters/postgres/purge_test.go",
+          "services/processing/internal/adapters/postgres/read_cases_test.go",
+          "services/processing/scripts/postgres/verify_purge.py",
+          "services/processing/docs/HIT-126",
+          ".project-os/results/HIT-126.json"
+        ],
+        "deviations": [],
+        "verification": {
+          "actual_stand": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+          "source_audit": "services/processing/docs/HIT-126/source-audit.json",
+          "report": "services/processing/docs/HIT-126/README.md",
+          "runbook": "services/processing/docs/HIT-126/RUN_RU.md",
+          "retention_map": "services/processing/docs/HIT-126/retention-map.md",
+          "test_protocol": "services/processing/docs/HIT-126/verification/test-evidence.json",
+          "ci_protocol": "services/processing/docs/HIT-126/verification/ci-evidence.json",
+          "code_ci": [
+            "https://github.com/hitpipe/hitpipe/actions/runs/44744088636",
+            "https://github.com/hitpipe/hitpipe/actions/runs/44744081639"
+          ]
+        },
+        "known_limitations": [
+          "Очистка проверена на локальном одноразовом стенде с одной выделенной базой и каталогом. Рабочие данные не использовались.",
+          "Точные версии HIT-111, HIT-113 и HIT-114 входят в изолированную проверенную базу; их ветки не слиты в main.",
+          "Неверифицируемые файлы остаются для разбирательства. Для прежних процессов без файловой блокировки требуется остановка перед очисткой."
+        ]
+      },
+      "review": {
+        "comment_id": "15121",
+        "packet_fingerprint": "aa8b5700cccf86517a146b579702b709e18e93ed8c9ca4c725c1f31229bde26b",
+        "verdict": "PASS",
+        "criteria_pass": 6,
+        "tested_code_sha_verified_against_review": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "notes": []
+      },
+      "file_blobs": {
+        "cmd/processing-purge/main.go": {
+          "original": "817c64f54eebf143d81d9c01cb475f3a0b081602",
+          "c426dc4": "981ba7fbdc06da1e22d70d8827ec14bed703fc45",
+          "c394de8": "981ba7fbdc06da1e22d70d8827ec14bed703fc45"
+        },
+        "internal/adapters/postgres/purge.go": {
+          "original": "3316baccde796a2a9f93190b8761a7e864c4751a",
+          "c426dc4": "3316baccde796a2a9f93190b8761a7e864c4751a",
+          "c394de8": "3316baccde796a2a9f93190b8761a7e864c4751a"
+        },
+        "internal/adapters/contentfiles/maintenance.go": {
+          "original": "ca3473f6d8d01702f150675f115cab94666dcd7f",
+          "c426dc4": "ca3473f6d8d01702f150675f115cab94666dcd7f",
+          "c394de8": "ca3473f6d8d01702f150675f115cab94666dcd7f"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingPurgeOwnedStand"
+    },
+    "HIT-127": {
+      "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+      "registered_projection_sha": "19831026d635dd74d4b54dd4acd93e53319c182e",
+      "registered_result_locator": "https://github.com/hitpipe/hitpipe/blob/19831026d635dd74d4b54dd4acd93e53319c182e/.project-os/results/HIT-127.json",
+      "registered_result_fingerprint": "923aa2e441792f9597bdca667f5099fc139f528be9119f1be473cf1713f39bbe",
+      "registered_result_blob": "6fa27bf90469407ab130eed6fc6cf6b4d8eff8bd",
+      "registered_result_file_sha256": "cb8bb142ca3dcc4c1443bcd1fb186c3c1c623a23da593ede46b3b486506a8805",
+      "registered_result": {
+        "subject": "HIT-127",
+        "authorship": {
+          "human_owner": "Тимофей Патрушев / Tim1hik",
+          "executor": "Codex по делегации владельца"
+        },
+        "materialized_result": {
+          "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_OWNED_PROCESS_AND_POSTGRES_STAND",
+          "summary": "Рабочая диагностика Processing с фактическими очередями и отказами. В пакет повторного ревью вложены точный diff, полные целевые журналы, реальные HTTP-ответы Health и полный протокол.",
+          "contract_revision": 1,
+          "contract_fingerprint": "4bc9b0983e0250104c9557f34237aafb0a36dc25f65af5e381ead8e3b85ecb46",
+          "base_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+          "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+          "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+          "pull_request": "https://github.com/hitpipe/hitpipe/pull/82",
+          "rework_of": "fdda9d1da3f5d0697b0a8811585aa2f8988964e2",
+          "review_findings_comment": "15172",
+          "dependency_provenance_review_comment": "15416",
+          "dependency_provenance_scope": "Пять точных предков 4da4820 и 4250bb4, разрешение merge e381972, go list и побайтовая повторная сборка двух CLI. Код 4da4820 и доказательства шести DoD сохранены."
+        },
+        "changed_artifacts": [
+          "services/processing/cmd/processing-purge/main.go",
+          "services/processing/internal/adapters/contentfiles/store.go",
+          "services/processing/internal/adapters/postgres/diagnostics.go",
+          "services/processing/internal/adapters/postgres/diagnostics_test.go",
+          "services/processing/internal/adapters/postgres/dispatch.go",
+          "services/processing/internal/adapters/postgres/observation_faults_test.go",
+          "services/processing/internal/adapters/postgres/observations.go",
+          "services/processing/internal/adapters/postgres/observations_test.go",
+          "services/processing/internal/adapters/postgres/prepare.go",
+          "services/processing/internal/adapters/postgres/runtime_process_test.go",
+          "services/processing/internal/runtime/caseworker.go",
+          "services/processing/internal/runtime/diagnostics.go",
+          "services/processing/internal/runtime/diagnostics_test.go",
+          "services/processing/internal/runtime/recheck.go",
+          "services/processing/internal/runtime/runtime.go",
+          "services/processing/internal/runtime/timeouts.go",
+          "services/processing/scripts/postgres/verify_diagnostics.py",
+          "services/processing/docs/HIT-127",
+          ".project-os/results/HIT-127.json"
+        ],
+        "deviations": [],
+        "verification": {
+          "actual_stand": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+          "source_audit": "services/processing/docs/HIT-127/source-audit.json",
+          "report": "services/processing/docs/HIT-127/README.md",
+          "runbook": "services/processing/docs/HIT-127/RUN_RU.md",
+          "diagnostics_map": "services/processing/docs/HIT-127/diagnostics-map.md",
+          "actual_runtime_log": "services/processing/docs/HIT-127/verification/diagnostic-runtime.jsonl",
+          "test_protocol": "services/processing/docs/HIT-127/verification/test-evidence.json",
+          "ci_protocol": "services/processing/docs/HIT-127/verification/ci-evidence.json",
+          "code_ci": [
+            "https://github.com/hitpipe/hitpipe/actions/runs/44797634267",
+            "https://github.com/hitpipe/hitpipe/actions/runs/44797621844"
+          ],
+          "source_diff": "services/processing/docs/HIT-127/review/exact-source.diff",
+          "reviewable_process_and_http": "services/processing/docs/HIT-127/review/process-and-http.md",
+          "reviewable_health_and_runbook": "services/processing/docs/HIT-127/review/operations.md",
+          "reviewable_commands": "services/processing/docs/HIT-127/review/commands-and-output.md",
+          "dependency_chain": {
+            "file": "services/processing/docs/HIT-127/review/dependency-chain.md",
+            "sha256": "0c7b8eed24fdb96a7a8d3bdb65219324bb1c11fc27e275ec0aa94fed3de2bef0",
+            "reviewed_pr_head": "4250bb434a9a48ed436904e0a4609717135f7143"
+          }
+        },
+        "known_limitations": [
+          "Локальные ограниченные выборки, измерения на изолированном стенде и управляемых mTLS-соседях.",
+          "Возраст нового Observation измеряется при коммите и сохраняется в журнале. Ретроспективная обработка архива и HIT-128 вне задачи.",
+          "Все пять точных зависимостей входят в проверенный head открытой ветки. GitHub main отделён."
+        ]
+      },
+      "review": {
+        "comment_id": "15637",
+        "packet_fingerprint": "f033b7f144cb18d8a709aa669e7692b032809d2f1cbd2cea0c466ad6b25be188",
+        "verdict": "PASS WITH NOTES",
+        "criteria_pass": 6,
+        "tested_code_sha_verified_against_review": "4da48202e77131427730b1827df9ee81940e559a",
+        "notes": [
+          "Проверка выполнена на ограниченном одноразовом стенде с PostgreSQL 18.7 и управляемыми mTLS-соседями; это не подтверждает развёртывание в рабочей среде или сквозные продуктовые показатели.",
+          "Проверенный код находится в открытой ветке и связан с Draft PR №82; факт объединения с GitHub main отдельно не подтверждён.",
+          "Покрытие локальных выборок, измерений и сценариев явно ограничено описанными в доказательствах границами; ретроспективная обработка архива и HIT-128 не входят в задачу."
+        ]
+      },
+      "file_blobs": {
+        "internal/runtime/diagnostics.go": {
+          "original": "aaa214dbd7deb48c3ad2884462c05535a02b3c14",
+          "c426dc4": "aaa214dbd7deb48c3ad2884462c05535a02b3c14",
+          "c394de8": "aaa214dbd7deb48c3ad2884462c05535a02b3c14"
+        },
+        "internal/adapters/postgres/diagnostics.go": {
+          "original": "abafb0400f25e5d27e7ffc9de5975c03a2b7e77c",
+          "c426dc4": "abafb0400f25e5d27e7ffc9de5975c03a2b7e77c",
+          "c394de8": "abafb0400f25e5d27e7ffc9de5975c03a2b7e77c"
+        },
+        "internal/runtime/runtime.go": {
+          "original": "ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6",
+          "c426dc4": "ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6",
+          "c394de8": "ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6"
+        }
+      },
+      "regression_at_c426dc4": "TestProcessingDiagnosticsOwnedStand"
+    }
+  },
+  "command_workdir": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery",
+  "commands": [
+    {
+      "label": "head",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "utc_start": "2026-11-21T09:46:28.616036+00:00",
+      "exit": 0,
+      "stdout": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f\n",
+      "stderr": ""
+    },
+    {
+      "label": "clean",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "utc_start": "2026-11-21T09:46:28.621568+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "tested is ancestor of PR",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.629826+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "tested versus current PR outside documentation and result",
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f",
+        "--",
+        ".",
+        ":(exclude)services/processing/docs/HIT-128/**",
+        ":(exclude).project-os/results/HIT-128.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.635020+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "observed main",
+      "argv": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "utc_start": "2026-11-21T09:46:28.642628+00:00",
+      "exit": 0,
+      "stdout": "ce771d37505e7770003d0796ae932556d06b7bab\n",
+      "stderr": ""
+    },
+    {
+      "label": "dependency base is outside main",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "19831026d635dd74d4b54dd4acd93e53319c182e",
+        "origin/main"
+      ],
+      "utc_start": "2026-11-21T09:46:28.646742+00:00",
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "full ancestry graph with actual parents",
+      "argv": [
+        "git",
+        "log",
+        "--ancestry-path",
+        "--format=%H %P %s",
+        "b2e823012854575146595b01a6f56d5ac677fc44^..c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.668917+00:00",
+      "exit": 0,
+      "stdout": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f e2c47485f548d66920d151320df5e87a3763f3b6 Deliver full HIT-128 source and execution evidence for re-review\ne2c47485f548d66920d151320df5e87a3763f3b6 c426dc400a4bec03fafba72e2a5780c9d85af1e2 Publish HIT-128 recovery runbook, evidence and result\nc426dc400a4bec03fafba72e2a5780c9d85af1e2 40ab678566624f20c914b62d4c0b9b1939d8f36d Verify exact Intake replay and rejection of the original worker claim\n40ab678566624f20c914b62d4c0b9b1939d8f36d e7c28ecf8f925d7ae13fc0d118dc5f2d0451c0b6 Verify sticky denial separately from the recovered authorized scope\ne7c28ecf8f925d7ae13fc0d118dc5f2d0451c0b6 546245a9db20466ee207e9f230a298b9cbe36798 Use a runtime-compatible database name on the recovery stand\n546245a9db20466ee207e9f230a298b9cbe36798 19831026d635dd74d4b54dd4acd93e53319c182e Exercise scoped Processing recovery against disposable PostgreSQL clusters\n19831026d635dd74d4b54dd4acd93e53319c182e 4250bb434a9a48ed436904e0a4609717135f7143 docs(processing): prove provenance of HIT-127 dependencies\n4250bb434a9a48ed436904e0a4609717135f7143 4da48202e77131427730b1827df9ee81940e559a docs(processing): deliver readable evidence for HIT-127 re-review\n4da48202e77131427730b1827df9ee81940e559a fdda9d1da3f5d0697b0a8811585aa2f8988964e2 test(processing): capture exact Health responses and focused fault logs\nfdda9d1da3f5d0697b0a8811585aa2f8988964e2 f1ddceeda0a61b7a7fd58a79d9b3616d4d614702 docs(processing): record HIT-127 process diagnostics qualification\nf1ddceeda0a61b7a7fd58a79d9b3616d4d614702 f30fdf8b1e08a90e1106fce5b482fcfbcce3877a Distinguish a held dispatch from gate denial in diagnostics\nf30fdf8b1e08a90e1106fce5b482fcfbcce3877a bdf3187b03558c56f30caa422d6ebeecc2986d8f Wait for committed hold before retiring seeded diagnostics job\nbdf3187b03558c56f30caa422d6ebeecc2986d8f d450efc7cfc11f8155a476304aced96dad0ebaf6 processing: report scoped operational diagnostics from runtime state\nd450efc7cfc11f8155a476304aced96dad0ebaf6 4c2f1df34f7cf72ddb2de1f6888e033d035913ac docs(processing): record HIT-126 retention qualification\n4c2f1df34f7cf72ddb2de1f6888e033d035913ac 633f7c35c4db4707c9dae6576829f54f187887ce Test purge recovery after abrupt exit following outbox hold\n633f7c35c4db4707c9dae6576829f54f187887ce e381972ab7ceb8913e345852c8e073998ec59afe processing: add role-scoped offline retention purge\ne381972ab7ceb8913e345852c8e073998ec59afe 33d2c8da52585bcdc2216df9d2033f9089209edb dd1a36f6529f57d7452a27b615b6cad18b1288bd Integrate HIT-113 recheck and HIT-114 case timeouts for HIT-126\n33d2c8da52585bcdc2216df9d2033f9089209edb dd05559bc911437d33c0c2582b604d2f2728d362 docs(processing): record HIT-114 timer verification\ndd05559bc911437d33c0c2582b604d2f2728d362 3b542e88447f41f8287cc0507814de3f3a330cc6 feat(processing): enforce durable case age limits in HIT-114\ndd1a36f6529f57d7452a27b615b6cad18b1288bd 9165e814cb7b46e9cfae484c62ccc70f63fc1ee3 docs(processing): record HIT-113 RECHECK proof and source map\n9165e814cb7b46e9cfae484c62ccc70f63fc1ee3 3b542e88447f41f8287cc0507814de3f3a330cc6 feat(processing): qualify and dispatch known-task RECHECK in HIT-113\n3b542e88447f41f8287cc0507814de3f3a330cc6 0f710a6682d15b437f847376b348947cb4757c7c docs(processing): record HIT-112 worker verification\n0f710a6682d15b437f847376b348947cb4757c7c 49229e1db3f371a051a022ea9e31951dd558eecb feat(processing): recover and advance admitted cases in HIT-112\n49229e1db3f371a051a022ea9e31951dd558eecb b2e823012854575146595b01a6f56d5ac677fc44 docs(processing): record HIT-111 executable and authorization checks\nb2e823012854575146595b01a6f56d5ac677fc44 1bbb3567c042a1ac79f21d69f78d71e8a4fef41e feat(processing): compose private HTTP, IAM start gate and durable sender\n",
+      "stderr": ""
+    },
+    {
+      "label": "recompute the historical merge conflicts",
+      "argv": [
+        "git",
+        "merge-tree",
+        "--write-tree",
+        "--name-only",
+        "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "dd1a36f6529f57d7452a27b615b6cad18b1288bd"
+      ],
+      "utc_start": "2026-11-21T09:46:28.675217+00:00",
+      "exit": 1,
+      "stdout": "9941fcc5d6157048c313db38021fdbc42c1e980d\nservices/processing/internal/adapters/postgres/dispatch.go\nservices/processing/internal/application/readcases/presentation.go\nservices/processing/internal/runtime/runtime.go\n\nAuto-merging services/processing/internal/adapters/postgres/dispatch.go\nCONFLICT (content): Merge conflict in services/processing/internal/adapters/postgres/dispatch.go\nAuto-merging services/processing/internal/adapters/postgres/read_cases.go\nAuto-merging services/processing/internal/application/readcases/presentation.go\nCONFLICT (content): Merge conflict in services/processing/internal/application/readcases/presentation.go\nAuto-merging services/processing/internal/application/readcases/read.go\nAuto-merging services/processing/internal/runtime/runtime.go\nCONFLICT (content): Merge conflict in services/processing/internal/runtime/runtime.go\n",
+      "stderr": ""
+    },
+    {
+      "label": "actual merge parents",
+      "argv": [
+        "git",
+        "show",
+        "-s",
+        "--format=%P",
+        "e381972ab7ceb8913e345852c8e073998ec59afe"
+      ],
+      "utc_start": "2026-11-21T09:46:28.690102+00:00",
+      "exit": 0,
+      "stdout": "33d2c8da52585bcdc2216df9d2033f9089209edb dd1a36f6529f57d7452a27b615b6cad18b1288bd\n",
+      "stderr": ""
+    },
+    {
+      "label": "actual conflict resolutions",
+      "argv": [
+        "git",
+        "show",
+        "--cc",
+        "--format=",
+        "--unified=0",
+        "e381972ab7ceb8913e345852c8e073998ec59afe",
+        "--",
+        "services/processing/internal/adapters/postgres/dispatch.go",
+        "services/processing/internal/application/readcases/presentation.go",
+        "services/processing/internal/runtime/runtime.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.700143+00:00",
+      "exit": 0,
+      "stdout": "diff --cc services/processing/internal/adapters/postgres/dispatch.go\nindex 336c582,4bb9ea1..3c2c311\n--- a/services/processing/internal/adapters/postgres/dispatch.go\n+++ b/services/processing/internal/adapters/postgres/dispatch.go\n@@@ -86,6 -92,1 +92,6 @@@ func (d DispatchStore) jobs(ctx context\n -\trows, e := tx.Query(ctx, `SELECT workspace_id::text,job_id::text FROM hp_processing.job_index WHERE ($2='' OR workspace_id::text=$2) AND kind=$3 AND due_at<=clock_timestamp() AND (lease_until IS NULL OR lease_until<=clock_timestamp()) ORDER BY due_at,job_id LIMIT $1`, limit, workspace, kind)\n +\trows, e := tx.Query(ctx, `SELECT j.workspace_id::text,j.job_id::text FROM hp_processing.job_index j\n-  WHERE ($2='' OR j.workspace_id::text=$2) AND j.kind='DELIVERY_INTENT' AND j.due_at<=clock_timestamp()\n++ WHERE ($2='' OR j.workspace_id::text=$2) AND j.kind=$3 AND j.due_at<=clock_timestamp()\n + AND (j.lease_until IS NULL OR j.lease_until<=clock_timestamp())\n + AND ($2='' OR EXISTS(SELECT 1 FROM hp_processing.outbox o WHERE o.workspace_id=j.workspace_id AND o.message_id=j.job_id\n +   AND o.kind=j.kind AND o.state IN('PENDING','CLAIMED')))\n-  ORDER BY j.due_at,j.job_id LIMIT $1`, limit, workspace)\n++ ORDER BY j.due_at,j.job_id LIMIT $1`, limit, workspace, kind)\ndiff --cc services/processing/internal/application/readcases/presentation.go\nindex 8b2a61c,a7872ba..b1f7445\n--- a/services/processing/internal/application/readcases/presentation.go\n+++ b/services/processing/internal/application/readcases/presentation.go\n@@@ -26,7 -32,1 +34,8 @@@ var reasonCatalog = map[string]reasonIn\n+ \t\"RECHECK_ACCEPTED\":            {\"Запрос на повторную проверку принят.\", false},\n +\tcasetimeouts.WorkingElapsed:   {\"Истёк срок обработки. Внешний исход требует проверки.\", false},\n +\tcasetimeouts.WaitingElapsed:   {\"Проверенные данные не поступили за 24 часа непрерывного ожидания.\", false},\n +\tcasetimeouts.HistoryMissing:   {\"Не найдена запись о начале текущего состояния. Действие удержано.\", false},\n +\tcasetimeouts.HistoryInvalid:   {\"Данные о начале текущего состояния недоступны или несогласованны. Действие удержано.\", false},\n +\tcasetimeouts.HistoryExpired:   {\"Подробности начала текущего состояния просрочены. Действие удержано.\", false},\n +\tcasetimeouts.EpisodeMissing:   {\"Не найден открытый эпизод обработки. Действие удержано.\", false},\n +\tcasetimeouts.EpisodeInvalid:   {\"Времена или связь эпизода обработки несогласованны. Действие удержано.\", false},\ndiff --cc services/processing/internal/runtime/runtime.go\nindex fcb1269,60e8b4c..4d7e72f\n--- a/services/processing/internal/runtime/runtime.go\n+++ b/services/processing/internal/runtime/runtime.go\n@@@ -415,1 -430,1 +432,2 @@@ func (rt *Runtime) work(ctx context.Con\n+ \t\t\trt.advanceRecheck(ctx, w)\n +\t\t\trt.advanceTimeout(ctx, w)\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "b2e823012854575146595b01a6f56d5ac677fc44",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.715993+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.721858+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "b2e823012854575146595b01a6f56d5ac677fc44",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.727891+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.733008+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "49229e1db3f371a051a022ea9e31951dd558eecb:.project-os/results/HIT-111.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-111.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-111.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.738286+00:00",
+      "exit": 0,
+      "stdout": "0419a5be287bddebfc5a78fbc073169aaa7c8719\n0419a5be287bddebfc5a78fbc073169aaa7c8719\n0419a5be287bddebfc5a78fbc073169aaa7c8719\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 blobs in original, tested and PR for cmd/processing/main.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "b2e823012854575146595b01a6f56d5ac677fc44:services/processing/cmd/processing/main.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing/main.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing/main.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.742986+00:00",
+      "exit": 0,
+      "stdout": "48335af3cd2c24cb372fffbc0392552ba84b56f6\n48335af3cd2c24cb372fffbc0392552ba84b56f6\n48335af3cd2c24cb372fffbc0392552ba84b56f6\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 blobs in original, tested and PR for internal/runtime/config.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "b2e823012854575146595b01a6f56d5ac677fc44:services/processing/internal/runtime/config.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/config.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/config.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.749372+00:00",
+      "exit": 0,
+      "stdout": "13852b29fe1d2b32374907d67f63236b518fabec\n13852b29fe1d2b32374907d67f63236b518fabec\n13852b29fe1d2b32374907d67f63236b518fabec\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-111 blobs in original, tested and PR for internal/runtime/iam.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "b2e823012854575146595b01a6f56d5ac677fc44:services/processing/internal/runtime/iam.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/iam.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/iam.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.754976+00:00",
+      "exit": 0,
+      "stdout": "0336b808d1e50340568892f29e27c9fde181d8c8\n0336b808d1e50340568892f29e27c9fde181d8c8\n0336b808d1e50340568892f29e27c9fde181d8c8\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "0f710a6682d15b437f847376b348947cb4757c7c",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.765284+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "3b542e88447f41f8287cc0507814de3f3a330cc6",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.770481+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "0f710a6682d15b437f847376b348947cb4757c7c",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.775630+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "3b542e88447f41f8287cc0507814de3f3a330cc6",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.780754+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "3b542e88447f41f8287cc0507814de3f3a330cc6:.project-os/results/HIT-112.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-112.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-112.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.785719+00:00",
+      "exit": 0,
+      "stdout": "837e45140b7670bc9da0804ce1aac82051007e10\n837e45140b7670bc9da0804ce1aac82051007e10\n837e45140b7670bc9da0804ce1aac82051007e10\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 blobs in original, tested and PR for internal/adapters/postgres/caseworker.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "0f710a6682d15b437f847376b348947cb4757c7c:services/processing/internal/adapters/postgres/caseworker.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/postgres/caseworker.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/postgres/caseworker.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.790443+00:00",
+      "exit": 0,
+      "stdout": "b3047429b1d804fa5cb1ef9594cd363cabf25a47\n541f8d4cdd0e2ff829436ebc8b977a901d3d22d3\n541f8d4cdd0e2ff829436ebc8b977a901d3d22d3\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 blobs in original, tested and PR for internal/runtime/caseworker.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "0f710a6682d15b437f847376b348947cb4757c7c:services/processing/internal/runtime/caseworker.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/caseworker.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/caseworker.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.796780+00:00",
+      "exit": 0,
+      "stdout": "84d855654ae46f80bd466522052f9827f766e617\n3f4a2277f8e92f95ab88fe1d19e739d378ba0352\n3f4a2277f8e92f95ab88fe1d19e739d378ba0352\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.807305+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.812456+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.817681+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.822925+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "dd1a36f6529f57d7452a27b615b6cad18b1288bd:.project-os/results/HIT-113.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-113.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-113.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.828084+00:00",
+      "exit": 0,
+      "stdout": "ae3939ee23c564c451589310bd4f40a1cce0779f\nae3939ee23c564c451589310bd4f40a1cce0779f\nae3939ee23c564c451589310bd4f40a1cce0779f\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 blobs in original, tested and PR for internal/adapters/postgres/recheck.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3:services/processing/internal/adapters/postgres/recheck.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/postgres/recheck.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/postgres/recheck.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.832797+00:00",
+      "exit": 0,
+      "stdout": "80ecf221f184607e82683550634c37f15710df78\n80ecf221f184607e82683550634c37f15710df78\n80ecf221f184607e82683550634c37f15710df78\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-113 blobs in original, tested and PR for internal/runtime/recheck.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3:services/processing/internal/runtime/recheck.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/recheck.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/recheck.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.838315+00:00",
+      "exit": 0,
+      "stdout": "ead75b4b85fafe67a439df9789081f4fb36a973a\n86ee1800f0e7cecbc94289e18c4b502907c87faf\n86ee1800f0e7cecbc94289e18c4b502907c87faf\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "dd05559bc911437d33c0c2582b604d2f2728d362",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.848116+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.853195+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "dd05559bc911437d33c0c2582b604d2f2728d362",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.858725+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.863953+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "33d2c8da52585bcdc2216df9d2033f9089209edb:.project-os/results/HIT-114.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-114.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-114.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.869183+00:00",
+      "exit": 0,
+      "stdout": "1508011ebfccadd5f6dbc0857178bc7ec3c9d187\n1508011ebfccadd5f6dbc0857178bc7ec3c9d187\n1508011ebfccadd5f6dbc0857178bc7ec3c9d187\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 blobs in original, tested and PR for internal/adapters/postgres/timeouts.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "dd05559bc911437d33c0c2582b604d2f2728d362:services/processing/internal/adapters/postgres/timeouts.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/postgres/timeouts.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/postgres/timeouts.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.874013+00:00",
+      "exit": 0,
+      "stdout": "c319df7375f0bb62e36d63c6ea5033dff03e571e\nc319df7375f0bb62e36d63c6ea5033dff03e571e\nc319df7375f0bb62e36d63c6ea5033dff03e571e\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-114 blobs in original, tested and PR for internal/runtime/timeouts.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "dd05559bc911437d33c0c2582b604d2f2728d362:services/processing/internal/runtime/timeouts.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/timeouts.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/timeouts.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.879801+00:00",
+      "exit": 0,
+      "stdout": "54baece7ffdb1a3798f4b1d9adc0b52db4817425\n2086539582cd5919cc2b920d27fbf9e3afcf6052\n2086539582cd5919cc2b920d27fbf9e3afcf6052\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.890582+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.895445+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.900521+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.905474+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "d450efc7cfc11f8155a476304aced96dad0ebaf6:.project-os/results/HIT-126.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-126.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-126.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.910222+00:00",
+      "exit": 0,
+      "stdout": "a816950a26e4dbb007adb994e35997c38d786be2\na816950a26e4dbb007adb994e35997c38d786be2\na816950a26e4dbb007adb994e35997c38d786be2\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 blobs in original, tested and PR for cmd/processing-purge/main.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac:services/processing/cmd/processing-purge/main.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing-purge/main.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing-purge/main.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.914823+00:00",
+      "exit": 0,
+      "stdout": "817c64f54eebf143d81d9c01cb475f3a0b081602\n981ba7fbdc06da1e22d70d8827ec14bed703fc45\n981ba7fbdc06da1e22d70d8827ec14bed703fc45\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 blobs in original, tested and PR for internal/adapters/postgres/purge.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac:services/processing/internal/adapters/postgres/purge.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/postgres/purge.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/postgres/purge.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.921136+00:00",
+      "exit": 0,
+      "stdout": "3316baccde796a2a9f93190b8761a7e864c4751a\n3316baccde796a2a9f93190b8761a7e864c4751a\n3316baccde796a2a9f93190b8761a7e864c4751a\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-126 blobs in original, tested and PR for internal/adapters/contentfiles/maintenance.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac:services/processing/internal/adapters/contentfiles/maintenance.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/contentfiles/maintenance.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/contentfiles/maintenance.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.926141+00:00",
+      "exit": 0,
+      "stdout": "ca3473f6d8d01702f150675f115cab94666dcd7f\nca3473f6d8d01702f150675f115cab94666dcd7f\nca3473f6d8d01702f150675f115cab94666dcd7f\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 tested ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4da48202e77131427730b1827df9ee81940e559a",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.936372+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 result ancestor c426dc4",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "19831026d635dd74d4b54dd4acd93e53319c182e",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+      ],
+      "utc_start": "2026-11-21T09:46:28.941024+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 tested ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4da48202e77131427730b1827df9ee81940e559a",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.945740+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 result ancestor c394de8",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "19831026d635dd74d4b54dd4acd93e53319c182e",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f"
+      ],
+      "utc_start": "2026-11-21T09:46:28.950610+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 exact result blob in registered, tested and PR",
+      "argv": [
+        "git",
+        "rev-parse",
+        "19831026d635dd74d4b54dd4acd93e53319c182e:.project-os/results/HIT-127.json",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:.project-os/results/HIT-127.json",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:.project-os/results/HIT-127.json"
+      ],
+      "utc_start": "2026-11-21T09:46:28.955387+00:00",
+      "exit": 0,
+      "stdout": "6fa27bf90469407ab130eed6fc6cf6b4d8eff8bd\n6fa27bf90469407ab130eed6fc6cf6b4d8eff8bd\n6fa27bf90469407ab130eed6fc6cf6b4d8eff8bd\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 blobs in original, tested and PR for internal/runtime/diagnostics.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4da48202e77131427730b1827df9ee81940e559a:services/processing/internal/runtime/diagnostics.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/diagnostics.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/diagnostics.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.960172+00:00",
+      "exit": 0,
+      "stdout": "aaa214dbd7deb48c3ad2884462c05535a02b3c14\naaa214dbd7deb48c3ad2884462c05535a02b3c14\naaa214dbd7deb48c3ad2884462c05535a02b3c14\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 blobs in original, tested and PR for internal/adapters/postgres/diagnostics.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4da48202e77131427730b1827df9ee81940e559a:services/processing/internal/adapters/postgres/diagnostics.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/adapters/postgres/diagnostics.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/adapters/postgres/diagnostics.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.966359+00:00",
+      "exit": 0,
+      "stdout": "abafb0400f25e5d27e7ffc9de5975c03a2b7e77c\nabafb0400f25e5d27e7ffc9de5975c03a2b7e77c\nabafb0400f25e5d27e7ffc9de5975c03a2b7e77c\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-127 blobs in original, tested and PR for internal/runtime/runtime.go",
+      "argv": [
+        "git",
+        "rev-parse",
+        "4da48202e77131427730b1827df9ee81940e559a:services/processing/internal/runtime/runtime.go",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/runtime.go",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/runtime.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.972316+00:00",
+      "exit": 0,
+      "stdout": "ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6\nca9add65cd97742d7baa5fc3aaba46d5d00dc5c6\nca9add65cd97742d7baa5fc3aaba46d5d00dc5c6\n",
+      "stderr": ""
+    },
+    {
+      "label": "HIT-112 worker adapter full later diff",
+      "argv": [
+        "git",
+        "diff",
+        "--unified=0",
+        "0f710a6682d15b437f847376b348947cb4757c7c",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/internal/adapters/postgres/caseworker.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.977546+00:00",
+      "exit": 0,
+      "stdout": "diff --git a/services/processing/internal/adapters/postgres/caseworker.go b/services/processing/internal/adapters/postgres/caseworker.go\nindex b304742..541f8d4 100644\n--- a/services/processing/internal/adapters/postgres/caseworker.go\n+++ b/services/processing/internal/adapters/postgres/caseworker.go\n@@ -42,0 +43,8 @@ const eligibleCase = `\n+ AND NOT EXISTS (\n+   SELECT 1 FROM hp_processing.safety_history d\n+   WHERE d.workspace_id=k.workspace_id AND d.case_id=k.case_id AND d.old_state=k.state AND d.new_state=k.state\n+     AND d.reason_code LIKE 'CASE\\_TIMER\\_%' AND d.at >= COALESCE((\n+       SELECT max(h.at) FROM hp_processing.safety_history h\n+       WHERE h.workspace_id=k.workspace_id AND h.case_id=k.case_id AND h.old_state IS DISTINCT FROM h.new_state\n+     ),'-infinity')\n+ )\n",
+      "stderr": ""
+    },
+    {
+      "label": "same worker adapter diff already present in HIT-114",
+      "argv": [
+        "git",
+        "diff",
+        "--unified=0",
+        "0f710a6682d15b437f847376b348947cb4757c7c",
+        "dd05559bc911437d33c0c2582b604d2f2728d362",
+        "--",
+        "services/processing/internal/adapters/postgres/caseworker.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.983565+00:00",
+      "exit": 0,
+      "stdout": "diff --git a/services/processing/internal/adapters/postgres/caseworker.go b/services/processing/internal/adapters/postgres/caseworker.go\nindex b304742..541f8d4 100644\n--- a/services/processing/internal/adapters/postgres/caseworker.go\n+++ b/services/processing/internal/adapters/postgres/caseworker.go\n@@ -42,0 +43,8 @@ const eligibleCase = `\n+ AND NOT EXISTS (\n+   SELECT 1 FROM hp_processing.safety_history d\n+   WHERE d.workspace_id=k.workspace_id AND d.case_id=k.case_id AND d.old_state=k.state AND d.new_state=k.state\n+     AND d.reason_code LIKE 'CASE\\_TIMER\\_%' AND d.at >= COALESCE((\n+       SELECT max(h.at) FROM hp_processing.safety_history h\n+       WHERE h.workspace_id=k.workspace_id AND h.case_id=k.case_id AND h.old_state IS DISTINCT FROM h.new_state\n+     ),'-infinity')\n+ )\n",
+      "stderr": ""
+    },
+    {
+      "label": "attribution of changed wrapper for HIT-112",
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s",
+        "--ancestry-path",
+        "0f710a6682d15b437f847376b348947cb4757c7c..c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/internal/runtime/caseworker.go"
+      ],
+      "utc_start": "2026-11-21T09:46:28.988594+00:00",
+      "exit": 0,
+      "stdout": "bdf3187b03558c56f30caa422d6ebeecc2986d8f processing: report scoped operational diagnostics from runtime state\n",
+      "stderr": ""
+    },
+    {
+      "label": "attribution of changed wrapper for HIT-113",
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s",
+        "--ancestry-path",
+        "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3..c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/internal/runtime/recheck.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.005691+00:00",
+      "exit": 0,
+      "stdout": "bdf3187b03558c56f30caa422d6ebeecc2986d8f processing: report scoped operational diagnostics from runtime state\n",
+      "stderr": ""
+    },
+    {
+      "label": "attribution of changed wrapper for HIT-114",
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s",
+        "--ancestry-path",
+        "dd05559bc911437d33c0c2582b604d2f2728d362..c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/internal/runtime/timeouts.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.014093+00:00",
+      "exit": 0,
+      "stdout": "bdf3187b03558c56f30caa422d6ebeecc2986d8f processing: report scoped operational diagnostics from runtime state\n",
+      "stderr": ""
+    },
+    {
+      "label": "attribution of changed wrapper for HIT-126",
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s",
+        "--ancestry-path",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac..c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/cmd/processing-purge/main.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.021830+00:00",
+      "exit": 0,
+      "stdout": "bdf3187b03558c56f30caa422d6ebeecc2986d8f processing: report scoped operational diagnostics from runtime state\n",
+      "stderr": ""
+    },
+    {
+      "label": "later diagnostic changes to wrappers, complete patch",
+      "argv": [
+        "git",
+        "show",
+        "--format=",
+        "--unified=0",
+        "bdf3187b03558c56f30caa422d6ebeecc2986d8f",
+        "--",
+        "services/processing/internal/runtime/caseworker.go",
+        "services/processing/internal/runtime/recheck.go",
+        "services/processing/internal/runtime/timeouts.go",
+        "services/processing/cmd/processing-purge/main.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.027825+00:00",
+      "exit": 0,
+      "stdout": "diff --git a/services/processing/cmd/processing-purge/main.go b/services/processing/cmd/processing-purge/main.go\nindex 817c64f..981ba7f 100644\n--- a/services/processing/cmd/processing-purge/main.go\n+++ b/services/processing/cmd/processing-purge/main.go\n@@ -10,0 +11 @@ import (\n+\t\"log/slog\"\n@@ -60,0 +62 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int\n+\tlog := slog.New(slog.NewJSONHandler(os.Stderr, nil))\n@@ -63 +65 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int\n-\t\tfmt.Fprintln(os.Stderr, \"private Processing content directory unavailable or busy\")\n+\t\tlog.Warn(\"private Processing content directory unavailable or busy\", \"reason\", \"purge_volume_unavailable\", \"workspace_id\", workspace)\n@@ -69 +71 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int\n-\t\tfmt.Fprintln(os.Stderr, \"local Processing database unavailable\")\n+\t\tlog.Warn(\"local Processing database unavailable\", \"reason\", \"purge_postgres_unavailable\", \"workspace_id\", workspace)\n@@ -76 +78 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int\n-\t\t\tfmt.Fprintln(os.Stderr, postgres.ErrPurgeScope)\n+\t\t\tlog.Warn(postgres.ErrPurgeScope.Error(), \"reason\", \"purge_scope_denied\", \"workspace_id\", workspace)\n@@ -78 +80 @@ func run(ctx context.Context, workspace, path string, limit int, local bool) int\n-\t\t\tfmt.Fprintln(os.Stderr, \"processing purge incomplete; review local state before repeating\")\n+\t\t\tlog.Warn(\"processing purge incomplete; review local state before repeating\", \"reason\", \"purge_incomplete\", \"workspace_id\", workspace)\ndiff --git a/services/processing/internal/runtime/caseworker.go b/services/processing/internal/runtime/caseworker.go\nindex 84d8556..3f4a227 100644\n--- a/services/processing/internal/runtime/caseworker.go\n+++ b/services/processing/internal/runtime/caseworker.go\n@@ -5,0 +6 @@ import (\n+\t\"time\"\n@@ -54,0 +56 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n+\tfault := barrierDenied\n@@ -55,0 +58 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n+\t\tfault = jobRecoveryFailed\n@@ -58,0 +62 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n+\t\tfault = jobClaimFailed\n@@ -64 +68 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n-\t\trt.logger.Warn(\"processing case worker could not claim work\")\n+\t\trt.diag.fault(fault, workspace, \"\", \"\")\n@@ -84,0 +89,2 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n+\tcase err != nil && !time.Now().Before(claim.Until()):\n+\t\trt.diag.fault(leaseExpired, workspace, claim.CaseID, \"\")\n@@ -86 +92 @@ func (rt *Runtime) advanceCase(ctx context.Context, workspace string) {\n-\t\trt.logger.Info(\"processing case worker lost current claim\", \"case_id\", claim.CaseID)\n+\t\trt.diag.fault(leaseStale, workspace, claim.CaseID, \"\")\ndiff --git a/services/processing/internal/runtime/recheck.go b/services/processing/internal/runtime/recheck.go\nindex ead75b4..86ee180 100644\n--- a/services/processing/internal/runtime/recheck.go\n+++ b/services/processing/internal/runtime/recheck.go\n@@ -89 +89,2 @@ func (rt *Runtime) advanceRecheck(ctx context.Context, workspace string) {\n-\tout, _ := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})\n+\tout, err := rt.queries.RunScope(c, dispatchintent.Request{WorkspaceID: workspace, Epoch: p.epoch})\n+\trt.diag.dispatchFault(recheckInterrupted, workspace, err)\ndiff --git a/services/processing/internal/runtime/timeouts.go b/services/processing/internal/runtime/timeouts.go\nindex 54baece..2086539 100644\n--- a/services/processing/internal/runtime/timeouts.go\n+++ b/services/processing/internal/runtime/timeouts.go\n@@ -43 +43 @@ func (rt *Runtime) advanceTimeout(ctx context.Context, workspace string) {\n-\t\trt.logger.Warn(\"processing case timer interrupted\")\n+\t\trt.diag.fault(timerInterrupted, workspace, \"\", \"\")\n",
+      "stderr": ""
+    },
+    {
+      "label": "runtime wiring c426dc4",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "func main\\(|runtime.New\\(|rt\\.(advanceCase|advanceRecheck|advanceTimeout)\\(ctx, w\\)|PurgeStore\\{",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "--",
+        "services/processing/cmd/processing/main.go",
+        "services/processing/cmd/processing-purge/main.go",
+        "services/processing/internal/runtime/runtime.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.034495+00:00",
+      "exit": 0,
+      "stdout": "c426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing-purge/main.go:75:\tresult, err := (postgres.PurgeStore{DB: conn, Files: files}).Run(ctx, workspace, limit)\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing-purge/main.go:90:func main() {\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing/main.go:18:func main() {\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/cmd/processing/main.go:43:\tr, err := runtime.New(ctx, c, revision, *stand, log)\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/runtime.go:437:\t\t\trt.advanceCase(ctx, w)\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/runtime.go:438:\t\t\trt.advanceRecheck(ctx, w)\nc426dc400a4bec03fafba72e2a5780c9d85af1e2:services/processing/internal/runtime/runtime.go:439:\t\t\trt.advanceTimeout(ctx, w)\n",
+      "stderr": ""
+    },
+    {
+      "label": "runtime wiring c394de8",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "func main\\(|runtime.New\\(|rt\\.(advanceCase|advanceRecheck|advanceTimeout)\\(ctx, w\\)|PurgeStore\\{",
+        "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f",
+        "--",
+        "services/processing/cmd/processing/main.go",
+        "services/processing/cmd/processing-purge/main.go",
+        "services/processing/internal/runtime/runtime.go"
+      ],
+      "utc_start": "2026-11-21T09:46:29.040765+00:00",
+      "exit": 0,
+      "stdout": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing-purge/main.go:75:\tresult, err := (postgres.PurgeStore{DB: conn, Files: files}).Run(ctx, workspace, limit)\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing-purge/main.go:90:func main() {\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing/main.go:18:func main() {\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/cmd/processing/main.go:43:\tr, err := runtime.New(ctx, c, revision, *stand, log)\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/runtime.go:437:\t\t\trt.advanceCase(ctx, w)\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/runtime.go:438:\t\t\trt.advanceRecheck(ctx, w)\nc394de8abb8d6ed4f5324f45a4b023c3749f1a5f:services/processing/internal/runtime/runtime.go:439:\t\t\trt.advanceTimeout(ctx, w)\n",
+      "stderr": ""
+    },
+    {
+      "label": "Go toolchain for build graph",
+      "argv": [
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "version"
+      ],
+      "utc_start": "2026-11-21T09:46:29.046803+00:00",
+      "exit": 0,
+      "stdout": "go version go1.27.2 darwin/arm64\n",
+      "stderr": ""
+    },
+    {
+      "label": "isolated Go graph checkout identity",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "utc_start": "2026-11-21T09:46:29.071626+00:00",
+      "exit": 0,
+      "stdout": "c426dc400a4bec03fafba72e2a5780c9d85af1e2\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c426dc4"
+    },
+    {
+      "label": "Go Linux arm64 assembly inputs c426dc4 processing",
+      "argv": [
+        "env",
+        "GOTOOLCHAIN=local",
+        "GOWORK=off",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "services/processing",
+        "list",
+        "-deps",
+        "-f",
+        "{{if or (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/cmd/processing\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/runtime\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres\")}}{{.ImportPath}} | {{join .GoFiles \" \"}}{{end}}",
+        "./cmd/processing"
+      ],
+      "utc_start": "2026-11-21T09:46:29.076607+00:00",
+      "exit": 0,
+      "stdout": "github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres | activation.go admit.go caseworker.go diagnostics.go dispatch.go draft_check.go drafts.go lifecycle.go lifecycle_drain.go lifecycle_resume.go observation_read.go observations.go prepare.go purge.go read_cases.go recheck.go recheck_dispatch.go record.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/internal/runtime | access.go caseworker.go config.go diagnostics.go iam.go queue.go recheck.go runtime.go source.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/cmd/processing | main.go\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c426dc4"
+    },
+    {
+      "label": "Go Linux arm64 assembly inputs c426dc4 processing-purge",
+      "argv": [
+        "env",
+        "GOTOOLCHAIN=local",
+        "GOWORK=off",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "services/processing",
+        "list",
+        "-deps",
+        "-f",
+        "{{if or (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/cmd/processing-purge\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles\")}}{{.ImportPath}} | {{join .GoFiles \" \"}}{{end}}",
+        "./cmd/processing-purge"
+      ],
+      "utc_start": "2026-11-21T09:46:29.482304+00:00",
+      "exit": 0,
+      "stdout": "github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles | draft.go maintenance.go read_owned.go store.go\ngithub.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres | activation.go admit.go caseworker.go diagnostics.go dispatch.go draft_check.go drafts.go lifecycle.go lifecycle_drain.go lifecycle_resume.go observation_read.go observations.go prepare.go purge.go read_cases.go recheck.go recheck_dispatch.go record.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/cmd/processing-purge | main.go\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c426dc4"
+    },
+    {
+      "label": "isolated Go graph checkout identity",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "utc_start": "2026-11-21T09:46:29.541022+00:00",
+      "exit": 0,
+      "stdout": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c394de8"
+    },
+    {
+      "label": "Go Linux arm64 assembly inputs c394de8 processing",
+      "argv": [
+        "env",
+        "GOTOOLCHAIN=local",
+        "GOWORK=off",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "services/processing",
+        "list",
+        "-deps",
+        "-f",
+        "{{if or (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/cmd/processing\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/runtime\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres\")}}{{.ImportPath}} | {{join .GoFiles \" \"}}{{end}}",
+        "./cmd/processing"
+      ],
+      "utc_start": "2026-11-21T09:46:29.546372+00:00",
+      "exit": 0,
+      "stdout": "github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres | activation.go admit.go caseworker.go diagnostics.go dispatch.go draft_check.go drafts.go lifecycle.go lifecycle_drain.go lifecycle_resume.go observation_read.go observations.go prepare.go purge.go read_cases.go recheck.go recheck_dispatch.go record.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/internal/runtime | access.go caseworker.go config.go diagnostics.go iam.go queue.go recheck.go runtime.go source.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/cmd/processing | main.go\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c394de8"
+    },
+    {
+      "label": "Go Linux arm64 assembly inputs c394de8 processing-purge",
+      "argv": [
+        "env",
+        "GOTOOLCHAIN=local",
+        "GOWORK=off",
+        "GOOS=linux",
+        "GOARCH=arm64",
+        "CGO_ENABLED=0",
+        "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+        "-C",
+        "services/processing",
+        "list",
+        "-deps",
+        "-f",
+        "{{if or (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/cmd/processing-purge\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres\") (eq .ImportPath \"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles\")}}{{.ImportPath}} | {{join .GoFiles \" \"}}{{end}}",
+        "./cmd/processing-purge"
+      ],
+      "utc_start": "2026-11-21T09:46:29.833106+00:00",
+      "exit": 0,
+      "stdout": "github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles | draft.go maintenance.go read_owned.go store.go\ngithub.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres | activation.go admit.go caseworker.go diagnostics.go dispatch.go draft_check.go drafts.go lifecycle.go lifecycle_drain.go lifecycle_resume.go observation_read.go observations.go prepare.go purge.go read_cases.go recheck.go recheck_dispatch.go record.go timeouts.go\ngithub.com/hitpipe/hitpipe/services/processing/cmd/processing-purge | main.go\n",
+      "stderr": "",
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-proof-c394de8"
+    }
+  ],
+  "original_process_qualification": {
+    "commands": [
+      {
+        "label": "build-processing",
+        "argv": [
+          "env",
+          "GOOS=linux",
+          "GOARCH=arm64",
+          "CGO_ENABLED=0",
+          "env",
+          "GOTOOLCHAIN=local",
+          "GOWORK=off",
+          "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+          "-C",
+          "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery/services/processing",
+          "build",
+          "-trimpath",
+          "-ldflags",
+          "-X main.revision=c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+          "-o",
+          "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit128-build-onit5b1x/processing",
+          "./cmd/processing"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery",
+        "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+        "source_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "tree_status_at_start": "",
+        "runner_sha256": "9898ac32f0b9eea496e6e23ab88a8e0ee8b43b1f49f77830a531f6a67a3f11c1",
+        "started_at": "2026-11-21T07:41:33.867609+00:00",
+        "finished_at": "2026-11-21T07:41:34.513664+00:00",
+        "exit_code": 0,
+        "stdout": {
+          "file": "020-build-processing.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "file": "020-build-processing.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "label": "build-processing-purge",
+        "argv": [
+          "env",
+          "GOOS=linux",
+          "GOARCH=arm64",
+          "CGO_ENABLED=0",
+          "env",
+          "GOTOOLCHAIN=local",
+          "GOWORK=off",
+          "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+          "-C",
+          "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery/services/processing",
+          "build",
+          "-trimpath",
+          "-ldflags",
+          "-X main.revision=c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+          "-o",
+          "/var/folders/d_/k8xghq856tsg8xzsvgtd_3tm0000gn/T/hit128-build-onit5b1x/processing-purge",
+          "./cmd/processing-purge"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery",
+        "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+        "source_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "tree_status_at_start": "",
+        "runner_sha256": "9898ac32f0b9eea496e6e23ab88a8e0ee8b43b1f49f77830a531f6a67a3f11c1",
+        "started_at": "2026-11-21T07:41:34.521315+00:00",
+        "finished_at": "2026-11-21T07:41:34.903586+00:00",
+        "exit_code": 0,
+        "stdout": {
+          "file": "021-build-processing-purge.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "file": "021-build-processing-purge.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "label": "predecessor-process-tests",
+        "argv": [
+          "docker",
+          "exec",
+          "-e",
+          "HIT78_ISOLATED_PG=1",
+          "-e",
+          "HIT111_PROCESSING_BIN=/test/processing",
+          "-e",
+          "HIT126_PURGE_BIN=/test/processing-purge",
+          "55347534a87a58b811a3df2c98dfe69a4b9de1df2006b9a34d060ee6a4a0369f",
+          "/test/storage.test",
+          "-test.v",
+          "-test.count=1",
+          "-test.timeout=145s",
+          "-test.run=^TestProcessing(Executable|CaseWorker|Recheck|CaseTimeouts|Purge|Diagnostics)OwnedStand$"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery",
+        "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+        "source_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "tree_status_at_start": "",
+        "runner_sha256": "9898ac32f0b9eea496e6e23ab88a8e0ee8b43b1f49f77830a531f6a67a3f11c1",
+        "started_at": "2026-11-21T07:41:40.642261+00:00",
+        "finished_at": "2026-11-21T07:42:39.692991+00:00",
+        "exit_code": 0,
+        "stdout": {
+          "file": "024-predecessor-process-tests.stdout",
+          "bytes": 5616,
+          "sha256": "de6f5092e42a36f875e2b92664abce0485793914d650838d6462374ec95e7d69"
+        },
+        "stderr": {
+          "file": "024-predecessor-process-tests.stderr",
+          "bytes": 216,
+          "sha256": "f11eb57ef429483586f5347a84b95a97695bd796a0d8cad535eff29aa8f79ae1"
+        }
+      },
+      {
+        "label": "recovery-process-tests",
+        "argv": [
+          "docker",
+          "exec",
+          "-e",
+          "HIT78_ISOLATED_PG=1",
+          "-e",
+          "HIT128_RECOVERY_STAND=1",
+          "-e",
+          "HIT111_PROCESSING_BIN=/test/processing",
+          "-e",
+          "HIT126_PURGE_BIN=/test/processing-purge",
+          "55347534a87a58b811a3df2c98dfe69a4b9de1df2006b9a34d060ee6a4a0369f",
+          "/test/storage.test",
+          "-test.v",
+          "-test.count=1",
+          "-test.timeout=110s",
+          "-test.run=^TestProcessingRecoveryOwnedStand$"
+        ],
+        "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit128-processing-recovery",
+        "environment": "Inherited CLI environment; no database DSN/credentials accepted or used. Docker context is recorded by docker version.",
+        "source_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "tree_status_at_start": "",
+        "runner_sha256": "9898ac32f0b9eea496e6e23ab88a8e0ee8b43b1f49f77830a531f6a67a3f11c1",
+        "started_at": "2026-11-21T07:41:36.234709+00:00",
+        "finished_at": "2026-11-21T07:41:40.640443+00:00",
+        "exit_code": 0,
+        "stdout": {
+          "file": "023-recovery-process-tests.stdout",
+          "bytes": 7617,
+          "sha256": "5e0985ea72d6000c5f1f20317dab96535ce2e98a483562ab172a07eb95baab34"
+        },
+        "stderr": {
+          "file": "023-recovery-process-tests.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ],
+    "binaries": {
+      "source_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+      "platform": "linux/arm64",
+      "sha256": {
+        "processing": "9fadd08dec36f4d8a32d1ca6c75d82868d2b3ff4862bf6cf878f843b4de96b3e",
+        "processing-purge": "3b0011350119f3f164aecfc7975b624d2108623265bd4eb2ea27d3d59383917a",
+        "storage.test": "6d0053c7d89f1d1ed76a9de465f1cb040cc74d76554a611928acd9d791a892f9"
+      }
+    },
+    "passing_test_lines": {
+      "TestProcessingCaseWorkerOwnedStand": "--- PASS: TestProcessingCaseWorkerOwnedStand (16.40s)",
+      "TestProcessingDiagnosticsOwnedStand": "--- PASS: TestProcessingDiagnosticsOwnedStand (14.17s)",
+      "TestProcessingPurgeOwnedStand": "--- PASS: TestProcessingPurgeOwnedStand (0.13s)",
+      "TestProcessingRecheckOwnedStand": "--- PASS: TestProcessingRecheckOwnedStand (23.68s)",
+      "TestProcessingExecutableOwnedStand": "--- PASS: TestProcessingExecutableOwnedStand (3.19s)",
+      "TestProcessingCaseTimeoutsOwnedStand": "--- PASS: TestProcessingCaseTimeoutsOwnedStand (1.41s)"
+    }
+  }
+}

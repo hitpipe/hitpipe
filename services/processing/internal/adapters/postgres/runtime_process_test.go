@@ -39,6 +39,8 @@ type processStand struct {
 	files                                                      string
 	iamOpen                                                    atomic.Bool
 	iamStale                                                   atomic.Bool
+	registerGeneration, authorizationEpoch                     atomic.Int64
+	registrations                                              atomic.Int64
 	bootMu                                                     sync.Mutex
 	current, old                                               drafts.RuntimeRegistration
 	deliveryCount                                              atomic.Int32
@@ -160,8 +162,13 @@ func (s *processStand) iam(w http.ResponseWriter, r *http.Request) {
 		if s.iamOpen.Load() {
 			stage, rev = "OPEN", 2
 		}
-		_ = json.NewEncoder(w).Encode(drafts.RuntimeSnapshot{RuntimeID: out.RuntimeID, BootID: out.BootID, Generation: in.Generation, Gate: stage,
+		generation := in.Generation
+		if override := s.registerGeneration.Load(); override != 0 {
+			generation = override
+		}
+		_ = json.NewEncoder(w).Encode(drafts.RuntimeSnapshot{RuntimeID: out.RuntimeID, BootID: out.BootID, Generation: generation, Gate: stage,
 			SnapshotRevision: rev, Denials: denials})
+		s.registrations.Add(1)
 	case "/internal/v1/authorize":
 		var in drafts.AuthorizeRequest
 		if draftjson.Validate("AuthorizeRequest", b) != nil || json.Unmarshal(b, &in) != nil || in.RuntimeID != s.identity {
@@ -174,7 +181,11 @@ func (s *processStand) iam(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		role := "OWNER"
-		_ = json.NewEncoder(w).Encode(drafts.Authorization{Allowed: true, Epoch: 7, CheckedAt: time.Now().UTC(),
+		epoch := s.authorizationEpoch.Load()
+		if epoch == 0 {
+			epoch = 7
+		}
+		_ = json.NewEncoder(w).Encode(drafts.Authorization{Allowed: true, Epoch: epoch, CheckedAt: time.Now().UTC(),
 			WorkspaceID: &in.WorkspaceID, Role: &role, PrincipalID: draftString(owner), SessionID: &s.session})
 	default:
 		w.WriteHeader(404)
@@ -301,13 +312,17 @@ type processingChild struct {
 }
 
 func (s *processStand) boot(log string) *processingChild {
+	return s.bootWith(log, "-config", s.config, "-stand-config", s.stand)
+}
+
+func (s *processStand) bootWith(log string, args ...string) *processingChild {
 	s.t.Helper()
 	logPath := filepath.Join(s.dir, log)
 	out, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
 	if err != nil {
 		s.t.Fatal(err)
 	}
-	cmd := exec.Command(s.binary, "-config", s.config, "-stand-config", s.stand)
+	cmd := exec.Command(s.binary, args...)
 	cmd.Stdout, cmd.Stderr = out, out
 	if err = cmd.Start(); err != nil {
 		s.t.Fatal(err)

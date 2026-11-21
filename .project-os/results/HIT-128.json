@@ -1,0 +1,176 @@
+{
+  "subject": "HIT-128",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_IN_OWNED_RECOVERY_TEST",
+    "summary": "Локальное контролируемое восстановление минимального SQL состояния Processing в отдельную PostgreSQL 18.7. Сохранены fence, сроки и идентичность, проверены прерывание, закрытие и отсутствие повторного эффекта.",
+    "contract_revision": 1,
+    "contract_fingerprint": "d0167eadb24c7ab367dd3c87b5f5d2bfa4e588515e0c72c708eb38dd9604de3d",
+    "base_sha": "19831026d635dd74d4b54dd4acd93e53319c182e",
+    "tested_code_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/85"
+  },
+  "changed_artifacts": [
+    "services/processing/scripts/recovery/verify_recovery.py",
+    "services/processing/internal/adapters/postgres/recovery_cluster_test.go",
+    "services/processing/internal/adapters/postgres/recovery_sql_test.go",
+    "services/processing/internal/adapters/postgres/recovery_process_test.go",
+    "services/processing/internal/adapters/postgres/runtime_process_test.go",
+    "services/processing/docs/HIT-128/",
+    ".project-os/results/HIT-128.json",
+    "services/processing/docs/HIT-128/review-15740/",
+    "services/processing/docs/HIT-128/review-15797/"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-128/README.md",
+    "runbook": "services/processing/docs/HIT-128/RUN_RU.md",
+    "test_protocol": "services/processing/docs/HIT-128/verification/test-evidence.md",
+    "original_run": "services/processing/docs/HIT-128/verification/original-run.tar.gz",
+    "source_audit": "services/processing/docs/HIT-128/verification/source-evidence.md",
+    "ci_protocol": "services/processing/docs/HIT-128/review-15740/ci-execution.md",
+    "source_files": "services/processing/docs/HIT-128/review-15740/source-files.md",
+    "exact_diff": "services/processing/docs/HIT-128/review-15740/exact-source.diff",
+    "local_execution": "services/processing/docs/HIT-128/review-15740/local-execution.md",
+    "canonical_contract_check": "services/processing/docs/HIT-128/review-15740/contract-conformance.md",
+    "dependencies": "services/processing/docs/HIT-128/review-15797/dependency-proof.md",
+    "dependencies_command_ledger": "services/processing/docs/HIT-128/review-15797/raw-dependency-proof.json"
+  },
+  "dod_evidence": [
+    {
+      "id": "f73726ee-60fe-4afc-aa58-332fe6a55a16",
+      "obligation": "Проверено: записаны точные SHA/версии, разрешённый состав восстановления и команды; не скопированы expiring payload/PII/секреты или чужая БД вопреки принятой политике.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/review-15740/source-files.md"
+    },
+    {
+      "id": "ba4fc241-d02f-4cb9-bfdc-e8e7f66a53e0",
+      "obligation": "Проверено на отдельной настоящей PostgreSQL: сохранённые case/config/command/inbox/effect identity и fence восстанавливаются без второго дела, intent или повторного create.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "6a4084cf-dd29-4f1e-9287-905236635e05",
+      "obligation": "Проверено: старые lease/claim/epoch не открывают новый старт после restart; свежая регистрация/снимок обязательны, отсутствие доверенного входа оставляет обычный запуск закрытым.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "cc9731b4-6474-4127-b70e-890d98a049b2",
+      "obligation": "Проверено: действительные собственные refs читаются, а отсутствующие/повреждённые/истёкшие данные не выданы за полноценный контекст/доказательство. Очистка и restore не воскрешают истёкший payload и не продлевают сроки.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "1539d937-f9f8-42f3-88cc-04342c3ce92b",
+      "obligation": "Проверено: crash на границе file/SQL commit, повтор восстановления и незавершённый outbox дают один корректный сохранённый исход или явное удержание; нет ACKED/CONFIRMED из самого факта restore.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/verification/test-evidence.md"
+    },
+    {
+      "id": "2441ed09-ad3c-4da1-b54c-f1b2b9c59033",
+      "obligation": "Проверено: сценарий действительно исполняется над собранным процессом и своим хранилищем, регрессии/race/vet/build проходят; сохранены команды/SHA/журналы и инструкция. Полученное локальное время восстановления не названо доказанным эксплуатационным RTO.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-128/review-15740/local-execution.md"
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Управляемые mTLS контрагенты, два изолированных кластера PostgreSQL, TEST на Linux arm64. Обычный режим закрыт без авторитетных входов. Эксплуатационный RTO и внешний end-to-end вне проверки.",
+    "Сценарий не принимает рабочий DSN или архив и не реализует общий протокол backup, erase или распределённого fencing."
+  ],
+  "review_rework": {
+    "review_comment": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15740",
+    "scope": "Evidence only. The original tested source and its four previously confirmed criteria remain unchanged.",
+    "original_tested_code_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+    "previous_independent_verdict": "FAIL, 4/6; re-review pending",
+    "snapshot_sources": [
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/ci-execution.md",
+        "sha256": "5c186f329dd3da2a90c0f1289ce792cdf94d179f6ee2537ca603c883e5871d5c",
+        "characters": 33004
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/contract-conformance.md",
+        "sha256": "7f87745f23c129bdd6e444324f5d347a4545ee22337612a3f76cb62e75ab4755",
+        "characters": 10301
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/exact-source.diff",
+        "sha256": "e09ecf6812fb3bce67a6c4ba9ddf05cabd923f84c82c1572b33e95110c21fbd1",
+        "characters": 38905
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/local-execution.md",
+        "sha256": "fff9a6825c89a18e5a362ce8d900652ef35e9fae0a31a1915d5ecf7e5ece0f71",
+        "characters": 45233
+      },
+      {
+        "path": "services/processing/docs/HIT-128/review-15740/source-files.md",
+        "sha256": "8e9bd6ca0cc56fff9c5efb9b2801d70f7b4d846350b49bafdd4ac03894712f91",
+        "characters": 35974
+      },
+      {
+        "path": "services/processing/docs/HIT-128/RUN_RU.md",
+        "sha256": "f07c4d1bafeb2b42a3b078804818227df2680bd61179ae1ca297d2a2eb739d70",
+        "characters": 3851
+      },
+      {
+        "path": "services/processing/docs/HIT-128/verification/test-evidence.md",
+        "sha256": "a04dfc2fbd6d69a8c8394f9979c9d686a2247f767223a3f67a4ecff5fde15f15",
+        "characters": 8651
+      }
+    ]
+  },
+  "review_rework_after_15797": {
+    "review_comment": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15797",
+    "previous_verdict": "FAIL; 6/6 DoD PASS; dependency provenance only",
+    "tested_code_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+    "previous_reviewed_pr_head": "c394de8abb8d6ed4f5324f45a4b023c3749f1a5f",
+    "dependency_evidence": {
+      "path": "services/processing/docs/HIT-128/review-15797/dependency-proof.md",
+      "sha256": "b82a80382a6a7970cea6faac701d3d0faf9030b2167c2b4bdb20eeea223fe7f9",
+      "raw_path": "services/processing/docs/HIT-128/review-15797/raw-dependency-proof.json",
+      "raw_sha256": "16af34e0ce6021dfa1abb66b94efda98dd43a269b599811520f6ed4011c54c12",
+      "total_active_evidence_characters_after_replacements": 179893
+    },
+    "dependencies": {
+      "HIT-111": {
+        "tested_code_sha": "b2e823012854575146595b01a6f56d5ac677fc44",
+        "result_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "review_comment_id": "14258",
+        "verdict": "PASS WITH NOTES"
+      },
+      "HIT-112": {
+        "tested_code_sha": "0f710a6682d15b437f847376b348947cb4757c7c",
+        "result_sha": "3b542e88447f41f8287cc0507814de3f3a330cc6",
+        "review_comment_id": "14400",
+        "verdict": "PASS WITH NOTES"
+      },
+      "HIT-113": {
+        "tested_code_sha": "9165e814cb7b46e9cfae484c62ccc70f63fc1ee3",
+        "result_sha": "dd1a36f6529f57d7452a27b615b6cad18b1288bd",
+        "review_comment_id": "14534",
+        "verdict": "PASS"
+      },
+      "HIT-114": {
+        "tested_code_sha": "dd05559bc911437d33c0c2582b604d2f2728d362",
+        "result_sha": "33d2c8da52585bcdc2216df9d2033f9089209edb",
+        "review_comment_id": "14726",
+        "verdict": "PASS"
+      },
+      "HIT-126": {
+        "tested_code_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "result_sha": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+        "review_comment_id": "15121",
+        "verdict": "PASS"
+      },
+      "HIT-127": {
+        "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
+        "result_sha": "19831026d635dd74d4b54dd4acd93e53319c182e",
+        "review_comment_id": "15637",
+        "verdict": "PASS WITH NOTES"
+      }
+    }
+  }
+}
