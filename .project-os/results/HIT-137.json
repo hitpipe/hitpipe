@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-137",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "В одном IAM checker совмещены повседневная проверка миграций, ролей и RLS и явный запуск замеров чтения сессий. Обе колеи проверены на чистом PostgreSQL 18.7.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "integration_pr": "https://github.com/hitpipe/hitpipe/pull/83",
+    "base_commit": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_code_commit": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+    "input_pr_heads": {
+      "PR51": "284fa8a5cfe8092bc65c508de6c067b31fd7df94",
+      "HIT-81_PR55": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "HIT-82_PR56": "a46d9d40169105356e61200a2a2b0cec17e5efb3"
+    },
+    "evidence_commit": "a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/tools/check_postgres_session_lookup.py",
+      "version": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/28b9e6a8beecb2e9d1952b0af363c33c687e5d4e/services/iam/tools/check_postgres_session_lookup.py"
+    },
+    {
+      "path": "services/iam/tools/prepare_session_lookup_baseline.py",
+      "version": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/28b9e6a8beecb2e9d1952b0af363c33c687e5d4e/services/iam/tools/prepare_session_lookup_baseline.py"
+    },
+    {
+      "path": "services/iam/tools/measure_session_lookup.py",
+      "version": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/28b9e6a8beecb2e9d1952b0af363c33c687e5d4e/services/iam/tools/measure_session_lookup.py"
+    },
+    {
+      "path": ".github/workflows/pr12-dk.yml",
+      "version": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/28b9e6a8beecb2e9d1952b0af363c33c687e5d4e/.github/workflows/pr12-dk.yml"
+    },
+    {
+      "path": "services/iam/evidence/HIT-137",
+      "version": "a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+    "postgres_server_version": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "go_version": "1.27.2",
+    "standard": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/standard.md",
+    "standard_raw_protocol": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/standard/verification.json",
+    "standard_postgres_race": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/standard/postgres-race.log",
+    "measurement": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/comparison.md",
+    "measurement_raw_protocol": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/measurement/measurement.json",
+    "separate_go_race": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/go-race.log",
+    "separate_go_vet": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/go-vet.log",
+    "ci_proof": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/ci-proof.json",
+    "artifact_checksums": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/lab-artifacts.json",
+    "cleanup": "https://github.com/hitpipe/hitpipe/blob/a9aac9bb0b8182fa10b8ba97eb89e063d6ada11a/services/iam/evidence/HIT-137/cleanup.log"
+  },
+  "deviations": [],
+  "limitations": [
+    "Парные замеры относятся к синтетическому набору данных и ресурсам тестовой VM. Во всех сравнениях указаны фактические значения и наблюдаемый разброс.",
+    "Во время обычного запуска Go-тесты без интеграционного тега отделены от реальных проверок PostgreSQL. Сценарий сбора выборок задержки включается только в отдельной колее измерения.",
+    "Область результата — проверяемый интеграционный кандидат. Результаты эксплуатации рабочей БД не оценивались."
+  ]
+}
