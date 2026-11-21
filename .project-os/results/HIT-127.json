@@ -14,7 +14,9 @@
     "tested_code_sha": "4da48202e77131427730b1827df9ee81940e559a",
     "pull_request": "https://github.com/hitpipe/hitpipe/pull/82",
     "rework_of": "fdda9d1da3f5d0697b0a8811585aa2f8988964e2",
-    "review_findings_comment": "15172"
+    "review_findings_comment": "15172",
+    "dependency_provenance_review_comment": "15416",
+    "dependency_provenance_scope": "Пять точных предков 4da4820 и 4250bb4, разрешение merge e381972, go list и побайтовая повторная сборка двух CLI. Код 4da4820 и доказательства шести DoD сохранены."
   },
   "changed_artifacts": [
     "services/processing/cmd/processing-purge/main.go",
@@ -54,7 +56,12 @@
     "source_diff": "services/processing/docs/HIT-127/review/exact-source.diff",
     "reviewable_process_and_http": "services/processing/docs/HIT-127/review/process-and-http.md",
     "reviewable_health_and_runbook": "services/processing/docs/HIT-127/review/operations.md",
-    "reviewable_commands": "services/processing/docs/HIT-127/review/commands-and-output.md"
+    "reviewable_commands": "services/processing/docs/HIT-127/review/commands-and-output.md",
+    "dependency_chain": {
+      "file": "services/processing/docs/HIT-127/review/dependency-chain.md",
+      "sha256": "0c7b8eed24fdb96a7a8d3bdb65219324bb1c11fc27e275ec0aa94fed3de2bef0",
+      "reviewed_pr_head": "4250bb434a9a48ed436904e0a4609717135f7143"
+    }
   },
   "known_limitations": [
     "Локальные ограниченные выборки, измерения на изолированном стенде и управляемых mTLS-соседях.",
