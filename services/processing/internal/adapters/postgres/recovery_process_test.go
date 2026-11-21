@@ -189,8 +189,8 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	f := newObservation(t)
 	ws, cid := f.request.WorkspaceID, f.request.CaseID
 	app := connect(t)
-	otherWorkspace := prepared(t, []string{}).request.WorkspaceID
-	stand := createProcessStand(t, binary, f.path, map[string]string{ws: "acct_synthetic"})
+	other := prepared(t, []string{}).request
+	stand := createProcessStand(t, binary, f.path, map[string]string{ws: "acct_synthetic", other.WorkspaceID: "acct_synthetic"})
 	stand.waitDelivery.Store(true)
 	stand.queryReply = func(w http.ResponseWriter, r *http.Request) {
 		// Observe a real outbound query without returning an observation/ACK.
@@ -234,13 +234,13 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	stand.bootMu.Unlock()
 	revocation, _ := newID()
 	barrier := drafts.BarrierCommand{TargetRuntimeID: stand.identity, BootID: boot.BootID, Generation: boot.Generation,
-		RevocationID: revocation, WorkspaceID: &ws, Scope: "WORKSPACE", SubjectID: ws, Epoch: 8, DeadlineAt: time.Now().Add(2 * time.Second)}
+		RevocationID: revocation, WorkspaceID: &other.WorkspaceID, Scope: "WORKSPACE", SubjectID: other.WorkspaceID, Epoch: 8, DeadlineAt: time.Now().Add(2 * time.Second)}
 	ack := stand.must("iam.test", "9443", "POST", "/internal/v1/runtime/barrier", marshalProcess(t, barrier), nil, 200)
 	if draftjson.Validate("BarrierAck", ack) != nil {
 		t.Fatal("invalid actual barrier acknowledgement")
 	}
 	stand.bootMu.Lock()
-	stand.denials = append(stand.denials, drafts.DenyEpochSnapshot{WorkspaceID: &ws, Scope: "WORKSPACE", SubjectID: ws,
+	stand.denials = append(stand.denials, drafts.DenyEpochSnapshot{WorkspaceID: &other.WorkspaceID, Scope: "WORKSPACE", SubjectID: other.WorkspaceID,
 		Epoch: 8, RevocationID: revocation, AcceptedAt: time.Now().Add(-time.Second).UTC()})
 	stand.bootMu.Unlock()
 	stopRecoveryProcess(t, proc)
@@ -271,10 +271,10 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if err := applyRecovery(target, ws, archive); !errors.Is(err, errRecoveryNotEmpty) {
 		t.Fatal("repeat restore must refuse non-empty target scope", err)
 	}
-	if err := applyRecovery(target, otherWorkspace, archive); err == nil {
+	if err := applyRecovery(target, other.WorkspaceID, archive); err == nil {
 		t.Fatal("RLS accepted a restore into a foreign workspace")
 	}
-	tx = begin(t, target, otherWorkspace)
+	tx = begin(t, target, other.WorkspaceID)
 	var foreign int
 	if err := tx.QueryRow(ctx, "SELECT count(*) FROM hp_processing.operations").Scan(&foreign); err != nil || foreign != 0 {
 		t.Fatal("foreign restore was not atomic", foreign, err)
@@ -310,12 +310,14 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	stand.recoveryHealth(t, restored, "target with wrong generation", "CLOSED")
 	stand.registerGeneration.Store(0)
 	stand.recoveryHealth(t, restored, "target with fresh boot and generation", "READY")
-	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 403)
+	revokedURL := "/api/v1/workspaces/" + other.WorkspaceID + "/cases/" + other.CaseID
+	stand.must("bff.test", "8443", "GET", revokedURL, nil, headers, 403)
 	stand.authorizationEpoch.Store(9)
+	stand.must("bff.test", "8443", "GET", revokedURL, nil, headers, 403)
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 200)
 	stand.command(caseURL+"/recovery", command, commandID, 202)
 	stand.must("delivery.test", "8443", "POST", "/internal/v1/delivery-observations", obs, nil, 202)
-	t.Log("fresh registration required, epoch 7 denied after restore; epoch 9 served existing identity; user command and inbox replay succeeded")
+	t.Log("fresh registration required; revoked workspace denied at epochs 7 and 9, legitimate scope served existing identity; command and inbox replay succeeded")
 	history := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 200)
 	var h readcases.HistoryView
 	if json.Unmarshal(history, &h) != nil || len(h.Items) < 2 {
@@ -324,7 +326,7 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	expiredMetadata, valid := false, false
 	for _, item := range h.Items {
 		if item.EntryID == expiredEntry {
-			expiredMetadata = item.EvidenceRef == nil && item.ExpiresAt.Equal(expired.ExpiresAt)
+			expiredMetadata = item.EvidenceRef != nil && *item.EvidenceRef == expired.ID && item.ExpiresAt.Equal(expired.ExpiresAt)
 		} else if item.EvidenceRef != nil {
 			valid = true
 		}
@@ -382,7 +384,16 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(f.path, expired.ID)); !os.IsNotExist(err) {
 		t.Fatal("restore resurrected an already removed file", err)
 	}
-	if after := restoredIdentity(t, target, ws, cid); !reflect.DeepEqual(before, after) ||
+	afterPurge := stand.boot("recovery-after-purge.log")
+	stand.recoveryHealth(t, afterPurge, "target after expiry cleanup", "READY")
+	still := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 200)
+	var afterHistory readcases.HistoryView
+	if json.Unmarshal(still, &afterHistory) != nil || !reflect.DeepEqual(h.Items, afterHistory.Items) {
+		t.Fatal("expired file removal changed retained history metadata")
+	}
+	stopRecoveryProcess(t, afterPurge)
+	t.Log("purge removed expired bytes while preserving the exact public history metadata and expiry")
+	if after := restoredIdentity(t, target, ws, cid); before != after ||
 		stand.deliveryCount.Load() != 1 || recoveredOutbox(t, target, ws, f.lineage) != held {
 		t.Fatal("replay or purge changed safety/identity or repeated the external effect")
 	}
