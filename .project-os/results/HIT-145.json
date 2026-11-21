@@ -1,0 +1,67 @@
+{
+  "subject": "HIT-145",
+  "authorship": "Codex по делегации Тимофея Патрушева / Tim1hik",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_IN_OWNED_OCI_TEST",
+    "summary": "Самостоятельный образ cmd/processing. Подтверждены изолированный запуск на PostgreSQL 18.7, допуск, сохранение состояния и повтор в чистой копии.",
+    "contract_revision": 1,
+    "contract_fingerprint": "6d273a0ce797188e4873a043a765b0c63dd5be032f41aa2cd286393522498fcd",
+    "base_sha": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "tested_code_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/84"
+  },
+  "changed_artifacts": [
+    "services/processing/Dockerfile",
+    "services/processing/Dockerfile.dockerignore",
+    "services/processing/scripts/postgres/verify_image.py",
+    "services/processing/scripts/postgres/verify.py",
+    "services/processing/internal/adapters/postgres/image_process_test.go",
+    "services/processing/docs/HIT-145/",
+    ".project-os/results/HIT-145.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-145/README.md",
+    "runbook": "services/processing/docs/HIT-145/RUN_RU.md",
+    "configuration_template": "services/processing/docs/HIT-145/processing.example.json",
+    "source_audit": "services/processing/docs/HIT-145/verification/source-evidence.md",
+    "test_protocol": "services/processing/docs/HIT-145/verification/test-evidence.md",
+    "raw_test_artifacts": "services/processing/docs/HIT-145/verification/original-runs.tar.gz",
+    "ci_protocol": "services/processing/docs/HIT-145/verification/ci-evidence.md",
+    "oci_manifest_digest": "sha256:972262cf9f8c50dd5a1d9009999b8d6b0177d1df23b5be555e2ccdd4df2f0a33",
+    "platform": "linux/arm64",
+    "postgres_version": "18.7"
+  },
+  "dod_evidence": [
+    {
+      "id": "f5f88b78-7513-4d8d-9ab9-0e5731f3c531",
+      "obligation": "Проверяемый результат. Образ собирается из явно закреплённых оснований. Зафиксированы точные SHA исходника, digest образа, архитектура сборки, команда и реально запущенная версия PostgreSQL.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-145/verification/test-evidence.md"
+    },
+    {
+      "id": "070e6478-19a0-46d5-ac39-601b86a2a652",
+      "obligation": "Проверяемый результат. Работающий контейнер пользуется непривилегированным UID, read-only root и собственным записываемым content volume. Сертификаты и конфигурация подаются при запуске, в слоях нет секретов.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-145/verification/test-evidence.md"
+    },
+    {
+      "id": "67aabcd9-bab5-4f9a-944b-18d2cdd2fe42",
+      "obligation": "Проверяемый результат. На локальном TEST видна техническая готовность из разрешённого health и отказ без необходимых авторитетных входов. Повторный запуск на том же томе сохраняет тестовую запись и не добавляет второй эффект.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-145/verification/test-evidence.md"
+    },
+    {
+      "id": "8bdda454-63d0-4c1e-887e-d4811c555376",
+      "obligation": "Проверяемый результат. Новая копия проекта и образа воспроизводит запуск по инструкции. Отдельно записано, какие сертификаты/доверенные входы нужны для полноценного окружения.",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-145/verification/test-evidence.md"
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Проверенная TEST-платформа linux/arm64. Новая копия и архив на том же Docker Engine.",
+    "Внешние участники управляемые. Рабочие системы и машина преподавателя за рамками проверки.",
+    "Решение о готовности к независимому ревью принимает Project OS."
+  ]
+}

@@ -1,0 +1,238 @@
+[
+  {
+    "label": "git-clean",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.559393+00:00",
+    "finished_at": "2026-11-21T07:05:11.577479+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "git-clean.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "git-clean.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "hit111-tested-ancestor",
+    "argv": [
+      "git",
+      "merge-base",
+      "--is-ancestor",
+      "b2e823012854575146595b01a6f56d5ac677fc44",
+      "30385d09962c3fa4aad4808253a5493235559d01"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.577933+00:00",
+    "finished_at": "2026-11-21T07:05:11.585690+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "hit111-tested-ancestor.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "hit111-tested-ancestor.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "hit111-published-ancestor",
+    "argv": [
+      "git",
+      "merge-base",
+      "--is-ancestor",
+      "49229e1db3f371a051a022ea9e31951dd558eecb",
+      "30385d09962c3fa4aad4808253a5493235559d01"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.585989+00:00",
+    "finished_at": "2026-11-21T07:05:11.593483+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "hit111-published-ancestor.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "hit111-published-ancestor.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "scope",
+    "argv": [
+      "git",
+      "diff",
+      "--name-status",
+      "49229e1db3f371a051a022ea9e31951dd558eecb",
+      "30385d09962c3fa4aad4808253a5493235559d01"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.594228+00:00",
+    "finished_at": "2026-11-21T07:05:11.602654+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "scope.stdout",
+      "bytes": 358,
+      "sha256": "baf7b15129d66c274468cda669e8714603a6c05456775f60a81f5d1f3e3ce201"
+    },
+    "stderr": {
+      "file": "scope.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "runtime-preserved",
+    "argv": [
+      "git",
+      "diff",
+      "--exit-code",
+      "b2e823012854575146595b01a6f56d5ac677fc44",
+      "30385d09962c3fa4aad4808253a5493235559d01",
+      "--",
+      "services/processing/cmd",
+      "services/processing/internal",
+      ":(exclude)**/*_test.go",
+      "services/processing/go.mod",
+      "services/processing/go.sum",
+      "services/platform",
+      "services/processing/scripts/migrations",
+      "Dockerfile"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.603101+00:00",
+    "finished_at": "2026-11-21T07:05:11.611901+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "runtime-preserved.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "runtime-preserved.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "go-version",
+    "argv": [
+      "env",
+      "GOTOOLCHAIN=local",
+      "GOWORK=off",
+      "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+      "version"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci/services/processing",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.612365+00:00",
+    "finished_at": "2026-11-21T07:05:11.620200+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "go-version.stdout",
+      "bytes": 33,
+      "sha256": "94e911f9fbf3c118f6a0573ab3a13fa546ad13e89ba40cf53df77e468509c92d"
+    },
+    "stderr": {
+      "file": "go-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "go-race",
+    "argv": [
+      "env",
+      "GOTOOLCHAIN=local",
+      "GOWORK=off",
+      "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+      "test",
+      "-race",
+      "-count=1",
+      "./..."
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci/services/processing",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:11.620634+00:00",
+    "finished_at": "2026-11-21T07:05:16.359579+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "go-race.stdout",
+      "bytes": 2904,
+      "sha256": "7dcb404fc279e9b1efa01cb133ba4a460db1f62c18eedb20e13d67fa18f12784"
+    },
+    "stderr": {
+      "file": "go-race.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "go-vet",
+    "argv": [
+      "env",
+      "GOTOOLCHAIN=local",
+      "GOWORK=off",
+      "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/go/bin/go",
+      "vet",
+      "./..."
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci/services/processing",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:16.360335+00:00",
+    "finished_at": "2026-11-21T07:05:16.599109+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "go-vet.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "go-vet.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "label": "git-diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check",
+      "49229e1db3f371a051a022ea9e31951dd558eecb",
+      "30385d09962c3fa4aad4808253a5493235559d01"
+    ],
+    "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit145-processing-oci",
+    "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+    "started_at": "2026-11-21T07:05:16.599521+00:00",
+    "finished_at": "2026-11-21T07:05:16.607780+00:00",
+    "exit_code": 0,
+    "stdout": {
+      "file": "git-diff-check.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "git-diff-check.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]
