@@ -16,6 +16,7 @@ import (
 
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/dispatchintent"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/preparecase"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
@@ -208,6 +209,22 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	case <-time.After(5 * time.Second):
 		t.Fatal("original create did not reach the controlled peer")
 	}
+	// Check the actual Intake route for the already known payment session.
+	// This new signal creates an inbox receipt on the original case.
+	eventAt := time.Now().UTC()
+	signal := intakeWire(t, ws, func(wire map[string]any) {
+		wire["source_created_at"] = eventAt.Add(-time.Hour).Format(time.RFC3339Nano)
+		wire["first_received_at"] = eventAt.Format(time.RFC3339Nano)
+		wire["expires_at"] = eventAt.Add(time.Hour).Format(time.RFC3339Nano)
+	})
+	admitted := stand.must("intake.test", "8443", "POST", "/internal/v1/intake-signals", signal, nil, 202)
+	var intakeRecord struct {
+		RecordID string `json:"record_id"`
+	}
+	if json.Unmarshal(admitted, &intakeRecord) != nil || intakeRecord.RecordID != cid {
+		t.Fatal("duplicate payment session did not resolve to the original case")
+	}
+
 	// Its HTTP response is still withheld. Inject a separately authenticated
 	// known-target observation, then a real user command for read-only recheck.
 	obs := observationWire(t, f.observation(t, "TARGET_ID_OBSERVED"))
@@ -252,14 +269,21 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 
 	before := restoredIdentity(t, app, ws, cid)
 	if !before.Fence || before.State != "UNKNOWN" || before.Knowledge != "TARGET_ID_KNOWN" ||
-		before.Cases != 1 || before.Commands != 1 || before.Inbox < 2 || before.Intents != 1 || before.Queries != 1 {
+		before.Cases != 1 || before.Commands != 1 || before.Inbox != 3 || before.Intents != 1 || before.Queries != 1 {
 		t.Fatal("unexpected source safety summary", before.Fence, before.State, before.Knowledge,
 			before.Cases, before.Commands, before.Inbox, before.Intents, before.Queries)
 	}
 	first := recoveredOutbox(t, app, ws, f.lineage)
-	if first.state == "ACKED" || first.attempts != 1 {
+	if first.state != "CLAIMED" || !first.lease || first.attempts != 1 {
 		t.Fatal("original effect did not reach the interrupted transport state", first)
 	}
+	tx = begin(t, app, ws)
+	oldClaim := dispatchintent.Claim{Request: dispatchintent.Request{WorkspaceID: ws, Epoch: 7}, MessageID: f.lineage}
+	if err := tx.QueryRow(ctx, `SELECT claim_token::text,lease_until FROM hp_processing.outbox WHERE message_id=$1`,
+		f.lineage).Scan(&oldClaim.Token, &oldClaim.LeaseUntil); err != nil {
+		t.Fatal(err)
+	}
+	tx.Rollback(ctx)
 	archive := captureRecovery(t, app, ws)
 	stand.t.Logf("source intent state=%s lease=%t attempts=%d; known identity and fence persisted", first.state, first.lease, first.attempts)
 
@@ -291,7 +315,11 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if query.state != "HELD" || query.lease {
 		t.Fatal("restore promoted unfinished recheck", query)
 	}
-	t.Logf("restore identity/config/command/inbox/effect and fence preserved; create/recheck HELD, leases cleared, expiry and attempts unchanged; repeat refused; foreign scope rolled back")
+	worker := DispatchStore{DB: cluster.connect(t, "hp_processing_worker")}
+	if err := worker.Check(ctx, oldClaim); !errors.Is(err, pgx.ErrNoRows) {
+		t.Fatal("restored worker accepted an old job/claim or returned an unexpected error", err)
+	}
+	t.Log("restore identity/config/command/inbox/effect and fence preserved; create/recheck HELD, old claim has no job, expiry and attempts unchanged; repeat refused; foreign scope rolled back")
 
 	cluster.runtimeConfig(t, stand)
 	normal := stand.bootWith("recovery-normal-closed.log", "-config", stand.config)
@@ -317,7 +345,11 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 200)
 	stand.command(caseURL+"/recovery", command, commandID, 202)
 	stand.must("delivery.test", "8443", "POST", "/internal/v1/delivery-observations", obs, nil, 202)
-	t.Log("fresh registration required; revoked workspace denied at epochs 7 and 9, legitimate scope served existing identity; command and inbox replay succeeded")
+	replayed := stand.must("intake.test", "8443", "POST", "/internal/v1/intake-signals", signal, nil, 202)
+	if !bytes.Equal(replayed, admitted) {
+		t.Fatal("restored Intake replay lost the original receipt")
+	}
+	t.Log("fresh registration required; revoked workspace denied at epochs 7 and 9; command, observation and exact Intake receipt replay succeeded")
 	history := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 200)
 	var h readcases.HistoryView
 	if json.Unmarshal(history, &h) != nil || len(h.Items) < 2 {
