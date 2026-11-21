@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -195,7 +194,7 @@ func TestProcessingOCIImageOwnedStand(t *testing.T) {
 	if before != after || stand.deliveryCount.Load() != 1 {
 		t.Fatal("restart changed durable state or repeated the external effect", before, after)
 	}
-	t.Logf("RESTART PASS: case=%s message=%s fresh_boot=%t history_items=%d receipt_sha256=%s durable=%+v delivery_calls=%d",
+	t.Logf("RESTART PASS: case=%s message=%s fresh_boot=%t history_items=%d receipt_sha256=%x durable=%+v delivery_calls=%d",
 		admitted.RecordID, result.MessageID, newBoot, len(secondBody.Items),
-		fmt.Sprintf("%x", sha256.Sum256(repeated)), after, stand.deliveryCount.Load())
+		sha256.Sum256(repeated), after, stand.deliveryCount.Load())
 }

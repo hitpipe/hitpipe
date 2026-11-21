@@ -2,6 +2,7 @@
 """Build, inspect, load and launch the Processing image on an owned TEST stand."""
 import argparse
 import hashlib
+import io
 import json
 import os
 import pathlib
@@ -43,7 +44,6 @@ def image_identity(archive, revision, architecture):
         manifest = json.loads(blob(manifest_descriptor))
         config = json.loads(blob(manifest["config"]))
         layer, = manifest["layers"]
-        import io
         with tarfile.open(fileobj=io.BytesIO(blob(layer))) as rootfs:
             binary, = rootfs.getmembers()
             if binary.name.lstrip("./") != "processing" or not binary.isfile() or not binary.mode & 0o111:
@@ -65,6 +65,8 @@ def image_identity(archive, revision, architecture):
 
 
 class ImageRun(Run):
+    command_timeout = 900  # The first build can download the pinned toolchain layers.
+
     def __init__(self, output, go, fixture):
         super().__init__(output)
         self.go = go
@@ -148,6 +150,7 @@ class ImageRun(Run):
                            "tests": "CLOSED, forbidden Health, mTLS, READY, restart, durable idempotence",
                            "finished_at": now()}
         (self.output / "summary.json").write_text(json.dumps(runtime_summary, indent=2) + "\n")
+        print(json.dumps(runtime_summary))
 
     def await_file(self, name):
         for _ in range(120):
