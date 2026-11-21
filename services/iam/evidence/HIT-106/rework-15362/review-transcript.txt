@@ -1,0 +1,35 @@
+HIT-106, 2026-11-21 MSK, tested commit 4d8c9772604b1f7d4d79e35c552f44a6984e7787
+Keycloak 26.8.1; PostgreSQL 18.7; Chromium 159.0.8154.6 (verified local CA; HTTPS errors enforced); /mailpit v1.33.1 compiled with go1.27.3 on linux/amd64; go version go1.27.2 linux/amd64.
+Isolated Ubuntu KVM guest, trusted TLS, actual Keycloak, SMTP and IAM database.
+npm ci --no-audit --no-fund (exit 0); HIT106_ISOLATED_LAB=1 ./run.sh (exit 0).
+
+PASS HTTPS registration requires email-code, then issues one real IAM session
+PASS concurrent replay of the completed callback creates no independent sessions
+PASS an existing session cannot be replaced without the revocation coordinator
+PASS the confirmed user signs in again with a fresh attempt and the same principal
+PASS foreign or missing state and browser authority assertions do not create a session
+PASS cancelling an attempt also blocks a later genuine IdP callback for that state
+PASS a genuine callback after IAM restart fails with the lost one-use attempt
+PASS a genuine unverified-email claim from the test IdP cannot create a session
+PASS HTTPS email code rejects wrong digits and locks after five attempts, including the genuine code
+PASS HTTPS email code rejects the expired genuine mail without consuming it or signing in
+PASS HTTPS email-code resend enforces cooldown, invalidates old digits and rejects reuse after verification
+PASS HTTPS email code enforces five sends in the rolling hour and accepts a send when the oldest leaves the window
+PASS two concurrent HTTPS submissions of one genuine email code yield exactly one authorization and one IAM session
+PASS two Keycloak subjects with the same verified email remain distinct HitPipe principals
+Positive same-email fixture: Keycloak read-back matched verified email, distinct subjects and usernames. Three real callbacks joined via the IAM session to issuer-subject rows; +2 principals, +3 sessions. Repeat login retained its own principal.
+Email-code fixture shifts only disposable account timestamps for expiration and resend windows. Live provider validates the unchanged attempt, generation, consumption and send limits.
+HIT-106 session policy verified PostgreSQL rows=7 absolute=24h0m0s idle=8h0m0s
+Synthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired
+
+go test -race -count=1 ./...; go vet ./...; go build ./...; lab-tagged vet/build; syntax checks (exit 0 each).
+python3 tools/check_session_issuance.py (exit 0); 11 PostgreSQL checks, PASSED.
+go test -p 1 -tags=integration -race -count=1 -v ./... (exit 0); 18 PostgreSQL suites PASS, including issuer rollback and uncertain COMMIT. TestHIT82LatencySamples SKIP (separate latency sampling).
+No residual browser-lab listeners, containers, volumes or networks.
+
+Full logs in this directory, recorded SHA-256:
+6203e522782d67510f5eaf90e38772c8cfa0cad4e9adf815072660fea79b027a browser.log
+c76289a24472eb9ad31c9a3fbc28a657d1e6dfe83c04da4dd77132dddbb677ed go.log
+fa353ba0884cf3c8ef9916199f94171c4b9bf9cdf194158b2a443bd3d90aef59 postgres-driver.log
+9f53c64d0f2d72b1c28246303f215a779b8faedef65430ae477229785e45a0ee postgres/postgres-race.log
+095de57adb38a67c783a46587c52e2deb6b72130f68fa8c2ec12f665bb081f75 postgres/verification.json

@@ -1,0 +1,239 @@
+{
+  "task": "HIT-83",
+  "schema_version": 1,
+  "started_at_utc": "2026-11-21T04:43:50Z",
+  "source_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+  "source_tree_sha256": "8998ef613f1c6d19b4a9a57f641b0bc16a36dc42d3e42f2fd2809b51806c4e24",
+  "go_version": "go version go1.27.2 linux/amd64",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "cpu_count": 4,
+  "execution_limits": {
+    "GOMAXPROCS": 1,
+    "GOGC": 50,
+    "go_build_parallelism": 1,
+    "postgres_memory_mib": 256,
+    "postgres_cpus": 0.5
+  },
+  "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+  "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+  "scope": "Local session issuer with controlled one-use verifier and guard, real PostgreSQL atomic writes, failures and existing reader compatibility; not real OIDC, a production clock/guard, HTTP or deployment",
+  "checks": [
+    {
+      "name": "bootstrap-roles",
+      "command": [
+        "docker",
+        "exec",
+        "-i",
+        "hit83-pg-b4c894707f34",
+        "psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "postgres",
+        "-d",
+        "hit68_test_b4c894707f34"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.111,
+      "log": "bootstrap-roles.log",
+      "log_sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322",
+      "stdin_sha256": "e67a1c56e3b1a1a98ee73ea4f746e8ca43cf9334c3c7878e899ff17b502a3673"
+    },
+    {
+      "name": "test-logins",
+      "command": [
+        "docker",
+        "exec",
+        "-i",
+        "hit83-pg-b4c894707f34",
+        "psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "postgres",
+        "-d",
+        "hit68_test_b4c894707f34"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.096,
+      "log": "test-logins.log",
+      "log_sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7",
+      "stdin_sha256": "a9ca152c541da9642457da816f627ed4f0e3f4d759929edb8c02fea031913827"
+    },
+    {
+      "name": "migration-role-tcp",
+      "command": [
+        "docker",
+        "exec",
+        "-i",
+        "hit83-pg-b4c894707f34",
+        "psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-h",
+        "127.0.0.1",
+        "-U",
+        "hp_hit81_migration",
+        "-d",
+        "hit68_test_b4c894707f34",
+        "-Atc",
+        "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.098,
+      "log": "migration-role-tcp.log",
+      "log_sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+    },
+    {
+      "name": "migration-startup-role",
+      "command": [
+        "docker",
+        "exec",
+        "-i",
+        "--env",
+        "PGOPTIONS=-c role=hp_iam_migrator",
+        "hit83-pg-b4c894707f34",
+        "psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-h",
+        "127.0.0.1",
+        "-U",
+        "hp_hit81_migration",
+        "-d",
+        "hit68_test_b4c894707f34",
+        "-Atc",
+        "SELECT current_user,session_user;"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.157,
+      "log": "migration-startup-role.log",
+      "log_sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+    },
+    {
+      "name": "migration-install",
+      "command": [
+        "go",
+        "run",
+        "-p",
+        "1",
+        "./cmd/iam-migrate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.302,
+      "log": "migration-install.log",
+      "log_sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+    },
+    {
+      "name": "migration-repeat",
+      "command": [
+        "go",
+        "run",
+        "-p",
+        "1",
+        "./cmd/iam-migrate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.33,
+      "log": "migration-repeat.log",
+      "log_sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+    },
+    {
+      "name": "read-only-lookup",
+      "command": [
+        "docker",
+        "exec",
+        "-i",
+        "hit83-pg-b4c894707f34",
+        "psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "postgres",
+        "-d",
+        "hit68_test_b4c894707f34"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.168,
+      "log": "read-only-lookup.log",
+      "log_sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76",
+      "stdin_sha256": "aa9ac4f7ebcb8e8116afce0064242fe5605ca63ef37d3a0f7807ccd7e7ebf383"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-count=1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.736,
+      "log": "unit.log",
+      "log_sha256": "0108f0b36b80a96b98120c204049bd0d3cd846de955fbdc5853f017d72eb91ed"
+    },
+    {
+      "name": "postgres-race",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-tags=integration",
+        "-race",
+        "-count=1",
+        "-v",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 43.226,
+      "log": "postgres-race.log",
+      "log_sha256": "9f53c64d0f2d72b1c28246303f215a779b8faedef65430ae477229785e45a0ee"
+    },
+    {
+      "name": "vet",
+      "command": [
+        "go",
+        "vet",
+        "-p",
+        "1",
+        "-tags=integration",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.843,
+      "log": "vet.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "command": [
+        "go",
+        "build",
+        "-p",
+        "1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.809,
+      "log": "build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "state": "PASSED",
+  "postgres_version": "18.7",
+  "host_loopback_tcp_probe": {
+    "host": "127.0.0.1",
+    "state": "PASSED"
+  },
+  "test_container_removed": true,
+  "test_network_removed": true,
+  "finished_at_utc": "2026-11-21T04:44:56Z"
+}
