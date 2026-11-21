@@ -5,6 +5,8 @@ import { once } from 'node:events';
 import { join } from 'node:path';
 import { setTimeout as pause } from 'node:timers/promises';
 import { chromium } from 'playwright';
+import { runEmailCodeScenarios } from './email-code-scenarios.mjs';
+import { sameEmailScenario } from './same-email-scenario.mjs';
 
 const app = 'https://127.0.0.2:18444';
 const idp = 'https://127.0.0.1:18443';
@@ -227,10 +229,10 @@ async function mailFor(email) {
   return messages.filter(message => message.To.some(to => to.Address.toLowerCase() === email));
 }
 
-async function mailCode(email) {
+async function mailCode(email, count = 1) {
   const message = await waitUntil(async () => {
     const messages = await mailFor(email);
-    return messages.length === 1 && messages[0];
+    return messages.length === count && messages[0];
   }, 'No genuine email-code arrived in the local SMTP receiver');
   const result = await localFetch(`${mailpit}/api/v1/message/${encodeURIComponent(message.ID)}`);
   assert.equal(result.status, 200, 'Mailpit opened captured local email');
@@ -268,7 +270,7 @@ async function keycloakAdmin() {
   const { access_token: token } = await r.json();
   remember(token);
   assert.ok(token, 'The temporary realm administrator token is available');
-  return (path, method = 'GET', data) => localFetch(`${idp}/admin/realms/${realm}/${path}`, {
+  return (path, method = 'GET', data) => localFetch(`${idp}/admin/realms/${realm}${path ? `/${path}` : ''}`, {
     method, headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
     body: data === undefined ? undefined : JSON.stringify(data),
   });
@@ -421,6 +423,11 @@ try {
       assert.equal((await restoreAdmin(actionPath, 'PUT', action)).status, 204, 'Required action restored in the temporary realm');
     }
   });
+
+  await runEmailCodeScenarios({ browser, check, newBrowser, begin, beginRegister, identity, mailFor, mailCode,
+    counts, expectSession, expectIssued, observeCallback, privateURL, callback });
+  await sameEmailScenario({ browser, check, begin, observeCallback, expectIssued, expectSession,
+    keycloakAdmin, newBrowser, counts, remember, localFetch });
 } catch (error) {
   if (!process.exitCode) console.error(`FAIL private browser stand: ${safeError(error)}`);
   process.exitCode = 1;

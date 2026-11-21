@@ -221,6 +221,9 @@ func serve(dir string) error {
 				}
 				w.WriteHeader(http.StatusUnauthorized)
 				return
+			case "/__hit106/identity":
+				serveIdentityProof(w, r, pool, authenticate)
+				return
 			case "/__hit106/count":
 				ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 				defer cancel()
