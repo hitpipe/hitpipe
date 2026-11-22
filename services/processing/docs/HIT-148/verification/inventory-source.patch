@@ -1,0 +1,711 @@
+diff --git a/services/processing/cmd/processing-purge/deletion_inventory.go b/services/processing/cmd/processing-purge/deletion_inventory.go
+new file mode 100644
+index 0000000..a87e011
+--- /dev/null
++++ b/services/processing/cmd/processing-purge/deletion_inventory.go
+@@ -0,0 +1,129 @@
++package main
++
++import (
++	"bytes"
++	"context"
++	"crypto/ed25519"
++	"crypto/tls"
++	"crypto/x509"
++	"encoding/json"
++	"encoding/pem"
++	"fmt"
++	"io"
++	"os"
++	"path/filepath"
++	"syscall"
++
++	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/deletionregistry"
++)
++
++type inventoryConfig struct {
++	Origin       string `json:"origin"`
++	ServerPin    string `json:"server_pin"`
++	PublisherID  string `json:"publisher_id"`
++	WorkspaceID  string `json:"workspace_id"`
++	Generation   uint64 `json:"generation"`
++	CA           string `json:"ca"`
++	Certificate  string `json:"client_certificate"`
++	PrivateKey   string `json:"client_key"`
++	PublisherKey string `json:"publisher_public_key"`
++}
++
++func privateInput(path string, limit int64) ([]byte, error) {
++	resolved, err := filepath.EvalSymlinks(path)
++	if !filepath.IsAbs(path) || err != nil || resolved != path {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	info, err := os.Lstat(path)
++	if err != nil || !info.Mode().IsRegular() || info.Size() > limit || info.Mode().Perm() != 0600 {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	if owner, ok := info.Sys().(*syscall.Stat_t); !ok || int(owner.Uid) != os.Geteuid() {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	f, err := os.OpenFile(path, os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
++	if err != nil {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	defer f.Close()
++	opened, err := f.Stat()
++	if err != nil || !os.SameFile(info, opened) {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	data, err := io.ReadAll(io.LimitReader(f, limit+1))
++	if err != nil || int64(len(data)) > limit {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	return data, nil
++}
++
++func inventoryClient(path string) (*deletionregistry.Client, error) {
++	raw, err := privateInput(path, 16<<10)
++	if err != nil {
++		return nil, err
++	}
++	var cfg inventoryConfig
++	d := json.NewDecoder(bytes.NewReader(raw))
++	d.DisallowUnknownFields()
++	if d.Decode(&cfg) != nil || d.Decode(new(any)) != io.EOF {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	ca, err := privateInput(cfg.CA, 32<<10)
++	if err != nil {
++		return nil, err
++	}
++	pool := x509.NewCertPool()
++	if !pool.AppendCertsFromPEM(ca) {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	cert, err := privateInput(cfg.Certificate, 32<<10)
++	if err != nil {
++		return nil, err
++	}
++	key, err := privateInput(cfg.PrivateKey, 32<<10)
++	if err != nil {
++		return nil, err
++	}
++	leaf, err := tls.X509KeyPair(cert, key)
++	if err != nil {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	pub, err := privateInput(cfg.PublisherKey, 4096)
++	if err != nil {
++		return nil, err
++	}
++	block, rest := pem.Decode(pub)
++	if block == nil || block.Type != "PUBLIC KEY" || len(bytes.TrimSpace(rest)) != 0 {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	parsed, err := x509.ParsePKIXPublicKey(block.Bytes)
++	publisher, ok := parsed.(ed25519.PublicKey)
++	if !ok || err != nil {
++		return nil, deletionregistry.ErrUnavailable
++	}
++	return deletionregistry.New(deletionregistry.Provision{
++		Origin: cfg.Origin, ServerPin: cfg.ServerPin, PublisherID: cfg.PublisherID,
++		WorkspaceID: cfg.WorkspaceID, Generation: cfg.Generation,
++	}, pool, leaf, publisher)
++}
++
++func observeDeletionInventory(ctx context.Context, path string) int {
++	client, err := inventoryClient(path)
++	if err != nil {
++		fmt.Fprintln(os.Stderr, deletionregistry.ErrUnavailable)
++		return 2
++	}
++	observation, err := client.Observe(ctx)
++	if err != nil {
++		fmt.Fprintln(os.Stderr, deletionregistry.ErrUnavailable)
++		return 1
++	}
++	response := struct {
++		deletionregistry.Observation
++		Serving string `json:"serving"`
++	}{observation, "CLOSED"}
++	if err := json.NewEncoder(os.Stdout).Encode(response); err != nil {
++		return 1
++	}
++	return 0
++}
+diff --git a/services/processing/cmd/processing-purge/main.go b/services/processing/cmd/processing-purge/main.go
+index 981ba7f..f5c4aaf 100644
+--- a/services/processing/cmd/processing-purge/main.go
++++ b/services/processing/cmd/processing-purge/main.go
+@@ -18,6 +18,7 @@ import (
+ 	"time"
+ 
+ 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
++	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/deletionregistry"
+ 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/postgres"
+ 	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
+ 	"github.com/jackc/pgx/v5"
+@@ -92,10 +93,19 @@ func main() {
+ 	path := flag.String("content-dir", "", "absolute path to the private local Processing content directory")
+ 	limit := flag.Int("limit", 100, "maximum rows held and maximum files unlinked per batch")
+ 	local := flag.Bool("local-stand", false, "confirm isolated local stand")
++	inventory := flag.String("verify-deletion-inventory", "", "absolute trusted configuration for a read-only TEST inventory check")
+ 	flag.Parse()
+ 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+ 	defer stop()
+ 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+ 	defer cancel()
++	if *inventory != "" {
++		// A verification request must never fall through to ordinary expiry cleanup.
++		if !*local || flag.NArg() != 0 || *workspace != "" || *path != "" || *limit != 100 {
++			fmt.Fprintln(os.Stderr, deletionregistry.ErrUnavailable)
++			os.Exit(2)
++		}
++		os.Exit(observeDeletionInventory(ctx, *inventory))
++	}
+ 	os.Exit(run(ctx, *workspace, *path, *limit, *local))
+ }
+diff --git a/services/processing/internal/adapters/deletionregistry/read.go b/services/processing/internal/adapters/deletionregistry/read.go
+new file mode 100644
+index 0000000..5703284
+--- /dev/null
++++ b/services/processing/internal/adapters/deletionregistry/read.go
+@@ -0,0 +1,261 @@
++// Package deletionregistry reads the pinned IAM case-content deletion inventory.
++// Freshness at serving requires IAM's separate local WithCurrent barrier.
++package deletionregistry
++
++import (
++	"bytes"
++	"context"
++	"crypto/ed25519"
++	"crypto/sha256"
++	"crypto/tls"
++	"crypto/x509"
++	"encoding/json"
++	"errors"
++	"fmt"
++	"io"
++	"mime"
++	"net"
++	"net/http"
++	"net/url"
++	"regexp"
++	"strconv"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
++)
++
++const (
++	snapshotPath    = "/internal/maintenance/v1/case-deletion/snapshot"
++	signatureDomain = "HITPIPE-CASE-DELETION/snapshot-v1\x00"
++	maxResponse     = 4 << 20
++	maxInteger      = 9007199254740991
++)
++
++var (
++	ErrUnavailable = errors.New("trusted case deletion inventory unavailable")
++	digestPattern  = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
++)
++
++type Target struct {
++	Class     string `json:"class"`
++	VersionID string `json:"version_id"`
++}
++
++type Scope struct {
++	WorkspaceID string   `json:"workspace_id"`
++	CaseID      string   `json:"case_id"`
++	Targets     []Target `json:"targets"`
++}
++
++type Receipt struct {
++	Environment    string    `json:"environment"`
++	WorkspaceID    string    `json:"workspace_id"`
++	DeletionID     string    `json:"deletion_id"`
++	ScopeDigest    string    `json:"scope_digest"`
++	Generation     uint64    `json:"generation"`
++	Revision       uint64    `json:"revision"`
++	AppliedAt      time.Time `json:"applied_at"`
++	ApplicationRef string    `json:"application_ref"`
++}
++
++type Decision struct {
++	DeletionID      string     `json:"deletion_id"`
++	Action          string     `json:"action"`
++	PublisherID     string     `json:"publisher_id"`
++	Scope           Scope      `json:"scope"`
++	ScopeDigest     string     `json:"scope_digest"`
++	ConfirmedAt     time.Time  `json:"confirmed_at"`
++	ConfirmationRef string     `json:"confirmation_ref"`
++	Status          string     `json:"status"`
++	ApplyGeneration uint64     `json:"apply_generation"`
++	ApplyRevision   uint64     `json:"apply_revision"`
++	ApplyingAt      *time.Time `json:"applying_at"`
++	Receipts        []Receipt  `json:"receipts"`
++}
++
++type inventory struct {
++	SchemaVersion int        `json:"schema_version"`
++	Environment   string     `json:"environment"`
++	PublisherID   string     `json:"publisher_id"`
++	WorkspaceID   string     `json:"workspace_id"`
++	Generation    uint64     `json:"generation"`
++	Revision      uint64     `json:"revision"`
++	Full          bool       `json:"full"`
++	Decisions     []Decision `json:"decisions"`
++}
++
++// Observation is the validated identity and revision from a live pinned
++// request. It authorizes neither serving nor changes to Processing storage.
++type Observation struct {
++	WorkspaceID string `json:"workspace_id"`
++	Generation  uint64 `json:"generation"`
++	Revision    uint64 `json:"revision"`
++	Decisions   int    `json:"decision_count"`
++}
++
++type Provision struct {
++	Origin      string
++	ServerPin   string
++	PublisherID string
++	WorkspaceID string
++	Generation  uint64
++}
++
++type Client struct {
++	endpoint  url.URL
++	provision Provision
++	key       ed25519.PublicKey
++	http      *http.Client
++}
++
++func New(p Provision, roots *x509.CertPool, leaf tls.Certificate, key ed25519.PublicKey) (*Client, error) {
++	u, err := url.Parse(p.Origin)
++	if err != nil || u.Scheme != "https" || u.Hostname() == "" || u.User != nil ||
++		u.Opaque != "" || u.Path != "" || u.RawPath != "" || u.RawQuery != "" || u.ForceQuery ||
++		u.Fragment != "" || !digestPattern.MatchString(p.ServerPin) || !id(p.PublisherID) ||
++		!id(p.WorkspaceID) || !version(p.Generation) || roots == nil || len(leaf.Certificate) == 0 ||
++		leaf.PrivateKey == nil || len(key) != ed25519.PublicKeySize {
++		return nil, ErrUnavailable
++	}
++	port, err := strconv.ParseUint(u.Port(), 10, 16)
++	if err != nil || port == 0 {
++		return nil, ErrUnavailable
++	}
++	u.Path = snapshotPath
++	u.RawQuery = url.Values{"workspace_id": {p.WorkspaceID}, "generation": {strconv.FormatUint(p.Generation, 10)}}.Encode()
++	dial := net.Dialer{Timeout: 2 * time.Second}
++	t := &http.Transport{
++		DialContext: dial.DialContext, DisableKeepAlives: true, DisableCompression: true,
++		TLSHandshakeTimeout: 2 * time.Second, ResponseHeaderTimeout: 3 * time.Second,
++		MaxResponseHeaderBytes: 16 << 10,
++		TLSClientConfig: &tls.Config{
++			MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13,
++			RootCAs: roots.Clone(), Certificates: []tls.Certificate{leaf},
++			VerifyConnection: func(s tls.ConnectionState) error {
++				if len(s.VerifiedChains) == 0 || len(s.PeerCertificates) == 0 ||
++					digest(s.PeerCertificates[0].Raw) != p.ServerPin {
++					return ErrUnavailable
++				}
++				return nil
++			},
++		},
++	}
++	return &Client{endpoint: *u, provision: p, key: bytes.Clone(key), http: &http.Client{
++		Transport: t, Timeout: 4 * time.Second,
++		CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse },
++	}}, nil
++}
++
++func (c *Client) Observe(ctx context.Context) (Observation, error) {
++	if c == nil || ctx == nil || ctx.Err() != nil {
++		return Observation{}, ErrUnavailable
++	}
++	q, err := http.NewRequestWithContext(ctx, http.MethodGet, c.endpoint.String(), nil)
++	if err != nil {
++		return Observation{}, ErrUnavailable
++	}
++	q.Header.Set("Accept", "application/json")
++	resp, err := c.http.Do(q)
++	if err != nil {
++		return Observation{}, ErrUnavailable
++	}
++	defer resp.Body.Close()
++	contentType, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
++	if err != nil || contentType != "application/json" || resp.StatusCode != http.StatusOK ||
++		resp.Header.Get("Content-Encoding") != "" || resp.ContentLength > maxResponse {
++		return Observation{}, ErrUnavailable
++	}
++	raw, err := io.ReadAll(io.LimitReader(resp.Body, maxResponse+1))
++	if err != nil || len(raw) > maxResponse || ctx.Err() != nil {
++		return Observation{}, ErrUnavailable
++	}
++	return c.verify(raw)
++}
++
++func (c *Client) verify(raw []byte) (Observation, error) {
++	var envelope struct {
++		Payload   json.RawMessage `json:"payload"`
++		Signature []byte          `json:"signature"`
++	}
++	if json.Unmarshal(raw, &envelope) != nil || len(envelope.Signature) != ed25519.SignatureSize {
++		return Observation{}, ErrUnavailable
++	}
++	// The publisher signs its canonical Go JSON bytes. Exact re-encoding
++	// rejects repeat keys, folded names, null substitutions and extra fields.
++	envelopeJSON, err := json.Marshal(envelope)
++	if err != nil || !bytes.Equal(bytes.TrimSuffix(raw, []byte("\n")), envelopeJSON) ||
++		!ed25519.Verify(c.key, append([]byte(signatureDomain), envelope.Payload...), envelope.Signature) {
++		return Observation{}, ErrUnavailable
++	}
++	var snapshot inventory
++	if err := json.Unmarshal(envelope.Payload, &snapshot); err != nil {
++		return Observation{}, ErrUnavailable
++	}
++	canonical, err := json.Marshal(snapshot)
++	p := c.provision
++	if err != nil || !bytes.Equal(envelope.Payload, canonical) ||
++		snapshot.SchemaVersion != 1 || snapshot.Environment != "test" ||
++		snapshot.PublisherID != p.PublisherID || snapshot.WorkspaceID != p.WorkspaceID ||
++		snapshot.Generation != p.Generation || !version(snapshot.Revision) ||
++		!snapshot.Full || snapshot.Decisions == nil || len(snapshot.Decisions) > 4096 {
++		return Observation{}, ErrUnavailable
++	}
++	var previous string
++	for _, d := range snapshot.Decisions {
++		if d.DeletionID <= previous || !d.valid(snapshot) {
++			return Observation{}, ErrUnavailable
++		}
++		previous = d.DeletionID
++	}
++	return Observation{snapshot.WorkspaceID, snapshot.Generation, snapshot.Revision, len(snapshot.Decisions)}, nil
++}
++
++func (d Decision) valid(p inventory) bool {
++	if !id(d.DeletionID) || d.Action != "CASE_CONTENT_DELETE" || d.PublisherID != p.PublisherID ||
++		d.Scope.WorkspaceID != p.WorkspaceID || !id(d.Scope.CaseID) ||
++		len(d.Scope.Targets) == 0 || len(d.Scope.Targets) > 128 ||
++		!digestPattern.MatchString(d.ConfirmationRef) || d.ConfirmedAt.IsZero() || d.Receipts == nil {
++		return false
++	}
++	var previous string
++	for _, t := range d.Scope.Targets {
++		key := t.Class + "/" + t.VersionID
++		if key <= previous || !id(t.VersionID) || (t.Class != "CASE_CONTEXT" && t.Class != "HISTORY") {
++			return false
++		}
++		previous = key
++	}
++	fields, err := json.Marshal(struct {
++		Action string `json:"action"`
++		Scope  Scope  `json:"scope"`
++	}{d.Action, d.Scope})
++	if err != nil || digest(fields) != d.ScopeDigest {
++		return false
++	}
++	switch d.Status {
++	case "CONFIRMED", "CANCELLED":
++		return d.ApplyGeneration == 0 && d.ApplyRevision == 0 && d.ApplyingAt == nil && len(d.Receipts) == 0
++	case "APPLYING", "APPLIED":
++		if d.ApplyGeneration != p.Generation || !version(d.ApplyRevision) || d.ApplyRevision > p.Revision ||
++			d.ApplyingAt == nil || d.ApplyingAt.Before(d.ConfirmedAt) {
++			return false
++		}
++		if d.Status == "APPLYING" {
++			return len(d.Receipts) == 0
++		}
++		if len(d.Receipts) != 1 {
++			return false
++		}
++		r := d.Receipts[0]
++		return r.Environment == p.Environment && r.WorkspaceID == p.WorkspaceID &&
++			r.DeletionID == d.DeletionID && r.ScopeDigest == d.ScopeDigest &&
++			r.Generation == p.Generation && r.Revision == d.ApplyRevision &&
++			!r.AppliedAt.Before(*d.ApplyingAt) && digestPattern.MatchString(r.ApplicationRef)
++	default:
++		return false
++	}
++}
++
++func digest(data []byte) string { return fmt.Sprintf("sha256:%x", sha256.Sum256(data)) }
++func version(n uint64) bool     { return n > 0 && n <= maxInteger }
++func id(s string) bool          { return readcases.UUID(s) && s != "00000000-0000-0000-0000-000000000000" }
+diff --git a/services/processing/scripts/recovery/verify_deletion_inventory.py b/services/processing/scripts/recovery/verify_deletion_inventory.py
+new file mode 100644
+index 0000000..e59cbe6
+--- /dev/null
++++ b/services/processing/scripts/recovery/verify_deletion_inventory.py
+@@ -0,0 +1,117 @@
++#!/usr/bin/env python3
++"""Qualify read-only HIT-154 integration and Processing recovery regressions."""
++import argparse
++import hashlib
++import json
++import pathlib
++import tempfile
++
++import verify_recovery
++
++IAM_SOURCE = "c715a079ab57d4c9e7b56862f7f2584c792b74b0"
++IAM_SQL = "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7"
++
++
++class Run(verify_recovery.Run):
++    def __init__(self, output, go, binaries, iam):
++        super().__init__(output, go, binaries)
++        self.name = self.name.replace("hit128-", "hit148-", 1)
++        self.iam = iam
++        self.module = iam / "services/iam"
++        self.migrations = self.module / "internal/adapters/postgres/migrations"
++        self.script_sha256 = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
++
++    def command(self, label, argv, *args, **kwargs):
++        if label == "container-create":
++            argv = ["hitpipe.task=HIT-148" if a == "hitpipe.task=HIT-76" else a for a in argv]
++            argv[2:2] = ["--mount", f"type=bind,source={self.migrations},target=/iam-migration,readonly"]
++        return super().command(label, argv, *args, **kwargs)
++
++    def checks(self):
++        version = self.command("iam-sha", ["git", "-C", str(self.iam), "rev-parse", "HEAD"])
++        clean = self.command("iam-clean", ["git", "-C", str(self.iam), "status", "--porcelain"])
++        if version.stdout.decode().strip() != IAM_SOURCE or clean.stdout:
++            raise RuntimeError("use the exact clean HIT-154 checkout")
++        sql = self.migrations / "schema/001_iam.sql"
++        if hashlib.sha256(sql.read_bytes()).hexdigest() != IAM_SQL:
++            raise RuntimeError("HIT-154 IAM schema differs from accepted bytes")
++        super().checks()
++        binaries = json.loads((self.output / "binaries.json").read_text())
++        cpu = binaries["platform"].split("/")[1]
++        go = ["env", "GOOS=linux", "GOARCH="+cpu, "CGO_ENABLED=0", "GOTOOLCHAIN=local",
++              "GOWORK=off", self.go, "-C", str(self.module)]
++        pkg = self.module / "internal/adapters/composition/casedeletion"
++        fixture = pkg / "fixture_integration_test.go"
++        probe = verify_recovery.verify.REPO / "tools/hit148/inventory-probe.go"
++        with tempfile.TemporaryDirectory(prefix="hit148-overlay-") as temp:
++            patched = pathlib.Path(temp) / fixture.name
++            overlay = pathlib.Path(temp) / "overlay.json"
++            text = fixture.read_text()
++            for old, new in [
++                ('c.Host != "127.0.0.1"', 'c.Host != "/var/run/postgresql"'),
++                ('"SHOW server_version"', '"SHOW server_version_num"'),
++                ('version != "18.7"', 'version != "180007"'),
++                ('type labTLS struct {', 'type labTLS struct {\n\tcaDER []byte'),
++                ('ca: ca, publish:', 'ca: ca, caDER: der, publish:'),
++            ]:
++                if text.count(old) != 1:
++                    raise RuntimeError("unexpected pinned test fixture")
++                text = text.replace(old, new)
++            patched.write_text(text)
++            overlay.write_text(json.dumps({"Replace": {
++                str(fixture): str(patched),
++                str(pkg / "processing_inventory_test.go"): str(probe),
++            }}))
++            self.command("build-iam-deletion-interop", [*go, "test", "-c", "-tags", "integration,hit148_probe",
++                         "-overlay", str(overlay), "-o", str(self.binaries / "iam-deletion.test"),
++                         "./internal/adapters/composition/casedeletion"])
++            self.command("build-iam-migrations", [*go, "build", "-trimpath",
++                         "-o", str(self.binaries / "iam-migrate"), "./cmd/iam-migrate"])
++            binaries.update(iam_source=IAM_SOURCE, iam_schema_sha256=IAM_SQL, overlay={
++                "source_fixture_sha256": self.sha(fixture),
++                "patched_fixture_sha256": self.sha(patched),
++                "test_sha256": self.sha(probe),
++            })
++        for name in ("iam-deletion.test", "iam-migrate"):
++            binaries["sha256"][name] = self.sha(self.binaries / name)
++        (self.output / "binaries.json").write_text(json.dumps(binaries, indent=2) + "\n")
++
++        db = "hit68_test_hit148"
++        self.sql("create-iam-db", "CREATE DATABASE "+db+"; REVOKE ALL ON DATABASE "+db+" FROM PUBLIC;",
++                 role="postgres", database="postgres")
++        self.sql("iam-bootstrap-roles", "\\i /iam-migration/bootstrap_roles.sql\n", role="postgres", database=db)
++        self.sql("iam-test-users",
++                 "CREATE ROLE hp_hit81_app LOGIN INHERIT; CREATE ROLE hit148_migrator LOGIN INHERIT;"
++                 "GRANT hp_iam_app TO hp_hit81_app; GRANT hp_iam_migrator TO hit148_migrator;"
++                 "GRANT CONNECT ON DATABASE "+db+" TO hp_hit81_app,hit148_migrator;",
++                 role="postgres", database=db)
++        dsn = "host=/var/run/postgresql dbname="+db+" sslmode=disable user="
++        self.command("iam-migration", ["docker", "exec", "-e",
++                     "HITPIPE_IAM_MIGRATOR_DSN="+dsn+"hit148_migrator options='-c role=hp_iam_migrator'",
++                     self.container, "/test/iam-migrate"])
++        self.command("real-iam-inventory", ["docker", "exec", "-e", "HITPIPE_IAM_TEST_ADMIN_DSN="+dsn+"postgres",
++                     "-e", "HITPIPE_IAM_TEST_APP_DSN="+dsn+"hp_hit81_app", self.container,
++                     "/test/iam-deletion.test", "-test.v", "-test.count=1", "-test.timeout=50s",
++                     "-test.run=^Test(ProcessingConsumesRealHIT154Inventory|PostgresCaseDeletionQualification)$"])
++
++    @staticmethod
++    def sha(file):
++        return hashlib.sha256(file.read_bytes()).hexdigest()
++
++    def main(self):
++        super().main()
++        path = self.output / "summary.json"
++        summary = json.loads(path.read_text())
++        summary.update(task="HIT-148", iam_source=IAM_SOURCE,
++                       scope="Pinned IAM mTLS, PostgreSQL owner confirmation, signed inventory. "
++                             "Processing observes only; no case deletion or serving transition.")
++        path.write_text(json.dumps(summary, indent=2) + "\n")
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    for name in ("output", "go", "iam"):
++        parser.add_argument("--"+name, type=pathlib.Path, required=True)
++    args = parser.parse_args()
++    with tempfile.TemporaryDirectory(prefix="hit148-build-") as binaries:
++        Run(args.output.resolve(), args.go, pathlib.Path(binaries), args.iam.resolve()).main()
+diff --git a/tools/hit148/inventory-probe.go b/tools/hit148/inventory-probe.go
+new file mode 100644
+index 0000000..d653bbd
+--- /dev/null
++++ b/tools/hit148/inventory-probe.go
+@@ -0,0 +1,148 @@
++//go:build hit148_probe && integration && linux
++
++// Added to the pinned IAM test package using a Go overlay. The Processing
++// executable makes its own authenticated request, outside the IAM process.
++package casedeletion_test
++
++import (
++	"crypto/ed25519"
++	"crypto/rand"
++	"crypto/tls"
++	"crypto/x509"
++	"encoding/json"
++	"encoding/pem"
++	"net"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"testing"
++	"time"
++
++	filereg "github.com/hitpipe/hitpipe/services/iam/internal/adapters/filestore/casedeletion"
++	httpreg "github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/casedeletion"
++	pgowner "github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/casedeletion"
++	app "github.com/hitpipe/hitpipe/services/iam/internal/application/casedeletion"
++	"github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess"
++)
++
++func TestProcessingConsumesRealHIT154Inventory(t *testing.T) {
++	now := time.Now().UTC().Truncate(time.Microsecond)
++	db := openFixtureDB(t, now)
++	owner, err := pgowner.New(db.iam, fixtureClock{now})
++	requireOK(t, err)
++	workspace, neighbor := db.workspaces[0], db.workspaces[1]
++	publisherDir, subordinateDir := filepath.Join(t.TempDir(), "authority"), filepath.Join(t.TempDir(), "copy")
++	requireOK(t, os.Mkdir(publisherDir, 0700))
++	requireOK(t, os.Mkdir(subordinateDir, 0700))
++	subordinate := &subordinateCopy{dir: subordinateDir}
++	// This is HIT-154's synthetic target authority. There is no deletion,
++	// application proof or serving transition in the Processing verification.
++	target := app.Target{Class: "HISTORY", VersionID: fixtureUUID()}
++	scope := app.Scope{WorkspaceID: workspace, CaseID: fixtureUUID(), Targets: []app.Target{target}}
++	requireOK(t, subordinate.save(copyState{Generation: 1, Items: []caseItem{{WorkspaceID: workspace, CaseID: scope.CaseID, Target: target, Detail: syntheticText}}}))
++	initial, err := app.NewState(labEnv)
++	requireOK(t, err)
++	store, err := filereg.Initialize(publisherDir, initial)
++	requireOK(t, err)
++	pub, private, err := ed25519.GenerateKey(rand.Reader)
++	requireOK(t, err)
++	publisherID := fixtureUUID()
++	r, err := app.New(app.Config{Environment: labEnv, PublisherID: publisherID,
++		ProcessingPeerID: processingPeer, SigningKey: private, Clock: func() time.Time { return now }}, store, owner, subordinate, subordinate)
++	requireOK(t, err)
++	for _, ws := range db.workspaces {
++		requireOK(t, r.ProvisionWorkspace(t.Context(), ws, 1))
++	}
++
++	keys := newLabTLS(t)
++	s, err := httpreg.NewServer(r, keys.publish, keys.ca, []httpreg.Peer{{ID: processingPeer, Workspaces: db.workspaces[:],
++		Transport: runtimeaccess.Peer{DNSName: "processing.test", CertificateFingerprint: pin(keys.read)}}})
++	requireOK(t, err)
++	l, err := net.Listen("tcp4", "127.0.0.1:0")
++	requireOK(t, err)
++	go s.ServeTLS(l, "", "")
++	defer s.Close()
++
++	dir := t.TempDir()
++	file := func(name string, data []byte) string {
++		p := filepath.Join(dir, name)
++		requireOK(t, os.WriteFile(p, data, 0600))
++		return p
++	}
++	pemFile := func(name, typ string, data []byte) string {
++		return file(name, pem.EncodeToMemory(&pem.Block{Type: typ, Bytes: data}))
++	}
++	credential := func(name string, leaf tls.Certificate) (string, string) {
++		private, err := x509.MarshalPKCS8PrivateKey(leaf.PrivateKey)
++		requireOK(t, err)
++		return pemFile(name+".pem", "CERTIFICATE", leaf.Certificate[0]), pemFile(name+".key", "PRIVATE KEY", private)
++	}
++	goodCert, goodKey := credential("trusted", keys.read)
++	foreignCert, foreignKey := credential("untrusted", keys.other)
++	publicDER, err := x509.MarshalPKIXPublicKey(pub)
++	requireOK(t, err)
++	foreignPub, _, err := ed25519.GenerateKey(rand.Reader)
++	requireOK(t, err)
++	foreignDER, err := x509.MarshalPKIXPublicKey(foreignPub)
++	requireOK(t, err)
++	ca := pemFile("ca.pem", "CERTIFICATE", keys.caDER)
++	pubFile := pemFile("publisher.pem", "PUBLIC KEY", publicDER)
++	badPubFile := pemFile("foreign-publisher.pem", "PUBLIC KEY", foreignDER)
++	run := func(label, ws string, generation int, serverPin, cert, key, signingKey string, wantExit, wantCount int) {
++		t.Helper()
++		cfg, err := json.Marshal(map[string]any{
++			"origin": "https://" + l.Addr().String(), "server_pin": serverPin, "publisher_id": publisherID,
++			"workspace_id": ws, "generation": generation, "ca": ca, "client_certificate": cert,
++			"client_key": key, "publisher_public_key": signingKey,
++		})
++		requireOK(t, err)
++		cmd := exec.CommandContext(t.Context(), "/test/processing-purge", "--local-stand", "--verify-deletion-inventory", file(label+".json", cfg))
++		out, err := cmd.CombinedOutput()
++		exit := 0
++		if err != nil {
++			exited, ok := err.(*exec.ExitError)
++			if !ok {
++				t.Fatal(err)
++			}
++			exit = exited.ExitCode()
++		}
++		if exit != wantExit {
++			t.Fatalf("%s: exit=%d want=%d output=%s", label, exit, wantExit, out)
++		}
++		if exit == 0 {
++			var view struct {
++				Workspace  string `json:"workspace_id"`
++				Generation int    `json:"generation"`
++				Revision   int    `json:"revision"`
++				Count      int    `json:"decision_count"`
++				Serving    string `json:"serving"`
++			}
++			if json.Unmarshal(out, &view) != nil || view.Workspace != ws || view.Generation != generation ||
++				view.Revision < 1 || view.Count != wantCount || view.Serving != "CLOSED" {
++				t.Fatalf("%s: wrong processing result %s", label, out)
++			}
++		}
++		t.Logf("%s: exit=%d %s", label, exit, out)
++	}
++	serverPin := pin(keys.publish)
++	run("signed-empty", workspace, 1, serverPin, goodCert, goodKey, pubFile, 0, 0)
++	run("neighbor-empty", neighbor, 1, serverPin, goodCert, goodKey, pubFile, 0, 0)
++	run("foreign-workspace", fixtureUUID(), 1, serverPin, goodCert, goodKey, pubFile, 1, 0)
++	run("unknown-generation", workspace, 2, serverPin, goodCert, goodKey, pubFile, 1, 0)
++	run("wrong-mTLS-client", workspace, 1, serverPin, foreignCert, foreignKey, pubFile, 1, 0)
++	run("wrong-server-pin", workspace, 1, pin(keys.other), goodCert, goodKey, pubFile, 1, 0)
++	run("wrong-signer", workspace, 1, serverPin, goodCert, goodKey, badPubFile, 1, 0)
++
++	offer, err := r.Prepare(t.Context(), db.session[0], scope)
++	requireOK(t, err)
++	code, err := offer.ConfirmationCode()
++	requireOK(t, err)
++	decision, err := r.Confirm(t.Context(), db.session[0], offer, code)
++	requireOK(t, err)
++	_, err = r.StartApplying(t.Context(), workspace, decision.DeletionID, 1)
++	requireOK(t, err)
++	run("owner-confirmed-applying", workspace, 1, serverPin, goodCert, goodKey, pubFile, 0, 1)
++	run("neighbor-stays-empty", neighbor, 1, serverPin, goodCert, goodKey, pubFile, 0, 0)
++	requireOK(t, s.Close())
++	run("no-current-source", workspace, 1, serverPin, goodCert, goodKey, pubFile, 1, 0)
++}
