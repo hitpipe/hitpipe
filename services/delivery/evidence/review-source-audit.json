@@ -1,0 +1,220 @@
+{
+  "subject": "HIT-70",
+  "purpose": "Сверка исходников, протокола запуска и материалов сборки для повторного ревью",
+  "scope": "Миграция Delivery и изолированный SQL-стенд. Стенд использует стандартную библиотеку Python, git и Docker. Go runtime, Go codegen, Python AI, frontend, edge и Keycloak относятся к другим частям стека и при этом запуске не используются.",
+  "stack_manifest": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+  "stack_readback": [
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/README.md",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "bd1265f428e1777c1d9024595630be0ec40dd1a80cc164e62b3ba57e07687f42",
+      "bytes": 1608,
+      "applicable": true,
+      "content": "# Exact compatibility inputs for HitPipe Architecture candidate\n\nThese are exact tested dependency and tool manifests, not an implemented HitPipe platform. `go-runtime` is the compatibility fixture dependency set including selected JCS v1.0.2; its fixture module identity is intentional. Service owners initialize their own modules and select the relevant dependency subset without changing pins silently. `go-codegen` pins the generator and transitive compiler inputs. Frontend and Python manifests are the actual compatibility-spike locks, not new product features. SDKs, caches, node_modules, browsers and secrets are excluded.\n\n`github.com/gowebpki/jcs v1.0.2` is selected for durable Go→Go message canonicalization only. Python AI and Next BFF do not originate these durable messages in MVP and do not require a second JCS implementation. Apache-2.0 license is verified from the upstream exact release source. Standard JSON sorting/serialization is not substituted for JCS. Its upstream module declares Go1.21 and no nonstandard production imports; compatibility was actually tested with Go1.27.2. Test-only dependency declarations are distinct from runtime imports.\n\nObserved compatibility evidence is under `checks/stack/results` and `checks/formal` in the source package. These fixtures confirm lock resolution, production frontend build, bounded browser/unit/generator/transport/schema checks. They do not claim live provider permissions, full product E2E, release SLOs, distributed revocation correctness or deployment qualification. Changes require relevant revalidation and revised exact pins.\n",
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/README.md",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/edge-pin.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "fbcc8aab7cd8efae5287fd0833d455bf93bbdb8e169c8e47e9e3879cdcaa4af9",
+      "bytes": 320,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/edge-pin.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "031f7da81ff6aeed35a10504578af0ba47178d4b75ab00d548df3a0f29e36d09",
+      "bytes": 73868,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package-lock.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "40814c46b99b5359fdb66d280ebcabeeba5d1a16466487d219322271c558a0df",
+      "bytes": 730,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/package.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/types/urlpattern-compat.d.ts",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "843bdcafb604b4d4c24ded486c9c04e03f7d77fef8b056b334c2994e3c0a979d",
+      "bytes": 575,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/frontend/types/urlpattern-compat.d.ts",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-codegen/go.mod",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "f09c985e3154660e88f9a1f0194d37e657257bba6ee83fd17778072b1d77b9ad",
+      "bytes": 1063,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-codegen/go.mod",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-codegen/go.sum",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "a66e4abc6a5e574b845abddced367717dcf3f5a1a4473c2f3ba04bf1ba493a94",
+      "bytes": 17167,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-codegen/go.sum",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/LICENSE.JCS",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/LICENSE.JCS",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/go.mod",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "21718fdc33cc34816c6014d90cc6243a768d89a32b1fd1786d8e31185f526639",
+      "bytes": 1844,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/go.mod",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/go.sum",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "56dc0bdaf6a994f5ec587eb18a78bcd68c6c04320e1048d0a2842a7996caa9db",
+      "bytes": 9188,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/go.sum",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/jcs_test.go",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "17381facedf72ad626be2d49d2b04aca5cd3bff3f3ac749d9c481dd9ad359430",
+      "bytes": 1855,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/go-runtime/jcs_test.go",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/inventory.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "9facd5fc54409e874d9ddcda54c07dcbffe19eb0cfabf3faa39649368d7b95ad",
+      "bytes": 2736,
+      "applicable": true,
+      "content": "{\n  \"timestamp_utc\": \"2026-10-16T20:46:40.301779+00:00\",\n  \"files\": [\n    {\n      \"path\": \"formal/stack/README.md\",\n      \"sha256\": \"bd1265f428e1777c1d9024595630be0ec40dd1a80cc164e62b3ba57e07687f42\",\n      \"bytes\": 1608\n    },\n    {\n      \"path\": \"formal/stack/edge-pin.json\",\n      \"sha256\": \"fbcc8aab7cd8efae5287fd0833d455bf93bbdb8e169c8e47e9e3879cdcaa4af9\",\n      \"bytes\": 320\n    },\n    {\n      \"path\": \"formal/stack/frontend/package-lock.json\",\n      \"sha256\": \"031f7da81ff6aeed35a10504578af0ba47178d4b75ab00d548df3a0f29e36d09\",\n      \"bytes\": 73868\n    },\n    {\n      \"path\": \"formal/stack/frontend/package.json\",\n      \"sha256\": \"40814c46b99b5359fdb66d280ebcabeeba5d1a16466487d219322271c558a0df\",\n      \"bytes\": 730\n    },\n    {\n      \"path\": \"formal/stack/frontend/types/urlpattern-compat.d.ts\",\n      \"sha256\": \"843bdcafb604b4d4c24ded486c9c04e03f7d77fef8b056b334c2994e3c0a979d\",\n      \"bytes\": 575\n    },\n    {\n      \"path\": \"formal/stack/go-codegen/go.mod\",\n      \"sha256\": \"f09c985e3154660e88f9a1f0194d37e657257bba6ee83fd17778072b1d77b9ad\",\n      \"bytes\": 1063\n    },\n    {\n      \"path\": \"formal/stack/go-codegen/go.sum\",\n      \"sha256\": \"a66e4abc6a5e574b845abddced367717dcf3f5a1a4473c2f3ba04bf1ba493a94\",\n      \"bytes\": 17167\n    },\n    {\n      \"path\": \"formal/stack/go-runtime/LICENSE.JCS\",\n      \"sha256\": \"cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30\",\n      \"bytes\": 11358\n    },\n    {\n      \"path\": \"formal/stack/go-runtime/go.mod\",\n      \"sha256\": \"21718fdc33cc34816c6014d90cc6243a768d89a32b1fd1786d8e31185f526639\",\n      \"bytes\": 1844\n    },\n    {\n      \"path\": \"formal/stack/go-runtime/go.sum\",\n      \"sha256\": \"56dc0bdaf6a994f5ec587eb18a78bcd68c6c04320e1048d0a2842a7996caa9db\",\n      \"bytes\": 9188\n    },\n    {\n      \"path\": \"formal/stack/go-runtime/jcs_test.go\",\n      \"sha256\": \"17381facedf72ad626be2d49d2b04aca5cd3bff3f3ac749d9c481dd9ad359430\",\n      \"bytes\": 1855\n    },\n    {\n      \"path\": \"formal/stack/jcs-origin.json\",\n      \"sha256\": \"527d663879e89616efe212ad45a1e51c26bec544690820a4a26e74cdfb496e05\",\n      \"bytes\": 188\n    },\n    {\n      \"path\": \"formal/stack/licenses.json\",\n      \"sha256\": \"a358bccf5613e164305464b494d5ef654b05971c97d51e55703f385d5015cc94\",\n      \"bytes\": 1972\n    },\n    {\n      \"path\": \"formal/stack/oci-pins.json\",\n      \"sha256\": \"c6183638aefc3123e9e4a5707e19e9631666db84083a9d4a816a552fa4cd37b9\",\n      \"bytes\": 4209\n    },\n    {\n      \"path\": \"formal/stack/python/pyproject.toml\",\n      \"sha256\": \"d7daba2c2fa0bda412157af5cc71e3974039d1d2bc0b54ad8eeb1b85c79a5169\",\n      \"bytes\": 258\n    },\n    {\n      \"path\": \"formal/stack/python/uv.lock\",\n      \"sha256\": \"fc7eeb8210ee6d7344ac3c70f0d8075062bed1c5cd4caf963839f08af0ecfdc3\",\n      \"bytes\": 25031\n    }\n  ]\n}\n",
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/inventory.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/jcs-origin.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "527d663879e89616efe212ad45a1e51c26bec544690820a4a26e74cdfb496e05",
+      "bytes": 188,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/jcs-origin.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/licenses.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "a358bccf5613e164305464b494d5ef654b05971c97d51e55703f385d5015cc94",
+      "bytes": 1972,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/licenses.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/oci-pins.json",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "c6183638aefc3123e9e4a5707e19e9631666db84083a9d4a816a552fa4cd37b9",
+      "bytes": 4209,
+      "applicable": true,
+      "content": "{\n  \"captured_utc\": \"2026-10-16T19:52:28.304897+00:00\",\n  \"method\": \"Registry manifest bytes digest check, without pulling or executing images; signed artifact verification not performed\",\n  \"images\": [\n    {\n      \"image\": \"docker.io/library/postgres\",\n      \"tag\": \"18.6-alpine\",\n      \"index_digest\": \"sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:d8703cd7fba306b9fec9268ecedfa8a966846c053036a60e3635791957eb2f66\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:89f747171c4b0af0eacf5984550060be79786dbe286eb60cfa691d79d1e8b23f\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\",\n            \"variant\": \"v8\"\n          }\n        }\n      ]\n    },\n    {\n      \"image\": \"docker.io/library/postgres\",\n      \"tag\": \"18.6-bookworm\",\n      \"index_digest\": \"sha256:afc7e2d441324c0388fa80c3d24f733b4194a4eb7f47dd8ee2b08eb1a24a647c\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:9551dd5bf356409a21b31248f49b33bba9bb1877365f3a7e933aecd9af3cf52d\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:67ba68a22dc7d5af3627b7e0f33d10bbefad07562ff9703b3a6c2de247649129\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\",\n            \"variant\": \"v8\"\n          }\n        }\n      ]\n    },\n    {\n      \"image\": \"docker.io/library/node\",\n      \"tag\": \"24.22.0-bookworm-slim\",\n      \"index_digest\": \"sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:ec857ea6bb60cb3d0fa4d97495590c5fe7d51be8572c307b55957eeb06569cf7\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:156e9bc7a0a267cc6ca77b4283e32b123479342df684ce297455d7b95ff5a6b5\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\",\n            \"variant\": \"v8\"\n          }\n        }\n      ]\n    },\n    {\n      \"image\": \"docker.io/library/python\",\n      \"tag\": \"3.14.8-slim-bookworm\",\n      \"index_digest\": \"sha256:48b13b003dda20b16f9442b8475aa05fe21bf6579a8c881db92ffb4d8fd20f83\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:a66d3a463d0be3cc537c269b0d3418746dda512417a975559a0eaa8a6406baaf\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:0e24db28cf5b7788413afe3fdc63075ca22bc4ecf74f5472304b391c2110e629\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\",\n            \"variant\": \"v8\"\n          }\n        }\n      ]\n    },\n    {\n      \"image\": \"docker.io/library/golang\",\n      \"tag\": \"1.27.2-bookworm\",\n      \"index_digest\": \"sha256:5cf287a799e6b94384bad13d16b14904c531f51ba65792237e122ce42b392f61\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:2bcff0c6ad6e8c5353e8c0d5c7f17bfcc87d667d0169615e34db1acc0db985b9\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\",\n            \"variant\": \"v8\"\n          }\n        }\n      ]\n    },\n    {\n      \"image\": \"quay.io/keycloak/keycloak\",\n      \"tag\": \"26.8.1\",\n      \"index_digest\": \"sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244\",\n      \"platforms\": [\n        {\n          \"digest\": \"sha256:ed1cab21814c7d18ce8f0e11d5a1fa1c6923de12dd4c7625a18c5d34452a57a4\",\n          \"platform\": {\n            \"architecture\": \"amd64\",\n            \"os\": \"linux\"\n          }\n        },\n        {\n          \"digest\": \"sha256:5cc3f249dea86003ccd0377077a3cc70cbf24686bd2a86260ef85ab1aebc9eda\",\n          \"platform\": {\n            \"architecture\": \"arm64\",\n            \"os\": \"linux\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/oci-pins.json",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/python/pyproject.toml",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "d7daba2c2fa0bda412157af5cc71e3974039d1d2bc0b54ad8eeb1b85c79a5169",
+      "bytes": 258,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/python/pyproject.toml",
+      "bytes_and_sha256_verified": true
+    },
+    {
+      "path": "contracts/hitpipe/architecture-2026-10-16/formal/stack/python/uv.lock",
+      "revision": "84249ff3ba611358232294c46f6022f030ea223d",
+      "sha256": "fc7eeb8210ee6d7344ac3c70f0d8075062bed1c5cd4caf963839f08af0ecfdc3",
+      "bytes": 25031,
+      "applicable": false,
+      "ref": "https://github.com/hitpipe/project-os/blob/84249ff3ba611358232294c46f6022f030ea223d/contracts/hitpipe/architecture-2026-10-16/formal/stack/python/uv.lock",
+      "bytes_and_sha256_verified": true
+    }
+  ],
+  "postgres_patch": {
+    "ref": "d9eb399d9cc0528f1beae6153851ab5020741ea5",
+    "path": "contracts/hitpipe/security-2026-11-14/postgres-18.7-images.json",
+    "sha256": "29531e2c28678b5e5e7052ba416a83d6535176da7127a43bc032e10aaae7301e",
+    "digest": "sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366",
+    "replaces": "18.6 Alpine linux/amd64",
+    "selected": "18.7 Alpine linux/amd64",
+    "manifest": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/postgres-18.7-images.json"
+  },
+  "tested_files": [
+    {
+      "path": "services/delivery/migrations/001_delivery.sql",
+      "tested_commit": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+      "compared_head": "465cabdc1ca7a83a88ae1b9aaa8cd6678a9a7455",
+      "sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+      "identical": true
+    },
+    {
+      "path": "services/delivery/tests/check_schema.py",
+      "tested_commit": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+      "compared_head": "465cabdc1ca7a83a88ae1b9aaa8cd6678a9a7455",
+      "sha256": "9c7606fc5dd9f394fc65daee19fc744ffd0c74a2544f000536b442ec9622ca29",
+      "identical": true
+    }
+  ],
+  "check_scope": {
+    "migration": "Полные байты 001_delivery.sql совпали с formal/sql/delivery.sql на fedbe40bb597e25f66aeb1172af3ff7459c81b40.",
+    "privileges": "Для 12 таблиц и 3 ролей тест сверяет has_table_privilege с явно выбранными ожидаемыми t/f. Прямые отрицательные операции дополнительно проверяют ожидаемый текст ошибки PostgreSQL.",
+    "lineage": "Второй lineage_id при том же case/effect проверяется по имени конкретного ограничения уникальности.",
+    "run": "Протокол 415 PASS и invocation.json относятся к b7eba4a. Проверены команда, exit 0, digest образа и соответствие SHA-256 обоих файлов."
+  },
+  "baseline_delivery": {
+    "ref": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "command": "git ls-tree -r --name-only ce771d37505e7770003d0796ae932556d06b7bab -- services/delivery",
+    "paths": [],
+    "interpretation": "На исходной ревизии main отсутствует services/delivery. Применимые существующие тесты Delivery отсутствовали. Учебный PR12 останавливается до прикладных проверок (lab-component.json is missing).",
+    "ci_run": "https://github.com/hitpipe/hitpipe/actions/runs/44309340631"
+  },
+  "invocation": {
+    "command": [
+      "python3",
+      "services/delivery/tests/check_schema.py",
+      "--report",
+      "/home/deploy/hitpipe-pg187-delivery-20261114/audit/DeliveryPG18720261114/postgresql.json"
+    ],
+    "cwd": "/home/deploy/hitpipe-pg187-delivery-20261114",
+    "started_utc": "2026-11-14T09:50:51.866772+00:00",
+    "source_revision": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+    "free_before_run": 775954432,
+    "deployment_reserve_bytes": 681574400,
+    "image": "docker.io/library/postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366",
+    "scope": "One real isolated Delivery schema harness run; no existing database or live service",
+    "finished_utc": "2026-11-14T09:51:46.578193+00:00",
+    "exit_code": 0,
+    "free_after_run": 775847936
+  }
+}

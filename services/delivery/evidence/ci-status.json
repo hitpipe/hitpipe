@@ -1,0 +1,16 @@
+{
+  "subject": "HIT-70",
+  "pull_request": "https://github.com/hitpipe/hitpipe/pull/49",
+  "head": "a7cdfc62ee829cd91de2d6d78dd6df74ad5031e5",
+  "workflow": ".github/workflows/pr12-ds.yml",
+  "run": "https://github.com/hitpipe/hitpipe/actions/runs/43576499951",
+  "job_id": 132391775544,
+  "conclusion": "failure",
+  "failed_step": "Report actual implementation state",
+  "command": "python3 tools/pr12/workspace.py status delivery",
+  "exit_code": 1,
+  "error": "delivery: module files exist or component is required, but lab-component.json is missing",
+  "delivery_test_steps": "skipped",
+  "meaning": "Старый учебный wrapper отвергает любую заполненную папку services/delivery без учебного manifest. Проверки новой SQL-миграции этот workflow не запускает. Локальные 414 проверок не объявляются успешным CI.",
+  "resolution_needed": "Владельцу репозитория согласовать актуальный CI-маршрут Delivery вместо обязательного manifest выведенной учебной очереди. Изменение .github/workflows и tools/pr12 выходит за объявленную область services/delivery; в HIT-70 эти файлы и исторические задачи не изменены."
+}
