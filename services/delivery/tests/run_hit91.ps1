@@ -11,6 +11,7 @@ $migration = Join-Path ([System.IO.Path]::GetTempPath()) "$run.sql"
 $sql = [System.IO.File]::ReadAllText((Join-Path $module 'migrations/001_delivery.sql')) -replace '\r\n', "`n"
 $app = "postgresql://hp_delivery_app@$($run)-pg/delivery?sslmode=disable&pool_max_conns=5"
 $admin = "postgresql://postgres@$($run)-pg/delivery?sslmode=disable&pool_max_conns=2"
+$worker = "postgresql://hp_delivery_worker@$($run)-pg/delivery?sslmode=disable&pool_max_conns=8"
 $mounts = @('--mount', "type=bind,source=$module,target=/src,readonly",
             '--mount', "type=volume,source=$run,target=/go/pkg/mod")
 function Invoke-Docker {
@@ -45,7 +46,8 @@ try {
     Invoke-Docker exec "$run-pg" psql -U postgres -d delivery -f /tmp/hit91_fixture.sql
     Invoke-Docker exec "$run-pg" psql -U postgres -d delivery -c "SELECT version(),current_setting('fsync') AS fsync,current_setting('full_page_writes') AS full_page_writes,current_setting('synchronous_commit') AS synchronous_commit"
     $runnerEnvironment = @('-e', 'GOPROXY=off', '-e', 'GOSUMDB=off', '-e', 'HIT91_REQUIRE_POSTGRES=1',
-                           '-e', "HIT91_TEST_APP_DSN=$app", '-e', "HIT91_TEST_ADMIN_DSN=$admin")
+                           '-e', "HIT91_TEST_APP_DSN=$app", '-e', "HIT91_TEST_ADMIN_DSN=$admin",
+                           '-e', 'HIT92_REQUIRE_POSTGRES=1', '-e', "HIT92_TEST_WORKER_DSN=$worker")
     Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment $go sh -ec 'go version; go test -v -race -count=1 ./...; echo go-test-exit=0; go vet ./...; echo go-vet-exit=0'
 } finally {
     & docker rm -f -v "$run-pg" 2>$null
