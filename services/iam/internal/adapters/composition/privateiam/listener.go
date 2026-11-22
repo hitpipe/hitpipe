@@ -17,6 +17,14 @@ import (
 // The caller controls startup with Start; the listener can receive bootstrap
 // registration while protected authorization is still closed.
 func (s *Server) Listen(ctx context.Context, address string, certificate tls.Certificate, clientCAs *x509.CertPool) error {
+	handler, err := transport.New(s)
+	if err != nil {
+		return err
+	}
+	return s.listen(ctx, address, certificate, clientCAs, handler)
+}
+
+func (s *Server) listen(ctx context.Context, address string, certificate tls.Certificate, clientCAs *x509.CertPool, handler http.Handler) error {
 	host, port, err := net.SplitHostPort(address)
 	ip := net.ParseIP(host)
 	if err != nil || port != "8443" || ip == nil || !(ip.IsPrivate() || ip.IsLoopback()) {
@@ -30,11 +38,6 @@ func (s *Server) Listen(ctx context.Context, address string, certificate tls.Cer
 	if err != nil {
 		return err
 	}
-	handler, err := transport.New(s)
-	if err != nil {
-		return err
-	}
-
 	listener, err := (&net.ListenConfig{}).Listen(ctx, "tcp", address)
 	if err != nil {
 		return runtimeaccess.ErrUnavailable

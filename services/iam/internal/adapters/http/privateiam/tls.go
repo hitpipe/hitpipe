@@ -96,3 +96,9 @@ func certificatePeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
 	digest := sha256.Sum256(leaf.Raw)
 	return runtimeaccess.Peer{DNSName: strings.ToLower(leaf.DNSNames[0]), CertificateFingerprint: "sha256:" + hex.EncodeToString(digest[:])}, nil
 }
+
+// TransportPeer exposes the accepted mTLS peer decoding to adjacent owner
+// handlers. They still check the peer against their own trusted allowlist.
+func TransportPeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
+	return transportPeer(state)
+}
