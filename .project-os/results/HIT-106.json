@@ -1,0 +1,417 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-106",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Браузерный HTTPS-вход через Keycloak 26.8.1 выдаёт непрозрачную сессию HitPipe. На отдельном стенде проверены одноразовый email-код и независимые аккаунты с одинаковым подтверждённым адресом.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
+    "code_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+    "review_base_ref": "codex/hit-106-dependencies",
+    "review_head_ref": "codex/hit-106-oidc-login",
+    "dependency_heads": {
+      "HIT-68": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "HIT-81_PR55": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "HIT-82_PR56": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+      "HIT-83_PR60": "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
+      "HIT-105_PR69": "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd"
+    },
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/README.md"
+  },
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/adapters/http",
+    "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/adapters/oidc",
+    "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/internal/application/oidclogin",
+    "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-lab",
+    "https://github.com/hitpipe/hitpipe/tree/4d8c9772604b1f7d4d79e35c552f44a6984e7787/services/iam/tools/hit106-server",
+    "https://github.com/hitpipe/hitpipe/tree/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362"
+  ],
+  "verification": {
+    "tested_code_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+    "environment": "Отдельная Ubuntu 24.04.5 VM, Go 1.27.2, Keycloak 26.8.1, PostgreSQL 18.7, Chromium 159 и Mailpit 1.33.1.",
+    "protocol_ref": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/verification.json",
+    "postgres_transaction_proof": "https://github.com/hitpipe/hitpipe/blob/8b1294f24de4543ac95b918e47527c0233968195/services/iam/evidence/HIT-106/rework-15362/postgres/postgres-race.log",
+    "postgres_skipped": [
+      "TestHIT82LatencySamples"
+    ],
+    "session_policy_output": [
+      "HIT-106 session policy verified PostgreSQL rows=7 absolute=24h0m0s idle=8h0m0s",
+      "Synthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired"
+    ],
+    "sources": {
+      "services/iam/evidence/HIT-106/rework-15362": {
+        "commit": "8b1294f24de4543ac95b918e47527c0233968195",
+        "files": {
+          "browser.log": {
+            "sha256": "6203e522782d67510f5eaf90e38772c8cfa0cad4e9adf815072660fea79b027a",
+            "text": "4d8c9772604b1f7d4d79e35c552f44a6984e7787\n\n$ npm ci --no-audit --no-fund\n\nadded 2 packages in 627ms\nexit=0\n\n$ env HIT106_ISOLATED_LAB=1 ./run.sh\n#1 [internal] load local bake definitions\n#1 reading from stdin 587B done\n#1 DONE 0.0s\n\n#2 [internal] load build definition from Dockerfile\n#2 transferring dockerfile: 925B done\n#2 DONE 0.0s\n\n#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237\n#3 DONE 0.1s\n\n#4 [internal] load metadata for quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244\n#4 DONE 0.1s\n\n#5 [internal] load .dockerignore\n#5 transferring context: 115B done\n#5 DONE 0.0s\n\n#6 [provider 1/5] FROM docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237\n#6 resolve docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237 0.1s done\n#6 DONE 0.1s\n\n#7 [stage-1 1/4] FROM quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244\n#7 resolve quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244 0.1s done\n#7 DONE 0.1s\n\n#8 [internal] load build context\n#8 transferring context: 69.34kB 0.0s done\n#8 DONE 0.0s\n\n#9 [provider 3/5] COPY pom.xml .\n#9 CACHED\n\n#10 [stage-1 2/4] COPY --from=provider --chown=1000:0 --chmod=0644 /build/target/hitpipe-keycloak-email-code.jar /opt/keycloak/providers/hitpipe-keycloak-email-code.jar\n#10 CACHED\n\n#11 [stage-1 3/4] COPY --chown=1000:0 --chmod=0644 realm/hit105-test-realm.json /opt/keycloak/data/import/hit105-test-realm.json\n#11 CACHED\n\n#12 [provider 4/5] COPY src ./src\n#12 CACHED\n\n#13 [provider 5/5] RUN --mount=type=cache,id=hit105-email-maven,target=/root/.m2/repository,sharing=locked     mvn --batch-mode --no-transfer-progress package\n#13 CACHED\n\n#14 [provider 2/5] WORKDIR /build\n#14 CACHED\n\n#15 [stage-1 4/4] RUN chmod 0755 /opt/keycloak/data/import     && touch -m --date=@1794873600 /opt/keycloak/providers/hitpipe-keycloak-email-code.jar     && /opt/keycloak/bin/kc.sh build --db=postgres\n#15 CACHED\n\n#16 exporting to image\n#16 exporting layers done\n#16 exporting manifest sha256:a20ac6f7993e302d28ab0e876367a2297a24d601b832ddbe1a09ca6e543ed7f4 0.0s done\n#16 exporting config sha256:37b54dbdf3718852b6fe7515fbbb95297f5e408cca29776a74956c42d2d3da08\n#16 exporting config sha256:37b54dbdf3718852b6fe7515fbbb95297f5e408cca29776a74956c42d2d3da08 0.0s done\n#16 exporting attestation manifest sha256:e503ee8d9a533951d809faf08e108dd7844acd28b75728a1fbb2fdf8c2153e45\n#16 exporting attestation manifest sha256:e503ee8d9a533951d809faf08e108dd7844acd28b75728a1fbb2fdf8c2153e45 0.1s done\n#16 exporting manifest list sha256:a4980f3ad2d077dad58a4e5714583e9cc12dd2c00a872e33f600318135137944 0.0s done\n#16 naming to docker.io/library/hit106-keycloak-email-code:local done\n#16 unpacking to docker.io/library/hit106-keycloak-email-code:local 0.0s done\n#16 DONE 0.3s\n\n#17 resolving provenance for metadata file\n#17 DONE 0.0s\n hit106-keycloak-email-code:local  Built\n Network hit106-browser-lab_lab  Creating\n Network hit106-browser-lab_lab  Created\n Container hit106-browser-lab-iam-db-1  Creating\n Container hit106-browser-lab-idp-db-1  Creating\n Container hit106-browser-lab-smtp-1  Creating\n Container hit106-browser-lab-smtp-1  Created\n Container hit106-browser-lab-idp-db-1  Created\n Container hit106-browser-lab-idp-1  Creating\n Container hit106-browser-lab-iam-db-1  Created\n Container hit106-browser-lab-idp-1  Created\n Container hit106-browser-lab-idp-db-1  Starting\n Container hit106-browser-lab-smtp-1  Starting\n Container hit106-browser-lab-iam-db-1  Starting\n Container hit106-browser-lab-idp-db-1  Started\n Container hit106-browser-lab-iam-db-1  Started\n Container hit106-browser-lab-smtp-1  Started\n Container hit106-browser-lab-idp-db-1  Waiting\n Container hit106-browser-lab-idp-db-1  Healthy\n Container hit106-browser-lab-idp-1  Starting\n Container hit106-browser-lab-idp-1  Started\nIAM PostgreSQL 18.7 migration: installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7\nIAM PostgreSQL 18.7 migration: already_installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7\nAppending additional Java properties to JAVA_OPTS\nKeycloak 26.8.1\nJVM: 21.0.12.1 (Red Hat, Inc. OpenJDK 64-Bit Server VM 21.0.12.1+1-LTS)\nOS: Linux 6.8.0-147-generic amd64\npostgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)\npostgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)\n/mailpit v1.33.1 compiled with go1.27.3 on linux/amd64\nv22.23.5\nChromium 159.0.8154.6 (verified local CA; HTTPS errors enforced)\nPASS HTTPS registration requires email-code, then issues one real IAM session\nPASS concurrent replay of the completed callback creates no independent sessions\nPASS an existing session cannot be replaced without the revocation coordinator\nPASS the confirmed user signs in again with a fresh attempt and the same principal\nPASS foreign or missing state and browser authority assertions do not create a session\nPASS cancelling an attempt also blocks a later genuine IdP callback for that state\nPASS a genuine callback after IAM restart fails with the lost one-use attempt\nPASS a genuine unverified-email claim from the test IdP cannot create a session\nPASS HTTPS email code rejects wrong digits and locks after five attempts, including the genuine code\nPASS HTTPS email code rejects the expired genuine mail without consuming it or signing in\nPASS HTTPS email-code resend enforces cooldown, invalidates old digits and rejects reuse after verification\nPASS HTTPS email code enforces five sends in the rolling hour and accepts a send when the oldest leaves the window\nPASS two concurrent HTTPS submissions of one genuine email code yield exactly one authorization and one IAM session\nPASS two Keycloak subjects with the same verified email remain distinct HitPipe principals\nHIT-106 session policy verified PostgreSQL rows=7 absolute=24h0m0s idle=8h0m0s\nSynthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired\nexit=0\n"
+          },
+          "go.log": {
+            "sha256": "c76289a24472eb9ad31c9a3fbc28a657d1e6dfe83c04da4dd77132dddbb677ed",
+            "text": "4d8c9772604b1f7d4d79e35c552f44a6984e7787\n\n$ go test -race -count=1 ./...\nok  \tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck\t1.071s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate\t1.022s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system\t1.023s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup\t1.039s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/http\t1.042s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/oidc\t3.403s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations\t1.028s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer\t1.025s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup\t1.325s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession\t1.025s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/application/issuesession\t1.035s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/application/oidclogin\t1.037s\nok  \tgithub.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy\t1.022s\nexit=0\n\n$ go vet ./...\nexit=0\n\n$ go build ./...\nexit=0\n\n$ go vet -tags hit106lab ./tools/hit106-server\nexit=0\n\n$ go build -tags hit106lab -o /work/hit106/4d8c977260.K32vk1/iam-browser-check ./tools/hit106-server\nexit=0\n\n$ bash -n tools/hit106-lab/run.sh\nexit=0\n\n$ node --check tools/hit106-lab/browser.mjs\nexit=0\n\n$ node --check tools/hit106-lab/email-code-scenarios.mjs\nexit=0\n\n$ node --check tools/hit106-lab/same-email-scenario.mjs\nexit=0\n"
+          },
+          "postgres-driver.log": {
+            "sha256": "fa353ba0884cf3c8ef9916199f94171c4b9bf9cdf194158b2a443bd3d90aef59",
+            "text": "4d8c9772604b1f7d4d79e35c552f44a6984e7787\n\n$ python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/4d8c977260.K32vk1/postgres\n{\"name\": \"bootstrap-roles\", \"command\": [\"docker\", \"exec\", \"-i\", \"hit83-pg-b4c894707f34\", \"psql\", \"-X\", \"-v\", \"ON_ERROR_STOP=1\", \"-U\", \"postgres\", \"-d\", \"hit68_test_b4c894707f34\"], \"exit_code\": 0, \"elapsed_seconds\": 0.111, \"log\": \"bootstrap-roles.log\", \"log_sha256\": \"870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322\", \"stdin_sha256\": \"e67a1c56e3b1a1a98ee73ea4f746e8ca43cf9334c3c7878e899ff17b502a3673\"}\n{\"name\": \"test-logins\", \"command\": [\"docker\", \"exec\", \"-i\", \"hit83-pg-b4c894707f34\", \"psql\", \"-X\", \"-v\", \"ON_ERROR_STOP=1\", \"-U\", \"postgres\", \"-d\", \"hit68_test_b4c894707f34\"], \"exit_code\": 0, \"elapsed_seconds\": 0.096, \"log\": \"test-logins.log\", \"log_sha256\": \"317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7\", \"stdin_sha256\": \"a9ca152c541da9642457da816f627ed4f0e3f4d759929edb8c02fea031913827\"}\n{\"name\": \"migration-role-tcp\", \"command\": [\"docker\", \"exec\", \"-i\", \"hit83-pg-b4c894707f34\", \"psql\", \"-X\", \"-v\", \"ON_ERROR_STOP=1\", \"-h\", \"127.0.0.1\", \"-U\", \"hp_hit81_migration\", \"-d\", \"hit68_test_b4c894707f34\", \"-Atc\", \"SET ROLE hp_iam_migrator; SELECT current_user,session_user;\"], \"exit_code\": 0, \"elapsed_seconds\": 0.098, \"log\": \"migration-role-tcp.log\", \"log_sha256\": \"a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4\"}\n{\"name\": \"migration-startup-role\", \"command\": [\"docker\", \"exec\", \"-i\", \"--env\", \"PGOPTIONS=-c role=hp_iam_migrator\", \"hit83-pg-b4c894707f34\", \"psql\", \"-X\", \"-v\", \"ON_ERROR_STOP=1\", \"-h\", \"127.0.0.1\", \"-U\", \"hp_hit81_migration\", \"-d\", \"hit68_test_b4c894707f34\", \"-Atc\", \"SELECT current_user,session_user;\"], \"exit_code\": 0, \"elapsed_seconds\": 0.157, \"log\": \"migration-startup-role.log\", \"log_sha256\": \"fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771\"}\n{\"name\": \"migration-install\", \"command\": [\"go\", \"run\", \"-p\", \"1\", \"./cmd/iam-migrate\"], \"exit_code\": 0, \"elapsed_seconds\": 1.302, \"log\": \"migration-install.log\", \"log_sha256\": \"d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f\"}\n{\"name\": \"migration-repeat\", \"command\": [\"go\", \"run\", \"-p\", \"1\", \"./cmd/iam-migrate\"], \"exit_code\": 0, \"elapsed_seconds\": 0.33, \"log\": \"migration-repeat.log\", \"log_sha256\": \"e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4\"}\n{\"name\": \"read-only-lookup\", \"command\": [\"docker\", \"exec\", \"-i\", \"hit83-pg-b4c894707f34\", \"psql\", \"-X\", \"-v\", \"ON_ERROR_STOP=1\", \"-U\", \"postgres\", \"-d\", \"hit68_test_b4c894707f34\"], \"exit_code\": 0, \"elapsed_seconds\": 0.168, \"log\": \"read-only-lookup.log\", \"log_sha256\": \"cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76\", \"stdin_sha256\": \"aa9ac4f7ebcb8e8116afce0064242fe5605ca63ef37d3a0f7807ccd7e7ebf383\"}\n{\"name\": \"unit\", \"command\": [\"go\", \"test\", \"-p\", \"1\", \"-count=1\", \"./...\"], \"exit_code\": 0, \"elapsed_seconds\": 10.736, \"log\": \"unit.log\", \"log_sha256\": \"0108f0b36b80a96b98120c204049bd0d3cd846de955fbdc5853f017d72eb91ed\"}\n{\"name\": \"postgres-race\", \"command\": [\"go\", \"test\", \"-p\", \"1\", \"-tags=integration\", \"-race\", \"-count=1\", \"-v\", \"./...\"], \"exit_code\": 0, \"elapsed_seconds\": 43.226, \"log\": \"postgres-race.log\", \"log_sha256\": \"9f53c64d0f2d72b1c28246303f215a779b8faedef65430ae477229785e45a0ee\"}\n{\"name\": \"vet\", \"command\": [\"go\", \"vet\", \"-p\", \"1\", \"-tags=integration\", \"./...\"], \"exit_code\": 0, \"elapsed_seconds\": 1.843, \"log\": \"vet.log\", \"log_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"}\n{\"name\": \"build\", \"command\": [\"go\", \"build\", \"-p\", \"1\", \"./...\"], \"exit_code\": 0, \"elapsed_seconds\": 1.809, \"log\": \"build.log\", \"log_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"}\nexit=0\n"
+          },
+          "postgres/verification.json": {
+            "sha256": "095de57adb38a67c783a46587c52e2deb6b72130f68fa8c2ec12f665bb081f75",
+            "json": {
+              "task": "HIT-83",
+              "schema_version": 1,
+              "started_at_utc": "2026-11-21T04:43:50Z",
+              "source_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+              "source_tree_sha256": "8998ef613f1c6d19b4a9a57f641b0bc16a36dc42d3e42f2fd2809b51806c4e24",
+              "go_version": "go version go1.27.2 linux/amd64",
+              "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+              "cpu_count": 4,
+              "execution_limits": {
+                "GOMAXPROCS": 1,
+                "GOGC": 50,
+                "go_build_parallelism": 1,
+                "postgres_memory_mib": 256,
+                "postgres_cpus": 0.5
+              },
+              "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+              "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+              "scope": "Local session issuer with controlled one-use verifier and guard, real PostgreSQL atomic writes, failures and existing reader compatibility; not real OIDC, a production clock/guard, HTTP or deployment",
+              "checks": [
+                {
+                  "name": "bootstrap-roles",
+                  "command": [
+                    "docker",
+                    "exec",
+                    "-i",
+                    "hit83-pg-b4c894707f34",
+                    "psql",
+                    "-X",
+                    "-v",
+                    "ON_ERROR_STOP=1",
+                    "-U",
+                    "postgres",
+                    "-d",
+                    "hit68_test_b4c894707f34"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.111,
+                  "log": "bootstrap-roles.log",
+                  "log_sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322",
+                  "stdin_sha256": "e67a1c56e3b1a1a98ee73ea4f746e8ca43cf9334c3c7878e899ff17b502a3673"
+                },
+                {
+                  "name": "test-logins",
+                  "command": [
+                    "docker",
+                    "exec",
+                    "-i",
+                    "hit83-pg-b4c894707f34",
+                    "psql",
+                    "-X",
+                    "-v",
+                    "ON_ERROR_STOP=1",
+                    "-U",
+                    "postgres",
+                    "-d",
+                    "hit68_test_b4c894707f34"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.096,
+                  "log": "test-logins.log",
+                  "log_sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7",
+                  "stdin_sha256": "a9ca152c541da9642457da816f627ed4f0e3f4d759929edb8c02fea031913827"
+                },
+                {
+                  "name": "migration-role-tcp",
+                  "command": [
+                    "docker",
+                    "exec",
+                    "-i",
+                    "hit83-pg-b4c894707f34",
+                    "psql",
+                    "-X",
+                    "-v",
+                    "ON_ERROR_STOP=1",
+                    "-h",
+                    "127.0.0.1",
+                    "-U",
+                    "hp_hit81_migration",
+                    "-d",
+                    "hit68_test_b4c894707f34",
+                    "-Atc",
+                    "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.098,
+                  "log": "migration-role-tcp.log",
+                  "log_sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+                },
+                {
+                  "name": "migration-startup-role",
+                  "command": [
+                    "docker",
+                    "exec",
+                    "-i",
+                    "--env",
+                    "PGOPTIONS=-c role=hp_iam_migrator",
+                    "hit83-pg-b4c894707f34",
+                    "psql",
+                    "-X",
+                    "-v",
+                    "ON_ERROR_STOP=1",
+                    "-h",
+                    "127.0.0.1",
+                    "-U",
+                    "hp_hit81_migration",
+                    "-d",
+                    "hit68_test_b4c894707f34",
+                    "-Atc",
+                    "SELECT current_user,session_user;"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.157,
+                  "log": "migration-startup-role.log",
+                  "log_sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+                },
+                {
+                  "name": "migration-install",
+                  "command": [
+                    "go",
+                    "run",
+                    "-p",
+                    "1",
+                    "./cmd/iam-migrate"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 1.302,
+                  "log": "migration-install.log",
+                  "log_sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+                },
+                {
+                  "name": "migration-repeat",
+                  "command": [
+                    "go",
+                    "run",
+                    "-p",
+                    "1",
+                    "./cmd/iam-migrate"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.33,
+                  "log": "migration-repeat.log",
+                  "log_sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+                },
+                {
+                  "name": "read-only-lookup",
+                  "command": [
+                    "docker",
+                    "exec",
+                    "-i",
+                    "hit83-pg-b4c894707f34",
+                    "psql",
+                    "-X",
+                    "-v",
+                    "ON_ERROR_STOP=1",
+                    "-U",
+                    "postgres",
+                    "-d",
+                    "hit68_test_b4c894707f34"
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 0.168,
+                  "log": "read-only-lookup.log",
+                  "log_sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76",
+                  "stdin_sha256": "aa9ac4f7ebcb8e8116afce0064242fe5605ca63ef37d3a0f7807ccd7e7ebf383"
+                },
+                {
+                  "name": "unit",
+                  "command": [
+                    "go",
+                    "test",
+                    "-p",
+                    "1",
+                    "-count=1",
+                    "./..."
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 10.736,
+                  "log": "unit.log",
+                  "log_sha256": "0108f0b36b80a96b98120c204049bd0d3cd846de955fbdc5853f017d72eb91ed"
+                },
+                {
+                  "name": "postgres-race",
+                  "command": [
+                    "go",
+                    "test",
+                    "-p",
+                    "1",
+                    "-tags=integration",
+                    "-race",
+                    "-count=1",
+                    "-v",
+                    "./..."
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 43.226,
+                  "log": "postgres-race.log",
+                  "log_sha256": "9f53c64d0f2d72b1c28246303f215a779b8faedef65430ae477229785e45a0ee"
+                },
+                {
+                  "name": "vet",
+                  "command": [
+                    "go",
+                    "vet",
+                    "-p",
+                    "1",
+                    "-tags=integration",
+                    "./..."
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 1.843,
+                  "log": "vet.log",
+                  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                },
+                {
+                  "name": "build",
+                  "command": [
+                    "go",
+                    "build",
+                    "-p",
+                    "1",
+                    "./..."
+                  ],
+                  "exit_code": 0,
+                  "elapsed_seconds": 1.809,
+                  "log": "build.log",
+                  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                }
+              ],
+              "state": "PASSED",
+              "postgres_version": "18.7",
+              "host_loopback_tcp_probe": {
+                "host": "127.0.0.1",
+                "state": "PASSED"
+              },
+              "test_container_removed": true,
+              "test_network_removed": true,
+              "finished_at_utc": "2026-11-21T04:44:56Z"
+            },
+            "original_json_key_order": {
+              "$": [
+                "task",
+                "schema_version",
+                "started_at_utc",
+                "source_commit",
+                "source_tree_sha256",
+                "go_version",
+                "platform",
+                "cpu_count",
+                "execution_limits",
+                "postgres_image",
+                "iam_sql_sha256",
+                "scope",
+                "checks",
+                "state",
+                "postgres_version",
+                "host_loopback_tcp_probe",
+                "test_container_removed",
+                "test_network_removed",
+                "finished_at_utc"
+              ],
+              "/execution_limits": [
+                "GOMAXPROCS",
+                "GOGC",
+                "go_build_parallelism",
+                "postgres_memory_mib",
+                "postgres_cpus"
+              ],
+              "/host_loopback_tcp_probe": [
+                "host",
+                "state"
+              ],
+              "/checks/*": [
+                "name",
+                "command",
+                "exit_code",
+                "elapsed_seconds",
+                "log",
+                "log_sha256",
+                "stdin_sha256"
+              ]
+            }
+          }
+        }
+      },
+      "services/iam/tools": {
+        "commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+        "files": {
+          "hit106-lab/same-email-scenario.mjs": {
+            "sha256": "4990a326ea0df44f9b0c95545515c9b13b7ad2f3cb298cfca32d54c7b9fe43bd",
+            "text": "import assert from 'node:assert/strict';\nimport { createHash, randomBytes } from 'node:crypto';\n\nconst app = 'https://127.0.0.2:18444';\nconst issuer = 'https://127.0.0.1:18443/realms/hit106-test';\nconst digest = value => createHash('sha256').update(value).digest('hex');\n\n// All accounts and credentials exist only in the disposable Keycloak realm.\n// The IAM callback, OIDC verifier, issuer and PostgreSQL adapter remain genuine.\nexport async function sameEmailScenario({\n  browser, check, begin, observeCallback, expectIssued, expectSession,\n  keycloakAdmin, newBrowser, counts, remember,\n}) {\n  await check('two Keycloak subjects with the same verified email remain distinct HitPipe principals', async () => {\n    const admin = await keycloakAdmin();\n    const settingsResponse = await admin('');\n    assert.equal(settingsResponse.status, 200, 'The temporary realm configuration is available');\n    const original = await settingsResponse.json();\n    assert.ok(original.realm === 'hit106-test' && original.duplicateEmailsAllowed === false,\n      'Only the disposable realm may be changed for the duplicate-email fixture');\n    const fixtureFlags = { duplicateEmailsAllowed: true, registrationEmailAsUsername: false, loginWithEmailAllowed: false };\n    const changed = await admin('', 'PUT', fixtureFlags);\n    assert.equal(changed.status, 204, 'The temporary realm accepts the test-only duplicate-email policy');\n    const fixture = await admin('');\n    assert.equal(fixture.status, 200);\n    const settings = await fixture.json();\n    assert.ok(settings.duplicateEmailsAllowed === true && settings.registrationEmailAsUsername === false\n      && settings.loginWithEmailAllowed === false, 'The isolated fixture permits duplicate emails and unambiguous username login');\n    const actionResponse = await admin('authentication/required-actions/hitpipe-email-code');\n    assert.equal(actionResponse.status, 200);\n    const action = await actionResponse.json();\n    assert.ok(action.enabled && action.defaultAction, 'The real email-code provider remains enabled');\n\n    const email = `${randomBytes(16).toString('hex')}@hit106.test`;\n    remember(email);\n    const accounts = [];\n    for (let index = 0; index < 2; index++) {\n      const account = {\n        username: `same-email-${randomBytes(16).toString('hex')}`,\n        password: `Lab67!${randomBytes(24).toString('base64url')}`,\n      };\n      remember(account.username);\n      remember(account.password);\n      const created = await admin('users', 'POST', {\n        username: account.username, email, emailVerified: true, enabled: true,\n        firstName: 'Same', lastName: 'Fixture', requiredActions: [],\n        credentials: [{ type: 'password', temporary: false, value: account.password }],\n      });\n      assert.equal(created.status, 201, 'Real Keycloak accepted the distinct fixture subject');\n      const location = created.headers.get('location');\n      assert.ok(location, 'Keycloak returned the created subject location');\n      const url = new URL(location);\n      const prefix = '/admin/realms/hit106-test/users/';\n      assert.ok(url.origin === new URL(issuer).origin && url.pathname.startsWith(prefix),\n        'Subject location belongs only to the disposable realm');\n      account.subject = url.pathname.slice(prefix.length);\n      remember(account.subject);\n      assert.ok(/^[a-f0-9-]{36}$/.test(account.subject), 'Keycloak generated an opaque subject identifier');\n      const recordResponse = await admin(`users/${account.subject}`);\n      assert.equal(recordResponse.status, 200);\n      const record = await recordResponse.json();\n      assert.ok(record.id === account.subject && record.username === account.username\n        && record.email === email && record.emailVerified === true && record.enabled === true,\n      'The actual Keycloak records have the same verified email and distinct usernames');\n      accounts.push(account);\n    }\n    assert.ok(accounts[0].subject !== accounts[1].subject, 'The fixture has two genuinely different Keycloak subjects');\n\n    const before = await counts();\n    async function loginAndRead(account) {\n      const user = await newBrowser(browser);\n      try {\n        await begin(user.page);\n        await user.page.locator('input[name=\"username\"]').fill(account.username);\n        await user.page.locator('input[name=\"password\"]').fill(account.password);\n        const finished = observeCallback(user.page);\n        await user.page.locator('#kc-form-login [type=\"submit\"]').click();\n        await expectIssued(user, await finished);\n        await expectSession(user.context, true);\n        const proofResponse = await user.context.request.get(`${app}/__hit106/identity`, { maxRedirects: 0 });\n        assert.equal(proofResponse.status(), 200, 'The authenticated session has a real PostgreSQL identity proof');\n        const proof = await proofResponse.json();\n        assert.ok(Object.keys(proof).sort().join(',') === 'issuer_digest,principal_digest,subject_digest'\n          && Object.values(proof).every(value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value)),\n        'The test endpoint returns only bounded identity digests');\n        assert.ok(proof.issuer_digest === digest(issuer) && proof.subject_digest === digest(account.subject),\n          'The persisted session belongs to the actual local issuer and expected Keycloak subject');\n        return proof;\n      } finally {\n        await user.context.close();\n      }\n    }\n\n    const first = await loginAndRead(accounts[0]);\n    const second = await loginAndRead(accounts[1]);\n    assert.ok(first.principal_digest !== second.principal_digest && first.subject_digest !== second.subject_digest,\n      'Equal verified email did not link the two distinct subject identities or HitPipe accounts');\n    assert.deepEqual(await counts(), { principals: before.principals + 2, sessions: before.sessions + 2 },\n      'Real browser callbacks committed two separate principals and sessions');\n    const firstAgain = await loginAndRead(accounts[0]);\n    assert.ok(firstAgain.principal_digest === first.principal_digest && firstAgain.subject_digest === first.subject_digest,\n      'A later real login reuses only its own issuer-subject principal');\n    assert.deepEqual(await counts(), { principals: before.principals + 2, sessions: before.sessions + 3 },\n      'Repeated login adds a session without merging or duplicating either principal');\n  });\n}\n"
+          },
+          "hit106-server/identity.go": {
+            "sha256": "7d4e0de6bd3817b221c2f09d159297c0aa767d1dac6cbf6f41420cd0aaf4efb8",
+            "text": "//go:build hit106lab\n\npackage main\n\nimport (\n\t\"context\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"encoding/json\"\n\t\"net/http\"\n\t\"time\"\n\n\t\"github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup\"\n\t\"github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession\"\n\t\"github.com/jackc/pgx/v5/pgxpool\"\n)\n\n// This loopback-only, explicitly tagged lab endpoint proves the persisted\n// identity behind a real browser session. Raw subjects, principal IDs and session\n// references never leave it; synthetic fixture IDs can be compared by digest.\nfunc serveIdentityProof(w http.ResponseWriter, r *http.Request, pool *pgxpool.Pool, authenticate authenticatesession.Service) {\n\tcookie, err := r.Cookie(\"__Host-hp_session\")\n\tif err != nil {\n\t\tw.WriteHeader(http.StatusUnauthorized)\n\t\treturn\n\t}\n\treference, err := sessionlookup.Reference(cookie.Value)\n\tif err != nil || !authenticate.Execute(r.Context(), reference).IsValid() {\n\t\tw.WriteHeader(http.StatusUnauthorized)\n\t\treturn\n\t}\n\tdigest, err := hex.DecodeString(reference)\n\tif err != nil {\n\t\tw.WriteHeader(http.StatusUnauthorized)\n\t\treturn\n\t}\n\tctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)\n\tdefer cancel()\n\tvar principal, issuer, subject string\n\terr = pool.QueryRow(ctx, `SELECT p.principal_id::text,p.oidc_issuer,p.oidc_subject\n\t\tFROM hp_iam.sessions s JOIN hp_iam.principals p USING(principal_id)\n\t\tWHERE s.session_hash=$1`, digest).Scan(&principal, &issuer, &subject)\n\tif err != nil || principal == \"\" || issuer == \"\" || subject == \"\" {\n\t\tw.WriteHeader(http.StatusServiceUnavailable)\n\t\treturn\n\t}\n\thash := func(value string) string {\n\t\tdigest := sha256.Sum256([]byte(value))\n\t\treturn hex.EncodeToString(digest[:])\n\t}\n\tresult := struct {\n\t\tPrincipalDigest string `json:\"principal_digest\"`\n\t\tIssuerDigest    string `json:\"issuer_digest\"`\n\t\tSubjectDigest   string `json:\"subject_digest\"`\n\t}{hash(principal), hash(issuer), hash(subject)}\n\tw.Header().Set(\"Content-Type\", \"application/json\")\n\t_ = json.NewEncoder(w).Encode(result)\n}\n"
+          }
+        }
+      }
+    }
+  },
+  "deviations": [],
+  "limitations": [
+    "Сценарии работают на одноразовом Keycloak с тестовой CA и SMTP. Для проверки истечения кода и повторной отправки только временные отметки тестовых записей сдвигались в PostgreSQL. Одинаковый email разрешался локально для заключительного сценария.",
+    "Профиль, GET session, доставка CSRF, BFF, logout, координатор rotation/revoke и рабочее развёртывание относятся к отдельным задачам."
+  ],
+  "rework": {
+    "addresses": "https://hitpipe.atlassian.net/browse/HIT-106?focusedCommentId=15546",
+    "dependency_readback": "https://github.com/hitpipe/hitpipe/blob/669706673f57e1a8c1d66d97a5640b94c3c34db8/services/iam/evidence/HIT-106/rework/dependency-readback.json",
+    "tested_revision_comparison": {
+      "prior": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
+      "tested": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "github": "https://github.com/hitpipe/hitpipe/compare/b50c35cdffc5465604b26080ceab347e2f2e85c2...4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+      "command": "git diff --name-status b50c35cdffc5465604b26080ceab347e2f2e85c2 4d8c9772604b1f7d4d79e35c552f44a6984e7787 -- . ':(exclude).project-os/results' ':(exclude)services/iam/evidence' ':(exclude)services/iam/tools/hit106-lab' ':(exclude)services/iam/tools/hit106-server'",
+      "stdout": "",
+      "exit": 0,
+      "outside_test_and_evidence_paths": {
+        "entries": 919,
+        "common_sha256_of_git_ls_tree_r_z": "22e8d777335f1b5e72fd4407890f31eea3b03f4f0038a059e68791496ad2c142"
+      },
+      "github_api_and_local_git_agree": 27,
+      "all_changed_files": {
+        ".project-os/results/": [
+          "M HIT-106.json"
+        ],
+        "services/iam/evidence/HIT-106/rework/": [
+          "A README.md",
+          "A browser-cleanup.log",
+          "A browser.log",
+          "A dependency-readback.json",
+          "A go.log",
+          "A postgres-driver.log",
+          "A postgres/bootstrap-roles.log",
+          "A postgres/build.log",
+          "A postgres/migration-install.log",
+          "A postgres/migration-repeat.log",
+          "A postgres/migration-role-tcp.log",
+          "A postgres/migration-startup-role.log",
+          "A postgres/postgres-race.log",
+          "A postgres/read-only-lookup.log",
+          "A postgres/test-logins.log",
+          "A postgres/unit.log",
+          "A postgres/verification.json",
+          "A postgres/vet.log",
+          "A provider-readback.log",
+          "A runtime.log",
+          "A verification.json"
+        ],
+        "services/iam/tools/": [
+          "M hit106-lab/browser.mjs",
+          "A hit106-lab/email-code-scenarios.mjs",
+          "A hit106-lab/same-email-scenario.mjs",
+          "A hit106-server/identity.go",
+          "M hit106-server/main.go"
+        ]
+      }
+    }
+  }
+}

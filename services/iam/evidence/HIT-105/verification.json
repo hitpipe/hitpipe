@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-105",
+  "verified_on": "2026-11-18",
+  "source": {
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_commit": "bb347e0e4385c56cc7721830314c3464b19e3e2f",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/69",
+    "main_search": {
+      "path": "services/iam",
+      "patterns": [
+        "RequiredActionProvider",
+        "hitpipe-email-code",
+        "keycloak-email-code"
+      ],
+      "result": "No existing email-code provider in main"
+    },
+    "staged_module_archive_sha256": "85ada14a7f9e3414dd533354b5ca4d474e7f8433515feda1eb124f68bba2ed51",
+    "canonical_migration": {
+      "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/keycloak-email.sql",
+      "sha256": "50f9fdfa632c7721521e95afd90d8b1fd7a536e1c5845c1062a0d16ef3c0038a",
+      "bytes": 2734
+    }
+  },
+  "runtime": {
+    "guest": "Ubuntu 24.04.5, linux/amd64, 4 vCPU, 4 GiB RAM, separate libvirt/KVM VM",
+    "docker": "29.1.3",
+    "compose": "2.40.3",
+    "buildx": "0.30.1",
+    "java_runtime": "Red Hat OpenJDK 21.0.12.1+1-LTS",
+    "java_release_target": 21,
+    "node": "22.23.5",
+    "npm": "10.9.9",
+    "playwright": "1.65.1",
+    "chromium": "159.0.8154.6",
+    "keycloak": {
+      "version": "26.8.1",
+      "index": "sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244",
+      "amd64": "sha256:ed1cab21814c7d18ce8f0e11d5a1fa1c6923de12dd4c7625a18c5d34452a57a4"
+    },
+    "postgresql": {
+      "version": "18.7, Debian 18.7-1.pgdg12+2",
+      "index": "sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+      "amd64": "sha256:a197bcc7150b0a7e35796ef0c110693cba6edd41e92b564cc50b976f17532423"
+    },
+    "mailpit": {
+      "version": "1.33.1",
+      "index": "sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce"
+    },
+    "maven_builder": {
+      "version": "3.9.11 with Eclipse Temurin 21",
+      "index": "sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237"
+    },
+    "built_image": "sha256:0a47dd54b11ef7e685785953738b39d4c70a668fe3a7728ce0f102bf72285396",
+    "provider_jar_sha256": "093aa8b742f8e02be616fa9c76c37da6a356ddadc30f88c83e729beafa2d4030"
+  },
+  "commands": [
+    {
+      "command": "npm --prefix tests ci --no-audit --no-fund",
+      "exit_code": 0
+    },
+    {
+      "command": "./tests/run.sh",
+      "exit_code": 0,
+      "log": "browser-postgres-smtp.log",
+      "log_sha256": "7eadff665379b50281acea7d778a0bd5270dd7ceaf196b685eff1aad99dd972a",
+      "raw_session_log_sha256": "8ee25331a58c9390e8889dca024cbd6c1664af4a9c54158728d5f5f31ba3481d",
+      "raw_session_log_bytes": 7239,
+      "published_log_normalization": "Trailing whitespace removed from complete stdout/stderr"
+    },
+    {
+      "command": "mvn --batch-mode --no-transfer-progress package (inside pinned builder)",
+      "exit_code": 0,
+      "source_commit": "7ba2ee8b050eba13970f9af449ad1c6feda36934",
+      "sources_and_pom_unchanged_at_tested_commit": true,
+      "unit_tests": {
+        "passed": 15,
+        "failed": 0,
+        "skipped": 0
+      },
+      "compact_log": "maven-test-summary.log",
+      "compact_log_sha256": "d754af025417710254fddd4ee469205be847693a679837688efdf7b872f0df2c",
+      "full_session_log_sha256": "8fbddb18fd9e03981f79160ef38069b455cc5b376099684e02e441de892dacff"
+    }
+  ],
+  "browser_and_integration_passed": [
+    "public registration, genuine SMTP, keyboard submit and one-time verification",
+    "five wrong codes lock the challenge; the real code cannot unlock it",
+    "expired challenge and unknown key version fail closed without consuming a code",
+    "resend enforces cooldown and rolling cap; changing generation invalidates the older code",
+    "a second browser flow keeps the rate limit and cannot use the first flow code",
+    "a changed Keycloak email invalidates the outstanding code",
+    "two parallel resends yield one replacement and one actual SMTP message",
+    "two parallel submits yield exactly one authorization and one database consumption",
+    "an actual database rollback leaves both verification markers unset",
+    "actual SMTP 451 leaves the account unverified and retains cooldown",
+    "SMTP greeting timeout cannot hold the rate and challenge row locks",
+    "deleting an IdP user removes their challenge",
+    "restart after database issuance and before SMTP preserves cooldown and permits a later resend",
+    "rotating the actual Keycloak code key invalidates version 1 and preserves recipient limits",
+    "scheduled cleanup purges only expired challenge and recipient history"
+  ],
+  "cleanup_readback": "No named lab containers, volumes, network or loopback listeners remained",
+  "scope": "The local test IdP and SMTP receiver. HitPipe session issuance, production OIDC callback, BFF and external mail delivery were not exercised."
+}

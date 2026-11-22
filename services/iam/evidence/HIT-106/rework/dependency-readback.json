@@ -1,0 +1,189 @@
+{
+  "subject": "HIT-106",
+  "captured_at_utc": "2026-11-19T21:17:42.546894+00:00",
+  "commands": [
+    "gh pr view 55/56/60/69/77 --repo hitpipe/hitpipe --json number,url,headRefOid,baseRefOid,state,isDraft,mergedAt",
+    "gh api repos/hitpipe/hitpipe/commits/5130d7afa505af98160cc58b4b704fd6efa58b2f/check-runs",
+    "git diff --name-status 32aa5673be9f3d2e1fe45dcd53ebca0e15a62296 5130d7afa505af98160cc58b4b704fd6efa58b2f",
+    "git rev-parse <revision>:<path>",
+    "git merge-base --is-ancestor <dependency-head> 32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
+    "git diff --name-status 5130d7afa505af98160cc58b4b704fd6efa58b2f b50c35cdffc5465604b26080ceab347e2f2e85c2"
+  ],
+  "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "main_observed": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_code": "4c165aaee969becf9a314b85e198d84949247796",
+  "reviewed_pr": {
+    "baseRefOid": "32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
+    "headRefOid": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
+    "isDraft": true,
+    "mergedAt": null,
+    "number": 77,
+    "state": "OPEN",
+    "url": "https://github.com/hitpipe/hitpipe/pull/77"
+  },
+  "dependency_prs": [
+    {
+      "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "headRefOid": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "isDraft": false,
+      "mergedAt": null,
+      "number": 55,
+      "state": "OPEN",
+      "url": "https://github.com/hitpipe/hitpipe/pull/55"
+    },
+    {
+      "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "headRefOid": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+      "isDraft": false,
+      "mergedAt": null,
+      "number": 56,
+      "state": "OPEN",
+      "url": "https://github.com/hitpipe/hitpipe/pull/56"
+    },
+    {
+      "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "headRefOid": "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
+      "isDraft": false,
+      "mergedAt": null,
+      "number": 60,
+      "state": "OPEN",
+      "url": "https://github.com/hitpipe/hitpipe/pull/60"
+    },
+    {
+      "baseRefOid": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "headRefOid": "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd",
+      "isDraft": true,
+      "mergedAt": null,
+      "number": 69,
+      "state": "OPEN",
+      "url": "https://github.com/hitpipe/hitpipe/pull/69"
+    }
+  ],
+  "combined_base_parents": [
+    "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
+    "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd"
+  ],
+  "checks_of_reviewed_head": [
+    {
+      "name": "pr12-delivery",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
+      "details_url": "https://github.com/hitpipe/hitpipe/actions/runs/44596659352/job/135816650019"
+    },
+    {
+      "name": "pr12-processing",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
+      "details_url": "https://github.com/hitpipe/hitpipe/actions/runs/44596659526/job/135816649635"
+    },
+    {
+      "name": "pr12-intake",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
+      "details_url": "https://github.com/hitpipe/hitpipe/actions/runs/44596659260/job/135816649141"
+    },
+    {
+      "name": "pr12-iam",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "5130d7afa505af98160cc58b4b704fd6efa58b2f",
+      "details_url": "https://github.com/hitpipe/hitpipe/actions/runs/44596659199/job/135816649090"
+    }
+  ],
+  "diff_from_combined_base": [
+    "A\t.project-os/results/HIT-106.json",
+    "A\tservices/iam/evidence/HIT-106/README.md",
+    "A\tservices/iam/evidence/HIT-106/browser-cleanup.log",
+    "A\tservices/iam/evidence/HIT-106/browser.log",
+    "A\tservices/iam/evidence/HIT-106/go.log",
+    "A\tservices/iam/evidence/HIT-106/postgres-driver.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/bootstrap-roles.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/build.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/migration-install.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/migration-repeat.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/migration-role-tcp.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/migration-startup-role.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/postgres-race.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/read-only-lookup.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/test-logins.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/unit.log",
+    "A\tservices/iam/evidence/HIT-106/postgres/verification.json",
+    "A\tservices/iam/evidence/HIT-106/postgres/vet.log",
+    "A\tservices/iam/evidence/HIT-106/runtime.log",
+    "A\tservices/iam/evidence/HIT-106/verification.json",
+    "A\tservices/iam/internal/adapters/http/compose.go",
+    "A\tservices/iam/internal/adapters/http/handler.go",
+    "A\tservices/iam/internal/adapters/http/handler_test.go",
+    "A\tservices/iam/internal/adapters/oidc/client.go",
+    "A\tservices/iam/internal/adapters/oidc/client_test.go",
+    "A\tservices/iam/internal/adapters/oidc/token.go",
+    "A\tservices/iam/internal/application/oidclogin/service.go",
+    "A\tservices/iam/internal/application/oidclogin/service_test.go",
+    "A\tservices/iam/tools/hit106-lab/.gitignore",
+    "A\tservices/iam/tools/hit106-lab/README.md",
+    "A\tservices/iam/tools/hit106-lab/browser.mjs",
+    "A\tservices/iam/tools/hit106-lab/compose.yaml",
+    "A\tservices/iam/tools/hit106-lab/loopback.mjs",
+    "A\tservices/iam/tools/hit106-lab/package-lock.json",
+    "A\tservices/iam/tools/hit106-lab/package.json",
+    "A\tservices/iam/tools/hit106-lab/realm.mjs",
+    "A\tservices/iam/tools/hit106-lab/run.sh",
+    "A\tservices/iam/tools/hit106-server/main.go"
+  ],
+  "unchanged_dependency_blobs_at_base_tested_and_reviewed_heads": [
+    {
+      "path": "services/iam/internal/adapters/postgres/migrations/schema/001_iam.sql",
+      "git_blob_id_unchanged": "c735d88154674acfc95df9f074ffd23724258501"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionlookup/lookup.go",
+      "git_blob_id_unchanged": "8ff37fd8234c9a89959843fc5b1f9804e4e7c87a"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/sessionissuer/issuer.go",
+      "git_blob_id_unchanged": "2850b0916cc93ac18717fc9d12da8e24b908eddd"
+    },
+    {
+      "path": "services/iam/internal/application/issuesession/service.go",
+      "git_blob_id_unchanged": "dc8602db5a97cdd22ebeee96a5b3c1d7334cae16"
+    },
+    {
+      "path": "services/iam/internal/application/authenticatesession/service.go",
+      "git_blob_id_unchanged": "3b516365d7d61f227cacbca50d4913e86e5a833a"
+    },
+    {
+      "path": "services/iam/internal/domain/sessionpolicy/policy.go",
+      "git_blob_id_unchanged": "ea2cd52cde9a79255243845de3b4149288621bba"
+    },
+    {
+      "path": ".project-os/results/HIT-68.json",
+      "git_blob_id_unchanged": "f49d31042232db8fa949ce53c354645a45bf6ee8"
+    },
+    {
+      "path": ".project-os/results/HIT-81.json",
+      "git_blob_id_unchanged": "414db81b73360d43730fed84c4cda39aee213a81"
+    },
+    {
+      "path": ".project-os/results/HIT-82.json",
+      "git_blob_id_unchanged": "bad50d3c3e717d4dce925a973198727ebea0fae1"
+    },
+    {
+      "path": ".project-os/results/HIT-83.json",
+      "git_blob_id_unchanged": "a53a2b173c8c881e0680b03cfa1d01fbe6d2f116"
+    },
+    {
+      "path": ".project-os/results/HIT-105.json",
+      "git_blob_id_unchanged": "cf1a347ca5e50e662928d94f1c148bda0d021748"
+    }
+  ],
+  "keycloak_subtree_unchanged_from_combined_base": true,
+  "rework_tested_commit": "b50c35cdffc5465604b26080ceab347e2f2e85c2",
+  "diff_from_reviewed_head_to_rework_code": [
+    "M\tservices/iam/tools/hit106-lab/run.sh",
+    "M\tservices/iam/tools/hit106-server/main.go",
+    "A\tservices/iam/tools/hit106-server/policy.go"
+  ]
+}

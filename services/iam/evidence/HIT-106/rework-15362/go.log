@@ -1,0 +1,41 @@
+4d8c9772604b1f7d4d79e35c552f44a6984e7787
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.071s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.022s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.023s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.039s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http	1.042s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/oidc	3.403s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.028s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer	1.025s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.325s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.025s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.035s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/oidclogin	1.037s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.022s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0
+
+$ go vet -tags hit106lab ./tools/hit106-server
+exit=0
+
+$ go build -tags hit106lab -o /work/hit106/4d8c977260.K32vk1/iam-browser-check ./tools/hit106-server
+exit=0
+
+$ bash -n tools/hit106-lab/run.sh
+exit=0
+
+$ node --check tools/hit106-lab/browser.mjs
+exit=0
+
+$ node --check tools/hit106-lab/email-code-scenarios.mjs
+exit=0
+
+$ node --check tools/hit106-lab/same-email-scenario.mjs
+exit=0

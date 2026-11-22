@@ -1,0 +1,176 @@
+b50c35cdffc5465604b26080ceab347e2f2e85c2
+go version go1.27.2 linux/amd64
+
+added 2 packages in 1s
+#1 [internal] load local bake definitions
+#1 reading from stdin 581B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 925B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#3 ...
+
+#4 [internal] load metadata for quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+#4 DONE 0.9s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#3 DONE 1.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 115B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [stage-1 1/4] FROM quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+#7 resolve quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244 0.1s done
+#7 DONE 0.1s
+
+#8 [provider 1/5] FROM docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#8 resolve docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237 0.1s done
+#8 DONE 0.1s
+
+#6 [internal] load build context
+#6 transferring context: 69.34kB 0.0s done
+#6 DONE 0.0s
+
+#9 [provider 2/5] WORKDIR /build
+#9 CACHED
+
+#10 [provider 3/5] COPY pom.xml .
+#10 DONE 0.1s
+
+#11 [provider 4/5] COPY src ./src
+#11 DONE 0.1s
+
+#12 [provider 5/5] RUN --mount=type=cache,id=hit105-email-maven,target=/root/.m2/repository,sharing=locked     mvn --batch-mode --no-transfer-progress package
+#12 3.627 [INFO] Scanning for projects...
+#12 3.759 [INFO]
+#12 3.760 [INFO] --------------< dev.hitpipe:hitpipe-keycloak-email-code >---------------
+#12 3.760 [INFO] Building hitpipe-keycloak-email-code 1.0.0
+#12 3.760 [INFO]   from pom.xml
+#12 3.761 [INFO] --------------------------------[ jar ]---------------------------------
+#12 6.756 [INFO]
+#12 6.756 [INFO] --- resources:3.3.1:resources (default-resources) @ hitpipe-keycloak-email-code ---
+#12 7.009 [INFO] Copying 14 resources from src/main/resources to target/classes
+#12 7.023 [INFO]
+#12 7.024 [INFO] --- compiler:3.14.1:compile (default-compile) @ hitpipe-keycloak-email-code ---
+#12 7.259 [INFO] Recompiling the module because of changed source code.
+#12 7.282 [INFO] Compiling 6 source files with javac [debug release 21] to target/classes
+#12 10.29 [INFO]
+#12 10.29 [INFO] --- resources:3.3.1:testResources (default-testResources) @ hitpipe-keycloak-email-code ---
+#12 10.29 [INFO] skip non existing resourceDirectory /build/src/test/resources
+#12 10.29 [INFO]
+#12 10.29 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ hitpipe-keycloak-email-code ---
+#12 10.31 [INFO] Recompiling the module because of changed dependency.
+#12 10.31 [INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+#12 10.88 [INFO]
+#12 10.88 [INFO] --- surefire:3.5.4:test (default-test) @ hitpipe-keycloak-email-code ---
+#12 11.14 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#12 11.23 [INFO]
+#12 11.23 [INFO] -------------------------------------------------------
+#12 11.23 [INFO]  T E S T S
+#12 11.23 [INFO] -------------------------------------------------------
+#12 12.67 [INFO] Running dev.hitpipe.keycloak.email.EmailCodesTest
+#12 13.15 [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.405 s -- in dev.hitpipe.keycloak.email.EmailCodesTest
+#12 13.26 Nov 19, 2026 9:21:01 PM org.jboss.logmanager.JBossLoggerFinder getLogger
+#12 13.26 ERROR: The LogManager accessed before the "java.util.logging.manager" system property was set to "org.jboss.logmanager.LogManager". Results may be unexpected.
+#12 13.30 [INFO]
+#12 13.30 [INFO] Results:
+#12 13.30 [INFO]
+#12 13.30 [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
+#12 13.30 [INFO]
+#12 13.31 [INFO]
+#12 13.31 [INFO] --- jar:3.4.2:jar (default-jar) @ hitpipe-keycloak-email-code ---
+#12 13.80 [INFO] Building jar: /build/target/hitpipe-keycloak-email-code.jar
+#12 13.88 [INFO] ------------------------------------------------------------------------
+#12 13.89 [INFO] BUILD SUCCESS
+#12 13.89 [INFO] ------------------------------------------------------------------------
+#12 13.89 [INFO] Total time:  10.341 s
+#12 13.89 [INFO] Finished at: 2026-11-19T21:21:01Z
+#12 13.89 [INFO] ------------------------------------------------------------------------
+#12 DONE 14.0s
+
+#7 [stage-1 1/4] FROM quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+#7 CACHED
+
+#13 [stage-1 2/4] COPY --from=provider --chown=1000:0 --chmod=0644 /build/target/hitpipe-keycloak-email-code.jar /opt/keycloak/providers/hitpipe-keycloak-email-code.jar
+#13 DONE 0.1s
+
+#14 [stage-1 3/4] COPY --chown=1000:0 --chmod=0644 realm/hit105-test-realm.json /opt/keycloak/data/import/hit105-test-realm.json
+#14 DONE 0.1s
+
+#15 [stage-1 4/4] RUN chmod 0755 /opt/keycloak/data/import     && touch -m --date=@1794873600 /opt/keycloak/providers/hitpipe-keycloak-email-code.jar     && /opt/keycloak/bin/kc.sh build --db=postgres
+#15 2.739 Updating the configuration and installing your custom providers, if any. Please wait.
+#15 11.19 2026-11-19 21:21:13,201 WARN  [org.keycloak.common.Profile] (build-2) Deprecated features identity-brokering-api:v1, twitter-broker:v1 enabled by default. Check the upgrading guide for steps to use later versions if available.
+#15 12.22 2026-11-19 21:21:14,243 WARN  [org.keycloak.services] (build-8) KC-SERVICES0047: hitpipe-email-code-schema (dev.hitpipe.keycloak.email.EmailCodeJpaProviderFactory) is implementing the internal SPI jpa-entity-provider. This SPI is internal and may change without notice
+#15 13.29 2026-11-19 21:21:15,315 WARN  [org.keycloak.services] (build-8) KC-SERVICES0047: hitpipe-email-code (dev.hitpipe.keycloak.email.EmailCodeActionFactory) is implementing the internal SPI required-action. This SPI is internal and may change without notice
+#15 13.55 2026-11-19 21:21:15,573 WARN  [org.keycloak.services] (build-8) KC-SERVICES0047: hitpipe-email-code-account-events (dev.hitpipe.keycloak.email.EmailCodeAccountEvents) is implementing the internal SPI eventsListener. This SPI is internal and may change without notice
+#15 23.84 2026-11-19 21:21:25,868 INFO  [io.quarkus.deployment.QuarkusAugmentor] (main) Quarkus augmentation completed in 18764ms
+#15 23.86 Server configuration updated and persisted. Run the following command to review the configuration:
+#15 23.86
+#15 23.87 	kc.sh show-config
+#15 23.87
+#15 DONE 24.0s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 0.6s done
+#16 exporting manifest sha256:17cfb0df8ec17d96adf9f29e5e50734e041f2038a7976bfcdbaa1685f3a14b54 0.0s done
+#16 exporting config sha256:28cd749af38a0fe9148f9127cba1aa844329baa65f009024670c31deb5b5a96a 0.0s done
+#16 exporting attestation manifest sha256:dcd82d23c53648f53c056f25d9decef4008529e6482a477966371c08b5b37fa9 0.1s done
+#16 exporting manifest list sha256:2b3990fe7a1bc13ec3df6295fb0ae66cdaeef55f0053d5dadcf8f03a3e5659a9
+#16 exporting manifest list sha256:2b3990fe7a1bc13ec3df6295fb0ae66cdaeef55f0053d5dadcf8f03a3e5659a9 0.0s done
+#16 naming to docker.io/library/hit106-keycloak-email-code:local done
+#16 unpacking to docker.io/library/hit106-keycloak-email-code:local
+#16 unpacking to docker.io/library/hit106-keycloak-email-code:local 0.2s done
+#16 DONE 1.0s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ hit106-keycloak-email-code:local  Built
+ Network hit106-browser-lab_lab  Creating
+ Network hit106-browser-lab_lab  Created
+ Container hit106-browser-lab-iam-db-1  Creating
+ Container hit106-browser-lab-idp-db-1  Creating
+ Container hit106-browser-lab-smtp-1  Creating
+ Container hit106-browser-lab-smtp-1  Created
+ Container hit106-browser-lab-iam-db-1  Created
+ Container hit106-browser-lab-idp-db-1  Created
+ Container hit106-browser-lab-idp-1  Creating
+ Container hit106-browser-lab-idp-1  Created
+ Container hit106-browser-lab-smtp-1  Starting
+ Container hit106-browser-lab-iam-db-1  Starting
+ Container hit106-browser-lab-idp-db-1  Starting
+ Container hit106-browser-lab-smtp-1  Started
+ Container hit106-browser-lab-idp-db-1  Started
+ Container hit106-browser-lab-idp-db-1  Waiting
+ Container hit106-browser-lab-iam-db-1  Started
+ Container hit106-browser-lab-idp-db-1  Healthy
+ Container hit106-browser-lab-idp-1  Starting
+ Container hit106-browser-lab-idp-1  Started
+IAM PostgreSQL 18.7 migration: installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7
+IAM PostgreSQL 18.7 migration: already_installed, version 1, SHA-256 604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7
+Appending additional Java properties to JAVA_OPTS
+Keycloak 26.8.1
+JVM: 21.0.12.1 (Red Hat, Inc. OpenJDK 64-Bit Server VM 21.0.12.1+1-LTS)
+OS: Linux 6.8.0-147-generic amd64
+postgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)
+postgres (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)
+/mailpit v1.33.1 compiled with go1.27.3 on linux/amd64
+v22.23.5
+Chromium 159.0.8154.6 (verified local CA; HTTPS errors enforced)
+PASS HTTPS registration requires email-code, then issues one real IAM session
+PASS concurrent replay of the completed callback creates no independent sessions
+PASS an existing session cannot be replaced without the revocation coordinator
+PASS the confirmed user signs in again with a fresh attempt and the same principal
+PASS foreign or missing state and browser authority assertions do not create a session
+PASS cancelling an attempt also blocks a later genuine IdP callback for that state
+PASS a genuine callback after IAM restart fails with the lost one-use attempt
+PASS a genuine unverified-email claim from the test IdP cannot create a session
+HIT-106 session policy verified PostgreSQL rows=2 absolute=24h0m0s idle=8h0m0s
+Synthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired

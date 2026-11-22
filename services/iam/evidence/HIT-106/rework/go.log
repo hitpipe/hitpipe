@@ -1,0 +1,34 @@
+HIT-106 source commit: b50c35cdffc5465604b26080ceab347e2f2e85c2
+go version go1.27.2 linux/amd64
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.068s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.018s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.018s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.036s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http	1.043s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/oidc	3.227s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.022s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer	1.022s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.253s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.022s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.032s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/oidclogin	1.033s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.027s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0
+
+$ go vet -tags hit106lab ./tools/hit106-server
+exit=0
+
+$ go build -tags hit106lab -o /work/hit106/rework-b50c35c/iam-browser-check ./tools/hit106-server
+exit=0
+
+$ bash -n tools/hit106-lab/run.sh
+exit=0

@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-106",
+  "tested_code_commit": "4d8c9772604b1f7d4d79e35c552f44a6984e7787",
+  "previous_independent_review": "https://hitpipe.atlassian.net/browse/HIT-106?focusedCommentId=15362",
+  "runtime": [
+    "Keycloak 26.8.1",
+    "/mailpit v1.33.1 compiled with go1.27.3 on linux/amd64",
+    "Chromium 159.0.8154.6 (verified local CA; HTTPS errors enforced)",
+    "go version go1.27.2 linux/amd64",
+    "PostgreSQL 18.7"
+  ],
+  "commands": [
+    {
+      "command": "npm ci --no-audit --no-fund",
+      "exit_code": 0,
+      "log": "browser.log"
+    },
+    {
+      "command": "env HIT106_ISOLATED_LAB=1 ./run.sh",
+      "exit_code": 0,
+      "log": "browser.log"
+    },
+    {
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go build ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go vet -tags hit106lab ./tools/hit106-server",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go build -tags hit106lab -o /work/hit106/4d8c977260.K32vk1/iam-browser-check ./tools/hit106-server",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "bash -n tools/hit106-lab/run.sh",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "node --check tools/hit106-lab/browser.mjs",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "node --check tools/hit106-lab/email-code-scenarios.mjs",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "node --check tools/hit106-lab/same-email-scenario.mjs",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/4d8c977260.K32vk1/postgres",
+      "exit_code": 0,
+      "log": "postgres-driver.log"
+    }
+  ],
+  "browser_scenarios": [
+    "HTTPS registration requires email-code, then issues one real IAM session",
+    "concurrent replay of the completed callback creates no independent sessions",
+    "an existing session cannot be replaced without the revocation coordinator",
+    "the confirmed user signs in again with a fresh attempt and the same principal",
+    "foreign or missing state and browser authority assertions do not create a session",
+    "cancelling an attempt also blocks a later genuine IdP callback for that state",
+    "a genuine callback after IAM restart fails with the lost one-use attempt",
+    "a genuine unverified-email claim from the test IdP cannot create a session",
+    "HTTPS email code rejects wrong digits and locks after five attempts, including the genuine code",
+    "HTTPS email code rejects the expired genuine mail without consuming it or signing in",
+    "HTTPS email-code resend enforces cooldown, invalidates old digits and rejects reuse after verification",
+    "HTTPS email code enforces five sends in the rolling hour and accepts a send when the oldest leaves the window",
+    "two concurrent HTTPS submissions of one genuine email code yield exactly one authorization and one IAM session",
+    "two Keycloak subjects with the same verified email remain distinct HitPipe principals"
+  ],
+  "session_policy_output": [
+    "HIT-106 session policy verified PostgreSQL rows=7 absolute=24h0m0s idle=8h0m0s",
+    "Synthetic trusted observations: idle_before=session_valid idle_at=idle_expired absolute_before=idle_expired absolute_at=absolute_expired"
+  ],
+  "postgres_passed": [
+    "TestPostgresIssuerAtomicAndCompatibleLookup",
+    "TestPostgresIssuerExistingPrincipalPreservesProfileAndIdentity",
+    "TestPostgresIssuerConcurrentDeduplication",
+    "TestPostgresIssuerDisabledAndPendingRevocations",
+    "TestPostgresIssuerRollbackOnInsertFailure",
+    "TestPostgresIssuerCancellationAndBoundedLock",
+    "TestPostgresIssuerAuthorityAndDatabaseFailures",
+    "TestPostgresIssuerCommitUncertainDoesNotReturnSuccess",
+    "TestPostgresIssuerServiceOneUseProofAndLookup",
+    "TestPostgresExactSnapshotAndExistingConsumer",
+    "TestPostgresMissingSessionIsNotFound",
+    "TestPostgresNextReadObservesRevocation",
+    "TestPostgresReadsNeverModifyOrRenewSession",
+    "TestPostgresErrorsAreSanitizedAndNeverValid",
+    "TestPostgresInFlightCancellationFailsClosed",
+    "TestPostgresInternalDeadlineBoundsBlockedRead",
+    "TestPostgresConcurrentReadsReturnIndependentValues",
+    "TestPostgresCancelledContextAndClosedPool"
+  ],
+  "postgres_skipped": [
+    "TestHIT82LatencySamples"
+  ],
+  "postgres_skip_detail": [
+    "=== RUN   TestPostgresExactSnapshotAndExistingConsumer"
+  ],
+  "cleanup": "No residual browser-lab listeners, containers, volumes or networks.",
+  "files": {
+    "browser.log": {
+      "sha256": "6203e522782d67510f5eaf90e38772c8cfa0cad4e9adf815072660fea79b027a",
+      "bytes": 6276
+    },
+    "go.log": {
+      "sha256": "c76289a24472eb9ad31c9a3fbc28a657d1e6dfe83c04da4dd77132dddbb677ed",
+      "bytes": 1603
+    },
+    "runtime.log": {
+      "sha256": "38e29eb11af506f1dc5267ed46414d8865d41c94d5116ebafa0400503813be79",
+      "bytes": 247
+    },
+    "cleanup.log": {
+      "sha256": "53a32cf05e6b9f58bbdb2bc00fd2bff22092b122b8d16f1db37279f1176a7447",
+      "bytes": 68
+    },
+    "postgres-driver.log": {
+      "sha256": "fa353ba0884cf3c8ef9916199f94171c4b9bf9cdf194158b2a443bd3d90aef59",
+      "bytes": 3744
+    },
+    "postgres/bootstrap-roles.log": {
+      "sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322",
+      "bytes": 16
+    },
+    "postgres/build.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "postgres/migration-install.log": {
+      "sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f",
+      "bytes": 114
+    },
+    "postgres/migration-repeat.log": {
+      "sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4",
+      "bytes": 122
+    },
+    "postgres/migration-role-tcp.log": {
+      "sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4",
+      "bytes": 39
+    },
+    "postgres/migration-startup-role.log": {
+      "sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771",
+      "bytes": 35
+    },
+    "postgres/postgres-race.log": {
+      "sha256": "9f53c64d0f2d72b1c28246303f215a779b8faedef65430ae477229785e45a0ee",
+      "bytes": 46624
+    },
+    "postgres/read-only-lookup.log": {
+      "sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76",
+      "bytes": 23
+    },
+    "postgres/test-logins.log": {
+      "sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7",
+      "bytes": 48
+    },
+    "postgres/unit.log": {
+      "sha256": "0108f0b36b80a96b98120c204049bd0d3cd846de955fbdc5853f017d72eb91ed",
+      "bytes": 1088
+    },
+    "postgres/verification.json": {
+      "sha256": "095de57adb38a67c783a46587c52e2deb6b72130f68fa8c2ec12f665bb081f75",
+      "bytes": 6253
+    },
+    "postgres/vet.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "review-transcript.txt": {
+      "sha256": "5f9f7612878171c1971ce2aa11f6ac2cea54b9f79fa21fb896c1b295d281868b",
+      "bytes": 3269
+    }
+  }
+}

@@ -1,0 +1,28 @@
+HIT-106 source commit: 4c165aaee969becf9a314b85e198d84949247796
+go version go1.27.2 linux/amd64
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.053s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.022s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.016s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.033s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http	1.043s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/oidc	2.735s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.025s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer	1.021s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.268s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.020s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.039s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/oidclogin	1.036s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.025s
+
+$ go vet ./...
+
+$ go build ./...
+
+$ go vet -tags hit106lab ./tools/hit106-server
+
+$ go build -tags hit106lab ./tools/hit106-server
+
+All five commands exited 0.
