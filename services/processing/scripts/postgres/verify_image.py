@@ -66,12 +66,14 @@ def image_identity(archive, revision, architecture):
 
 class ImageRun(Run):
     command_timeout = 900  # The first build can download the pinned toolchain layers.
+    task = "HIT-145"
+    test_summary = "CLOSED, forbidden Health, mTLS, READY, restart, durable idempotence"
 
     def __init__(self, output, go, fixture):
         super().__init__(output)
         self.go = go
         self.fixture = fixture
-        self.name = self.name.replace("hit76-", "hit145-", 1)
+        self.name = self.name.replace("hit76-", self.task.lower().replace("-", "") + "-", 1)
         self.db = "hit78"  # Existing isolated Go fixtures use this database name.
         self.tag = self.name + ":test"
         self.volumes = {target: f"{self.name}-{name}" for target, name in
@@ -91,13 +93,13 @@ class ImageRun(Run):
     def command(self, label, args, stdin=None, required=True):
         if label == "container-create":
             for volume in self.volumes.values():
-                self.docker("volume-create", "volume", "create", "--label", "hitpipe.task=HIT-145", volume)
+                self.docker("volume-create", "volume", "create", "--label", "hitpipe.task=" + self.task, volume)
                 self.owned_volumes.append(volume)
             args = list(args)
             index = args.index("/var/run/postgresql:rw") - 1
             args[index:index + 2] = [*self.volume(SOCKET), *self.volume(CONFIG), *self.volume(CONTENT),
                                     "--mount", f"type=bind,source={self.fixture},target=/test,readonly"]
-            args[args.index("hitpipe.task=HIT-76")] = "hitpipe.task=HIT-145"
+            args[args.index("hitpipe.task=HIT-76")] = "hitpipe.task=" + self.task
         return super().command(label, args, stdin=stdin, required=required)
 
     def run(self):
@@ -149,35 +151,40 @@ class ImageRun(Run):
             self.docker("image-cleanup", "image", "rm", self.tag, required=False)
         runtime_summary = {"status": "PASS", "image": self.identity, "postgres": IMAGE,
                            "started_from": "image loaded from the inspected archive",
-                           "tests": "CLOSED, forbidden Health, mTLS, READY, restart, durable idempotence",
+                           "tests": self.test_summary,
                            "finished_at": now()}
         (self.output / "summary.json").write_text(json.dumps(runtime_summary, indent=2) + "\n")
         print(json.dumps(runtime_summary))
 
-    def await_file(self, name):
+    def await_file(self, name, status="status"):
         for _ in range(120):
             found = self.docker("await-" + name, "exec", self.container, "test", "-f",
                                 CONTROL + "/" + name, required=False)
             if found.returncode == 0:
                 return self.docker(name, "exec", self.container, "cat", CONTROL + "/" + name).stdout
-            if name != "status":
+            if name != status:
                 done = self.docker("early-driver-status", "exec", self.container, "test", "-f",
-                                   CONTROL + "/status", required=False)
+                                   CONTROL + "/" + status, required=False)
                 if done.returncode == 0:
                     break
             time.sleep(0.15)
         raise RuntimeError("fixture did not publish " + name)
 
     def start_app(self, number, paths):
+        if set(paths) not in ({"config"}, {"config", "stand"}):
+            raise ValueError("unexpected fixture arguments")
         for path in paths.values():
             if not re.fullmatch(CONFIG + r"/fixture/[a-zA-Z0-9._/-]+", path) or ".." in pathlib.PurePath(path).parts:
                 raise ValueError("unexpected fixture path")
         self.app_name = f"{self.name}-processing-{number}"
+        args = ["-config", paths["config"]]
+        if "stand" in paths:
+            args += ["-stand-config", paths["stand"]]
         self.docker("processing-start-" + number, "run", "--detach", "--name", self.app_name,
-                    "--pull=never", "--label", "hitpipe.task=HIT-145", "--network", "container:" + self.container,
+                    "--pull=never", "--label", "hitpipe.task=" + self.task, "--network", "container:" + self.container,
                     "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges:true",
                     *self.volume(CONFIG, readonly=True), *self.volume(SOCKET, readonly=True), *self.volume(CONTENT),
-                    self.tag, "-config", paths["config"], "-stand-config", paths["stand"])
+                    self.loaded_id, *args)
         fields = ("Config.User", "HostConfig.ReadonlyRootfs", "HostConfig.PidMode", "HostConfig.Privileged",
                   "HostConfig.NetworkMode", "HostConfig.CapDrop", "HostConfig.SecurityOpt", "Mounts", "Image")
         template = "\n".join("{{json ." + field + "}}" for field in fields)
@@ -194,13 +201,18 @@ class ImageRun(Run):
         if process.split()[0] != b"10001":
             raise AssertionError("the actual process UID is not 10001")
 
-    def stop_app(self):
+    def stop_app(self, kill=False):
         name = self.app_name
-        self.docker("processing-stop", "stop", "-t", "7", name)
+        if kill:
+            self.docker("processing-kill", "kill", "--signal", "KILL", name)
+            self.docker("processing-wait", "wait", name)
+        else:
+            self.docker("processing-stop", "stop", "-t", "7", name)
         self.docker("processing-logs", "logs", name)
         state = self.docker("processing-exit", "inspect", "--format", "{{json .State}}", name).stdout
-        if json.loads(state)["ExitCode"] != 0:
-            raise AssertionError("Processing did not exit normally")
+        result = json.loads(state)
+        if result["ExitCode"] != (137 if kill else 0) or result["OOMKilled"]:
+            raise AssertionError("unexpected Processing exit: " + state.decode())
         self.docker("processing-cleanup", "rm", "-v", name)
         self.app_name = None
 
