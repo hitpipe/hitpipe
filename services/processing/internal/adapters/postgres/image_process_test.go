@@ -13,6 +13,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/contentfiles"
 	"github.com/hitpipe/hitpipe/services/processing/internal/adapters/draftjson"
 	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
+	"github.com/hitpipe/hitpipe/services/processing/internal/application/readcases"
 )
 
 const imageControl = "/tmp/hit145-control"
@@ -67,6 +68,29 @@ func imageHealth(t *testing.T, stand *processStand, wanted, revision string) dra
 type imageState struct {
 	Cases, Inbound, Outbound, Attempts int
 	DeliveryState                      string
+}
+
+func awaitImageHistory(t *testing.T, stand *processStand, path string, headers map[string]string) []byte {
+	t.Helper()
+	// The integrated runtime has a case worker. Its controlled Intake answers
+	// 503, so compare history only after the expected durable hold is recorded.
+	deadline := time.Now().Add(8 * time.Second)
+	for time.Now().Before(deadline) {
+		body := stand.must("bff.test", "8443", "GET", path, nil, headers, 200)
+		var history readcases.HistoryView
+		if err := json.Unmarshal(body, &history); err != nil {
+			t.Fatal(err)
+		}
+		for _, item := range history.Items {
+			if item.NewState == "WAITING_DATA" && item.ReasonCode == "READER_UNAVAILABLE" {
+				t.Log("baseline history captured after the controlled Intake failure was durably recorded")
+				return body
+			}
+		}
+		time.Sleep(40 * time.Millisecond)
+	}
+	t.Fatal("case worker did not persist the expected Intake hold")
+	return nil
 }
 
 func readImageState(t *testing.T, scope, jobScope, message string) imageState {
@@ -141,7 +165,7 @@ func TestProcessingOCIImageOwnedStand(t *testing.T) {
 		t.Fatal("invalid admission receipt")
 	}
 	historyURL := path + "/cases/" + admitted.RecordID + "/history"
-	history := stand.must("bff.test", "8443", "GET", historyURL, nil, own, 200)
+	history := awaitImageHistory(t, stand, historyURL, own)
 
 	result, err := job.service.Prepare(ctx, job.request)
 	if err != nil {
