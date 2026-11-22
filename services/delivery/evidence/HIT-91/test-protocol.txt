@@ -1,0 +1,186 @@
+3c671f1f22d5e3466b2218b605b28545875c907e
+Committed Delivery tree verified clean
+HIT-91 fixture 2026-11-22T16:06:47.3086769Z
+Migration SHA-256 9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e
+Commands: go test -v -race -count=1 ./...; go vet ./...
+29.3.1
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+hit91-a6942338b9f3
+87865007a432e5360449abd0c3b098fe312edcf67c09acf558954da505f616d6
+5128c979b1e0b77fb628bd9818590bdac07067677235855ecd648d7ec1c3798b
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+ALTER DATABASE
+SET
+BEGIN
+CREATE SCHEMA
+REVOKE
+GRANT
+SET
+CREATE TABLE
+INSERT 0 1
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+REVOKE
+GRANT
+GRANT
+COMMIT
+RESET
+CREATE TABLE
+CREATE FUNCTION
+CREATE TRIGGER
+                                         version                                         | fsync | full_page_writes | synchronous_commit 
+-----------------------------------------------------------------------------------------+-------+------------------+--------------------
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+(1 row)
+
+go version go1.27.2 linux/amd64
+=== RUN   TestHTTPContract
+=== RUN   TestHTTPContract/receipt
+=== RUN   TestHTTPContract/wrong_caller
+=== RUN   TestHTTPContract/untrusted_certificate
+2026/11/22 16:07:27 http: TLS handshake error from 127.0.0.1:53426: tls: failed to verify certificate: x509: certificate signed by unknown authority (possibly because of "x509: ECDSA verification failure" while trying to verify candidate authority certificate "Delivery fixture")
+=== RUN   TestHTTPContract/missing_certificate
+2026/11/22 16:07:27 http: TLS handshake error from 127.0.0.1:58182: tls: client didn't provide a certificate
+=== RUN   TestHTTPContract/unknown_field
+=== RUN   TestHTTPContract/too_big
+=== RUN   TestHTTPContract/wrong_binding
+=== RUN   TestHTTPContract/closed_gate
+=== RUN   TestHTTPContract/not_visible
+=== RUN   TestHTTPContract/conflict
+=== RUN   TestHTTPContract/expired
+=== RUN   TestHTTPContract/quota
+=== RUN   TestHTTPContract/unavailable_authority
+=== RUN   TestHTTPContract/unavailable_storage
+--- PASS: TestHTTPContract (0.77s)
+    --- PASS: TestHTTPContract/receipt (0.03s)
+    --- PASS: TestHTTPContract/wrong_caller (0.02s)
+    --- PASS: TestHTTPContract/untrusted_certificate (0.02s)
+    --- PASS: TestHTTPContract/missing_certificate (0.02s)
+    --- PASS: TestHTTPContract/unknown_field (0.03s)
+    --- PASS: TestHTTPContract/too_big (0.54s)
+    --- PASS: TestHTTPContract/wrong_binding (0.01s)
+    --- PASS: TestHTTPContract/closed_gate (0.01s)
+    --- PASS: TestHTTPContract/not_visible (0.01s)
+    --- PASS: TestHTTPContract/conflict (0.01s)
+    --- PASS: TestHTTPContract/expired (0.01s)
+    --- PASS: TestHTTPContract/quota (0.01s)
+    --- PASS: TestHTTPContract/unavailable_authority (0.01s)
+    --- PASS: TestHTTPContract/unavailable_storage (0.01s)
+=== RUN   TestUnwiredService
+--- PASS: TestUnwiredService (0.00s)
+=== RUN   TestIntentSchema
+=== RUN   TestIntentSchema/unknown
+=== RUN   TestIntentSchema/case_alias
+=== RUN   TestIntentSchema/wrong_version
+=== RUN   TestIntentSchema/wrong_rendering
+=== RUN   TestIntentSchema/null
+=== RUN   TestIntentSchema/null_item
+=== RUN   TestIntentSchema/oversized_context
+=== RUN   TestIntentSchema/missing
+=== RUN   TestIntentSchema/unsafe_epoch
+=== RUN   TestIntentSchema/fractional_epoch
+=== RUN   TestIntentSchema/block_bytes
+=== RUN   TestIntentSchema/duplicate
+=== RUN   TestIntentSchema/nested_duplicate
+=== RUN   TestIntentSchema/unpaired_Unicode
+=== RUN   TestIntentSchema/bad_digest
+=== RUN   TestIntentSchema/trailing_JSON
+--- PASS: TestIntentSchema (0.06s)
+    --- PASS: TestIntentSchema/unknown (0.00s)
+    --- PASS: TestIntentSchema/case_alias (0.00s)
+    --- PASS: TestIntentSchema/wrong_version (0.00s)
+    --- PASS: TestIntentSchema/wrong_rendering (0.00s)
+    --- PASS: TestIntentSchema/null (0.00s)
+    --- PASS: TestIntentSchema/null_item (0.00s)
+    --- PASS: TestIntentSchema/oversized_context (0.02s)
+    --- PASS: TestIntentSchema/missing (0.00s)
+    --- PASS: TestIntentSchema/unsafe_epoch (0.00s)
+    --- PASS: TestIntentSchema/fractional_epoch (0.00s)
+    --- PASS: TestIntentSchema/block_bytes (0.02s)
+    --- PASS: TestIntentSchema/duplicate (0.00s)
+    --- PASS: TestIntentSchema/nested_duplicate (0.00s)
+    --- PASS: TestIntentSchema/unpaired_Unicode (0.00s)
+    --- PASS: TestIntentSchema/bad_digest (0.00s)
+    --- PASS: TestIntentSchema/trailing_JSON (0.00s)
+=== RUN   TestPrivateContent
+--- PASS: TestPrivateContent (1.54s)
+=== RUN   TestPostgresDurableIntake
+    postgres_linux_test.go:308: lost HTTP ACK and replay from a new process: {"message_id":"13e10e0e-44e4-464b-9166-b543ad27c1d3","disposition":"APPLIED","record_id":"6c000886-ad83-4d2b-9e28-37b75dd3ef50"}
+    postgres_linux_test.go:319: receipt={MessageID:f246f5e3-1db2-48e1-be55-6c4a4d2a5ec9 Disposition:APPLIED RecordID:0a3f8a89-4f77-4900-9502-2aefa0531f9b} before/after replay; state=PREPARED attempt=1 fence=false network_started=false expiry=2026-11-22T17:07:30.138957Z
+--- PASS: TestPostgresDurableIntake (9.18s)
+=== RUN   TestPostgresReplayProcess
+    postgres_linux_test.go:352: spawned by the lost HTTP ACK check
+--- SKIP: TestPostgresReplayProcess (0.00s)
+PASS
+ok  	github.com/dkar-dev/hitpipe/services/delivery/internal/intake	12.585s
+go-test-exit=0
+go-vet-exit=0
+hit91-a6942338b9f3-pg
+hit91-a6942338b9f3
+hit91-a6942338b9f3
+fixture-exit=0
