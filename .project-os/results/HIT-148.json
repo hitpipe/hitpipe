@@ -2,12 +2,12 @@
   "subject": "HIT-148",
   "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
   "materialized_result": {
-    "implementation_status": "BLOCKED_NO_PROCESSING_APPLICATION_ATTESTATION_AND_RESTORE_BARRIER",
-    "summary": "На двух TEST workspace Processing проверил настоящий подписанный инвентарь HIT-154 по TLS 1.3. Фактическое удаление и допуск после восстановления не включены без композиции квитанции с реальным хранилищем и барьера WithCurrent.",
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_ISOLATED_TEST",
+    "summary": "Processing применил подписанное точечное удаление, восстановил квитанцию после сбоя и повторно удалил те же версии из старой копии до синхронного открытия под WithCurrent. Настоящий IAM HIT-154 независимо проверил два применения.",
     "contract_revision": 2,
     "contract_fingerprint": "4f6de4914566687537272ebc38e95ab78c3297c0678319725a86d2585c92c7c5",
     "base_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
-    "tested_code_sha": "0eba954c24652655cfc661fc63628b2097ebd33e",
+    "tested_code_sha": "107ed4e3ae0d43300a09dea10b2d43ad4423efc1",
     "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
     "tested_iam_sha": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
     "pull_request": "https://github.com/hitpipe/hitpipe/pull/86"
@@ -34,43 +34,48 @@
   ],
   "changed_artifacts": [
     "services/processing/cmd/processing-purge",
-    "services/processing/internal/adapters/deletionregistry/read.go",
+    "services/processing/internal/adapters",
+    "services/processing/internal/runtime",
+    "services/processing/maintenance",
     "services/processing/scripts/recovery/verify_deletion_inventory.py",
-    "tools/hit148/inventory-probe.go",
+    "tools/hit148",
     "services/processing/docs/HIT-148",
     ".project-os/results/HIT-148.json"
   ],
   "verification": {
     "report": "services/processing/docs/HIT-148/README.md",
     "runbook": "services/processing/docs/HIT-148/RUN_RU.md",
-    "integration_boundary": "services/processing/docs/HIT-148/verification/INTEGRATION_BOUNDARY.md",
-    "test_log": "services/processing/docs/HIT-148/verification/INVENTORY_RUN.md",
-    "raw_logs": "services/processing/docs/HIT-148/verification/inventory-raw.tar.gz"
+    "source": "services/processing/docs/HIT-148/verification/applied/SOURCE.md",
+    "test": "services/processing/docs/HIT-148/verification/applied/RUNS.md",
+    "raw": "services/processing/docs/HIT-148/verification/applied/raw-local.tar.gz",
+    "ci": "https://github.com/hitpipe/hitpipe/pull/86/checks",
+    "real_case_application": "services/processing/docs/HIT-148/verification/applied/RUNTIME.md",
+    "ci_report": "services/processing/docs/HIT-148/verification/applied/CI.md"
   },
   "dod_evidence": [
     {
       "id": "8d0d1da9-f5a3-484e-8d94-7b99e7bedb42",
-      "observed_local": "PARTIAL",
-      "observation": "Реальная проверка снимка и отказов по роли mTLS, области, поколению и подписи. Адресный вызов под ограниченной ролью не реализован."
+      "observed_local": "PASS",
+      "observation": "Два синтетических пространства. Настоящий владелец и точные версии, отказы app/worker, чужой области, версии, поколения, источника и подменённого подтверждения."
     },
     {
       "id": "5f9f0546-97ad-4d41-b2bc-ea98fc50a2f7",
-      "observed_local": "BLOCKED",
-      "observation": "Нужна доверенная проверка устойчивого эффекта в реальных файлах Processing. Прежний purge используется только как регрессия."
+      "observed_local": "PASS",
+      "observation": "Два выбранных файла удалены. Общий файл, другие дела, соседнее пространство, обязательная история, исходные времена и SQL fence сохранены."
     },
     {
       "id": "a021aaf4-88eb-4cbe-9819-360f189411aa",
-      "observed_local": "BLOCKED",
-      "observation": "Повтор и readback неизменённого Processing прошли в прежнем recovery. Фактическое адресное удаление и его readback не выполнялись."
+      "observed_local": "PASS",
+      "observation": "Разрыв после применения до принятия квитанции. Повтор сохранил точный результат, WithApplied проверил устойчивый эффект, readback вернул минимум. Отсутствие файла без отметки квитанцию не создало."
     },
     {
       "id": "e24b6b04-15fa-4c03-8df2-0e991331d222",
-      "observed_local": "BLOCKED",
-      "observation": "WithCurrent требует синхронного открытия под замком издателя. Межпроцессная композиция отсутствует. Адресный режим закрыт."
+      "observed_local": "PASS",
+      "observation": "После восстановления старых SQL и файлов повторное применение в поколении 2. Старый снимок и отсутствие источника держали gate CLOSED. Синхронный переход под WithCurrent, история вернула 200, новых вызовов Delivery нет."
     }
   ],
   "deviations": [],
   "known_limitations": [
-    "Отсутствуют доверенные адаптеры издателя к принадлежности версий и к устойчивому результату фактического Processing, а также синхронная проверка открытия восстановленного процесса. Источник HIT-154 и его подтверждённая версия доступны."
+    "Проверено на изолированном TEST с одним восстанавливаемым пространством и вторым контрольным. Обычный mTLS runtime-стенд управляемый, выдача и проверка удаления выполнены настоящим HIT-154."
   ]
 }
