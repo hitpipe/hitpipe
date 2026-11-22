@@ -1,0 +1,27 @@
+d13f723511b61cb3068bfdf63d40bd7100fa1e89
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.084s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.036s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.021s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/privateiam	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.042s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	1.519s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/revocation	3.832s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	1.029s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.032s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/revocation	[no test files]
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.324s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.030s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.060s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/revocation	1.031s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.028s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0
