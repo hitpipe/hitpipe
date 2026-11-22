@@ -1,0 +1,41 @@
+{
+  "subject": "HIT-146",
+  "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
+  "materialized_result": {
+    "implementation_status": "BLOCKED_REMOTE_IAM_REGISTRATION",
+    "summary": "Два реальных изолированных прогона воспроизвели 403 для новых boot Processing и 200/SYNCING для точно утверждённой привязки. Полезный защищённый старт и ACK Processing недостижимы на принятых источниках. У настоящего координатора отсутствие ACK даёт PENDING, затем INCIDENT без EFFECTIVE.",
+    "contract_revision": 1,
+    "contract_fingerprint": "0f89b752fa6ef21d986f295541483c3da6dc36fdedc90be4f5ac91bf404348ac",
+    "processing_base": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "tested_processing_sha": "ce317193244623c5a464a3014bb39f32875c1e98",
+    "tested_iam_checkout_sha": "ae5fd0f35ec7d5097cace75b3b15ecb14042c654",
+    "tested_iam_implementation_sha": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+    "postgres": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "platform": "linux/arm64",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/90"
+  },
+  "dependencies": {
+    "HIT-111": {"verified": "b2e823012854575146595b01a6f56d5ac677fc44", "included_in": "Processing", "review": 14274},
+    "HIT-115": {"verified": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08", "included_in": "IAM", "review": 15478},
+    "HIT-116": {"verified": "d13f723511b61cb3068bfdf63d40bd7100fa1e89", "included_in": "IAM", "review": 16116}
+  },
+  "verification": {
+    "report": "services/processing/docs/HIT-146/README.md",
+    "runbook": "services/processing/docs/HIT-146/RUN_RU.md",
+    "source_evidence": "services/processing/docs/HIT-146/verification/source-evidence.md",
+    "runtime_evidence": "services/processing/docs/HIT-146/verification/runtime-evidence.md",
+    "test_evidence": "services/processing/docs/HIT-146/verification/test-evidence.md",
+    "ci_evidence": "services/processing/docs/HIT-146/verification/ci-evidence.md",
+    "cross_service_boundary": "services/processing/docs/HIT-146/STARTUP_BOUNDARY_RU.md"
+  },
+  "dod_evidence": [
+    {"id":"7ab7120a-2855-4572-9e99-ab5f942662da","observed_local":"BLOCKED","observation":"CLOSED и отказы подтверждены. Свежий удалённый OPEN отсутствует."},
+    {"id":"e12254a0-d1ea-4765-9f73-529275720d3a","observed_local":"BLOCKED","observation":"Защищённый старт до отзыва и ACK Processing недостижимы."},
+    {"id":"f977c6a6-733c-4915-a29f-a6f7f22e01cb","observed_local":"BLOCKED","observation":"Отсутствие ACK не стало EFFECTIVE. Удерживаемый исходящий запрос в реальном IAM сценарии не начался."},
+    {"id":"c297fb3a-7e92-4b81-8645-8d61e91a5004","observed_local":"MEASURED_INCIDENT","observation":"Два прогона с теми же SHA. INCIDENT без EFFECTIVE наблюдался через 5091 и 5092 мс от принятия при лимите 5000 мс."}
+  ],
+  "known_limitations": [
+    "Нужен принятый способ подготовки нового boot и удалённого OPEN для Processing, а также привязка control-сертификата к участнику.",
+    "В новом стенде проверены настоящие частные IAM методы и координатор, Processing, PostgreSQL 18.7. Внешние зависимости и PKI управляемые. Успешного отзыва и рабочего provider flow нет."
+  ]
+}
