@@ -26,6 +26,8 @@ const startBudget = 2 * time.Second
 type Server struct {
 	local runtimeaccess.Registration
 	peers map[runtimeaccess.Peer]runtimeaccess.Registration
+	pool  *pgxpool.Pool
+	clock authenticatesession.Clock
 	store *runtimedb.Store
 	gate  *startgate.Gate
 	scope *authorization.Reader
@@ -80,7 +82,7 @@ func New(pool *pgxpool.Pool, clock authenticatesession.Clock, owner authorizeact
 	if err != nil {
 		return nil, err
 	}
-	return &Server{local: local, peers: peers, store: store, gate: gate, scope: scope, check: check}, nil
+	return &Server{local: local, peers: peers, pool: pool, clock: clock, store: store, gate: gate, scope: scope, check: check}, nil
 }
 
 // Start only opens the process after applying the complete, fresh snapshot for

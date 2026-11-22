@@ -65,6 +65,12 @@ func transportPeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
 	return certificatePeer(state)
 }
 
+// TransportPeer gives a composing listener the same verified, current TLS
+// peer as these private endpoints.
+func TransportPeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
+	return transportPeer(state)
+}
+
 func certificatePeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
 	if state == nil || state.Version != tls.VersionTLS13 || len(state.PeerCertificates) == 0 || len(state.VerifiedChains) == 0 {
 		return runtimeaccess.Peer{}, errCertificate

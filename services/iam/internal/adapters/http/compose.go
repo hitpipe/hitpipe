@@ -1,6 +1,7 @@
 package httpauth
 
 import (
+	"context"
 	"net/url"
 	"strings"
 
@@ -15,6 +16,19 @@ import (
 // The caller owns the pool and supplies trusted time, issuance authority and
 // session lifetimes for its environment. No test authority is selected here.
 func NewOIDC(config oidc.Config, pool *pgxpool.Pool, clock issuesession.Clock, guard issuesession.IssuanceGuard, policy issuesession.Policy, successPath string) (*Handler, error) {
+	return newOIDC(config, pool, clock, guard, policy, successPath, nil)
+}
+
+// NewAdmittedOIDC reuses the accepted adapter and additionally binds session
+// creation and its successful cookie response to the configured runtime gate.
+func NewAdmittedOIDC(config oidc.Config, pool *pgxpool.Pool, clock issuesession.Clock, guard issuesession.IssuanceGuard, policy issuesession.Policy, successPath string, admission issuesession.StartAdmission) (*Handler, error) {
+	if admission == nil {
+		return nil, issuesession.ErrConfiguration
+	}
+	return newOIDC(config, pool, clock, guard, policy, successPath, admission)
+}
+
+func newOIDC(config oidc.Config, pool *pgxpool.Pool, clock issuesession.Clock, guard issuesession.IssuanceGuard, policy issuesession.Policy, successPath string, admission issuesession.StartAdmission) (*Handler, error) {
 	callback, err := url.Parse(config.RedirectURI)
 	if err != nil || callback.EscapedPath() != "/auth/callback" {
 		return nil, issuesession.ErrConfiguration
@@ -43,5 +57,14 @@ func NewOIDC(config oidc.Config, pool *pgxpool.Pool, clock issuesession.Clock, g
 	if err != nil {
 		return nil, err
 	}
-	return New(flow, issuer, successPath)
+	handler, err := New(flow, issuer, successPath)
+	if err != nil {
+		return nil, err
+	}
+	if admission != nil {
+		handler.issueAtStart = func(ctx context.Context, proof string, emit func(context.Context, issuesession.Result) error) error {
+			return issuer.ExecuteAtStart(ctx, proof, admission, emit)
+		}
+	}
+	return handler, nil
 }

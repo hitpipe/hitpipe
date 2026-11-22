@@ -29,9 +29,10 @@ type Issuer interface {
 }
 
 type Handler struct {
-	flow        *oidclogin.Service
-	issuer      Issuer
-	successPath string
+	flow         *oidclogin.Service
+	issuer       Issuer
+	successPath  string
+	issueAtStart func(context.Context, string, func(context.Context, issuesession.Result) error) error
 }
 
 // New takes a configured same-origin path. No redirect target is read from the browser.
@@ -178,16 +179,13 @@ func (h *Handler) callback(w http.ResponseWriter, r *http.Request) {
 		unavailable(w)
 		return
 	}
+	if h.issueAtStart != nil {
+		h.admittedCallback(w, ctx, proof)
+		return
+	}
 	result, err := h.issuer.Execute(ctx, proof)
-	switch {
-	case errors.Is(err, issuesession.ErrConfirmationDenied):
-		credentialDenied(w)
-		return
-	case errors.Is(err, issuesession.ErrIssuanceDenied):
-		writeError(w, http.StatusForbidden, "session_denied", "Sign-in is unavailable for this session.")
-		return
-	case err != nil:
-		unavailable(w)
+	if err != nil {
+		issueError(w, err)
 		return
 	}
 	cookie := issuedCookie(result)
@@ -197,6 +195,47 @@ func (h *Handler) callback(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, cookie)
 	redirect(w, http.StatusSeeOther, h.successPath)
+}
+
+func issueError(w http.ResponseWriter, err error) {
+	switch {
+	case errors.Is(err, issuesession.ErrConfirmationDenied):
+		credentialDenied(w)
+	case errors.Is(err, issuesession.ErrIssuanceDenied):
+		writeError(w, http.StatusForbidden, "session_denied", "Sign-in is unavailable for this session.")
+	default:
+		unavailable(w)
+	}
+}
+
+func (h *Handler) admittedCallback(w http.ResponseWriter, ctx context.Context, proof string) {
+	controller := http.NewResponseController(w)
+	if _, ok := w.(http.Flusher); !ok || controller.SetWriteDeadline(time.Time{}) != nil {
+		unavailable(w)
+		return
+	}
+	started := false
+	err := h.issueAtStart(ctx, proof, func(work context.Context, result issuesession.Result) error {
+		deadline, bounded := work.Deadline()
+		cookie := issuedCookie(result)
+		if started || !bounded || work.Err() != nil || controller.SetWriteDeadline(deadline) != nil || cookie == nil {
+			return issuesession.ErrGuardUnavailable
+		}
+		if work.Err() != nil {
+			return issuesession.ErrCancelled
+		}
+		started = true
+		http.SetCookie(w, cookie)
+		redirect(w, http.StatusSeeOther, h.successPath)
+		return controller.Flush()
+	})
+	if started {
+		if err != nil {
+			panic(http.ErrAbortHandler)
+		}
+		return
+	}
+	issueError(w, err)
 }
 
 func issuedCookie(result issuesession.Result) *http.Cookie {
