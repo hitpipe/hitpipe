@@ -73,7 +73,7 @@ type Decision struct {
 	Receipts        []Receipt  `json:"receipts"`
 }
 
-type inventory struct {
+type Snapshot struct {
 	SchemaVersion int        `json:"schema_version"`
 	Environment   string     `json:"environment"`
 	PublisherID   string     `json:"publisher_id"`
@@ -147,49 +147,57 @@ func New(p Provision, roots *x509.CertPool, leaf tls.Certificate, key ed25519.Pu
 }
 
 func (c *Client) Observe(ctx context.Context) (Observation, error) {
+	snapshot, err := c.Snapshot(ctx)
+	if err != nil {
+		return Observation{}, err
+	}
+	return Observation{snapshot.WorkspaceID, snapshot.Generation, snapshot.Revision, len(snapshot.Decisions)}, nil
+}
+
+func (c *Client) Snapshot(ctx context.Context) (Snapshot, error) {
 	if c == nil || ctx == nil || ctx.Err() != nil {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	q, err := http.NewRequestWithContext(ctx, http.MethodGet, c.endpoint.String(), nil)
 	if err != nil {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	q.Header.Set("Accept", "application/json")
 	resp, err := c.http.Do(q)
 	if err != nil {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	defer resp.Body.Close()
 	contentType, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 	if err != nil || contentType != "application/json" || resp.StatusCode != http.StatusOK ||
 		resp.Header.Get("Content-Encoding") != "" || resp.ContentLength > maxResponse {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	raw, err := io.ReadAll(io.LimitReader(resp.Body, maxResponse+1))
 	if err != nil || len(raw) > maxResponse || ctx.Err() != nil {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	return c.verify(raw)
 }
 
-func (c *Client) verify(raw []byte) (Observation, error) {
+func (c *Client) verify(raw []byte) (Snapshot, error) {
 	var envelope struct {
 		Payload   json.RawMessage `json:"payload"`
 		Signature []byte          `json:"signature"`
 	}
 	if json.Unmarshal(raw, &envelope) != nil || len(envelope.Signature) != ed25519.SignatureSize {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	// The publisher signs its canonical Go JSON bytes. Exact re-encoding
 	// rejects repeat keys, folded names, null substitutions and extra fields.
 	envelopeJSON, err := json.Marshal(envelope)
 	if err != nil || !bytes.Equal(bytes.TrimSuffix(raw, []byte("\n")), envelopeJSON) ||
 		!ed25519.Verify(c.key, append([]byte(signatureDomain), envelope.Payload...), envelope.Signature) {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
-	var snapshot inventory
+	var snapshot Snapshot
 	if err := json.Unmarshal(envelope.Payload, &snapshot); err != nil {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	canonical, err := json.Marshal(snapshot)
 	p := c.provision
@@ -198,19 +206,19 @@ func (c *Client) verify(raw []byte) (Observation, error) {
 		snapshot.PublisherID != p.PublisherID || snapshot.WorkspaceID != p.WorkspaceID ||
 		snapshot.Generation != p.Generation || !version(snapshot.Revision) ||
 		!snapshot.Full || snapshot.Decisions == nil || len(snapshot.Decisions) > 4096 {
-		return Observation{}, ErrUnavailable
+		return Snapshot{}, ErrUnavailable
 	}
 	var previous string
 	for _, d := range snapshot.Decisions {
 		if d.DeletionID <= previous || !d.valid(snapshot) {
-			return Observation{}, ErrUnavailable
+			return Snapshot{}, ErrUnavailable
 		}
 		previous = d.DeletionID
 	}
-	return Observation{snapshot.WorkspaceID, snapshot.Generation, snapshot.Revision, len(snapshot.Decisions)}, nil
+	return snapshot, nil
 }
 
-func (d Decision) valid(p inventory) bool {
+func (d Decision) valid(p Snapshot) bool {
 	if !id(d.DeletionID) || d.Action != "CASE_CONTENT_DELETE" || d.PublisherID != p.PublisherID ||
 		d.Scope.WorkspaceID != p.WorkspaceID || !id(d.Scope.CaseID) ||
 		len(d.Scope.Targets) == 0 || len(d.Scope.Targets) > 128 ||

@@ -94,11 +94,19 @@ func main() {
 	limit := flag.Int("limit", 100, "maximum rows held and maximum files unlinked per batch")
 	local := flag.Bool("local-stand", false, "confirm isolated local stand")
 	inventory := flag.String("verify-deletion-inventory", "", "absolute trusted configuration for a read-only TEST inventory check")
+	apply := flag.String("apply-deletion-inventory", "", "absolute trusted configuration for verified TEST deletion application")
 	flag.Parse()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
+	if *apply != "" {
+		if !*local || *inventory != "" || flag.NArg() != 0 || *workspace != "" || *limit != 100 {
+			fmt.Fprintln(os.Stderr, deletionregistry.ErrUnavailable)
+			os.Exit(2)
+		}
+		os.Exit(runDeletion(ctx, *apply, *path))
+	}
 	if *inventory != "" {
 		// A verification request must never fall through to ordinary expiry cleanup.
 		if !*local || flag.NArg() != 0 || *workspace != "" || *path != "" || *limit != 100 {

@@ -16,6 +16,7 @@ var (
 	ErrDenied          = errors.New("READ_DENIED")
 	ErrNotFound        = errors.New("NOT_FOUND")
 	ErrUnavailable     = errors.New("READ_UNAVAILABLE")
+	ErrDeleted         = errors.New("CASE_CONTENT_DELETED")
 	ErrExpired         = errors.New("CONTENT_EXPIRED")
 	ErrFutureHistory   = errors.New(casetimeouts.HistoryInvalid)
 )

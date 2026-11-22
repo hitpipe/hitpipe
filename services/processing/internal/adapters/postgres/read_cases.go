@@ -293,6 +293,9 @@ func (db CaseReadStore) loadReadContext(ctx context.Context, tx pgx.Tx, ws strin
 			continue
 		}
 		b, e := db.Content.ReadOwned(ctx, f.ref, preparecase.Origin{WorkspaceID: ws, CaseID: rec.Summary.CaseID, Revision: rec.Summary.Revision}, now)
+		if errors.Is(e, readcases.ErrDeleted) {
+			continue
+		}
 		if errors.Is(e, readcases.ErrExpired) {
 			rec.ContextExpired = true
 			continue
@@ -389,6 +392,10 @@ func (db CaseReadStore) readHistory(ctx context.Context, tx pgx.Tx, r readcases.
 		}
 		ref := preparecase.Ref{ID: *s.refID, Digest: *s.hash, Class: "HISTORY", Bytes: *s.bytes, ExpiresAt: *s.expiry}
 		b, e := db.Content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: r.WorkspaceID, CaseID: r.CaseID, Revision: revision}, now)
+		if errors.Is(e, readcases.ErrDeleted) {
+			out.Items = append(out.Items, h)
+			continue
+		}
 		if e != nil {
 			return nil, readcases.ErrUnavailable
 		}
