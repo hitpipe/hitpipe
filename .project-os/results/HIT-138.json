@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-138",
+  "mode": "IMP",
+  "materialized_result": {
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "summary": "Запускаемый процесс IAM с PostgreSQL, общим шлюзом начала работы, установленными маршрутами и отдельным техническим входом OPS.",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "734c96b88bdd5ce0d5d95e5b895a6b5c25d1c83d",
+    "code_commit": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+    "review_base_ref": "codex/hit-138-dependencies",
+    "review_head_ref": "codex/hit-138-iam-process",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/README.md",
+    "iam_process_runbook": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/docs/IAM_PROCESS_RU.md",
+    "contracts": {
+      "openapi": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+      "iam_sql": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql",
+      "architecture": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+      "postgres_security": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md"
+    },
+    "dependencies": {
+      "HIT-85": {
+        "accepted_result_commit": "51e8d26cb27beac8ed71eed3526f107dbee7c0b8",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/51e8d26cb27beac8ed71eed3526f107dbee7c0b8/.project-os/results/HIT-85.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/64"
+      },
+      "HIT-106": {
+        "accepted_result_commit": "716f422d77f04d1614aae283bdece4c90ecf3056",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/716f422d77f04d1614aae283bdece4c90ecf3056/.project-os/results/HIT-106.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/77"
+      },
+      "HIT-115": {
+        "accepted_result_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/c7a74f55ea8111fa290f803976d256cc8a4a202e/.project-os/results/HIT-115.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/80"
+      }
+    }
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/cmd/iam/main.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/cmd/iam/main.go"
+    },
+    {
+      "path": "services/iam/cmd/iam/process_fixture_integration_test.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/cmd/iam/process_fixture_integration_test.go"
+    },
+    {
+      "path": "services/iam/cmd/iam/process_idp_integration_test.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/cmd/iam/process_idp_integration_test.go"
+    },
+    {
+      "path": "services/iam/cmd/iam/process_integration_test.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/cmd/iam/process_integration_test.go"
+    },
+    {
+      "path": "services/iam/docs/IAM_PROCESS_RU.md",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/docs/IAM_PROCESS_RU.md"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/iamprocess/config.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/iamprocess/config.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/iamprocess/config_postgres.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/iamprocess/config_postgres.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/iamprocess/config_test.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/iamprocess/config_test.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/iamprocess/routes.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/iamprocess/routes.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/iamprocess/run.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/iamprocess/run.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/health.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/privateiam/health.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/login.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/privateiam/login.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/profile.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/privateiam/profile.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/server.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/composition/privateiam/server.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/compose.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/http/compose.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/handler.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/http/handler.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/privateiam/handler.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/http/privateiam/handler.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/privateiam/tls.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/http/privateiam/tls.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/profile/admission.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/adapters/postgres/profile/admission.go"
+    },
+    {
+      "path": "services/iam/internal/application/issuesession/admission_test.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/application/issuesession/admission_test.go"
+    },
+    {
+      "path": "services/iam/internal/application/issuesession/service.go",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/internal/application/issuesession/service.go"
+    },
+    {
+      "path": "services/iam/tools/check_iam_process.py",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/tools/check_iam_process.py"
+    },
+    {
+      "path": "services/iam/tools/check_postgres_session_lookup.py",
+      "version": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/d081e4f5c408b2a94286b1193b244f01f41153d7/services/iam/tools/check_postgres_session_lookup.py"
+    },
+    {
+      "path": "services/iam/evidence/HIT-138",
+      "version": "df293df9214920fffc45180af96ed13f8f245c93",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "d081e4f5c408b2a94286b1193b244f01f41153d7",
+    "evidence_commit": "df293df9214920fffc45180af96ed13f8f245c93",
+    "go": "go version go1.27.2 linux/amd64",
+    "postgres": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "source_tree_sha256": "3a2f915056909a29c2da129379146cf965fc83b23470df7690b51cdbe031653a",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "test_groups": [
+      "TestPostgresIAMProcess"
+    ],
+    "full_protocols": [
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/iam-process-full.log",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/iam/postgres-race.log",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/iam/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/iam-process-passes.log",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/driver.log",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/go.log",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/platform/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/df293df9214920fffc45180af96ed13f8f245c93/services/iam/evidence/HIT-138/cleanup.log"
+    ],
+    "protocol_sha256": "3898b43820b0b0b41a93d8a32d9d70021efe5588619134720b5f9e50d58180d7"
+  },
+  "deviations": [],
+  "limitations": [
+    "Испытания проведены в изолированной VM с отдельными тестовыми материалами, PostgreSQL 18.7 и принятыми, всё ещё открытыми исходными PR.",
+    "Положительные пользовательские сценарии проверены с ограниченными доверенными источниками стенда. Рабочей композиции нужны реальные часы, источники разрешения выпуска сессии и доказательства ресурса.",
+    "OPS health подтверждает техническое состояние конкретной загрузки. Подключение Caddy, развёртывание и новые бизнес-API остаются отдельными задачами."
+  ]
+}
