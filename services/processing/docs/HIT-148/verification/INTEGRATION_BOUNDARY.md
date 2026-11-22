@@ -22,7 +22,7 @@ Processing: `0eba954c24652655cfc661fc63628b2097ebd33e`. База PR №86: `8e67
 | HIT-128, принята | `c426dc400a4bec03fafba72e2a5780c9d85af1e2` | Точный предок Processing, пустой diff исполняемого кода до базы PR №86 |
 | HIT-154, принята | `c715a079ab57d4c9e7b56862f7f2584c792b74b0` | Чистая отдельная сборка, точный предок head PR №89 `fde4ad66cf736bd4ab67af926ae98f4de8eb5f69`. Изменения после него касаются материала результата, diff пакетов и команд IAM пуст |
 
-[Полный diff от базы](https://github.com/hitpipe/hitpipe/compare/8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3...0eba954c24652655cfc661fc63628b2097ebd33e) · [Исходник клиента](https://github.com/hitpipe/hitpipe/blob/0eba954c24652655cfc661fc63628b2097ebd33e/services/processing/internal/adapters/deletionregistry/read.go) · [Определение теста](https://github.com/hitpipe/hitpipe/blob/0eba954c24652655cfc661fc63628b2097ebd33e/tools/hit148/inventory-probe.go). SHA-256 приложенного diff `8112f7eb96c0c2da1b833693e42f9d8881f8a8a163718858cd7c09149159edda`.
+[Полный diff от базы](https://github.com/hitpipe/hitpipe/compare/8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3...0eba954c24652655cfc661fc63628b2097ebd33e) · [Исходник клиента](https://github.com/hitpipe/hitpipe/blob/0eba954c24652655cfc661fc63628b2097ebd33e/services/processing/internal/adapters/deletionregistry/read.go) · [Определение теста](https://github.com/hitpipe/hitpipe/blob/0eba954c24652655cfc661fc63628b2097ebd33e/tools/hit148/inventory-probe.go). SHA-256 исходного diff (файл inventory-source.patch.gz) `8112f7eb96c0c2da1b833693e42f9d8881f8a8a163718858cd7c09149159edda`.
 
 Команды Git, UTC 2026-11-22T19:53:24.078637+00:00. В последнем grep exit 1 означает отсутствие реализаций вне тестов.
 
