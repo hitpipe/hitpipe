@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-83",
+  "mode": "IMP",
+  "materialized_result": {
+    "summary": "Реализовано создание сессии после проверенного одноразового входа: криптографические секреты, атомарные principal+session в PostgreSQL, отказ при повторе/ошибке/неопределённости, совместимость с прежней проверкой сессии.",
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "base_commit": "961ca9bc9743e3d7c288529af4983227007eb4d3",
+    "code_commit": "86fb115c996bb645b62a738f5438cce56075779e",
+    "evidence_commit": "3ec04c07bd7d61064a9915121bc8420e3d3b2aa7",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/README.md",
+    "dependencies": [
+      {
+        "issue": "HIT-81",
+        "commit": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/55"
+      },
+      {
+        "issue": "HIT-82",
+        "commit": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/56"
+      }
+    ]
+  },
+  "changed_artifacts": {
+    "code_version": "86fb115c996bb645b62a738f5438cce56075779e",
+    "code_paths": [
+      "services/iam/README.md",
+      "services/iam/docs/SESSION_ISSUANCE_RU.md",
+      "services/iam/internal/adapters/postgres/sessionissuer/issuer.go",
+      "services/iam/internal/adapters/postgres/sessionissuer/issuer_integration_test.go",
+      "services/iam/internal/adapters/postgres/sessionissuer/issuer_test.go",
+      "services/iam/internal/application/issuesession/ports.go",
+      "services/iam/internal/application/issuesession/service.go",
+      "services/iam/internal/application/issuesession/service_test.go",
+      "services/iam/tools/check_postgres_session_lookup.py",
+      "services/iam/tools/check_session_issuance.py"
+    ],
+    "evidence_version": "3ec04c07bd7d61064a9915121bc8420e3d3b2aa7",
+    "evidence_paths": [
+      "services/iam/evidence/HIT-83/README.md",
+      "services/iam/evidence/HIT-83/bootstrap-roles.log",
+      "services/iam/evidence/HIT-83/build.log",
+      "services/iam/evidence/HIT-83/migration-install.log",
+      "services/iam/evidence/HIT-83/migration-repeat.log",
+      "services/iam/evidence/HIT-83/migration-role-tcp.log",
+      "services/iam/evidence/HIT-83/migration-startup-role.log",
+      "services/iam/evidence/HIT-83/postgres-race.log",
+      "services/iam/evidence/HIT-83/read-only-lookup.log",
+      "services/iam/evidence/HIT-83/test-logins.log",
+      "services/iam/evidence/HIT-83/unit.log",
+      "services/iam/evidence/HIT-83/verification.json",
+      "services/iam/evidence/HIT-83/vet.log"
+    ]
+  },
+  "verification": {
+    "state": "PASSED",
+    "tested_code_commit": "86fb115c996bb645b62a738f5438cce56075779e",
+    "source_tree_sha256": "d1687650e9a3ab3331a78512d86d12d82276e7237277d366613b16ecf33183d7",
+    "protocol": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/verification.json",
+    "postgres_log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/postgres-race.log",
+    "go": "go version go1.27.2 linux/amd64",
+    "pgx": "5.11.0",
+    "postgres": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "commands": [
+      {
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit83-pg-cac0c2aef92b",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_cac0c2aef92b"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/bootstrap-roles.log",
+        "log_sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322"
+      },
+      {
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit83-pg-cac0c2aef92b",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_cac0c2aef92b"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/test-logins.log",
+        "log_sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7"
+      },
+      {
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit83-pg-cac0c2aef92b",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_cac0c2aef92b",
+          "-Atc",
+          "SET ROLE hp_iam_migrator; SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/migration-role-tcp.log",
+        "log_sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+      },
+      {
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "--env",
+          "PGOPTIONS=-c role=hp_iam_migrator",
+          "hit83-pg-cac0c2aef92b",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "hp_hit81_migration",
+          "-d",
+          "hit68_test_cac0c2aef92b",
+          "-Atc",
+          "SELECT current_user,session_user;"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/migration-startup-role.log",
+        "log_sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+      },
+      {
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/migration-install.log",
+        "log_sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+      },
+      {
+        "command": [
+          "go",
+          "run",
+          "-p",
+          "1",
+          "./cmd/iam-migrate"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/migration-repeat.log",
+        "log_sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+      },
+      {
+        "command": [
+          "docker",
+          "exec",
+          "-i",
+          "hit83-pg-cac0c2aef92b",
+          "psql",
+          "-X",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-U",
+          "postgres",
+          "-d",
+          "hit68_test_cac0c2aef92b"
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/read-only-lookup.log",
+        "log_sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76"
+      },
+      {
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/unit.log",
+        "log_sha256": "490719fbd20f3d659cef20bd176c1af75a40b2f8930f81d6cf92c4442d710904"
+      },
+      {
+        "command": [
+          "go",
+          "test",
+          "-p",
+          "1",
+          "-tags=integration",
+          "-race",
+          "-count=1",
+          "-v",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/postgres-race.log",
+        "log_sha256": "a98712cdbba9879495f88ecf3f55a6c1e62c1cd02120c5b7e2694e4fbb31d8e2"
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "-p",
+          "1",
+          "-tags=integration",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/vet.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "go",
+          "build",
+          "-p",
+          "1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "log": "https://github.com/hitpipe/hitpipe/blob/3ec04c07bd7d61064a9915121bc8420e3d3b2aa7/services/iam/evidence/HIT-83/build.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "top_level_tests_passed": 86,
+    "tests_and_subcases_passed": 273,
+    "skipped": [
+      "TestHIT82LatencySamples: необязательное повторное измерение HIT-82, не часть HIT-83"
+    ],
+    "required_tests_skipped": 0,
+    "cleanup": {
+      "container_removed": true,
+      "network_removed": true
+    }
+  },
+  "acceptance_criteria": [
+    {
+      "id": "3ff52633-ee00-4a09-b57d-973d4257223c",
+      "criterion": "Сохранены исходный SHA и reuse HIT-81/HIT-68; issuer отделён от read-only SessionLookup и не дублирует policy/consumer.",
+      "result": "Исходные policy/consumer/reader и SQL сохранены; переиспользованы точные HIT-81 и HIT-82."
+    },
+    {
+      "id": "0ad2b8cd-1276-424b-b398-35f3b660a87a",
+      "criterion": "Проверено: отсутствующая/отвергнутая/истёкшая/replayed OIDC proof, неподтверждённый email и отмена не создают пригодную сессию; непроверенные claims/email не становятся authority.",
+      "result": "Невалидные подтверждения, неподтверждённый email, повтор, истечение, отмена и неизвестные условия проверены с отказом; Verifier обязателен."
+    },
+    {
+      "id": "9be73545-45be-4dcc-82f3-5e078c1da544",
+      "criterion": "Реальная PostgreSQL сохраняет principal по issuer+subject и связанную session атомарно; одинаковый email у разных subject не объединяет identity, параллельное создание не дублирует principal.",
+      "result": "principal определяется только issuer+subject; email не входит в интерфейс подтверждённой identity или SQL-поиск. Настоящая PostgreSQL подтверждает атомарность и отсутствие дублей при конкуренции."
+    },
+    {
+      "id": "5639bbbd-1021-486a-a2fe-dfdd02df389e",
+      "criterion": "Проверено одноразовое потребление разрешённой попытки на управляемом verifier: параллельный повтор не выпускает независимые сессии; rollback/неустановленный commit не выдаёт положительного подтверждения.",
+      "result": "Управляемый одноразовый verifier: из параллельных повторов только один получает сессию. При откате/неустановленном COMMIT нет успеха и секретов; строка после COMMIT уже может существовать."
+    },
+    {
+      "id": "d0453e17-d77d-424c-873a-b3291e17336b",
+      "criterion": "Secret создан криптографически случайно с принятой энтропией; SQL хранит только accepted session/CSRF digests и поля сроков/epoch, а secret не появляется в URL, протоколе или обычном логе.",
+      "result": "Два независимых crypto/rand-секрета по 32 байта; SQL получает SHA-256 закодированных значений. Форматирование/JSON скрывают секреты; проверено отсутствие исходных значений в SQL-строке."
+    },
+    {
+      "id": "982f2721-d5d5-47fe-8549-76d52189eb39",
+      "criterion": "Применимые принятые сроки и параметры __Host-hp_session соблюдены; после выдачи прежний AuthenticateSession+SessionLookup читает созданную session, revoked/expired запись даёт отказ без нового разрешения.",
+      "result": "Обязательная Policy без значений по умолчанию сохраняет предел существующей sessionpolicy. Метаданные __Host-hp_session фиксированы; старый reader/consumer принимает новую сессию и отвергает revoked/expired."
+    },
+    {
+      "id": "01a860af-878b-40b4-960b-d8e712004259",
+      "criterion": "Настоящие PostgreSQL tests, конкуренция, отказ CSPRNG/БД/verifier/clock и Go race/vet проходят; сохранены SHA, версии, команды, реальные журналы и exit codes.",
+      "result": "Полный реальный прогон PASSED: unit, PostgreSQL18.7 -race, vet, build; 86 верхних PASS, 273 PASS с подслучаями; обязательных SKIP нет."
+    },
+    {
+      "id": "cfd2cfd4-88d1-47c6-bf4e-7a6023491702",
+      "criterion": "Результат явно указывает границу готового local issuer; OIDC code flow, email-code регистрация, общий logout/rotation/revoke и рабочее серверное подключение ещё не выполнены.",
+      "result": "Локальный компонент. Реальные OIDC/verifier/clock/guard, HTTP/CSRF delivery, общий logout/rotation/revoke и deployment не заявлены; подключение входа остаётся HIT-106."
+    }
+  ],
+  "limitations": [
+    "Локальный компонент. Реальные OIDC/verifier/clock/guard, HTTP/CSRF delivery, общий logout/rotation/revoke и deployment не заявлены; подключение входа остаётся HIT-106.",
+    "Рабочие сроки требуют явного задания Policy; тестовые 8/24 часа не объявлены новой продуктовой настройкой.",
+    "PR55/56 остаются открытыми зависимостями; их код включён в основание этой ветки с сохранением истории.",
+    "Первый прогон отклонён из-за неверного имени env в отрицательном тесте роли мигратора; исправлено, полный прогон повторён.",
+    "Успех локальных проверок не заменяет независимое ревью и принятие человеком."
+  ],
+  "deviations": {
+    "scope_changes": "Нет. Сохранены согласованные границы локального issuer, принятая SQL-схема и прежние policy/consumer/reader.",
+    "verification_correction": "Первый прогон не принят из-за неверного имени переменной окружения в отрицательном тесте роли мигратора. Исправлено до проверенного коммита 86fb115c996bb645b62a738f5438cce56075779e; полный прогон PASSED.",
+    "runtime_boundary": "Рабочие OIDC/verifier/clock/guard, HTTP/CSRF, общий отзыв/ротация и развёртывание остаются за границей задачи; см. limitations.",
+    "result_format_correction": "Первый handoff 13118 сообщил об отсутствующем обязательном поле deviations. Добавлен этот раздел; код, проверки и уже сохранённые доказательства не изменены."
+  }
+}
