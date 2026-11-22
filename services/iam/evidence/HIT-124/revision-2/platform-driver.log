@@ -1,0 +1,8 @@
+
+$ python3 services/platform/tools/check_start_gate.py --evidence-dir /work/hit124/exact-130c45b41c.2BIzxw/platform
+{"name": "unit", "command": ["go", "test", "-p", "1", "-count=1", "-v", "./..."], "exit_code": 0, "elapsed_seconds": 0.869, "log": "unit.log", "log_sha256": "bbb5f8ed185fa795bb627961ccdcc07acbf4669b7c6067d9684e207b0efa2663"}
+{"name": "race", "command": ["go", "test", "-p", "1", "-race", "-count=10", "./..."], "exit_code": 0, "elapsed_seconds": 2.833, "log": "race.log", "log_sha256": "7c63dc33f179a558dcb891d0de2a3d40c17e486dc22b67d412042e3b1e855c02"}
+{"name": "vet", "command": ["go", "vet", "-p", "1", "./..."], "exit_code": 0, "elapsed_seconds": 0.317, "log": "vet.log", "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"name": "build", "command": ["go", "build", "-p", "1", "./..."], "exit_code": 0, "elapsed_seconds": 0.117, "log": "build.log", "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"state": "PASSED", "evidence_dir": "/work/hit124/exact-130c45b41c.2BIzxw/platform"}
+exit=0

@@ -1,0 +1,130 @@
+Exact tested commit c74089f05954e7c974385077523d96c5c3d9ef87
+Full original module log: iam/postgres-race.log
+Module log SHA-256 d72f47175d2da534f15837cb2d8f31d7c63c93bf3a29e5c5a4368a5a8547ec70
+Complete output of workspace packages and workspace-specific test groups in the shared HTTP package.
+
+=== RUN   TestPublishReopenAndWorkspaceIsolation
+--- PASS: TestPublishReopenAndWorkspaceIsolation (0.03s)
+=== RUN   TestConcurrentPublicationAcrossStoreInstances
+--- PASS: TestConcurrentPublicationAcrossStoreInstances (0.02s)
+=== RUN   TestRecoverInterruptedPublish
+=== RUN   TestRecoverInterruptedPublish/unpublished_partial_file
+=== RUN   TestRecoverInterruptedPublish/published_before_directory_sync
+--- PASS: TestRecoverInterruptedPublish (0.02s)
+    --- PASS: TestRecoverInterruptedPublish/unpublished_partial_file (0.01s)
+    --- PASS: TestRecoverInterruptedPublish/published_before_directory_sync (0.01s)
+=== RUN   TestFileAndDirectorySafety
+=== RUN   TestFileAndDirectorySafety/symlink
+=== RUN   TestFileAndDirectorySafety/hard_link
+=== RUN   TestFileAndDirectorySafety/fifo
+=== RUN   TestFileAndDirectorySafety/directory
+=== RUN   TestFileAndDirectorySafety/public_file
+=== RUN   TestFileAndDirectorySafety/public_scope
+=== RUN   TestFileAndDirectorySafety/public_root
+=== RUN   TestFileAndDirectorySafety/oversize_file
+--- PASS: TestFileAndDirectorySafety (0.09s)
+    --- PASS: TestFileAndDirectorySafety/symlink (0.01s)
+    --- PASS: TestFileAndDirectorySafety/hard_link (0.01s)
+    --- PASS: TestFileAndDirectorySafety/fifo (0.01s)
+    --- PASS: TestFileAndDirectorySafety/directory (0.01s)
+    --- PASS: TestFileAndDirectorySafety/public_file (0.01s)
+    --- PASS: TestFileAndDirectorySafety/public_scope (0.01s)
+    --- PASS: TestFileAndDirectorySafety/public_root (0.01s)
+    --- PASS: TestFileAndDirectorySafety/oversize_file (0.01s)
+=== RUN   TestRejectCrossScopeSymlinkAndBadInputs
+--- PASS: TestRejectCrossScopeSymlinkAndBadInputs (0.01s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/workspacefiles	1.181s
+=== RUN   TestPostgresWorkspacesPrivateListener
+=== RUN   TestPostgresWorkspacesPrivateListener/the_list_rejects_an_epoch_change_after_discovery
+=== RUN   TestPostgresWorkspacesPrivateListener/real_TLS_and_fresh_owner_authority
+2026/11/22 16:36:48 http: TLS handshake error from 127.0.0.1:32816: tls: client didn't provide a certificate
+2026/11/22 16:36:48 http: TLS handshake error from 127.0.0.1:32824: tls: failed to verify certificate: x509: certificate has expired or is not yet valid: current time 2026-11-22T16:36:48Z is after 2026-11-22T16:35:48Z
+2026/11/22 16:36:48 http: TLS handshake error from 127.0.0.1:32838: privateiam: client certificate rejected
+2026/11/22 16:36:48 http: TLS handshake error from 127.0.0.1:32850: tls: failed to verify certificate: x509: certificate signed by unknown authority (possibly because of "x509: ECDSA verification failure" while trying to verify candidate authority certificate "HIT-115 isolated CA")
+2026/11/22 16:36:48 http: TLS handshake error from 127.0.0.1:32858: tls: client offered only unsupported versions: [303]
+=== RUN   TestPostgresWorkspacesPrivateListener/the_list_cannot_return_more_than_fifty_current_workspaces
+=== RUN   TestPostgresWorkspacesPrivateListener/strict_command_boundary_and_durable_same-ID_replay
+=== RUN   TestPostgresWorkspacesPrivateListener/unprovisioned_onboarding_and_candidate_authorities_stay_closed
+=== RUN   TestPostgresWorkspacesPrivateListener/durable_runtime_and_session_decisions
+--- PASS: TestPostgresWorkspacesPrivateListener (2.57s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/the_list_rejects_an_epoch_change_after_discovery (0.06s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/real_TLS_and_fresh_owner_authority (0.20s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/the_list_cannot_return_more_than_fifty_current_workspaces (0.84s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/strict_command_boundary_and_durable_same-ID_replay (0.84s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/unprovisioned_onboarding_and_candidate_authorities_stay_closed (0.12s)
+    --- PASS: TestPostgresWorkspacesPrivateListener/durable_runtime_and_session_decisions (0.11s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	5.865s
+=== RUN   TestCreateSeparatesCorrelationAndCommandAndFlushesBeforeReturn
+--- PASS: TestCreateSeparatesCorrelationAndCommandAndFlushesBeforeReturn (0.00s)
+=== RUN   TestListWireEnvelopeAndUnavailableProjection
+=== RUN   TestListWireEnvelopeAndUnavailableProjection/empty
+=== RUN   TestListWireEnvelopeAndUnavailableProjection/visible
+=== RUN   TestListWireEnvelopeAndUnavailableProjection/over_limit
+=== RUN   TestListWireEnvelopeAndUnavailableProjection/onboarding
+--- PASS: TestListWireEnvelopeAndUnavailableProjection (0.00s)
+    --- PASS: TestListWireEnvelopeAndUnavailableProjection/empty (0.00s)
+    --- PASS: TestListWireEnvelopeAndUnavailableProjection/visible (0.00s)
+    --- PASS: TestListWireEnvelopeAndUnavailableProjection/over_limit (0.00s)
+    --- PASS: TestListWireEnvelopeAndUnavailableProjection/onboarding (0.00s)
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/unknown_key
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/duplicate_command
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/lone_surrogate
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/overlong_name
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/null_revision
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/valid_but_inapplicable_revision
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/if_match
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/missing_correlation
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/unsupported_media_type
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/unsupported_content_coding
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/ambiguous_csrf
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/missing_session
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/forged_role
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/no_TLS
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/wrong_fingerprint
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/oversize
+=== RUN   TestMalformedAndUntrustedRequestsNeverReachBackend/oversize_streamed
+--- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend (0.01s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/unknown_key (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/duplicate_command (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/lone_surrogate (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/overlong_name (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/null_revision (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/valid_but_inapplicable_revision (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/if_match (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/missing_correlation (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/unsupported_media_type (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/unsupported_content_coding (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/ambiguous_csrf (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/missing_session (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/forged_role (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/no_TLS (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/wrong_fingerprint (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/oversize (0.00s)
+    --- PASS: TestMalformedAndUntrustedRequestsNeverReachBackend/oversize_streamed (0.00s)
+=== RUN   TestCertificateExpiryBetweenValidationAndStart
+--- PASS: TestCertificateExpiryBetweenValidationAndStart (0.00s)
+=== RUN   TestUnboundedTransportAndUncertainOutcomeDoNotReportSuccess
+--- PASS: TestUnboundedTransportAndUncertainOutcomeDoNotReportSuccess (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/workspaces	1.038s
+=== RUN   TestPostgresWorkspacesUnknownCommitRecoversDurableReceipt
+--- PASS: TestPostgresWorkspacesUnknownCommitRecoversDurableReceipt (0.20s)
+=== RUN   TestSessionDeadlineUsesTrustedRemainingTime
+--- PASS: TestSessionDeadlineUsesTrustedRemainingTime (0.00s)
+=== RUN   TestCommitOutcomePreservesUncertainty
+--- PASS: TestCommitOutcomePreservesUncertainty (0.00s)
+=== RUN   TestPostgresWorkspacesAtomicCreateAndReplay
+--- PASS: TestPostgresWorkspacesAtomicCreateAndReplay (0.30s)
+=== RUN   TestPostgresWorkspacesRollbackAndApplicationRole
+--- PASS: TestPostgresWorkspacesRollbackAndApplicationRole (0.31s)
+=== RUN   TestPostgresWorkspacesCurrentOwnFactsAndLocks
+--- PASS: TestPostgresWorkspacesCurrentOwnFactsAndLocks (0.37s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/workspaces	2.212s
+=== RUN   TestCommandDigestUsesCanonicalBodyAndOriginalUUIDSpelling
+--- PASS: TestCommandDigestUsesCanonicalBodyAndOriginalUUIDSpelling (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/workspaces	1.022s
