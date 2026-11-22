@@ -1,0 +1,32 @@
+130c45b41ccaabea4901944321cb2a7e9d38a3cc
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.057s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.026s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.020s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/privateiam	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/profilefiles	1.049s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/workspacefiles	1.211s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.039s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	1.614s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/profile	1.641s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/workspaces	1.038s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	1.030s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.024s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/profile	1.030s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.315s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/workspaces	1.025s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.024s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.059s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/getprofile	3.043s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/workspaces	1.025s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.027s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0
