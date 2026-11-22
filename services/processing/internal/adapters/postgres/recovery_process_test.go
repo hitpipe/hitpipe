@@ -213,7 +213,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 	other := prepared(t, []string{}).request
 	stand := createProcessStand(t, binary, f.path, map[string]string{ws: "acct_synthetic", other.WorkspaceID: "acct_synthetic"})
 	runtime := driver(stand)
-	boot := func(log string) { runtime.boot(log, "-config", stand.config, "-stand-config", stand.stand) }
+	bootStand := func(log string) { runtime.boot(log, "-config", stand.config, "-stand-config", stand.stand) }
 	stand.waitDelivery.Store(true)
 	var deliveryQueries atomic.Int32
 	stand.queryReply = func(w http.ResponseWriter, r *http.Request) {
@@ -221,7 +221,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 		deliveryQueries.Add(1)
 		<-r.Context().Done()
 	}
-	boot("recovery-source.log")
+	bootStand("recovery-source.log")
 	runtime.health("original", "CLOSED")
 	stand.iamOpen.Store(true)
 	runtime.health("original", "READY")
@@ -286,7 +286,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 	stand.bootMu.Unlock()
 	runtime.stop()
 	stand.iamStale.Store(true)
-	boot("recovery-same-db.log")
+	bootStand("recovery-same-db.log")
 	runtime.health("cold restart, same database", "CLOSED")
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 503)
 	runtime.stop()
@@ -357,7 +357,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 	runtime.stop()
 
 	previous := stand.registrations.Load()
-	boot("recovery-target.log")
+	bootStand("recovery-target.log")
 	stand.recoveryWaitRegistration(t, previous)
 	runtime.health("target with stale boot snapshot", "CLOSED")
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 503)
@@ -409,7 +409,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 	if err := os.Rename(activePath, saved); err != nil {
 		t.Fatal(err)
 	}
-	boot("recovery-missing-content.log")
+	bootStand("recovery-missing-content.log")
 	runtime.health("target, one missing detail", "READY")
 	missing := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 503)
 	if err := os.WriteFile(activePath, []byte("deliberately damaged synthetic content"), 0600); err != nil {
@@ -457,7 +457,7 @@ func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge 
 	if _, err := os.Stat(filepath.Join(f.path, expired.ID)); !os.IsNotExist(err) {
 		t.Fatal("restore resurrected an already removed file", err)
 	}
-	boot("recovery-after-purge.log")
+	bootStand("recovery-after-purge.log")
 	runtime.health("target after expiry cleanup", "READY")
 	still := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 200)
 	var afterHistory readcases.HistoryView
