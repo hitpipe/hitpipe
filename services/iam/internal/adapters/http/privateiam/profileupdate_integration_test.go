@@ -244,6 +244,13 @@ func TestPostgresProfileUpdatePrivateListener(t *testing.T) {
 	owner := issueProfileSession(t, db, lab.now)
 	second := issueProfileSession(t, db, lab.now)
 	ownerRoot, receiptRoot := t.TempDir(), t.TempDir()
+	for _, root := range []string{ownerRoot, receiptRoot} {
+		// A runner's temporary filesystem may pass its setgid bit to
+		// newly created directories. Both test stores require exact 0700.
+		if err := os.Chmod(root, 0700); err != nil {
+			t.Fatal("could not set owner-only fixture directory permissions")
+		}
+	}
 	openFiles := func() *profilefiles.Reader {
 		files, err := profilefiles.New(ownerRoot)
 		if err != nil {
