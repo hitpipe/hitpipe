@@ -181,9 +181,14 @@ func TestProcessingOCIImageOwnedStand(t *testing.T) {
 	var body, secondBody struct {
 		Items []json.RawMessage `json:"items"`
 	}
-	if json.Unmarshal(history, &body) != nil || json.Unmarshal(again, &secondBody) != nil ||
-		len(body.Items) == 0 || !reflect.DeepEqual(body.Items, secondBody.Items) || !bytes.Equal(receipt, repeated) {
-		t.Fatal("history or admission receipt was not preserved across restart")
+	if !bytes.Equal(receipt, repeated) {
+		t.Fatalf("admission receipt changed across restart: before=%x after=%x", sha256.Sum256(receipt), sha256.Sum256(repeated))
+	}
+	if json.Unmarshal(history, &body) != nil || json.Unmarshal(again, &secondBody) != nil || len(body.Items) == 0 {
+		t.Fatal("expected nonempty history before and after the restart")
+	}
+	if !reflect.DeepEqual(body.Items, secondBody.Items) {
+		t.Fatalf("synthetic history changed across restart: before=%s after=%s", marshalProcess(t, body.Items), marshalProcess(t, secondBody.Items))
 	}
 	select {
 	case <-stand.deliverySeen:
