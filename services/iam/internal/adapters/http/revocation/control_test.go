@@ -285,6 +285,62 @@ func TestControlVerifiesBothTLSIdentitiesWithNoRedirect(t *testing.T) {
 	}
 }
 
+func TestControlUsesIndependentlyProvisionedRuntimeLeaves(t *testing.T) {
+	f := fixture(t)
+	registration := f.runtimeCA.leaf(t, "processing-client.fixture.test", x509.ExtKeyUsageClientAuth, false)
+	var reached atomic.Int32
+	handler := f.handler(t)
+	server := f.server(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		reached.Add(1)
+		handler.ServeHTTP(w, r)
+	}))
+	binding := ControlBinding{
+		Identity: f.identity(), RegistrationFingerprint: certificatePin(registration),
+		ControlFingerprint: certificatePin(f.runtime), Origin: server.URL,
+	}
+	client, err := NewClientWithControlBindings(f.iam, f.runtimeCA.pool, []ControlBinding{binding})
+	if err != nil {
+		t.Fatal(err)
+	}
+	participant := app.Participant{Identity: f.identity(), CertificateFingerprint: certificatePin(registration)}
+	for _, field := range []string{"registry pin", "boot", "generation"} {
+		t.Run(field, func(t *testing.T) {
+			other := participant
+			command := f.command
+			switch field {
+			case "registry pin":
+				// The control server leaf also has a valid chain/SAN. It is not
+				// the outbound identity configured for this registry entry.
+				other.CertificateFingerprint = certificatePin(f.runtime)
+			case "boot":
+				other.Identity.BootID, command.BootID = otherID, otherID
+			case "generation":
+				other.Identity.Generation++
+				command.Generation++
+			}
+			if _, err := client.Send(t.Context(), other, command); err == nil {
+				t.Fatal("ACK established without an exact control binding")
+			}
+		})
+	}
+	wrong := binding
+	wrong.ControlFingerprint = binding.RegistrationFingerprint
+	untrusted, err := NewClientWithControlBindings(f.iam, f.runtimeCA.pool, []ControlBinding{wrong})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := untrusted.Send(t.Context(), participant, f.command); err == nil || reached.Load() != 0 {
+		t.Fatalf("an unprovisioned control peer reached the handler: %d", reached.Load())
+	}
+	if _, err := NewClientWithControlBindings(f.iam, f.runtimeCA.pool, []ControlBinding{binding, binding}); err == nil {
+		t.Fatal("duplicate bindings accepted for the same process incarnation")
+	}
+	ack, err := client.Send(t.Context(), participant, f.command)
+	if err != nil || !ackMatches(f.command, ack) || reached.Load() != 1 {
+		t.Fatalf("independently bound control listener did not prove ACK: %v", err)
+	}
+}
+
 func TestControlRejectsUnprovedAcknowledgements(t *testing.T) {
 	f := fixture(t)
 	fake := ackWire{

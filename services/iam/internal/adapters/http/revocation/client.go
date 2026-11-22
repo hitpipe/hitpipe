@@ -25,36 +25,103 @@ type Client struct {
 	certificate tls.Certificate
 	serverCAs   *x509.CertPool
 	targets     map[string]string
+	bindings    map[startgate.Identity]controlTarget
+}
+
+// ControlBinding is supplied by trusted provisioning. RegistrationFingerprint
+// is the leaf used to call IAM. ControlFingerprint pins the separate leaf
+// served by the control listener for that same exact process incarnation.
+type ControlBinding struct {
+	Identity                startgate.Identity
+	RegistrationFingerprint string
+	ControlFingerprint      string
+	Origin                  string
+}
+
+type controlTarget struct {
+	endpoint                string
+	registrationFingerprint string
+	controlFingerprint      string
 }
 
 // NewClient builds the trusted target inventory out of band from any request.
 // Each configured target must be an HTTPS origin with an explicit port. The
-// runtime registry separately supplies the exact certificate pin for each send.
+// runtime registry supplies the exact certificate pin when one leaf is used
+// for both registration and control.
 func NewClient(iamClientCertificate tls.Certificate, runtimeServerCAs *x509.CertPool, targets map[string]string) (*Client, error) {
 	if !validCertificateConfig(iamClientCertificate) || !validRoots(runtimeServerCAs) || len(targets) == 0 {
 		return nil, errConfiguration
 	}
 	configured := make(map[string]string, len(targets))
 	for id, origin := range targets {
-		endpoint, err := url.Parse(origin)
-		if !runtimeaccess.ValidUUID(id) || err != nil || endpoint.Scheme != "https" ||
-			endpoint.User != nil || endpoint.RawQuery != "" || endpoint.ForceQuery || strings.Contains(origin, "#") ||
-			endpoint.Opaque != "" || (endpoint.Path != "" && endpoint.Path != "/") || endpoint.RawPath != "" {
-			return nil, errConfiguration
-		}
-		host := endpoint.Hostname()
-		port, err := strconv.ParseUint(endpoint.Port(), 10, 16)
-		if err != nil || port == 0 || (net.ParseIP(host) == nil && !runtimeaccess.ValidDNSName(host)) {
+		endpoint, err := controlEndpoint(origin)
+		if err != nil || !runtimeaccess.ValidUUID(id) {
 			return nil, errConfiguration
 		}
 		id = strings.ToLower(id)
 		if _, duplicate := configured[id]; duplicate {
 			return nil, errConfiguration
 		}
-		endpoint.Path = Path
-		configured[id] = endpoint.String()
+		configured[id] = endpoint
 	}
 	return &Client{certificate: iamClientCertificate, serverCAs: runtimeServerCAs.Clone(), targets: configured}, nil
+}
+
+// NewClientWithControlBindings verifies the frozen registry identity and client
+// leaf before dialing the independently pinned control listener. Missing
+// bindings fail closed without trying the registry leaf as a server pin.
+func NewClientWithControlBindings(iamClientCertificate tls.Certificate, runtimeServerCAs *x509.CertPool, bindings []ControlBinding) (*Client, error) {
+	if !validCertificateConfig(iamClientCertificate) || !validRoots(runtimeServerCAs) || len(bindings) == 0 {
+		return nil, errConfiguration
+	}
+	configured := make(map[startgate.Identity]controlTarget, len(bindings))
+	for _, binding := range bindings {
+		endpoint, err := controlEndpoint(binding.Origin)
+		if err != nil || !validIdentity(binding.Identity) ||
+			!runtimeaccess.ValidFingerprint(binding.RegistrationFingerprint) ||
+			!runtimeaccess.ValidFingerprint(binding.ControlFingerprint) {
+			return nil, errConfiguration
+		}
+		identity := normalizedIdentity(binding.Identity)
+		if _, duplicate := configured[identity]; duplicate {
+			return nil, errConfiguration
+		}
+		configured[identity] = controlTarget{endpoint, binding.RegistrationFingerprint, binding.ControlFingerprint}
+	}
+	return &Client{certificate: iamClientCertificate, serverCAs: runtimeServerCAs.Clone(), bindings: configured}, nil
+}
+
+func controlEndpoint(origin string) (string, error) {
+	endpoint, err := url.Parse(origin)
+	if err != nil || endpoint.Scheme != "https" ||
+		endpoint.User != nil || endpoint.RawQuery != "" || endpoint.ForceQuery || strings.Contains(origin, "#") ||
+		endpoint.Opaque != "" || (endpoint.Path != "" && endpoint.Path != "/") || endpoint.RawPath != "" {
+		return "", errConfiguration
+	}
+	host := endpoint.Hostname()
+	port, err := strconv.ParseUint(endpoint.Port(), 10, 16)
+	if err != nil || port == 0 || (net.ParseIP(host) == nil && !runtimeaccess.ValidDNSName(host)) {
+		return "", errConfiguration
+	}
+	endpoint.Path = Path
+	return endpoint.String(), nil
+}
+
+func normalizedIdentity(identity startgate.Identity) startgate.Identity {
+	identity.RuntimeID = strings.ToLower(identity.RuntimeID)
+	identity.BootID = strings.ToLower(identity.BootID)
+	return identity
+}
+
+func (c *Client) endpoint(target app.Participant) (origin, pin string) {
+	if c.bindings == nil {
+		return c.targets[strings.ToLower(target.Identity.RuntimeID)], target.CertificateFingerprint
+	}
+	binding, ok := c.bindings[normalizedIdentity(target.Identity)]
+	if !ok || binding.registrationFingerprint != target.CertificateFingerprint {
+		return "", ""
+	}
+	return binding.endpoint, binding.controlFingerprint
 }
 
 // Send performs one bounded transmission to the exact configured participant.
@@ -69,8 +136,8 @@ func (c *Client) Send(ctx context.Context, target app.Participant, command start
 		target.Identity.Generation != command.Generation {
 		return startgate.BarrierAck{}, errExchange
 	}
-	endpoint, ok := c.targets[strings.ToLower(target.Identity.RuntimeID)]
-	if !ok {
+	endpoint, pin := c.endpoint(target)
+	if endpoint == "" {
 		return startgate.BarrierAck{}, errExchange
 	}
 	body, err := json.Marshal(commandValue(command))
@@ -89,7 +156,6 @@ func (c *Client) Send(ctx context.Context, target app.Participant, command start
 	id := requestID()
 	req.Header.Set("X-Request-ID", id)
 	req.Header.Set("Content-Type", "application/json")
-	pin := target.CertificateFingerprint
 	transport := &http.Transport{
 		// A literal fresh transport has no proxy and no HTTP/2 upgrade.
 		DisableKeepAlives: true, DisableCompression: true,

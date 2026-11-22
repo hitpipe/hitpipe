@@ -33,6 +33,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction"
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess"
 	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
+	"github.com/hitpipe/hitpipe/services/platform/startgate"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -430,7 +431,37 @@ func TestPostgresPrivateIAMEndToEnd(t *testing.T) {
 
 	assertDenied(t, post(ctx, iam, base+authorizePath, req, ""), f.opaqueSession)
 	assertDenied(t, post(ctx, bff, base+authorizePath, req, f.opaqueSession), f.opaqueSession)
-	assertDenied(t, post(ctx, bff, base+authorizePath, authorizeRequest(f, peers.remote.RuntimeID), f.opaqueSession), f.opaqueSession)
+	remoteRequest := authorizeRequest(f, peers.remote.RuntimeID)
+	assertDenied(t, post(ctx, bff, base+authorizePath, remoteRequest, f.opaqueSession), f.opaqueSession)
+
+	remoteIdentity := startgate.Identity{
+		RuntimeID: peers.remote.RuntimeID, BootID: peers.remote.BootID, Generation: uint64(peers.remote.Generation),
+	}
+	remoteGate, err := startgate.New(remoteIdentity)
+	if err != nil {
+		t.Fatal(err)
+	}
+	opened := assertRegistration(t, post(ctx, bff, base+registerPath, peers.remote.Registration, ""), peers.remote)
+	if opened.Gate != "OPEN" || opened.Revision <= remote.Revision || len(opened.Denials) != 0 {
+		t.Fatal("the enrolled remote boot did not receive a fresh OPEN snapshot for this empty fixture")
+	}
+	if state, err := remoteGate.State(ctx); err != nil || state != startgate.Closed {
+		t.Fatal("issuing an OPEN snapshot cannot open the remote gate by itself")
+	}
+	if err := remoteGate.ApplySnapshot(ctx, startgate.RuntimeSnapshot{
+		RuntimeID: opened.RuntimeID, BootID: opened.BootID, Generation: uint64(opened.Generation),
+		SnapshotRevision: uint64(opened.Revision), Gate: startgate.State(opened.Gate),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if state, err := remoteGate.State(ctx); err != nil || state != startgate.Open {
+		t.Fatal("the exact remote boot could not apply its OPEN snapshot")
+	}
+	checkRuntimeRow(t, db, peers.remote, "OPEN")
+	assertAllowed(t, post(ctx, bff, base+authorizePath, remoteRequest, f.opaqueSession), f, "OWNER")
+	wrongRemoteBoot := peers.remote.Registration
+	wrongRemoteBoot.BootID = labUUID()
+	assertDenied(t, post(ctx, bff, base+registerPath, wrongRemoteBoot, ""), f.opaqueSession)
 	foreign := req
 	foreign.WorkspaceID = f.otherWorkspace
 	assertDenied(t, post(ctx, iam, base+authorizePath, foreign, f.opaqueSession), f.opaqueSession)

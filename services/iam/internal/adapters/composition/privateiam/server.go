@@ -134,14 +134,15 @@ func (s *Server) Register(ctx context.Context, peer runtimeaccess.Peer, input ru
 	}
 	ctx, cancel := context.WithTimeout(ctx, startBudget)
 	defer cancel()
-	if bound == s.local {
-		state, err := s.gate.State(ctx)
-		if err != nil {
-			return runtimeaccess.Snapshot{}, gateError(err)
-		}
-		if state == startgate.Open {
+	state, err := s.gate.State(ctx)
+	if err != nil {
+		return runtimeaccess.Snapshot{}, gateError(err)
+	}
+	if state == startgate.Open {
+		if bound == s.local {
 			return s.activeSnapshot(ctx)
 		}
+		return s.store.RegisterRemote(ctx, bound)
 	}
 	return s.store.Register(ctx, bound)
 }

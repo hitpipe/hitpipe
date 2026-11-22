@@ -98,12 +98,28 @@ type operation int
 
 const (
 	register operation = iota
+	registerRemote
 	read
 	openLocal
 )
 
+func (op operation) registersRuntime() bool {
+	return op == register || op == registerRemote
+}
+
 func (s *Store) Register(ctx context.Context, reg app.Registration) (app.Snapshot, error) {
 	return s.snapshot(ctx, reg, register, app.Snapshot{})
+}
+
+// RegisterRemote is called by an open IAM process after authenticating the
+// caller. The first registration stays SYNCING. A fresh OPEN snapshot on a
+// subsequent registration is permission to apply the snapshot locally, not
+// evidence of its delivery or a revocation acknowledgement.
+func (s *Store) RegisterRemote(ctx context.Context, reg app.Registration) (app.Snapshot, error) {
+	if reg.Service == "IAM" {
+		return app.Snapshot{}, app.ErrDenied
+	}
+	return s.snapshot(ctx, reg, registerRemote, app.Snapshot{})
 }
 
 func (s *Store) Read(ctx context.Context, reg app.Registration) (app.Snapshot, error) {
@@ -170,7 +186,10 @@ func (s *Store) snapshot(ctx context.Context, reg app.Registration, op operation
 	if err != nil {
 		return app.Snapshot{}, err
 	}
-	if op == openLocal {
+	// The observation time is zero on an insert or replacement in this
+	// transaction. Those boots must receive SYNCING on their first call.
+	openRemote := op == registerRemote && complete && current.status == syncing && validDate(current.observed)
+	if op == openLocal || openRemote {
 		// Keep the checked denial set current through the durable transition.
 		if _, err := tx.Exec(ctx, `LOCK TABLE hp_iam.revocations IN SHARE MODE`); err != nil {
 			return app.Snapshot{}, app.ErrUnavailable
@@ -190,6 +209,9 @@ func (s *Store) snapshot(ctx context.Context, reg app.Registration, op operation
 			applied.Revision != current.observed.UnixMicro() || !reflect.DeepEqual(applied.Denials, denials) {
 			return app.Snapshot{}, app.ErrStale
 		}
+		status = open
+	}
+	if openRemote {
 		status = open
 	}
 	var observed time.Time
@@ -212,7 +234,7 @@ func prepareRuntime(ctx context.Context, tx pgx.Tx, reg app.Registration, op ope
 	err := current.scan(tx.QueryRow(ctx, readRegistry+` WHERE runtime_id=$1`, reg.RuntimeID))
 	switch {
 	case errors.Is(err, pgx.ErrNoRows):
-		if op != register {
+		if !op.registersRuntime() {
 			return row{}, app.ErrStale
 		}
 		_, err = tx.Exec(ctx, insertRuntime, reg.RuntimeID, reg.Service, reg.BootID, reg.CertificateFingerprint, reg.Generation)
@@ -223,7 +245,7 @@ func prepareRuntime(ctx context.Context, tx pgx.Tx, reg app.Registration, op ope
 			return row{}, app.ErrStale
 		}
 		return current, nil
-	case op != register || current.Generation > reg.Generation:
+	case !op.registersRuntime() || current.Generation > reg.Generation:
 		return row{}, app.ErrStale
 	case current.Service != reg.Service || current.Generation == reg.Generation || current.BootID == reg.BootID:
 		return row{}, app.ErrConflict
