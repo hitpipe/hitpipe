@@ -52,6 +52,7 @@ def main(*, task="HIT-81", schema_checks=True, authorization_checks=False, issua
     # Existing CI calls this entry directly. Once the issuer is present, its
     # real database tests are mandatory there as well as in the HIT-83 wrapper.
     issuance_checks = issuance_checks or (IAM / "internal/application/issuesession").is_dir()
+    process_checks = (IAM / "cmd/iam").is_dir()
     if hashlib.sha256(SQL.read_bytes()).hexdigest() != SQL_SHA256:
         parser.error("IAM fixture differs from the complete accepted SQL source")
     if schema_checks and hashlib.sha256((MIGRATIONS / "schema/001_iam.sql").read_bytes()).hexdigest() != SQL_SHA256:
@@ -211,6 +212,8 @@ def main(*, task="HIT-81", schema_checks=True, authorization_checks=False, issua
                         raise RuntimeError("required protected profile composition tests did not run: " + required)
             if issuance_checks and label == "postgres-race" and ("--- SKIP: TestPostgresIssuer" in log or "--- PASS: TestPostgresIssuer" not in log):
                 raise RuntimeError("required session issuance PostgreSQL tests did not run")
+            if process_checks and label == "postgres-race" and ("--- SKIP: TestPostgresIAMProcess" in log or "--- PASS: TestPostgresIAMProcess" not in log):
+                raise RuntimeError("required IAM subprocess and TLS tests did not run")
         if args.measure_baseline:
             from measure_session_lookup import measure
             measure(args.go, environment, evidence, args.measure_baseline)

@@ -79,6 +79,12 @@ type IssuanceGuard interface {
 	Check(context.Context, Identity) (GuardDecision, error)
 }
 
+// StartAdmission holds the runtime gate for this new, exact session through
+// the synchronous SQL commit and actual start of the cookie response.
+type StartAdmission interface {
+	Within(context.Context, string, int64, func(context.Context) error) error
+}
+
 // Policy has no default lifetime: its values must be supplied from accepted
 // deployment policy. Fixture values in tests do not establish production TTLs.
 type Policy struct{ AbsoluteLifetime, IdleLifetime time.Duration }
@@ -227,6 +233,20 @@ func (s Service) now(ctx context.Context) (time.Time, error) {
 // A row may already exist after an uncertain commit or post-commit failure; its
 // withheld secret is not returned and this function does not claim a rollback.
 func (s Service) Execute(ctx context.Context, proof string) (Result, error) {
+	return s.execute(ctx, proof, nil, nil)
+}
+
+// ExecuteAtStart keeps the candidate session and cookie within the runtime
+// operation. OIDC network exchange already finished before the proof is consumed.
+func (s Service) ExecuteAtStart(ctx context.Context, proof string, gate StartAdmission, emit func(context.Context, Result) error) error {
+	if absent(gate) || emit == nil {
+		return ErrConfiguration
+	}
+	_, err := s.execute(ctx, proof, gate, emit)
+	return err
+}
+
+func (s Service) execute(ctx context.Context, proof string, gate StartAdmission, emit func(context.Context, Result) error) (Result, error) {
 	if absent(s.verifier) || absent(s.clock) || absent(s.guard) || absent(s.store) || absent(s.entropy) || !s.policy.valid() {
 		return Result{}, ErrConfiguration
 	}
@@ -251,15 +271,9 @@ func (s Service) Execute(ctx context.Context, proof string) (Result, error) {
 		return Result{}, ErrConfirmationDenied
 	}
 	identity := Identity{Issuer: login.Issuer, Subject: login.Subject}
-	guard, err := s.guard.Check(ctx, identity)
-	if ctx.Err() != nil {
-		return Result{}, ErrCancelled
-	}
+	guard, err := s.currentGuard(ctx, identity)
 	if err != nil {
-		return Result{}, ErrGuardUnavailable
-	}
-	if !guard.allowed() {
-		return Result{}, ErrIssuanceDenied
+		return Result{}, err
 	}
 	session, err := secret(s.entropy)
 	if err != nil {
@@ -296,21 +310,68 @@ func (s Service) Execute(ctx context.Context, proof string) (Result, error) {
 	if ctx.Err() != nil {
 		return Result{}, ErrCancelled
 	}
+	if gate == nil {
+		return s.persist(ctx, record, login, session, csrf)
+	}
+	var called bool
+	err = gate.Within(ctx, record.SessionID, record.Epoch, func(work context.Context) error {
+		if called || work == nil {
+			return ErrGuardUnavailable
+		}
+		called = true
+		current, err := s.currentGuard(work, identity)
+		if err != nil {
+			return err
+		}
+		if current.Epoch != record.Epoch {
+			return ErrIssuanceDenied
+		}
+		checkedAt, err := s.now(work)
+		if err != nil {
+			return err
+		}
+		if checkedAt.Before(record.CreatedAt) || !login.valid(checkedAt) || !checkedAt.Before(record.IdleExpiresAt) {
+			return ErrIssuanceDenied
+		}
+		result, err := s.persist(work, record, login, session, csrf)
+		if err != nil {
+			return err
+		}
+		return emit(work, result)
+	})
+	if err == nil && !called {
+		err = ErrGuardUnavailable
+	}
+	return Result{}, err
+}
+
+func (s Service) currentGuard(ctx context.Context, identity Identity) (GuardDecision, error) {
+	guard, err := s.guard.Check(ctx, identity)
+	if ctx.Err() != nil {
+		return GuardDecision{}, ErrCancelled
+	}
+	if err != nil {
+		return GuardDecision{}, ErrGuardUnavailable
+	}
+	if !guard.allowed() {
+		return GuardDecision{}, ErrIssuanceDenied
+	}
+	return guard, nil
+}
+
+func (s Service) persist(ctx context.Context, record Record, login VerifiedLogin, session, csrf Secret) (Result, error) {
 	persisted, err := s.store.Create(ctx, record)
 	if ctx.Err() != nil {
 		return Result{}, ErrCancelled
 	}
-	if err != nil || !validUUID(persisted.PrincipalID) || persisted.SessionID != sessionID {
+	if err != nil || !validUUID(persisted.PrincipalID) || persisted.SessionID != record.SessionID {
 		return Result{}, ErrStoreUnavailable
 	}
-	currentGuard, err := s.guard.Check(ctx, identity)
-	if ctx.Err() != nil {
-		return Result{}, ErrCancelled
-	}
+	currentGuard, err := s.currentGuard(ctx, Identity{Issuer: record.Issuer, Subject: record.Subject})
 	if err != nil {
-		return Result{}, ErrGuardUnavailable
+		return Result{}, err
 	}
-	if !currentGuard.allowed() || currentGuard.Epoch != guard.Epoch {
+	if currentGuard.Epoch != record.Epoch {
 		return Result{}, ErrIssuanceDenied
 	}
 	finished, err := s.now(ctx)
@@ -321,7 +382,7 @@ func (s Service) Execute(ctx context.Context, proof string) (Result, error) {
 		return Result{}, ErrIssuanceDenied
 	}
 	return Result{
-		PrincipalID: persisted.PrincipalID, SessionID: sessionID,
+		PrincipalID: persisted.PrincipalID, SessionID: record.SessionID,
 		CreatedAt: record.CreatedAt, ExpiresAt: record.ExpiresAt, IdleExpiresAt: record.IdleExpiresAt,
 		Session: session, CSRF: csrf,
 		Cookie: CookieMetadata{Name: "__Host-hp_session", Path: "/", Secure: true, HTTPOnly: true, SameSite: "Lax"},

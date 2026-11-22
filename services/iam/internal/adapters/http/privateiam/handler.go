@@ -174,6 +174,16 @@ func headerValue(request *http.Request, name string) (string, bool) {
 	return request.Header.Get(name), len(values) == 1
 }
 
+// Reject uses the existing error envelope for a composing listener's routing
+// and peer admission failures.
+func Reject(writer http.ResponseWriter, request *http.Request, status int, code, message string) {
+	requestID, valid := headerValue(request, "X-Request-ID")
+	if !valid || !runtimeaccess.ValidUUID(requestID) {
+		requestID = newRequestID()
+	}
+	writeError(writer, request, requestID, status, code, message)
+}
+
 func newRequestID() string {
 	var id [16]byte
 	if _, err := rand.Read(id[:]); err != nil {
