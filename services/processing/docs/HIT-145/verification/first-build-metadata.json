@@ -1,0 +1,52 @@
+{
+  "buildx.build.provenance": {
+    "builder": {
+      "id": ""
+    },
+    "buildType": "https://mobyproject.org/buildkit@v1",
+    "materials": [
+      {
+        "uri": "pkg:docker/golang@1.27.2-bookworm?digest=sha256:5cf287a799e6b94384bad13d16b14904c531f51ba65792237e122ce42b392f61\u0026platform=linux%2Farm64",
+        "digest": {
+          "sha256": "5cf287a799e6b94384bad13d16b14904c531f51ba65792237e122ce42b392f61"
+        }
+      }
+    ],
+    "invocation": {
+      "configSource": {
+        "entryPoint": "Dockerfile"
+      },
+      "parameters": {
+        "frontend": "dockerfile.v0",
+        "args": {
+          "build-arg:SOURCE_DATE_EPOCH": "0",
+          "build-arg:SOURCE_SHA": "30385d09962c3fa4aad4808253a5493235559d01"
+        },
+        "locals": [
+          {
+            "name": "context"
+          },
+          {
+            "name": "dockerfile"
+          }
+        ]
+      },
+      "environment": {
+        "platform": "linux/arm64"
+      }
+    }
+  },
+  "buildx.build.ref": "desktop-linux/desktop-linux/wku1uypkgxbl3vas9bnbt2400",
+  "containerimage.config.digest": "sha256:7c932292a0cc393e273dfad2cfa246e8a0b24a316be0a4845f35da281e1c592b",
+  "containerimage.descriptor": {
+    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "digest": "sha256:972262cf9f8c50dd5a1d9009999b8d6b0177d1df23b5be555e2ccdd4df2f0a33",
+    "size": 503,
+    "platform": {
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  },
+  "containerimage.digest": "sha256:972262cf9f8c50dd5a1d9009999b8d6b0177d1df23b5be555e2ccdd4df2f0a33",
+  "image.name": "docker.io/library/hit145-e276949be98d4e758d9a056a46d5dc29:test"
+}

@@ -1,0 +1,39 @@
+{
+  "source_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+  "platform": "linux/arm64",
+  "manifest_digest": "sha256:972262cf9f8c50dd5a1d9009999b8d6b0177d1df23b5be555e2ccdd4df2f0a33",
+  "manifest_media_type": "application/vnd.docker.distribution.manifest.v2+json",
+  "config_digest": "sha256:7c932292a0cc393e273dfad2cfa246e8a0b24a316be0a4845f35da281e1c592b",
+  "layer_digest": "sha256:08289da242c3f6457a39618ab7dcbdf1217f269674e9fc8c535ce7c50f6f9ab2",
+  "files": [
+    "processing"
+  ],
+  "binary_sha256": "sha256:ff48719d2e60df6e24f857f3a2dd75c9fd6b753abe3cd77080056c19aaada511",
+  "archive_sha256": "sha256:e1ae2e256b6da0c23d16443276426f8c7363ba07a1d077ebc976e046e5190954",
+  "config": {
+    "User": "10001:10001",
+    "ExposedPorts": {
+      "8443/tcp": {},
+      "9443/tcp": {},
+      "9444/tcp": {}
+    },
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Entrypoint": [
+      "/processing"
+    ],
+    "Cmd": [
+      "-config",
+      "/etc/processing/processing.json"
+    ],
+    "WorkingDir": "/",
+    "Labels": {
+      "org.opencontainers.image.revision": "30385d09962c3fa4aad4808253a5493235559d01",
+      "org.opencontainers.image.source": "https://github.com/hitpipe/hitpipe",
+      "org.opencontainers.image.title": "HitPipe Processing"
+    },
+    "ArgsEscaped": true
+  },
+  "engine_image_id": "sha256:972262cf9f8c50dd5a1d9009999b8d6b0177d1df23b5be555e2ccdd4df2f0a33"
+}
