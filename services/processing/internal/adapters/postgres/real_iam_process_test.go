@@ -129,9 +129,11 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	iamRuntime, _ := newID()
 	iamBoot, _ := newID()
 	revokeID, _ := newID()
-	leaf := st.pki.Issue(t, "iam.test", net.ParseIP("127.0.0.2"), true, true)
+	leaf := st.pki.Issue(t, "iam.test", net.ParseIP("127.0.0.2"), true, false)
 	cert, key := st.keypair("real-iam", leaf)
-	iamFingerprint := sha256.Sum256(leaf.Certificate[0])
+	iamClient := st.pki.Leaf(t, "iam.test", false, false)
+	clientCert, clientKey := st.keypair("real-iam-client", iamClient)
+	iamFingerprint := sha256.Sum256(iamClient.Certificate[0])
 	procCert, err := tls.LoadX509KeyPair(filepath.Join(st.dir, "processing-client.pem"), filepath.Join(st.dir, "processing-client.key"))
 	if err != nil {
 		t.Fatal(err)
@@ -159,6 +161,7 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 		"IAM": map[string]any{"runtime_id": iamRuntime, "boot_id": iamBoot, "service": "IAM", "generation": 2,
 			"dns_name": "iam.test", "certificate_fingerprint": "sha256:" + hex.EncodeToString(iamFingerprint[:])},
 		"Processing": binding, "CA": filepath.Join(st.dir, "ca.pem"), "Certificate": cert, "Key": key,
+		"ClientCertificate": clientCert, "ClientKey": clientKey,
 		"Workspace": ws, "Revocation": revokeID, "Dir": st.dir,
 	})
 	command := exec.Command(iam, cfg)
@@ -182,7 +185,7 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	if err != nil || code != 200 || draftjson.Validate("RuntimeSnapshot", payload) != nil ||
 		json.Unmarshal(payload, &current) != nil || current.Gate != "SYNCING" || current.BootID != boot ||
 		current.Generation != 2 || current.RuntimeID != st.identity {
-		t.Fatalf("expected a real matching SYNCING snapshot, code=%d", code)
+		t.Fatalf("expected a real matching SYNCING snapshot, code=%d: %v", code, err)
 	}
 	awaitIAMTrace(t, tracePath, func(e iamTrace) bool { return e.Message == "iam-gate-open" })
 	code, again, err := postIAMFixture(t, st, procCert, register, "", registration)
@@ -239,7 +242,7 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	<-p.done
 	check("restart", first)
 	control, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Second}, "tcp", "127.0.0.1:9443",
-		&tls.Config{RootCAs: st.pki.Root, Certificates: []tls.Certificate{leaf},
+		&tls.Config{RootCAs: st.pki.Root, Certificates: []tls.Certificate{iamClient},
 			MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13})
 	if err != nil {
 		t.Fatal("could not inspect the actual Processing control certificate", err)

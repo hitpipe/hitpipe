@@ -30,9 +30,10 @@ import (
 )
 
 type fixture struct {
-	IAM, Processing            runtimeaccess.Binding
-	CA, Certificate, Key       string
-	Workspace, Revocation, Dir string
+	IAM, Processing              runtimeaccess.Binding
+	CA, Certificate, Key         string
+	ClientCertificate, ClientKey string
+	Workspace, Revocation, Dir   string
 }
 
 type clock struct{}
@@ -150,6 +151,10 @@ func run(ctx context.Context, path string, log *slog.Logger) error {
 	if err != nil {
 		return errors.New("load disposable IAM certificate")
 	}
+	clientCert, err := tls.LoadX509KeyPair(f.ClientCertificate, f.ClientKey)
+	if err != nil {
+		return errors.New("load disposable IAM client certificate")
+	}
 	ca := x509.NewCertPool()
 	if raw, err = os.ReadFile(f.CA); err != nil || !ca.AppendCertsFromPEM(raw) {
 		return errors.New("load disposable root")
@@ -195,7 +200,7 @@ func run(ctx context.Context, path string, log *slog.Logger) error {
 	log.Info("iam-gate-open")
 	for {
 		if _, err = os.Stat(filepath.Join(f.Dir, "revoke")); err == nil {
-			return observeNoACK(ctx, pool, f, cert, ca, log)
+			return observeNoACK(ctx, pool, f, clientCert, ca, log)
 		}
 		if ctx.Err() != nil {
 			return ctx.Err()
