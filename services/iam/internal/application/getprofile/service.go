@@ -187,6 +187,17 @@ func currentFacts(snapshot Snapshot, caller authorizeaction.Caller) Facts {
 // Once emit has been invoked its bytes cannot be rolled back. Any subsequent
 // error is diagnostic only: the transport must not retry or send another reply.
 func (s Service) Serve(ctx context.Context, opaqueSession string, caller authorizeaction.Caller, emit func(Profile) error) error {
+	if emit == nil {
+		return ErrInvalidRequest
+	}
+	return s.ServeWithContext(ctx, opaqueSession, caller, func(_ context.Context, profile Profile) error {
+		return emit(profile)
+	})
+}
+
+// ServeWithContext passes the actual start guard's expiration and cancellation
+// to a transport that can enforce them during its first write and flush.
+func (s Service) ServeWithContext(ctx context.Context, opaqueSession string, caller authorizeaction.Caller, emit func(context.Context, Profile) error) error {
 	if absent(s.lookup) || absent(s.reference) || absent(s.clock) || absent(s.reader) || absent(s.content) || absent(s.gate) {
 		return ErrConfiguration
 	}
@@ -287,7 +298,8 @@ func (s Service) Serve(ctx context.Context, opaqueSession string, caller authori
 		if err := stopped(ctx, bounded); err != nil {
 			return err
 		}
-		err = admission.Confirm(work, currentFacts(after, caller))
+		facts := currentFacts(after, caller)
+		err = admission.Confirm(work, facts)
 		if errStopped := stopped(ctx, work); errStopped != nil {
 			return errStopped
 		}
@@ -311,18 +323,27 @@ func (s Service) Serve(ctx context.Context, opaqueSession string, caller authori
 			return ErrUnauthenticated
 		}
 		profile.UserID = strings.ToLower(after.Principal.ID)
-		if !emitted.CompareAndSwap(false, true) {
-			return ErrUnavailable
+		start := func(guarded context.Context) error {
+			if err := stopped(ctx, guarded); err != nil {
+				return err
+			}
+			if !emitted.CompareAndSwap(false, true) {
+				return ErrUnavailable
+			}
+			err := emit(guarded, profile)
+			if errStopped := stopped(ctx, bounded); errStopped != nil {
+				return errStopped
+			}
+			if err != nil {
+				return ErrUnavailable
+			}
+			completed.Store(true)
+			return nil
 		}
-		err = emit(profile)
-		if errStopped := stopped(ctx, bounded); errStopped != nil {
-			return errStopped
+		if atomicStart, ok := admission.(StartAdmission); ok {
+			return atomicStart.Start(work, facts, start)
 		}
-		if err != nil {
-			return ErrUnavailable
-		}
-		completed.Store(true)
-		return nil
+		return start(work)
 	})
 	if errStopped := stopped(ctx, bounded); errStopped != nil {
 		return errStopped
