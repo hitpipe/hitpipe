@@ -1,0 +1,28 @@
+c715a079ab57d4c9e7b56862f7f2584c792b74b0
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.085s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.026s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.021s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/privateiam	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/filestore/casedeletion	2.910s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.046s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/casedeletion	2.221s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	1.566s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	1.034s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/casedeletion	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.037s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.296s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.023s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.060s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/casedeletion	1.188s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.030s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0

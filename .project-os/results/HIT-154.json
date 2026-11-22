@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-154",
+  "mode": "IMP",
+  "materialized_result": {
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "summary": "Доверенный минимальный реестр подтверждений адресного удаления с актуальной полной выдачей и барьером открытия после восстановления.",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+    "code_commit": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+    "review_base_ref": "codex/hit-115-private-iam",
+    "review_head_ref": "codex/hit-154-case-deletion-authority",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/README.md",
+    "consumer_runbook": "https://github.com/hitpipe/hitpipe/blob/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/docs/HIT-154.md",
+    "authoritative_amendment": {
+      "sha": "0dc25affc7cb19b1a74a16d80b93eac0d9961c05",
+      "ref": "https://github.com/hitpipe/project-os/blob/0dc25affc7cb19b1a74a16d80b93eac0d9961c05/contracts/hitpipe/case-deletion-2026-11-22/CASE_DELETION_AUTHORITY_RU.md"
+    },
+    "dependencies": {
+      "HIT-115": {
+        "accepted_result_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/c7a74f55ea8111fa290f803976d256cc8a4a202e/.project-os/results/HIT-115.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/80"
+      }
+    }
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/internal/application/casedeletion",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/internal/application/casedeletion"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/casedeletion",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/internal/adapters/postgres/casedeletion"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/casedeletion",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/internal/adapters/http/casedeletion"
+    },
+    {
+      "path": "services/iam/internal/adapters/filestore/casedeletion",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/internal/adapters/filestore/casedeletion"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/casedeletion",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/internal/adapters/composition/casedeletion"
+    },
+    {
+      "path": "services/iam/docs/HIT-154.md",
+      "version": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c715a079ab57d4c9e7b56862f7f2584c792b74b0/services/iam/docs/HIT-154.md"
+    },
+    {
+      "path": "services/iam/evidence/HIT-154",
+      "version": "bffe429960767e9f279647b9b981b2a79b0e7245",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+    "evidence_commit": "bffe429960767e9f279647b9b981b2a79b0e7245",
+    "go": "go version go1.27.2 linux/amd64",
+    "postgres": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "source_tree_sha256": "5f365d4c486416910653ad1a7fe5b3e5d764081aa0246b2d353cbb1f8ebf6a95",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "test_groups": [
+      "TestPostgresCaseDeletionQualification",
+      "TestPostgresCaseDeletionOnlyCurrentOwner",
+      "TestPostgresCaseDeletionOwnerRemainsCurrentThroughRegistryCommit",
+      "TestPostgresCaseDeletionRejectsWrongDatabaseAuthorityAndUntrustedTime"
+    ],
+    "full_protocols": [
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/case-deletion-full.log",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/iam/postgres-race.log",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/iam/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/deletion-passes.log",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/driver.log",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/go.log",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/platform/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/bffe429960767e9f279647b9b981b2a79b0e7245/services/iam/evidence/HIT-154/cleanup.log"
+    ],
+    "protocol_sha256": "0d0970c3f1db20104cb90ff4c63223f019e3d90070237208c67b89f7ad2aa830"
+  },
+  "deviations": [],
+  "limitations": [
+    "Испытано только в изолированной TEST-среде на временных данных и сертификатах.",
+    "Применение к реальному хранилищу Processing и установка барьера в его рабочем контуре относятся к HIT-148.",
+    "Не вводятся публичный API удаления, DDL, роли и эксплуатационная гарантия при утрате самого источника."
+  ]
+}

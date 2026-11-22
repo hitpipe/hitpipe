@@ -1,0 +1,117 @@
+Exact tested commit c715a079ab57d4c9e7b56862f7f2584c792b74b0
+Full original module log: iam/postgres-race.log
+Module log SHA-256 34972ea71d46ce05d4428944cba873b849a5baf3550fcf0fb48411d159f5bccc
+The following are the complete output blocks of the five HIT-154 packages.
+
+=== RUN   TestPostgresCaseDeletionQualification
+    qualification_integration_test.go:82: postgres=18.7 role=hp_hit81_app isolated_workspaces=2
+    qualification_integration_test.go:144: real TLS 1.3 publisher read: valid full empty rev=1; other cert and absent source scope denied
+    qualification_integration_test.go:170: owner checks: foreign workspace, foreign target, downgraded operator and tampered offer denied without new record
+    qualification_integration_test.go:209: committed APPLYING before synthetic mutation id=f3e5477e-b460-48ec-9620-7a41a3cc201a generation=1 apply_revision=5; pre-proof receipt rejected
+    qualification_integration_test.go:237: reopened issuer, reloaded same id and apply revision; durable receipt stored once, published rev=6
+    qualification_integration_test.go:307: restored subordinate backup independently; generation=2 old receipt/stale/partial/foreign states denied; applied exact old id and opened under rev=10
+    qualification_integration_test.go:336: independent source missing over real TLS: no snapshot; restore stayed closed; registry/publication excluded synthetic content and credentials
+--- PASS: TestPostgresCaseDeletionQualification (1.17s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/casedeletion	2.187s
+=== RUN   TestRegistryCommitAndFreshOpen
+=== RUN   TestRegistryCommitAndFreshOpen/nonempty_directory_seed_refused
+--- PASS: TestRegistryCommitAndFreshOpen (0.05s)
+    --- PASS: TestRegistryCommitAndFreshOpen/nonempty_directory_seed_refused (0.00s)
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/absent_source_never_initialized_by_Open
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/link_to_directory
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/absent_active_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/symlink_active_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/hardlink_active_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/wrong_permissions
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/FIFO_active_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/duplicate_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/trailing_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/oversized_state
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/different_source's_active_JSON
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same-content_lock_replaced
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same-incarnation_rollback_detected
+=== RUN   TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same_revision_competing_contents_detected
+--- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes (0.48s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/absent_source_never_initialized_by_Open (0.00s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/link_to_directory (0.01s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/absent_active_JSON (0.02s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/symlink_active_JSON (0.01s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/hardlink_active_JSON (0.01s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/wrong_permissions (0.01s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/FIFO_active_JSON (0.01s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/duplicate_JSON (0.02s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/trailing_JSON (0.02s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/oversized_state (0.26s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/different_source's_active_JSON (0.04s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same-content_lock_replaced (0.02s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same-incarnation_rollback_detected (0.04s)
+    --- PASS: TestRegistryRefusesMissingAmbiguousAndSubstitutedNodes/same_revision_competing_contents_detected (0.02s)
+=== RUN   TestRegistryReadBarrierAcrossProcesses
+    store_linux_test.go:388: PASS
+    store_linux_test.go:401: shared restore read prevented a second process from publishing until after guarded open
+--- PASS: TestRegistryReadBarrierAcrossProcesses (1.23s)
+=== RUN   TestRegistryWriterChild
+--- PASS: TestRegistryWriterChild (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/filestore/casedeletion	2.790s
+=== RUN   TestProcessingTLSAndWorkspaceScope
+=== RUN   TestProcessingTLSAndWorkspaceScope/expired_leaf
+=== RUN   TestProcessingTLSAndWorkspaceScope/absent
+=== RUN   TestProcessingTLSAndWorkspaceScope/different_issuer
+=== RUN   TestProcessingTLSAndWorkspaceScope/different_certificate_same_SAN
+=== RUN   TestProcessingTLSAndWorkspaceScope/ambiguous_SAN
+--- PASS: TestProcessingTLSAndWorkspaceScope (0.27s)
+    --- PASS: TestProcessingTLSAndWorkspaceScope/expired_leaf (0.01s)
+    --- PASS: TestProcessingTLSAndWorkspaceScope/absent (0.01s)
+    --- PASS: TestProcessingTLSAndWorkspaceScope/different_issuer (0.02s)
+    --- PASS: TestProcessingTLSAndWorkspaceScope/different_certificate_same_SAN (0.01s)
+    --- PASS: TestProcessingTLSAndWorkspaceScope/ambiguous_SAN (0.01s)
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/folded
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/bad-digest
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/null
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/trailing-json
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/invalid-utf8
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/spoofed-peer
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/duplicate
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/missing
+=== RUN   TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/unknown
+--- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire (0.22s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/folded (0.02s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/bad-digest (0.02s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/null (0.01s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/trailing-json (0.01s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/invalid-utf8 (0.01s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/spoofed-peer (0.01s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/duplicate (0.02s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/missing (0.01s)
+    --- PASS: TestReceiptChannelUsesOnlyThePinnedPeerAndExactWire/unknown (0.01s)
+=== RUN   TestProcessingClientPinsPublisherAndDoesNotRedirectOrRetry
+--- PASS: TestProcessingClientPinsPublisherAndDoesNotRedirectOrRetry (0.05s)
+=== RUN   TestJSONReceiptAndSnapshotRejectAmbiguity
+--- PASS: TestJSONReceiptAndSnapshotRejectAmbiguity (0.00s)
+=== RUN   TestAuthenticFullEmptySnapshotDoesNotStandInForUnknownOrOldGeneration
+--- PASS: TestAuthenticFullEmptySnapshotDoesNotStandInForUnknownOrOldGeneration (0.07s)
+=== RUN   TestPublisherCannotSendForeignOrIncompleteSnapshotThroughAdapter
+--- PASS: TestPublisherCannotSendForeignOrIncompleteSnapshotThroughAdapter (0.05s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/casedeletion	1.670s
+=== RUN   TestPostgresCaseDeletionOnlyCurrentOwner
+    owner_integration_test.go:208: PG18.7: both exact owners accepted; cross-workspace, public session ID, unknown session, OPERATOR, role revoke, deleting workspace, disabled principal, expired and revoked sessions, pending SESSION deny all fail closed; unrelated workspace remains allowed
+--- PASS: TestPostgresCaseDeletionOnlyCurrentOwner (0.23s)
+=== RUN   TestPostgresCaseDeletionOwnerRemainsCurrentThroughRegistryCommit
+    owner_integration_test.go:270: actual concurrent role update and new SESSION deny were blocked while publication callback held current IAM authority; later role downgrade was observed
+--- PASS: TestPostgresCaseDeletionOwnerRemainsCurrentThroughRegistryCommit (0.37s)
+=== RUN   TestPostgresCaseDeletionRejectsWrongDatabaseAuthorityAndUntrustedTime
+    owner_integration_test.go:300: administrator pool and untrusted time rejected; commit context stops at actual session policy deadline
+--- PASS: TestPostgresCaseDeletionRejectsWrongDatabaseAuthorityAndUntrustedTime (0.22s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/casedeletion	1.843s
+=== RUN   TestOfferPinsOwnerAndTargetsAndRetainsPrivateAuditProof
+--- PASS: TestOfferPinsOwnerAndTargetsAndRetainsPrivateAuditProof (0.04s)
+=== RUN   TestGenerationOpenRejectsOldReceiptAndChangedFullRevision
+--- PASS: TestGenerationOpenRejectsOldReceiptAndChangedFullRevision (0.11s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/casedeletion	1.167s

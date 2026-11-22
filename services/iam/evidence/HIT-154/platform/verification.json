@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "task": "HIT-69",
+  "started_at": "2026-11-22T14:31:36.384863+00:00",
+  "source_commit": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+  "source_files_sha256": {
+    "services/platform/go.mod": "267b10e8ca7bdcdd58e753f6bec916daa6b45cca8659864a36a6bacb1bda5f52",
+    "services/platform/tools/check_start_gate.py": "f4bc339a9e5ceb2b46221025d86062683e0efcba97a9e199547d6e650a68532d",
+    "services/platform/startgate/adversarial_test.go": "ff6c83e4f3a67b8a53cadd5f2ff2cc75a5a0f68a1064caf41975ff0f2c46ba34",
+    "services/platform/startgate/gate.go": "4a7a044d70e9b8d9d726ceddb98196b56609c11a119f3915974f9e6d0d1a9e3e",
+    "services/platform/startgate/gate_test.go": "0302871217dc6842374e7059202c493793014691caa54f38af343b2f9c7d2ada"
+  },
+  "go_version": "go version go1.27.2 linux/amd64",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "cpu_count": 4,
+  "GOMAXPROCS": "2",
+  "GOTOOLCHAIN": "local",
+  "scope": "Controlled in-process starts, snapshots and barriers; no live service, IAM authority or distributed fencing qualification",
+  "checks": [
+    {
+      "name": "unit",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-count=1",
+        "-v",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.818,
+      "log": "unit.log",
+      "log_sha256": "3e378f5a785351c2dcb78c8105b3eb547f7c433439c075d9dc9ec483bb025c69"
+    },
+    {
+      "name": "race",
+      "command": [
+        "go",
+        "test",
+        "-p",
+        "1",
+        "-race",
+        "-count=10",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.73,
+      "log": "race.log",
+      "log_sha256": "90d70cb6935285192b2affaf89603f1788eef2f6955bdbf45df8758bc481a86a"
+    },
+    {
+      "name": "vet",
+      "command": [
+        "go",
+        "vet",
+        "-p",
+        "1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.266,
+      "log": "vet.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "command": [
+        "go",
+        "build",
+        "-p",
+        "1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.116,
+      "log": "build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "state": "PASSED",
+  "finished_at": "2026-11-22T14:31:40.322481+00:00"
+}
