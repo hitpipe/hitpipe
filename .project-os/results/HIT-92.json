@@ -1,0 +1,70 @@
+{
+  "subject": "HIT-92",
+  "materialized_result": "Одна безопасная попытка ClickUp Create Task из сохранённого поручения HIT-91. PostgreSQL фиксирует необратимый допуск возможного эффекта до отправки, а повтор не создаёт новый запрос.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/docs/dispatch.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/docs/dispatch.md",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/clickup.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/dispatch_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/postgres.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/revoke_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/worker.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/intent.go",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/tests/hit91_fixture.sql",
+    "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/tests/run_hit91.ps1",
+    "https://github.com/hitpipe/hitpipe/blob/b7ba4fd348632adfdb2ed705d87ea3bef87484f8/services/delivery/evidence/HIT-92/test-protocol.txt",
+    "https://github.com/hitpipe/hitpipe/blob/b7ba4fd348632adfdb2ed705d87ea3bef87484f8/services/delivery/evidence/HIT-92/source-audit.json"
+  ],
+  "verification": {
+    "contract_revision": 2,
+    "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "code_commit": "42f3df82f1f73ddd45fb1c22d59d5d843b876c45",
+    "dependency_heads": [
+      {
+        "issue": "HIT-91",
+        "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+        "merged": false
+      },
+      {
+        "issue": "HIT-70",
+        "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+        "merged": false
+      }
+    ],
+    "command": "pwsh -NoProfile -File tests/run_hit91.ps1",
+    "go_test_command": "go test -v -race -count=1 ./...",
+    "go_vet_command": "go vet ./...",
+    "exit_code": 0,
+    "go_test_exit_code": 0,
+    "go_vet_exit_code": 0,
+    "environment": "Изолированные контейнеры linux/amd64: Go 1.27.2, PostgreSQL 18.7 Alpine, Docker 29.3.1, роли приложения и worker. PostgreSQL fsync, full_page_writes и synchronous_commit включены. HTTPS ClickUp имитирован локально.",
+    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/b7ba4fd348632adfdb2ed705d87ea3bef87484f8/services/delivery/evidence/HIT-92/test-protocol.txt",
+    "test_protocol_sha256": "434d4110680cd601db8fb076c37ca44191d985c2afb3a4827d203a38d468bcf8",
+    "source_audit": "https://github.com/hitpipe/hitpipe/blob/b7ba4fd348632adfdb2ed705d87ea3bef87484f8/services/delivery/evidence/HIT-92/source-audit.json",
+    "id_only_example": {
+      "native_task_id": "opaque-test-task",
+      "https_posts": 1,
+      "lineage_state": "RESULT_ID_OBSERVED",
+      "observation": "TARGET_ID_OBSERVED",
+      "shared_budget_count": 1
+    },
+    "unknown_example": {
+      "initial_https_posts": 1,
+      "repeated_https_posts": 0,
+      "lineage_state": "AMBIGUOUS",
+      "observation": "POSSIBLE_EFFECT"
+    },
+    "coverage": [
+      "Конкурентные повторы одного job, committed DISPATCHING, network_start_at и проверка отсутствия SQL row locks при фактическом HTTPS POST.",
+      "Точный List, title, handoff, assignee 9007199254740993 без округления, одноразовый HTTP/1.1, общий credential_budget и отклонение смены origin.",
+      "Отозванное соединение, epoch, закрытый gate, отмена, истечение facts/deadline и отсутствующий credential. Ранее начатый запрос сохраняет ID после локального отзыва.",
+      "HTTP 401/403/429/503, redirect, timeout, обрыв, повреждённый и слишком большой ответ, потеря файла, завершение отдельного процесса после fence и повтор после старта нового обработчика."
+    ]
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Авторитетные источники полномочий, допуска, окна credential_budget и секрета предоставляются отдельной рабочей сборкой. Проверки использовали только синтетические данные и локальный HTTPS-стенд, без записи в рабочий ClickUp.",
+    "Запись HIT-91 без точного назначения в частном файле удерживается. Старые квитанции и SQL сохраняются, автоматического пересоздания или переадресации нет.",
+    "Наблюдение native ID не подтверждает содержимое задачи. Readback, распределённый отзыв, развёртывание и дальнейшая provider-попытка вне этой карточки."
+  ]
+}
