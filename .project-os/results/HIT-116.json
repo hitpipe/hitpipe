@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-116",
+  "mode": "IMP",
+  "materialized_result": {
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "summary": "Долговременный координатор отзыва SESSION и WORKSPACE с общей блокировкой фактического старта на управляемых runtime.",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+    "code_commit": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+    "review_base_ref": "codex/hit-115-private-iam",
+    "review_head_ref": "codex/hit-116-revocation-coordinator",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/README.md",
+    "dependencies": {
+      "HIT-115": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+      "HIT-69": "fa01ea89ff72dcaaecef9c53f9fe1ffa41dea519",
+      "HIT-84": "fba9d664862adedd3df305e18e3c03fb95e0f95c",
+      "HIT-81": "60013536b69b4b8d7f99e7bddf714e6432f09a11"
+    },
+    "accepted_gate": "https://github.com/hitpipe/hitpipe/blob/4462d4aa25148af5347bf61c2378c2be7a88662e/services/platform/startgate/gate.go"
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/internal/application/revocation",
+      "version": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/d13f723511b61cb3068bfdf63d40bd7100fa1e89/services/iam/internal/application/revocation"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/revocation",
+      "version": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/d13f723511b61cb3068bfdf63d40bd7100fa1e89/services/iam/internal/adapters/postgres/revocation"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/revocation",
+      "version": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/d13f723511b61cb3068bfdf63d40bd7100fa1e89/services/iam/internal/adapters/http/revocation"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/revocation",
+      "version": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/d13f723511b61cb3068bfdf63d40bd7100fa1e89/services/iam/internal/adapters/composition/revocation"
+    },
+    {
+      "path": "services/iam/evidence/HIT-116",
+      "version": "cd9954fc350a2387e456d2fb4d46c16ff17586f0",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+    "evidence_commit": "cd9954fc350a2387e456d2fb4d46c16ff17586f0",
+    "go": "go version go1.27.2 linux/amd64",
+    "postgres": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "source_tree_sha256": "bedb70e4ae21d721c408a86a67a550e0ffa9345fa8fe5f4993a2108220398e22",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "test_groups": [
+      "TestPostgresRevocationMultiProcess",
+      "TestPostgresRevocationAtomicallyFreezesRegistryAndUpdatesSubject",
+      "TestPostgresRevocationExactAckRecoveryAndIncident",
+      "TestPostgresRevocationRejectedCommitAndCancellationLeaveNoPartialState",
+      "TestPostgresRevocationUnknownCommitReplaysOnceWithoutAnotherEpoch",
+      "TestPostgresRevocationNeverSilentlyAcceptsAnIncompleteRoster"
+    ],
+    "full_protocols": [
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/iam/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/iam/postgres-race.log",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/revocation-full.log",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/iam-driver.log",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/go.log",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/platform/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/revocation-passes.log",
+      "https://github.com/hitpipe/hitpipe/blob/cd9954fc350a2387e456d2fb4d46c16ff17586f0/services/iam/evidence/HIT-116/cleanup.log"
+    ],
+    "protocol_sha256": "8e3a1937a9c88e79499e286932bd0f170d2c07dec4ec05e17d8125e99c97c019"
+  },
+  "deviations": [],
+  "limitations": [
+    "Квалификация на отдельных управляемых тестовых процессах; вызовы рабочих сервисов не выполнялись.",
+    "Сетевого и database fencing в этом срезе нет. Неподтверждённый старый boot остаётся обязательным.",
+    "Workflow logout/BFF, MEMBERSHIP/CONNECTION и production wiring относятся к другим задачам."
+  ]
+}

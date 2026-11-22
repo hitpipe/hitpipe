@@ -1,0 +1,146 @@
+Exact tested commit d13f723511b61cb3068bfdf63d40bd7100fa1e89
+Complete module log: iam/postgres-race.log
+Module log SHA-256: e87f998b4688c2320f5eed24ee396af5f780450acd6c1fa5d2a8ac736db8217b
+The following are the complete output blocks of the four HIT-116 packages.
+
+=== RUN   TestHIT116Process
+--- PASS: TestHIT116Process (0.00s)
+=== RUN   TestPostgresRevocationMultiProcess
+    qualification_integration_test.go:431: postgres=18.7 app_role=hp_hit81_app registry_empty=true
+    qualification_integration_test.go:527: coordinator_pid=10127 managed_iam_runtime_pids=[10134,10135] real_control_port=9443
+    qualification_integration_test.go:570: wire revocation=0b49e5a1-3367-4fc5-8e6a-b6ce66130ef1 attempts=1 exact_command_sha256=7573a23fe3e77e2de929d6c2cba1109a07ef1a39d2ef5dac4474b29e90042d77
+    qualification_integration_test.go:572: mTLS rejects foreign CA, alternate IAM-CA leaf, expired leaf and wrong runtime pin; wrong boot yields no ACK
+    qualification_integration_test.go:622: durable-before-send id=3495bc10-5ed7-4de5-87d4-63e01076a7cd scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:36.746003Z deadline=2026-11-22T13:13:41.746003Z state=PENDING effective=<nil> incident=false deadline_breached=false missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244 8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:638: parallel-ack-while-other-start-section-held id=3495bc10-5ed7-4de5-87d4-63e01076a7cd scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:36.746003Z deadline=2026-11-22T13:13:41.746003Z state=PENDING effective=<nil> incident=false deadline_breached=false missing=[8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:36.959634Z"},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:651: all-ack-session id=3495bc10-5ed7-4de5-87d4-63e01076a7cd scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:36.746003Z deadline=2026-11-22T13:13:41.746003Z state=EFFECTIVE effective=2026-11-22 13:13:36.992737 +0000 UTC incident=false deadline_breached=false missing=[] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:36.959634Z"},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:36.982524Z"}]
+    qualification_integration_test.go:671: pre-barrier actual start=2026-11-22T13:13:36.741697916Z completed after all ACK; new global session starts denied across workspaces
+    qualification_integration_test.go:673: durable-before-send id=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 scope=WORKSPACE workspace_set=true epoch=8 accepted=2026-11-22T13:13:37.009257Z deadline=2026-11-22T13:13:42.009257Z state=PENDING effective=<nil> incident=false deadline_breached=false missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244 8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:678: lost-response-but-one-ack-durable id=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 scope=WORKSPACE workspace_set=true epoch=8 accepted=2026-11-22T13:13:37.009257Z deadline=2026-11-22T13:13:42.009257Z state=PENDING effective=<nil> incident=false deadline_breached=false missing=[8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":8,"acknowledged_at":"2026-11-22T13:13:37.074375Z"},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:711: restart-observed-deadline-incident-before-network id=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 scope=WORKSPACE workspace_set=true epoch=8 accepted=2026-11-22T13:13:37.009257Z deadline=2026-11-22T13:13:42.009257Z state=INCIDENT effective=<nil> incident=true deadline_breached=true missing=[8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":8,"acknowledged_at":"2026-11-22T13:13:37.074375Z"},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:711: coordinator recovery pid=10155 database=existing-records
+    qualification_integration_test.go:726: exact-on-time-ack-replayed-after-restart id=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 scope=WORKSPACE workspace_set=true epoch=8 accepted=2026-11-22T13:13:37.009257Z deadline=2026-11-22T13:13:42.009257Z state=EFFECTIVE effective=2026-11-22 13:13:42.187182 +0000 UTC incident=true deadline_breached=true missing=[] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":8,"acknowledged_at":"2026-11-22T13:13:37.074375Z"},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":8,"acknowledged_at":"2026-11-22T13:13:37.058256Z"}]
+    qualification_integration_test.go:727: wire revocation=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 attempts=2 exact_command_sha256=ba7d31b0c87c59ccd0c3dcf3f7571a003c9030da8e32e71dc798d935a9b66711
+    qualification_integration_test.go:728: wire revocation=ff7040d4-f2b3-4734-8dc2-11d500b3abf8 attempts=1 exact_command_sha256=64e46c09b119c1c2d83e19495d1b8c01817661cb44c204b1ba63798b77f83f7a
+    qualification_integration_test.go:730: durable-before-send id=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:43.200774Z deadline=2026-11-22T13:13:48.200774Z state=PENDING effective=<nil> incident=false deadline_breached=false missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244 8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":0,"acknowledged_at":null}]
+    qualification_integration_test.go:739: real control request cancelled after 3.014s; deadline 2026-11-22T13:13:48.200774Z stays unchanged
+    qualification_integration_test.go:742: restart-observed-deadline-incident-before-network id=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:43.200774Z deadline=2026-11-22T13:13:48.200774Z state=INCIDENT effective=<nil> incident=true deadline_breached=true missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:43.256411Z"}]
+    qualification_integration_test.go:742: coordinator recovery pid=10163 database=existing-records
+    qualification_integration_test.go:748: real-network-delay-no-late-ack id=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:43.200774Z deadline=2026-11-22T13:13:48.200774Z state=INCIDENT effective=<nil> incident=true deadline_breached=true missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:43.256411Z"}]
+    qualification_integration_test.go:749: wire revocation=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 attempts=2 exact_command_sha256=fcd9ba194c4aa4869b0885d609b33abcc097b2fec5acde218d5d714bdcee9c97
+    qualification_integration_test.go:771: restart-observed-deadline-incident-before-network id=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:43.200774Z deadline=2026-11-22T13:13:48.200774Z state=INCIDENT effective=<nil> incident=true deadline_breached=true missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:43.256411Z"}]
+    qualification_integration_test.go:771: coordinator recovery pid=10178 database=existing-records
+    qualification_integration_test.go:777: replacement-boot-closed-old-roster-unfulfilled id=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 scope=SESSION workspace_set=false epoch=4 accepted=2026-11-22T13:13:43.200774Z deadline=2026-11-22T13:13:48.200774Z state=INCIDENT effective=<nil> incident=true deadline_breached=true missing=[33fe6ba4-4d9f-436d-814d-c0ccd85c3244] roster=[{"runtime_id":"33fe6ba4-4d9f-436d-814d-c0ccd85c3244","boot_id":"a8c8aec6-9046-4663-9386-e68e1d0e5217","generation":1,"applied_epoch":0,"acknowledged_at":null},{"runtime_id":"8a9c1059-0aa2-4e59-bcb1-8677c6e1d4fd","boot_id":"2a6a1a3f-dca2-469b-9030-4ff9bdbcfa0a","generation":1,"applied_epoch":4,"acknowledged_at":"2026-11-22T13:13:43.256411Z"}]
+    qualification_integration_test.go:778: wire revocation=271722a5-bb51-4fcc-9f6a-579a44cfa9b6 attempts=1 exact_command_sha256=fcd9ba194c4aa4869b0885d609b33abcc097b2fec5acde218d5d714bdcee9c97
+--- PASS: TestPostgresRevocationMultiProcess (15.25s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/revocation	16.275s
+=== RUN   TestControlUsesActualStartGate
+--- PASS: TestControlUsesActualStartGate (0.09s)
+=== RUN   TestControlVerifiesBothTLSIdentitiesWithNoRedirect
+--- PASS: TestControlVerifiesBothTLSIdentitiesWithNoRedirect (0.15s)
+=== RUN   TestControlRejectsUnprovedAcknowledgements
+=== RUN   TestControlRejectsUnprovedAcknowledgements/workspace
+=== RUN   TestControlRejectsUnprovedAcknowledgements/epoch
+=== RUN   TestControlRejectsUnprovedAcknowledgements/late
+=== RUN   TestControlRejectsUnprovedAcknowledgements/generation
+=== RUN   TestControlRejectsUnprovedAcknowledgements/subject
+=== RUN   TestControlRejectsUnprovedAcknowledgements/drained
+=== RUN   TestControlRejectsUnprovedAcknowledgements/runtime
+=== RUN   TestControlRejectsUnprovedAcknowledgements/boot
+=== RUN   TestControlRejectsUnprovedAcknowledgements/revocation
+--- PASS: TestControlRejectsUnprovedAcknowledgements (0.21s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/workspace (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/epoch (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/late (0.03s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/generation (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/subject (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/drained (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/runtime (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/boot (0.02s)
+    --- PASS: TestControlRejectsUnprovedAcknowledgements/revocation (0.02s)
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/duplicate
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/unknown
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/wrong_key_case
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/absent_nullable
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/point_release
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/overflow
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/null_required
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/wrong_boot
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/unsupported_scope
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/trailing_JSON
+=== RUN   TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/too_large
+--- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand (0.08s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/duplicate (0.02s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/unknown (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/wrong_key_case (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/absent_nullable (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/point_release (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/overflow (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/null_required (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/wrong_boot (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/unsupported_scope (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/trailing_JSON (0.00s)
+    --- PASS: TestControlRejectsInvalidCommandsBeforeApplyingAcceptedCommand/too_large (0.00s)
+=== RUN   TestControlWorkspaceIdentityDoesNotAffectAnUnrelatedWorkspace
+--- PASS: TestControlWorkspaceIdentityDoesNotAffectAnUnrelatedWorkspace (0.04s)
+=== RUN   TestControlExchangeAllowsTransportHeadroom
+--- PASS: TestControlExchangeAllowsTransportHeadroom (2.14s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/revocation	3.733s
+=== RUN   TestPostgresRevocationAtomicallyFreezesRegistryAndUpdatesSubject
+--- PASS: TestPostgresRevocationAtomicallyFreezesRegistryAndUpdatesSubject (0.19s)
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/epoch
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/scope
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/boot
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/generation
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/revision
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/drained
+=== RUN   TestPostgresRevocationExactAckRecoveryAndIncident/late
+--- PASS: TestPostgresRevocationExactAckRecoveryAndIncident (0.20s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/epoch (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/scope (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/boot (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/generation (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/revision (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/drained (0.00s)
+    --- PASS: TestPostgresRevocationExactAckRecoveryAndIncident/late (0.00s)
+=== RUN   TestPostgresRevocationRejectedCommitAndCancellationLeaveNoPartialState
+--- PASS: TestPostgresRevocationRejectedCommitAndCancellationLeaveNoPartialState (0.24s)
+=== RUN   TestPostgresRevocationUnknownCommitReplaysOnceWithoutAnotherEpoch
+--- PASS: TestPostgresRevocationUnknownCommitReplaysOnceWithoutAnotherEpoch (0.27s)
+=== RUN   TestPostgresRevocationNeverSilentlyAcceptsAnIncompleteRoster
+--- PASS: TestPostgresRevocationNeverSilentlyAcceptsAnIncompleteRoster (0.17s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/revocation	2.099s
+=== RUN   TestUncertainBeginDoesNotDeliverAndSameIntentCanResume
+--- PASS: TestUncertainBeginDoesNotDeliverAndSameIntentCanResume (0.00s)
+=== RUN   TestValidAckPersistsWhileOtherTargetIsUnavailable
+--- PASS: TestValidAckPersistsWhileOtherTargetIsUnavailable (0.00s)
+=== RUN   TestAckValidation
+=== RUN   TestAckValidation/revocation
+=== RUN   TestAckValidation/boot
+=== RUN   TestAckValidation/scope
+=== RUN   TestAckValidation/subject
+=== RUN   TestAckValidation/epoch
+=== RUN   TestAckValidation/drained
+=== RUN   TestAckValidation/expired
+=== RUN   TestAckValidation/workspace
+=== RUN   TestAckValidation/generation
+=== RUN   TestAckValidation/premature
+--- PASS: TestAckValidation (0.00s)
+    --- PASS: TestAckValidation/revocation (0.00s)
+    --- PASS: TestAckValidation/boot (0.00s)
+    --- PASS: TestAckValidation/scope (0.00s)
+    --- PASS: TestAckValidation/subject (0.00s)
+    --- PASS: TestAckValidation/epoch (0.00s)
+    --- PASS: TestAckValidation/drained (0.00s)
+    --- PASS: TestAckValidation/expired (0.00s)
+    --- PASS: TestAckValidation/workspace (0.00s)
+    --- PASS: TestAckValidation/generation (0.00s)
+    --- PASS: TestAckValidation/premature (0.00s)
+=== RUN   TestRecoveryRespectsRosterAndOnlyRetriesMissingParticipant
+--- PASS: TestRecoveryRespectsRosterAndOnlyRetriesMissingParticipant (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/revocation	1.022s
