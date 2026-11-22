@@ -179,8 +179,9 @@ class Qualification:
         self.log["caddy"]["version"] = version
         m = self.docker("caddy list-modules --skip-standard", "run", "--rm", *opts,
                         "list-modules", "--skip-standard").stdout.decode()
-        want(re.search(r"(?im)^non-standard modules:\s*0\s*$", m) and
-             re.search(r"(?im)^unknown modules:\s*0\s*$", m), "unexpected extension modules in pinned executable")
+        # In v2.11.7 --skip-standard prints no group for a zero count.
+        # Any stdout here names or counts a non-standard or unknown module.
+        want(not m.strip(), "unexpected extension modules in pinned executable")
         self.log["caddy"]["non_standard_modules"] = 0
         self.log["caddy"]["unknown_modules"] = 0
         adapted = self.docker("caddy adapt", "run", "--rm", *opts, "adapt", "--config",
