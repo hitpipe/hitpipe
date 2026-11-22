@@ -63,9 +63,7 @@ func validWorkspace(value app.Workspace) bool {
 	default:
 		return false
 	}
-	// The wire enum also names DELETING/DELETED, but an accessible workspace
-	// cannot be either of those closed states. ONBOARDING has no wire member.
-	return value.Lifecycle == "ACTIVE"
+	return app.IsPublicLifecycle(value.Lifecycle)
 }
 
 func correlationID(request *http.Request) (string, bool) {

@@ -41,6 +41,16 @@ type Workspace struct {
 	SecurityEpoch int64  `json:"security_epoch"`
 }
 
+// IsPublicLifecycle reports whether the value is an accepted Workspace lifecycle.
+func IsPublicLifecycle(value string) bool {
+	switch value {
+	case "ACTIVE", "DELETING", "DELETED":
+		return true
+	default:
+		return false
+	}
+}
+
 type Command struct {
 	RequestID        string
 	Name             string

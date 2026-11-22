@@ -107,7 +107,7 @@ func orderRows(rows []Row, ids []string) ([]Row, error) {
 		_, found := slices.BinarySearch(ids, row.WorkspaceID)
 		if !found || (i > 0 && out[i-1].WorkspaceID == row.WorkspaceID) || !epoch(row.Revision) || !epoch(row.SecurityEpoch) || !id(row.NameRef) ||
 			!epoch(row.MembershipRevision) ||
-			row.Lifecycle != "ACTIVE" || (row.Role != "OWNER" && row.Role != "OPERATOR" && row.Role != "READER") {
+			!IsPublicLifecycle(row.Lifecycle) || (row.Role != "OWNER" && row.Role != "OPERATOR" && row.Role != "READER") {
 			return nil, ErrUnavailable
 		}
 	}
@@ -326,7 +326,7 @@ func (s *Service) startCreationResponse(ctx context.Context, peer runtimeaccess.
 			if err != nil {
 				return err
 			}
-			if len(rows) != 1 || rows[0] != committed || rows[0].Role != "OWNER" {
+			if len(rows) != 1 || rows[0] != committed || rows[0].Role != "OWNER" || rows[0].Lifecycle != "ACTIVE" {
 				return ErrStale
 			}
 			item, err := s.project(guard, rows[0])

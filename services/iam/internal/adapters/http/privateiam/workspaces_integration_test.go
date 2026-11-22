@@ -434,6 +434,49 @@ func TestPostgresWorkspacesPrivateListener(t *testing.T) {
 		}
 	})
 
+	t.Run("the list projects the exact current public lifecycle under owner authority", func(t *testing.T) {
+		owned, onboarding := labUUID(), labUUID()
+		const ownedName = "Допущенное синтетическое пространство"
+		const onboardingName = "Внутреннее синтетическое пространство"
+		for _, fixture := range []struct{ id, lifecycle, name string }{
+			{owned, "ACTIVE", ownedName},
+			{onboarding, "ONBOARDING", onboardingName},
+		} {
+			cleanWorkspaceFixture(t, db, fixture.id)
+			sqlExec(t, db.admin, `INSERT INTO hp_iam.workspaces(workspace_id,name_content_ref,revision,security_epoch,lifecycle,created_at,owner_confirmed_at)
+ VALUES($1,$2,1,1,$3,$4,$4)`, fixture.id, labUUID(), fixture.lifecycle, f.now)
+			sqlExec(t, db.admin, `INSERT INTO hp_iam.memberships(workspace_id,principal_id,role,status,revision,accepted_at)
+ VALUES($1,$2,'OWNER','ACTIVE',1,$3)`, fixture.id, f.principal, f.now)
+			seedWorkspaceName(t, db, files, fixture.id, fixture.name)
+		}
+		candidates.replace([]string{f.otherWorkspace, owned, onboarding})
+		defer candidates.replace(baseIDs)
+		for i, lifecycle := range []string{"ACTIVE", "DELETING", "DELETED"} {
+			revision := int64(i + 1)
+			if i > 0 {
+				sqlExec(t, db.admin, `UPDATE hp_iam.workspaces SET lifecycle=$2,revision=$3,security_epoch=$3 WHERE workspace_id=$1`, owned, lifecycle, revision)
+			}
+			response := list(bff, f.opaqueSession)
+			assertWorkspaceStatus(t, response, http.StatusOK, f.opaqueSession)
+			var listed struct{ Items []app.Workspace }
+			want := app.Workspace{WorkspaceID: owned, Name: ownedName, Role: "OWNER", Lifecycle: lifecycle, Revision: revision, SecurityEpoch: revision}
+			if json.Unmarshal(response.body, &listed) != nil || len(listed.Items) != 1 || listed.Items[0] != want {
+				t.Fatalf("current %s state or workspace authority was projected incorrectly", lifecycle)
+			}
+		}
+		// Once owner content is purged, the exact public schema cannot be
+		// projected. Once membership is withdrawn, the ID is omitted entirely.
+		sqlExec(t, db.admin, `UPDATE hp_iam.workspaces SET name_content_ref=$2 WHERE workspace_id=$1`, owned, labUUID())
+		missingContent := list(bff, f.opaqueSession)
+		assertWorkspaceStatus(t, missingContent, http.StatusServiceUnavailable, ownedName)
+		sqlExec(t, db.admin, `UPDATE hp_iam.memberships SET status='REVOKED',revoked_at=clock_timestamp(),revision=2 WHERE workspace_id=$1 AND principal_id=$2`, owned, f.principal)
+		empty := list(bff, f.opaqueSession)
+		assertWorkspaceStatus(t, empty, http.StatusOK, f.opaqueSession)
+		if string(empty.body) != `{"items":[]}` {
+			t.Fatal("closed membership, foreign workspace or internal lifecycle reached the wire")
+		}
+	})
+
 	t.Run("the list cannot return more than fifty current workspaces", func(t *testing.T) {
 		ids := make([]string, 0, 51)
 		for range 51 {

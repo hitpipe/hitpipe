@@ -61,7 +61,7 @@ func (s *Store) Create(ctx context.Context, who app.Identity, change app.Change,
 		if err != nil {
 			return app.Row{}, err
 		}
-		if !found || row.Role != "OWNER" {
+		if !found || row.Role != "OWNER" || row.Lifecycle != "ACTIVE" {
 			return app.Row{}, app.ErrDenied
 		}
 		if _, err := s.liveNow(guarded, who); err != nil {

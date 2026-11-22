@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -111,6 +112,8 @@ func TestCreateSeparatesCorrelationAndCommandAndFlushesBeforeReturn(t *testing.T
 }
 
 func TestListWireEnvelopeAndUnavailableProjection(t *testing.T) {
+	deleting, deleted := created, created
+	deleting.Lifecycle, deleted.Lifecycle = "DELETING", "DELETED"
 	for _, tc := range []struct {
 		name string
 		rows []app.Workspace
@@ -118,6 +121,7 @@ func TestListWireEnvelopeAndUnavailableProjection(t *testing.T) {
 	}{
 		{"empty", nil, http.StatusOK},
 		{"visible", []app.Workspace{created}, http.StatusOK},
+		{"public deletion states", []app.Workspace{deleting, deleted}, http.StatusOK},
 		{"over limit", make([]app.Workspace, maxWorkspaceItems+1), http.StatusServiceUnavailable},
 		{"onboarding", []app.Workspace{{WorkspaceID: workspaceID, Name: "internal", Role: "OWNER", Revision: 1, SecurityEpoch: 1, Lifecycle: "ONBOARDING"}}, http.StatusServiceUnavailable},
 	} {
@@ -137,6 +141,12 @@ func TestListWireEnvelopeAndUnavailableProjection(t *testing.T) {
 			}
 			if tc.rows == nil && writer.Body.String() != `{"items":[]}` {
 				t.Fatalf("empty list does not satisfy Workspaces: %s", writer.Body.String())
+			}
+			if tc.want == http.StatusOK {
+				var result workspaceList
+				if err := json.Unmarshal(writer.Body.Bytes(), &result); err != nil || !slices.Equal(result.Items, tc.rows) {
+					t.Fatal("workspace lifecycle or list shape changed on the wire")
+				}
 			}
 			if tc.want != http.StatusOK && (writer.Flushed || strings.Contains(writer.Body.String(), "ONBOARDING")) {
 				t.Fatal("internal lifecycle reached the wire")

@@ -125,7 +125,8 @@ func (h handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 		err = h.backend.Create(request.Context(), peer, session, csrf, command, func(work context.Context, workspace app.Workspace) error {
-			return response.publish(writer, request, controller, work, http.StatusCreated, workspace, validWorkspace(workspace) && workspace.Role == "OWNER")
+			return response.publish(writer, request, controller, work, http.StatusCreated, workspace,
+				validWorkspace(workspace) && workspace.Role == "OWNER" && workspace.Lifecycle == "ACTIVE")
 		})
 	}
 	response.finish(writer, request, err)

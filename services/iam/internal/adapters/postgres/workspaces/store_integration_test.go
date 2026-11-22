@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -261,9 +260,14 @@ func TestPostgresWorkspacesAtomicCreateAndReplay(t *testing.T) {
 	if err != nil || replayed != first.row {
 		t.Fatalf("durable replay failed: %v", err)
 	}
-	change.BodyDigest = "sha256:" + strings.Repeat("d", 64)
-	if row, err := restarted.Create(ctx, who, change.Change, mustNotPrepare); !errors.Is(err, app.ErrConflict) || row != (app.Row{}) {
+	conflict := change.Change
+	conflict.BodyDigest = "sha256:" + strings.Repeat("d", 64)
+	if row, err := restarted.Create(ctx, who, conflict, mustNotPrepare); !errors.Is(err, app.ErrConflict) || row != (app.Row{}) {
 		t.Fatalf("different body was not a bounded conflict: %v", err)
+	}
+	f.exec(`UPDATE hp_iam.workspaces SET lifecycle='DELETING',revision=2 WHERE workspace_id=$1`, change.WorkspaceID)
+	if row, err := restarted.Create(ctx, who, change.Change, mustNotPrepare); !errors.Is(err, app.ErrDenied) || row != (app.Row{}) {
+		t.Fatalf("a closed workspace was replayed as a successful creation: %v", err)
 	}
 }
 
@@ -349,17 +353,22 @@ func TestPostgresWorkspacesCurrentOwnFactsAndLocks(t *testing.T) {
 	onboarding := f.candidate(f.principal, "ONBOARDING", "ACTIVE", 9)
 	deleting := f.candidate(f.principal, "DELETING", "ACTIVE", 9)
 	deleted := f.candidate(f.principal, "DELETED", "ACTIVE", 9)
+	foreignDeleted := f.candidate(f.other, "DELETED", "ACTIVE", 9)
+	revokedDeleting := f.candidate(f.principal, "DELETING", "REVOKED", 9)
 	unsafeEpoch := f.candidate(f.principal, "ACTIVE", "ACTIVE", 9007199254740992)
 	blocked := f.candidate(f.principal, "ACTIVE", "ACTIVE", 9)
 	f.revoke("MEMBERSHIP", testID(t), &blocked)
-	ids := []string{foreign, ours, revoked, onboarding, deleting, deleted, invited, unsafeEpoch, blocked, testID(t)}
+	ids := []string{foreign, ours, revoked, onboarding, deleting, deleted, foreignDeleted, revokedDeleting, invited, unsafeEpoch, blocked, testID(t)}
 	err := f.store.WithRows(ctx, who, ids, func(guard context.Context, rows []app.Row) error {
-		got := make([]string, 0, len(rows))
-		for _, row := range rows {
-			got = append(got, row.WorkspaceID)
+		want := map[string]string{ours: "ACTIVE", deleting: "DELETING", deleted: "DELETED"}
+		if len(rows) != len(want) {
+			t.Fatal("candidate scope became authority or a public lifecycle was omitted")
 		}
-		if !slices.Equal(got, []string{ours}) || rows[0].SecurityEpoch != 9 || rows[0].MembershipRevision != 1 || rows[0].Role != "READER" {
-			t.Fatal("candidate scope became authority or stale facts were not closed")
+		for _, row := range rows {
+			if row.Lifecycle != want[row.WorkspaceID] || row.SecurityEpoch != 9 || row.MembershipRevision != 1 || row.Role != "READER" {
+				t.Fatal("candidate scope became authority or a current row was projected incorrectly")
+			}
+			delete(want, row.WorkspaceID)
 		}
 		// A concurrent lifecycle or authorization update cannot change the
 		// checked membership while the actual response start is in progress.

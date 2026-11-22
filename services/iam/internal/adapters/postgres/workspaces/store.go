@@ -41,7 +41,7 @@ const selectCaller = `SELECT runtime_id::text,service,generation,boot_id::text,c
 const selectWorkspace = `SELECT w.workspace_id::text,w.name_content_ref::text,m.role,w.lifecycle,
  w.revision,w.security_epoch,m.revision
  FROM hp_iam.workspaces w JOIN hp_iam.memberships m USING(workspace_id)
- WHERE w.workspace_id=$1 AND m.principal_id=$2 AND w.lifecycle='ACTIVE'
+ WHERE w.workspace_id=$1 AND m.principal_id=$2 AND w.lifecycle IN ('ACTIVE','DELETING','DELETED')
    AND m.status='ACTIVE' AND m.revoked_at IS NULL
    AND NOT EXISTS(SELECT 1 FROM hp_iam.revocations r
                   WHERE (r.scope='WORKSPACE' AND (r.workspace_id=w.workspace_id OR r.subject_id=w.workspace_id))
