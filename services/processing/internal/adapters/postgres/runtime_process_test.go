@@ -232,6 +232,11 @@ func (s *processStand) delivery(w http.ResponseWriter, r *http.Request) {
 
 func createProcessStand(t *testing.T, binary, files string, workspaces map[string]string) *processStand {
 	t.Helper()
+	return createProcessStandWithIAM(t, binary, files, workspaces, true)
+}
+
+func createProcessStandWithIAM(t *testing.T, binary, files string, workspaces map[string]string, useFixtureIAM bool) *processStand {
+	t.Helper()
 	id, _ := newID()
 	s := &processStand{t: t, dir: t.TempDir(), binary: binary, files: files, pki: testfixtures.NewDraftPKI(t),
 		token: strings.Repeat("s", 48), csrf: strings.Repeat("z", 43), session: config, identity: id, workspaces: workspaces,
@@ -268,7 +273,9 @@ func createProcessStand(t *testing.T, binary, files string, workspaces map[strin
 			"service_label": "Synthetic service", "queue_lock_file": lock, "queue_snapshot_file": filepath.Join(s.dir, "queue-"+ws+".json")})
 	}
 	s.stand = s.json("stand.json", map[string]any{"workspaces": slots})
-	s.peer("127.0.0.2:8443", "iam.test", s.iam)
+	if useFixtureIAM {
+		s.peer("127.0.0.2:8443", "iam.test", s.iam)
+	}
 	s.peer("127.0.0.3:8443", "intake.test", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(503) })
 	s.peer("127.0.0.4:8443", "delivery.test", s.delivery)
 	return s
