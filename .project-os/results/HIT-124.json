@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-124",
+  "mode": "IMP",
+  "materialized_result": {
+    "repository": "https://github.com/hitpipe/hitpipe",
+    "summary": "Приватные IAM API списка и создания рабочих областей с текущей авторизацией и устойчивой квитанцией в явно установленной области.",
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "base_commit": "5b35214e5c7a96b01da1148c1df1ddcbe700b78d",
+    "code_commit": "c74089f05954e7c974385077523d96c5c3d9ef87",
+    "review_base_ref": "codex/hit-124-dependencies",
+    "review_head_ref": "codex/hit-124-workspaces",
+    "human_report": "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/README.md",
+    "workspace_api_runbook": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/docs/WORKSPACES_RU.md",
+    "contracts": {
+      "openapi": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+      "iam_sql": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql",
+      "architecture": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md"
+    },
+    "dependencies": {
+      "HIT-81": {
+        "accepted_result_commit": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/60013536b69b4b8d7f99e7bddf714e6432f09a11/.project-os/results/HIT-81.json"
+      },
+      "HIT-82": {
+        "accepted_result_commit": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/a46d9d40169105356e61200a2a2b0cec17e5efb3/.project-os/results/HIT-82.json"
+      },
+      "HIT-84": {
+        "accepted_result_commit": "fba9d664862adedd3df305e18e3c03fb95e0f95c",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/fba9d664862adedd3df305e18e3c03fb95e0f95c/.project-os/results/HIT-84.json"
+      },
+      "HIT-85": {
+        "accepted_result_commit": "51e8d26cb27beac8ed71eed3526f107dbee7c0b8",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/51e8d26cb27beac8ed71eed3526f107dbee7c0b8/.project-os/results/HIT-85.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/64"
+      },
+      "HIT-115": {
+        "accepted_result_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "ref": "https://github.com/hitpipe/hitpipe/blob/c7a74f55ea8111fa290f803976d256cc8a4a202e/.project-os/results/HIT-115.json",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/80"
+      }
+    }
+  },
+  "changed_artifacts": [
+    {
+      "path": "services/iam/internal/application/workspaces",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/application/workspaces"
+    },
+    {
+      "path": "services/iam/internal/adapters/postgres/workspaces",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/postgres/workspaces"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/workspaces",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/http/workspaces"
+    },
+    {
+      "path": "services/iam/internal/adapters/content/workspacefiles",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/content/workspacefiles"
+    },
+    {
+      "path": "services/iam/docs/WORKSPACES_RU.md",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/docs/WORKSPACES_RU.md"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/listener.go",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/composition/privateiam/listener.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/server.go",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/composition/privateiam/server.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/composition/privateiam/workspaces.go",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/composition/privateiam/workspaces.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/privateiam/tls.go",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/http/privateiam/tls.go"
+    },
+    {
+      "path": "services/iam/internal/adapters/http/privateiam/workspaces_integration_test.go",
+      "version": "c74089f05954e7c974385077523d96c5c3d9ef87",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/c74089f05954e7c974385077523d96c5c3d9ef87/services/iam/internal/adapters/http/privateiam/workspaces_integration_test.go"
+    },
+    {
+      "path": "services/iam/evidence/HIT-124",
+      "version": "0cfac833eaba453ab6da93c8ecef447d47229795",
+      "ref": "https://github.com/hitpipe/hitpipe/tree/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124"
+    }
+  ],
+  "verification": {
+    "tested_code_commit": "c74089f05954e7c974385077523d96c5c3d9ef87",
+    "evidence_commit": "0cfac833eaba453ab6da93c8ecef447d47229795",
+    "go": "go version go1.27.2 linux/amd64",
+    "postgres": "18.7",
+    "postgres_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "source_tree_sha256": "69ec9dcade5cea93496ca8a154dd4e305770752ae250d9a68e02352cd0b6bd38",
+    "iam_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "test_groups": [
+      "TestPostgresWorkspacesPrivateListener",
+      "TestPostgresWorkspacesUnknownCommitRecoversDurableReceipt",
+      "TestPostgresWorkspacesAtomicCreateAndReplay",
+      "TestPostgresWorkspacesRollbackAndApplicationRole",
+      "TestPostgresWorkspacesCurrentOwnFactsAndLocks"
+    ],
+    "full_protocols": [
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/workspaces-full.log",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/iam/postgres-race.log",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/iam/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/workspaces-passes.log",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/driver.log",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/go.log",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/platform/verification.json",
+      "https://github.com/hitpipe/hitpipe/blob/0cfac833eaba453ab6da93c8ecef447d47229795/services/iam/evidence/HIT-124/cleanup.log"
+    ],
+    "protocol_sha256": "5923edc418faf1b7d5ae71425b1863127068272b854dfd2f88622181c8d00cb0"
+  },
+  "deviations": [],
+  "limitations": [
+    "Стенд проверяет принятую команду с заранее установленным реальным workspace ID и явным ACTIVE. У ONBOARDING нет принятой публичной проекции.",
+    "При неизвестном scope нельзя найти квитанцию по одному principal и request ID под FORCE RLS. Рабочий допуск и поиск всех областей требуют подключённых доверенных портов.",
+    "Доставка CSRF, GET session, logout, UI/BFF и рабочая активация операции остаются отдельными шагами. Доставка локального outbox не проверялась."
+  ]
+}
