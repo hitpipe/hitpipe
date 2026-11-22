@@ -71,7 +71,11 @@ type observationFixture struct {
 
 func newObservation(t *testing.T) observationFixture {
 	t.Helper()
-	f := prepared(t, []string{})
+	return observePrepared(t, prepared(t, []string{}))
+}
+
+func observePrepared(t *testing.T, f preparedFixture) observationFixture {
+	t.Helper()
 	result, e := f.service.Prepare(ctx, f.request)
 	if e != nil {
 		t.Fatal(e)

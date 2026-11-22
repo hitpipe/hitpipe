@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"testing"
 	"time"
@@ -148,6 +149,21 @@ type recoveryOutbox struct {
 	expiry   time.Time
 }
 
+type recoveryDriver struct {
+	boot   func(log string, args ...string)
+	health func(label, state string)
+	stop   func()
+}
+
+func localRecoveryDriver(stand *processStand) recoveryDriver {
+	var child *processingChild
+	return recoveryDriver{
+		boot:   func(log string, args ...string) { child = stand.bootWith(log, args...) },
+		health: func(label, state string) { stand.recoveryHealth(stand.t, child, label, state) },
+		stop:   func() { stopRecoveryProcess(stand.t, child) },
+	}
+}
+
 func recoveredOutbox(t *testing.T, db *pgx.Conn, ws, id string) recoveryOutbox {
 	t.Helper()
 	tx := begin(t, db, ws)
@@ -186,21 +202,29 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if os.Getenv("HIT128_RECOVERY_STAND") != "1" || binary == "" || purge == "" {
 		t.Skip("requires the private HIT-128 PostgreSQL stand and built commands")
 	}
+	verifyProcessingRecovery(t, newObservation(t), binary, purge, localRecoveryDriver)
+}
+
+func verifyProcessingRecovery(t *testing.T, f observationFixture, binary, purge string, driver func(*processStand) recoveryDriver) {
+	t.Helper()
 	started := time.Now()
-	f := newObservation(t)
 	ws, cid := f.request.WorkspaceID, f.request.CaseID
 	app := connect(t)
 	other := prepared(t, []string{}).request
 	stand := createProcessStand(t, binary, f.path, map[string]string{ws: "acct_synthetic", other.WorkspaceID: "acct_synthetic"})
+	runtime := driver(stand)
+	bootStand := func(log string) { runtime.boot(log, "-config", stand.config, "-stand-config", stand.stand) }
 	stand.waitDelivery.Store(true)
+	var deliveryQueries atomic.Int32
 	stand.queryReply = func(w http.ResponseWriter, r *http.Request) {
 		// Observe a real outbound query without returning an observation/ACK.
+		deliveryQueries.Add(1)
 		<-r.Context().Done()
 	}
-	proc := stand.boot("recovery-source.log")
-	stand.recoveryHealth(t, proc, "original", "CLOSED")
+	bootStand("recovery-source.log")
+	runtime.health("original", "CLOSED")
 	stand.iamOpen.Store(true)
-	stand.recoveryHealth(t, proc, "original", "READY")
+	runtime.health("original", "READY")
 	select {
 	case got := <-stand.deliverySeen:
 		if got != f.lineage {
@@ -260,14 +284,15 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	stand.denials = append(stand.denials, drafts.DenyEpochSnapshot{WorkspaceID: &other.WorkspaceID, Scope: "WORKSPACE", SubjectID: other.WorkspaceID,
 		Epoch: 8, RevocationID: revocation, AcceptedAt: time.Now().Add(-time.Second).UTC()})
 	stand.bootMu.Unlock()
-	stopRecoveryProcess(t, proc)
+	runtime.stop()
 	stand.iamStale.Store(true)
-	cold := stand.boot("recovery-same-db.log")
-	stand.recoveryHealth(t, cold, "cold restart, same database", "CLOSED")
+	bootStand("recovery-same-db.log")
+	runtime.health("cold restart, same database", "CLOSED")
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 503)
-	stopRecoveryProcess(t, cold)
+	runtime.stop()
 
 	before := restoredIdentity(t, app, ws, cid)
+	queriesBefore := deliveryQueries.Load()
 	if !before.Fence || before.State != "UNKNOWN" || before.Knowledge != "TARGET_ID_KNOWN" ||
 		before.Cases != 1 || before.Commands != 1 || before.Inbox != 3 || before.Intents != 1 || before.Queries != 1 {
 		t.Fatal("unexpected source safety summary", before.Fence, before.State, before.Knowledge,
@@ -286,6 +311,7 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	tx.Rollback(ctx)
 	archive := captureRecovery(t, app, ws)
 	stand.t.Logf("source intent state=%s lease=%t attempts=%d; known identity and fence persisted", first.state, first.lease, first.attempts)
+	t.Logf("source safety: %+v", before)
 
 	cluster := createRecoveryCluster(t, stand)
 	target := cluster.connect(t, "hp_processing_app")
@@ -304,7 +330,8 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 		t.Fatal("foreign restore was not atomic", foreign, err)
 	}
 	tx.Rollback(ctx)
-	if after := restoredIdentity(t, target, ws, cid); before != after {
+	after := restoredIdentity(t, target, ws, cid)
+	if before != after {
 		t.Fatal("restored identity, command, inbox, outbox or fence differs")
 	}
 	held := recoveredOutbox(t, target, ws, f.lineage)
@@ -315,6 +342,8 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if query.state != "HELD" || query.lease {
 		t.Fatal("restore promoted unfinished recheck", query)
 	}
+	t.Logf("restored safety: %+v", after)
+	t.Logf("restored intent: state=%s lease=%t attempts=%d expiry_unchanged=%t", held.state, held.lease, held.attempts, held.expiry.Equal(first.expiry))
 	worker := DispatchStore{DB: cluster.connect(t, "hp_processing_worker")}
 	if err := worker.Check(ctx, oldClaim); !errors.Is(err, pgx.ErrNoRows) {
 		t.Fatal("restored worker accepted an old job/claim or returned an unexpected error", err)
@@ -322,22 +351,22 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	t.Log("restore identity/config/command/inbox/effect and fence preserved; create/recheck HELD, old claim has no job, expiry and attempts unchanged; repeat refused; foreign scope rolled back")
 
 	cluster.runtimeConfig(t, stand)
-	normal := stand.bootWith("recovery-normal-closed.log", "-config", stand.config)
-	stand.recoveryHealth(t, normal, "ordinary configuration without authoritative stand inputs", "CLOSED")
+	runtime.boot("recovery-normal-closed.log", "-config", stand.config)
+	runtime.health("ordinary configuration without authoritative stand inputs", "CLOSED")
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 503)
-	stopRecoveryProcess(t, normal)
+	runtime.stop()
 
 	previous := stand.registrations.Load()
-	restored := stand.boot("recovery-target.log")
+	bootStand("recovery-target.log")
 	stand.recoveryWaitRegistration(t, previous)
-	stand.recoveryHealth(t, restored, "target with stale boot snapshot", "CLOSED")
+	runtime.health("target with stale boot snapshot", "CLOSED")
 	stand.must("bff.test", "8443", "GET", caseURL, nil, headers, 503)
 	stand.registerGeneration.Store(2)
 	stand.iamStale.Store(false)
 	stand.recoveryWaitRegistration(t, stand.registrations.Load())
-	stand.recoveryHealth(t, restored, "target with wrong generation", "CLOSED")
+	runtime.health("target with wrong generation", "CLOSED")
 	stand.registerGeneration.Store(0)
-	stand.recoveryHealth(t, restored, "target with fresh boot and generation", "READY")
+	runtime.health("target with fresh boot and generation", "READY")
 	revokedURL := "/api/v1/workspaces/" + other.WorkspaceID + "/cases/" + other.CaseID
 	stand.must("bff.test", "8443", "GET", revokedURL, nil, headers, 403)
 	stand.authorizationEpoch.Store(9)
@@ -366,7 +395,7 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if !expiredMetadata || !valid {
 		t.Fatal("did not retain live refs and expired metadata distinctly", expiredMetadata, valid)
 	}
-	stopRecoveryProcess(t, restored)
+	runtime.stop()
 
 	tx = begin(t, target, ws)
 	var activeRef string
@@ -380,18 +409,30 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if err := os.Rename(activePath, saved); err != nil {
 		t.Fatal(err)
 	}
-	fault := stand.boot("recovery-missing-content.log")
-	stand.recoveryHealth(t, fault, "target, one missing detail", "READY")
+	bootStand("recovery-missing-content.log")
+	runtime.health("target, one missing detail", "READY")
 	missing := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 503)
 	if err := os.WriteFile(activePath, []byte("deliberately damaged synthetic content"), 0600); err != nil {
 		t.Fatal(err)
+	}
+	// Preserve fixture ownership so the container sees corrupt bytes, even when
+	// the test driver bootstraps PostgreSQL as root.
+	info, err := os.Stat(saved)
+	if err != nil {
+		t.Fatal(err)
+	}
+	owner := info.Sys().(*syscall.Stat_t)
+	if int(owner.Uid) != os.Geteuid() || int(owner.Gid) != os.Getegid() {
+		if err := os.Chown(activePath, int(owner.Uid), int(owner.Gid)); err != nil {
+			t.Fatal(err)
+		}
 	}
 	corrupt := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 503)
 	if !bytes.Contains(missing, []byte("READ_UNAVAILABLE")) || !bytes.Contains(corrupt, []byte("READ_UNAVAILABLE")) {
 		t.Fatal("unexpected missing or corrupt detail result")
 	}
 	t.Log("live refs read successfully; expired detail is metadata-only; missing and corrupt live refs each returned HTTP 503 READ_UNAVAILABLE")
-	stopRecoveryProcess(t, fault)
+	runtime.stop()
 	if err := os.Rename(saved, activePath); err != nil {
 		t.Fatal(err)
 	}
@@ -416,18 +457,20 @@ func TestProcessingRecoveryOwnedStand(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(f.path, expired.ID)); !os.IsNotExist(err) {
 		t.Fatal("restore resurrected an already removed file", err)
 	}
-	afterPurge := stand.boot("recovery-after-purge.log")
-	stand.recoveryHealth(t, afterPurge, "target after expiry cleanup", "READY")
+	bootStand("recovery-after-purge.log")
+	runtime.health("target after expiry cleanup", "READY")
 	still := stand.must("bff.test", "8443", "GET", caseURL+"/history", nil, headers, 200)
 	var afterHistory readcases.HistoryView
 	if json.Unmarshal(still, &afterHistory) != nil || !reflect.DeepEqual(h.Items, afterHistory.Items) {
 		t.Fatal("expired file removal changed retained history metadata")
 	}
-	stopRecoveryProcess(t, afterPurge)
+	runtime.stop()
 	t.Log("purge removed expired bytes while preserving the exact public history metadata and expiry")
 	if after := restoredIdentity(t, target, ws, cid); before != after ||
-		stand.deliveryCount.Load() != 1 || recoveredOutbox(t, target, ws, f.lineage) != held {
+		stand.deliveryCount.Load() != 1 || deliveryQueries.Load() != queriesBefore ||
+		recoveredOutbox(t, target, ws, f.lineage) != held {
 		t.Fatal("replay or purge changed safety/identity or repeated the external effect")
 	}
-	t.Logf("RECOVERY PASS: live provider create calls=1, no promoted ACK/CONFIRMED, cleanup preserved fence, duration_local_ms=%d", time.Since(started).Milliseconds())
+	t.Logf("RECOVERY PASS: controlled Delivery create calls=%d, query calls before/after=%d/%d, no promoted ACK/CONFIRMED, cleanup preserved fence, duration_local_ms=%d",
+		stand.deliveryCount.Load(), queriesBefore, deliveryQueries.Load(), time.Since(started).Milliseconds())
 }

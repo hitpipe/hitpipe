@@ -154,6 +154,15 @@ func prepared(t *testing.T, keys []string) preparedFixture {
 
 func preparedSince(t *testing.T, keys []string, activation time.Time) preparedFixture {
 	t.Helper()
+	path := filepath.Join(t.TempDir(), "content")
+	if err := os.Mkdir(path, 0700); err != nil {
+		t.Fatal(err)
+	}
+	return preparedIn(t, keys, activation, path)
+}
+
+func preparedIn(t *testing.T, keys []string, activation time.Time, path string) preparedFixture {
+	t.Helper()
 	db := connect(t)
 	ws, _ := newID()
 	tx := begin(t, db, ws)
@@ -176,10 +185,6 @@ func preparedSince(t *testing.T, keys []string, activation time.Time) preparedFi
 		t.Fatal(e)
 	}
 	if e = tx.Commit(ctx); e != nil {
-		t.Fatal(e)
-	}
-	path := filepath.Join(t.TempDir(), "content")
-	if e = os.Mkdir(path, 0700); e != nil {
 		t.Fatal(e)
 	}
 	files, e := contentfiles.New(path)

@@ -1,0 +1,9 @@
+=== RUN   TestProcessingOCIImageOwnedStand
+    image_process_test.go:116: OPS mTLS HTTP 200 {"build_revision":"30385d09962c3fa4aad4808253a5493235559d01","checked_at":"2026-11-21T07:04:43.95841876Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    image_process_test.go:125: Negative HTTP checks: CLOSED business 503, non-OPS Health 403, missing mTLS certificate refused
+    image_process_test.go:128: OPS mTLS HTTP 200 {"build_revision":"30385d09962c3fa4aad4808253a5493235559d01","checked_at":"2026-11-21T07:04:44.926737844Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    image_process_test.go:167: OPS mTLS HTTP 200 {"build_revision":"30385d09962c3fa4aad4808253a5493235559d01","checked_at":"2026-11-21T07:04:45.848273469Z","protocol_version":"1.0","service":"PROCESSING","status":"CLOSED"}
+    image_process_test.go:170: OPS mTLS HTTP 200 {"build_revision":"30385d09962c3fa4aad4808253a5493235559d01","checked_at":"2026-11-21T07:04:46.790196553Z","protocol_version":"1.0","service":"PROCESSING","status":"READY"}
+    image_process_test.go:197: RESTART PASS: case=4e846eb2-619c-4af2-bea5-849ebafc1a6e message=a99bd3d2-ef86-47c9-8a83-25252fce0bc2 fresh_boot=true history_items=1 receipt_sha256=ce062bc07e9141bd742def7aa3c1ac2ff421f2775af1c7d5863b8470eec77df3 durable={Cases:1 Inbound:1 Outbound:1 Attempts:1 DeliveryState:ACKED} delivery_calls=1
+--- PASS: TestProcessingOCIImageOwnedStand (3.99s)
+PASS

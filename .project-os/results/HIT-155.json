@@ -1,0 +1,85 @@
+{
+  "subject": "HIT-155",
+  "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
+  "materialized_result": {
+    "implementation_status": "INTEGRATED_AND_VERIFIED_ON_ONE_OWNED_TEST_IMAGE",
+    "summary": "Два принятых результата объединены отдельной веткой. Один проверенный OCI-образ использовался для перезапуска и выборочного восстановления на PostgreSQL 18.7. Сохранены идентичность, минимальная история и fence. Управляемый Delivery получил один create, повтора не было.",
+    "contract_revision": 1,
+    "contract_fingerprint": "25abbceaf2fe430f58885776736c8dbf58b9d15376b90b7d2ef7870dea6b2d3f",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "common_base": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "merge_sha": "d2083e0317c507e1ac32180b6f156003969e04cd",
+    "tested_code_sha": "1ed91653a747b47a98f2738ca0d831a38cebc98a",
+    "oci_platform": "linux/arm64",
+    "oci_manifest_digest": "sha256:91a2b1b19d0d22fe783b74c3ecf338dd0f3e20a2863a3b3cdb061d4b69312e51",
+    "postgres": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/88"
+  },
+  "dependencies": [
+    {
+      "issue": "HIT-145",
+      "tested_sha": "30385d09962c3fa4aad4808253a5493235559d01",
+      "accepted_result_sha": "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-145?focusedCommentId=15704",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/84",
+      "pull_request_state": "OPEN_DRAFT",
+      "inclusion": "Exact Git ancestor; second parent of merge is the accepted HIT-145 result."
+    },
+    {
+      "issue": "HIT-128",
+      "tested_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+      "accepted_result_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15934",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/85",
+      "pull_request_state": "OPEN_DRAFT",
+      "inclusion": "Exact Git ancestor; first parent of merge is the accepted HIT-128 result."
+    }
+  ],
+  "changed_artifacts": [
+    "services/processing/internal/adapters/postgres/image_process_test.go",
+    "services/processing/internal/adapters/postgres/oci_recovery_process_test.go",
+    "services/processing/internal/adapters/postgres/observations_test.go",
+    "services/processing/internal/adapters/postgres/prepare_test.go",
+    "services/processing/internal/adapters/postgres/recovery_process_test.go",
+    "services/processing/scripts/postgres/verify_image.py",
+    "services/processing/scripts/recovery/verify_oci_recovery.py",
+    "services/processing/docs/HIT-155/",
+    ".project-os/results/HIT-155.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-155/README.md",
+    "runbook": "services/processing/docs/HIT-155/RUN_RU.md",
+    "source_evidence": "services/processing/docs/HIT-155/verification/source-evidence.md",
+    "execution_evidence": "services/processing/docs/HIT-155/verification/execution-evidence.md",
+    "test_evidence": "services/processing/docs/HIT-155/verification/test-evidence.md",
+    "ci_evidence": "services/processing/docs/HIT-155/verification/ci-evidence.md",
+    "raw_execution": "services/processing/docs/HIT-155/verification/raw-execution.tar.gz"
+  },
+  "dod_evidence": [
+    {
+      "id": "a8791103-ffbe-47c3-9943-80f12374a0f3",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-155/verification/source-evidence.md"
+    },
+    {
+      "id": "9442ad50-f280-40e5-ab2b-13a026ccefa9",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-155/verification/execution-evidence.md"
+    },
+    {
+      "id": "4119b3d9-9a9f-43b1-83cf-0ab1990ce03b",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-155/verification/execution-evidence.md"
+    },
+    {
+      "id": "7064384a-492c-4b90-be3f-cd959b036636",
+      "observed_local": "PASS",
+      "source": "services/processing/docs/HIT-155/verification/test-evidence.md"
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Проверенный OCI-контур linux/arm64 на одном Docker Engine, PostgreSQL 18.7 и управляемые mTLS-соседи с синтетическими данными.",
+    "GitHub CI и локальный OCI/restore являются отдельными прогонами. Внешний интеграционный стенд, рабочее восстановление и адресное удаление не проверялись."
+  ]
+}
