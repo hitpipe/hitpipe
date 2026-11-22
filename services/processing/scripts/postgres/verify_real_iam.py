@@ -54,12 +54,12 @@ class Run(verify.Run):
             "-o", str(binaries / "storage.test"), "./internal/adapters/postgres"])
         # Only the fixture main is overlaid. The IAM checkout and all imported
         # IAM implementation files remain the pinned originals.
-        probe = pathlib.Path(__file__).parent / "testdata/hit146/iam-process.go"
+        probe = verify.REPO / "tools/hit146/iam-process.go"
         overlay = binaries / "iam.probe.overlay.json"
         overlay.write_text(json.dumps({"Replace": {
             str(self.iam_module / "cmd/iam-contractcheck/main.go"): str(probe),
         }}) + "\n")
-        self.command("build-iam-probe", [*linux, "-C", str(self.iam_module), "build", "-trimpath",
+        self.command("build-iam-probe", [*linux, "-C", str(self.iam_module), "build", "-trimpath", "-tags", "hit146_iam_fixture",
             "-overlay", str(overlay), "-o", str(binaries / "iam-probe"), "./cmd/iam-contractcheck"])
         self.command("build-iam-migrate", [*linux, "-C", str(self.iam_module), "build", "-trimpath",
             "-o", str(binaries / "iam-migrate"), "./cmd/iam-migrate"])

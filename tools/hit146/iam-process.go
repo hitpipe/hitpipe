@@ -1,3 +1,5 @@
+//go:build hit146_iam_fixture
+
 // Built by the disposable Processing qualification runner as an overlay on the
 // accepted IAM checkout. This is only an assembly for existing IAM components.
 package main
