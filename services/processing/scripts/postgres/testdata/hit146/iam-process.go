@@ -24,6 +24,7 @@ import (
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction"
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/revocation"
 	"github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess"
+	"github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy"
 	"github.com/hitpipe/hitpipe/services/platform/startgate"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -36,7 +37,12 @@ type fixture struct {
 
 type clock struct{}
 
-func (clock) Now() time.Time { return time.Now() }
+func (clock) Now(ctx context.Context) (sessionpolicy.Observation, error) {
+	if err := ctx.Err(); err != nil {
+		return sessionpolicy.Observation{}, err
+	}
+	return sessionpolicy.Observation{At: time.Now().UTC(), Trusted: true}, nil
+}
 
 type closedOwner struct{}
 

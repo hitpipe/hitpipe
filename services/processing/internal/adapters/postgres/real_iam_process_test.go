@@ -238,6 +238,19 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	}
 	<-p.done
 	check("restart", first)
+	control, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Second}, "tcp", "127.0.0.1:9443",
+		&tls.Config{RootCAs: st.pki.Root, Certificates: []tls.Certificate{leaf},
+			MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13})
+	if err != nil {
+		t.Fatal("could not inspect the actual Processing control certificate", err)
+	}
+	serverHash := sha256.Sum256(control.ConnectionState().PeerCertificates[0].Raw)
+	_ = control.Close()
+	serverPin := "sha256:" + hex.EncodeToString(serverHash[:])
+	if serverPin == st.cert {
+		t.Fatal("the stand must use distinct outbound and control certificates")
+	}
+	t.Logf("control TLS leaf=%s; registered outbound leaf=%s", serverPin, st.cert)
 	if err := os.WriteFile(filepath.Join(st.dir, "revoke"), nil, 0600); err != nil {
 		t.Fatal(err)
 	}
