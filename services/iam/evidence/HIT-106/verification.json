@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "subject": "HIT-106",
+  "verified_date_msk": "2026-11-19",
+  "source": {
+    "main_at_start": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "combined_base": "32aa5673be9f3d2e1fe45dcd53ebca0e15a62296",
+    "review_base": "codex/hit-106-dependencies",
+    "review_branch": "codex/hit-106-oidc-login",
+    "tested_commit": "4c165aaee969becf9a314b85e198d84949247796",
+    "frozen_task_contract": "685e797bf32f71fd4ca42cd5f594b80912736473",
+    "dependency_heads": {
+      "HIT-68": "ce771d37505e7770003d0796ae932556d06b7bab",
+      "HIT-81_PR55": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "HIT-82_PR56": "a46d9d40169105356e61200a2a2b0cec17e5efb3",
+      "HIT-83_PR60": "5d9436cac140ec8ea0a888ebf4f9a3821de10d48",
+      "HIT-105_PR69": "fd30a3f9316ae81f33132f4ef4f2c9f3892399cd"
+    }
+  },
+  "runtime": {
+    "guest": "Ubuntu 24.04.5 LTS amd64, local libvirt/KVM, 4 vCPU / 4 GiB",
+    "go": "1.27.2",
+    "gcc": "13.3.0",
+    "docker": "29.1.3",
+    "compose": "2.40.3+ds1-0ubuntu1~24.04.1",
+    "buildx": "0.30.1",
+    "node": "22.23.5",
+    "playwright": "1.65.1",
+    "chromium": "159.0.8154.6",
+    "java": "Red Hat OpenJDK 21.0.12.1+1-LTS",
+    "keycloak": "26.8.1",
+    "keycloak_oci_index": "sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244",
+    "test_idp_built_image": "sha256:6a22c9fa926296af5a9907e30c9fbe937a2bab233a34161a6072b25b4c563e22",
+    "keycloak_email_code_jar_sha256": "093aa8b742f8e02be616fa9c76c37da6a356ddadc30f88c83e729beafa2d4030",
+    "postgresql": "18.7",
+    "postgresql_browser_oci_index": "sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "postgresql_previous_suite_image": "postgres:18.7-alpine@sha256:75dcac3dfb1cd01ca3536910bbc84128759362f8b118bf8c55b38a94f68f3b73",
+    "iam_accepted_sql_sha256": "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7",
+    "mailpit": "1.33.1",
+    "mailpit_oci_index": "sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce"
+  },
+  "commands": [
+    {
+      "command": "npm ci --no-audit --no-fund (services/iam/tools/hit106-lab)",
+      "exit_code": 0,
+      "log": "browser.log"
+    },
+    {
+      "command": "HIT106_ISOLATED_LAB=1 ./run.sh (services/iam/tools/hit106-lab)",
+      "exit_code": 0,
+      "log": "browser.log"
+    },
+    {
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go build ./...",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go vet -tags hit106lab ./tools/hit106-server",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "go build -tags hit106lab -o /work/hit106/hit106-browser-check-4c165aa ./tools/hit106-server",
+      "exit_code": 0,
+      "log": "go.log"
+    },
+    {
+      "command": "python3 tools/check_session_issuance.py --go /work/hit106/go/bin/go --evidence-dir /work/hit106/prior-suite-4c165aa",
+      "exit_code": 0,
+      "log": "postgres-driver.log"
+    }
+  ],
+  "browser_scenarios": [
+    "HTTPS registration requires email-code, then issues one real IAM session",
+    "concurrent replay of the completed callback creates no independent sessions",
+    "an existing session cannot be replaced without the revocation coordinator",
+    "the confirmed user signs in again with a fresh attempt and the same principal",
+    "foreign or missing state and browser authority assertions do not create a session",
+    "cancelling an attempt also blocks a later genuine IdP callback for that state",
+    "a genuine callback after IAM restart fails with the lost one-use attempt",
+    "a genuine unverified-email claim from the test IdP cannot create a session"
+  ],
+  "postgres_integration_examples": [
+    "TestIAMSchemaMigrationRepeatOnFreshConnection",
+    "TestIAMSchemaTenantRLSReadAndWriteIsolation",
+    "TestPostgresIssuerAtomicAndCompatibleLookup",
+    "TestPostgresIssuerConcurrentDeduplication",
+    "TestPostgresIssuerDisabledAndPendingRevocations",
+    "TestPostgresIssuerRollbackOnInsertFailure",
+    "TestPostgresIssuerCommitUncertainDoesNotReturnSuccess"
+  ],
+  "postgres_full_protocol": "postgres/verification.json",
+  "security_checks": [
+    "Real browser and application-to-Keycloak HTTPS with a generated test CA and distinct loopback hosts; ordinary TLS verification enabled.",
+    "Local HTTPS negative suite validates CA, SAN, expiry, redirect refusal and bounded token/JWKS responses.",
+    "Adapter tests reject invalid signatures, algorithms, keys, issuer, audience, authorized party, nonce, and ID token time claims.",
+    "Application race tests cover atomic first consumption, foreign binding, expiration, and provider failures.",
+    "Existing issuer PostgreSQL integrations cover rollback, uncertain COMMIT, pending revocations and read-side compatibility."
+  ],
+  "teardown": "No browser lab or prior suite containers, networks, volumes or exposed lab listeners remained.",
+  "limitations": [
+    "Only test Keycloak and test SMTP, test clock and issuance authority, test session lifetimes.",
+    "No production OIDC deployment or trust policy, BFF, profile, GET session, CSRF delivery, logout or rotation/revocation coordinator.",
+    "Same-email non-linking follows issuer+subject identity projection and the reused unique SQL identity; no browser same-email scenario is attributed."
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 5081,
+      "sha256": "308960c1f67c3f1e8bc104b308c10eb7f8216e4f11d0e309d977b9cfe3d5df81"
+    },
+    {
+      "path": "browser-cleanup.log",
+      "bytes": 84,
+      "sha256": "4c6dec25b887d8501933ed570d18df1fb8410936e854d7026e98009ee9b49007"
+    },
+    {
+      "path": "browser.log",
+      "bytes": 5359,
+      "sha256": "f218b4d9aed1123c5955d57a7588ea73d507933fb2a51936f31f21a97a8a5ff8"
+    },
+    {
+      "path": "go.log",
+      "bytes": 1421,
+      "sha256": "d3142b58916bee114ec9118df5df996771fa4e2922c61b62968be635eaf8dec6"
+    },
+    {
+      "path": "postgres/bootstrap-roles.log",
+      "bytes": 16,
+      "sha256": "870559a6089f73079358045ae7416189207961699b796fcdd5f6e895e1fa5322"
+    },
+    {
+      "path": "postgres/build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "postgres/migration-install.log",
+      "bytes": 114,
+      "sha256": "d9be125712cd9d9d9a4fdb2cf4cfc83f9806f6828376340315ab9ce93b7fe75f"
+    },
+    {
+      "path": "postgres/migration-repeat.log",
+      "bytes": 122,
+      "sha256": "e0f7c559d025039216285c3ddf6068949da3a84447eb3c15dcf6480b025897e4"
+    },
+    {
+      "path": "postgres/migration-role-tcp.log",
+      "bytes": 39,
+      "sha256": "a9622048894bb56727e509a42ffa7b4fe1cc0188e18f114baad72e13492e5dc4"
+    },
+    {
+      "path": "postgres/migration-startup-role.log",
+      "bytes": 35,
+      "sha256": "fdfd1dd9dda53cc6a37e2e1f1a25d88322c91546475505fc7472cd78eaec2771"
+    },
+    {
+      "path": "postgres/postgres-race.log",
+      "bytes": 46624,
+      "sha256": "38f7365883d545ea53dabe919cb690de06a92f8c091112ba105c159550b3ab11"
+    },
+    {
+      "path": "postgres/read-only-lookup.log",
+      "bytes": 23,
+      "sha256": "cd98805f2d87537d5e03292230d857dcfdc09b5a415bec562055585405d8dc76"
+    },
+    {
+      "path": "postgres/test-logins.log",
+      "bytes": 48,
+      "sha256": "317579f4bff0fd21e20813511567753c736f296f3239519f88ed08e9f9df73d7"
+    },
+    {
+      "path": "postgres/unit.log",
+      "bytes": 1088,
+      "sha256": "75ece2904e11cac24d5324d6b811a62ec18da9d224cb336bffb474f0f33062db"
+    },
+    {
+      "path": "postgres/verification.json",
+      "bytes": 6255,
+      "sha256": "6077e4b0ad30daf2386cadcada46f058323d44e2711d719241e6e3aa7ec5d051"
+    },
+    {
+      "path": "postgres/vet.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "postgres-driver.log",
+      "bytes": 3572,
+      "sha256": "c9989d905034a94bc9af7ec92ba240586a73dc3884ab30039ad34bcfdda99578"
+    },
+    {
+      "path": "runtime.log",
+      "bytes": 354,
+      "sha256": "dadce50e1a97cc2be8412c4e7da247f8a607b52cea5bd1a369f161781d076368"
+    }
+  ]
+}
