@@ -1,0 +1,861 @@
+diff --git a/services/processing/internal/adapters/postgres/real_iam_process_test.go b/services/processing/internal/adapters/postgres/real_iam_process_test.go
+index 3ee4b4a..7422696 100644
+--- a/services/processing/internal/adapters/postgres/real_iam_process_test.go
++++ b/services/processing/internal/adapters/postgres/real_iam_process_test.go
+@@ -7,6 +7,7 @@ import (
+ 	"encoding/hex"
+ 	"encoding/json"
+ 	"errors"
++	"fmt"
+ 	"io"
+ 	"net"
+ 	"net/http"
+@@ -28,6 +29,7 @@ type iamTrace struct {
+ 	RuntimeID  string `json:"runtime_id"`
+ 	BootID     string `json:"boot_id"`
+ 	Generation int64  `json:"generation"`
++	Gate       string `json:"gate"`
+ }
+ 
+ func awaitIAMTrace(t *testing.T, path string, want func(iamTrace) bool) iamTrace {
+@@ -99,6 +101,7 @@ func seedIAMWorkspace(t *testing.T, st *processStand, ws string) {
+ 		{"INSERT INTO hp_iam.sessions(session_id,session_hash,principal_id,csrf_hash,created_at,expires_at,idle_expires_at,epoch) VALUES($1,$2,$3,$4,now(),now()+interval '1 hour',now()+interval '30 minutes',7)", []any{st.session, session[:], owner, csrf[:]}},
+ 		{"INSERT INTO hp_iam.workspaces(workspace_id,name_content_ref,revision,security_epoch,lifecycle,created_at) VALUES($1,$2,1,7,'ACTIVE',now())", []any{ws, config}},
+ 		{"INSERT INTO hp_iam.memberships(workspace_id,principal_id,role,status,revision,accepted_at) VALUES($1,$2,'OWNER','ACTIVE',1,now())", []any{ws, owner}},
++		{"INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1,$2,'CLICKUP','synthetic',false,'PAID_ORDER_TASK_V1','VERIFIED',7,now(),now())", []any{ws, destination}},
+ 	} {
+ 		if _, err := tx.Exec(t.Context(), s.sql, s.args...); err != nil {
+ 			t.Fatal("seed disposable IAM owner, workspace and session")
+@@ -124,11 +127,12 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 	seedIAMWorkspace(t, st, ws)
+ 
+ 	// The fixed binding belongs to TEST provisioning, never to the incoming
+-	// registration. The standalone process selects its own boot on each launch.
++	// registration. Both processes receive it through their trusted local inputs.
+ 	boot, _ := newID()
+ 	iamRuntime, _ := newID()
+ 	iamBoot, _ := newID()
+ 	revokeID, _ := newID()
++	missingACK, _ := newID()
+ 	leaf := st.pki.Issue(t, "iam.test", net.ParseIP("127.0.0.2"), true, false)
+ 	cert, key := st.keypair("real-iam", leaf)
+ 	iamClient := st.pki.Leaf(t, "iam.test", false, false)
+@@ -138,6 +142,14 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 	if err != nil {
+ 		t.Fatal(err)
+ 	}
++	controlCert, err := tls.LoadX509KeyPair(filepath.Join(st.dir, "processing.pem"), filepath.Join(st.dir, "processing.key"))
++	if err != nil {
++		t.Fatal(err)
++	}
++	controlPin := fmt.Sprintf("sha256:%x", sha256.Sum256(controlCert.Certificate[0]))
++	if controlPin == st.cert {
++		t.Fatal("registration and control pins must differ")
++	}
+ 	registration := drafts.RuntimeRegistration{RuntimeID: st.identity, Service: "PROCESSING", Generation: 2, BootID: boot, CertificateFingerprint: st.cert}
+ 	raw, err := os.ReadFile(st.config)
+ 	var options map[string]any
+@@ -162,7 +174,8 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 			"dns_name": "iam.test", "certificate_fingerprint": "sha256:" + hex.EncodeToString(iamFingerprint[:])},
+ 		"Processing": binding, "CA": filepath.Join(st.dir, "ca.pem"), "Certificate": cert, "Key": key,
+ 		"ClientCertificate": clientCert, "ClientKey": clientKey,
+-		"Workspace": ws, "Revocation": revokeID, "Dir": st.dir,
++		"Workspace": ws, "Revocation": revokeID, "MissingACK": missingACK, "Dir": st.dir,
++		"Owner": owner, "Session": st.session, "Destination": destination, "ProcessingControlPin": controlPin,
+ 	})
+ 	command := exec.Command(iam, cfg)
+ 	command.Stdout, command.Stderr = trace, trace
+@@ -180,20 +193,49 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 	awaitIAMTrace(t, tracePath, func(e iamTrace) bool { return e.Message == "iam-listening" })
+ 
+ 	const register = "/internal/v1/runtime/register"
++	history := "/api/v1/workspaces/" + ws + "/cases/" + f.request.CaseID + "/history"
++	headers := map[string]string{"X-HitPipe-Session": st.token}
++	unbound := st.boot("unbound")
++	st.pollHealth(unbound, "CLOSED")
++	rejected := awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
++		return e.Message == "iam-register" && e.Status == 403 && e.RuntimeID == st.identity &&
++			e.Generation == 2 && e.BootID != "" && e.BootID != boot
++	})
++	st.must("bff.test", "8443", "GET", history, nil, headers, 503)
++	if err := unbound.cmd.Process.Kill(); err != nil {
++		t.Fatal(err)
++	}
++	<-unbound.done
++	t.Logf("HTTP 403 for unprovisioned boot %s, protected HTTP 503 while CLOSED", rejected.BootID)
++
++	// The first registered incarnation follows an unadmitted process. No
++	// old admitted runtime is replaced without a fence.
++	provisionDir := filepath.Join(st.dir, "boot-provision")
++	if err := os.Mkdir(provisionDir, 0700); err != nil {
++		t.Fatal(err)
++	}
++	provision := st.file("boot-provision/identity", []byte(fmt.Sprintf("%s\n%d\n%s\n%s\n",
++		registration.RuntimeID, registration.Generation, registration.BootID, registration.CertificateFingerprint)))
++	options["boot_identity_file"] = provision
++	st.config = st.json("real-processing.json", options)
++	st.waitDelivery.Store(true)
++	p := st.boot("provisioned")
++	st.pollHealth(p, "CLOSED")
++	awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
++		return e.Message == "iam-register" && e.Status == 200 && e.BootID == boot && e.Gate == "SYNCING"
++	})
++	st.must("bff.test", "8443", "GET", history, nil, headers, 503)
++	if st.deliveryCount.Load() != 0 {
++		t.Fatal("a CLOSED process started Delivery")
++	}
+ 	code, payload, err := postIAMFixture(t, st, procCert, register, "", registration)
+ 	var current drafts.RuntimeSnapshot
+ 	if err != nil || code != 200 || draftjson.Validate("RuntimeSnapshot", payload) != nil ||
+ 		json.Unmarshal(payload, &current) != nil || current.Gate != "SYNCING" || current.BootID != boot ||
+ 		current.Generation != 2 || current.RuntimeID != st.identity {
+-		t.Fatalf("expected a real matching SYNCING snapshot, code=%d: %v", code, err)
+-	}
+-	awaitIAMTrace(t, tracePath, func(e iamTrace) bool { return e.Message == "iam-gate-open" })
+-	code, again, err := postIAMFixture(t, st, procCert, register, "", registration)
+-	var repeated drafts.RuntimeSnapshot
+-	if err != nil || code != 200 || json.Unmarshal(again, &repeated) != nil || repeated.Gate != "SYNCING" || repeated.SnapshotRevision <= current.SnapshotRevision {
+-		t.Fatal("fresh matching remote registration after IAM opened did not stay SYNCING", code)
++		t.Fatalf("expected matching actual SYNCING snapshot, code=%d: %v", code, err)
+ 	}
+-	t.Logf("exact provisioning, actual IAM HTTP 200 before and after local IAM OPEN: %s / %s", payload, again)
++	t.Logf("actual IAM SYNCING snapshot %s", payload)
+ 
+ 	gate, err := startgate.New(startgate.Identity{RuntimeID: current.RuntimeID, BootID: current.BootID, Generation: 3})
+ 	if err != nil {
+@@ -203,7 +245,6 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 		Generation: uint64(current.Generation), SnapshotRevision: uint64(current.SnapshotRevision), Gate: startgate.State(current.Gate)}); !errors.Is(err, startgate.ErrIdentity) {
+ 		t.Fatal("current generation accepted the genuine old IAM snapshot", err)
+ 	}
+-	t.Log("actual generation=2 snapshot rejected by generation=3 startgate")
+ 	old := registration
+ 	old.Generation--
+ 	code, _, err = postIAMFixture(t, st, procCert, register, "", old)
+@@ -214,62 +255,76 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
+ 	if code, _, err = postIAMFixture(t, st, foreign, register, "", registration); err == nil || code != 0 {
+ 		t.Fatal("wrong service principal received an HTTP response", code)
+ 	}
+-	t.Log("old generation registration HTTP 403, wrong mTLS principal rejected at TLS")
+-	code, _, err = postIAMFixture(t, st, procCert, "/internal/v1/authorize", st.token,
+-		drafts.AuthorizeRequest{WorkspaceID: ws, RuntimeID: st.identity, Action: "CONFIG_READ"})
+-	if err != nil || code != 403 {
+-		t.Fatal("authorized-use probe did not reject the remote SYNCING row", code, err)
+-	}
+-	t.Log("actual IAM authorize for valid TEST session and registered remote SYNCING runtime HTTP 403")
++	t.Log("old generation: HTTP 403 and stale snapshot ErrIdentity. Wrong principal: mTLS rejected.")
++	st.file("open-iam", nil)
++	awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
++		return e.Message == "iam-register" && e.Status == 200 && e.BootID == boot && e.Gate == "OPEN"
++	})
++	st.pollHealth(p, "READY")
++	health := st.must("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 200)
++	st.must("bff.test", "8443", "GET", history, nil, headers, 200)
++	t.Logf("SYNCING → genuine IAM OPEN → protected HTTP 200; OPS %s", health)
+ 
+-	check := func(name, previousBoot string) (*processingChild, string) {
+-		p := st.boot(name)
+-		st.pollHealth(p, "CLOSED")
+-		trace := awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
+-			return e.Message == "iam-register" && e.Status == 403 && e.RuntimeID == st.identity &&
+-				e.Generation == 2 && e.BootID != "" && e.BootID != boot && e.BootID != previousBoot
+-		})
+-		health := st.must("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 200)
+-		st.must("bff.test", "8443", "GET", "/api/v1/workspaces/"+ws+"/operations", nil,
+-			map[string]string{"X-HitPipe-Session": st.token}, 503)
+-		t.Logf("%s boot=%s, actual IAM registration HTTP 403, protected call HTTP 503, OPS HTTP 200 %s", name, trace.BootID, health)
+-		return p, trace.BootID
+-	}
+-	p, first := check("first-start", "")
+-	if err = p.cmd.Process.Kill(); err != nil {
++	select {
++	case message := <-st.deliverySeen:
++		if message != result.MessageID {
++			t.Fatal("unexpected synthetic message", message)
++		}
++	case <-time.After(6 * time.Second):
++		t.Fatal("genuine IAM permit did not allow the first Delivery start")
++	}
++	t.Logf("synthetic Delivery accepted first HTTP start %s and held its response", result.MessageID)
++	st.file("revoke", nil)
++	if err := waitIAMFile(t, st.dir, "effective-observed", 5*time.Second); err != nil {
+ 		t.Fatal(err)
+ 	}
+-	<-p.done
+-	check("restart", first)
+-	control, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Second}, "tcp", "127.0.0.1:9443",
+-		&tls.Config{RootCAs: st.pki.Root, Certificates: []tls.Certificate{iamClient},
+-			MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13})
+-	if err != nil {
+-		t.Fatal("could not inspect the actual Processing control certificate", err)
++	st.must("bff.test", "8443", "GET", history, nil, headers, 403)
++	t.Log("protected request after effective revocation: HTTP 403")
++	select {
++	case msg := <-st.deliverySeen:
++		t.Fatal("old epoch started a new HTTP request", msg)
++	case <-time.After(2300 * time.Millisecond):
+ 	}
+-	serverHash := sha256.Sum256(control.ConnectionState().PeerCertificates[0].Raw)
+-	_ = control.Close()
+-	serverPin := "sha256:" + hex.EncodeToString(serverHash[:])
+-	if serverPin == st.cert {
+-		t.Fatal("the stand must use distinct outbound and control certificates")
++	state, _, _, attempts := (sendFixture{f: f, message: result.MessageID}).outbox(t)
++	if state != "CLAIMED" || attempts != 1 || st.deliveryCount.Load() != 1 {
++		t.Fatal("in-flight request unexpectedly finalized, retried or repeated", state, attempts, st.deliveryCount.Load())
+ 	}
+-	t.Logf("control TLS leaf=%s; registered outbound leaf=%s", serverPin, st.cert)
+-	if err := os.WriteFile(filepath.Join(st.dir, "revoke"), nil, 0600); err != nil {
++	t.Logf("held request after ACK and timeout: outbox=%s attempts=%d Delivery_HTTP_starts=%d", state, attempts, st.deliveryCount.Load())
++	if err := p.cmd.Process.Kill(); err != nil {
+ 		t.Fatal(err)
+ 	}
++	<-p.done
++	replay := st.boot("reused-provision")
++	select {
++	case err := <-replay.done:
++		if err == nil {
++			t.Fatal("a reused provision started successfully")
++		}
++	case <-time.After(2 * time.Second):
++		t.Fatal("a reused provision did not fail before registration")
++	}
++	st.file("revoke-without-processing", nil)
+ 	select {
+ 	case err := <-done:
+ 		if err != nil {
+-			t.Fatal("IAM coordinator did not complete the no-ACK observation", err)
++			t.Fatal("real IAM coordinator failed its missing-ACK verification", err)
+ 		}
+-	case <-time.After(10 * time.Second):
+-		t.Fatal("IAM coordinator no-ACK observation timed out")
++	case <-time.After(9 * time.Second):
++		t.Fatal("real IAM missing-ACK verification timed out")
+ 	}
+-	if _, err := os.Stat(filepath.Join(st.dir, "incident-observed")); err != nil {
+-		t.Fatal("missing durable incident observation", err)
+-	}
+-	if st.deliveryCount.Load() != 0 {
+-		t.Fatal("a closed Processing dispatched the seeded outbox")
++	t.Log("reused provision rejected, absent Processing remained missing, IAM recorded INCIDENT")
++}
++
++func waitIAMFile(t *testing.T, dir, name string, limit time.Duration) error {
++	t.Helper()
++	deadline := time.Now().Add(limit)
++	for time.Now().Before(deadline) {
++		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
++			return nil
++		} else if !errors.Is(err, os.ErrNotExist) {
++			return err
++		}
++		time.Sleep(20 * time.Millisecond)
+ 	}
+-	t.Log("BLOCKED: no protected start, no create, no accepted remote OPEN and no EFFECTIVE revocation")
++	return fmt.Errorf("IAM observation missing: %s", name)
+ }
+diff --git a/services/processing/internal/runtime/boot.go b/services/processing/internal/runtime/boot.go
+new file mode 100644
+index 0000000..e67defb
+--- /dev/null
++++ b/services/processing/internal/runtime/boot.go
+@@ -0,0 +1,94 @@
++package runtime
++
++import (
++	"crypto/sha256"
++	"fmt"
++	"io"
++	"os"
++	"path/filepath"
++	"strconv"
++	"strings"
++	"syscall"
++
++	"github.com/hitpipe/hitpipe/services/processing/internal/application/drafts"
++)
++
++// startupBoot consumes a provisioned incarnation. IAM still has to authenticate
++// registration and return a fresh OPEN snapshot before protected work can start.
++func startupBoot(c Config, clientLeaf []byte) (string, error) {
++	if c.BootIdentity == "" {
++		boot, err := drafts.NewID()
++		if err != nil {
++			return "", ErrUnavailable
++		}
++		return boot, nil
++	}
++
++	dir := filepath.Dir(c.BootIdentity)
++	if resolved, err := filepath.EvalSymlinks(dir); err != nil || resolved != dir {
++		return "", ErrConfig
++	}
++	root, err := os.OpenRoot(dir)
++	if err != nil {
++		return "", ErrConfig
++	}
++	defer root.Close()
++	parent, err := root.Open(".")
++	if err != nil {
++		return "", ErrConfig
++	}
++	defer parent.Close()
++	info, err := parent.Stat()
++	if err != nil || !info.IsDir() || !ownedMode(info, 0700) {
++		return "", ErrConfig
++	}
++	name := filepath.Base(c.BootIdentity)
++	info, err = root.Lstat(name)
++	if err != nil || !info.Mode().IsRegular() || !ownedMode(info, 0600) || info.Size() > 256 {
++		return "", ErrConfig
++	}
++	file, err := root.Open(name)
++	if err != nil {
++		return "", ErrConfig
++	}
++	defer file.Close()
++	opened, err := file.Stat()
++	if err != nil || !os.SameFile(info, opened) {
++		return "", ErrConfig
++	}
++	raw, err := io.ReadAll(io.LimitReader(file, 257))
++	if err != nil || len(raw) > 256 {
++		return "", ErrConfig
++	}
++	// Exact, LF-terminated records avoid duplicate keys or alternate spellings.
++	lines := strings.Split(string(raw), "\n")
++	if len(lines) != 5 || lines[4] != "" || lines[0] != c.Identity ||
++		lines[1] != strconv.FormatUint(c.Generation, 10) ||
++		!drafts.UUID(lines[2]) || lines[3] != fmt.Sprintf("sha256:%x", sha256.Sum256(clientLeaf)) {
++		return "", ErrConfig
++	}
++	boot := lines[2]
++	if boot == "00000000-0000-0000-0000-000000000000" {
++		return "", ErrConfig
++	}
++	claim, err := root.OpenFile(".boot-used-"+boot, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
++	if err != nil {
++		if os.IsExist(err) {
++			return "", ErrConfig
++		}
++		return "", ErrUnavailable
++	}
++	if err = claim.Sync(); err != nil {
++		claim.Close()
++		return "", ErrUnavailable
++	}
++	if claim.Close() != nil || parent.Sync() != nil {
++		return "", ErrUnavailable
++	}
++	return boot, nil
++}
++
++func ownedMode(info os.FileInfo, permissions os.FileMode) bool {
++	stat, ok := info.Sys().(*syscall.Stat_t)
++	return ok && int(stat.Uid) == os.Geteuid() && info.Mode().Perm() == permissions
++}
+diff --git a/services/processing/internal/runtime/boot_test.go b/services/processing/internal/runtime/boot_test.go
+new file mode 100644
+index 0000000..c98af57
+--- /dev/null
++++ b/services/processing/internal/runtime/boot_test.go
+@@ -0,0 +1,76 @@
++package runtime
++
++import (
++	"crypto/sha256"
++	"errors"
++	"fmt"
++	"os"
++	"path/filepath"
++	"testing"
++)
++
++func TestStartupBootBindsProvisioningAndClaimsOnce(t *testing.T) {
++	dir, err := filepath.EvalSymlinks(t.TempDir())
++	if err != nil {
++		t.Fatal(err)
++	}
++	if err := os.Chmod(dir, 0700); err != nil {
++		t.Fatal(err)
++	}
++	c := Config{Identity: "11111111-1111-4111-8111-111111111111", Generation: 5,
++		BootIdentity: filepath.Join(dir, "identity")}
++	boot := "22222222-2222-4222-8222-222222222222"
++	leaf := []byte("synthetic client leaf")
++	record := fmt.Sprintf("%s\n%d\n%s\nsha256:%x\n", c.Identity, c.Generation, boot, sha256.Sum256(leaf))
++	if err := os.WriteFile(c.BootIdentity, []byte(record), 0600); err != nil {
++		t.Fatal(err)
++	}
++	wrong := c
++	wrong.Generation++
++	if _, err := startupBoot(wrong, leaf); !errors.Is(err, ErrConfig) {
++		t.Fatalf("wrong generation was admitted: %v", err)
++	}
++	if _, err := startupBoot(c, []byte("different leaf")); !errors.Is(err, ErrConfig) {
++		t.Fatalf("wrong certificate was admitted: %v", err)
++	}
++	link := c
++	link.BootIdentity = filepath.Join(dir, "link")
++	if err := os.Symlink(c.BootIdentity, link.BootIdentity); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := startupBoot(link, leaf); !errors.Is(err, ErrConfig) {
++		t.Fatalf("symlink was admitted: %v", err)
++	}
++	if err := os.Chmod(c.BootIdentity, 0644); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := startupBoot(c, leaf); !errors.Is(err, ErrConfig) {
++		t.Fatalf("shared file was admitted: %v", err)
++	}
++	if err := os.Chmod(c.BootIdentity, 0600); err != nil {
++		t.Fatal(err)
++	}
++	type outcome struct {
++		got string
++		err error
++	}
++	started := make(chan outcome, 2)
++	for range 2 {
++		go func() {
++			id, err := startupBoot(c, leaf)
++			started <- outcome{id, err}
++		}()
++	}
++	success := 0
++	for range 2 {
++		o := <-started
++		if o.err == nil && o.got == boot {
++			success++
++		} else if !errors.Is(o.err, ErrConfig) {
++			t.Fatalf("unexpected claim: %v", o.err)
++		}
++	}
++	if success != 1 {
++		t.Fatalf("boot was claimed %d times", success)
++	}
++}
+diff --git a/services/processing/internal/runtime/config.go b/services/processing/internal/runtime/config.go
+index 13852b2..106cb5d 100644
+--- a/services/processing/internal/runtime/config.go
++++ b/services/processing/internal/runtime/config.go
+@@ -29,23 +29,24 @@ var (
+ )
+ 
+ type Config struct {
+-	Business    string   `json:"business_listen"`
+-	Control     string   `json:"control_listen"`
+-	Health      string   `json:"health_listen"`
+-	Identity    string   `json:"runtime_id"`
+-	Generation  uint64   `json:"generation"`
+-	OwnerDB     string   `json:"database_name"`
+-	AppDSN      string   `json:"application_dsn_file"`
+-	WorkerDSN   string   `json:"worker_dsn_file"`
+-	CursorKey   string   `json:"cursor_key_file"`
+-	Content     string   `json:"content_directory"`
+-	Connections int32    `json:"pool_connections"`
+-	TLS         TLSFiles `json:"tls"`
+-	IAM         Peer     `json:"iam"`
+-	Intake      Peer     `json:"intake"`
+-	Delivery    Peer     `json:"delivery"`
+-	BFFName     string   `json:"bff_name"`
+-	OPSName     string   `json:"ops_name"`
++	Business     string   `json:"business_listen"`
++	Control      string   `json:"control_listen"`
++	Health       string   `json:"health_listen"`
++	Identity     string   `json:"runtime_id"`
++	Generation   uint64   `json:"generation"`
++	BootIdentity string   `json:"boot_identity_file,omitempty"`
++	OwnerDB      string   `json:"database_name"`
++	AppDSN       string   `json:"application_dsn_file"`
++	WorkerDSN    string   `json:"worker_dsn_file"`
++	CursorKey    string   `json:"cursor_key_file"`
++	Content      string   `json:"content_directory"`
++	Connections  int32    `json:"pool_connections"`
++	TLS          TLSFiles `json:"tls"`
++	IAM          Peer     `json:"iam"`
++	Intake       Peer     `json:"intake"`
++	Delivery     Peer     `json:"delivery"`
++	BFFName      string   `json:"bff_name"`
++	OPSName      string   `json:"ops_name"`
+ }
+ 
+ type TLSFiles struct {
+@@ -155,6 +156,9 @@ func (c Config) validate() error {
+ 	if c.TLS.ServerKey == c.TLS.ClientKey || c.TLS.ServerCertificate == c.TLS.ClientCertificate {
+ 		return ErrConfig
+ 	}
++	if c.BootIdentity != "" && !filepath.IsAbs(c.BootIdentity) {
++		return ErrConfig
++	}
+ 	return nil
+ }
+ 
+diff --git a/services/processing/internal/runtime/runtime.go b/services/processing/internal/runtime/runtime.go
+index 3aeab0d..4066875 100644
+--- a/services/processing/internal/runtime/runtime.go
++++ b/services/processing/internal/runtime/runtime.go
+@@ -123,9 +123,9 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	boot, err := drafts.NewID()
++	boot, err := startupBoot(c, clientCert.Certificate[0])
+ 	if err != nil {
+-		return nil, ErrUnavailable
++		return nil, err
+ 	}
+ 	id := startgate.Identity{RuntimeID: c.Identity, BootID: boot, Generation: c.Generation}
+ 	g, err := startgate.New(id)
+diff --git a/services/processing/scripts/postgres/verify_real_iam.py b/services/processing/scripts/postgres/verify_real_iam.py
+index b36c7ee..1c0c509 100644
+--- a/services/processing/scripts/postgres/verify_real_iam.py
++++ b/services/processing/scripts/postgres/verify_real_iam.py
+@@ -9,7 +9,7 @@ import uuid
+ 
+ import verify
+ 
+-IAM_HEAD = "ae5fd0f35ec7d5097cace75b3b15ecb14042c654"
++IAM_HEAD = "e1be0c1a0be577a3626a3e120707b3aeeb579c6f"
+ IAM_SCHEMA = "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7"
+ 
+ 
+@@ -99,8 +99,8 @@ class Run(verify.Run):
+         super().main()
+         path = self.output / "summary.json"
+         result = json.loads(path.read_text())
+-        result.update(status="BLOCKED_REPRODUCED", iam_source_sha=IAM_HEAD,
+-                      scope="Negative real-IAM startup and missing-ACK deadline; independent controlled HIT-111 regression.")
++        result.update(status="PASS", iam_source_sha=IAM_HEAD,
++                      scope="Real IAM startup, two authenticated control ACKs and missing-ACK deadline; controlled HIT-111 regression.")
+         path.write_text(json.dumps(result, indent=2) + "\n")
+ 
+ 
+diff --git a/tools/hit146/iam-process.go b/tools/hit146/iam-process.go
+index 1533e6d..bcd13d1 100644
+--- a/tools/hit146/iam-process.go
++++ b/tools/hit146/iam-process.go
+@@ -7,10 +7,12 @@ package main
+ import (
+ 	"bytes"
+ 	"context"
++	"crypto/sha256"
+ 	"crypto/tls"
+ 	"crypto/x509"
+ 	"encoding/json"
+ 	"errors"
++	"fmt"
+ 	"io"
+ 	"log/slog"
+ 	"net"
+@@ -32,10 +34,11 @@ import (
+ )
+ 
+ type fixture struct {
+-	IAM, Processing              runtimeaccess.Binding
+-	CA, Certificate, Key         string
+-	ClientCertificate, ClientKey string
+-	Workspace, Revocation, Dir   string
++	IAM, Processing                                   runtimeaccess.Binding
++	CA, Certificate, Key                              string
++	ClientCertificate, ClientKey                      string
++	Workspace, Revocation, MissingACK, Dir            string
++	Owner, Session, Destination, ProcessingControlPin string
+ }
+ 
+ type clock struct{}
+@@ -47,15 +50,62 @@ func (clock) Now(ctx context.Context) (sessionpolicy.Observation, error) {
+ 	return sessionpolicy.Observation{At: time.Now().UTC(), Trusted: true}, nil
+ }
+ 
+-type closedOwner struct{}
++// testOwner is the retained resource owner input for the isolated synthetic
++// records. The real IAM application still checks caller, session, membership,
++// workspace, binding, gate and revocations against its PostgreSQL data.
++type testOwner struct {
++	f  fixture
++	db *pgxpool.Pool
++}
+ 
+-func (closedOwner) Prove(context.Context, authorizeaction.Actor, authorizeaction.Request) (authorizeaction.Proof, error) {
+-	return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++func (o testOwner) Prove(ctx context.Context, actor authorizeaction.Actor, request authorizeaction.Request) (authorizeaction.Proof, error) {
++	if actor.PrincipalID != o.f.Owner || actor.SessionID != o.f.Session ||
++		actor.WorkspaceID != o.f.Workspace || request.WorkspaceID != o.f.Workspace ||
++		request.RuntimeID != o.f.Processing.RuntimeID {
++		return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++	}
++	proof := authorizeaction.Proof{Verified: true, PrincipalID: actor.PrincipalID,
++		WorkspaceID: actor.WorkspaceID, Action: request.Action, ResourceID: request.ResourceID}
++	switch {
++	case request.Action == "CASE_READ" && request.ResourceID != nil:
++		proof.Operation = "getCaseHistory"
++	case request.Action == "CONNECTOR_WRITE" && request.ResourceID != nil && *request.ResourceID == o.f.Destination:
++		proof.Operation, proof.BindingGrantID = "connectService", o.f.Destination
++	default:
++		return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++	}
++	tx, err := o.db.Begin(ctx)
++	if err != nil {
++		return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++	}
++	defer tx.Rollback(ctx)
++	if _, err := tx.Exec(ctx, "SELECT set_config('hp.workspace_id',$1,true)", request.WorkspaceID); err != nil {
++		return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++	}
++	resource := ""
++	if request.Action == "CASE_READ" {
++		resource = *request.ResourceID
++	}
++	var verified bool
++	if err := tx.QueryRow(ctx, `SELECT EXISTS (
++		SELECT 1 FROM hp_processing.operations o JOIN hp_processing.accepted_configs c
++		  ON c.workspace_id=o.workspace_id AND c.config_id=o.selected_config_id
++		 WHERE o.workspace_id=$1 AND o.owner_user_id=$2 AND o.state='ACTIVE'
++		   AND c.canonical_config->>'mode'='TEST'
++		   AND ($3='' OR c.canonical_config->>'destination_connection_id'=$3)
++		   AND ($4='' OR EXISTS (SELECT 1 FROM hp_processing.case_identity k
++		        WHERE k.workspace_id=o.workspace_id AND k.operation_id=o.operation_id
++		          AND k.case_id::text=$4 AND k.owner_user_id=o.owner_user_id))
++	)`, request.WorkspaceID, actor.PrincipalID, proof.BindingGrantID, resource).Scan(&verified); err != nil || !verified {
++		return authorizeaction.Proof{}, authorizeaction.ErrUnavailable
++	}
++	return proof, nil
+ }
+ 
+ type statusWriter struct {
+ 	http.ResponseWriter
+-	status int
++	status   int
++	response *bytes.Buffer
+ }
+ 
+ func (w *statusWriter) Unwrap() http.ResponseWriter { return w.ResponseWriter }
+@@ -65,11 +115,19 @@ func (w *statusWriter) WriteHeader(status int) {
+ 	w.ResponseWriter.WriteHeader(status)
+ }
+ 
++func (w *statusWriter) Write(p []byte) (int, error) {
++	if w.response != nil {
++		w.response.Write(p)
++	}
++	return w.ResponseWriter.Write(p)
++}
++
+ func trace(h http.Handler, log *slog.Logger) http.Handler {
+ 	return http.HandlerFunc(func(out http.ResponseWriter, req *http.Request) {
+ 		w := &statusWriter{ResponseWriter: out, status: 200}
+-		var registration bytes.Buffer
++		var registration, response bytes.Buffer
+ 		if req.URL.Path == privatehttp.RegisterPath && req.Body != nil {
++			w.response = &response
+ 			req.Body = struct {
+ 				io.Reader
+ 				io.Closer
+@@ -78,7 +136,11 @@ func trace(h http.Handler, log *slog.Logger) http.Handler {
+ 		h.ServeHTTP(w, req)
+ 		var r runtimeaccess.Registration
+ 		if registration.Len() != 0 && json.Unmarshal(registration.Bytes(), &r) == nil {
+-			log.Info("iam-register", "status", w.status, "runtime_id", r.RuntimeID, "boot_id", r.BootID, "generation", r.Generation)
++			var snapshot struct {
++				Gate string `json:"gate"`
++			}
++			_ = json.Unmarshal(response.Bytes(), &snapshot)
++			log.Info("iam-register", "gate", snapshot.Gate, "status", w.status, "runtime_id", r.RuntimeID, "boot_id", r.BootID, "generation", r.Generation)
+ 		} else {
+ 			log.Info("iam-http", "status", w.status, "path", req.URL.Path)
+ 		}
+@@ -92,38 +154,57 @@ type tracedSender struct {
+ 
+ func (s tracedSender) Send(ctx context.Context, target revocation.Participant, command startgate.BarrierCommand) (startgate.BarrierAck, error) {
+ 	ack, err := s.client.Send(ctx, target, command)
+-	s.log.Info("coordinator-send", "runtime_id", target.Identity.RuntimeID, "generation", target.Identity.Generation, "ack_received", err == nil)
++	s.log.Info("coordinator-send", "runtime_id", target.Identity.RuntimeID, "generation", target.Identity.Generation, "ack_received", err == nil, "ack", ack)
+ 	return ack, err
+ }
+ 
+-func observeNoACK(ctx context.Context, pool *pgxpool.Pool, f fixture, leaf tls.Certificate, ca *x509.CertPool, log *slog.Logger) error {
+-	store, err := revocationdb.New(pool)
+-	if err != nil {
+-		return err
++func waitFile(ctx context.Context, dir, name string) error {
++	tick := time.NewTicker(20 * time.Millisecond)
++	defer tick.Stop()
++	for {
++		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
++			return nil
++		} else if !errors.Is(err, os.ErrNotExist) {
++			return err
++		}
++		select {
++		case <-ctx.Done():
++			return ctx.Err()
++		case <-tick.C:
++		}
+ 	}
+-	client, err := barrierhttp.NewClient(leaf, ca, map[string]string{
+-		f.IAM.RuntimeID: "https://127.0.0.2:9443", f.Processing.RuntimeID: "https://127.0.0.1:9443",
+-	})
+-	if err != nil {
+-		return err
++}
++
++func driveRevocation(ctx context.Context, coordinator *revocation.Coordinator, f fixture,
++	id string, effective bool, log *slog.Logger) error {
++	subject := startgate.Subject{Scope: startgate.Workspace, WorkspaceID: &f.Workspace, SubjectID: f.Workspace}
++	if !effective {
++		subject = startgate.Subject{Scope: startgate.Session, SubjectID: f.Session}
+ 	}
+-	rt, err := revocation.New(store, tracedSender{client, log}, time.Now)
++	accepted, err := coordinator.Begin(ctx, revocation.Intent{ID: id, ReasonCode: "TEST_REVOCATION", Subject: subject})
+ 	if err != nil {
+ 		return err
+ 	}
+-	accepted, err := rt.Begin(ctx, revocation.Intent{ID: f.Revocation, ReasonCode: "TEST_REVOCATION",
+-		Subject: startgate.Subject{Scope: startgate.Workspace, WorkspaceID: &f.Workspace, SubjectID: f.Workspace}})
+-	if err != nil {
+-		return err
++	if accepted.DeadlineAt.Sub(accepted.AcceptedAt) != 5*time.Second {
++		return errors.New("wrong effective-revocation deadline")
+ 	}
+-	pending, err := rt.Drive(ctx, accepted.ID)
++	observed, err := coordinator.Drive(ctx, accepted.ID)
+ 	if err != nil {
+ 		return err
+ 	}
+-	log.Info("coordinator-pending", "status", pending.Status, "accepted_at", pending.AcceptedAt,
+-		"deadline_at", pending.DeadlineAt, "effective", pending.EffectiveAt != nil, "missing", len(pending.MissingRuntimeIDs()))
+-	if pending.Status != revocation.Pending || pending.EffectiveAt != nil || len(pending.MissingRuntimeIDs()) != 2 {
+-		return errors.New("no-ACK fixture did not retain its mandatory participants as pending")
++	log.Info("coordinator-drive", "status", observed.Status, "accepted_at", observed.AcceptedAt,
++		"deadline_at", observed.DeadlineAt, "effective_at", observed.EffectiveAt, "missing", observed.MissingRuntimeIDs(),
++		"participants", observed.Participants, "epoch", observed.Epoch)
++	if effective {
++		if observed.Status != revocation.Effective || observed.EffectiveAt == nil ||
++			!observed.EffectiveAt.Before(accepted.DeadlineAt) || len(observed.Participants) != 2 || len(observed.MissingRuntimeIDs()) != 0 {
++			return errors.New("exact real participant ACKs did not make the revocation effective on time")
++		}
++		return os.WriteFile(filepath.Join(f.Dir, "effective-observed"), []byte("EFFECTIVE\n"), 0600)
++	}
++	missing := observed.MissingRuntimeIDs()
++	if observed.Status != revocation.Pending || observed.EffectiveAt != nil || len(missing) != 1 || missing[0] != f.Processing.RuntimeID {
++		return errors.New("missing Processing ACK did not retain PENDING")
+ 	}
+ 	wait := time.NewTimer(time.Until(accepted.DeadlineAt) + 80*time.Millisecond)
+ 	defer wait.Stop()
+@@ -132,17 +213,19 @@ func observeNoACK(ctx context.Context, pool *pgxpool.Pool, f fixture, leaf tls.C
+ 		return ctx.Err()
+ 	case <-wait.C:
+ 	}
+-	final, err := rt.Drive(ctx, accepted.ID)
++	final, err := coordinator.Drive(ctx, accepted.ID)
+ 	if err != nil {
+ 		return err
+ 	}
+ 	log.Info("coordinator-deadline", "status", final.Status, "effective", final.EffectiveAt != nil,
+-		"deadline_breached", final.DeadlineBreached(), "missing", len(final.MissingRuntimeIDs()),
++		"deadline_breached", final.DeadlineBreached(), "missing", final.MissingRuntimeIDs(),
+ 		"observed_at", time.Now().UTC(), "elapsed_ms", time.Since(accepted.AcceptedAt).Milliseconds())
+-	if final.Status != revocation.Incident || final.EffectiveAt != nil || !final.DeadlineBreached() || len(final.MissingRuntimeIDs()) != 2 {
++	missing = final.MissingRuntimeIDs()
++	if final.Status != revocation.Incident || final.EffectiveAt != nil || !final.DeadlineBreached() ||
++		len(missing) != 1 || missing[0] != f.Processing.RuntimeID {
+ 		return errors.New("missing ACK did not produce a deadline incident")
+ 	}
+-	return os.WriteFile(filepath.Join(f.Dir, "incident-observed"), []byte("INCIDENT\n"), 0600)
++	return nil
+ }
+ 
+ func run(ctx context.Context, path string, log *slog.Logger) error {
+@@ -168,7 +251,12 @@ func run(ctx context.Context, path string, log *slog.Logger) error {
+ 		return err
+ 	}
+ 	defer pool.Close()
+-	iam, err := composition.New(pool, clock{}, closedOwner{}, f.IAM.Registration, []runtimeaccess.Binding{f.IAM, f.Processing})
++	ownerDB, err := pgxpool.New(ctx, "host=/var/run/postgresql user=hp_processing_app dbname=hit78 sslmode=disable pool_max_conns=2")
++	if err != nil {
++		return err
++	}
++	defer ownerDB.Close()
++	iam, err := composition.New(pool, clock{}, testOwner{f, ownerDB}, f.IAM.Registration, []runtimeaccess.Binding{f.IAM, f.Processing})
+ 	if err != nil {
+ 		return err
+ 	}
+@@ -191,26 +279,61 @@ func run(ctx context.Context, path string, log *slog.Logger) error {
+ 	server := &http.Server{Handler: trace(h, log), TLSConfig: tlsConfig, ReadHeaderTimeout: time.Second}
+ 	defer server.Close()
+ 	go server.ServeTLS(listener, "", "")
+-	log.Info("iam-listening")
+-	for {
+-		if err = iam.Start(ctx); err == nil {
+-			break
+-		}
+-		if ctx.Err() != nil {
+-			return errors.New("local IAM failed to open after roster registration")
++	controlHandler, err := iam.ControlHandler(ca, f.IAM.CertificateFingerprint)
++	if err != nil {
++		return err
++	}
++	controlTLS, err := barrierhttp.ServerTLS(cert, ca, f.IAM.CertificateFingerprint)
++	if err != nil {
++		return err
++	}
++	controlListener, err := net.Listen("tcp", "127.0.0.2:9443")
++	if err != nil {
++		return err
++	}
++	defer controlListener.Close()
++	control := &http.Server{Handler: trace(controlHandler, log), TLSConfig: controlTLS, ReadHeaderTimeout: time.Second}
++	defer control.Close()
++	go control.ServeTLS(controlListener, "", "")
++	store, err := revocationdb.New(pool)
++	if err != nil {
++		return err
++	}
++	target := func(b runtimeaccess.Binding, pin, origin string) barrierhttp.ControlBinding {
++		return barrierhttp.ControlBinding{
++			Identity:                startgate.Identity{RuntimeID: b.RuntimeID, BootID: b.BootID, Generation: uint64(b.Generation)},
++			RegistrationFingerprint: b.CertificateFingerprint, ControlFingerprint: pin, Origin: origin,
+ 		}
+-		time.Sleep(40 * time.Millisecond)
++	}
++	client, err := barrierhttp.NewClientWithControlBindings(clientCert, ca, []barrierhttp.ControlBinding{
++		target(f.IAM, fmt.Sprintf("sha256:%x", sha256.Sum256(cert.Certificate[0])), "https://127.0.0.2:9443"),
++		target(f.Processing, f.ProcessingControlPin, "https://127.0.0.1:9443"),
++	})
++	if err != nil {
++		return err
++	}
++	coordinator, err := revocation.New(store, tracedSender{client, log}, time.Now)
++	if err != nil {
++		return err
++	}
++	log.Info("iam-listening")
++	if err := waitFile(ctx, f.Dir, "open-iam"); err != nil {
++		return err
++	}
++	if err := iam.Start(ctx); err != nil {
++		return fmt.Errorf("open registered IAM roster: %w", err)
+ 	}
+ 	log.Info("iam-gate-open")
+-	for {
+-		if _, err = os.Stat(filepath.Join(f.Dir, "revoke")); err == nil {
+-			return observeNoACK(ctx, pool, f, clientCert, ca, log)
+-		}
+-		if ctx.Err() != nil {
+-			return ctx.Err()
+-		}
+-		time.Sleep(40 * time.Millisecond)
++	if err := waitFile(ctx, f.Dir, "revoke"); err != nil {
++		return err
++	}
++	if err := driveRevocation(ctx, coordinator, f, f.Revocation, true, log); err != nil {
++		return err
++	}
++	if err := waitFile(ctx, f.Dir, "revoke-without-processing"); err != nil {
++		return err
+ 	}
++	return driveRevocation(ctx, coordinator, f, f.MissingACK, false, log)
+ }
+ 
+ func main() {

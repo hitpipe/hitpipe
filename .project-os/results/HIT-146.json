@@ -1,0 +1,80 @@
+{
+  "subject": "HIT-146",
+  "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_ISOLATED_TEST",
+    "summary": "Настоящий IAM открыл Processing только после свежего снимка. Обе стороны подтвердили барьер, защищённое чтение после отзыва получило 403, удержанный запрос не повторился. Отсутствие ACK дало INCIDENT без EFFECTIVE.",
+    "contract_revision": 1,
+    "contract_fingerprint": "0f89b752fa6ef21d986f295541483c3da6dc36fdedc90be4f5ac91bf404348ac",
+    "processing_base": "49229e1db3f371a051a022ea9e31951dd558eecb",
+    "tested_processing_sha": "717c954fca4f06f165074a8688f0e94a31b398e7",
+    "tested_iam_checkout_sha": "e1be0c1a0be577a3626a3e120707b3aeeb579c6f",
+    "tested_iam_implementation_sha": "e1be0c1a0be577a3626a3e120707b3aeeb579c6f",
+    "postgres": "docker.io/library/postgres:18.7-bookworm@sha256:ece55f7868da684e400f82f1030a050718adbdd65c23aa500c486f6e2950dc0f",
+    "platform": "linux/arm64",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/90"
+  },
+  "dependencies": {
+    "HIT-111": {
+      "verified": "b2e823012854575146595b01a6f56d5ac677fc44",
+      "included_in": "Processing",
+      "review": 14274
+    },
+    "HIT-115": {
+      "verified": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "included_in": "IAM",
+      "review": 15478
+    },
+    "HIT-116": {
+      "verified": "d13f723511b61cb3068bfdf63d40bd7100fa1e89",
+      "included_in": "IAM",
+      "review": 16116
+    },
+    "IAM PR #92": {
+      "verified": "e1be0c1a0be577a3626a3e120707b3aeeb579c6f",
+      "included_in": "Separate pinned IAM TEST binary"
+    }
+  },
+  "verification": {
+    "report": "services/processing/docs/HIT-146/README.md",
+    "runbook": "services/processing/docs/HIT-146/RUN_RU.md",
+    "source_evidence": "services/processing/docs/HIT-146/verification/iam-pr92/SOURCE.md",
+    "test_evidence": "services/processing/docs/HIT-146/verification/iam-pr92/RUNS.md",
+    "raw_evidence": "services/processing/docs/HIT-146/verification/iam-pr92/raw-local.tar.gz",
+    "ci": "https://github.com/hitpipe/hitpipe/pull/90/checks"
+  },
+  "dod_evidence": [
+    {
+      "id": "7ab7120a-2855-4572-9e99-ab5f942662da",
+      "observed_local": "PASS",
+      "observation": "Реальный отказ 403, CLOSED, затем SYNCING → OPEN → 200. Старое поколение, чужая mTLS-идентичность и повтор boot отвергнуты."
+    },
+    {
+      "id": "e12254a0-d1ea-4765-9f73-529275720d3a",
+      "observed_local": "PASS",
+      "observation": "Два настоящих ACK с epoch 8, защищённое чтение 200 → 403 и отсутствие нового HTTP-старта Delivery."
+    },
+    {
+      "id": "f977c6a6-733c-4915-a29f-a6f7f22e01cb",
+      "observed_local": "PASS",
+      "observation": "Удержанный запрос остался CLAIMED, одна попытка и один HTTP-старт. Отдельный отказ PENDING → INCIDENT без EFFECTIVE."
+    },
+    {
+      "id": "c297fb3a-7e92-4b81-8645-8d61e91a5004",
+      "observed_local": "PASS",
+      "observation": "SHA обоих сервисов и фактические UTC сохранены. EFFECTIVE за 15,044 мс. Отсутствие ACK наблюдалось как INCIDENT через 5098 мс."
+    }
+  ],
+  "known_limitations": [
+    "Только изолированный синтетический TEST, управляемые Intake и Delivery. PR №92 подключён точным отдельным SHA, его статус принятия этим прогоном не меняется."
+  ],
+  "changed_artifacts": [
+    "services/processing/internal/runtime/{boot,boot_test,config,runtime}.go",
+    "services/processing/internal/adapters/postgres/real_iam_process_test.go",
+    "services/processing/scripts/postgres/verify_real_iam.py",
+    "tools/hit146/iam-process.go",
+    "services/processing/docs/HIT-146",
+    ".project-os/results/HIT-146.json"
+  ],
+  "deviations": []
+}

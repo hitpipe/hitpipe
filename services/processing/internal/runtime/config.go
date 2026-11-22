@@ -29,23 +29,24 @@ var (
 )
 
 type Config struct {
-	Business    string   `json:"business_listen"`
-	Control     string   `json:"control_listen"`
-	Health      string   `json:"health_listen"`
-	Identity    string   `json:"runtime_id"`
-	Generation  uint64   `json:"generation"`
-	OwnerDB     string   `json:"database_name"`
-	AppDSN      string   `json:"application_dsn_file"`
-	WorkerDSN   string   `json:"worker_dsn_file"`
-	CursorKey   string   `json:"cursor_key_file"`
-	Content     string   `json:"content_directory"`
-	Connections int32    `json:"pool_connections"`
-	TLS         TLSFiles `json:"tls"`
-	IAM         Peer     `json:"iam"`
-	Intake      Peer     `json:"intake"`
-	Delivery    Peer     `json:"delivery"`
-	BFFName     string   `json:"bff_name"`
-	OPSName     string   `json:"ops_name"`
+	Business     string   `json:"business_listen"`
+	Control      string   `json:"control_listen"`
+	Health       string   `json:"health_listen"`
+	Identity     string   `json:"runtime_id"`
+	Generation   uint64   `json:"generation"`
+	BootIdentity string   `json:"boot_identity_file,omitempty"`
+	OwnerDB      string   `json:"database_name"`
+	AppDSN       string   `json:"application_dsn_file"`
+	WorkerDSN    string   `json:"worker_dsn_file"`
+	CursorKey    string   `json:"cursor_key_file"`
+	Content      string   `json:"content_directory"`
+	Connections  int32    `json:"pool_connections"`
+	TLS          TLSFiles `json:"tls"`
+	IAM          Peer     `json:"iam"`
+	Intake       Peer     `json:"intake"`
+	Delivery     Peer     `json:"delivery"`
+	BFFName      string   `json:"bff_name"`
+	OPSName      string   `json:"ops_name"`
 }
 
 type TLSFiles struct {
@@ -153,6 +154,9 @@ func (c Config) validate() error {
 		}
 	}
 	if c.TLS.ServerKey == c.TLS.ClientKey || c.TLS.ServerCertificate == c.TLS.ClientCertificate {
+		return ErrConfig
+	}
+	if c.BootIdentity != "" && !filepath.IsAbs(c.BootIdentity) {
 		return ErrConfig
 	}
 	return nil
