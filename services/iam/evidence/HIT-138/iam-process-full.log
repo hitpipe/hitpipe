@@ -1,0 +1,176 @@
+Exact tested commit d081e4f5c408b2a94286b1193b244f01f41153d7
+Full original module log: iam/postgres-race.log
+Module log SHA-256 0ecddb8a962f7d8637fa7a4a9df5a28a733e8208c616447e97db7347bc81ea09
+Complete executable, composition/configuration and session-issuance package output.
+
+=== RUN   TestPostgresIAMProcess
+=== RUN   TestPostgresIAMProcess/normal_executable_and_TLS_role_matrix
+    process_integration_test.go:300: actual cmd/iam opened the registered service; TLS handshake and wrong-role/port isolation verified; missing authorities denied profile
+    process_integration_test.go:328: SIGTERM released sockets and app pool; duplicate old boot denied; exact new boot opened only after explicit durable fixture fence
+=== RUN   TestPostgresIAMProcess/same_process_composition_with_explicit_fixture_authorities
+    process_integration_test.go:403: EDGE login and callback through a controlled TLS IdP saved one exact session; BFF profile/authorize verified current access and rejected SQL session revoke
+=== RUN   TestPostgresIAMProcess/invalid_TLS_materials_and_unavailable_database
+    process_integration_test.go:440: invalid TLS or build revision bound neither listener; failed real PostgreSQL connection exposed technical CLOSED and denied registration
+--- PASS: TestPostgresIAMProcess (10.11s)
+    --- PASS: TestPostgresIAMProcess/normal_executable_and_TLS_role_matrix (4.60s)
+    --- PASS: TestPostgresIAMProcess/same_process_composition_with_explicit_fixture_authorities (1.79s)
+    --- PASS: TestPostgresIAMProcess/invalid_TLS_materials_and_unavailable_database (1.25s)
+=== RUN   TestIAMProcessChild
+    process_integration_test.go:473: exercised only by the separately launched integration child
+--- SKIP: TestIAMProcessChild (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam	11.144s
+=== RUN   TestStrictListenerInput
+--- PASS: TestStrictListenerInput (0.00s)
+=== RUN   TestPoolUsesOnlyExplicitRuntimeProvisioning
+--- PASS: TestPoolUsesOnlyExplicitRuntimeProvisioning (0.00s)
+=== RUN   TestDatabaseProvisioningRejectsFallbacks
+--- PASS: TestDatabaseProvisioningRejectsFallbacks (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/iamprocess	1.034s
+=== RUN   TestAdmittedIssuanceBindsCommitAndResponseToOneExactStart
+--- PASS: TestAdmittedIssuanceBindsCommitAndResponseToOneExactStart (0.00s)
+=== RUN   TestAdmittedIssuanceRejectsAuthorityChangedWhileWaiting
+--- PASS: TestAdmittedIssuanceRejectsAuthorityChangedWhileWaiting (0.00s)
+=== RUN   TestRequiresDependenciesAndExplicitPolicy
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_verifier
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_verifier
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_clock
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_clock
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_guard
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_guard
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/missing_store
+=== RUN   TestRequiresDependenciesAndExplicitPolicy/typed_nil_store
+--- PASS: TestRequiresDependenciesAndExplicitPolicy (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_verifier (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_verifier (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_clock (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_clock (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_guard (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_guard (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/missing_store (0.00s)
+    --- PASS: TestRequiresDependenciesAndExplicitPolicy/typed_nil_store (0.00s)
+=== RUN   TestInvalidInputDoesNotConsumeProof
+=== RUN   TestInvalidInputDoesNotConsumeProof/nil_context
+=== RUN   TestInvalidInputDoesNotConsumeProof/empty
+=== RUN   TestInvalidInputDoesNotConsumeProof/oversized
+=== RUN   TestInvalidInputDoesNotConsumeProof/cancelled
+--- PASS: TestInvalidInputDoesNotConsumeProof (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/nil_context (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/empty (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/oversized (0.00s)
+    --- PASS: TestInvalidInputDoesNotConsumeProof/cancelled (0.00s)
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/verifier_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unverified_email
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_issuer
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/whitespace_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/control_subject
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/invalid_UTF8
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/future_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/expired_equality
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/inverted_attempt
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/clock_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/untrusted_clock
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_clock
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/guard_error
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_guard
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unknown_guard
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_epoch
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/negative_epoch
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/rotation_hold
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/pending_revoke
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/entropy_failure
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/CSRF_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/principal_UUID_entropy_short
+=== RUN   TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_UUID_entropy_short
+--- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/verifier_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unverified_email (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_issuer (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/missing_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/whitespace_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/control_subject (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/invalid_UTF8 (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/future_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/expired_equality (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/too_long_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/inverted_attempt (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/clock_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/untrusted_clock (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_clock (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/guard_error (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_guard (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/unknown_guard (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/zero_epoch (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/negative_epoch (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/rotation_hold (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/pending_revoke (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/entropy_failure (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/CSRF_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/principal_UUID_entropy_short (0.00s)
+    --- PASS: TestRejectsUnverifiedExpiredOrUncertainInputsBeforeStore/session_UUID_entropy_short (0.00s)
+=== RUN   TestCreatesHashedSessionAfterCommit
+--- PASS: TestCreatesHashedSessionAfterCommit (0.00s)
+=== RUN   TestFormattingAndJSONRedactSecrets
+--- PASS: TestFormattingAndJSONRedactSecrets (0.00s)
+=== RUN   TestPostCommitFailureWithholdsSecrets
+=== RUN   TestPostCommitFailureWithholdsSecrets/unknown_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/cancel_after_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/clock_error
+=== RUN   TestPostCommitFailureWithholdsSecrets/untrusted_clock
+=== RUN   TestPostCommitFailureWithholdsSecrets/clock_backwards
+=== RUN   TestPostCommitFailureWithholdsSecrets/proof_expired_during_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/session_expired_during_commit
+=== RUN   TestPostCommitFailureWithholdsSecrets/guard_error
+=== RUN   TestPostCommitFailureWithholdsSecrets/guard_unknown
+=== RUN   TestPostCommitFailureWithholdsSecrets/epoch_changed
+=== RUN   TestPostCommitFailureWithholdsSecrets/pending_revoke
+=== RUN   TestPostCommitFailureWithholdsSecrets/rotation_hold
+--- PASS: TestPostCommitFailureWithholdsSecrets (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/unknown_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/cancel_after_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/clock_error (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/untrusted_clock (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/clock_backwards (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/proof_expired_during_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/session_expired_during_commit (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/guard_error (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/guard_unknown (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/epoch_changed (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/pending_revoke (0.00s)
+    --- PASS: TestPostCommitFailureWithholdsSecrets/rotation_hold (0.00s)
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/zero
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/non_UUID
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/nil_UUID
+=== RUN   TestMalformedCommitReceiptWithholdsSecrets/wrong_session
+--- PASS: TestMalformedCommitReceiptWithholdsSecrets (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/zero (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/non_UUID (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/nil_UUID (0.00s)
+    --- PASS: TestMalformedCommitReceiptWithholdsSecrets/wrong_session (0.00s)
+=== RUN   TestFreshClockRejectsProofExpiredBeforeStore
+--- PASS: TestFreshClockRejectsProofExpiredBeforeStore (0.00s)
+=== RUN   TestMaximumPolicyAndAttemptAreAllowed
+--- PASS: TestMaximumPolicyAndAttemptAreAllowed (0.00s)
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/verifier
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/clock
+=== RUN   TestCancellationInDependenciesStopsBeforeWrite/guard
+--- PASS: TestCancellationInDependenciesStopsBeforeWrite (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/verifier (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/clock (0.00s)
+    --- PASS: TestCancellationInDependenciesStopsBeforeWrite/guard (0.00s)
+=== RUN   TestConcurrentOneUseConfirmationAndReplay
+--- PASS: TestConcurrentOneUseConfirmationAndReplay (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.035s
