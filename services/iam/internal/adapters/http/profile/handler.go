@@ -28,6 +28,10 @@ type Service interface {
 	Serve(context.Context, string, authorizeaction.Caller, func(getprofile.Profile) error) error
 }
 
+type guardedService interface {
+	ServeWithContext(context.Context, string, authorizeaction.Caller, func(context.Context, getprofile.Profile) error) error
+}
+
 // Config explicitly binds a verified client certificate to one BFF runtime.
 // BFFDNSName is an exact configured DNS SAN, not a canonical deployment hostname.
 // Certificate rotation or runtime replacement requires a fresh explicit binding.
@@ -245,9 +249,9 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer func() { _ = controller.SetWriteDeadline(time.Time{}) }()
-	var emitted, started atomic.Bool
-	err := h.service.Serve(bounded, credentials[0], caller, func(profile getprofile.Profile) error {
-		if !emitted.CompareAndSwap(false, true) || bounded.Err() != nil || !validProfile(profile) {
+	var emitted, started, flushed atomic.Bool
+	publish := func(work context.Context, profile getprofile.Profile) error {
+		if work == nil || !emitted.CompareAndSwap(false, true) || work.Err() != nil || bounded.Err() != nil || !validProfile(profile) {
 			return getprofile.ErrUnavailable
 		}
 		// Buffer and validate before the first response byte. This callback runs
@@ -256,14 +260,27 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return getprofile.ErrUnavailable
 		}
-		if bounded.Err() != nil {
+		if work.Err() != nil || bounded.Err() != nil {
 			return getprofile.ErrCancelled
 		}
 		currentCaller, verified := h.verifiedCaller(r.TLS)
 		if !verified || currentCaller != caller {
 			return getprofile.ErrForbidden
 		}
-		if bounded.Err() != nil {
+		if limit, ok := work.Deadline(); ok && limit.Before(deadline) && controller.SetWriteDeadline(limit) != nil {
+			return getprofile.ErrUnavailable
+		}
+		canceled := make(chan struct{})
+		stop := context.AfterFunc(work, func() {
+			defer close(canceled)
+			_ = controller.SetWriteDeadline(time.Now())
+		})
+		defer func() {
+			if !stop() {
+				<-canceled
+			}
+		}()
+		if work.Err() != nil || bounded.Err() != nil {
 			return getprofile.ErrCancelled
 		}
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -272,14 +289,27 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if n, err := w.Write(body); err != nil || n != len(body) {
 			return getprofile.ErrUnavailable
 		}
-		if err := controller.Flush(); err != nil {
+		if work.Err() != nil || bounded.Err() != nil || controller.Flush() != nil {
 			return getprofile.ErrUnavailable
 		}
+		flushed.Store(true)
 		return nil
-	})
+	}
+	var err error
+	service, guarded := h.service.(guardedService)
+	if guarded {
+		err = service.ServeWithContext(bounded, credentials[0], caller, publish)
+	} else {
+		err = h.service.Serve(bounded, credentials[0], caller, func(profile getprofile.Profile) error {
+			return publish(bounded, profile)
+		})
+	}
 	if started.Load() {
 		// A gate/transport error after response start cannot undo that start. Never
 		// append error JSON, retry the read or emit a second HTTP response.
+		if guarded && !flushed.Load() {
+			panic(http.ErrAbortHandler)
+		}
 		return
 	}
 	if err == nil {

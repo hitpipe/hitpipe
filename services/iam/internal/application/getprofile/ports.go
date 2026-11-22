@@ -59,6 +59,14 @@ type Admission interface {
 	Confirm(context.Context, Facts) error
 }
 
+// StartAdmission lets a composed listener hold authoritative SQL facts during
+// the final response start. The read-only Admission contract also remains
+// available to existing callers that hold those facts across all of Within.
+type StartAdmission interface {
+	Admission
+	Start(context.Context, Facts, func(context.Context) error) error
+}
+
 // Gate holds the critical section through fresh SQL, content verification and
 // actual response start. It checks eligibility before invoking its callback,
 // exactly once, with the bound caller/reference and context. A later I/O failure

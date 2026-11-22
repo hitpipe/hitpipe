@@ -65,6 +65,12 @@ func transportPeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
 	return certificatePeer(state)
 }
 
+// TransportPeer verifies the established TLS connection before resolving a
+// caller in an independently provisioned IAM route.
+func TransportPeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
+	return transportPeer(state)
+}
+
 func certificatePeer(state *tls.ConnectionState) (runtimeaccess.Peer, error) {
 	if state == nil || state.Version != tls.VersionTLS13 || len(state.PeerCertificates) == 0 || len(state.VerifiedChains) == 0 {
 		return runtimeaccess.Peer{}, errCertificate
