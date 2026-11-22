@@ -1,0 +1,33 @@
+622a5848df71d75d2cd5d2a2f9571057fca9911a
+
+$ go test -race -count=1 ./...
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-contractcheck	1.065s
+ok  	github.com/hitpipe/hitpipe/services/iam/cmd/iam-migrate	1.023s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/clock/system	1.025s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/composition/privateiam	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/profilefiles	1.146s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/fixtures/sessionlookup	1.037s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/privateiam	1.529s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/profile	1.700s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/profileupdate	1.041s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/authorization	1.024s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/migrations	1.024s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/profile	1.025s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/profileupdate	[no test files]
+?   	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionissuer	1.023s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/sessionlookup	1.274s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authenticatesession	1.024s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/authorizeaction	1.059s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/getprofile	3.041s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/issuesession	1.037s
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/profileupdate	1.021s
+?   	github.com/hitpipe/hitpipe/services/iam/internal/application/runtimeaccess	[no test files]
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/domain/sessionpolicy	1.023s
+exit=0
+
+$ go vet ./...
+exit=0
+
+$ go build ./...
+exit=0
