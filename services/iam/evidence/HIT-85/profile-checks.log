@@ -1,0 +1,279 @@
+HIT-85: exact package excerpts from postgres-race.log; not a separate test run.
+Full log SHA-256: bbc201abe42692b34c8563d0bad667212c30b767fcbfb30763d24fb64eb86c5f
+
+Original lines 55..104
+=== RUN   TestProfileContentStrictFormatAndExactDigest
+=== RUN   TestProfileContentStrictFormatAndExactDigest/trailing
+=== RUN   TestProfileContentStrictFormatAndExactDigest/duplicate
+=== RUN   TestProfileContentStrictFormatAndExactDigest/null
+=== RUN   TestProfileContentStrictFormatAndExactDigest/missing
+=== RUN   TestProfileContentStrictFormatAndExactDigest/fraction
+=== RUN   TestProfileContentStrictFormatAndExactDigest/empty
+=== RUN   TestProfileContentStrictFormatAndExactDigest/long_name
+=== RUN   TestProfileContentStrictFormatAndExactDigest/long_zone
+=== RUN   TestProfileContentStrictFormatAndExactDigest/unknown
+=== RUN   TestProfileContentStrictFormatAndExactDigest/unsafe_integer
+=== RUN   TestProfileContentStrictFormatAndExactDigest/invalid_UUID
+=== RUN   TestProfileContentStrictFormatAndExactDigest/invalid_UTF8
+=== RUN   TestProfileContentStrictFormatAndExactDigest/oversize
+--- PASS: TestProfileContentStrictFormatAndExactDigest (0.01s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/trailing (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/duplicate (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/null (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/missing (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/fraction (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/empty (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/long_name (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/long_zone (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/unknown (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/unsafe_integer (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/invalid_UUID (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/invalid_UTF8 (0.00s)
+    --- PASS: TestProfileContentStrictFormatAndExactDigest/oversize (0.00s)
+=== RUN   TestProfileContentFilesystemBoundary
+=== RUN   TestProfileContentFilesystemBoundary/symlink
+=== RUN   TestProfileContentFilesystemBoundary/hardlink
+=== RUN   TestProfileContentFilesystemBoundary/directory
+=== RUN   TestProfileContentFilesystemBoundary/fifo
+=== RUN   TestProfileContentFilesystemBoundary/public_file
+=== RUN   TestProfileContentFilesystemBoundary/public_root
+=== RUN   TestProfileContentFilesystemBoundary/missing
+--- PASS: TestProfileContentFilesystemBoundary (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/symlink (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/hardlink (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/directory (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/fifo (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/public_file (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/public_root (0.00s)
+    --- PASS: TestProfileContentFilesystemBoundary/missing (0.00s)
+=== RUN   TestProfileContentNoCachedFallbackAfterChange
+--- PASS: TestProfileContentNoCachedFallbackAfterChange (0.00s)
+=== RUN   TestProfileContentRejectsUnpairedUnicodeWithoutRepairingIt
+--- PASS: TestProfileContentRejectsUnpairedUnicodeWithoutRepairingIt (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/content/profilefiles	1.026s
+
+Original lines 135..218
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/global_profile_without_workspace
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/forged_browser_claims
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/wrong_session
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/revoked_session
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/disabled_principal
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/closed_runtime
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/missing_content
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/mismatched_digest
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/closed_gate
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/epoch_changes_during_content_read
+=== RUN   TestProfileHTTPSPostgresAndOwnerFiles/database_unavailable
+--- PASS: TestProfileHTTPSPostgresAndOwnerFiles (0.96s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/global_profile_without_workspace (0.18s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/forged_browser_claims (0.12s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/wrong_session (0.08s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/revoked_session (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/disabled_principal (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/closed_runtime (0.10s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/missing_content (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/mismatched_digest (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/closed_gate (0.04s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/epoch_changes_during_content_read (0.06s)
+    --- PASS: TestProfileHTTPSPostgresAndOwnerFiles/database_unavailable (0.05s)
+=== RUN   TestProfileHTTPConfiguration
+--- PASS: TestProfileHTTPConfiguration (0.01s)
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/BFF
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/missing_certificate
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/foreign_CA
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/foreign_SAN
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/same_SAN_different_fingerprint
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/expired_certificate
+=== RUN   TestProfileHTTPSMutualTLSBFFBinding/TLS12
+--- PASS: TestProfileHTTPSMutualTLSBFFBinding (0.05s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/BFF (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/missing_certificate (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/foreign_CA (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/foreign_SAN (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/same_SAN_different_fingerprint (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/expired_certificate (0.01s)
+    --- PASS: TestProfileHTTPSMutualTLSBFFBinding/TLS12 (0.00s)
+=== RUN   TestProfileHTTPErrorAndResponseStart
+=== RUN   TestProfileHTTPErrorAndResponseStart/missing_session
+=== RUN   TestProfileHTTPErrorAndResponseStart/forbidden_caller
+=== RUN   TestProfileHTTPErrorAndResponseStart/invalid_request
+=== RUN   TestProfileHTTPErrorAndResponseStart/database_or_content_failure
+=== RUN   TestProfileHTTPErrorAndResponseStart/cancelled
+=== RUN   TestProfileHTTPErrorAndResponseStart/no_emission
+=== RUN   TestProfileHTTPErrorAndResponseStart/invalid_profile
+=== RUN   TestProfileHTTPErrorAndResponseStart/error_after_emission
+=== RUN   TestProfileHTTPErrorAndResponseStart/second_emission
+--- PASS: TestProfileHTTPErrorAndResponseStart (0.08s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/missing_session (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/forbidden_caller (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/invalid_request (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/database_or_content_failure (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/cancelled (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/no_emission (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/invalid_profile (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/error_after_emission (0.01s)
+    --- PASS: TestProfileHTTPErrorAndResponseStart/second_emission (0.01s)
+=== RUN   TestProfileHTTPCredentialsAndRoutes
+=== RUN   TestProfileHTTPCredentialsAndRoutes/cookie_only
+=== RUN   TestProfileHTTPCredentialsAndRoutes/duplicate_credential
+=== RUN   TestProfileHTTPCredentialsAndRoutes/wrong_session_with_forged_identity
+=== RUN   TestProfileHTTPCredentialsAndRoutes/write_method
+=== RUN   TestProfileHTTPCredentialsAndRoutes/another_route
+=== RUN   TestProfileHTTPCredentialsAndRoutes/client-selected_principal
+=== RUN   TestProfileHTTPCredentialsAndRoutes/claims_do_not_replace_session_identity
+--- PASS: TestProfileHTTPCredentialsAndRoutes (0.06s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/cookie_only (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/duplicate_credential (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/wrong_session_with_forged_identity (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/write_method (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/another_route (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/client-selected_principal (0.01s)
+    --- PASS: TestProfileHTTPCredentialsAndRoutes/claims_do_not_replace_session_identity (0.01s)
+=== RUN   TestProfileHTTPBoundedWriteAndUnsupportedWriter
+--- PASS: TestProfileHTTPBoundedWriteAndUnsupportedWriter (0.03s)
+=== RUN   TestProfileHTTPRechecksCertificateBeforeResponseStart
+--- PASS: TestProfileHTTPRechecksCertificateBeforeResponseStart (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/http/profile	2.232s
+
+Original lines 475..496
+=== RUN   TestPostgresProfileGlobalSessionOwnerProjection
+--- PASS: TestPostgresProfileGlobalSessionOwnerProjection (0.13s)
+=== RUN   TestPostgresProfileFreshMetadataAndNullableContent
+--- PASS: TestPostgresProfileFreshMetadataAndNullableContent (0.10s)
+=== RUN   TestPostgresProfileExactSessionRevocations
+--- PASS: TestPostgresProfileExactSessionRevocations (0.13s)
+=== RUN   TestPostgresProfileConcurrentConsistentSnapshots
+--- PASS: TestPostgresProfileConcurrentConsistentSnapshots (0.36s)
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_ADMIN_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_WORKER_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_PURGE_DSN
+=== RUN   TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_MIGRATOR_DSN
+--- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure (2.27s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_ADMIN_DSN (0.02s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_WORKER_DSN (0.03s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_TEST_PURGE_DSN (0.05s)
+    --- PASS: TestPostgresProfileRoleErrorsCancellationAndDatabaseFailure/HITPIPE_IAM_MIGRATOR_DSN (0.03s)
+=== RUN   TestProfileReaderConfigurationAndInput
+--- PASS: TestProfileReaderConfigurationAndInput (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/adapters/postgres/profile	4.031s
+
+Original lines 878..989
+=== RUN   TestRequiresEveryPortAndZeroServiceCannotEmit
+--- PASS: TestRequiresEveryPortAndZeroServiceCannotEmit (0.00s)
+=== RUN   TestOwnGlobalProfileEmitsInsideGateFromCurrentPrincipal
+--- PASS: TestOwnGlobalProfileEmitsInsideGateFromCurrentPrincipal (0.00s)
+=== RUN   TestMissingSessionInvalidCallerAndCancellationDoNotEmit
+--- PASS: TestMissingSessionInvalidCallerAndCancellationDoNotEmit (0.00s)
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/revoked_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/expired_legacy_session
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/legacy_lookup_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_missing
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_revoked
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_expired
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/disabled_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/mismatched_principal
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_epoch
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_epoch
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/CLOSED_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SYNCING_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/FENCED_runtime
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/old_runtime_generation
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_boot
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_cert
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_profile_ref
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_digest
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_digest
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SQL_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/content_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/untrusted_clock
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_clock
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/clock_error
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unverified_content_user
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_name
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_name
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_UTF8
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_timezone
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_timezone
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_revision
+=== RUN   TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_revision
+--- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit (0.01s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/revoked_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/expired_legacy_session (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/legacy_lookup_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_missing (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_revoked (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/fresh_session_expired (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unknown_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/disabled_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/mismatched_principal (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_epoch (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_epoch (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/CLOSED_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SYNCING_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/FENCED_runtime (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/old_runtime_generation (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_boot (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/wrong_runtime_cert (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_profile_ref (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/missing_digest (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_digest (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/SQL_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/content_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/untrusted_clock (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_clock (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/clock_error (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unverified_content_user (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_name (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_name (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/bad_UTF8 (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/empty_timezone (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/oversized_timezone (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/zero_revision (0.00s)
+    --- PASS: TestCurrentIdentitySessionRuntimeAndContentFailuresNeverEmit/unsafe_revision (0.00s)
+=== RUN   TestSessionDenyCannotDisappearThroughWorkspaceFilter
+--- PASS: TestSessionDenyCannotDisappearThroughWorkspaceFilter (0.00s)
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_reference
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_digest
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_switched
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_switched
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/epoch_changed
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_revoked
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_disabled
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/runtime_fenced
+=== RUN   TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_lifetime_changed
+--- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_reference (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/profile_digest (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_switched (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_switched (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/epoch_changed (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_revoked (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/principal_disabled (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/runtime_fenced (0.00s)
+    --- PASS: TestChangesDuringContentIOInvalidateEarlierOwnerFacts/session_lifetime_changed (0.00s)
+=== RUN   TestAdmissionBindingConfirmationAndFinalClock
+--- PASS: TestAdmissionBindingConfirmationAndFinalClock (0.00s)
+=== RUN   TestCancelDuringContentOrConfirmationPreventsResponse
+--- PASS: TestCancelDuringContentOrConfirmationPreventsResponse (0.00s)
+=== RUN   TestEmitterAndPostCallbackErrorsNeverCauseASecondResponse
+--- PASS: TestEmitterAndPostCallbackErrorsNeverCauseASecondResponse (0.00s)
+=== RUN   TestCriticalBudgetIsRealAndCannotBeRemovedByGate
+--- PASS: TestCriticalBudgetIsRealAndCannotBeRemovedByGate (2.00s)
+=== RUN   TestConcurrentReadsAfterCommittedSessionRevokeCannotEmit
+--- PASS: TestConcurrentReadsAfterCommittedSessionRevokeCannotEmit (0.00s)
+PASS
+ok  	github.com/hitpipe/hitpipe/services/iam/internal/application/getprofile	3.058s
+

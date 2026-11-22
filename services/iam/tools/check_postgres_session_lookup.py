@@ -48,6 +48,7 @@ def main(*, task="HIT-81", schema_checks=True, authorization_checks=False):
     # checks whenever this implementation is present, including through the
     # historical schema/lookup wrappers.
     authorization_checks = authorization_checks or (IAM / "internal/application/authorizeaction").is_dir()
+    profile_checks = (IAM / "internal/application/getprofile").is_dir()
     if hashlib.sha256(SQL.read_bytes()).hexdigest() != SQL_SHA256:
         parser.error("IAM fixture differs from the complete accepted SQL source")
     if schema_checks and hashlib.sha256((MIGRATIONS / "schema/001_iam.sql").read_bytes()).hexdigest() != SQL_SHA256:
@@ -80,7 +81,9 @@ def main(*, task="HIT-81", schema_checks=True, authorization_checks=False):
         "execution_limits": {"GOMAXPROCS": 1, "GOGC": 50, "go_build_parallelism": 1,
                              "postgres_memory_mib": 256, "postgres_cpus": 0.5},
         "postgres_image": IMAGE, "iam_sql_sha256": SQL_SHA256,
-        "scope": ("Local current authorization with controlled caller, owner-resource and actual-start gate ports, "
+        "scope": ("Local protected GET /api/v1/profile over real TLS 1.3 mutual authentication, PostgreSQL and owner-only profile files; "
+                  "mandatory controlled actual-response-start gate, not the HIT-69 distributed coordinator or a deployed service"
+                  if profile_checks else "Local current authorization with controlled caller, owner-resource and actual-start gate ports, "
                   "real PostgreSQL authority and existing session consumer; not a live listener or distributed coordinator"
                   if authorization_checks else "Isolated IAM schema migration, role permissions, row isolation, constraints and transaction checks, "
                   "plus the existing session lookup and consumer; not live IAM, login, trusted time or deployment qualification"
@@ -198,6 +201,10 @@ def main(*, task="HIT-81", schema_checks=True, authorization_checks=False):
                 raise RuntimeError("required IAM schema and permission tests did not run")
             if authorization_checks and label == "postgres-race" and ("--- SKIP: TestPostgresAuthorization" in log or "--- PASS: TestPostgresAuthorization" not in log):
                 raise RuntimeError("required current authorization PostgreSQL tests did not run")
+            if profile_checks and label == "postgres-race":
+                for required in ("TestPostgresProfile", "TestProfileHTTPSPostgresAndOwnerFiles"):
+                    if "--- SKIP: " + required in log or "--- PASS: " + required not in log:
+                        raise RuntimeError("required protected profile composition tests did not run: " + required)
         if args.measure_baseline:
             from measure_session_lookup import measure
             measure(args.go, environment, evidence, args.measure_baseline)

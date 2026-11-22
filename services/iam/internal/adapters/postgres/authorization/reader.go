@@ -51,6 +51,11 @@ const checkAuthority = `SELECT current_user=session_user
  AND NOT EXISTS(SELECT 1 FROM unnest(ARRAY['principals','sessions','workspaces','memberships','revocations','runtime_registry','external_bindings']) AS t(name)
                 WHERE NOT has_table_privilege(current_user,'hp_iam.'||name,'SELECT'))`
 
+// ApplicationAuthoritySQL is the shared IAM application-login/database guard for
+// PostgreSQL adapters. It checks installation/role authority only; it grants no
+// user action and must run within the adapter's bounded read transaction.
+const ApplicationAuthoritySQL = checkAuthority
+
 const selectSession = `SELECT s.session_id::text,s.principal_id::text,s.epoch,
  s.created_at,s.expires_at,s.idle_expires_at,s.revoked_at IS NOT NULL,p.disabled_at IS NOT NULL
  FROM hp_iam.sessions s JOIN hp_iam.principals p USING(principal_id) WHERE s.session_hash=$1`
