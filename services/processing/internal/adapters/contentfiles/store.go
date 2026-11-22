@@ -232,6 +232,11 @@ func (s *Store) Read(ctx context.Context, ref preparecase.Ref, now time.Time) ([
 	if !now.Before(h.Ref.ExpiresAt) {
 		return nil, preparecase.ErrContent
 	}
+	if ref.Class == "CASE_CONTEXT" || ref.Class == "HISTORY" {
+		if deleted, err := s.deleted(ref, h.Origin); deleted || err != nil {
+			return nil, preparecase.ErrContent
+		}
+	}
 	return b, nil
 }
 

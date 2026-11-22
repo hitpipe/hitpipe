@@ -46,6 +46,8 @@ type Config struct {
 	Delivery    Peer     `json:"delivery"`
 	BFFName     string   `json:"bff_name"`
 	OPSName     string   `json:"ops_name"`
+
+	RestoreCaseDeletion bool `json:"restore_case_deletion,omitempty"`
 }
 
 type TLSFiles struct {

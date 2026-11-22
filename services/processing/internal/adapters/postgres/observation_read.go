@@ -30,6 +30,9 @@ func (db CaseReadStore) observationView(ctx context.Context, tx pgx.Tx, r readca
 		return nil, false, nil, nil
 	}
 	b, e := db.Content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: ws, CaseID: r.Summary.CaseID, Revision: r.Summary.Revision}, now)
+	if errors.Is(e, readcases.ErrDeleted) {
+		return nil, false, nil, nil
+	}
 	if e != nil {
 		return nil, false, nil, readcases.ErrUnavailable
 	}

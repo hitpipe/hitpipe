@@ -16,6 +16,13 @@ func (s *Store) ReadOwned(ctx context.Context, ref preparecase.Ref, origin prepa
 	if s == nil || s.root == nil || ctx == nil || ctx.Err() != nil || now.IsZero() || !validOrigin(origin) {
 		return nil, readcases.ErrUnavailable
 	}
+	deleted, err := s.deleted(ref, origin)
+	if err != nil {
+		return nil, readcases.ErrUnavailable
+	}
+	if deleted {
+		return nil, readcases.ErrDeleted
+	}
 	h, b, e := s.read(ref.ID)
 	if e != nil {
 		return nil, readcases.ErrUnavailable

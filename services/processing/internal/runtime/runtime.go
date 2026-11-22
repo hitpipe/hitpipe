@@ -46,18 +46,20 @@ type clock struct{}
 func (clock) Now() time.Time { return time.Now().UTC() }
 
 type Runtime struct {
-	a           *access
-	servers     []*http.Server
-	pool        []*pgxpool.Pool
-	files       *contentfiles.Store
-	sender      dispatchintent.Service
-	queries     dispatchintent.Service
-	lifecycle   postgres.LifecycleStore
-	caseReaders sourceReaders
-	caseJobs    postgres.CaseJobStore
-	timeouts    postgres.CaseTimeoutStore
-	logger      *slog.Logger
-	diag        diagnostics
+	restoreRequired bool
+	restoreBarrier  RestoreBarrier
+	a               *access
+	servers         []*http.Server
+	pool            []*pgxpool.Pool
+	files           *contentfiles.Store
+	sender          dispatchintent.Service
+	queries         dispatchintent.Service
+	lifecycle       postgres.LifecycleStore
+	caseReaders     sourceReaders
+	caseJobs        postgres.CaseJobStore
+	timeouts        postgres.CaseTimeoutStore
+	logger          *slog.Logger
+	diag            diagnostics
 }
 
 func newPool(ctx context.Context, path, dbName, role string, size int32, stand bool) (*pgxpool.Pool, error) {
@@ -139,7 +141,7 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 		return nil, ErrConfig
 	}
 
-	rt := &Runtime{logger: logger, diag: diagnostics{logger: logger}}
+	rt := &Runtime{restoreRequired: c.RestoreCaseDeletion, logger: logger, diag: diagnostics{logger: logger}}
 	success := false
 	defer func() {
 		if !success {
@@ -380,7 +382,7 @@ func (rt *Runtime) Serve(ctx context.Context) error {
 }
 
 func (rt *Runtime) registration(ctx context.Context, stop <-chan struct{}) {
-	if len(rt.a.stand) == 0 {
+	if len(rt.a.stand) == 0 || (rt.restoreRequired && rt.restoreBarrier == nil) {
 		return
 	}
 	tick := time.NewTicker(time.Second)
@@ -392,7 +394,15 @@ func (rt *Runtime) registration(ctx context.Context, stop <-chan struct{}) {
 		default:
 		}
 		call, cancel := context.WithTimeout(ctx, protectedTime)
-		err := rt.a.iam.sync(call, rt.a.gate)
+		sync := func(c context.Context) error {
+			return rt.a.iam.sync(c, rt.a.gate)
+		}
+		var err error
+		if rt.restoreRequired {
+			err = rt.restoreBarrier(call, sync)
+		} else {
+			err = sync(call)
+		}
 		state, _ := rt.a.gate.State(call)
 		cancel()
 		if err == nil && state == startgate.Open {

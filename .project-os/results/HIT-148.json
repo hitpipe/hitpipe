@@ -1,0 +1,81 @@
+{
+  "subject": "HIT-148",
+  "authorship": "Codex по делегации Тимофея Патрушева (Tim1hik)",
+  "materialized_result": {
+    "implementation_status": "IMPLEMENTED_AND_VERIFIED_ON_ISOLATED_TEST",
+    "summary": "Processing применил подписанное точечное удаление, восстановил квитанцию после сбоя и повторно удалил те же версии из старой копии до синхронного открытия под WithCurrent. Настоящий IAM HIT-154 независимо проверил два применения.",
+    "contract_revision": 2,
+    "contract_fingerprint": "4f6de4914566687537272ebc38e95ab78c3297c0678319725a86d2585c92c7c5",
+    "base_sha": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+    "tested_code_sha": "107ed4e3ae0d43300a09dea10b2d43ad4423efc1",
+    "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "tested_iam_sha": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+    "pull_request": "https://github.com/hitpipe/hitpipe/pull/86"
+  },
+  "dependencies": [
+    {
+      "issue": "HIT-126",
+      "tested_sha": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-126?focusedCommentId=15122",
+      "inclusion": "Exact Git ancestor of base_sha"
+    },
+    {
+      "issue": "HIT-128",
+      "tested_sha": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-128?focusedCommentId=15934",
+      "inclusion": "Exact Git ancestor of base_sha with an empty Processing code diff"
+    },
+    {
+      "issue": "HIT-154",
+      "tested_sha": "c715a079ab57d4c9e7b56862f7f2584c792b74b0",
+      "review": "https://hitpipe.atlassian.net/browse/HIT-154?focusedCommentId=16317",
+      "inclusion": "Exact pinned separate IAM TEST binary; tested code is ancestor of PR #89 head"
+    }
+  ],
+  "changed_artifacts": [
+    "services/processing/cmd/processing-purge",
+    "services/processing/internal/adapters",
+    "services/processing/internal/runtime",
+    "services/processing/maintenance",
+    "services/processing/scripts/recovery/verify_deletion_inventory.py",
+    "tools/hit148",
+    "services/processing/docs/HIT-148",
+    ".project-os/results/HIT-148.json"
+  ],
+  "verification": {
+    "report": "services/processing/docs/HIT-148/README.md",
+    "runbook": "services/processing/docs/HIT-148/RUN_RU.md",
+    "source": "services/processing/docs/HIT-148/verification/applied/SOURCE.md",
+    "test": "services/processing/docs/HIT-148/verification/applied/RUNS.md",
+    "raw": "services/processing/docs/HIT-148/verification/applied/raw-local.tar.gz",
+    "ci": "https://github.com/hitpipe/hitpipe/pull/86/checks",
+    "real_case_application": "services/processing/docs/HIT-148/verification/applied/RUNTIME.md",
+    "ci_report": "services/processing/docs/HIT-148/verification/applied/CI.md"
+  },
+  "dod_evidence": [
+    {
+      "id": "8d0d1da9-f5a3-484e-8d94-7b99e7bedb42",
+      "observed_local": "PASS",
+      "observation": "Два синтетических пространства. Настоящий владелец и точные версии, отказы app/worker, чужой области, версии, поколения, источника и подменённого подтверждения."
+    },
+    {
+      "id": "5f9f0546-97ad-4d41-b2bc-ea98fc50a2f7",
+      "observed_local": "PASS",
+      "observation": "Два выбранных файла удалены. Общий файл, другие дела, соседнее пространство, обязательная история, исходные времена и SQL fence сохранены."
+    },
+    {
+      "id": "a021aaf4-88eb-4cbe-9819-360f189411aa",
+      "observed_local": "PASS",
+      "observation": "Разрыв после применения до принятия квитанции. Повтор сохранил точный результат, WithApplied проверил устойчивый эффект, readback вернул минимум. Отсутствие файла без отметки квитанцию не создало."
+    },
+    {
+      "id": "e24b6b04-15fa-4c03-8df2-0e991331d222",
+      "observed_local": "PASS",
+      "observation": "После восстановления старых SQL и файлов повторное применение в поколении 2. Старый снимок и отсутствие источника держали gate CLOSED. Синхронный переход под WithCurrent, история вернула 200, новых вызовов Delivery нет."
+    }
+  ],
+  "deviations": [],
+  "known_limitations": [
+    "Проверено на изолированном TEST с одним восстанавливаемым пространством и вторым контрольным. Обычный mTLS runtime-стенд управляемый, выдача и проверка удаления выполнены настоящим HIT-154."
+  ]
+}

@@ -1,0 +1,771 @@
+{
+  "scope": "Read-only inspection. No PostgreSQL, CLI deletion, or runtime executed.",
+  "started_at": "2026-11-21T17:01:35.749250+00:00",
+  "finished_at": "2026-11-21T17:01:35.983149+00:00",
+  "inputs": {
+    "architecture_manifest": "0ff88d118e39a5dfaa34540c0d621649c34655a7",
+    "formal_sources": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+    "verified_github_manifest_sources": 8,
+    "iam_source_head": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+    "processing_base": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+    "previous_pr_head": "68593bd3eb2edbe17cf3aefba153857f123546f7"
+  },
+  "canonical_results": {
+    "HIT-69": {
+      "result_commit": "fa01ea89ff72dcaaecef9c53f9fe1ffa41dea519",
+      "result_sha256": "9182f51d5f706405996320b096a30b5493c887348f2a336b088ff878db48b2a1",
+      "tested_code": "71bf6440d502cd7c5b488cdd968fa868c7aa5505",
+      "summary": "Изолированная защита начала работы одного процесса: закрыта до текущего снимка; фактическое начало и барьер используют одну блокировку; после ACK новое действие отозванного субъекта не начинается. Снимок и повышенная эпоха не снимают известный запрет. Результат не подключён к действующим сервисам."
+    },
+    "HIT-81": {
+      "result_commit": "60013536b69b4b8d7f99e7bddf714e6432f09a11",
+      "result_sha256": "0e35c7ea0b2dd4fb81a35d866f0e42cb056cbbfaabc18cedceaa6b47129e1b7e",
+      "tested_code": "829934b4dab057661f1a63d8cc009645d9f515e9",
+      "summary": "Добавлены отдельная административная подготовка ролей и команда установки точной принятой схемы IAM. Мигратор владеет схемой, прикладные роли разделены. Повторный запуск распознаёт версию1; частичная/чужая схема, ослабленные политики или права вызывают отказ без удаления/ремонта. Результат HIT-68 переиспользован, адаптер чтения не изменён."
+    },
+    "HIT-84": {
+      "result_commit": "fba9d664862adedd3df305e18e3c03fb95e0f95c",
+      "result_sha256": "2f423a1b3b16378d463657ce62e7112aa3eb4a61ae7bf878f31902e3d36f2a85",
+      "tested_code": "595223163e71cd418ee24401a71a898e10e565cd",
+      "summary": "Локальная проверка текущих прав IAM: сессия, членство и роль, доказанная область ресурса, runtime и обязательный допуск; отзыв, неизвестность, ошибка и старое доказательство не становятся разрешением."
+    },
+    "HIT-95": {
+      "result_commit": "ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8",
+      "result_sha256": "2a399fdeca1d74de5de775069f7726b9cc48edf88e4516c87d79cd5d06ce7082",
+      "tested_code": "15ed1e567907bee951715b3b025c657e2009044d",
+      "summary": "Полные защищённые owner listCases/getCase/getCaseHistory по CCR3; label из pinned config, утверждённый next_action и available_actions[], атомарная durable initial HISTORY, минимальная история после expiry/purge/restart."
+    },
+    "HIT-115": {
+      "result_commit": "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+      "result_sha256": "4898e674cb407f87dc153ada57c24b6f63bc521d16feadfb82f6b5ccf01798ff",
+      "tested_code": "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+      "summary": "Добавлены два приватных mTLS маршрута IAM8443. Регистрация проверяет инвентарь и записывает идентичность в PostgreSQL. Действующая авторизация IAM использует собственные текущие SQL-факты и один общий локальный startgate, который удерживается до фактического старта ответа."
+    },
+    "HIT-126": {
+      "result_commit": "d450efc7cfc11f8155a476304aced96dad0ebaf6",
+      "result_sha256": "982b609dbfd21e6e530f0c5a27d507d23e778461e4559f422be48d530139813e",
+      "tested_code": "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+      "summary": "Пакетная физическая очистка истёкшего содержимого Processing через отдельно разрешённую роль, с повторной проверкой refs и сохранением safety. Истёкшая доставка удерживается."
+    },
+    "HIT-128": {
+      "result_commit": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+      "result_sha256": "c5fcd517357bb5336181f55a14d886238ccac423d50bee557608bf7156e076fe",
+      "tested_code": "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+      "summary": "Локальное контролируемое восстановление минимального SQL состояния Processing в отдельную PostgreSQL 18.7. Сохранены fence, сроки и идентичность, проверены прерывание, закрытие и отсутствие повторного эффекта."
+    },
+    "HIT-137": {
+      "result_commit": "6bc4a32dacaf032bb1943efc29947eb42231b7bb",
+      "result_sha256": "c2f2c5acb41d47a18d394a1c0f6734b934a80267e6b4578c872b7205afffb814",
+      "tested_code": "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+      "summary": "В одном IAM checker совмещены повседневная проверка миграций, ролей и RLS и явный запуск замеров чтения сессий. Обе колеи проверены на чистом PostgreSQL 18.7."
+    }
+  },
+  "oas": {
+    "authorize_action_enum": [
+      "PROFILE_READ",
+      "PROFILE_WRITE",
+      "WORKSPACE_READ",
+      "WORKSPACE_MANAGE",
+      "CONFIG_READ",
+      "CONFIG_WRITE",
+      "ACTIVATE",
+      "CASE_READ",
+      "CASE_CONTEXT_WRITE",
+      "CASE_RECOVER",
+      "OWNER_CLOSE",
+      "EXPORT",
+      "CONNECTOR_READ",
+      "CONNECTOR_WRITE",
+      "AI_PREPARE"
+    ],
+    "runtime_deny_scope_enum": [
+      "SESSION",
+      "MEMBERSHIP",
+      "CONNECTION",
+      "WORKSPACE"
+    ],
+    "recovery_action_enum": [
+      "RECHECK",
+      "BIND_TASK",
+      "CLOSE_WITHOUT_CONFIRMATION",
+      "CONTINUE_SAFE",
+      "RECONSIDER",
+      "REOPEN_CLOSED"
+    ],
+    "public_delete_paths": [
+      "/api/v1/session"
+    ],
+    "denial_fields": [
+      "workspace_id",
+      "scope",
+      "subject_id",
+      "epoch",
+      "revocation_id",
+      "accepted_at",
+      "effective_at"
+    ],
+    "snapshot_fields": [
+      "runtime_id",
+      "generation",
+      "boot_id",
+      "snapshot_revision",
+      "denials",
+      "gate"
+    ],
+    "history_response_required": [
+      "entry_id",
+      "case_id",
+      "at",
+      "actor_kind",
+      "actor_id",
+      "old_state",
+      "new_state",
+      "reason_code",
+      "evidence_ref",
+      "episode_id",
+      "expires_at"
+    ],
+    "case_detail_response_required": [
+      "case",
+      "context",
+      "context_complete",
+      "context_expired",
+      "last_observation_at",
+      "observation_complete",
+      "available_actions",
+      "history_cursor"
+    ]
+  },
+  "commands": [
+    {
+      "label": "system-design-projection",
+      "argv": [
+        "git",
+        "show",
+        "0ff88d118e39a5dfaa34540c0d621649c34655a7:contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 251053,
+      "stdout_sha256": "ea552ae1906ae7998687fcdd6ea0b13ac8a9a31630c6f4cf8b82ba7867bfd8f4",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "global",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 134606,
+      "stdout_sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "discovery",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 7652,
+      "stdout_sha256": "7fa61bb6fa150c033c87c9b8fc2fa9ef06bb0bc7d87132a88229a783c6923c7d",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "product",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 17889,
+      "stdout_sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "architecture",
+      "argv": [
+        "git",
+        "show",
+        "b2461564e4355ea5a72a55a30a635655397c463b:contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 36710,
+      "stdout_sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "interface",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 94293,
+      "stdout_sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "persistence",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 55836,
+      "stdout_sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "stack",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 9581,
+      "stdout_sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "comparison",
+      "argv": [
+        "git",
+        "show",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 125080,
+      "stdout_sha256": "a1cbc99e4d5450d77d47a1967155d0e0288775eacadd22b313fc58d4e8f86741",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-69",
+      "argv": [
+        "git",
+        "show",
+        "fa01ea89ff72dcaaecef9c53f9fe1ffa41dea519:.project-os/results/HIT-69.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 10693,
+      "stdout_sha256": "9182f51d5f706405996320b096a30b5493c887348f2a336b088ff878db48b2a1",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-69-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "71bf6440d502cd7c5b488cdd968fa868c7aa5505",
+        "fa01ea89ff72dcaaecef9c53f9fe1ffa41dea519"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-81",
+      "argv": [
+        "git",
+        "show",
+        "60013536b69b4b8d7f99e7bddf714e6432f09a11:.project-os/results/HIT-81.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 21643,
+      "stdout_sha256": "0e35c7ea0b2dd4fb81a35d866f0e42cb056cbbfaabc18cedceaa6b47129e1b7e",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-81-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "829934b4dab057661f1a63d8cc009645d9f515e9",
+        "60013536b69b4b8d7f99e7bddf714e6432f09a11"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-84",
+      "argv": [
+        "git",
+        "show",
+        "fba9d664862adedd3df305e18e3c03fb95e0f95c:.project-os/results/HIT-84.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 5806,
+      "stdout_sha256": "2f423a1b3b16378d463657ce62e7112aa3eb4a61ae7bf878f31902e3d36f2a85",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-84-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "595223163e71cd418ee24401a71a898e10e565cd",
+        "fba9d664862adedd3df305e18e3c03fb95e0f95c"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-95",
+      "argv": [
+        "git",
+        "show",
+        "ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8:.project-os/results/HIT-95.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 4600,
+      "stdout_sha256": "2a399fdeca1d74de5de775069f7726b9cc48edf88e4516c87d79cd5d06ce7082",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-95-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "15ed1e567907bee951715b3b025c657e2009044d",
+        "ddcad3aa6ee26a67a7df7ec30e9e83600b4243e8"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-115",
+      "argv": [
+        "git",
+        "show",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e:.project-os/results/HIT-115.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 10629,
+      "stdout_sha256": "4898e674cb407f87dc153ada57c24b6f63bc521d16feadfb82f6b5ccf01798ff",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-115-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-126",
+      "argv": [
+        "git",
+        "show",
+        "d450efc7cfc11f8155a476304aced96dad0ebaf6:.project-os/results/HIT-126.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 4063,
+      "stdout_sha256": "982b609dbfd21e6e530f0c5a27d507d23e778461e4559f422be48d530139813e",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-126-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "d450efc7cfc11f8155a476304aced96dad0ebaf6"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128",
+      "argv": [
+        "git",
+        "show",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:.project-os/results/HIT-128.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 10587,
+      "stdout_sha256": "c5fcd517357bb5336181f55a14d886238ccac423d50bee557608bf7156e076fe",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-137",
+      "argv": [
+        "git",
+        "show",
+        "6bc4a32dacaf032bb1943efc29947eb42231b7bb:.project-os/results/HIT-137.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 5003,
+      "stdout_sha256": "c2f2c5acb41d47a18d394a1c0f6734b934a80267e6b4578c872b7205afffb814",
+      "stdout": null,
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-137-tested-code-in-result",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "28b9e6a8beecb2e9d1952b0af363c33c687e5d4e",
+        "6bc4a32dacaf032bb1943efc29947eb42231b7bb"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-126-included-in-PR86-base",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "4c2f1df34f7cf72ddb2de1f6888e033d035913ac",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128-included-in-PR86-base",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-128-Processing-code-identical",
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "68593bd3eb2edbe17cf3aefba153857f123546f7",
+        "--",
+        "services/processing",
+        ":(exclude)services/processing/docs"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "HIT-115-IAM-code-identical",
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "0ff7f039ccaf450d60a59cd9cc0504c13e032b08",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "--",
+        "services/iam/internal",
+        "services/platform/startgate"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "formal-IAM-storage",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "^CREATE TABLE (runtime_registry|revocations|deletion_overlays|deletion_receipts|support_grants|command_receipts|audit_minimal)",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "--",
+        "contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 3579,
+      "stdout_sha256": "0dd8f249ca98a552bfd0bde7ebca347e241e4d6864796f65c17f3d0e07bf3464",
+      "stdout": "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:19:CREATE TABLE revocations(workspace_id uuid,revocation_id uuid NOT NULL,scope text NOT NULL CHECK(scope IN('SESSION','MEMBERSHIP','CONNECTION','WORKSPACE')),subject_id uuid NOT NULL,epoch bigint NOT NULL CHECK(epoch>0),accepted_at timestamptz NOT NULL,deadline_at timestamptz NOT NULL,status text NOT NULL CHECK(status IN('PENDING','EFFECTIVE','INCIDENT')),effective_at timestamptz,reason_code text NOT NULL,deadline_breached_at timestamptz,incident_id uuid,PRIMARY KEY(revocation_id),UNIQUE(workspace_id,revocation_id),CHECK(deadline_at=accepted_at+interval'5seconds'),CHECK((status='EFFECTIVE')=(effective_at IS NOT NULL)));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:21:CREATE TABLE runtime_registry(runtime_id uuid PRIMARY KEY,service text NOT NULL CHECK(service IN('IAM','INTAKE','PROCESSING','DELIVERY','BFF','AI')),generation bigint NOT NULL CHECK(generation>0),boot_id uuid NOT NULL UNIQUE,certificate_fingerprint text NOT NULL CHECK(certificate_fingerprint~'^sha256:[0-9a-f]{64}$'),status text NOT NULL CHECK(status IN('CLOSED','SYNCING','OPEN','FENCED')),registered_at timestamptz NOT NULL,last_observed_at timestamptz NOT NULL,fence_evidence_ref uuid);\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:23:CREATE TABLE deletion_overlays(workspace_id uuid PRIMARY KEY,deletion_id uuid NOT NULL UNIQUE,confirmed_at timestamptz NOT NULL,active_deadline_at timestamptz NOT NULL,backup_deadline_at timestamptz NOT NULL,status text NOT NULL CHECK(status IN('CLOSING','PURGING','ACTIVE_PURGED','BACKUPS_PURGED','INCIDENT')),CHECK(active_deadline_at<=confirmed_at+interval'7days'),CHECK(backup_deadline_at<=confirmed_at+interval'35days'));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:24:CREATE TABLE deletion_receipts(workspace_id uuid NOT NULL,service text NOT NULL,active_purged_at timestamptz,backup_last_copy_expires_at timestamptz,receipt_digest text NOT NULL,PRIMARY KEY(workspace_id,service),FOREIGN KEY(workspace_id) REFERENCES deletion_overlays(workspace_id));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:25:CREATE TABLE support_grants(workspace_id uuid NOT NULL,grant_id uuid NOT NULL,support_principal_id uuid NOT NULL REFERENCES principals(principal_id),authorized_by uuid NOT NULL,action_code text NOT NULL,resource_id uuid NOT NULL,created_at timestamptz NOT NULL,expires_at timestamptz NOT NULL,revoked_at timestamptz,PRIMARY KEY(workspace_id,grant_id),CHECK(expires_at<=created_at+interval'1hour'),FOREIGN KEY(workspace_id,authorized_by) REFERENCES memberships(workspace_id,principal_id));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:26:CREATE TABLE command_receipts(workspace_id uuid NOT NULL,actor_id uuid NOT NULL,request_id uuid NOT NULL,body_digest text NOT NULL CHECK(body_digest~'^sha256:[0-9a-f]{64}$'),result_id uuid NOT NULL,result_kind text NOT NULL,created_at timestamptz NOT NULL,PRIMARY KEY(workspace_id,actor_id,request_id));\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/iam.sql:27:CREATE TABLE audit_minimal(workspace_id uuid NOT NULL,entry_id uuid NOT NULL,actor_id uuid,action_code text NOT NULL,resource_id uuid NOT NULL,at timestamptz NOT NULL,reason_code text NOT NULL,evidence_content_ref uuid,evidence_expires_at timestamptz,PRIMARY KEY(workspace_id,entry_id));\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "formal-Processing-rights",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "^GRANT .* ON (case_content|history_content|safety_history|user_commands) TO",
+        "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "--",
+        "contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/project-os",
+      "exit_code": 0,
+      "stdout_bytes": 1419,
+      "stdout_sha256": "e065fded1458488d29e08e5ae958fc1766cc9f6f85497e55880702ac43528ac9",
+      "stdout": "fedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:97:GRANT SELECT,INSERT,UPDATE ON case_content TO hp_processing_app,hp_processing_worker;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:98:GRANT SELECT,DELETE,INSERT,UPDATE ON case_content TO hp_processing_purge;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:102:GRANT SELECT,INSERT ON safety_history TO hp_processing_app,hp_processing_worker;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:103:GRANT SELECT,DELETE ON safety_history TO hp_processing_purge;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:107:GRANT SELECT,INSERT ON history_content TO hp_processing_app,hp_processing_worker;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:108:GRANT SELECT,DELETE ON history_content TO hp_processing_purge;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:112:GRANT SELECT,INSERT ON user_commands TO hp_processing_app,hp_processing_worker;\nfedbe40bb597e25f66aeb1172af3ff7459c81b40:contracts/hitpipe/mvp-2026-10-31/formal/sql/processing.sql:113:GRANT SELECT,DELETE ON user_commands TO hp_processing_purge;\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "IAM-accepted-actions",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "case \"PROFILE_READ\", \"PROFILE_WRITE\"|return proof.Operation == \"recoverCase\"|return proof.Operation == \"createWorkspace\"",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "--",
+        "services/iam/internal/application/authorizeaction/service.go"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 1075,
+      "stdout_sha256": "3f9d985f4903f19957a8904143ed2f09fd6604e417ff68de012be5b1a6d75e14",
+      "stdout": "c7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/application/authorizeaction/service.go:113:\tcase \"PROFILE_READ\", \"PROFILE_WRITE\", \"WORKSPACE_READ\", \"WORKSPACE_MANAGE\", \"CONFIG_READ\", \"CONFIG_WRITE\", \"ACTIVATE\", \"CASE_READ\", \"CASE_CONTEXT_WRITE\", \"CASE_RECOVER\", \"OWNER_CLOSE\", \"EXPORT\", \"CONNECTOR_READ\", \"CONNECTOR_WRITE\", \"AI_PREPARE\":\nc7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/application/authorizeaction/service.go:127:\t\tcase \"PROFILE_READ\", \"PROFILE_WRITE\", \"WORKSPACE_READ\", \"CASE_READ\", \"CASE_RECOVER\":\nc7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/application/authorizeaction/service.go:132:\t\tcase \"PROFILE_READ\", \"PROFILE_WRITE\", \"WORKSPACE_READ\", \"CONFIG_READ\", \"CASE_READ\":\nc7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/application/authorizeaction/service.go:151:\t\treturn proof.Operation == \"createWorkspace\"\nc7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/application/authorizeaction/service.go:180:\t\treturn proof.Operation == \"recoverCase\" && proof.RecoveryAction == \"RECHECK\"\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "IAM-registration-reads-revocations",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "const readDenials|accepted_at,effective_at,status FROM hp_iam.revocations",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "--",
+        "services/iam/internal/adapters/postgres/runtimeaccess/store.go"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 401,
+      "stdout_sha256": "9f1094fbf88fe2c1c2ca9fc8dd90ab05bfcea20b71a0354e735c38c49b554b59",
+      "stdout": "c7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/adapters/postgres/runtimeaccess/store.go:67:const readDenials = `SELECT workspace_id::text,scope,subject_id::text,revocation_id::text,epoch,\nc7a74f55ea8111fa290f803976d256cc8a4a202e:services/iam/internal/adapters/postgres/runtimeaccess/store.go:68: accepted_at,effective_at,status FROM hp_iam.revocations ORDER BY revocation_id LIMIT $1`\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "IAM-application-has-no-case-deletion-consumer",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-i",
+        "-E",
+        "support_grants|deletion_overlays|deletion_receipts|case_content_delet|delete_case_content|case_content_erase",
+        "c7a74f55ea8111fa290f803976d256cc8a4a202e",
+        "--",
+        "services/iam/internal",
+        ":(glob)**/*.go",
+        ":(exclude)services/iam/internal/adapters/postgres/migrations/**",
+        ":(exclude,glob)**/*_test.go",
+        ":(exclude,glob)**/*.sql"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "Processing-history-read",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "LEFT JOIN hp_processing.history_content|s.refID == nil|if !now.Before[(][*]s.expiry[)]|db.Content.ReadOwned",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing/internal/adapters/postgres/read_cases.go"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 1105,
+      "stdout_sha256": "aec0da4c64c96e5745b49979713e95e96b85af51d713445267ef10e032591262",
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/read_cases.go:295:\t\tb, e := db.Content.ReadOwned(ctx, f.ref, preparecase.Origin{WorkspaceID: ws, CaseID: rec.Summary.CaseID, Revision: rec.Summary.Revision}, now)\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/read_cases.go:338: FROM hp_processing.safety_history h LEFT JOIN hp_processing.history_content c ON (h.workspace_id,h.entry_id)=(c.workspace_id,c.entry_id)\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/read_cases.go:377:\t\tif s.newState == nil || !readcases.State(*s.newState) || s.refID == nil || s.hash == nil || s.bytes == nil || s.expiry == nil {\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/read_cases.go:386:\t\tif !now.Before(*s.expiry) {\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/read_cases.go:391:\t\tb, e := db.Content.ReadOwned(ctx, ref, preparecase.Origin{WorkspaceID: r.WorkspaceID, CaseID: r.CaseID, Revision: revision}, now)\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "Processing-age-bounded-sweep",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "now.Before[(]h.Ref.ExpiresAt[)]|singleRegular[(]current[)]|syncDir[(][)]|m.files.root.Remove",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing/internal/adapters/contentfiles/maintenance.go"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 710,
+      "stdout_sha256": "2ef65249d2083fc84cae5e000c1bb95fd894350546eff95b32983149c6799daf",
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/contentfiles/maintenance.go:45:\t\t\terr = errors.Join(err, m.files.syncDir())\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/contentfiles/maintenance.go:73:\t\t\tif !strings.EqualFold(h.Origin.WorkspaceID, workspace) || now.Before(h.Ref.ExpiresAt) {\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/contentfiles/maintenance.go:87:\t\t\tif err != nil || !singleRegular(current) || !os.SameFile(original, current) ||\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/contentfiles/maintenance.go:92:\t\t\tif err = m.files.root.Remove(name); err != nil {\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "Processing-restore-current-hold",
+      "argv": [
+        "git",
+        "grep",
+        "-n",
+        "-E",
+        "ordinary configuration without authoritative stand inputs|target with wrong generation|target with fresh boot and generation",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing/internal/adapters/postgres/recovery_process_test.go"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit148-case-content-deletion",
+      "exit_code": 0,
+      "stdout_bytes": 617,
+      "stdout_sha256": "10a470b927dd858c03e5e19428194d459715d9a67b5bcf5ce837d145045de4cf",
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/recovery_process_test.go:326:\tstand.recoveryHealth(t, normal, \"ordinary configuration without authoritative stand inputs\", \"CLOSED\")\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/recovery_process_test.go:338:\tstand.recoveryHealth(t, restored, \"target with wrong generation\", \"CLOSED\")\n8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/internal/adapters/postgres/recovery_process_test.go:340:\tstand.recoveryHealth(t, restored, \"target with fresh boot and generation\", \"READY\")\n",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
