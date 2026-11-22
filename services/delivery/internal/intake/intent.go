@@ -119,6 +119,11 @@ func DecodeIntent(data []byte) (Intent, error) {
 		return Intent{}, err
 	}
 	payload["context"] = fields["context"]
+	// Persist the exact accepted destination alongside the rendered content.
+	// The dispatch worker never substitutes destination values from current config.
+	for _, name := range []string{"destination_workspace_id", "target_list_id", "assignee_id", "config_digest"} {
+		payload[name] = fields[name]
+	}
 	i.Content, err = canonicalObject(payload)
 	if err != nil {
 		return Intent{}, invalid{}
