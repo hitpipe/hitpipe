@@ -91,6 +91,9 @@ func DecodeIntent(data []byte) (Intent, error) {
 	if err != nil {
 		return Intent{}, invalid{}
 	}
+	// The worker must be able to recover the exact accepted target after a restart.
+	// The existing private, digest-checked content file holds those values.
+	payload := make(map[string]json.RawMessage)
 	for name, target := range map[string]*string{
 		"destination_workspace_id": &i.DestinationWorkspace, "target_list_id": &i.List,
 		"assignee_id": &i.Assignee,
@@ -99,9 +102,9 @@ func DecodeIntent(data []byte) (Intent, error) {
 		if err != nil {
 			return Intent{}, err
 		}
+		payload[name] = fields[name]
 	}
 
-	payload := make(map[string]json.RawMessage)
 	for name, maximum := range map[string]int{
 		"title": 255, "service_label": 120, "source_session_id": 255, "order_reference": 64,
 		"case_marker": 255, "rendered_handoff_block": maxBlockBytes,

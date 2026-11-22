@@ -248,6 +248,17 @@ func TestPostgresDurableIntake(t *testing.T) {
 	if err != nil || string(payload) != string(intent.Content) {
 		t.Fatalf("stored payload did not round-trip: %v", err)
 	}
+	var target struct {
+		Workspace string `json:"destination_workspace_id"`
+		List      string `json:"target_list_id"`
+		Assignee  string `json:"assignee_id"`
+	}
+	if err := json.Unmarshal(payload, &target); err != nil {
+		t.Fatal(err)
+	}
+	if target.Workspace != intent.DestinationWorkspace || target.List != intent.List || target.Assignee != intent.Assignee {
+		t.Fatal("committed content did not preserve the accepted destination")
+	}
 
 	var visible int
 	tenantTx, err := app.Begin(ctx)
