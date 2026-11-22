@@ -123,9 +123,9 @@ func New(ctx context.Context, c Config, revision, standPath string, logger *slog
 	if err != nil {
 		return nil, err
 	}
-	boot, err := drafts.NewID()
+	boot, err := startupBoot(c, clientCert.Certificate[0])
 	if err != nil {
-		return nil, ErrUnavailable
+		return nil, err
 	}
 	id := startgate.Identity{RuntimeID: c.Identity, BootID: boot, Generation: c.Generation}
 	g, err := startgate.New(id)

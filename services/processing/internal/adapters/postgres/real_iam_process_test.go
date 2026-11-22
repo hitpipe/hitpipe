@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -28,6 +29,7 @@ type iamTrace struct {
 	RuntimeID  string `json:"runtime_id"`
 	BootID     string `json:"boot_id"`
 	Generation int64  `json:"generation"`
+	Gate       string `json:"gate"`
 }
 
 func awaitIAMTrace(t *testing.T, path string, want func(iamTrace) bool) iamTrace {
@@ -99,6 +101,7 @@ func seedIAMWorkspace(t *testing.T, st *processStand, ws string) {
 		{"INSERT INTO hp_iam.sessions(session_id,session_hash,principal_id,csrf_hash,created_at,expires_at,idle_expires_at,epoch) VALUES($1,$2,$3,$4,now(),now()+interval '1 hour',now()+interval '30 minutes',7)", []any{st.session, session[:], owner, csrf[:]}},
 		{"INSERT INTO hp_iam.workspaces(workspace_id,name_content_ref,revision,security_epoch,lifecycle,created_at) VALUES($1,$2,1,7,'ACTIVE',now())", []any{ws, config}},
 		{"INSERT INTO hp_iam.memberships(workspace_id,principal_id,role,status,revision,accepted_at) VALUES($1,$2,'OWNER','ACTIVE',1,now())", []any{ws, owner}},
+		{"INSERT INTO hp_iam.external_bindings(workspace_id,grant_id,provider,provider_account_id,livemode,pack,status,security_epoch,created_at,verified_at) VALUES($1,$2,'CLICKUP','synthetic',false,'PAID_ORDER_TASK_V1','VERIFIED',7,now(),now())", []any{ws, destination}},
 	} {
 		if _, err := tx.Exec(t.Context(), s.sql, s.args...); err != nil {
 			t.Fatal("seed disposable IAM owner, workspace and session")
@@ -124,11 +127,12 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	seedIAMWorkspace(t, st, ws)
 
 	// The fixed binding belongs to TEST provisioning, never to the incoming
-	// registration. The standalone process selects its own boot on each launch.
+	// registration. Both processes receive it through their trusted local inputs.
 	boot, _ := newID()
 	iamRuntime, _ := newID()
 	iamBoot, _ := newID()
 	revokeID, _ := newID()
+	missingACK, _ := newID()
 	leaf := st.pki.Issue(t, "iam.test", net.ParseIP("127.0.0.2"), true, false)
 	cert, key := st.keypair("real-iam", leaf)
 	iamClient := st.pki.Leaf(t, "iam.test", false, false)
@@ -137,6 +141,14 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	procCert, err := tls.LoadX509KeyPair(filepath.Join(st.dir, "processing-client.pem"), filepath.Join(st.dir, "processing-client.key"))
 	if err != nil {
 		t.Fatal(err)
+	}
+	controlCert, err := tls.LoadX509KeyPair(filepath.Join(st.dir, "processing.pem"), filepath.Join(st.dir, "processing.key"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	controlPin := fmt.Sprintf("sha256:%x", sha256.Sum256(controlCert.Certificate[0]))
+	if controlPin == st.cert {
+		t.Fatal("registration and control pins must differ")
 	}
 	registration := drafts.RuntimeRegistration{RuntimeID: st.identity, Service: "PROCESSING", Generation: 2, BootID: boot, CertificateFingerprint: st.cert}
 	raw, err := os.ReadFile(st.config)
@@ -162,7 +174,8 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 			"dns_name": "iam.test", "certificate_fingerprint": "sha256:" + hex.EncodeToString(iamFingerprint[:])},
 		"Processing": binding, "CA": filepath.Join(st.dir, "ca.pem"), "Certificate": cert, "Key": key,
 		"ClientCertificate": clientCert, "ClientKey": clientKey,
-		"Workspace": ws, "Revocation": revokeID, "Dir": st.dir,
+		"Workspace": ws, "Revocation": revokeID, "MissingACK": missingACK, "Dir": st.dir,
+		"Owner": owner, "Session": st.session, "Destination": destination, "ProcessingControlPin": controlPin,
 	})
 	command := exec.Command(iam, cfg)
 	command.Stdout, command.Stderr = trace, trace
@@ -180,20 +193,49 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	awaitIAMTrace(t, tracePath, func(e iamTrace) bool { return e.Message == "iam-listening" })
 
 	const register = "/internal/v1/runtime/register"
+	history := "/api/v1/workspaces/" + ws + "/cases/" + f.request.CaseID + "/history"
+	headers := map[string]string{"X-HitPipe-Session": st.token}
+	unbound := st.boot("unbound")
+	st.pollHealth(unbound, "CLOSED")
+	rejected := awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
+		return e.Message == "iam-register" && e.Status == 403 && e.RuntimeID == st.identity &&
+			e.Generation == 2 && e.BootID != "" && e.BootID != boot
+	})
+	st.must("bff.test", "8443", "GET", history, nil, headers, 503)
+	if err := unbound.cmd.Process.Kill(); err != nil {
+		t.Fatal(err)
+	}
+	<-unbound.done
+	t.Logf("HTTP 403 for unprovisioned boot %s, protected HTTP 503 while CLOSED", rejected.BootID)
+
+	// The first registered incarnation follows an unadmitted process. No
+	// old admitted runtime is replaced without a fence.
+	provisionDir := filepath.Join(st.dir, "boot-provision")
+	if err := os.Mkdir(provisionDir, 0700); err != nil {
+		t.Fatal(err)
+	}
+	provision := st.file("boot-provision/identity", []byte(fmt.Sprintf("%s\n%d\n%s\n%s\n",
+		registration.RuntimeID, registration.Generation, registration.BootID, registration.CertificateFingerprint)))
+	options["boot_identity_file"] = provision
+	st.config = st.json("real-processing.json", options)
+	st.waitDelivery.Store(true)
+	p := st.boot("provisioned")
+	st.pollHealth(p, "CLOSED")
+	awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
+		return e.Message == "iam-register" && e.Status == 200 && e.BootID == boot && e.Gate == "SYNCING"
+	})
+	st.must("bff.test", "8443", "GET", history, nil, headers, 503)
+	if st.deliveryCount.Load() != 0 {
+		t.Fatal("a CLOSED process started Delivery")
+	}
 	code, payload, err := postIAMFixture(t, st, procCert, register, "", registration)
 	var current drafts.RuntimeSnapshot
 	if err != nil || code != 200 || draftjson.Validate("RuntimeSnapshot", payload) != nil ||
 		json.Unmarshal(payload, &current) != nil || current.Gate != "SYNCING" || current.BootID != boot ||
 		current.Generation != 2 || current.RuntimeID != st.identity {
-		t.Fatalf("expected a real matching SYNCING snapshot, code=%d: %v", code, err)
+		t.Fatalf("expected matching actual SYNCING snapshot, code=%d: %v", code, err)
 	}
-	awaitIAMTrace(t, tracePath, func(e iamTrace) bool { return e.Message == "iam-gate-open" })
-	code, again, err := postIAMFixture(t, st, procCert, register, "", registration)
-	var repeated drafts.RuntimeSnapshot
-	if err != nil || code != 200 || json.Unmarshal(again, &repeated) != nil || repeated.Gate != "SYNCING" || repeated.SnapshotRevision <= current.SnapshotRevision {
-		t.Fatal("fresh matching remote registration after IAM opened did not stay SYNCING", code)
-	}
-	t.Logf("exact provisioning, actual IAM HTTP 200 before and after local IAM OPEN: %s / %s", payload, again)
+	t.Logf("actual IAM SYNCING snapshot %s", payload)
 
 	gate, err := startgate.New(startgate.Identity{RuntimeID: current.RuntimeID, BootID: current.BootID, Generation: 3})
 	if err != nil {
@@ -203,7 +245,6 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 		Generation: uint64(current.Generation), SnapshotRevision: uint64(current.SnapshotRevision), Gate: startgate.State(current.Gate)}); !errors.Is(err, startgate.ErrIdentity) {
 		t.Fatal("current generation accepted the genuine old IAM snapshot", err)
 	}
-	t.Log("actual generation=2 snapshot rejected by generation=3 startgate")
 	old := registration
 	old.Generation--
 	code, _, err = postIAMFixture(t, st, procCert, register, "", old)
@@ -214,62 +255,76 @@ func TestRealIAMRegistrationBoundary(t *testing.T) {
 	if code, _, err = postIAMFixture(t, st, foreign, register, "", registration); err == nil || code != 0 {
 		t.Fatal("wrong service principal received an HTTP response", code)
 	}
-	t.Log("old generation registration HTTP 403, wrong mTLS principal rejected at TLS")
-	code, _, err = postIAMFixture(t, st, procCert, "/internal/v1/authorize", st.token,
-		drafts.AuthorizeRequest{WorkspaceID: ws, RuntimeID: st.identity, Action: "CONFIG_READ"})
-	if err != nil || code != 403 {
-		t.Fatal("authorized-use probe did not reject the remote SYNCING row", code, err)
-	}
-	t.Log("actual IAM authorize for valid TEST session and registered remote SYNCING runtime HTTP 403")
+	t.Log("old generation: HTTP 403 and stale snapshot ErrIdentity. Wrong principal: mTLS rejected.")
+	st.file("open-iam", nil)
+	awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
+		return e.Message == "iam-register" && e.Status == 200 && e.BootID == boot && e.Gate == "OPEN"
+	})
+	st.pollHealth(p, "READY")
+	health := st.must("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 200)
+	st.must("bff.test", "8443", "GET", history, nil, headers, 200)
+	t.Logf("SYNCING → genuine IAM OPEN → protected HTTP 200; OPS %s", health)
 
-	check := func(name, previousBoot string) (*processingChild, string) {
-		p := st.boot(name)
-		st.pollHealth(p, "CLOSED")
-		trace := awaitIAMTrace(t, tracePath, func(e iamTrace) bool {
-			return e.Message == "iam-register" && e.Status == 403 && e.RuntimeID == st.identity &&
-				e.Generation == 2 && e.BootID != "" && e.BootID != boot && e.BootID != previousBoot
-		})
-		health := st.must("ops.test", "9444", "GET", "/internal/v1/health/processing", nil, nil, 200)
-		st.must("bff.test", "8443", "GET", "/api/v1/workspaces/"+ws+"/operations", nil,
-			map[string]string{"X-HitPipe-Session": st.token}, 503)
-		t.Logf("%s boot=%s, actual IAM registration HTTP 403, protected call HTTP 503, OPS HTTP 200 %s", name, trace.BootID, health)
-		return p, trace.BootID
+	select {
+	case message := <-st.deliverySeen:
+		if message != result.MessageID {
+			t.Fatal("unexpected synthetic message", message)
+		}
+	case <-time.After(6 * time.Second):
+		t.Fatal("genuine IAM permit did not allow the first Delivery start")
 	}
-	p, first := check("first-start", "")
-	if err = p.cmd.Process.Kill(); err != nil {
+	t.Logf("synthetic Delivery accepted first HTTP start %s and held its response", result.MessageID)
+	st.file("revoke", nil)
+	if err := waitIAMFile(t, st.dir, "effective-observed", 5*time.Second); err != nil {
+		t.Fatal(err)
+	}
+	st.must("bff.test", "8443", "GET", history, nil, headers, 403)
+	t.Log("protected request after effective revocation: HTTP 403")
+	select {
+	case msg := <-st.deliverySeen:
+		t.Fatal("old epoch started a new HTTP request", msg)
+	case <-time.After(2300 * time.Millisecond):
+	}
+	state, _, _, attempts := (sendFixture{f: f, message: result.MessageID}).outbox(t)
+	if state != "CLAIMED" || attempts != 1 || st.deliveryCount.Load() != 1 {
+		t.Fatal("in-flight request unexpectedly finalized, retried or repeated", state, attempts, st.deliveryCount.Load())
+	}
+	t.Logf("held request after ACK and timeout: outbox=%s attempts=%d Delivery_HTTP_starts=%d", state, attempts, st.deliveryCount.Load())
+	if err := p.cmd.Process.Kill(); err != nil {
 		t.Fatal(err)
 	}
 	<-p.done
-	check("restart", first)
-	control, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Second}, "tcp", "127.0.0.1:9443",
-		&tls.Config{RootCAs: st.pki.Root, Certificates: []tls.Certificate{iamClient},
-			MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13})
-	if err != nil {
-		t.Fatal("could not inspect the actual Processing control certificate", err)
+	replay := st.boot("reused-provision")
+	select {
+	case err := <-replay.done:
+		if err == nil {
+			t.Fatal("a reused provision started successfully")
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("a reused provision did not fail before registration")
 	}
-	serverHash := sha256.Sum256(control.ConnectionState().PeerCertificates[0].Raw)
-	_ = control.Close()
-	serverPin := "sha256:" + hex.EncodeToString(serverHash[:])
-	if serverPin == st.cert {
-		t.Fatal("the stand must use distinct outbound and control certificates")
-	}
-	t.Logf("control TLS leaf=%s; registered outbound leaf=%s", serverPin, st.cert)
-	if err := os.WriteFile(filepath.Join(st.dir, "revoke"), nil, 0600); err != nil {
-		t.Fatal(err)
-	}
+	st.file("revoke-without-processing", nil)
 	select {
 	case err := <-done:
 		if err != nil {
-			t.Fatal("IAM coordinator did not complete the no-ACK observation", err)
+			t.Fatal("real IAM coordinator failed its missing-ACK verification", err)
 		}
-	case <-time.After(10 * time.Second):
-		t.Fatal("IAM coordinator no-ACK observation timed out")
+	case <-time.After(9 * time.Second):
+		t.Fatal("real IAM missing-ACK verification timed out")
 	}
-	if _, err := os.Stat(filepath.Join(st.dir, "incident-observed")); err != nil {
-		t.Fatal("missing durable incident observation", err)
+	t.Log("reused provision rejected, absent Processing remained missing, IAM recorded INCIDENT")
+}
+
+func waitIAMFile(t *testing.T, dir, name string, limit time.Duration) error {
+	t.Helper()
+	deadline := time.Now().Add(limit)
+	for time.Now().Before(deadline) {
+		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
+			return nil
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return err
+		}
+		time.Sleep(20 * time.Millisecond)
 	}
-	if st.deliveryCount.Load() != 0 {
-		t.Fatal("a closed Processing dispatched the seeded outbox")
-	}
-	t.Log("BLOCKED: no protected start, no create, no accepted remote OPEN and no EFFECTIVE revocation")
+	return fmt.Errorf("IAM observation missing: %s", name)
 }

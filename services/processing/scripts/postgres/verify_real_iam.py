@@ -9,7 +9,7 @@ import uuid
 
 import verify
 
-IAM_HEAD = "ae5fd0f35ec7d5097cace75b3b15ecb14042c654"
+IAM_HEAD = "e1be0c1a0be577a3626a3e120707b3aeeb579c6f"
 IAM_SCHEMA = "604d693ff49ccde71755d2b7afccaa0e9b96f03fef2d2c0e420c08c7ab59bef7"
 
 
@@ -99,8 +99,8 @@ class Run(verify.Run):
         super().main()
         path = self.output / "summary.json"
         result = json.loads(path.read_text())
-        result.update(status="BLOCKED_REPRODUCED", iam_source_sha=IAM_HEAD,
-                      scope="Negative real-IAM startup and missing-ACK deadline; independent controlled HIT-111 regression.")
+        result.update(status="PASS", iam_source_sha=IAM_HEAD,
+                      scope="Real IAM startup, two authenticated control ACKs and missing-ACK deadline; controlled HIT-111 regression.")
         path.write_text(json.dumps(result, indent=2) + "\n")
 
 
