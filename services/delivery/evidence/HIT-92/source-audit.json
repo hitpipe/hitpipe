@@ -1,0 +1,207 @@
+{
+  "subject": "HIT-92",
+  "contract_revision": 2,
+  "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_commit": "42f3df82f1f73ddd45fb1c22d59d5d843b876c45",
+  "dependencies": [
+    {
+      "issue": "HIT-91",
+      "jira_status": "Готово",
+      "review": "PASS",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/93",
+      "merged": false,
+      "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+      "reused": "Квитанция, сохранённое намерение, идентификаторы и проверка частного файла; точное назначение расширено в этом же формате файла."
+    },
+    {
+      "issue": "HIT-70",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/49",
+      "merged": false,
+      "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+      "reused": "Миграция owner PostgreSQL, роли, RLS, состояния, ограничения и неизменяемый fence.",
+      "ddl_sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e"
+    }
+  ],
+  "systemdesign": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+  "source_manifest": [
+    {
+      "source_id": "global",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b"
+      }
+    },
+    {
+      "source_id": "discovery",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "7fa61bb6fa150c033c87c9b8fc2fa9ef06bb0bc7d87132a88229a783c6923c7d"
+      }
+    },
+    {
+      "source_id": "product",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3"
+      }
+    },
+    {
+      "source_id": "architecture",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+        "revision": "b2461564e4355ea5a72a55a30a635655397c463b",
+        "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a"
+      }
+    },
+    {
+      "source_id": "interface",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+      }
+    },
+    {
+      "source_id": "persistence",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb"
+      }
+    },
+    {
+      "source_id": "stack",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
+      }
+    },
+    {
+      "source_id": "comparison",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "a1cbc99e4d5450d77d47a1967155d0e0288775eacadd22b313fc58d4e8f86741"
+      }
+    },
+    {
+      "source_id": "lead-scope",
+      "source_ref": {
+        "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10908",
+        "revision": "2026-10-31T11:29:51.893+0300",
+        "sha256": "310d84fd402ec9b3391c81e525aacc9e38104d31f73d0caab406f3753a7af999"
+      }
+    },
+    {
+      "source_id": "scope-table",
+      "source_ref": {
+        "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10859",
+        "revision": "2026-10-30T17:34:17.216+0300",
+        "sha256": "f87f2618eaf4bf17f4e8117477f56a0b6e1d2df7ac044d580e316d75837360b7"
+      }
+    }
+  ],
+  "provider_reference": "https://developer.clickup.com/reference/createtask",
+  "postgresql_patch": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md",
+  "files": [
+    {
+      "path": "services/delivery/docs/dispatch.md",
+      "git_blob": "cc223360de3dc8727f33422adabff50d6ada6db5",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/docs/dispatch.md"
+    },
+    {
+      "path": "services/delivery/go.mod",
+      "git_blob": "f74dcefd3ee8a1ae82283dbc1e69cfa62a3fcbf9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/go.mod"
+    },
+    {
+      "path": "services/delivery/go.sum",
+      "git_blob": "4367cf547c0237138a1357a8812be36c22059ed2",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/go.sum"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/clickup.go",
+      "git_blob": "cad9ce682c2686540b00f2b3ef51f6960b1cdda1",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/clickup.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/dispatch_linux_test.go",
+      "git_blob": "1e97ebb41684e858006bd36c30f300f9d8246670",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/dispatch_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/postgres.go",
+      "git_blob": "f7b1364af8e40de95cee1df5f3945afbe1d25c0d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/postgres.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/revoke_linux_test.go",
+      "git_blob": "f1308be164ec92e0fc8913106848a6dced8f30cb",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/revoke_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/worker.go",
+      "git_blob": "b64f5c1c541aaf5a0fcd786b30b84684841ea84f",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/dispatch/worker.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/content_linux.go",
+      "git_blob": "cff1912f7e1854161d180c51045543dbb703f68c",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/content_linux.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/http.go",
+      "git_blob": "1101a9700d30c9a80a97a4e82796685e0e9239a4",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/http.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/http_test.go",
+      "git_blob": "ad0474211fc3e80bbe6bf73eeb8ec3e51a075f8d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/http_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/intent.go",
+      "git_blob": "cd2b9941934c795ca53db661adb9086b87f7dcbf",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/intent.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/intent_test.go",
+      "git_blob": "b5fb1bd6692e10e1539d288136f715e27ecf3128",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/intent_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/postgres.go",
+      "git_blob": "5ac98000497a7a6172e81a6d6ac77190e52596c9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/postgres.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/postgres_linux_test.go",
+      "git_blob": "bb7407b398146912b656c68323ab20d40eb97a18",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/postgres_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/service.go",
+      "git_blob": "9546d1e061fd1f340779d895c897d0e170b7af7d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/internal/intake/service.go"
+    },
+    {
+      "path": "services/delivery/migrations/001_delivery.sql",
+      "git_blob": "657a06ca5ec8cdee020c2ab0037a72f421f33e84",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/migrations/001_delivery.sql"
+    },
+    {
+      "path": "services/delivery/tests/hit91_fixture.sql",
+      "git_blob": "91ea3746dee49135814eaa1281125ae7bd93be29",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/tests/hit91_fixture.sql"
+    },
+    {
+      "path": "services/delivery/tests/run_hit91.ps1",
+      "git_blob": "3a717e9323ed3e2a1f654e1a3efb187d85aa8097",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/42f3df82f1f73ddd45fb1c22d59d5d843b876c45/services/delivery/tests/run_hit91.ps1"
+    }
+  ]
+}
