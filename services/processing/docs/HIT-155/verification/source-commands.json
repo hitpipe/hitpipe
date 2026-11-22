@@ -1,0 +1,609 @@
+{
+  "integration_sha": "1ed91653a747b47a98f2738ca0d831a38cebc98a",
+  "merge_sha": "d2083e0317c507e1ac32180b6f156003969e04cd",
+  "common_base": "49229e1db3f371a051a022ea9e31951dd558eecb",
+  "observed_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "recorded_at": "2026-11-22T13:42:46.382824+00:00",
+  "tested_dependencies": {
+    "HIT-145": {
+      "head": "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+      "tested": "30385d09962c3fa4aad4808253a5493235559d01"
+    },
+    "HIT-128": {
+      "head": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+      "tested": "c426dc400a4bec03fafba72e2a5780c9d85af1e2"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "2083f8916d3e7e30eb62092d4d3a0c478079d84828536f2d404f5bdc86ba6715",
+      "stderr": "",
+      "stdout": "1ed91653a747b47a98f2738ca0d831a38cebc98a\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--all",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "e67700b6efbca47c385c70125b72316d0f95b45c7775fb1d856dee724018fe1c",
+      "stderr": "",
+      "stdout": "49229e1db3f371a051a022ea9e31951dd558eecb\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "-s",
+        "--format=%P",
+        "d2083e0317c507e1ac32180b6f156003969e04cd"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 82,
+      "stdout_sha256": "193605c20034f3549a1cada7d1817d6021d8d828c483fa9d7640ae82e0dead2d",
+      "stderr": "",
+      "stdout": "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3 4a551a9bb17c0961562b51ceb85bb1e53862bbde\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "30385d09962c3fa4aad4808253a5493235559d01",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "30385d09962c3fa4aad4808253a5493235559d01",
+        "d2083e0317c507e1ac32180b6f156003969e04cd"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "30385d09962c3fa4aad4808253a5493235559d01",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "30385d09962c3fa4aad4808253a5493235559d01",
+        "ce771d37505e7770003d0796ae932556d06b7bab"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "30385d09962c3fa4aad4808253a5493235559d01",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+        "--",
+        "services/processing",
+        ":(exclude)services/processing/docs"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "d2083e0317c507e1ac32180b6f156003969e04cd"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "ce771d37505e7770003d0796ae932556d06b7bab"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "c426dc400a4bec03fafba72e2a5780c9d85af1e2",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "--",
+        "services/processing",
+        ":(exclude)services/processing/docs"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "stdout": "",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 2180,
+      "stdout_sha256": "633334dd59ddbd5eeaa883762d123cab183638dfbfdb79446604e2a12617e0a3",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-145.json\nservices/processing/Dockerfile\nservices/processing/Dockerfile.dockerignore\nservices/processing/docs/HIT-145/README.md\nservices/processing/docs/HIT-145/RUN_RU.md\nservices/processing/docs/HIT-145/processing.example.json\nservices/processing/docs/HIT-145/verification/ci-commands.json\nservices/processing/docs/HIT-145/verification/ci-evidence.md\nservices/processing/docs/HIT-145/verification/ci-pr.json\nservices/processing/docs/HIT-145/verification/ci-processing-push.json\nservices/processing/docs/HIT-145/verification/ci-processing.json\nservices/processing/docs/HIT-145/verification/clean-copy-build-metadata.json\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stderr\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stdout\nservices/processing/docs/HIT-145/verification/clean-copy-image-identity.json\nservices/processing/docs/HIT-145/verification/clean-copy-summary.json\nservices/processing/docs/HIT-145/verification/first-build-metadata.json\nservices/processing/docs/HIT-145/verification/first-driver.stderr\nservices/processing/docs/HIT-145/verification/first-driver.stdout\nservices/processing/docs/HIT-145/verification/first-image-identity.json\nservices/processing/docs/HIT-145/verification/first-summary.json\nservices/processing/docs/HIT-145/verification/image-details.json\nservices/processing/docs/HIT-145/verification/original-runs-manifest.json\nservices/processing/docs/HIT-145/verification/original-runs.tar.gz\nservices/processing/docs/HIT-145/verification/source-commands.json\nservices/processing/docs/HIT-145/verification/source-evidence.md\nservices/processing/docs/HIT-145/verification/source-go-race.stderr\nservices/processing/docs/HIT-145/verification/source-go-race.stdout\nservices/processing/docs/HIT-145/verification/source-go-vet.stderr\nservices/processing/docs/HIT-145/verification/source-go-vet.stdout\nservices/processing/docs/HIT-145/verification/source-scope.stdout\nservices/processing/docs/HIT-145/verification/test-evidence.md\nservices/processing/internal/adapters/postgres/image_process_test.go\nservices/processing/scripts/postgres/verify.py\nservices/processing/scripts/postgres/verify_image.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 15670,
+      "stdout_sha256": "ea3295b12ba77f005c09d75c386ffc4918d2395fe55d9f3246645addf42262ba",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-112.json\n.project-os/results/HIT-113.json\n.project-os/results/HIT-114.json\n.project-os/results/HIT-126.json\n.project-os/results/HIT-127.json\n.project-os/results/HIT-128.json\nservices/processing/cmd/processing-purge/main.go\nservices/processing/docs/HIT-112/README.md\nservices/processing/docs/HIT-112/evidence-digests.json\nservices/processing/docs/HIT-112/source-audit.json\nservices/processing/docs/HIT-112/verification/ci-evidence.json\nservices/processing/docs/HIT-112/verification/commands.json\nservices/processing/docs/HIT-112/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-112/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-112/verification/go-build.stderr\nservices/processing/docs/HIT-112/verification/go-build.stdout\nservices/processing/docs/HIT-112/verification/go-race.stderr\nservices/processing/docs/HIT-112/verification/go-race.stdout\nservices/processing/docs/HIT-112/verification/go-version.stderr\nservices/processing/docs/HIT-112/verification/go-version.stdout\nservices/processing/docs/HIT-112/verification/go-vet.stderr\nservices/processing/docs/HIT-112/verification/go-vet.stdout\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-112/verification/postgres-version.stderr\nservices/processing/docs/HIT-112/verification/postgres-version.stdout\nservices/processing/docs/HIT-112/verification/raw-run.tar.gz\nservices/processing/docs/HIT-112/verification/review-commands.json\nservices/processing/docs/HIT-112/verification/runtime-binary.json\nservices/processing/docs/HIT-112/verification/summary.json\nservices/processing/docs/HIT-112/verification/test-binary.json\nservices/processing/docs/HIT-112/verification/test-evidence.json\nservices/processing/docs/HIT-113/README.md\nservices/processing/docs/HIT-113/evidence-digests.json\nservices/processing/docs/HIT-113/field-map.md\nservices/processing/docs/HIT-113/source-audit.json\nservices/processing/docs/HIT-113/verification/ci-evidence.json\nservices/processing/docs/HIT-113/verification/commands.json\nservices/processing/docs/HIT-113/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-113/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-113/verification/go-build.stderr\nservices/processing/docs/HIT-113/verification/go-build.stdout\nservices/processing/docs/HIT-113/verification/go-race.stderr\nservices/processing/docs/HIT-113/verification/go-race.stdout\nservices/processing/docs/HIT-113/verification/go-version.stderr\nservices/processing/docs/HIT-113/verification/go-version.stdout\nservices/processing/docs/HIT-113/verification/go-vet.stderr\nservices/processing/docs/HIT-113/verification/go-vet.stdout\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-113/verification/postgres-version.stderr\nservices/processing/docs/HIT-113/verification/postgres-version.stdout\nservices/processing/docs/HIT-113/verification/raw-run.tar.gz\nservices/processing/docs/HIT-113/verification/review-commands.json\nservices/processing/docs/HIT-113/verification/runtime-binary.json\nservices/processing/docs/HIT-113/verification/summary.json\nservices/processing/docs/HIT-113/verification/test-binary.json\nservices/processing/docs/HIT-113/verification/test-evidence.json\nservices/processing/docs/HIT-114/README.md\nservices/processing/docs/HIT-114/evidence-digests.json\nservices/processing/docs/HIT-114/source-audit.json\nservices/processing/docs/HIT-114/timing-map.md\nservices/processing/docs/HIT-114/verification/ci-evidence.json\nservices/processing/docs/HIT-114/verification/commands.json\nservices/processing/docs/HIT-114/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-114/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-114/verification/go-build.stderr\nservices/processing/docs/HIT-114/verification/go-build.stdout\nservices/processing/docs/HIT-114/verification/go-race.stderr\nservices/processing/docs/HIT-114/verification/go-race.stdout\nservices/processing/docs/HIT-114/verification/go-version.stderr\nservices/processing/docs/HIT-114/verification/go-version.stdout\nservices/processing/docs/HIT-114/verification/go-vet.stderr\nservices/processing/docs/HIT-114/verification/go-vet.stdout\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-114/verification/postgres-version.stderr\nservices/processing/docs/HIT-114/verification/postgres-version.stdout\nservices/processing/docs/HIT-114/verification/raw-run.tar.gz\nservices/processing/docs/HIT-114/verification/review-commands.json\nservices/processing/docs/HIT-114/verification/runtime-binary.json\nservices/processing/docs/HIT-114/verification/summary.json\nservices/processing/docs/HIT-114/verification/test-binary.json\nservices/processing/docs/HIT-114/verification/test-evidence.json\nservices/processing/docs/HIT-126/README.md\nservices/processing/docs/HIT-126/RUN_RU.md\nservices/processing/docs/HIT-126/evidence-digests.json\nservices/processing/docs/HIT-126/retention-map.md\nservices/processing/docs/HIT-126/source-audit.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.stdout.gz\nservices/processing/docs/HIT-126/verification/ci-evidence.json\nservices/processing/docs/HIT-126/verification/commands.json\nservices/processing/docs/HIT-126/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-126/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-126/verification/go-build.stderr\nservices/processing/docs/HIT-126/verification/go-build.stdout\nservices/processing/docs/HIT-126/verification/go-race.stderr\nservices/processing/docs/HIT-126/verification/go-race.stdout\nservices/processing/docs/HIT-126/verification/go-version.stderr\nservices/processing/docs/HIT-126/verification/go-version.stdout\nservices/processing/docs/HIT-126/verification/go-vet.stderr\nservices/processing/docs/HIT-126/verification/go-vet.stdout\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-126/verification/postgres-version.stderr\nservices/processing/docs/HIT-126/verification/postgres-version.stdout\nservices/processing/docs/HIT-126/verification/purge-binary.json\nservices/processing/docs/HIT-126/verification/raw-run.tar.gz\nservices/processing/docs/HIT-126/verification/runtime-binary.json\nservices/processing/docs/HIT-126/verification/summary.json\nservices/processing/docs/HIT-126/verification/test-binary.json\nservices/processing/docs/HIT-126/verification/test-evidence.json\nservices/processing/docs/HIT-127/README.md\nservices/processing/docs/HIT-127/RUN_RU.md\nservices/processing/docs/HIT-127/diagnostics-map.md\nservices/processing/docs/HIT-127/evidence-digests.json\nservices/processing/docs/HIT-127/review/commands-and-output.md\nservices/processing/docs/HIT-127/review/dependency-chain.md\nservices/processing/docs/HIT-127/review/exact-source.diff\nservices/processing/docs/HIT-127/review/operations.md\nservices/processing/docs/HIT-127/review/process-and-http.md\nservices/processing/docs/HIT-127/source-audit.json\nservices/processing/docs/HIT-127/verification/ci-evidence.json\nservices/processing/docs/HIT-127/verification/commands.json\nservices/processing/docs/HIT-127/verification/diagnostic-http.jsonl\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-runtime-capture.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-runtime.jsonl\nservices/processing/docs/HIT-127/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-127/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-127/verification/go-build.stderr\nservices/processing/docs/HIT-127/verification/go-build.stdout\nservices/processing/docs/HIT-127/verification/go-race.stderr\nservices/processing/docs/HIT-127/verification/go-race.stdout\nservices/processing/docs/HIT-127/verification/go-version.stderr\nservices/processing/docs/HIT-127/verification/go-version.stdout\nservices/processing/docs/HIT-127/verification/go-vet.stderr\nservices/processing/docs/HIT-127/verification/go-vet.stdout\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-127/verification/postgres-version.stderr\nservices/processing/docs/HIT-127/verification/postgres-version.stdout\nservices/processing/docs/HIT-127/verification/purge-binary.json\nservices/processing/docs/HIT-127/verification/raw-run.tar.gz\nservices/processing/docs/HIT-127/verification/runtime-binary.json\nservices/processing/docs/HIT-127/verification/summary.json\nservices/processing/docs/HIT-127/verification/test-binary.json\nservices/processing/docs/HIT-127/verification/test-evidence.json\nservices/processing/docs/HIT-128/README.md\nservices/processing/docs/HIT-128/RUN_RU.md\nservices/processing/docs/HIT-128/review-15740/ci-execution.md\nservices/processing/docs/HIT-128/review-15740/contract-conformance.md\nservices/processing/docs/HIT-128/review-15740/exact-source.diff\nservices/processing/docs/HIT-128/review-15740/local-execution.md\nservices/processing/docs/HIT-128/review-15740/source-files.md\nservices/processing/docs/HIT-128/review-15797/dependency-chain.md\nservices/processing/docs/HIT-128/review-15797/dependency-proof.md\nservices/processing/docs/HIT-128/review-15797/raw-dependency-proof.json\nservices/processing/docs/HIT-128/verification/binaries.json\nservices/processing/docs/HIT-128/verification/ci-commands.json\nservices/processing/docs/HIT-128/verification/ci-evidence.md\nservices/processing/docs/HIT-128/verification/ci-pr.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881430920.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881435097.json\nservices/processing/docs/HIT-128/verification/commands.json\nservices/processing/docs/HIT-128/verification/go-race.stderr\nservices/processing/docs/HIT-128/verification/go-race.stdout\nservices/processing/docs/HIT-128/verification/go-vet.stderr\nservices/processing/docs/HIT-128/verification/go-vet.stdout\nservices/processing/docs/HIT-128/verification/original-run-manifest.json\nservices/processing/docs/HIT-128/verification/original-run.tar.gz\nservices/processing/docs/HIT-128/verification/postgres-version.stderr\nservices/processing/docs/HIT-128/verification/postgres-version.stdout\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stderr\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stdout.gz\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stderr\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stdout\nservices/processing/docs/HIT-128/verification/source-evidence.md\nservices/processing/docs/HIT-128/verification/summary.json\nservices/processing/docs/HIT-128/verification/test-evidence.md\nservices/processing/internal/adapters/casereadhttp/http.go\nservices/processing/internal/adapters/contentfiles/draft.go\nservices/processing/internal/adapters/contentfiles/maintenance.go\nservices/processing/internal/adapters/contentfiles/maintenance_test.go\nservices/processing/internal/adapters/contentfiles/read_owned.go\nservices/processing/internal/adapters/contentfiles/read_owned_test.go\nservices/processing/internal/adapters/contentfiles/store.go\nservices/processing/internal/adapters/contentfiles/store_test.go\nservices/processing/internal/adapters/deliveryhttp/query.go\nservices/processing/internal/adapters/deliveryhttp/send.go\nservices/processing/internal/adapters/draftjson/schemas.json\nservices/processing/internal/adapters/postgres/activation_test.go\nservices/processing/internal/adapters/postgres/caseworker.go\nservices/processing/internal/adapters/postgres/caseworker_process_test.go\nservices/processing/internal/adapters/postgres/caseworker_test.go\nservices/processing/internal/adapters/postgres/diagnostics.go\nservices/processing/internal/adapters/postgres/diagnostics_test.go\nservices/processing/internal/adapters/postgres/dispatch.go\nservices/processing/internal/adapters/postgres/drafts_security_test.go\nservices/processing/internal/adapters/postgres/expiry_fixture_test.go\nservices/processing/internal/adapters/postgres/history_api_revision3_test.go\nservices/processing/internal/adapters/postgres/history_revision3_test.go\nservices/processing/internal/adapters/postgres/intake_faults_test.go\nservices/processing/internal/adapters/postgres/observation_faults_test.go\nservices/processing/internal/adapters/postgres/observations.go\nservices/processing/internal/adapters/postgres/observations_test.go\nservices/processing/internal/adapters/postgres/prepare.go\nservices/processing/internal/adapters/postgres/prepare_test.go\nservices/processing/internal/adapters/postgres/projection_revision3_test.go\nservices/processing/internal/adapters/postgres/purge.go\nservices/processing/internal/adapters/postgres/purge_test.go\nservices/processing/internal/adapters/postgres/read_cases.go\nservices/processing/internal/adapters/postgres/read_cases_test.go\nservices/processing/internal/adapters/postgres/recheck.go\nservices/processing/internal/adapters/postgres/recheck_dispatch.go\nservices/processing/internal/adapters/postgres/recheck_process_test.go\nservices/processing/internal/adapters/postgres/recheck_test.go\nservices/processing/internal/adapters/postgres/recovery_cluster_test.go\nservices/processing/internal/adapters/postgres/recovery_process_test.go\nservices/processing/internal/adapters/postgres/recovery_sql_test.go\nservices/processing/internal/adapters/postgres/runtime_process_test.go\nservices/processing/internal/adapters/postgres/timeouts.go\nservices/processing/internal/adapters/postgres/timeouts_process_test.go\nservices/processing/internal/adapters/postgres/timeouts_test.go\nservices/processing/internal/adapters/recheckhttp/http.go\nservices/processing/internal/application/casetimeouts/timeout.go\nservices/processing/internal/application/dispatchintent/dispatch.go\nservices/processing/internal/application/drafts/wire_generated.go\nservices/processing/internal/application/evaluatepaidorder/evaluate.go\nservices/processing/internal/application/preparecase/prepare.go\nservices/processing/internal/application/readcases/presentation.go\nservices/processing/internal/application/readcases/read.go\nservices/processing/internal/application/recheck/recheck.go\nservices/processing/internal/runtime/access.go\nservices/processing/internal/runtime/caseworker.go\nservices/processing/internal/runtime/diagnostics.go\nservices/processing/internal/runtime/diagnostics_test.go\nservices/processing/internal/runtime/recheck.go\nservices/processing/internal/runtime/runtime.go\nservices/processing/internal/runtime/source.go\nservices/processing/internal/runtime/timeouts.go\nservices/processing/scripts/postgres/verify_diagnostics.py\nservices/processing/scripts/postgres/verify_purge.py\nservices/processing/scripts/recovery/verify_recovery.py\nservices/processing/tools/drafts/generate.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 2180,
+      "stdout_sha256": "633334dd59ddbd5eeaa883762d123cab183638dfbfdb79446604e2a12617e0a3",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-145.json\nservices/processing/Dockerfile\nservices/processing/Dockerfile.dockerignore\nservices/processing/docs/HIT-145/README.md\nservices/processing/docs/HIT-145/RUN_RU.md\nservices/processing/docs/HIT-145/processing.example.json\nservices/processing/docs/HIT-145/verification/ci-commands.json\nservices/processing/docs/HIT-145/verification/ci-evidence.md\nservices/processing/docs/HIT-145/verification/ci-pr.json\nservices/processing/docs/HIT-145/verification/ci-processing-push.json\nservices/processing/docs/HIT-145/verification/ci-processing.json\nservices/processing/docs/HIT-145/verification/clean-copy-build-metadata.json\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stderr\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stdout\nservices/processing/docs/HIT-145/verification/clean-copy-image-identity.json\nservices/processing/docs/HIT-145/verification/clean-copy-summary.json\nservices/processing/docs/HIT-145/verification/first-build-metadata.json\nservices/processing/docs/HIT-145/verification/first-driver.stderr\nservices/processing/docs/HIT-145/verification/first-driver.stdout\nservices/processing/docs/HIT-145/verification/first-image-identity.json\nservices/processing/docs/HIT-145/verification/first-summary.json\nservices/processing/docs/HIT-145/verification/image-details.json\nservices/processing/docs/HIT-145/verification/original-runs-manifest.json\nservices/processing/docs/HIT-145/verification/original-runs.tar.gz\nservices/processing/docs/HIT-145/verification/source-commands.json\nservices/processing/docs/HIT-145/verification/source-evidence.md\nservices/processing/docs/HIT-145/verification/source-go-race.stderr\nservices/processing/docs/HIT-145/verification/source-go-race.stdout\nservices/processing/docs/HIT-145/verification/source-go-vet.stderr\nservices/processing/docs/HIT-145/verification/source-go-vet.stdout\nservices/processing/docs/HIT-145/verification/source-scope.stdout\nservices/processing/docs/HIT-145/verification/test-evidence.md\nservices/processing/internal/adapters/postgres/image_process_test.go\nservices/processing/scripts/postgres/verify.py\nservices/processing/scripts/postgres/verify_image.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "d2083e0317c507e1ac32180b6f156003969e04cd"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 2180,
+      "stdout_sha256": "633334dd59ddbd5eeaa883762d123cab183638dfbfdb79446604e2a12617e0a3",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-145.json\nservices/processing/Dockerfile\nservices/processing/Dockerfile.dockerignore\nservices/processing/docs/HIT-145/README.md\nservices/processing/docs/HIT-145/RUN_RU.md\nservices/processing/docs/HIT-145/processing.example.json\nservices/processing/docs/HIT-145/verification/ci-commands.json\nservices/processing/docs/HIT-145/verification/ci-evidence.md\nservices/processing/docs/HIT-145/verification/ci-pr.json\nservices/processing/docs/HIT-145/verification/ci-processing-push.json\nservices/processing/docs/HIT-145/verification/ci-processing.json\nservices/processing/docs/HIT-145/verification/clean-copy-build-metadata.json\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stderr\nservices/processing/docs/HIT-145/verification/clean-copy-driver.stdout\nservices/processing/docs/HIT-145/verification/clean-copy-image-identity.json\nservices/processing/docs/HIT-145/verification/clean-copy-summary.json\nservices/processing/docs/HIT-145/verification/first-build-metadata.json\nservices/processing/docs/HIT-145/verification/first-driver.stderr\nservices/processing/docs/HIT-145/verification/first-driver.stdout\nservices/processing/docs/HIT-145/verification/first-image-identity.json\nservices/processing/docs/HIT-145/verification/first-summary.json\nservices/processing/docs/HIT-145/verification/image-details.json\nservices/processing/docs/HIT-145/verification/original-runs-manifest.json\nservices/processing/docs/HIT-145/verification/original-runs.tar.gz\nservices/processing/docs/HIT-145/verification/source-commands.json\nservices/processing/docs/HIT-145/verification/source-evidence.md\nservices/processing/docs/HIT-145/verification/source-go-race.stderr\nservices/processing/docs/HIT-145/verification/source-go-race.stdout\nservices/processing/docs/HIT-145/verification/source-go-vet.stderr\nservices/processing/docs/HIT-145/verification/source-go-vet.stdout\nservices/processing/docs/HIT-145/verification/source-scope.stdout\nservices/processing/docs/HIT-145/verification/test-evidence.md\nservices/processing/internal/adapters/postgres/image_process_test.go\nservices/processing/scripts/postgres/verify.py\nservices/processing/scripts/postgres/verify_image.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "49229e1db3f371a051a022ea9e31951dd558eecb",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 15670,
+      "stdout_sha256": "ea3295b12ba77f005c09d75c386ffc4918d2395fe55d9f3246645addf42262ba",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-112.json\n.project-os/results/HIT-113.json\n.project-os/results/HIT-114.json\n.project-os/results/HIT-126.json\n.project-os/results/HIT-127.json\n.project-os/results/HIT-128.json\nservices/processing/cmd/processing-purge/main.go\nservices/processing/docs/HIT-112/README.md\nservices/processing/docs/HIT-112/evidence-digests.json\nservices/processing/docs/HIT-112/source-audit.json\nservices/processing/docs/HIT-112/verification/ci-evidence.json\nservices/processing/docs/HIT-112/verification/commands.json\nservices/processing/docs/HIT-112/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-112/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-112/verification/go-build.stderr\nservices/processing/docs/HIT-112/verification/go-build.stdout\nservices/processing/docs/HIT-112/verification/go-race.stderr\nservices/processing/docs/HIT-112/verification/go-race.stdout\nservices/processing/docs/HIT-112/verification/go-version.stderr\nservices/processing/docs/HIT-112/verification/go-version.stdout\nservices/processing/docs/HIT-112/verification/go-vet.stderr\nservices/processing/docs/HIT-112/verification/go-vet.stdout\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-112/verification/postgres-version.stderr\nservices/processing/docs/HIT-112/verification/postgres-version.stdout\nservices/processing/docs/HIT-112/verification/raw-run.tar.gz\nservices/processing/docs/HIT-112/verification/review-commands.json\nservices/processing/docs/HIT-112/verification/runtime-binary.json\nservices/processing/docs/HIT-112/verification/summary.json\nservices/processing/docs/HIT-112/verification/test-binary.json\nservices/processing/docs/HIT-112/verification/test-evidence.json\nservices/processing/docs/HIT-113/README.md\nservices/processing/docs/HIT-113/evidence-digests.json\nservices/processing/docs/HIT-113/field-map.md\nservices/processing/docs/HIT-113/source-audit.json\nservices/processing/docs/HIT-113/verification/ci-evidence.json\nservices/processing/docs/HIT-113/verification/commands.json\nservices/processing/docs/HIT-113/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-113/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-113/verification/go-build.stderr\nservices/processing/docs/HIT-113/verification/go-build.stdout\nservices/processing/docs/HIT-113/verification/go-race.stderr\nservices/processing/docs/HIT-113/verification/go-race.stdout\nservices/processing/docs/HIT-113/verification/go-version.stderr\nservices/processing/docs/HIT-113/verification/go-version.stdout\nservices/processing/docs/HIT-113/verification/go-vet.stderr\nservices/processing/docs/HIT-113/verification/go-vet.stdout\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-113/verification/postgres-version.stderr\nservices/processing/docs/HIT-113/verification/postgres-version.stdout\nservices/processing/docs/HIT-113/verification/raw-run.tar.gz\nservices/processing/docs/HIT-113/verification/review-commands.json\nservices/processing/docs/HIT-113/verification/runtime-binary.json\nservices/processing/docs/HIT-113/verification/summary.json\nservices/processing/docs/HIT-113/verification/test-binary.json\nservices/processing/docs/HIT-113/verification/test-evidence.json\nservices/processing/docs/HIT-114/README.md\nservices/processing/docs/HIT-114/evidence-digests.json\nservices/processing/docs/HIT-114/source-audit.json\nservices/processing/docs/HIT-114/timing-map.md\nservices/processing/docs/HIT-114/verification/ci-evidence.json\nservices/processing/docs/HIT-114/verification/commands.json\nservices/processing/docs/HIT-114/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-114/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-114/verification/go-build.stderr\nservices/processing/docs/HIT-114/verification/go-build.stdout\nservices/processing/docs/HIT-114/verification/go-race.stderr\nservices/processing/docs/HIT-114/verification/go-race.stdout\nservices/processing/docs/HIT-114/verification/go-version.stderr\nservices/processing/docs/HIT-114/verification/go-version.stdout\nservices/processing/docs/HIT-114/verification/go-vet.stderr\nservices/processing/docs/HIT-114/verification/go-vet.stdout\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-114/verification/postgres-version.stderr\nservices/processing/docs/HIT-114/verification/postgres-version.stdout\nservices/processing/docs/HIT-114/verification/raw-run.tar.gz\nservices/processing/docs/HIT-114/verification/review-commands.json\nservices/processing/docs/HIT-114/verification/runtime-binary.json\nservices/processing/docs/HIT-114/verification/summary.json\nservices/processing/docs/HIT-114/verification/test-binary.json\nservices/processing/docs/HIT-114/verification/test-evidence.json\nservices/processing/docs/HIT-126/README.md\nservices/processing/docs/HIT-126/RUN_RU.md\nservices/processing/docs/HIT-126/evidence-digests.json\nservices/processing/docs/HIT-126/retention-map.md\nservices/processing/docs/HIT-126/source-audit.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.stdout.gz\nservices/processing/docs/HIT-126/verification/ci-evidence.json\nservices/processing/docs/HIT-126/verification/commands.json\nservices/processing/docs/HIT-126/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-126/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-126/verification/go-build.stderr\nservices/processing/docs/HIT-126/verification/go-build.stdout\nservices/processing/docs/HIT-126/verification/go-race.stderr\nservices/processing/docs/HIT-126/verification/go-race.stdout\nservices/processing/docs/HIT-126/verification/go-version.stderr\nservices/processing/docs/HIT-126/verification/go-version.stdout\nservices/processing/docs/HIT-126/verification/go-vet.stderr\nservices/processing/docs/HIT-126/verification/go-vet.stdout\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-126/verification/postgres-version.stderr\nservices/processing/docs/HIT-126/verification/postgres-version.stdout\nservices/processing/docs/HIT-126/verification/purge-binary.json\nservices/processing/docs/HIT-126/verification/raw-run.tar.gz\nservices/processing/docs/HIT-126/verification/runtime-binary.json\nservices/processing/docs/HIT-126/verification/summary.json\nservices/processing/docs/HIT-126/verification/test-binary.json\nservices/processing/docs/HIT-126/verification/test-evidence.json\nservices/processing/docs/HIT-127/README.md\nservices/processing/docs/HIT-127/RUN_RU.md\nservices/processing/docs/HIT-127/diagnostics-map.md\nservices/processing/docs/HIT-127/evidence-digests.json\nservices/processing/docs/HIT-127/review/commands-and-output.md\nservices/processing/docs/HIT-127/review/dependency-chain.md\nservices/processing/docs/HIT-127/review/exact-source.diff\nservices/processing/docs/HIT-127/review/operations.md\nservices/processing/docs/HIT-127/review/process-and-http.md\nservices/processing/docs/HIT-127/source-audit.json\nservices/processing/docs/HIT-127/verification/ci-evidence.json\nservices/processing/docs/HIT-127/verification/commands.json\nservices/processing/docs/HIT-127/verification/diagnostic-http.jsonl\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-runtime-capture.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-runtime.jsonl\nservices/processing/docs/HIT-127/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-127/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-127/verification/go-build.stderr\nservices/processing/docs/HIT-127/verification/go-build.stdout\nservices/processing/docs/HIT-127/verification/go-race.stderr\nservices/processing/docs/HIT-127/verification/go-race.stdout\nservices/processing/docs/HIT-127/verification/go-version.stderr\nservices/processing/docs/HIT-127/verification/go-version.stdout\nservices/processing/docs/HIT-127/verification/go-vet.stderr\nservices/processing/docs/HIT-127/verification/go-vet.stdout\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-127/verification/postgres-version.stderr\nservices/processing/docs/HIT-127/verification/postgres-version.stdout\nservices/processing/docs/HIT-127/verification/purge-binary.json\nservices/processing/docs/HIT-127/verification/raw-run.tar.gz\nservices/processing/docs/HIT-127/verification/runtime-binary.json\nservices/processing/docs/HIT-127/verification/summary.json\nservices/processing/docs/HIT-127/verification/test-binary.json\nservices/processing/docs/HIT-127/verification/test-evidence.json\nservices/processing/docs/HIT-128/README.md\nservices/processing/docs/HIT-128/RUN_RU.md\nservices/processing/docs/HIT-128/review-15740/ci-execution.md\nservices/processing/docs/HIT-128/review-15740/contract-conformance.md\nservices/processing/docs/HIT-128/review-15740/exact-source.diff\nservices/processing/docs/HIT-128/review-15740/local-execution.md\nservices/processing/docs/HIT-128/review-15740/source-files.md\nservices/processing/docs/HIT-128/review-15797/dependency-chain.md\nservices/processing/docs/HIT-128/review-15797/dependency-proof.md\nservices/processing/docs/HIT-128/review-15797/raw-dependency-proof.json\nservices/processing/docs/HIT-128/verification/binaries.json\nservices/processing/docs/HIT-128/verification/ci-commands.json\nservices/processing/docs/HIT-128/verification/ci-evidence.md\nservices/processing/docs/HIT-128/verification/ci-pr.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881430920.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881435097.json\nservices/processing/docs/HIT-128/verification/commands.json\nservices/processing/docs/HIT-128/verification/go-race.stderr\nservices/processing/docs/HIT-128/verification/go-race.stdout\nservices/processing/docs/HIT-128/verification/go-vet.stderr\nservices/processing/docs/HIT-128/verification/go-vet.stdout\nservices/processing/docs/HIT-128/verification/original-run-manifest.json\nservices/processing/docs/HIT-128/verification/original-run.tar.gz\nservices/processing/docs/HIT-128/verification/postgres-version.stderr\nservices/processing/docs/HIT-128/verification/postgres-version.stdout\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stderr\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stdout.gz\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stderr\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stdout\nservices/processing/docs/HIT-128/verification/source-evidence.md\nservices/processing/docs/HIT-128/verification/summary.json\nservices/processing/docs/HIT-128/verification/test-evidence.md\nservices/processing/internal/adapters/casereadhttp/http.go\nservices/processing/internal/adapters/contentfiles/draft.go\nservices/processing/internal/adapters/contentfiles/maintenance.go\nservices/processing/internal/adapters/contentfiles/maintenance_test.go\nservices/processing/internal/adapters/contentfiles/read_owned.go\nservices/processing/internal/adapters/contentfiles/read_owned_test.go\nservices/processing/internal/adapters/contentfiles/store.go\nservices/processing/internal/adapters/contentfiles/store_test.go\nservices/processing/internal/adapters/deliveryhttp/query.go\nservices/processing/internal/adapters/deliveryhttp/send.go\nservices/processing/internal/adapters/draftjson/schemas.json\nservices/processing/internal/adapters/postgres/activation_test.go\nservices/processing/internal/adapters/postgres/caseworker.go\nservices/processing/internal/adapters/postgres/caseworker_process_test.go\nservices/processing/internal/adapters/postgres/caseworker_test.go\nservices/processing/internal/adapters/postgres/diagnostics.go\nservices/processing/internal/adapters/postgres/diagnostics_test.go\nservices/processing/internal/adapters/postgres/dispatch.go\nservices/processing/internal/adapters/postgres/drafts_security_test.go\nservices/processing/internal/adapters/postgres/expiry_fixture_test.go\nservices/processing/internal/adapters/postgres/history_api_revision3_test.go\nservices/processing/internal/adapters/postgres/history_revision3_test.go\nservices/processing/internal/adapters/postgres/intake_faults_test.go\nservices/processing/internal/adapters/postgres/observation_faults_test.go\nservices/processing/internal/adapters/postgres/observations.go\nservices/processing/internal/adapters/postgres/observations_test.go\nservices/processing/internal/adapters/postgres/prepare.go\nservices/processing/internal/adapters/postgres/prepare_test.go\nservices/processing/internal/adapters/postgres/projection_revision3_test.go\nservices/processing/internal/adapters/postgres/purge.go\nservices/processing/internal/adapters/postgres/purge_test.go\nservices/processing/internal/adapters/postgres/read_cases.go\nservices/processing/internal/adapters/postgres/read_cases_test.go\nservices/processing/internal/adapters/postgres/recheck.go\nservices/processing/internal/adapters/postgres/recheck_dispatch.go\nservices/processing/internal/adapters/postgres/recheck_process_test.go\nservices/processing/internal/adapters/postgres/recheck_test.go\nservices/processing/internal/adapters/postgres/recovery_cluster_test.go\nservices/processing/internal/adapters/postgres/recovery_process_test.go\nservices/processing/internal/adapters/postgres/recovery_sql_test.go\nservices/processing/internal/adapters/postgres/runtime_process_test.go\nservices/processing/internal/adapters/postgres/timeouts.go\nservices/processing/internal/adapters/postgres/timeouts_process_test.go\nservices/processing/internal/adapters/postgres/timeouts_test.go\nservices/processing/internal/adapters/recheckhttp/http.go\nservices/processing/internal/application/casetimeouts/timeout.go\nservices/processing/internal/application/dispatchintent/dispatch.go\nservices/processing/internal/application/drafts/wire_generated.go\nservices/processing/internal/application/evaluatepaidorder/evaluate.go\nservices/processing/internal/application/preparecase/prepare.go\nservices/processing/internal/application/readcases/presentation.go\nservices/processing/internal/application/readcases/read.go\nservices/processing/internal/application/recheck/recheck.go\nservices/processing/internal/runtime/access.go\nservices/processing/internal/runtime/caseworker.go\nservices/processing/internal/runtime/diagnostics.go\nservices/processing/internal/runtime/diagnostics_test.go\nservices/processing/internal/runtime/recheck.go\nservices/processing/internal/runtime/runtime.go\nservices/processing/internal/runtime/source.go\nservices/processing/internal/runtime/timeouts.go\nservices/processing/scripts/postgres/verify_diagnostics.py\nservices/processing/scripts/postgres/verify_purge.py\nservices/processing/scripts/recovery/verify_recovery.py\nservices/processing/tools/drafts/generate.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+        "d2083e0317c507e1ac32180b6f156003969e04cd"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 15670,
+      "stdout_sha256": "ea3295b12ba77f005c09d75c386ffc4918d2395fe55d9f3246645addf42262ba",
+      "stderr": "",
+      "stdout": ".project-os/results/HIT-112.json\n.project-os/results/HIT-113.json\n.project-os/results/HIT-114.json\n.project-os/results/HIT-126.json\n.project-os/results/HIT-127.json\n.project-os/results/HIT-128.json\nservices/processing/cmd/processing-purge/main.go\nservices/processing/docs/HIT-112/README.md\nservices/processing/docs/HIT-112/evidence-digests.json\nservices/processing/docs/HIT-112/source-audit.json\nservices/processing/docs/HIT-112/verification/ci-evidence.json\nservices/processing/docs/HIT-112/verification/commands.json\nservices/processing/docs/HIT-112/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-112/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-112/verification/go-build.stderr\nservices/processing/docs/HIT-112/verification/go-build.stdout\nservices/processing/docs/HIT-112/verification/go-race.stderr\nservices/processing/docs/HIT-112/verification/go-race.stdout\nservices/processing/docs/HIT-112/verification/go-version.stderr\nservices/processing/docs/HIT-112/verification/go-version.stdout\nservices/processing/docs/HIT-112/verification/go-vet.stderr\nservices/processing/docs/HIT-112/verification/go-vet.stdout\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-112/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-112/verification/postgres-version.stderr\nservices/processing/docs/HIT-112/verification/postgres-version.stdout\nservices/processing/docs/HIT-112/verification/raw-run.tar.gz\nservices/processing/docs/HIT-112/verification/review-commands.json\nservices/processing/docs/HIT-112/verification/runtime-binary.json\nservices/processing/docs/HIT-112/verification/summary.json\nservices/processing/docs/HIT-112/verification/test-binary.json\nservices/processing/docs/HIT-112/verification/test-evidence.json\nservices/processing/docs/HIT-113/README.md\nservices/processing/docs/HIT-113/evidence-digests.json\nservices/processing/docs/HIT-113/field-map.md\nservices/processing/docs/HIT-113/source-audit.json\nservices/processing/docs/HIT-113/verification/ci-evidence.json\nservices/processing/docs/HIT-113/verification/commands.json\nservices/processing/docs/HIT-113/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-113/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-113/verification/go-build.stderr\nservices/processing/docs/HIT-113/verification/go-build.stdout\nservices/processing/docs/HIT-113/verification/go-race.stderr\nservices/processing/docs/HIT-113/verification/go-race.stdout\nservices/processing/docs/HIT-113/verification/go-version.stderr\nservices/processing/docs/HIT-113/verification/go-version.stdout\nservices/processing/docs/HIT-113/verification/go-vet.stderr\nservices/processing/docs/HIT-113/verification/go-vet.stdout\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-113/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-113/verification/postgres-version.stderr\nservices/processing/docs/HIT-113/verification/postgres-version.stdout\nservices/processing/docs/HIT-113/verification/raw-run.tar.gz\nservices/processing/docs/HIT-113/verification/review-commands.json\nservices/processing/docs/HIT-113/verification/runtime-binary.json\nservices/processing/docs/HIT-113/verification/summary.json\nservices/processing/docs/HIT-113/verification/test-binary.json\nservices/processing/docs/HIT-113/verification/test-evidence.json\nservices/processing/docs/HIT-114/README.md\nservices/processing/docs/HIT-114/evidence-digests.json\nservices/processing/docs/HIT-114/source-audit.json\nservices/processing/docs/HIT-114/timing-map.md\nservices/processing/docs/HIT-114/verification/ci-evidence.json\nservices/processing/docs/HIT-114/verification/commands.json\nservices/processing/docs/HIT-114/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-114/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-114/verification/go-build.stderr\nservices/processing/docs/HIT-114/verification/go-build.stdout\nservices/processing/docs/HIT-114/verification/go-race.stderr\nservices/processing/docs/HIT-114/verification/go-race.stdout\nservices/processing/docs/HIT-114/verification/go-version.stderr\nservices/processing/docs/HIT-114/verification/go-version.stdout\nservices/processing/docs/HIT-114/verification/go-vet.stderr\nservices/processing/docs/HIT-114/verification/go-vet.stdout\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-114/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-114/verification/postgres-version.stderr\nservices/processing/docs/HIT-114/verification/postgres-version.stdout\nservices/processing/docs/HIT-114/verification/raw-run.tar.gz\nservices/processing/docs/HIT-114/verification/review-commands.json\nservices/processing/docs/HIT-114/verification/runtime-binary.json\nservices/processing/docs/HIT-114/verification/summary.json\nservices/processing/docs/HIT-114/verification/test-binary.json\nservices/processing/docs/HIT-114/verification/test-evidence.json\nservices/processing/docs/HIT-126/README.md\nservices/processing/docs/HIT-126/RUN_RU.md\nservices/processing/docs/HIT-126/evidence-digests.json\nservices/processing/docs/HIT-126/retention-map.md\nservices/processing/docs/HIT-126/source-audit.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.json\nservices/processing/docs/HIT-126/verification/baseline-postgres.stdout.gz\nservices/processing/docs/HIT-126/verification/ci-evidence.json\nservices/processing/docs/HIT-126/verification/commands.json\nservices/processing/docs/HIT-126/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-126/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-126/verification/go-build.stderr\nservices/processing/docs/HIT-126/verification/go-build.stdout\nservices/processing/docs/HIT-126/verification/go-race.stderr\nservices/processing/docs/HIT-126/verification/go-race.stdout\nservices/processing/docs/HIT-126/verification/go-version.stderr\nservices/processing/docs/HIT-126/verification/go-version.stdout\nservices/processing/docs/HIT-126/verification/go-vet.stderr\nservices/processing/docs/HIT-126/verification/go-vet.stdout\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-126/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-126/verification/postgres-version.stderr\nservices/processing/docs/HIT-126/verification/postgres-version.stdout\nservices/processing/docs/HIT-126/verification/purge-binary.json\nservices/processing/docs/HIT-126/verification/raw-run.tar.gz\nservices/processing/docs/HIT-126/verification/runtime-binary.json\nservices/processing/docs/HIT-126/verification/summary.json\nservices/processing/docs/HIT-126/verification/test-binary.json\nservices/processing/docs/HIT-126/verification/test-evidence.json\nservices/processing/docs/HIT-127/README.md\nservices/processing/docs/HIT-127/RUN_RU.md\nservices/processing/docs/HIT-127/diagnostics-map.md\nservices/processing/docs/HIT-127/evidence-digests.json\nservices/processing/docs/HIT-127/review/commands-and-output.md\nservices/processing/docs/HIT-127/review/dependency-chain.md\nservices/processing/docs/HIT-127/review/exact-source.diff\nservices/processing/docs/HIT-127/review/operations.md\nservices/processing/docs/HIT-127/review/process-and-http.md\nservices/processing/docs/HIT-127/source-audit.json\nservices/processing/docs/HIT-127/verification/ci-evidence.json\nservices/processing/docs/HIT-127/verification/commands.json\nservices/processing/docs/HIT-127/verification/diagnostic-http.jsonl\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-postgres-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-race-tests.stdout\nservices/processing/docs/HIT-127/verification/diagnostic-runtime-capture.stderr\nservices/processing/docs/HIT-127/verification/diagnostic-runtime.jsonl\nservices/processing/docs/HIT-127/verification/github-processing-pull_request.log.gz\nservices/processing/docs/HIT-127/verification/github-processing-push.log.gz\nservices/processing/docs/HIT-127/verification/go-build.stderr\nservices/processing/docs/HIT-127/verification/go-build.stdout\nservices/processing/docs/HIT-127/verification/go-race.stderr\nservices/processing/docs/HIT-127/verification/go-race.stdout\nservices/processing/docs/HIT-127/verification/go-version.stderr\nservices/processing/docs/HIT-127/verification/go-version.stdout\nservices/processing/docs/HIT-127/verification/go-vet.stderr\nservices/processing/docs/HIT-127/verification/go-vet.stdout\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stderr\nservices/processing/docs/HIT-127/verification/postgres-storage-tests.stdout.gz\nservices/processing/docs/HIT-127/verification/postgres-version.stderr\nservices/processing/docs/HIT-127/verification/postgres-version.stdout\nservices/processing/docs/HIT-127/verification/purge-binary.json\nservices/processing/docs/HIT-127/verification/raw-run.tar.gz\nservices/processing/docs/HIT-127/verification/runtime-binary.json\nservices/processing/docs/HIT-127/verification/summary.json\nservices/processing/docs/HIT-127/verification/test-binary.json\nservices/processing/docs/HIT-127/verification/test-evidence.json\nservices/processing/docs/HIT-128/README.md\nservices/processing/docs/HIT-128/RUN_RU.md\nservices/processing/docs/HIT-128/review-15740/ci-execution.md\nservices/processing/docs/HIT-128/review-15740/contract-conformance.md\nservices/processing/docs/HIT-128/review-15740/exact-source.diff\nservices/processing/docs/HIT-128/review-15740/local-execution.md\nservices/processing/docs/HIT-128/review-15740/source-files.md\nservices/processing/docs/HIT-128/review-15797/dependency-chain.md\nservices/processing/docs/HIT-128/review-15797/dependency-proof.md\nservices/processing/docs/HIT-128/review-15797/raw-dependency-proof.json\nservices/processing/docs/HIT-128/verification/binaries.json\nservices/processing/docs/HIT-128/verification/ci-commands.json\nservices/processing/docs/HIT-128/verification/ci-evidence.md\nservices/processing/docs/HIT-128/verification/ci-pr.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881430920.json\nservices/processing/docs/HIT-128/verification/ci-processing-44881435097.json\nservices/processing/docs/HIT-128/verification/commands.json\nservices/processing/docs/HIT-128/verification/go-race.stderr\nservices/processing/docs/HIT-128/verification/go-race.stdout\nservices/processing/docs/HIT-128/verification/go-vet.stderr\nservices/processing/docs/HIT-128/verification/go-vet.stdout\nservices/processing/docs/HIT-128/verification/original-run-manifest.json\nservices/processing/docs/HIT-128/verification/original-run.tar.gz\nservices/processing/docs/HIT-128/verification/postgres-version.stderr\nservices/processing/docs/HIT-128/verification/postgres-version.stdout\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stderr\nservices/processing/docs/HIT-128/verification/predecessor-process-tests.stdout.gz\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stderr\nservices/processing/docs/HIT-128/verification/recovery-process-tests.stdout\nservices/processing/docs/HIT-128/verification/source-evidence.md\nservices/processing/docs/HIT-128/verification/summary.json\nservices/processing/docs/HIT-128/verification/test-evidence.md\nservices/processing/internal/adapters/casereadhttp/http.go\nservices/processing/internal/adapters/contentfiles/draft.go\nservices/processing/internal/adapters/contentfiles/maintenance.go\nservices/processing/internal/adapters/contentfiles/maintenance_test.go\nservices/processing/internal/adapters/contentfiles/read_owned.go\nservices/processing/internal/adapters/contentfiles/read_owned_test.go\nservices/processing/internal/adapters/contentfiles/store.go\nservices/processing/internal/adapters/contentfiles/store_test.go\nservices/processing/internal/adapters/deliveryhttp/query.go\nservices/processing/internal/adapters/deliveryhttp/send.go\nservices/processing/internal/adapters/draftjson/schemas.json\nservices/processing/internal/adapters/postgres/activation_test.go\nservices/processing/internal/adapters/postgres/caseworker.go\nservices/processing/internal/adapters/postgres/caseworker_process_test.go\nservices/processing/internal/adapters/postgres/caseworker_test.go\nservices/processing/internal/adapters/postgres/diagnostics.go\nservices/processing/internal/adapters/postgres/diagnostics_test.go\nservices/processing/internal/adapters/postgres/dispatch.go\nservices/processing/internal/adapters/postgres/drafts_security_test.go\nservices/processing/internal/adapters/postgres/expiry_fixture_test.go\nservices/processing/internal/adapters/postgres/history_api_revision3_test.go\nservices/processing/internal/adapters/postgres/history_revision3_test.go\nservices/processing/internal/adapters/postgres/intake_faults_test.go\nservices/processing/internal/adapters/postgres/observation_faults_test.go\nservices/processing/internal/adapters/postgres/observations.go\nservices/processing/internal/adapters/postgres/observations_test.go\nservices/processing/internal/adapters/postgres/prepare.go\nservices/processing/internal/adapters/postgres/prepare_test.go\nservices/processing/internal/adapters/postgres/projection_revision3_test.go\nservices/processing/internal/adapters/postgres/purge.go\nservices/processing/internal/adapters/postgres/purge_test.go\nservices/processing/internal/adapters/postgres/read_cases.go\nservices/processing/internal/adapters/postgres/read_cases_test.go\nservices/processing/internal/adapters/postgres/recheck.go\nservices/processing/internal/adapters/postgres/recheck_dispatch.go\nservices/processing/internal/adapters/postgres/recheck_process_test.go\nservices/processing/internal/adapters/postgres/recheck_test.go\nservices/processing/internal/adapters/postgres/recovery_cluster_test.go\nservices/processing/internal/adapters/postgres/recovery_process_test.go\nservices/processing/internal/adapters/postgres/recovery_sql_test.go\nservices/processing/internal/adapters/postgres/runtime_process_test.go\nservices/processing/internal/adapters/postgres/timeouts.go\nservices/processing/internal/adapters/postgres/timeouts_process_test.go\nservices/processing/internal/adapters/postgres/timeouts_test.go\nservices/processing/internal/adapters/recheckhttp/http.go\nservices/processing/internal/application/casetimeouts/timeout.go\nservices/processing/internal/application/dispatchintent/dispatch.go\nservices/processing/internal/application/drafts/wire_generated.go\nservices/processing/internal/application/evaluatepaidorder/evaluate.go\nservices/processing/internal/application/preparecase/prepare.go\nservices/processing/internal/application/readcases/presentation.go\nservices/processing/internal/application/readcases/read.go\nservices/processing/internal/application/recheck/recheck.go\nservices/processing/internal/runtime/access.go\nservices/processing/internal/runtime/caseworker.go\nservices/processing/internal/runtime/diagnostics.go\nservices/processing/internal/runtime/diagnostics_test.go\nservices/processing/internal/runtime/recheck.go\nservices/processing/internal/runtime/runtime.go\nservices/processing/internal/runtime/source.go\nservices/processing/internal/runtime/timeouts.go\nservices/processing/scripts/postgres/verify_diagnostics.py\nservices/processing/scripts/postgres/verify_purge.py\nservices/processing/scripts/recovery/verify_recovery.py\nservices/processing/tools/drafts/generate.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "d2083e0317c507e1ac32180b6f156003969e04cd",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 461,
+      "stdout_sha256": "1da8c46e3d3e74355a57278e0765d44cb4ceb1aa08d112e0664bae2f20c97627",
+      "stderr": "",
+      "stdout": "services/processing/internal/adapters/postgres/image_process_test.go\nservices/processing/internal/adapters/postgres/observations_test.go\nservices/processing/internal/adapters/postgres/oci_recovery_process_test.go\nservices/processing/internal/adapters/postgres/prepare_test.go\nservices/processing/internal/adapters/postgres/recovery_process_test.go\nservices/processing/scripts/postgres/verify_image.py\nservices/processing/scripts/recovery/verify_oci_recovery.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--full-index",
+        "--binary",
+        "--unified=0",
+        "d2083e0317c507e1ac32180b6f156003969e04cd",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 21969,
+      "stdout_sha256": "2ea5643268d221be7931aca40c3fee931391a3eca39a8a7f0ed1bc3424d7621f",
+      "stderr": "",
+      "stdout": null,
+      "output_file": "test-harness.diff"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--full-index",
+        "--binary",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 5546680,
+      "stdout_sha256": "1622e54443af2e1f56fafd421a1cf8f05c58e37eac72a80cb8dc6ef4c5fb425e",
+      "stderr": "",
+      "stdout": null,
+      "output_file": "HIT-145-to-integration.diff"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--raw",
+        "--no-abbrev",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a",
+        "--",
+        "services/processing/Dockerfile",
+        "services/processing/internal",
+        "services/processing/scripts",
+        ".project-os/results/HIT-145.json",
+        ".project-os/results/HIT-128.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 11161,
+      "stdout_sha256": "5a58eb936c6c0ea48da5903f60d906eee2820a544f837e369ceefbcdeb4be545",
+      "stderr": "",
+      "stdout": ":000000 100644 0000000000000000000000000000000000000000 377fdb8adb9ed6e2c75f8b5f9496677ed49b332e A\t.project-os/results/HIT-128.json\n:100644 100644 0153f82442327f1f9da23cf7743cf9a386ba36c1 da5487fee06c83c5c588f236d3a4d6f96b86f399 M\tservices/processing/internal/adapters/casereadhttp/http.go\n:100644 100644 bb6c7aab538563a7e763936885ef6dec4a2c5c7d 24b71406f9a19e4203d4b131a8b8f0bbd73cb5b0 M\tservices/processing/internal/adapters/contentfiles/draft.go\n:000000 100644 0000000000000000000000000000000000000000 ca3473f6d8d01702f150675f115cab94666dcd7f A\tservices/processing/internal/adapters/contentfiles/maintenance.go\n:000000 100644 0000000000000000000000000000000000000000 d676645dcb4cfe4d972123efcd6aeb352d89ffcb A\tservices/processing/internal/adapters/contentfiles/maintenance_test.go\n:100644 100644 0b32898db3ad14f228c4713845e3d9f2211263d3 49ce8883487dd6d21f36cee780ecdc083d63376f M\tservices/processing/internal/adapters/contentfiles/read_owned.go\n:100644 100644 98a8d7215db5b267154c40d94b6144db15aab8a7 ff500b91a5832fa19828fe36ea5239aff8cdb300 M\tservices/processing/internal/adapters/contentfiles/read_owned_test.go\n:100644 100644 640efcb2b15f31f3309d9f0428d4047fa2c2f9e2 5b2f3557d20fc080f92b7010770ae0d6d68c1abd M\tservices/processing/internal/adapters/contentfiles/store.go\n:100644 100644 534b04977e4f36fe6444f2e86a70b264f5659511 a3b01fbc4ac81dba22cced1d8fe62bfb59157715 M\tservices/processing/internal/adapters/contentfiles/store_test.go\n:000000 100644 0000000000000000000000000000000000000000 0d6ddc5b956b2a5bc5af7de994b572bf26081534 A\tservices/processing/internal/adapters/deliveryhttp/query.go\n:100644 100644 39375674257ad9acd7f5f9b1516b69ea9fd267e9 0c64573c8d76684e6f6a2b03fb961cac49e24e61 M\tservices/processing/internal/adapters/deliveryhttp/send.go\n:100644 100644 655341d6e6a14b437a2ec03e99df1152cfe99b37 07f9e65803e7de58fe47491c33ca0222390d7eda M\tservices/processing/internal/adapters/draftjson/schemas.json\n:100644 100644 caac70ae46270de7622b8505de8389ec166a2c1c b05cc506da9b9810b378854c0f4d71adbde269d3 M\tservices/processing/internal/adapters/postgres/activation_test.go\n:000000 100644 0000000000000000000000000000000000000000 541f8d4cdd0e2ff829436ebc8b977a901d3d22d3 A\tservices/processing/internal/adapters/postgres/caseworker.go\n:000000 100644 0000000000000000000000000000000000000000 7cc368f1c6cb5131996e3a037df08c0537fd4497 A\tservices/processing/internal/adapters/postgres/caseworker_process_test.go\n:000000 100644 0000000000000000000000000000000000000000 1a53a0234d17f97ca1d041c894d1bd7f8c6e1836 A\tservices/processing/internal/adapters/postgres/caseworker_test.go\n:000000 100644 0000000000000000000000000000000000000000 abafb0400f25e5d27e7ffc9de5975c03a2b7e77c A\tservices/processing/internal/adapters/postgres/diagnostics.go\n:000000 100644 0000000000000000000000000000000000000000 0f7a4972e34e4fd3b63adb1d3852354df1cdb658 A\tservices/processing/internal/adapters/postgres/diagnostics_test.go\n:100644 100644 845a958634e6535eb1d1351362573d43f0f97881 40c7628bbda41640a8c1343661c84963bd322373 M\tservices/processing/internal/adapters/postgres/dispatch.go\n:100644 100644 240975361979f24fad8822d9bb48e6c5cd99b1ec 15c317ff2ce2dd48303937f332a87cd427469c8e M\tservices/processing/internal/adapters/postgres/drafts_security_test.go\n:000000 100644 0000000000000000000000000000000000000000 5d9478dd04a0b4cc0f2a2c67a2bd4cfdb0d48914 A\tservices/processing/internal/adapters/postgres/expiry_fixture_test.go\n:100644 100644 dd9ec35ea7581dbadacd5be6d71d3072f269d8a8 0ddcb333c113653ee09666b9771de4b68a7d5c3f M\tservices/processing/internal/adapters/postgres/history_api_revision3_test.go\n:100644 100644 272c99b1b13493f053a76c1a8b3bfd7290655d0d 0c1484f8286322f0ce657895f8543569b6b80611 M\tservices/processing/internal/adapters/postgres/history_revision3_test.go\n:100644 100644 eb21029e07ec50060a15c0af0aef7b308e2cd6cc f52ed9d0e148a083614a5e74a55141b5f98fdf35 M\tservices/processing/internal/adapters/postgres/image_process_test.go\n:100644 100644 dc0e50e8a38fbbe23ad5cb57707533640fd78491 6d34cc4c303cb5df6211547d2501cf49bd49d73a M\tservices/processing/internal/adapters/postgres/intake_faults_test.go\n:100644 100644 98fb0d9b7fe8e8a5fdf31cef53045fdbfce32bdb 47baa6ce5d53266174bc6da6089445c984fda006 M\tservices/processing/internal/adapters/postgres/observation_faults_test.go\n:100644 100644 d7a2d03911ca72460601ffbd3113f850a9c54518 8457a7f461557b6175ccefcd8b2b4e5f3da906f3 M\tservices/processing/internal/adapters/postgres/observations.go\n:100644 100644 b96da1731718be2dc2e8b7af343bce5938851dac 7abd678a2273742da49a11a54ffbd7d29d8069b7 M\tservices/processing/internal/adapters/postgres/observations_test.go\n:000000 100644 0000000000000000000000000000000000000000 d93c907457ab03d94ed5541e18336c8c8192f645 A\tservices/processing/internal/adapters/postgres/oci_recovery_process_test.go\n:100644 100644 c29ae4dce158a9c4e11903287d274d93a71a9e75 05c8caf6a9101858051e0b322c1d2adeba280169 M\tservices/processing/internal/adapters/postgres/prepare.go\n:100644 100644 49fa8ac0b86da68ad0d547429715cb076ad540c9 894a9d96680ad50c4bfbadb93f0c878c8dd405dc M\tservices/processing/internal/adapters/postgres/prepare_test.go\n:100644 100644 63f493634d9e9578200d75c474b69e11ed9e91ce 0663f06884355df32b0b11e9d222c7f027fa44ca M\tservices/processing/internal/adapters/postgres/projection_revision3_test.go\n:000000 100644 0000000000000000000000000000000000000000 3316baccde796a2a9f93190b8761a7e864c4751a A\tservices/processing/internal/adapters/postgres/purge.go\n:000000 100644 0000000000000000000000000000000000000000 00e1f2b15b775e578c8640acb509bd99ef38e3cd A\tservices/processing/internal/adapters/postgres/purge_test.go\n:100644 100644 87f896ccb0d2d33019d35cc75d60ce97ae1f65bc 08f439a67f101c87459240e0570447e4b6a6fb25 M\tservices/processing/internal/adapters/postgres/read_cases.go\n:100644 100644 10397e4fc11598f10d534dbbf0d3b3c54225a848 23d7c82a3b6c6511accea312217d915900c84400 M\tservices/processing/internal/adapters/postgres/read_cases_test.go\n:000000 100644 0000000000000000000000000000000000000000 80ecf221f184607e82683550634c37f15710df78 A\tservices/processing/internal/adapters/postgres/recheck.go\n:000000 100644 0000000000000000000000000000000000000000 2ffd46d31d1e80a289ed9aa9bacf6ab2612886f1 A\tservices/processing/internal/adapters/postgres/recheck_dispatch.go\n:000000 100644 0000000000000000000000000000000000000000 1f4bc55d3dd376b68f28212ee999b6e06d59e473 A\tservices/processing/internal/adapters/postgres/recheck_process_test.go\n:000000 100644 0000000000000000000000000000000000000000 22d359ce437e7cb4403f3fe197149875189b253c A\tservices/processing/internal/adapters/postgres/recheck_test.go\n:000000 100644 0000000000000000000000000000000000000000 d718ad93e16dffa23dc2336c9f1dde1b3409bc92 A\tservices/processing/internal/adapters/postgres/recovery_cluster_test.go\n:000000 100644 0000000000000000000000000000000000000000 3a01a76107c006bb6794f122445a10262794d736 A\tservices/processing/internal/adapters/postgres/recovery_process_test.go\n:000000 100644 0000000000000000000000000000000000000000 c852bc2ff3682c83303279adc3305ea522e1a2a3 A\tservices/processing/internal/adapters/postgres/recovery_sql_test.go\n:100644 100644 7740c0702cf8f89c8d91b82c4afdcfb410251f00 32327384692aa01be3bf93ca12f3f31f78d42dcd M\tservices/processing/internal/adapters/postgres/runtime_process_test.go\n:000000 100644 0000000000000000000000000000000000000000 c319df7375f0bb62e36d63c6ea5033dff03e571e A\tservices/processing/internal/adapters/postgres/timeouts.go\n:000000 100644 0000000000000000000000000000000000000000 d497f195229fa8e39bf80dc9af1c145d4941de52 A\tservices/processing/internal/adapters/postgres/timeouts_process_test.go\n:000000 100644 0000000000000000000000000000000000000000 cc40ed92ee6eee69ba1917452a4dcd35c467c620 A\tservices/processing/internal/adapters/postgres/timeouts_test.go\n:000000 100644 0000000000000000000000000000000000000000 dba91ddb37275270db32d552f22728b29024c0e1 A\tservices/processing/internal/adapters/recheckhttp/http.go\n:000000 100644 0000000000000000000000000000000000000000 cdb67a75dda9247e4d4f7c61ee811dd090199291 A\tservices/processing/internal/application/casetimeouts/timeout.go\n:100644 100644 1da1ccf3ef442e6d073b85a1876dd846fca04c09 530aa8e70c6653d7f18b2e5d74c9ca4390edc37b M\tservices/processing/internal/application/dispatchintent/dispatch.go\n:100644 100644 2e9f8ec22e08a85b2bef3fb772c590dda245368e 5dba0a773d2ad0f78ca84d467186420419c0ce8e M\tservices/processing/internal/application/drafts/wire_generated.go\n:100644 100644 e35b338661146c9014d5561dc55dbfeacd14e03c 44a5fb58ca66a272c45e7dd50c4082d5a206a09d M\tservices/processing/internal/application/evaluatepaidorder/evaluate.go\n:100644 100644 6e342522002e8de7ce4030032f765f3589f83ae2 9a80d55a36a5b10cb789e7621cb10ba40f7adbbf M\tservices/processing/internal/application/preparecase/prepare.go\n:100644 100644 93f65749f4d4200477af7ed8204145171f4b75f0 b1f7445cd6299486b5f6d723818013275b78f2dd M\tservices/processing/internal/application/readcases/presentation.go\n:100644 100644 753eb8aad44f22523d2c3028dd917377ac811993 a8cca639ca93c59b9fa333c83bbd70794df78de7 M\tservices/processing/internal/application/readcases/read.go\n:000000 100644 0000000000000000000000000000000000000000 6b706dfdfb183b9157aa710d8fa237aa9c68ff9d A\tservices/processing/internal/application/recheck/recheck.go\n:100644 100644 6c9ac9930eabd68ec38725139e2f2e36b74620a3 6e3a52fcd912c47e886e67e4ab4c236bbd5e8391 M\tservices/processing/internal/runtime/access.go\n:000000 100644 0000000000000000000000000000000000000000 3f4a2277f8e92f95ab88fe1d19e739d378ba0352 A\tservices/processing/internal/runtime/caseworker.go\n:000000 100644 0000000000000000000000000000000000000000 aaa214dbd7deb48c3ad2884462c05535a02b3c14 A\tservices/processing/internal/runtime/diagnostics.go\n:000000 100644 0000000000000000000000000000000000000000 9b2eb47e74d6557800f7ed5e7a8cd598e8c2e590 A\tservices/processing/internal/runtime/diagnostics_test.go\n:000000 100644 0000000000000000000000000000000000000000 86ee1800f0e7cecbc94289e18c4b502907c87faf A\tservices/processing/internal/runtime/recheck.go\n:100644 100644 3aeab0d89d9853a698da7ffa22f28654fc2f621d ca9add65cd97742d7baa5fc3aaba46d5d00dc5c6 M\tservices/processing/internal/runtime/runtime.go\n:100644 100644 3e267198b4379ca9d23a051f0aabdbbeb423d70b 31c912421d327f066efbf66e8a6461ada9412ccc M\tservices/processing/internal/runtime/source.go\n:000000 100644 0000000000000000000000000000000000000000 2086539582cd5919cc2b920d27fbf9e3afcf6052 A\tservices/processing/internal/runtime/timeouts.go\n:000000 100644 0000000000000000000000000000000000000000 58a190e9b500f21647d416511c37251c0701b2bd A\tservices/processing/scripts/postgres/verify_diagnostics.py\n:100644 100644 70f5d17d5233e6071630bf6fd301df0d08d7c102 d88a98361609374e979df2eac5ce22d18102c8c3 M\tservices/processing/scripts/postgres/verify_image.py\n:000000 100644 0000000000000000000000000000000000000000 8748f854b41aa465fc12d279f94ea36e1af72d83 A\tservices/processing/scripts/postgres/verify_purge.py\n:000000 100644 0000000000000000000000000000000000000000 a69fdb1a597a3b35cdaae46d4ba56c9a3bc157bd A\tservices/processing/scripts/recovery/verify_oci_recovery.py\n:000000 100644 0000000000000000000000000000000000000000 c6d6a29a173e2b3444f7b7d0d780dcc642b6dc13 A\tservices/processing/scripts/recovery/verify_recovery.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--full-index",
+        "--binary",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 303450,
+      "stdout_sha256": "d85930a00ff435b4010ebcc98f985e56589fb48df3f80c31deef1d8066c24266",
+      "stderr": "",
+      "stdout": null,
+      "output_file": "HIT-128-to-integration.diff"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--raw",
+        "--no-abbrev",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a",
+        "--",
+        "services/processing/Dockerfile",
+        "services/processing/internal",
+        "services/processing/scripts",
+        ".project-os/results/HIT-145.json",
+        ".project-os/results/HIT-128.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 1562,
+      "stdout_sha256": "587ff2925bb2fb249fabbc4fd3f2ed871171d3a108535adc09f10d5da3001c11",
+      "stderr": "",
+      "stdout": ":000000 100644 0000000000000000000000000000000000000000 471a7df7725edfc0eeace0cfc05ac6708fa21a22 A\t.project-os/results/HIT-145.json\n:000000 100644 0000000000000000000000000000000000000000 45fc51d1959d699def33941ba0464fdb18559274 A\tservices/processing/Dockerfile\n:000000 100644 0000000000000000000000000000000000000000 f52ed9d0e148a083614a5e74a55141b5f98fdf35 A\tservices/processing/internal/adapters/postgres/image_process_test.go\n:100644 100644 e06f0e97090e482030e22abc7c3420670ec5b8df 7abd678a2273742da49a11a54ffbd7d29d8069b7 M\tservices/processing/internal/adapters/postgres/observations_test.go\n:000000 100644 0000000000000000000000000000000000000000 d93c907457ab03d94ed5541e18336c8c8192f645 A\tservices/processing/internal/adapters/postgres/oci_recovery_process_test.go\n:100644 100644 6675596bdfd83ad50ed92c1b920892c1f457a403 894a9d96680ad50c4bfbadb93f0c878c8dd405dc M\tservices/processing/internal/adapters/postgres/prepare_test.go\n:100644 100644 7d604df9c7c652c9aa60f3ab5684b0a2e97f58a8 3a01a76107c006bb6794f122445a10262794d736 M\tservices/processing/internal/adapters/postgres/recovery_process_test.go\n:100644 100644 267c92513476989dbb12bea673bbb2c759f8f12e 83ea89fa8f3ddd90c379fef3f3b4a3e18b6833c2 M\tservices/processing/scripts/postgres/verify.py\n:000000 100644 0000000000000000000000000000000000000000 d88a98361609374e979df2eac5ce22d18102c8c3 A\tservices/processing/scripts/postgres/verify_image.py\n:000000 100644 0000000000000000000000000000000000000000 a69fdb1a597a3b35cdaae46d4ba56c9a3bc157bd A\tservices/processing/scripts/recovery/verify_oci_recovery.py\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde:services/processing/Dockerfile"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "174839f3d4dae5fa90a945907a2cbac7484ec7940dafeb7ddac85d12460c7aa2",
+      "stderr": "",
+      "stdout": "45fc51d1959d699def33941ba0464fdb18559274\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:services/processing/Dockerfile"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "174839f3d4dae5fa90a945907a2cbac7484ec7940dafeb7ddac85d12460c7aa2",
+      "stderr": "",
+      "stdout": "45fc51d1959d699def33941ba0464fdb18559274\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde:services/processing/Dockerfile.dockerignore"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "c3c19743d2d1ece125c63c40b671c0dff8a2ea68538b85fbfd5a2d3988550d1b",
+      "stderr": "",
+      "stdout": "0ae75640ef095ea264eea9af2dbb231c02591553\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:services/processing/Dockerfile.dockerignore"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "c3c19743d2d1ece125c63c40b671c0dff8a2ea68538b85fbfd5a2d3988550d1b",
+      "stderr": "",
+      "stdout": "0ae75640ef095ea264eea9af2dbb231c02591553\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "4a551a9bb17c0961562b51ceb85bb1e53862bbde:.project-os/results/HIT-145.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "ef4a8c9b97811a23598c86edc3f997717ab4a620c36432d9d6ef08566f5fd2b3",
+      "stderr": "",
+      "stdout": "471a7df7725edfc0eeace0cfc05ac6708fa21a22\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:.project-os/results/HIT-145.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "ef4a8c9b97811a23598c86edc3f997717ab4a620c36432d9d6ef08566f5fd2b3",
+      "stderr": "",
+      "stdout": "471a7df7725edfc0eeace0cfc05ac6708fa21a22\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/scripts/recovery/verify_recovery.py"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "ed0e27dfaf71018e5d6d5f96d12a9ee0957e6b877d883d3d1924dcf898c7956e",
+      "stderr": "",
+      "stdout": "c6d6a29a173e2b3444f7b7d0d780dcc642b6dc13\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:services/processing/scripts/recovery/verify_recovery.py"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "ed0e27dfaf71018e5d6d5f96d12a9ee0957e6b877d883d3d1924dcf898c7956e",
+      "stderr": "",
+      "stdout": "c6d6a29a173e2b3444f7b7d0d780dcc642b6dc13\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:services/processing/scripts/migrations/001_processing.sql"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "9f85a47cc3b360a6f99b6a130f011b33c70f8d34281729001abfdb8152a8d231",
+      "stderr": "",
+      "stdout": "87c321d67376e450cab3d6b1cb551e52201e0f3e\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:services/processing/scripts/migrations/001_processing.sql"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "9f85a47cc3b360a6f99b6a130f011b33c70f8d34281729001abfdb8152a8d231",
+      "stderr": "",
+      "stdout": "87c321d67376e450cab3d6b1cb551e52201e0f3e\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "8e679371504de0f1aa4a2cbb3ef6e5be2783c9e3:.project-os/results/HIT-128.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "af170df297aa3aac41558e954b7c9597428824eb53f01a4a1e6e093dc9cf0be1",
+      "stderr": "",
+      "stdout": "377fdb8adb9ed6e2c75f8b5f9496677ed49b332e\n",
+      "output_file": null
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "1ed91653a747b47a98f2738ca0d831a38cebc98a:.project-os/results/HIT-128.json"
+      ],
+      "cwd": "/Users/tima/Documents/Codex/2026-10-18/files-pasted-by-the-user-hitpipe/work/hit155-processing-oci-recovery",
+      "exit_code": 0,
+      "stdout_bytes": 41,
+      "stdout_sha256": "af170df297aa3aac41558e954b7c9597428824eb53f01a4a1e6e093dc9cf0be1",
+      "stderr": "",
+      "stdout": "377fdb8adb9ed6e2c75f8b5f9496677ed49b332e\n",
+      "output_file": null
+    }
+  ]
+}
