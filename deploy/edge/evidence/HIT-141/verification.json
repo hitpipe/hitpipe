@@ -1,0 +1,2153 @@
+{
+  "caddy": {
+    "archive": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_linux_amd64.tar.gz",
+    "archive_sha256": "727b91701a392de6ebc5027509f548bf39979e5216340d0faed8fa5e69c84f8b",
+    "binary_sha256": "678ade3bfc088749c81a681adc603333ee0bb023b6a6cfe3c0f58bef8ff854e9",
+    "non_standard_modules": 0,
+    "unknown_modules": 0,
+    "version": "v2.11.7 h1:yj0Y4fYZGPkSvibBJ1sTWE33xC0fxztVyXEW5iIdUT4="
+  },
+  "cleanup_remaining": {
+    "containers": 0,
+    "images": 0,
+    "networks": 0
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stage": "git exact source"
+    },
+    {
+      "argv": [
+        "go",
+        "version"
+      ],
+      "exit": 0,
+      "stage": "go version"
+    },
+    {
+      "argv": [
+        "go",
+        "vet",
+        "./deploy/edge/fixture"
+      ],
+      "exit": 0,
+      "stage": "fixture vet"
+    },
+    {
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "./deploy/edge/fixture"
+      ],
+      "exit": 0,
+      "stage": "fixture race tests"
+    },
+    {
+      "argv": [
+        "go",
+        "build",
+        "-trimpath",
+        "-o",
+        "/tmp/hit141-edge-95ytspia/rootfs/fixture",
+        "./deploy/edge/fixture"
+      ],
+      "exit": 0,
+      "stage": "fixture isolated static build"
+    },
+    {
+      "argv": [
+        "go",
+        "vet",
+        "./deploy/edge/probe"
+      ],
+      "exit": 0,
+      "stage": "probe vet"
+    },
+    {
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "./deploy/edge/probe"
+      ],
+      "exit": 0,
+      "stage": "probe race tests"
+    },
+    {
+      "argv": [
+        "go",
+        "build",
+        "-trimpath",
+        "-o",
+        "/tmp/hit141-edge-95ytspia/rootfs/probe",
+        "./deploy/edge/probe"
+      ],
+      "exit": 0,
+      "stage": "probe isolated static build"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "image",
+        "import",
+        "--change",
+        "LABEL hitpipe.edge-qualification=736f1c0a282d41",
+        "/tmp/hit141-edge-95ytspia/rootfs.tar",
+        "hit141-736f1c0a282d41:local"
+      ],
+      "exit": 0,
+      "stage": "import scratch image without registry"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "create",
+        "--driver",
+        "bridge",
+        "--internal",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "hit141-736f1c0a282d41-front"
+      ],
+      "exit": 0,
+      "stage": "create internal bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "inspect",
+        "hit141-736f1c0a282d41-front"
+      ],
+      "exit": 0,
+      "stage": "inspect bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "create",
+        "--driver",
+        "bridge",
+        "--internal",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "hit141-736f1c0a282d41-back"
+      ],
+      "exit": 0,
+      "stage": "create internal bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "inspect",
+        "hit141-736f1c0a282d41-back"
+      ],
+      "exit": 0,
+      "stage": "inspect bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "version"
+      ],
+      "exit": 0,
+      "stage": "caddy version"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "list-modules",
+        "--skip-standard"
+      ],
+      "exit": 0,
+      "stage": "caddy list-modules --skip-standard"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "adapt",
+        "--config",
+        "/Caddyfile",
+        "--adapter",
+        "caddyfile"
+      ],
+      "exit": 0,
+      "stage": "caddy adapt"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "validate",
+        "--config",
+        "/Caddyfile",
+        "--adapter",
+        "caddyfile"
+      ],
+      "exit": 0,
+      "stage": "caddy validate"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-private",
+        "--network-alias",
+        "private",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "private"
+      ],
+      "exit": 0,
+      "stage": "start synthetic private"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-private"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-bff",
+        "--network-alias",
+        "bff",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/bff,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "bff",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic bff"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-bff"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-intake",
+        "--network-alias",
+        "intake",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/intake,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "intake",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic intake"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-intake"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-keycloak",
+        "--network-alias",
+        "keycloak",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/keycloak,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "keycloak",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic keycloak"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-keycloak"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-iam",
+        "--network-alias",
+        "iam",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/iam,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "iam",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic iam"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-iam"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-private-baseline",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "private-positive",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6"
+      ],
+      "exit": 0,
+      "stage": "create probe private-baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-private-baseline"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-private-baseline"
+      ],
+      "exit": 0,
+      "stage": "run probe private-baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-private-baseline"
+      ],
+      "exit": 0,
+      "stage": "remove probe private-baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--name",
+        "hit141-736f1c0a282d41-edge",
+        "--network-alias",
+        "edge",
+        "--sysctl",
+        "net.ipv4.ip_unprivileged_port_start=0",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "run",
+        "--config",
+        "/Caddyfile",
+        "--adapter",
+        "caddyfile"
+      ],
+      "exit": 0,
+      "stage": "start unmodified Caddyfile baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "connect",
+        "hit141-736f1c0a282d41-back",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "attach Caddy to private bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for Caddy listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-baseline",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/client,dst=/tls,readonly",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "baseline",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6",
+        "-edge",
+        "edge:443",
+        "-ca",
+        "/tls/public-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "create probe baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-baseline"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-baseline"
+      ],
+      "exit": 0,
+      "stage": "run probe baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-baseline"
+      ],
+      "exit": 0,
+      "stage": "remove probe baseline"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "remove phase Caddy and cached outbound connections"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "hit141-736f1c0a282d41-iam"
+      ],
+      "exit": 0,
+      "stage": "replace only IAM synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-iam",
+        "--network-alias",
+        "iam",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/iam-wrong-san,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "iam",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic iam"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-iam"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-private-wrong-san",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "private-positive",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6"
+      ],
+      "exit": 0,
+      "stage": "create probe private-wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-private-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-private-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "run probe private-wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-private-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "remove probe private-wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--name",
+        "hit141-736f1c0a282d41-edge",
+        "--network-alias",
+        "edge",
+        "--sysctl",
+        "net.ipv4.ip_unprivileged_port_start=0",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "run",
+        "--config",
+        "/Caddyfile",
+        "--adapter",
+        "caddyfile"
+      ],
+      "exit": 0,
+      "stage": "start unmodified Caddyfile wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "connect",
+        "hit141-736f1c0a282d41-back",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "attach Caddy to private bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for Caddy listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-wrong-san",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/client,dst=/tls,readonly",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "wrong-san",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6",
+        "-edge",
+        "edge:443",
+        "-ca",
+        "/tls/public-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "create probe wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "run probe wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-wrong-san"
+      ],
+      "exit": 0,
+      "stage": "remove probe wrong-san"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "logs",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "classify Caddy upstream failure"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "remove phase Caddy and cached outbound connections"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "hit141-736f1c0a282d41-iam"
+      ],
+      "exit": 0,
+      "stage": "replace only IAM synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-iam",
+        "--network-alias",
+        "iam",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/iam-untrusted-ca,dst=/tls,readonly",
+        "--entrypoint",
+        "/fixture",
+        "hit141-736f1c0a282d41:local",
+        "-role",
+        "iam",
+        "-cert",
+        "/tls/server.crt",
+        "-key",
+        "/tls/server.key",
+        "-ca",
+        "/tls/service-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "start synthetic iam"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for synthetic listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-iam"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-back",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-private-untrusted-ca",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "private-positive",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6"
+      ],
+      "exit": 0,
+      "stage": "create probe private-untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-private-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-private-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "run probe private-untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-private-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "remove probe private-untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--tmpfs",
+        "/runtime:rw,nosuid,nodev,noexec,mode=0700,uid=1000,gid=1000",
+        "--mount",
+        "type=bind,src=/work/hit141/exact-e81773519b.GNq1e5/repo/docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template,dst=/Caddyfile,readonly",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/edge,dst=/tls,readonly",
+        "--env",
+        "HP_PUBLIC_HOST=app.edge.test",
+        "--env",
+        "HP_IDP_HOST=idp.edge.test",
+        "--env",
+        "HP_PUBLIC_CERT=/tls/public.crt",
+        "--env",
+        "HP_PUBLIC_KEY=/tls/public.key",
+        "--env",
+        "HP_IDP_CERT=/tls/idp.crt",
+        "--env",
+        "HP_IDP_KEY=/tls/idp.key",
+        "--env",
+        "HP_EDGE_CERT=/tls/edge.crt",
+        "--env",
+        "HP_EDGE_KEY=/tls/edge.key",
+        "--env",
+        "HP_SERVICE_CA=/tls/service-ca.crt",
+        "--env",
+        "XDG_DATA_HOME=/runtime/data",
+        "--env",
+        "XDG_CONFIG_HOME=/runtime/config",
+        "--name",
+        "hit141-736f1c0a282d41-edge",
+        "--network-alias",
+        "edge",
+        "--sysctl",
+        "net.ipv4.ip_unprivileged_port_start=0",
+        "--entrypoint",
+        "/caddy",
+        "hit141-736f1c0a282d41:local",
+        "run",
+        "--config",
+        "/Caddyfile",
+        "--adapter",
+        "caddyfile"
+      ],
+      "exit": 0,
+      "stage": "start unmodified Caddyfile untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "connect",
+        "hit141-736f1c0a282d41-back",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "attach Caddy to private bridge"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "exit": 0,
+      "stage": "wait for Caddy listener"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "create",
+        "--network",
+        "hit141-736f1c0a282d41-front",
+        "--label",
+        "hitpipe.edge-qualification=736f1c0a282d41",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--pids-limit",
+        "64",
+        "--user",
+        "1000:1000",
+        "--name",
+        "hit141-736f1c0a282d41-probe-untrusted-ca",
+        "--mount",
+        "type=bind,src=/tmp/hit141-edge-95ytspia/pki/client,dst=/tls,readonly",
+        "--entrypoint",
+        "/probe",
+        "hit141-736f1c0a282d41:local",
+        "-phase",
+        "untrusted-ca",
+        "-private-ip",
+        "172.19.0.2",
+        "-iam-ip",
+        "172.19.0.6",
+        "-edge",
+        "edge:443",
+        "-ca",
+        "/tls/public-ca.crt"
+      ],
+      "exit": 0,
+      "stage": "create probe untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "inspect",
+        "hit141-736f1c0a282d41-probe-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "inspect actual container topology"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "hit141-736f1c0a282d41-probe-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "run probe untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "hit141-736f1c0a282d41-probe-untrusted-ca"
+      ],
+      "exit": 0,
+      "stage": "remove probe untrusted-ca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "logs",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "classify Caddy upstream failure"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "hit141-736f1c0a282d41-edge"
+      ],
+      "exit": 0,
+      "stage": "remove phase Caddy and cached outbound connections"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment containers"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "6bb62c32e3d5",
+        "6df8a779353b",
+        "75ea1dee1e10",
+        "a78a11225c4e",
+        "e28681ca50b4"
+      ],
+      "exit": 0,
+      "stage": "cleanup labelled containers"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "ls",
+        "-q",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment networks"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "rm",
+        "3d6a2ec71644",
+        "571453a84b2e"
+      ],
+      "exit": 0,
+      "stage": "cleanup labelled networks"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "image",
+        "ls",
+        "-q",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment images"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "image",
+        "rm",
+        "9610da51b0d3"
+      ],
+      "exit": 0,
+      "stage": "cleanup labelled images"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment containers"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "network",
+        "ls",
+        "-q",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment networks"
+    },
+    {
+      "argv": [
+        "docker",
+        "--host",
+        "unix:///var/run/docker.sock",
+        "image",
+        "ls",
+        "-q",
+        "--filter",
+        "label=hitpipe.edge-qualification=736f1c0a282d41"
+      ],
+      "exit": 0,
+      "stage": "inventory experiment images"
+    }
+  ],
+  "phases": {
+    "baseline": {
+      "checks": [
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "oidc_login",
+          "ok": true,
+          "upstream": "iam",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "oidc_callback",
+          "ok": true,
+          "upstream": "iam",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "body_sha256": "1f057d24291647cefc6e1cec0b10205bd191b8dc546cabc56876fc94e1120589",
+          "evidence": "byte_exact_body_and_signature; no_authorization_cookie_or_hitpipe_headers",
+          "http_status": 200,
+          "name": "stripe_webhook",
+          "ok": true,
+          "stripe_signature_sha256": "59b45e4f645bd920a673af0148697dbbb02ed09ed41e3babf59e8fe25fba4752",
+          "upstream": "intake",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "ui",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "public_api",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "bff_catchall; not_direct_forwarding_to_internal_service",
+          "http_status": 200,
+          "name": "public_private_path_is_bff",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "public_admin_path_is_bff",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "public_metrics_path_is_bff",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "idp_realms",
+          "ok": true,
+          "upstream": "keycloak",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "idp_resources",
+          "ok": true,
+          "upstream": "keycloak",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "idp_well_known",
+          "ok": true,
+          "upstream": "keycloak",
+          "upstream_tls": "TLS1.3"
+        },
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 404,
+          "name": "idp_admin",
+          "ok": true
+        },
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 404,
+          "name": "idp_metrics",
+          "ok": true
+        },
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 404,
+          "name": "idp_health",
+          "ok": true
+        },
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 404,
+          "name": "idp_control",
+          "ok": true
+        },
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 404,
+          "name": "idp_default",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_80",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_2019",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_5432",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_8443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_9443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "public_edge_9444",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "fixture_private_5432",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "fixture_private_8443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "fixture_private_9443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "fixture_private_9444",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connection_not_established",
+          "name": "iam_business_listener_8443",
+          "ok": true
+        }
+      ],
+      "passed": true,
+      "phase": "baseline"
+    },
+    "private-baseline": {
+      "checks": [
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_5432",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_8443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9444",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "iam_business_listener_8443",
+          "ok": true
+        }
+      ],
+      "passed": true,
+      "phase": "private-positive"
+    },
+    "private-untrusted-ca": {
+      "checks": [
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_5432",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_8443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9444",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "iam_business_listener_8443",
+          "ok": true
+        }
+      ],
+      "passed": true,
+      "phase": "private-positive"
+    },
+    "private-wrong-san": {
+      "checks": [
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_5432",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_8443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9443",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "fixture_private_9444",
+          "ok": true
+        },
+        {
+          "evidence": "tcp_connected",
+          "name": "iam_business_listener_8443",
+          "ok": true
+        }
+      ],
+      "passed": true,
+      "phase": "private-positive"
+    },
+    "untrusted-ca": {
+      "checks": [
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 502,
+          "name": "iam_with_invalid_upstream_certificate",
+          "ok": true
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "unrelated_bff_control",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        }
+      ],
+      "passed": true,
+      "phase": "untrusted-ca"
+    },
+    "wrong-san": {
+      "checks": [
+        {
+          "evidence": "edge_rejected; no_fixture_response",
+          "http_status": 502,
+          "name": "iam_with_invalid_upstream_certificate",
+          "ok": true
+        },
+        {
+          "evidence": "exact_route_and_sanitized_headers",
+          "http_status": 200,
+          "name": "unrelated_bff_control",
+          "ok": true,
+          "upstream": "bff",
+          "upstream_tls": "TLS1.3"
+        }
+      ],
+      "passed": true,
+      "phase": "wrong-san"
+    }
+  },
+  "rejected_tls_diagnostics": {
+    "untrusted-ca": true,
+    "wrong-san": true
+  },
+  "scope": "Isolated synthetic topology, route/header and transport checks; no live endpoints or data.",
+  "source_commit": "e81773519b6c163816583310f481bc5ad0fdc82a",
+  "state": "PASSED",
+  "task": "HIT-141",
+  "template": {
+    "adapted_sha256": "bd40bd5de97f71b9a6d1adfa56062c01b7427d40f136a3cc06a73de0ddecba1f",
+    "admin_disabled": true,
+    "archive_mirror": "docs/labs/pr12/upstream/architecture/formal/platform/Caddyfile.template",
+    "sha256": "44171d205e928177b150a4c0a71ba630843771a10f1ab11fa682e7111087799c"
+  },
+  "toolchain": "go version go1.27.2 linux/amd64",
+  "topology": {
+    "bff": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "caddy-baseline": {
+      "attachments": [
+        "front",
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "caddy-untrusted-ca": {
+      "attachments": [
+        "front",
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "caddy-wrong-san": {
+      "attachments": [
+        "front",
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "iam": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "iam-untrusted-ca": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "iam-wrong-san": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "intake": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "keycloak": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "networks": {
+      "front": "internal bridge",
+      "private": "internal bridge"
+    },
+    "private": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-baseline": {
+      "attachments": [
+        "front"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-private-baseline": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-private-untrusted-ca": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-private-wrong-san": {
+      "attachments": [
+        "private"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-untrusted-ca": {
+      "attachments": [
+        "front"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    },
+    "probe-wrong-san": {
+      "attachments": [
+        "front"
+      ],
+      "privileged": false,
+      "published_ports": 0
+    }
+  }
+}
