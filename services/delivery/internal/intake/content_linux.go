@@ -44,6 +44,14 @@ func (d *Directory) Check() error {
 		return ErrUnavailable
 	}
 	fd, err := unix.Openat(dir, ".", unix.O_TMPFILE|unix.O_WRONLY|unix.O_CLOEXEC, 0600)
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.EINVAL) || errors.Is(err, unix.ENOSYS) {
+		name := ".probe-" + uuid.NewString()
+		fd, err = unix.Openat(dir, name, unix.O_WRONLY|unix.O_CREAT|unix.O_EXCL|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0600)
+		if err == nil && unix.Unlinkat(dir, name, 0) != nil {
+			_ = unix.Close(fd)
+			return ErrUnavailable
+		}
+	}
 	if err != nil {
 		return ErrUnavailable
 	}

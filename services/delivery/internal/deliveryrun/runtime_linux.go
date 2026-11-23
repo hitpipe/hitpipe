@@ -57,6 +57,7 @@ var revisionPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
 type guarded struct {
 	ready *atomic.Bool
 	next  intake.StartGate
+	files *intake.Directory
 }
 
 func (g guarded) WithOpen(ctx context.Context, ws uuid.UUID, epoch int64, work func() error) error {
@@ -65,6 +66,9 @@ func (g guarded) WithOpen(ctx context.Context, ws uuid.UUID, epoch int64, work f
 	}
 	return g.next.WithOpen(ctx, ws, epoch, func() error {
 		if !g.ready.Load() || ctx.Err() != nil {
+			return intake.ErrUnavailable
+		}
+		if g.files.Check() != nil || ctx.Err() != nil {
 			return intake.ErrUnavailable
 		}
 		return work()
@@ -137,7 +141,7 @@ func Run(ctx context.Context, cfg Config, adapters Adapters, clickup *dispatch.C
 		return errors.New("closed: worker ledger unavailable")
 	}
 	var ready atomic.Bool
-	gate := guarded{ready: &ready, next: adapters.Gate}
+	gate := guarded{ready: &ready, next: adapters.Gate, files: files}
 	admission, err := intake.New(adapters.Intake, gate, appLedger)
 	if err != nil {
 		return errors.New("closed: admission adapter unavailable")
@@ -220,6 +224,12 @@ func databaseReady(ctx context.Context, pool *pgxpool.Pool, role string) error {
 		AND current_setting('fsync')='on' AND current_setting('full_page_writes')='on'
 		AND current_setting('synchronous_commit')='on'
 		AND EXISTS(SELECT 1 FROM hp_delivery.schema_version WHERE version=1)
+		AND has_table_privilege(current_user,'hp_delivery.attempts','SELECT')
+		AND has_table_privilege(current_user,'hp_delivery.intent_content','SELECT')
+		AND (current_user<>'hp_delivery_worker' OR
+		  (has_table_privilege(current_user,'hp_delivery.job_index','SELECT')
+		  AND has_table_privilege(current_user,'hp_delivery.credential_budget','UPDATE')
+		  AND has_table_privilege(current_user,'hp_delivery.outbox','UPDATE')))
 		AND EXISTS(SELECT 1 FROM pg_roles WHERE rolname=current_user AND NOT rolsuper AND NOT rolbypassrls)`, role).Scan(&ready)
 	if err != nil || !ready {
 		return fmt.Errorf("closed: PostgreSQL 18.7, schema, durable settings or role %s unavailable", role)

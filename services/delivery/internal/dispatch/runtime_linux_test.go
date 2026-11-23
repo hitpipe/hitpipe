@@ -102,7 +102,8 @@ func TestDeliveryProcessCycle(t *testing.T) {
 	clickup.StartTLS()
 	t.Cleanup(clickup.Close)
 
-	var recovered atomic.Bool
+	var accepting atomic.Bool
+	accepting.Store(true)
 	var mu sync.Mutex
 	var first []byte
 	var firstID uuid.UUID
@@ -139,7 +140,7 @@ func TestDeliveryProcessCycle(t *testing.T) {
 			w.WriteHeader(http.StatusConflict)
 			return
 		}
-		if !recovered.Load() {
+		if !accepting.Load() {
 			w.Header().Set("Retry-After", "1")
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
@@ -175,6 +176,7 @@ func TestDeliveryProcessCycle(t *testing.T) {
 	refuses(t, normalBin, env, nil, "obligatory runtime adapters")
 	refuses(t, fixtureBin, env, map[string]string{"DELIVERY_APP_DSN": ""}, "configuration is missing")
 	refuses(t, fixtureBin, env, map[string]string{"DELIVERY_CONTENT_DIR": filepath.Join(dir, "missing")}, "private content directory unavailable")
+	refuses(t, fixtureBin, env, map[string]string{"DELIVERY_WORKER_DSN": env["DELIVERY_APP_DSN"]}, "role hp_delivery_worker unavailable")
 	refuses(t, fixtureBin, env, map[string]string{"DELIVERY_PROFILE": "STANDARD"}, "requires explicit TEST profile")
 	if creates.Load() != 0 {
 		t.Fatal("failed start produced a provider write")
@@ -229,6 +231,18 @@ func TestDeliveryProcessCycle(t *testing.T) {
 	}
 	writeRuntimeFile(t, manifestPath, manifest)
 	waitHealthy(http.StatusOK)
+	if err := os.Chmod(f.root, 0500); err != nil {
+		t.Fatal(err)
+	}
+	waitHealthy(http.StatusServiceUnavailable)
+	send(http.StatusServiceUnavailable)
+	if creates.Load() != 0 {
+		t.Fatal("unwritable storage produced a ClickUp write")
+	}
+	if err := os.Chmod(f.root, 0700); err != nil {
+		t.Fatal(err)
+	}
+	waitHealthy(http.StatusOK)
 	receipt := send(http.StatusAccepted)
 	if dup := send(http.StatusAccepted); receipt != dup {
 		t.Fatal("same durable receipt changed on duplicate intent")
@@ -238,6 +252,7 @@ func TestDeliveryProcessCycle(t *testing.T) {
 	case <-time.After(12 * time.Second):
 		t.Fatal("no readback after durable ClickUp identity")
 	}
+	accepting.Store(false)
 	stop()
 	if creates.Load() != 1 || gets.Load() != 1 {
 		t.Fatal("unexpected provider counts at process crash")
@@ -266,7 +281,7 @@ func TestDeliveryProcessCycle(t *testing.T) {
 	runtimeEventually(t, "durable PENDING observation after HTTP 503", func() bool { return outbox("PENDING") })
 	pendingID := messageID
 	stop()
-	recovered.Store(true)
+	accepting.Store(true)
 	runtimeStart(t, fixtureBin, env)
 	waitHealthy(http.StatusOK)
 	runtimeEventually(t, "existing publisher ACK", func() bool { return outbox("ACKED") })

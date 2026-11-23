@@ -53,7 +53,21 @@ try {
                            '-e', 'HIT92_REQUIRE_POSTGRES=1', '-e', "HIT92_TEST_WORKER_DSN=$worker")
     if ($RuntimeRevision) {
         Write-Output "HIT-133 revision $RuntimeRevision"
-        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment -e "HIT133_REVISION=$RuntimeRevision" $go sh -ec 'go version; echo "go build -ldflags -X main.revision=$HIT133_REVISION ./cmd/delivery"; go build -ldflags "-X main.revision=$HIT133_REVISION" -o /tmp/delivery ./cmd/delivery; echo standard-build-exit=0; echo "go build -tags delivery_fixture -ldflags -X main.revision=$HIT133_REVISION ./cmd/delivery"; go build -tags delivery_fixture -ldflags "-X main.revision=$HIT133_REVISION" -o /tmp/delivery-fixture ./cmd/delivery; echo fixture-build-exit=0; export HIT133_NORMAL_BIN=/tmp/delivery HIT133_FIXTURE_BIN=/tmp/delivery-fixture; go test -v -race -count=1 ./...; echo go-test-exit=0; go vet ./...; echo go-vet-exit=0; go vet -tags delivery_fixture ./cmd/delivery; echo fixture-vet-exit=0'
+        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment -e "HIT133_REVISION=$RuntimeRevision" $go sh -ec '
+            go version
+            echo "go build -ldflags -X main.revision=$HIT133_REVISION ./cmd/delivery"
+            go build -ldflags "-X main.revision=$HIT133_REVISION" -o /tmp/delivery ./cmd/delivery
+            echo standard-build-exit=0
+            echo "go build -race -tags delivery_fixture -ldflags -X main.revision=$HIT133_REVISION ./cmd/delivery"
+            go build -race -tags delivery_fixture -ldflags "-X main.revision=$HIT133_REVISION" -o /tmp/delivery-fixture ./cmd/delivery
+            echo fixture-build-exit=0
+            export HIT133_NORMAL_BIN=/tmp/delivery HIT133_FIXTURE_BIN=/tmp/delivery-fixture
+            go test -v -race -count=1 ./...
+            echo go-test-exit=0
+            go vet ./...
+            echo go-vet-exit=0
+            go vet -tags delivery_fixture ./cmd/delivery
+            echo fixture-vet-exit=0'
     } elseif ($ReadbackBenchmark) {
         Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment -e HIT94_BENCHMARK=1 $go sh -ec 'uname -smr; go version; grep -m 1 "model name" /proc/cpuinfo; grep MemTotal /proc/meminfo; cat /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max; echo "go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch"; go test -v -count=1 -run "^TestHIT94ReadbackBenchmark$" ./internal/dispatch; echo benchmark-exit=0'
     } else {
