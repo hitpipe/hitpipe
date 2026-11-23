@@ -12,8 +12,18 @@ case ${1:-browser} in
   persisted-case)
     exec "$node" "$here/verify-case.mjs" "$config" "${2:?Pass the earlier browser-proof.json}"
     ;;
+  stripe)
+    command=${2:-status}
+    case "$command" in
+      paid|replay|unpaid|async-paid|status) ;;
+      *) printf 'Допустимо paid, replay, unpaid, async-paid или status.\n' >&2; exit 2 ;;
+    esac
+    export HITPIPE_BROWSER_SHARE
+    HITPIPE_BROWSER_SHARE=$(realpath -- "$state/current/bridge")
+    exec "${HITPIPE_SCHOOL_EVENT:?Set the school event launcher}" "$command"
+    ;;
   *)
-    printf 'Режимы проверки — browser и persisted-case.\n' >&2
+    printf 'Режимы проверки — browser, persisted-case и stripe.\n' >&2
     exit 2
     ;;
 esac

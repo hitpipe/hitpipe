@@ -18,6 +18,7 @@ if (input.length !== 3 || input.some(value => !value)) {
 const [share, frontend, report] = input.map(path => resolve(path));
 const webPort = Number(process.env.HITPIPE_BROWSER_PORT ?? '3108');
 const entryPort = Number(process.env.HITPIPE_SCHOOL_ENTRY_PORT ?? '3109');
+const schoolAiEnabled = process.env.HITPIPE_SCHOOL_AI === '1';
 if (![webPort, entryPort].every(port => Number.isInteger(port) && port > 1023 && port <= 65535)
     || new Set([webPort, entryPort, 8443, 9443]).size !== 4) {
   throw new Error('Distinct unprivileged ports are required for browser and entry');
@@ -118,6 +119,7 @@ async function requestBody(req) {
 async function startIAM(ready, hostPki, bffCA, bffFingerprint, runtimeId) {
   const allowedActions = new Set(['CASE_READ', 'CONFIG_READ', 'CONFIG_WRITE', 'ACTIVATE',
     'CONNECTOR_READ', 'PAUSE', 'RESUME', 'RECHECK']);
+  if (schoolAiEnabled) allowedActions.add('AI_PREPARE');
   const region = {
     workspace_id: ready.workspaceId, name: 'HitPipe · демонстрация', lifecycle: 'ACTIVE',
     role: 'OWNER', revision: 1, security_epoch: ready.securityEpoch,
@@ -312,6 +314,9 @@ async function run() {
     controlKey: pki.keyPath('bff-control.demo.test'), controlIamName: 'iam-control.demo.test',
     controlIamFingerprint: tlsFingerprint(await readFile(pki.certPath('iam-control.demo.test'))),
     runtimeId, generation: 1, owners: { processing, ...metadata },
+    ...(schoolAiEnabled ? { schoolAi: { workspaceId: ready.workspaceId,
+      aliases: { price: ready.priceAlias, list: ready.listAlias, assignee: ready.assigneeAlias },
+    } } : {}),
   }));
   const next = start(process.execPath, ['server.mjs', '--iam-test-transport'], frontend, {
     PORT: new URL(publicOrigin).port, HOST: host, HITPIPE_BFF_CONFIG: bffConfig, NEXT_TELEMETRY_DISABLED: '1',
@@ -347,6 +352,7 @@ async function run() {
     priceAlias: ready.priceAlias, listAlias: ready.listAlias, assigneeAlias: ready.assigneeAlias,
     serviceLabel: ready.serviceLabel, clickupProofUrl: proof.url, stripeTriggerUrl: proof.trigger, artifactDir: report,
     frontendRoot: frontend, chromiumExecutable: process.env.HITPIPE_CHROMIUM_EXECUTABLE,
+    schoolAi: schoolAiEnabled,
   });
   await safeWrite(join(report, 'web-ready.json'), { origin: publicOrigin, entryUrl, proofUrl: proof.url, mode: 'school-fixture' });
   console.log('HitPipe school UI ready on ' + publicOrigin + ' (loopback).');

@@ -34,6 +34,7 @@ function validateConfig(config) {
     assert.ok(typeof config[key] === 'string' && config[key].length > 0, `${key}: требуется значение`);
   }
   assert.ok(isAbsolute(config.artifactDir), 'artifactDir: нужен абсолютный путь');
+  assert.ok(config.schoolAi === undefined || typeof config.schoolAi === 'boolean', 'schoolAi: ожидается true или false');
   assert.ok(!/[\x00-\x20\x7f;,]/.test(config.sessionToken), 'Некорректная форма значения сеанса');
   return config;
 }
@@ -151,17 +152,20 @@ async function run(config) {
     await expect(stripeConnection.locator(`option[value="${config.stripeConnectionId}"]`)).toBeAttached();
     await expect(clickupConnection.locator(`option[value="${config.clickupConnectionId}"]`)).toBeAttached();
 
-    await page.getByLabel('Название операции', { exact: true }).fill(config.operationName ?? 'Заказ из Stripe');
+    const operationName = page.getByLabel('Название операции', { exact: true });
+    const initialName = config.operationName ?? 'Заказ из Stripe';
+    await operationName.fill(initialName);
     await page.getByLabel('Подпись услуги', { exact: true }).fill(config.serviceLabel ?? 'Synthetic service');
     await page.getByLabel('Режим операции').selectOption('TEST');
     await stripeConnection.selectOption(config.stripeConnectionId);
     await clickupConnection.selectOption(config.clickupConnectionId);
 
-    for (const [label, connectionId, value] of [
+    const selections = [
       ['Тариф Stripe (Price)', config.stripeConnectionId, config.priceAlias],
       ['Список ClickUp (List)', config.clickupConnectionId, config.listAlias],
       ['Исполнитель', config.clickupConnectionId, config.assigneeAlias],
-    ]) {
+    ];
+    for (const [label, connectionId, value] of selections) {
       const load = button(`Загрузить: ${label}`);
       const [optionsResponse] = await Promise.all([
         responseFor('GET', path => path === `${workspace}/connections/${connectionId}/options`),
@@ -169,10 +173,83 @@ async function run(config) {
       ]);
       assert.equal(optionsResponse.status(), 200, `Загрузка «${label}» вернула HTTP ${optionsResponse.status()}`);
       await expect(load).toBeEnabled();
-      await page.getByRole('combobox', { name: label, exact: true }).selectOption(value);
+      if (!config.schoolAi) await page.getByRole('combobox', { name: label, exact: true }).selectOption(value);
+    }
+
+    const openAssistant = button('Открыть учебного помощника');
+    if (config.schoolAi) {
+      const proposalPath = '/api/v1/ai/proposals';
+      const writes = [];
+      const captureWrite = request => {
+        const url = new URL(request.url());
+        if (request.method() === 'POST' && url.origin === config.origin
+            && (url.pathname === proposalPath || url.pathname.startsWith(workspace + '/'))) writes.push(url.pathname);
+      };
+      page.on('request', captureWrite);
+      try {
+        await openAssistant.click();
+        const assistant = page.getByRole('complementary', { name: 'Учебный помощник' });
+        await expect(assistant).toBeVisible();
+        await expect(assistant.getByText(/Получатель — локальный учебный помощник/)).toBeVisible();
+        const send = assistant.getByRole('button', { name: 'Отправить запрос', exact: true });
+        await expect(send).toBeDisabled();
+        await assistant.getByRole('button', { name: 'Вставить учебный запрос', exact: true }).click();
+        const editor = assistant.getByLabel('Запрос помощнику');
+        await expect(editor).toHaveValue('Подготовь тестовую операцию Stripe → ClickUp');
+        assert.equal(writes.length, 0, 'Подстановка текста не должна отправлять запрос');
+
+        const [response] = await Promise.all([responseFor('POST', path => path === proposalPath), send.click()]);
+        assert.equal(response.status(), 200, 'Защищённый маршрут помощника должен принять отправку');
+        assert.equal(await response.headerValue('cache-control'), 'private, no-store');
+        const sent = response.request().postDataJSON();
+        const requestId = response.request().headers()['x-request-id'];
+        assert.ok(uuid.test(requestId) && sent.request_id === requestId && sent.explicit_send === true
+          && sent.recipient_notice_version === 'ai-minimal-v1' && sent.editor_text === await editor.inputValue()
+          && Array.isArray(sent.intent_aliases) && sent.intent_aliases.length === selections.length
+          && selections.every((selection, index) => sent.intent_aliases[index] === selection[2])
+          && Array.isArray(sent.synthetic_examples) && sent.synthetic_examples.length === 0
+          && Object.keys(sent).length === 6, 'Помощнику ушли данные за пределами разрешённого запроса');
+        const proposal = await response.json();
+        assert.ok(proposal.status === 'PROPOSAL' && proposal.request_id === requestId && proposal.proposed_name
+          && proposal.price_alias === config.priceAlias && proposal.list_alias === config.listAlias
+          && proposal.assignee_alias === config.assigneeAlias, 'Получено предложение с неожиданными настройками');
+
+        const apply = assistant.getByRole('button', { name: 'Внести в поля черновика', exact: true });
+        await expect(apply).toBeEnabled();
+        await expect(operationName).toHaveValue(initialName);
+        for (const [label] of selections) {
+          await expect(page.getByRole('combobox', { name: label, exact: true })).toHaveValue('');
+        }
+        await apply.click();
+        await expect(operationName).toHaveValue(proposal.proposed_name);
+        for (const [label, , value] of selections) {
+          await expect(page.getByRole('combobox', { name: label, exact: true })).toHaveValue(value);
+        }
+        await expect(assistant.getByText(/Предложение внесено в поля/)).toBeVisible();
+        await assistant.getByRole('button', { name: 'Скрыть помощника', exact: true }).click();
+        await expect(assistant).toHaveCount(0);
+        assert.deepEqual(writes, [proposalPath], 'Пользователь ещё не просил сохранить черновик или запустить операцию');
+        console.log('Учебный помощник вернул предложение. Поля изменились после нажатия «Внести в поля черновика».');
+      } finally {
+        page.off('request', captureWrite);
+      }
+    } else {
+      await expect(openAssistant).toHaveCount(0);
     }
     await page.getByLabel('Обязательные ключи контекста через запятую', { exact: true }).fill('');
     await expect(page.getByText('Выбранные варианты подтверждены полученными данными.')).toBeVisible();
+    const operations = page.getByRole('region', { name: 'Управление операцией' });
+    const readOperations = operations.getByRole('button', { name: 'Прочитать состояние операций', exact: true });
+    await expect(readOperations).toBeEnabled({ timeout: 12_000 });
+    if (await operations.getByRole('alert').isVisible()) {
+      const problem = await operations.getByRole('alert').innerText();
+      assert.match(problem, /\(503\)|Истекло время ожидания ответа/, 'При чтении операций произошла другая ошибка');
+      const [current] = await Promise.all([
+        responseFor('GET', path => path === `${workspace}/operations`), readOperations.click(),
+      ]);
+      assert.equal(current.status(), 200, 'Повторное чтение операций должно пройти');
+    }
+    await expect(operations.getByText('Сервис не вернул операций.')).toBeVisible();
     const draft = await clickAndRead(button('Сохранить черновик'), path => path === `${workspace}/drafts`, 201);
     assert.ok(typeof draft.draft_id === 'string' && uuid.test(draft.draft_id) && draft.revision === 1,
       'Владелец не сохранил черновик ревизии 1');
@@ -189,7 +266,6 @@ async function run(config) {
     );
     assert.equal(rehearsal.live_requests_made, 0, 'Репетиция не должна вызывать внешние сервисы');
     await expect(page.getByText('Внешних запросов: 0.', { exact: false })).toBeVisible();
-    const operations = page.getByRole('region', { name: 'Управление операцией' });
     await operations.getByRole('button', { name: 'Просмотреть конфигурацию для включения' }).click();
     const activationButton = operations.getByRole('button', { name: 'Включить эту операцию', exact: true });
     await expect(activationButton).toBeVisible();
@@ -284,6 +360,7 @@ async function run(config) {
     await writeFile(join(config.artifactDir, 'browser-proof.json'), JSON.stringify({
       browser: chromium.name(),
       browser_version: browser.version(),
+      ...(config.schoolAi ? { assistant_proposal_applied: true } : {}),
       operation_id: operation.operation_id,
       case_id: proof.case_id,
       clickup_task_id: proof.task_id,
