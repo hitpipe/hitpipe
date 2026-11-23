@@ -178,10 +178,14 @@ async function relay(socket) {
 }
 
 function providerObservation(socketPath) {
-  let current;
-  return () => {
-    if (current && Date.now() - current.startedAt < 250) return current.result;
-    const result = new Promise((resolve, reject) => {
+  let pending;
+  let observed;
+  return async () => {
+    // Intake and Delivery expose the same local fixtures. Share one real
+    // observation across the BFF fan-out and the next few option requests.
+    if (observed && Date.now() - Date.parse(observed) < 10_000) return observed;
+    if (pending) return pending;
+    pending = new Promise((resolve, reject) => {
       const request = httpRequest({ socketPath, path: '/status', method: 'GET' }, response => {
         const chunks = [];
         let size = 0;
@@ -207,9 +211,11 @@ function providerObservation(socketPath) {
       request.setTimeout(2000, () => request.destroy(new Error('Local provider status timed out')));
       request.on('error', reject);
       request.end();
-    });
-    current = { result, startedAt: Date.now() };
-    return result;
+    }).then(value => {
+      observed = value;
+      return value;
+    }).finally(() => { pending = undefined; });
+    return pending;
   };
 }
 

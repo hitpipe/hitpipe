@@ -149,6 +149,15 @@ async function run(config) {
     const stripeConnection = page.getByLabel('Подключение Stripe');
     const clickupConnection = page.getByLabel('Подключение ClickUp');
     // The form cancels pending reads when a user edits it. Wait for real connection metadata.
+    const refreshConnections = button('Обновить подключения');
+    await expect(refreshConnections).toBeEnabled({ timeout: 12_000 });
+    const connectionWarning = page.getByRole('alert').filter({ hasText: 'Сервис временно недоступен (503)' }).first();
+    if (await stripeConnection.locator(`option[value="${config.stripeConnectionId}"]`).count() === 0 && await connectionWarning.isVisible()) {
+      const [connections] = await Promise.all([
+        responseFor('GET', path => path === `${workspace}/connections`), refreshConnections.click(),
+      ]);
+      assert.equal(connections.status(), 200, 'Повторное чтение подключений должно пройти');
+    }
     await expect(stripeConnection.locator(`option[value="${config.stripeConnectionId}"]`)).toBeAttached();
     await expect(clickupConnection.locator(`option[value="${config.clickupConnectionId}"]`)).toBeAttached();
 
