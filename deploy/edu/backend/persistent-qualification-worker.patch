@@ -1,0 +1,52 @@
+--- a/internal/demoworker/worker.go
++++ b/internal/demoworker/worker.go
+@@ -1,4 +1,4 @@
+-// Package demoworker is the single-case, isolated delivery qualification runner.
++// Package demoworker runs isolated delivery qualification on bounded local fixtures.
+ // It can call only loopback endpoints and cannot use real provider credentials.
+ package demoworker
+ 
+@@ -28,6 +28,8 @@
+ 
+ const syntheticCredential = "synthetic-hitpipe-demo"
+ 
++var errFactExpired = errors.New("offline delivery facts expired before network start")
++
+ type Config struct {
+ 	WorkerDSN, ProviderOrigin, ProcessingOrigin, ProcessingServerName          string
+ 	ProviderCA, ProcessingCA, ProcessingClientCertificate, ProcessingClientKey string
+@@ -121,6 +123,11 @@
+ 			taskID, err = client.Create(bounded, syntheticCredential, target)
+ 			return err
+ 		})
++		if errors.Is(err, errFactExpired) {
++			// A fence was durably recorded. Do not retry it or start any network call.
++			fmt.Fprintln(os.Stderr, errFactExpired)
++			continue
++		}
+ 		if errors.Is(err, pgx.ErrNoRows) || errors.Is(err, intake.ErrDenied) {
+ 			continue
+ 		}
+@@ -146,9 +153,11 @@
+ 		if err != nil {
+ 			return fmt.Errorf("offline delivery could not save observation: %w", err)
+ 		}
+-		return gate.WithOpen(ctx, cfg.WorkspaceID, cfg.Epoch, func() error {
++		if err := gate.WithOpen(ctx, cfg.WorkspaceID, cfg.Epoch, func() error {
+ 			return publish(ctx, pool, dir, cfg, processHTTP, processing, messageID, message.Digest, ref)
+-		})
++		}); err != nil {
++			return err
++		}
+ 	}
+ }
+ 
+@@ -235,7 +244,7 @@
+ 		return item, target, err
+ 	}
+ 	if !time.Now().Before(item.until) {
+-		return item, target, errors.New("offline delivery expired before network start")
++		return item, target, errFactExpired
+ 	}
+ 	return item, target, nil
+ }

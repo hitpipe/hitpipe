@@ -1,0 +1,16 @@
+[Unit]
+Description=HitPipe local school environment
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/hitpipe-school.env
+ExecStart=/usr/bin/bash ${HITPIPE_SCHOOL_CODE}/deploy/edu/serve.sh
+Restart=on-failure
+RestartSec=3
+KillMode=mixed
+TimeoutStopSec=65
+UMask=0077
+
+[Install]
+WantedBy=default.target
