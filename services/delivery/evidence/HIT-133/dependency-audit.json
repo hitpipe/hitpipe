@@ -1,0 +1,80 @@
+{
+  "subject": "HIT-133",
+  "frozen_contract_revision": 1,
+  "tested_commit": "4ad31432e0417de95b6d6f7fcac60ae55b8e9d52",
+  "base": "9f122f98460d0a95acc734172197184942e86d7c",
+  "dependency_inclusion": "git merge-base --is-ancestor <dependency-head-or-result> <tested-commit> для всех записей. Открытые PR включены через родословную одного стека.",
+  "dependencies": [
+    {
+      "issue": "HIT-70",
+      "jira_status": "Done",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/49",
+      "merged": false,
+      "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+      "accepted_result": "https://github.com/hitpipe/hitpipe/blob/465cabdc1ca7a83a88ae1b9aaa8cd6678a9a7455/.project-os/results/HIT-70.json",
+      "implementation_revision": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+      "included_in_candidate": true,
+      "composition": "Схема PostgreSQL 18.7, RLS и права ролей."
+    },
+    {
+      "issue": "HIT-91",
+      "jira_status": "Done",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/93",
+      "merged": false,
+      "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+      "accepted_result": "https://github.com/hitpipe/hitpipe/blob/a226778c6e40bac897965370ef43ce7b7fa6b369/.project-os/results/HIT-91.json",
+      "implementation_revision": "3c671f1f22d5e3466b2218b605b28545875c907e",
+      "included_in_candidate": true,
+      "composition": "Приём DeliveryIntent, mTLS, транзакционная квитанция, файловый контент."
+    },
+    {
+      "issue": "HIT-92",
+      "jira_status": "Done",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/98",
+      "merged": false,
+      "head": "d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3",
+      "accepted_result": "https://github.com/hitpipe/hitpipe/blob/d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3/.project-os/results/HIT-92.json",
+      "implementation_revision": "42f3df82f1f73ddd45fb1c22d59d5d843b876c45",
+      "included_in_candidate": true,
+      "composition": "Worker.Run, fence и однократное создание."
+    },
+    {
+      "issue": "HIT-93",
+      "jira_status": "Done",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/99",
+      "merged": false,
+      "head": "0914c3cbdaa82b01b15231d39ceffcec983eea7d",
+      "accepted_result": "https://github.com/hitpipe/hitpipe/blob/0914c3cbdaa82b01b15231d39ceffcec983eea7d/.project-os/results/HIT-93.json",
+      "implementation_revision": "f8498a4d4eccfd537149ecff17b9d0936e8f1bb2",
+      "included_in_candidate": true,
+      "composition": "QueryService, TaskObservation и Publisher с durable retry."
+    },
+    {
+      "issue": "HIT-94",
+      "jira_status": "Done",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/100",
+      "merged": false,
+      "head": "9f122f98460d0a95acc734172197184942e86d7c",
+      "accepted_result": "https://github.com/hitpipe/hitpipe/blob/9f122f98460d0a95acc734172197184942e86d7c/.project-os/results/HIT-94.json",
+      "implementation_revision": "28d9541cebb280f80de14f32df2f3bffeb8d7cce",
+      "included_in_candidate": true,
+      "composition": "Принятый пул HTTPS safe-read, основа ветки HIT-133."
+    }
+  ],
+  "migration": {
+    "same_git_blob_as_hit70": "657a06ca5ec8cdee020c2ab0037a72f421f33e84",
+    "sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+    "pinned_postgres_image": "docker.io/library/postgres:18.7-alpine@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366"
+  },
+  "protocol": {
+    "oas": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+    "sql": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/sql/delivery.sql",
+    "manifest": "https://github.com/hitpipe/project-os/blob/0ff88d118e39a5dfaa34540c0d621649c34655a7/contracts/hitpipe/mvp-2026-10-31/phase-candidates/systemdesign.json",
+    "routes": [
+      "acceptDeliveryIntent (Processing mTLS; DeliveryIntent → 202 Receipt)",
+      "queryKnownTask (Processing mTLS; DeliveryQuery → 200 TaskObservation)",
+      "applyTaskObservation (Delivery mTLS; TaskObservation → 202 Receipt)",
+      "healthDelivery (OPS mTLS; 200 Health либо 503 Error)"
+    ]
+  }
+}

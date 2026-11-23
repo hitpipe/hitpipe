@@ -34,6 +34,38 @@ func (d *Directory) Close() error {
 	return d.dir.Close()
 }
 
+// Check verifies the provisioned, pinned directory can durably write. No
+// record is created, and the probe never opens a path based on request data.
+func (d *Directory) Check() error {
+	dir := int(d.dir.Fd())
+	var st unix.Stat_t
+	if unix.Fstat(dir, &st) != nil || st.Nlink == 0 || st.Mode&07777 != 0700 ||
+		st.Uid != uint32(unix.Geteuid()) {
+		return ErrUnavailable
+	}
+	fd, err := unix.Openat(dir, ".", unix.O_TMPFILE|unix.O_WRONLY|unix.O_CLOEXEC, 0600)
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.EINVAL) || errors.Is(err, unix.ENOSYS) {
+		name := ".probe-" + uuid.NewString()
+		fd, err = unix.Openat(dir, name, unix.O_WRONLY|unix.O_CREAT|unix.O_EXCL|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0600)
+		if err == nil && unix.Unlinkat(dir, name, 0) != nil {
+			_ = unix.Close(fd)
+			return ErrUnavailable
+		}
+	}
+	if err != nil {
+		return ErrUnavailable
+	}
+	f := os.NewFile(uintptr(fd), "delivery-storage-probe")
+	_, err = f.Write([]byte{0})
+	if err == nil {
+		err = f.Sync()
+	}
+	if errors.Join(err, f.Close()) != nil {
+		return ErrUnavailable
+	}
+	return nil
+}
+
 func (d *Directory) Put(data []byte, expires time.Time) (ContentRef, error) {
 	if len(data) == 0 || len(data) > maxContentBytes {
 		return ContentRef{}, ErrUnavailable

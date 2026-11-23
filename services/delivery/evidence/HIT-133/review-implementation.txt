@@ -1,0 +1,2188 @@
+HIT-133 composition and inherited runtime paths
+Accepted ancestor 9f122f98460d0a95acc734172197184942e86d7c
+Tested 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52
+Exact Git blobs follow.
+
+--- file services/delivery/cmd/delivery/main_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 7539bd1c6249990c61d05c709aa1e66f430f75fb; SHA-256 1c001ee0d95cf81714e802c57f401038cadcb00bd3c62e077b60947672f03a2e; 2375 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/main_linux.go
+
+package main
+
+import (
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
+	"log"
+	"os"
+	"os/signal"
+	"path/filepath"
+	"syscall"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/deliveryrun"
+)
+
+var revision string
+
+func main() {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	cfg, err := configuration()
+	if err == nil {
+		err = launch(ctx, cfg)
+	}
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+}
+
+func configuration() (deliveryrun.Config, error) {
+	cfg := deliveryrun.Config{
+		AppDSN: os.Getenv("DELIVERY_APP_DSN"), WorkerDSN: os.Getenv("DELIVERY_WORKER_DSN"),
+		ContentPath: os.Getenv("DELIVERY_CONTENT_DIR"), Revision: revision,
+		BusinessAddr: os.Getenv("DELIVERY_BUSINESS_ADDR"), HealthAddr: os.Getenv("DELIVERY_HEALTH_ADDR"),
+		ProcessingOrigin: os.Getenv("DELIVERY_PROCESSING_ORIGIN"), ProcessingSAN: "processing.internal",
+		OpsSAN: "ops.internal",
+	}
+	if cfg.AppDSN == "" || cfg.WorkerDSN == "" || cfg.ContentPath == "" {
+		return cfg, errors.New("closed: database or private content configuration is missing")
+	}
+	dir := os.Getenv("DELIVERY_TLS_DIR")
+	if dir == "" {
+		return cfg, errors.New("closed: TLS configuration is missing")
+	}
+	var err error
+	cfg.Server, err = certificate(dir, "delivery-server")
+	if err != nil {
+		return cfg, err
+	}
+	cfg.Client, err = certificate(dir, "delivery-client")
+	if err != nil {
+		return cfg, err
+	}
+	cfg.ProcessingCallerCA, err = roots(dir, "processing-client-ca")
+	if err != nil {
+		return cfg, err
+	}
+	cfg.ProcessingPeerCA, err = roots(dir, "processing-server-ca")
+	if err != nil {
+		return cfg, err
+	}
+	cfg.OpsCA, err = roots(dir, "ops-client-ca")
+	return cfg, err
+}
+
+func certificate(dir, name string) (tls.Certificate, error) {
+	cert, err := tls.LoadX509KeyPair(filepath.Join(dir, name+".pem"), filepath.Join(dir, name+".key"))
+	if err != nil || cert.Leaf == nil || time.Now().Before(cert.Leaf.NotBefore) || !time.Now().Before(cert.Leaf.NotAfter) {
+		return tls.Certificate{}, errors.New("closed: " + name + " TLS identity unavailable or expired")
+	}
+	return cert, nil
+}
+
+func roots(dir, name string) (*x509.CertPool, error) {
+	raw, err := os.ReadFile(filepath.Join(dir, name+".pem"))
+	ca := x509.NewCertPool()
+	if err != nil || !ca.AppendCertsFromPEM(raw) {
+		return nil, errors.New("closed: " + name + " trust unavailable")
+	}
+	return ca, nil
+}
+--- end services/delivery/cmd/delivery/main_linux.go ---
+
+--- file services/delivery/cmd/delivery/normal_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob ca2071baca8c91e9d3187312ef7aee9e28ce5439; SHA-256 9ae7a9b1cafb94ac796b9374d5fd075d45fecfcfdd51d5f79cdfe5557af43792; 501 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/normal_linux.go
+
+//go:build !delivery_fixture
+
+package main
+
+import (
+	"context"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/deliveryrun"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/dispatch"
+)
+
+func launch(ctx context.Context, cfg deliveryrun.Config) error {
+	// The owner-supplied IAM/runtime and connector adapters are subsequent
+	// work. The standard build cannot activate the verification adapters.
+	return deliveryrun.Run(ctx, cfg, deliveryrun.Adapters{}, dispatch.NewClickUp(nil))
+}
+--- end services/delivery/cmd/delivery/normal_linux.go ---
+
+--- file services/delivery/cmd/delivery/fixture_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 6cf038139347b89b639158670fe9ccdd66aff64f; SHA-256 d3721198b3a1608e1f005f0d16210d6fe6c2b2f8effdec11cdd0ece2087ee241; 6409 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/fixture_linux.go
+
+//go:build delivery_fixture
+
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"errors"
+	"io"
+	"net"
+	"net/url"
+	"os"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/deliveryrun"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/dispatch"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type fixtureManifest struct {
+	Snapshot intake.Snapshot
+	Token    string
+	ClickUp  string
+}
+
+type fixtureAuthority struct {
+	config fixtureManifest
+	path   string
+	digest [32]byte
+	pool   *pgxpool.Pool
+}
+
+type dispatchAuthority struct{ *fixtureAuthority }
+
+func launch(ctx context.Context, cfg deliveryrun.Config) error {
+	path := os.Getenv("DELIVERY_FIXTURE_MANIFEST")
+	raw, err := readManifest(path)
+	if os.Getenv("DELIVERY_PROFILE") != "TEST" || err != nil ||
+		!loopback(cfg.BusinessAddr) || !loopback(cfg.HealthAddr) {
+		return errors.New("closed: verification requires explicit TEST profile, fixture manifest and loopback listeners")
+	}
+	u, err := url.Parse(cfg.ProcessingOrigin)
+	if err != nil || !net.ParseIP(u.Hostname()).IsLoopback() {
+		return errors.New("closed: test Processing must use a loopback IP")
+	}
+	var manifest fixtureManifest
+	d := json.NewDecoder(bytes.NewReader(raw))
+	d.DisallowUnknownFields()
+	if d.Decode(&manifest) != nil || d.Decode(new(any)) != io.EOF ||
+		manifest.Token != "test-only-delivery-token" || manifest.Snapshot.Workspace == uuid.Nil ||
+		manifest.Snapshot.Case == uuid.Nil || manifest.Snapshot.Epoch < 1 {
+		return errors.New("closed: invalid test authority manifest")
+	}
+	ca, err := roots(os.Getenv("DELIVERY_TLS_DIR"), "clickup-fixture-ca")
+	if err != nil {
+		return err
+	}
+	target, err := dispatch.FixtureClickUp(manifest.ClickUp, ca)
+	if err != nil {
+		return errors.New("closed: ClickUp test target must use HTTPS loopback")
+	}
+	pool, err := pgxpool.New(ctx, cfg.WorkerDSN)
+	if err != nil {
+		return errors.New("closed: test authority worker database unavailable")
+	}
+	defer pool.Close()
+	f := &fixtureAuthority{config: manifest, path: path, digest: sha256.Sum256(raw), pool: pool}
+	return deliveryrun.Run(ctx, cfg, deliveryrun.Adapters{
+		Intake: f, Dispatch: dispatchAuthority{f}, Read: f, Gate: f, Credentials: f, Scopes: f.scopes,
+	}, target)
+}
+
+func loopback(address string) bool {
+	host, port, err := net.SplitHostPort(address)
+	return err == nil && port != "" && net.ParseIP(host).IsLoopback()
+}
+
+func readManifest(path string) ([]byte, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	raw, err := io.ReadAll(io.LimitReader(f, 16385))
+	if err != nil || len(raw) > 16384 {
+		return nil, intake.ErrUnavailable
+	}
+	return raw, nil
+}
+
+func (f *fixtureAuthority) available(ctx context.Context) error {
+	raw, err := readManifest(f.path)
+	if err != nil || sha256.Sum256(raw) != f.digest || ctx.Err() != nil {
+		return intake.ErrUnavailable
+	}
+	return nil
+}
+
+func (f *fixtureAuthority) scopes(ctx context.Context) ([]deliveryrun.Scope, error) {
+	if err := f.available(ctx); err != nil {
+		return nil, err
+	}
+	s := f.config.Snapshot
+	return []deliveryrun.Scope{{Workspace: s.Workspace, Epoch: s.Epoch}}, nil
+}
+
+func (f *fixtureAuthority) Current(ctx context.Context, ws, caseID uuid.UUID) (intake.Snapshot, error) {
+	if err := f.available(ctx); err != nil {
+		return intake.Snapshot{}, err
+	}
+	s := f.config.Snapshot
+	if ws != s.Workspace || caseID != s.Case {
+		return intake.Snapshot{}, intake.ErrDenied
+	}
+	return s, nil
+}
+
+func (f *fixtureAuthority) WithOpen(ctx context.Context, ws uuid.UUID, epoch int64, work func() error) error {
+	if err := f.available(ctx); err != nil {
+		return err
+	}
+	if ws != f.config.Snapshot.Workspace || epoch != f.config.Snapshot.Epoch {
+		return intake.ErrDenied
+	}
+	return work()
+}
+
+func (f *fixtureAuthority) ForConnection(ctx context.Context, ws, connection uuid.UUID, epoch int64) (dispatch.Credential, error) {
+	s := f.config.Snapshot
+	if err := f.available(ctx); err != nil || ws != s.Workspace || connection != s.Connection || epoch != s.Epoch {
+		return dispatch.Credential{}, intake.ErrDenied
+	}
+	return dispatch.Credential{Token: f.config.Token, Fingerprint: sha256.Sum256([]byte(f.config.Token))}, nil
+}
+
+func (f *fixtureAuthority) AuthorizeRead(ctx context.Context, q intake.Query) (dispatch.Authorization, error) {
+	s := f.config.Snapshot
+	if q.Workspace != s.Workspace || q.Case != s.Case || q.Lineage != s.Lineage || q.Epoch != s.Epoch {
+		return dispatch.Authorization{}, intake.ErrDenied
+	}
+	return f.bound(ctx, uuid.Nil)
+}
+
+func (d dispatchAuthority) Current(ctx context.Context, job dispatch.Job) (dispatch.Authorization, error) {
+	if job.Workspace != d.config.Snapshot.Workspace || job.Attempt == uuid.Nil {
+		return dispatch.Authorization{}, intake.ErrDenied
+	}
+	return d.bound(ctx, job.Attempt)
+}
+
+func (f *fixtureAuthority) bound(ctx context.Context, expected uuid.UUID) (dispatch.Authorization, error) {
+	if err := f.available(ctx); err != nil {
+		return dispatch.Authorization{}, err
+	}
+	bounded, cancel := context.WithTimeout(ctx, time.Second)
+	defer cancel()
+	s := f.config.Snapshot
+	tx, err := f.pool.BeginTx(bounded, pgx.TxOptions{AccessMode: pgx.ReadOnly})
+	if err != nil {
+		return dispatch.Authorization{}, intake.ErrUnavailable
+	}
+	defer tx.Rollback(bounded)
+	if _, err := tx.Exec(bounded, "SELECT set_config('hp.workspace_id',$1,true)", s.Workspace.String()); err != nil {
+		return dispatch.Authorization{}, intake.ErrUnavailable
+	}
+	var attempt uuid.UUID
+	err = tx.QueryRow(bounded, `SELECT a.attempt_id FROM hp_delivery.attempts a
+		JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id)
+		WHERE a.workspace_id=$1 AND l.case_id=$2 AND a.lineage_id=$3 AND a.episode_id=$4 AND a.attempt_number=1`,
+		s.Workspace, s.Case, s.Lineage, s.Episode).Scan(&attempt)
+	if err != nil || expected != uuid.Nil && attempt != expected || tx.Commit(bounded) != nil {
+		return dispatch.Authorization{}, intake.ErrDenied
+	}
+	return dispatch.Authorization{
+		Workspace: s.Workspace, Attempt: attempt, Case: s.Case, Config: s.Config,
+		Connection: s.Connection, Lineage: s.Lineage, Episode: s.Episode, Epoch: s.Epoch,
+		ConfigDigest: s.ConfigDigest, FactsDigest: s.FactsDigest, FactsUntil: s.FactsUntil,
+		Deadline: s.Deadline, TargetWorkspace: s.DestinationWorkspace, List: s.List, Assignee: s.Assignee,
+	}, nil
+}
+--- end services/delivery/cmd/delivery/fixture_linux.go ---
+
+--- file services/delivery/internal/deliveryrun/runtime_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 3866babde8e712b8a0f462e94406ef89e91f4cf4; SHA-256 f8aa6711455e74c3314301a3109ef0f19c0bb672a4b2f0e31e8d19def67f165f; 9793 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/deliveryrun/runtime_linux.go
+
+// Package deliveryrun composes the Delivery adapters in one Linux process.
+package deliveryrun
+
+import (
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"log"
+	"net"
+	"net/http"
+	"regexp"
+	"sync/atomic"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/dispatch"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type Scope struct {
+	Workspace uuid.UUID
+	Epoch     int64
+}
+
+// Adapters are provided by the runtime owner. No authority, credential or gate
+// is inferred from an inbound message, a TLS identity or a database record.
+type Adapters struct {
+	Intake      intake.Authority
+	Dispatch    dispatch.Authority
+	Read        dispatch.ReadAuthority
+	Gate        intake.StartGate
+	Credentials dispatch.Credentials
+	Scopes      func(context.Context) ([]Scope, error)
+}
+
+type Config struct {
+	AppDSN, WorkerDSN, ContentPath          string
+	BusinessAddr, HealthAddr, Revision      string
+	ProcessingOrigin, ProcessingSAN, OpsSAN string
+	Server, Client                          tls.Certificate
+	ProcessingCallerCA, ProcessingPeerCA    *x509.CertPool
+	OpsCA                                   *x509.CertPool
+}
+
+const (
+	healthPath   = "/internal/v1/health/delivery"
+	pollInterval = 250 * time.Millisecond
+	runtimeLock  = int64(4831059550513427798)
+)
+
+var revisionPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
+
+type guarded struct {
+	ready *atomic.Bool
+	next  intake.StartGate
+	files *intake.Directory
+}
+
+func (g guarded) WithOpen(ctx context.Context, ws uuid.UUID, epoch int64, work func() error) error {
+	if !g.ready.Load() {
+		return intake.ErrUnavailable
+	}
+	return g.next.WithOpen(ctx, ws, epoch, func() error {
+		if !g.ready.Load() || ctx.Err() != nil {
+			return intake.ErrUnavailable
+		}
+		if g.files.Check() != nil || ctx.Err() != nil {
+			return intake.ErrUnavailable
+		}
+		return work()
+	})
+}
+
+// Run requires explicitly provisioned adapters. It does not apply migrations
+// or provision runtime permissions. clickup has a fixed provisioned origin.
+func Run(ctx context.Context, cfg Config, adapters Adapters, clickup *dispatch.ClickUp) error {
+	if adapters.Intake == nil || adapters.Dispatch == nil || adapters.Read == nil ||
+		adapters.Gate == nil || adapters.Credentials == nil || adapters.Scopes == nil || clickup == nil {
+		return errors.New("closed: obligatory runtime adapters are unavailable")
+	}
+	if !revisionPattern.MatchString(cfg.Revision) || cfg.BusinessAddr == "" || cfg.HealthAddr == "" ||
+		cfg.OpsSAN == "" || cfg.OpsCA == nil || cfg.BusinessAddr == cfg.HealthAddr {
+		return errors.New("closed: mandatory listener configuration is missing")
+	}
+	startCtx, cancel := context.WithTimeout(ctx, 8*time.Second)
+	defer cancel()
+	if cfg.AppDSN == "" || cfg.WorkerDSN == "" || cfg.ContentPath == "" {
+		return errors.New("closed: database or content configuration is missing")
+	}
+	files, err := intake.OpenDirectory(cfg.ContentPath)
+	if err != nil {
+		return errors.New("closed: private content directory unavailable")
+	}
+	defer files.Close()
+	app, err := pgxpool.New(startCtx, cfg.AppDSN)
+	if err != nil {
+		return errors.New("closed: application database configuration invalid")
+	}
+	defer app.Close()
+	workerPool, err := pgxpool.New(startCtx, cfg.WorkerDSN)
+	if err != nil {
+		return errors.New("closed: worker database configuration invalid")
+	}
+	defer workerPool.Close()
+	if app.Config().MaxConns > 10 || workerPool.Config().MaxConns < 2 || workerPool.Config().MaxConns > 10 {
+		return errors.New("closed: database pool limits invalid")
+	}
+	if err := databaseReady(startCtx, app, "hp_delivery_app"); err != nil {
+		return err
+	}
+	if err := databaseReady(startCtx, workerPool, "hp_delivery_worker"); err != nil {
+		return err
+	}
+	owner, err := workerPool.Acquire(startCtx)
+	if err != nil {
+		return errors.New("closed: worker lock connection unavailable")
+	}
+	var locked bool
+	if err = owner.QueryRow(startCtx, "SELECT pg_try_advisory_lock($1)", runtimeLock).Scan(&locked); err != nil || !locked {
+		owner.Release()
+		return errors.New("closed: another Delivery process owns the database scheduler or lock is unavailable")
+	}
+	// End the owning database session on shutdown, including any failure after
+	// the lock was acquired. A pooled connection must never retain the lock.
+	defer func() {
+		stopCtx, stop := context.WithTimeout(context.Background(), time.Second)
+		defer stop()
+		_ = owner.Hijack().Close(stopCtx)
+	}()
+
+	appLedger, err := intake.NewPostgres(app, files)
+	if err != nil {
+		return errors.New("closed: application ledger unavailable")
+	}
+	workerLedger, err := dispatch.NewPostgres(workerPool)
+	if err != nil {
+		return errors.New("closed: worker ledger unavailable")
+	}
+	var ready atomic.Bool
+	gate := guarded{ready: &ready, next: adapters.Gate, files: files}
+	admission, err := intake.New(adapters.Intake, gate, appLedger)
+	if err != nil {
+		return errors.New("closed: admission adapter unavailable")
+	}
+	query, err := dispatch.NewQueryService(workerLedger, files, adapters.Read, gate, adapters.Credentials, clickup)
+	if err != nil {
+		return errors.New("closed: query adapter unavailable")
+	}
+	worker, err := dispatch.NewWorker(workerLedger, files, adapters.Dispatch, gate, adapters.Credentials, clickup)
+	if err != nil {
+		return errors.New("closed: dispatch adapter unavailable")
+	}
+	publisher, err := dispatch.NewPublisher(workerLedger, files, gate, cfg.ProcessingOrigin, cfg.ProcessingPeerCA, cfg.Client)
+	if err != nil {
+		return errors.New("closed: Processing publisher configuration unavailable")
+	}
+	business, err := intake.NewHTTPWithQuery(admission, query, cfg.Server, cfg.ProcessingCallerCA, cfg.ProcessingSAN)
+	if err != nil {
+		return errors.New("closed: Processing caller listener unavailable")
+	}
+	health := &http.Server{
+		Handler: healthHandler(cfg, &ready), TLSConfig: &tls.Config{
+			MinVersion: tls.VersionTLS13, ClientAuth: tls.RequireAndVerifyClientCert,
+			ClientCAs: cfg.OpsCA.Clone(), Certificates: []tls.Certificate{cfg.Server},
+		},
+		ReadHeaderTimeout: 2 * time.Second, ReadTimeout: 3 * time.Second,
+		WriteTimeout: 3 * time.Second, IdleTimeout: 5 * time.Second, MaxHeaderBytes: 8192,
+	}
+	bl, err := net.Listen("tcp", cfg.BusinessAddr)
+	if err != nil {
+		return errors.New("closed: business listener could not bind")
+	}
+	defer bl.Close()
+	hl, err := net.Listen("tcp", cfg.HealthAddr)
+	if err != nil {
+		return errors.New("closed: health listener could not bind")
+	}
+	defer hl.Close()
+	run, stop := context.WithCancel(ctx)
+	defer stop()
+	done := make(chan error, 3)
+	go func() { done <- business.ServeTLS(bl, "", "") }()
+	go func() { done <- health.ServeTLS(hl, "", "") }()
+	s := scheduler{
+		pool: workerPool, files: files, worker: worker, query: query, publisher: publisher,
+		gate: adapters.Gate, scopes: adapters.Scopes, ready: &ready,
+		cursors: make(map[uuid.UUID]uuid.UUID),
+	}
+	go func() { done <- s.run(run, owner, app) }()
+
+	var failure error
+	remaining := 3
+	select {
+	case <-ctx.Done():
+	case err := <-done:
+		failure = err
+		remaining--
+	}
+	ready.Store(false)
+	stop()
+	shutdown, finish := context.WithTimeout(context.Background(), 3*time.Second)
+	defer finish()
+	_ = business.Shutdown(shutdown)
+	_ = health.Shutdown(shutdown)
+	_ = business.Close()
+	_ = health.Close()
+	for range remaining {
+		<-done
+	}
+	if failure != nil && !errors.Is(failure, http.ErrServerClosed) && !errors.Is(failure, context.Canceled) {
+		return failure
+	}
+	return nil
+}
+
+func databaseReady(ctx context.Context, pool *pgxpool.Pool, role string) error {
+	var ready bool
+	err := pool.QueryRow(ctx, `SELECT current_user::text=$1
+		AND current_setting('server_version_num')::int=180007
+		AND current_setting('fsync')='on' AND current_setting('full_page_writes')='on'
+		AND current_setting('synchronous_commit')='on'
+		AND EXISTS(SELECT 1 FROM hp_delivery.schema_version WHERE version=1)
+		AND has_table_privilege(current_user,'hp_delivery.attempts','SELECT')
+		AND has_table_privilege(current_user,'hp_delivery.intent_content','SELECT')
+		AND (current_user<>'hp_delivery_worker' OR
+		  (has_table_privilege(current_user,'hp_delivery.job_index','SELECT')
+		  AND has_table_privilege(current_user,'hp_delivery.credential_budget','UPDATE')
+		  AND has_table_privilege(current_user,'hp_delivery.outbox','UPDATE')))
+		AND EXISTS(SELECT 1 FROM pg_roles WHERE rolname=current_user AND NOT rolsuper AND NOT rolbypassrls)`, role).Scan(&ready)
+	if err != nil || !ready {
+		return fmt.Errorf("closed: PostgreSQL 18.7, schema, durable settings or role %s unavailable", role)
+	}
+	return nil
+}
+
+func healthHandler(cfg Config, ready *atomic.Bool) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || r.URL.Path != healthPath {
+			http.NotFound(w, r)
+			return
+		}
+		ops := false
+		if r.TLS != nil && len(r.TLS.VerifiedChains) != 0 {
+			for _, name := range r.TLS.VerifiedChains[0][0].DNSNames {
+				ops = ops || name == cfg.OpsSAN
+			}
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Cache-Control", "no-store")
+		if !ops {
+			w.WriteHeader(http.StatusForbidden)
+			_ = json.NewEncoder(w).Encode(map[string]string{"code": "CALLER_DENIED", "message": "Forbidden", "request_id": uuid.NewString()})
+			return
+		}
+		if !ready.Load() {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_ = json.NewEncoder(w).Encode(map[string]string{"code": "DELIVERY_CLOSED", "message": "Delivery dependencies unavailable", "request_id": uuid.NewString()})
+			return
+		}
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "READY", "service": "delivery",
+			"build_revision": cfg.Revision, "protocol_version": "1.0", "checked_at": time.Now().UTC().Format(time.RFC3339Nano)})
+	})
+}
+
+func logState(state string) { log.Print("delivery state=", state) }
+--- end services/delivery/internal/deliveryrun/runtime_linux.go ---
+
+--- file services/delivery/internal/deliveryrun/scheduler_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob a69d72f105ff550b485b72bf0ee196c1ffa849a8; SHA-256 a80dab48519e57a445512c9b00dd7c952142127f6f69a3393a0122d5e0a6a051; 6192 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/deliveryrun/scheduler_linux.go
+
+package deliveryrun
+
+import (
+	"context"
+	"errors"
+	"sync/atomic"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/dispatch"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+const batchSize = 8
+
+type scheduler struct {
+	pool      *pgxpool.Pool
+	files     *intake.Directory
+	worker    *dispatch.Worker
+	query     *dispatch.QueryService
+	publisher *dispatch.Publisher
+	gate      intake.StartGate
+	scopes    func(context.Context) ([]Scope, error)
+	ready     *atomic.Bool
+	cursors   map[uuid.UUID]uuid.UUID
+}
+
+func (s *scheduler) state(value bool) {
+	if s.ready.Swap(value) != value {
+		if value {
+			logState("READY")
+		} else {
+			logState("CLOSED")
+		}
+	}
+}
+
+func (s *scheduler) run(ctx context.Context, owner *pgxpool.Conn, app *pgxpool.Pool) error {
+	tick := time.NewTicker(pollInterval)
+	defer tick.Stop()
+	defer s.state(false)
+	logState("CLOSED")
+	for {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		check, stop := context.WithTimeout(ctx, 2*time.Second)
+		if err := owner.Conn().Ping(check); err != nil {
+			stop()
+			return errors.New("closed: scheduler database session lost")
+		}
+		scopes, err := s.scopes(check)
+		healthy := err == nil && validScopes(scopes) && databaseReady(check, app, "hp_delivery_app") == nil &&
+			databaseReady(check, s.pool, "hp_delivery_worker") == nil && s.files.Check() == nil
+		if healthy {
+			for _, scope := range scopes {
+				if s.gate.WithOpen(check, scope.Workspace, scope.Epoch, func() error { return nil }) != nil {
+					healthy = false
+					break
+				}
+			}
+		}
+		stop()
+		s.state(healthy)
+		if healthy {
+			for ws := range s.cursors {
+				found := false
+				for _, scope := range scopes {
+					found = found || ws == scope.Workspace
+				}
+				if !found {
+					delete(s.cursors, ws)
+				}
+			}
+			for _, scope := range scopes {
+				if err := s.cycle(ctx, scope); err != nil {
+					s.state(false)
+					break
+				}
+			}
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-tick.C:
+		}
+	}
+}
+
+func validScopes(scopes []Scope) bool {
+	if len(scopes) == 0 || len(scopes) > 64 {
+		return false
+	}
+	seen := make(map[uuid.UUID]bool, len(scopes))
+	for _, scope := range scopes {
+		if scope.Workspace == uuid.Nil || scope.Epoch < 1 || seen[scope.Workspace] {
+			return false
+		}
+		seen[scope.Workspace] = true
+	}
+	return true
+}
+
+type pending struct {
+	attempt, caseID, lineage uuid.UUID
+	state                    string
+}
+
+func (s *scheduler) cycle(ctx context.Context, scope Scope) error {
+	// The gate admits the short protected SQL scan; release transaction and
+	// gate before dispatching. Each reused worker checks its own actual start.
+	read, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+	var work []pending
+	var sends []uuid.UUID
+	err := s.gate.WithOpen(read, scope.Workspace, scope.Epoch, func() error {
+		var err error
+		work, sends, err = s.scan(read, scope)
+		return err
+	})
+	cancel()
+	if err != nil {
+		return err
+	}
+	if len(work) == 0 {
+		delete(s.cursors, scope.Workspace)
+	} else {
+		s.cursors[scope.Workspace] = work[len(work)-1].attempt
+	}
+	for _, job := range work {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		if job.state == "PREPARED" {
+			_, err := s.worker.Run(ctx, dispatch.Job{Workspace: scope.Workspace, Attempt: job.attempt})
+			if errors.Is(err, dispatch.ErrUnwired) {
+				return err
+			}
+			continue
+		}
+		_, err := s.query.QueryKnownTask(ctx, intake.Query{
+			Workspace: scope.Workspace, Case: job.caseID, Lineage: job.lineage,
+			Epoch: scope.Epoch, Deadline: time.Now().Add(8 * time.Second),
+		})
+		if errors.Is(err, intake.ErrUnavailable) {
+			return err
+		}
+	}
+	for _, message := range sends {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		// Publisher owns the SQL lease, backoff, ACK and immutable replay.
+		// A receiver outage is recoverable and does not erase the observation.
+		_ = s.publisher.Publish(ctx, scope.Workspace, message, scope.Epoch)
+	}
+	return nil
+}
+
+func (s *scheduler) scan(ctx context.Context, scope Scope) ([]pending, []uuid.UUID, error) {
+	tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{AccessMode: pgx.ReadOnly})
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback(ctx)
+	if _, err = tx.Exec(ctx, "SELECT set_config('hp.workspace_id',$1,true)", scope.Workspace.String()); err != nil {
+		return nil, nil, err
+	}
+	rows, err := tx.Query(ctx, `SELECT a.attempt_id,l.case_id,l.lineage_id,l.state
+		FROM hp_delivery.attempts a
+		JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id)
+		JOIN hp_delivery.intent_content f USING(workspace_id,attempt_id)
+		JOIN hp_delivery.destination_connections c USING(workspace_id,connection_id)
+		WHERE a.workspace_id=$1 AND a.attempt_id>$2 AND a.attempt_number=1
+		  AND c.revoked_at IS NULL AND c.security_epoch=$3 AND a.connection_epoch=$3
+		  AND f.expires_at>clock_timestamp()
+		  AND ((l.state='PREPARED' AND NOT l.ever_dispatch_fenced
+		    AND a.facts_valid_until>clock_timestamp() AND a.episode_deadline_at>clock_timestamp())
+		  OR (l.state='RESULT_ID_OBSERVED' AND l.ever_dispatch_fenced
+		    AND a.network_start_at IS NOT NULL AND l.known_task_id IS NOT NULL
+		    AND NOT EXISTS(SELECT 1 FROM hp_delivery.effect_observations o
+		      WHERE o.workspace_id=a.workspace_id AND o.lineage_id=a.lineage_id
+		        AND o.attempt_id=a.attempt_id AND o.knowledge<>'TARGET_ID_OBSERVED')))
+		ORDER BY a.attempt_id LIMIT $4`, scope.Workspace, s.cursors[scope.Workspace], scope.Epoch, batchSize)
+	if err != nil {
+		return nil, nil, err
+	}
+	work, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (pending, error) {
+		var p pending
+		err := row.Scan(&p.attempt, &p.caseID, &p.lineage, &p.state)
+		return p, err
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	rows, err = tx.Query(ctx, `SELECT j.job_id
+		FROM hp_delivery.job_index j
+		WHERE j.workspace_id=$1 AND j.kind='TASK_OBSERVATION' AND j.due_at<=clock_timestamp()
+		ORDER BY j.due_at,j.job_id LIMIT $2`, scope.Workspace, batchSize)
+	if err != nil {
+		return nil, nil, err
+	}
+	sends, err := pgx.CollectRows(rows, pgx.RowTo[uuid.UUID])
+	if err != nil {
+		return nil, nil, err
+	}
+	return work, sends, tx.Commit(ctx)
+}
+--- end services/delivery/internal/deliveryrun/scheduler_linux.go ---
+
+--- file services/delivery/internal/intake/content_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob f1b7e4419e90cd3838bed9b0c670ec491002a668; SHA-256 708651a238db5e0da6c000d7593a58309a8dfb19d014852852b3076519102c72; 3833 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/intake/content_linux.go
+
+package intake
+
+import (
+	"errors"
+	"io"
+	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"golang.org/x/sys/unix"
+)
+
+type Directory struct {
+	dir *os.File
+}
+
+// OpenDirectory opens a provisioned private content root. The directory is
+// pinned for subsequent operations. No external request controls its path.
+func OpenDirectory(path string) (*Directory, error) {
+	fd, err := unix.Open(path, unix.O_RDONLY|unix.O_CLOEXEC|unix.O_DIRECTORY|unix.O_NOFOLLOW, 0)
+	if err != nil {
+		return nil, ErrUnavailable
+	}
+	dir := os.NewFile(uintptr(fd), "delivery-content")
+	var st unix.Stat_t
+	if unix.Fstat(fd, &st) != nil || st.Mode&07777 != 0700 || st.Uid != uint32(unix.Geteuid()) {
+		_ = dir.Close()
+		return nil, ErrUnavailable
+	}
+	return &Directory{dir: dir}, nil
+}
+
+func (d *Directory) Close() error {
+	return d.dir.Close()
+}
+
+// Check verifies the provisioned, pinned directory can durably write. No
+// record is created, and the probe never opens a path based on request data.
+func (d *Directory) Check() error {
+	dir := int(d.dir.Fd())
+	var st unix.Stat_t
+	if unix.Fstat(dir, &st) != nil || st.Nlink == 0 || st.Mode&07777 != 0700 ||
+		st.Uid != uint32(unix.Geteuid()) {
+		return ErrUnavailable
+	}
+	fd, err := unix.Openat(dir, ".", unix.O_TMPFILE|unix.O_WRONLY|unix.O_CLOEXEC, 0600)
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.EINVAL) || errors.Is(err, unix.ENOSYS) {
+		name := ".probe-" + uuid.NewString()
+		fd, err = unix.Openat(dir, name, unix.O_WRONLY|unix.O_CREAT|unix.O_EXCL|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0600)
+		if err == nil && unix.Unlinkat(dir, name, 0) != nil {
+			_ = unix.Close(fd)
+			return ErrUnavailable
+		}
+	}
+	if err != nil {
+		return ErrUnavailable
+	}
+	f := os.NewFile(uintptr(fd), "delivery-storage-probe")
+	_, err = f.Write([]byte{0})
+	if err == nil {
+		err = f.Sync()
+	}
+	if errors.Join(err, f.Close()) != nil {
+		return ErrUnavailable
+	}
+	return nil
+}
+
+func (d *Directory) Put(data []byte, expires time.Time) (ContentRef, error) {
+	if len(data) == 0 || len(data) > maxContentBytes {
+		return ContentRef{}, ErrUnavailable
+	}
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	dir := int(d.dir.Fd())
+	final := id.String()
+	temp := "." + final
+	fd, err := unix.Openat(dir, temp, unix.O_WRONLY|unix.O_CREAT|unix.O_EXCL|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0600)
+	if err != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	defer func() { _ = unix.Unlinkat(dir, temp, 0) }()
+	f := os.NewFile(uintptr(fd), "delivery-content-pending")
+	if err = f.Chmod(0600); err == nil {
+		_, err = f.Write(data)
+	}
+	if err == nil {
+		err = f.Sync()
+	}
+	err = errors.Join(err, f.Close())
+	if err != nil || unix.Renameat2(dir, temp, dir, final, unix.RENAME_NOREPLACE) != nil || d.dir.Sync() != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	return ContentRef{ID: id, Size: len(data), SHA256: digest(data), Expires: expires}, nil
+}
+
+// Read accepts only a reference obtained from authorized SQL. A UUID filename
+// by itself does not authorize file access.
+func (d *Directory) Read(ref ContentRef, now time.Time) ([]byte, error) {
+	if !now.Before(ref.Expires) || ref.ID == uuid.Nil || ref.Size <= 0 || ref.Size > maxContentBytes {
+		return nil, ErrNotFound
+	}
+	fd, err := unix.Openat(int(d.dir.Fd()), ref.ID.String(), unix.O_RDONLY|unix.O_NONBLOCK|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
+	if err != nil {
+		return nil, ErrUnavailable
+	}
+	f := os.NewFile(uintptr(fd), "delivery-content-record")
+	defer f.Close()
+	var st unix.Stat_t
+	if unix.Fstat(fd, &st) != nil || st.Mode&unix.S_IFMT != unix.S_IFREG ||
+		st.Mode&07777 != 0600 || st.Nlink != 1 || st.Uid != uint32(unix.Geteuid()) {
+		return nil, ErrUnavailable
+	}
+	data, err := io.ReadAll(io.LimitReader(f, int64(ref.Size)+1))
+	if err != nil || len(data) != ref.Size || digest(data) != ref.SHA256 {
+		return nil, ErrUnavailable
+	}
+	return data, nil
+}
+--- end services/delivery/internal/intake/content_linux.go ---
+
+--- file services/delivery/internal/intake/http.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 21109687dbac058cb0d134a421b4d98a19e4e2ec; SHA-256 88368775fa478a1323fa5e131a087bb7b38a64b74f6f548f1103cbf1fc41eb49; 5329 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/intake/http.go
+
+package intake
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"io"
+	"mime"
+	"net/http"
+	"time"
+
+	"github.com/google/uuid"
+)
+
+const route = "/internal/v1/delivery-intents"
+const maxWireBytes = 512 * 1024
+
+// NewHTTP constructs the internal TLS 1.3 listener. The caller owns binding
+// its private address and supplying independently provisioned trust material.
+func NewHTTP(s *Service, serverCert tls.Certificate, clientCAs *x509.CertPool, processingSAN string) (*http.Server, error) {
+	if s == nil || len(serverCert.Certificate) == 0 || serverCert.PrivateKey == nil ||
+		clientCAs == nil || processingSAN == "" {
+		return nil, ErrUnavailable
+	}
+	h := handler{service: s, processingSAN: processingSAN}
+	return &http.Server{
+		Addr: ":8443", Handler: h,
+		ReadHeaderTimeout: 2 * time.Second, ReadTimeout: 4 * time.Second,
+		WriteTimeout: 8 * time.Second, IdleTimeout: 10 * time.Second, MaxHeaderBytes: 8 * 1024,
+		TLSConfig: &tls.Config{
+			MinVersion:   tls.VersionTLS13,
+			ClientAuth:   tls.RequireAndVerifyClientCert,
+			ClientCAs:    clientCAs.Clone(),
+			Certificates: []tls.Certificate{serverCert},
+		},
+	}, nil
+}
+
+type handler struct {
+	service       *Service
+	query         QueryReader
+	processingSAN string
+}
+
+func NewHTTPWithQuery(s *Service, q QueryReader, cert tls.Certificate, roots *x509.CertPool, san string) (*http.Server, error) {
+	if q == nil {
+		return nil, ErrUnavailable
+	}
+	server, err := NewHTTP(s, cert, roots, san)
+	if err != nil {
+		return nil, err
+	}
+	server.Handler = handler{service: s, query: q, processingSAN: san}
+	return server, nil
+}
+
+type errorBody struct {
+	Code      string    `json:"code"`
+	Message   string    `json:"message"`
+	RequestID uuid.UUID `json:"request_id"`
+}
+
+func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	requestID := uuid.New()
+	values := r.Header.Values("X-Request-ID")
+	validID := false
+	if len(values) == 1 && len(values[0]) == 36 {
+		if id, err := uuid.Parse(values[0]); err == nil {
+			requestID, validID = id, true
+		}
+	}
+	isQuery := r.URL.Path == queryRoute && h.query != nil
+	if (r.URL.Path != route && !isQuery) || r.Method != http.MethodPost {
+		writeFailure(w, http.StatusNotFound, "NOT_FOUND", requestID)
+		return
+	}
+	if r.TLS == nil || r.TLS.Version < tls.VersionTLS13 || len(r.TLS.VerifiedChains) == 0 {
+		writeFailure(w, http.StatusUnauthorized, "CERTIFICATE_REQUIRED", requestID)
+		return
+	}
+	if cert := r.TLS.VerifiedChains[0][0]; cert.VerifyHostname(h.processingSAN) != nil ||
+		!hasExactDNSName(cert, h.processingSAN) {
+		writeFailure(w, http.StatusUnauthorized, "CALLER_DENIED", requestID)
+		return
+	}
+	if !validID {
+		writeFailure(w, http.StatusBadRequest, "INVALID_REQUEST_ID", requestID)
+		return
+	}
+	media, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil || media != "application/json" {
+		writeFailure(w, http.StatusBadRequest, "INVALID_CONTENT_TYPE", requestID)
+		return
+	}
+	raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxWireBytes))
+	if err != nil {
+		var tooLarge *http.MaxBytesError
+		if errors.As(err, &tooLarge) {
+			writeFailure(w, http.StatusRequestEntityTooLarge, "SIZE_LIMIT", requestID)
+		} else {
+			writeFailure(w, http.StatusBadRequest, "INVALID_BODY", requestID)
+		}
+		return
+	}
+	if isQuery {
+		q, err := DecodeQuery(raw)
+		if err != nil {
+			writeFailure(w, http.StatusBadRequest, "INVALID_QUERY", requestID)
+			return
+		}
+		o, err := h.query.QueryKnownTask(r.Context(), q)
+		if err == nil {
+			writeJSON(w, http.StatusOK, o)
+		} else {
+			writeServiceFailure(w, err, requestID)
+		}
+		return
+	}
+	intent, err := DecodeIntent(raw)
+	if err != nil {
+		var invalidInput invalid
+		if errors.As(err, &invalidInput) && invalidInput.size {
+			writeFailure(w, http.StatusRequestEntityTooLarge, "SIZE_LIMIT", requestID)
+		} else {
+			writeFailure(w, http.StatusBadRequest, "INVALID_INTENT", requestID)
+		}
+		return
+	}
+	receipt, err := h.service.Accept(r.Context(), intent)
+	if err == nil {
+		writeJSON(w, http.StatusAccepted, receipt)
+		return
+	}
+	writeServiceFailure(w, err, requestID)
+}
+
+func writeServiceFailure(w http.ResponseWriter, err error, requestID uuid.UUID) {
+	switch {
+	case errors.Is(err, ErrDenied):
+		writeFailure(w, http.StatusForbidden, "SCOPE_DENIED", requestID)
+	case errors.Is(err, ErrNotFound):
+		writeFailure(w, http.StatusNotFound, "NOT_FOUND", requestID)
+	case errors.Is(err, ErrConflict):
+		writeFailure(w, http.StatusConflict, "IDENTITY_CONFLICT", requestID)
+	case errors.Is(err, ErrStale):
+		writeFailure(w, http.StatusPreconditionFailed, "STALE_INTENT", requestID)
+	case errors.Is(err, ErrQuota):
+		writeFailure(w, http.StatusTooManyRequests, "QUOTA_REFUSED", requestID)
+	default:
+		writeFailure(w, http.StatusServiceUnavailable, "ADMISSION_UNAVAILABLE", requestID)
+	}
+}
+
+func hasExactDNSName(cert *x509.Certificate, name string) bool {
+	for _, actual := range cert.DNSNames {
+		if actual == name {
+			return true
+		}
+	}
+	return false
+}
+
+func writeFailure(w http.ResponseWriter, status int, code string, id uuid.UUID) {
+	writeJSON(w, status, errorBody{Code: code, Message: http.StatusText(status), RequestID: id})
+}
+
+func writeJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}
+--- end services/delivery/internal/intake/http.go ---
+
+--- file services/delivery/internal/intake/postgres.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 5ac98000497a7a6172e81a6d6ac77190e52596c9; SHA-256 62fca520a8f7575a7acfb6abe88b06c9e2395f27c6dadca36f06de46b2036a34; 5341 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/intake/postgres.go
+
+package intake
+
+import (
+	"context"
+	"errors"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type ContentRef struct {
+	ID      uuid.UUID
+	SHA256  string
+	Size    int
+	Expires time.Time
+}
+
+type ContentStore interface {
+	Put(data []byte, expires time.Time) (ContentRef, error)
+}
+
+type Postgres struct {
+	pool    *pgxpool.Pool
+	content ContentStore
+}
+
+func NewPostgres(pool *pgxpool.Pool, content ContentStore) (*Postgres, error) {
+	if pool == nil || content == nil || pool.Config().MaxConns > 10 {
+		return nil, ErrUnavailable
+	}
+	return &Postgres{pool: pool, content: content}, nil
+}
+
+func (p *Postgres) Accept(ctx context.Context, i Intent, now func() time.Time) (Receipt, error) {
+	tx, err := p.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	if _, err = tx.Exec(ctx, `SELECT set_config('hp.workspace_id', $1, true),
+	    set_config('synchronous_commit', 'on', true), set_config('TimeZone', 'UTC', true)`, i.WorkspaceID.String()); err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+
+	var external string
+	var epoch int64
+	var revoked bool
+	err = tx.QueryRow(ctx, `
+		SELECT external_workspace_id, security_epoch, revoked_at IS NOT NULL
+		FROM hp_delivery.destination_connections WHERE workspace_id=$1 AND connection_id=$2
+		FOR SHARE`, i.WorkspaceID, i.ConnectionID).Scan(&external, &epoch, &revoked)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return Receipt{}, ErrDenied
+	}
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if revoked || epoch != i.Epoch || external != i.DestinationWorkspace {
+		return Receipt{}, ErrDenied
+	}
+
+	attempt, err := uuid.NewRandom()
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	inserted, err := tx.Exec(ctx, `
+		INSERT INTO hp_delivery.inbox (workspace_id,message_id,digest,disposition,record_id)
+		VALUES ($1,$2,$3,'APPLIED',$4)
+		ON CONFLICT (workspace_id,message_id) DO NOTHING`,
+		i.WorkspaceID, i.MessageID, i.MessageDigest, attempt)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if inserted.RowsAffected() == 0 {
+		receipt, err := readReceipt(ctx, tx, i)
+		if err != nil {
+			return Receipt{}, err
+		}
+		if tx.Commit(ctx) != nil {
+			return Receipt{}, ErrUnavailable
+		}
+		return receipt, nil
+	}
+
+	created := now().UTC().Truncate(time.Microsecond)
+	contentExpiry := created.Add(90 * 24 * time.Hour)
+	if !i.ContentUntil.IsZero() && i.ContentUntil.Before(contentExpiry) {
+		contentExpiry = i.ContentUntil.UTC().Truncate(time.Microsecond)
+	}
+	if !fresh(i, created, contentExpiry) {
+		return Receipt{}, ErrStale
+	}
+	lineage, err := tx.Exec(ctx, `
+		INSERT INTO hp_delivery.effect_lineage (workspace_id,lineage_id,case_id,connection_id,effect_kind,config_id,state,updated_at)
+		VALUES ($1,$2,$3,$4,'CREATE_TASK',$5,'PREPARED',$6) ON CONFLICT DO NOTHING`,
+		i.WorkspaceID, i.LineageID, i.CaseID, i.ConnectionID, i.ConfigID, created)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if lineage.RowsAffected() != 1 {
+		return Receipt{}, ErrConflict
+	}
+	_, err = tx.Exec(ctx, `
+		INSERT INTO hp_delivery.attempts (workspace_id,attempt_id,lineage_id,episode_id,attempt_number,command_message_id,
+		    source_facts_digest,facts_valid_until,episode_deadline_at,connection_epoch,prepared_at)
+		VALUES ($1,$2,$3,$4,1,$5,$6,$7,$8,$9,$10)`,
+		i.WorkspaceID, attempt, i.LineageID, i.EpisodeID, i.MessageID,
+		i.FactsDigest, i.FactsUntil, i.Deadline, i.Epoch, created)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+
+	ref, err := p.content.Put(i.Content, contentExpiry)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if ref.ID == uuid.Nil || ref.SHA256 != digest(i.Content) ||
+		ref.Size != len(i.Content) || !ref.Expires.Equal(contentExpiry) {
+		return Receipt{}, ErrUnavailable
+	}
+	_, err = tx.Exec(ctx, `
+		INSERT INTO hp_delivery.intent_content (workspace_id,attempt_id,rendered_payload_ref,rendered_payload_sha256,
+		    rendered_payload_bytes,created_at,expires_at)
+		VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+		i.WorkspaceID, attempt, ref.ID, ref.SHA256, ref.Size, created, ref.Expires)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if ctx.Err() != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if !fresh(i, now(), contentExpiry) {
+		return Receipt{}, ErrStale
+	}
+	// When Commit cannot confirm the outcome, never remove the file. The
+	// server might have committed the reference before the connection broke.
+	if tx.Commit(ctx) != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	return Receipt{MessageID: i.MessageID, Disposition: "APPLIED", RecordID: attempt}, nil
+}
+
+func fresh(i Intent, now, contentExpiry time.Time) bool {
+	return now.Before(i.FactsUntil) && now.Before(i.Deadline) && now.Before(contentExpiry)
+}
+
+func readReceipt(ctx context.Context, tx pgx.Tx, i Intent) (Receipt, error) {
+	var sum, disposition string
+	var record uuid.NullUUID
+	err := tx.QueryRow(ctx, `
+		SELECT digest,disposition,record_id FROM hp_delivery.inbox
+		WHERE workspace_id=$1 AND message_id=$2`, i.WorkspaceID, i.MessageID).Scan(&sum, &disposition, &record)
+	if err != nil {
+		return Receipt{}, ErrUnavailable
+	}
+	if sum != i.MessageDigest || disposition != "APPLIED" || !record.Valid {
+		return Receipt{}, ErrConflict
+	}
+	return Receipt{MessageID: i.MessageID, Disposition: disposition, RecordID: record.UUID}, nil
+}
+--- end services/delivery/internal/intake/postgres.go ---
+
+--- file services/delivery/internal/dispatch/fixture_clickup_linux.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob f9294b8819224b136d7050b0bb49113695f5fdb7; SHA-256 11f026d644f2ff826f9a0b6dc5b007a318f94baf24ac2e6d8996e95b6b21ed5b; 585 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/fixture_clickup_linux.go
+
+//go:build delivery_fixture
+
+package dispatch
+
+import (
+	"crypto/x509"
+	"net"
+	"net/url"
+)
+
+// FixtureClickUp is only present in the verification build and cannot dial
+// the public provider or a hostname subject to DNS.
+func FixtureClickUp(origin string, trust *x509.CertPool) (*ClickUp, error) {
+	u, err := url.Parse(origin)
+	if err != nil || u.Scheme != "https" || u.User != nil || u.Path != "" ||
+		u.RawQuery != "" || u.Fragment != "" || u.Port() == "" || trust == nil ||
+		!net.ParseIP(u.Hostname()).IsLoopback() {
+		return nil, ErrUnwired
+	}
+	return clickUpAt(*u, trust), nil
+}
+--- end services/delivery/internal/dispatch/fixture_clickup_linux.go ---
+
+--- file services/delivery/internal/dispatch/worker.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob b64f5c1c541aaf5a0fcd786b30b84684841ea84f; SHA-256 397d527c5c013e71e1d93fd6cd507c92f8b4862c8edffd66121a541dacac9c30; 6193 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/worker.go
+
+package dispatch
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+)
+
+var (
+	ErrHeld    = errors.New("delivery attempt held")
+	ErrFenced  = errors.New("delivery attempt already fenced")
+	ErrUnwired = errors.New("delivery dispatch dependency unavailable")
+)
+
+type Job struct {
+	Workspace, Attempt uuid.UUID
+}
+
+// Authorization is the current decision for a saved attempt. The authority
+// owner supplies it independently of the worker's job or its content.
+type Authorization struct {
+	Workspace, Attempt, Case, Config, Connection, Lineage, Episode uuid.UUID
+	Epoch                                                          int64
+	ConfigDigest, FactsDigest                                      string
+	FactsUntil, Deadline                                           time.Time
+	TargetWorkspace, List, Assignee                                string
+}
+
+type Authority interface {
+	Current(context.Context, Job) (Authorization, error)
+}
+
+type Credential struct {
+	Token       string
+	Fingerprint [32]byte
+}
+
+type Credentials interface {
+	ForConnection(context.Context, uuid.UUID, uuid.UUID, int64) (Credential, error)
+}
+
+type ContentReader interface {
+	Read(intake.ContentRef, time.Time) ([]byte, error)
+}
+
+type saved struct {
+	auth        Authorization
+	ref         intake.ContentRef
+	fingerprint [32]byte
+}
+
+type payload struct {
+	Title           string `json:"title"`
+	Description     string `json:"rendered_handoff_block"`
+	TargetWorkspace string `json:"destination_workspace_id"`
+	List            string `json:"target_list_id"`
+	Assignee        string `json:"assignee_id"`
+	ConfigDigest    string `json:"config_digest"`
+}
+
+type disposition string
+
+const (
+	TargetIDObserved disposition = "TARGET_ID_OBSERVED"
+	Ambiguous        disposition = "AMBIGUOUS"
+)
+
+type Result struct {
+	Disposition disposition
+	TaskID      string
+}
+
+type Worker struct {
+	ledger      *Postgres
+	content     ContentReader
+	authority   Authority
+	gate        intake.StartGate
+	credentials Credentials
+	clickup     *ClickUp
+}
+
+func NewWorker(ledger *Postgres, content ContentReader, authority Authority, gate intake.StartGate, credentials Credentials, clickup *ClickUp) (*Worker, error) {
+	if ledger == nil || content == nil || authority == nil || gate == nil || credentials == nil || clickup == nil {
+		return nil, ErrUnwired
+	}
+	return &Worker{ledger, content, authority, gate, credentials, clickup}, nil
+}
+
+func (w *Worker) Run(ctx context.Context, job Job) (Result, error) {
+	if job.Workspace == uuid.Nil || job.Attempt == uuid.Nil {
+		return Result{}, ErrHeld
+	}
+	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
+	defer cancel()
+	auth, err := w.current(ctx, job)
+	if err != nil {
+		return Result{}, err
+	}
+	var rec saved
+	var target payload
+	readCtx, stopReading := context.WithTimeout(ctx, 2*time.Second)
+	err = w.gate.WithOpen(readCtx, job.Workspace, auth.Epoch, func() error {
+		var err error
+		rec, err = w.ledger.load(readCtx, job)
+		if err != nil {
+			return err
+		}
+		body, err := w.content.Read(rec.ref, time.Now())
+		if err != nil || json.Unmarshal(body, &target) != nil {
+			return ErrHeld
+		}
+		return checkBinding(rec, target, auth)
+	})
+	stopReading()
+	if err != nil {
+		return Result{}, err
+	}
+
+	var ex *exchange
+	fenced := false
+	deadline := time.Now().Add(2 * time.Second)
+	for _, limit := range []time.Time{rec.auth.FactsUntil, rec.auth.Deadline, rec.ref.Expires} {
+		if limit.Before(deadline) {
+			deadline = limit
+		}
+	}
+	startCtx, stop := context.WithDeadline(ctx, deadline)
+	defer stop()
+	err = w.gate.WithOpen(startCtx, job.Workspace, auth.Epoch, func() error {
+		current, err := w.current(startCtx, job)
+		if err != nil {
+			return err
+		}
+		if err = checkBinding(rec, target, current); err != nil {
+			return err
+		}
+		cred, err := w.credentials.ForConnection(startCtx, job.Workspace, auth.Connection, auth.Epoch)
+		if err != nil || cred.Fingerprint != rec.fingerprint {
+			return ErrHeld
+		}
+		request, err := w.clickup.request(target, cred.Token)
+		if err != nil {
+			return err
+		}
+		if err = w.ledger.fence(startCtx, rec); err != nil {
+			return err
+		}
+		fenced = true
+		ex, err = w.clickup.start(startCtx, request, func() error {
+			if !time.Now().Before(rec.ref.Expires) {
+				return ErrHeld
+			}
+			return w.ledger.markStart(startCtx, rec)
+		})
+		return err
+	})
+	if ex != nil {
+		defer ex.conn.Close()
+	}
+	if !fenced {
+		if err == nil {
+			return Result{}, ErrHeld
+		}
+		return Result{}, err
+	}
+	out := outcome{result: Result{Disposition: Ambiguous}, code: "DISPATCH_OUTCOME_UNKNOWN"}
+	if err == nil && ex != nil {
+		out = ex.receive(ctx)
+	}
+
+	// Request cancellation cannot reset the durable fence or suppress a known
+	// result. Use a distinct, bounded context for recording the observation.
+	persistCtx, persistCancel := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
+	defer persistCancel()
+	if e := w.ledger.finish(persistCtx, rec, out); e != nil {
+		return Result{Disposition: Ambiguous}, ErrUnwired
+	}
+	return out.result, nil
+}
+
+func (w *Worker) current(ctx context.Context, job Job) (Authorization, error) {
+	if ctx.Err() != nil {
+		return Authorization{}, ErrHeld
+	}
+	a, err := w.authority.Current(ctx, job)
+	if err != nil || a.Workspace != job.Workspace || a.Attempt != job.Attempt || a.Epoch <= 0 ||
+		!time.Now().Before(a.FactsUntil) || !time.Now().Before(a.Deadline) {
+		return Authorization{}, ErrHeld
+	}
+	return a, nil
+}
+
+func checkBinding(r saved, p payload, a Authorization) error {
+	i := r.auth
+	if i.Workspace != a.Workspace || i.Attempt != a.Attempt || i.Case != a.Case ||
+		i.Connection != a.Connection || i.Config != a.Config || i.Lineage != a.Lineage || i.Episode != a.Episode ||
+		i.Epoch != a.Epoch || i.FactsDigest != a.FactsDigest ||
+		!i.FactsUntil.Equal(a.FactsUntil.UTC().Truncate(time.Microsecond)) ||
+		!i.Deadline.Equal(a.Deadline.UTC().Truncate(time.Microsecond)) ||
+		p.TargetWorkspace != i.TargetWorkspace || p.TargetWorkspace != a.TargetWorkspace ||
+		p.List == "" || p.List != a.List || p.Assignee == "" || p.Assignee != a.Assignee ||
+		p.ConfigDigest == "" || p.ConfigDigest != a.ConfigDigest {
+		return ErrHeld
+	}
+	return nil
+}
+--- end services/delivery/internal/dispatch/worker.go ---
+
+--- file services/delivery/internal/dispatch/query.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 784c35909535311573702fed43e2dfa19ab8b8b6; SHA-256 6ade547adf16a3039dfcced5b6f04c96902be3cb6ba633aec14f0603a07f2196; 7690 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/query.go
+
+package dispatch
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/application/verifytarget"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/domain/readback"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+)
+
+type ReadAuthority interface {
+	AuthorizeRead(context.Context, intake.Query) (Authorization, error)
+}
+
+type ObservationFiles interface {
+	ContentReader
+	intake.ContentStore
+}
+
+type QueryService struct {
+	db          *Postgres
+	files       ObservationFiles
+	authority   ReadAuthority
+	gate        intake.StartGate
+	credentials Credentials
+	reads       *readPool
+}
+
+func NewQueryService(db *Postgres, files ObservationFiles, authority ReadAuthority, gate intake.StartGate,
+	credentials Credentials, clickup *ClickUp) (*QueryService, error) {
+	if db == nil || files == nil || authority == nil || gate == nil || credentials == nil || clickup == nil {
+		return nil, ErrUnwired
+	}
+	return &QueryService{db, files, authority, gate, credentials, newReadPool(clickup)}, nil
+}
+
+func (s *QueryService) QueryKnownTask(ctx context.Context, q intake.Query) (intake.TaskObservation, error) {
+	var zero intake.TaskObservation
+	if !time.Now().Before(q.Deadline) {
+		return zero, intake.ErrStale
+	}
+	ctx, cancel := context.WithDeadline(ctx, earlier(q.Deadline, time.Now().Add(8*time.Second)))
+	defer cancel()
+	a, err := s.authorize(ctx, q)
+	if err != nil {
+		return zero, err
+	}
+	var k known
+	var expected readback.Expected
+	var ex *readExchange
+	start, stop := context.WithTimeout(ctx, 2*time.Second)
+	err = s.gate.WithOpen(start, q.Workspace, q.Epoch, func() error {
+		k, err = s.db.known(start, q, a)
+		if err != nil {
+			return err
+		}
+		body, err := s.files.Read(k.ref, time.Now())
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		var p payload
+		if json.Unmarshal(body, &p) != nil || !matchesRead(k, p, a) {
+			return intake.ErrDenied
+		}
+		block, caseID, ok := readback.ExtractBlock(p.Description)
+		if !ok || caseID != q.Case.String() {
+			return intake.ErrConflict
+		}
+		expected = readback.Expected{Workspace: p.TargetWorkspace, List: p.List, Title: p.Title, Assignee: p.Assignee, HandoffBlock: block}
+		cred, err := s.credentials.ForConnection(start, q.Workspace, k.connection, q.Epoch)
+		if err != nil || cred.Fingerprint != k.fingerprint {
+			return intake.ErrDenied
+		}
+		req, err := s.reads.upstream.readRequest(k.task, cred.Token)
+		if err != nil {
+			return intake.ErrConflict
+		}
+		ex, err = s.reads.start(start, req, func() error { return s.db.chargeRead(start, k) })
+		return err
+	})
+	stop()
+	if ex != nil {
+		defer ex.finish(false)
+	}
+	if errors.Is(err, errReadBudget) {
+		return zero, intake.ErrQuota
+	}
+	if errors.Is(err, ErrHeld) || errors.Is(err, ErrUnwired) {
+		return zero, intake.ErrUnavailable
+	}
+	if err != nil {
+		return zero, err
+	}
+	if ex == nil {
+		return zero, intake.ErrDenied
+	}
+
+	reader := &targetReader{ex: ex, id: k.task}
+	readCtx, stopRead := context.WithTimeout(ctx, 4*time.Second)
+	result := verifytarget.New(reader).VerifyTarget(readCtx, k.task, expected)
+	stopRead()
+	var o intake.TaskObservation
+	recordCtx, stopRecord := context.WithTimeout(ctx, 2*time.Second)
+	defer stopRecord()
+	err = s.gate.WithOpen(recordCtx, q.Workspace, q.Epoch, func() error {
+		current, err := s.authorize(recordCtx, q)
+		if err != nil {
+			return err
+		}
+		if !sameReadAuthorization(a, current) {
+			return intake.ErrDenied
+		}
+		o, err = s.record(recordCtx, k, result, reader.code)
+		return err
+	})
+	if errors.Is(err, ErrHeld) {
+		return zero, intake.ErrDenied
+	}
+	if errors.Is(err, ErrUnwired) {
+		return zero, intake.ErrUnavailable
+	}
+	if err != nil {
+		return zero, err
+	}
+	return o, nil
+}
+
+func earlier(a, b time.Time) time.Time {
+	if a.Before(b) {
+		return a
+	}
+	return b
+}
+
+func (s *QueryService) authorize(ctx context.Context, q intake.Query) (Authorization, error) {
+	a, err := s.authority.AuthorizeRead(ctx, q)
+	if err != nil {
+		return Authorization{}, err
+	}
+	if a.Workspace != q.Workspace || a.Case != q.Case || a.Lineage != q.Lineage || a.Attempt == uuid.Nil || a.Epoch != q.Epoch {
+		return Authorization{}, intake.ErrDenied
+	}
+	return a, nil
+}
+
+func matchesRead(k known, p payload, a Authorization) bool {
+	return a.Connection == k.connection && a.Config == k.config && a.Episode == k.episode && a.TargetWorkspace == k.workspace &&
+		a.TargetWorkspace == p.TargetWorkspace && a.List != "" && a.List == p.List && a.Assignee != "" && a.Assignee == p.Assignee &&
+		a.ConfigDigest != "" && a.ConfigDigest == p.ConfigDigest
+}
+
+func sameReadAuthorization(a, b Authorization) bool {
+	return a.Attempt == b.Attempt && a.Config == b.Config && a.Connection == b.Connection && a.Episode == b.Episode &&
+		a.ConfigDigest == b.ConfigDigest && a.TargetWorkspace == b.TargetWorkspace && a.List == b.List && a.Assignee == b.Assignee
+}
+
+func (s *QueryService) record(ctx context.Context, k known, r verifytarget.Result, code string) (intake.TaskObservation, error) {
+	created := time.Now().UTC().Truncate(time.Microsecond)
+	o := intake.TaskObservation{MessageID: uuid.New(), SchemaVersion: "1.0", Workspace: k.job.Workspace, Case: k.caseID,
+		Lineage: k.lineage, Episode: k.episode, Observation: uuid.New(), TaskID: &k.task, ObservedAt: r.Provenance.ObservedAt,
+		Knowledge: "INCOMPLETE", ProofCode: code}
+	if !created.Before(k.ref.Expires) || o.ObservedAt.IsZero() || r.Provenance.Source != observationSource {
+		return o, intake.ErrUnavailable
+	}
+	m := r.Comparison
+	o.WorkspaceMatches, o.ListMatches, o.AssigneeMatches = m.Workspace, m.List, m.Assignee
+	o.TitleMatches, o.MarkerMatches, o.ContextMatches = m.Title, m.Marker, m.Context
+	o.Complete = m.Workspace != nil && m.List != nil && m.Assignee != nil && m.Title != nil && m.Marker != nil && m.Context != nil
+	switch m.Outcome {
+	case readback.Match:
+		o.Knowledge = "RESULT_VERIFIED"
+	case readback.Mismatch:
+		o.Knowledge = "RESULT_MISMATCH"
+	}
+	expires := earlier(k.ref.Expires, created.Add(90*24*time.Hour))
+	var attrs *intake.ContentRef
+	if r.Observed.Retrieved && r.Observed.List != "" && r.Observed.Assignees != nil {
+		var workspace *string
+		if r.Observed.Workspace != "" {
+			workspace = &r.Observed.Workspace
+		}
+		data, err := json.Marshal(map[string]any{"task_id": r.Observed.TargetID, "external_workspace_id": workspace,
+			"list_id": r.Observed.List, "assignee_ids": r.Observed.Assignees, "name": r.Observed.Title,
+			"handoff_block": m.Block, "retrieved_at": r.Provenance.ObservedAt, "source": r.Provenance.Source})
+		if err != nil {
+			return o, intake.ErrUnavailable
+		}
+		ref, err := s.put(data, expires)
+		if err != nil {
+			return o, err
+		}
+		attrs = &ref
+		o.EvidenceRef, o.EvidenceExpires, o.ProofDigest = &ref.ID, &ref.Expires, ref.SHA256
+	} else {
+		// This digest attests only the bounded local diagnostic, never absent
+		// provider evidence or proof that no external effect occurred.
+		o.ProofDigest = checksum([]byte(o.Observation.String() + ":" + o.ProofCode + ":" + o.ObservedAt.Format(time.RFC3339Nano)))
+	}
+	wire, err := intake.EncodeObservation(&o)
+	if err != nil {
+		return o, intake.ErrUnavailable
+	}
+	ref, err := s.put(wire, expires)
+	if err != nil {
+		return o, err
+	}
+	return o, s.db.saveReadback(ctx, k, o, attrs, ref, created)
+}
+
+func checksum(b []byte) string { return fmt.Sprintf("sha256:%x", sha256.Sum256(b)) }
+
+func (s *QueryService) put(b []byte, expiry time.Time) (intake.ContentRef, error) {
+	ref, err := s.files.Put(b, expiry)
+	if err != nil || ref.ID == uuid.Nil || ref.SHA256 != checksum(b) || ref.Size != len(b) || !ref.Expires.Equal(expiry) {
+		return intake.ContentRef{}, intake.ErrUnavailable
+	}
+	return ref, nil
+}
+--- end services/delivery/internal/dispatch/query.go ---
+
+--- file services/delivery/internal/dispatch/observation_publisher.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 32d148b0f3e7dc7b662353468c9c33222c53fe40; SHA-256 1ba9353ee64c5cdbd836f350305d90d31ea4461deed449f0c21e8658e23ea122; 9872 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/observation_publisher.go
+
+package dispatch
+
+import (
+	"bytes"
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"math/rand/v2"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/gowebpki/jcs"
+	"github.com/jackc/pgx/v5"
+)
+
+const applyPath = "/internal/v1/delivery-observations"
+
+type Publisher struct {
+	db        *Postgres
+	files     ContentReader
+	gate      intake.StartGate
+	recipient *ClickUp
+}
+
+// NewPublisher binds a provisioned Processing origin and client identity.
+// An outbox row cannot supply either, and the transport never follows redirects.
+func NewPublisher(db *Postgres, files ContentReader, gate intake.StartGate, origin string,
+	roots *x509.CertPool, cert tls.Certificate) (*Publisher, error) {
+	u, err := url.Parse(origin)
+	if err != nil || u.Scheme != "https" || u.Hostname() == "" || u.User != nil ||
+		u.Path != "" || u.RawQuery != "" || u.Fragment != "" || roots == nil || len(cert.Certificate) == 0 ||
+		cert.PrivateKey == nil || db == nil || files == nil || gate == nil {
+		return nil, ErrUnwired
+	}
+	client := clickUpAt(*u, roots)
+	client.tlsConfig.Certificates = []tls.Certificate{cert}
+	return &Publisher{db, files, gate, client}, nil
+}
+
+type claimed struct {
+	key, lease uuid.UUID
+	ref        intake.ContentRef
+	digest     string
+	attempt    int
+}
+
+// Publish sends at most one physical POST. An unacknowledged claim is retried
+// with the same durable file, message ID and digest after its next due time.
+func (p *Publisher) Publish(ctx context.Context, workspace, message uuid.UUID, epoch int64) error {
+	if workspace == uuid.Nil || message == uuid.Nil || epoch < 1 {
+		return intake.ErrDenied
+	}
+	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
+	defer cancel()
+	var c claimed
+	var ex *exchange
+	start, stop := context.WithTimeout(ctx, 2*time.Second)
+	err := p.gate.WithOpen(start, workspace, epoch, func() error {
+		var err error
+		c, err = p.db.claimObservation(start, workspace, message)
+		if err != nil {
+			return err
+		}
+		body, err := p.files.Read(c.ref, time.Now())
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		var o intake.TaskObservation
+		if json.Unmarshal(body, &o) != nil || o.Workspace != workspace || o.MessageID != message || o.MessageDigest != c.digest {
+			return intake.ErrConflict
+		}
+		wire, err := intake.EncodeObservation(&o)
+		if err != nil || !bytes.Equal(wire, body) {
+			return intake.ErrConflict
+		}
+		dst := p.recipient.origin
+		dst.Path = applyPath
+		req, err := http.NewRequest(http.MethodPost, dst.String(), bytes.NewReader(body))
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		req.Close = true
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Request-ID", uuid.NewString())
+		ex, err = p.recipient.start(start, req, func() error { return p.db.publicationAllowed(start, o, c, epoch) })
+		return err
+	})
+	stop()
+	if ex != nil {
+		defer ex.conn.Close()
+	}
+	if c.lease == uuid.Nil {
+		if err == nil {
+			return intake.ErrDenied
+		}
+		return err
+	}
+	ack := false
+	var retryAt *time.Time
+	if err == nil && ex != nil {
+		response, readErr := ex.readBounded(ctx)
+		ack = readErr == nil && response.status == http.StatusAccepted && acceptedReceipt(response.body, message)
+		switch response.status {
+		case http.StatusTooManyRequests, http.StatusServiceUnavailable:
+			retryAt = retryAfter(response.header.Get("Retry-After"), time.Now(), c.ref.Expires)
+		}
+		if !ack {
+			err = intake.ErrUnavailable
+		}
+	}
+	finish, stopFinish := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
+	defer stopFinish()
+	if e := p.db.finishPublication(finish, workspace, c, ack, retryAt); e != nil {
+		return e
+	}
+	return err
+}
+
+// Retry-After is a lower bound. A valid hint beyond the content lifetime
+// makes the outbox row ineligible for further delivery.
+func retryAfter(value string, now, expires time.Time) *time.Time {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil
+	}
+	if strings.Trim(value, "0123456789") == "" {
+		seconds, err := strconv.ParseUint(value, 10, 64)
+		if err != nil || seconds > uint64(max(expires.Sub(now), 0)/time.Second) {
+			return &expires
+		}
+		next := now.Add(time.Duration(seconds) * time.Second)
+		return &next
+	}
+	next, err := http.ParseTime(value)
+	if err != nil {
+		return nil
+	}
+	if next.After(expires) {
+		return &expires
+	}
+	return &next
+}
+
+func publicationBackoff(attempt int) time.Duration {
+	ceiling := time.Second << min(attempt, 8)
+	half := ceiling / 2
+	return half + rand.N(half)
+}
+
+func acceptedReceipt(body []byte, message uuid.UUID) bool {
+	if _, err := jcs.Transform(body); err != nil {
+		return false
+	}
+	var f map[string]json.RawMessage
+	if json.Unmarshal(body, &f) != nil {
+		return false
+	}
+	for k := range f {
+		switch k {
+		case "message_id", "disposition", "record_id", "revision":
+		default:
+			return false
+		}
+	}
+	var id uuid.UUID
+	var disposition string
+	if json.Unmarshal(f["message_id"], &id) != nil || id != message || json.Unmarshal(f["disposition"], &disposition) != nil {
+		return false
+	}
+	if raw, ok := f["record_id"]; ok {
+		var record uuid.UUID
+		if json.Unmarshal(raw, &record) != nil || record == uuid.Nil {
+			return false
+		}
+	}
+	if raw, ok := f["revision"]; ok {
+		var rev int64
+		if json.Unmarshal(raw, &rev) != nil || rev < 1 || rev > 9007199254740991 {
+			return false
+		}
+	}
+	return disposition == "APPLIED" || disposition == "DUPLICATE" || disposition == "HELD"
+}
+
+func (p *Postgres) claimObservation(ctx context.Context, ws, id uuid.UUID) (claimed, error) {
+	row := claimed{key: id, lease: uuid.New()}
+	available := true
+	err := p.scoped(ctx, Job{Workspace: ws}, func(tx pgx.Tx) error {
+		err := tx.QueryRow(ctx, `UPDATE hp_delivery.outbox
+			SET state='CLAIMED',claim_token=$3,lease_until=clock_timestamp()+interval '15 seconds',delivery_count=delivery_count+1
+			WHERE workspace_id=$1 AND message_id=$2 AND kind='TASK_OBSERVATION'
+			  AND expires_at>clock_timestamp() AND next_attempt_at<=clock_timestamp() AND delivery_count<8
+			  AND (state='PENDING' OR (state='CLAIMED' AND lease_until<=clock_timestamp()))
+			RETURNING payload_ref,payload_sha256,payload_bytes,expires_at,digest,delivery_count`, ws, id, row.lease).
+			Scan(&row.ref.ID, &row.ref.SHA256, &row.ref.Size, &row.ref.Expires, &row.digest, &row.attempt)
+		if errors.Is(err, pgx.ErrNoRows) {
+			available = false
+			released, err := tx.Exec(ctx, `UPDATE hp_delivery.outbox SET state='HELD',claim_token=NULL,lease_until=NULL
+				WHERE workspace_id=$1 AND message_id=$2 AND kind='TASK_OBSERVATION'
+				  AND (expires_at<=clock_timestamp() OR delivery_count>=8)
+				  AND (state='PENDING' OR (state='CLAIMED' AND lease_until<=clock_timestamp()))`, ws, id)
+			if err != nil {
+				return intake.ErrUnavailable
+			}
+			if released.RowsAffected() == 1 {
+				_, err = tx.Exec(ctx, `DELETE FROM hp_delivery.job_index WHERE workspace_id=$1 AND job_id=$2`, ws, id)
+				if err != nil {
+					return intake.ErrUnavailable
+				}
+			}
+			return nil
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		_, err = tx.Exec(ctx, `UPDATE hp_delivery.job_index j SET due_at=o.lease_until,claim_token=o.claim_token,lease_until=o.lease_until
+			FROM hp_delivery.outbox o WHERE j.workspace_id=$1 AND j.job_id=$2
+			  AND o.workspace_id=j.workspace_id AND o.message_id=j.job_id`, ws, id)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+	if err != nil {
+		return claimed{}, err
+	}
+	if !available {
+		return claimed{}, intake.ErrNotFound
+	}
+	return row, nil
+}
+
+func (p *Postgres) publicationAllowed(ctx context.Context, o intake.TaskObservation, c claimed, epoch int64) error {
+	return p.scoped(ctx, Job{Workspace: o.Workspace}, func(tx pgx.Tx) error {
+		var one int
+		err := tx.QueryRow(ctx, `SELECT 1 FROM hp_delivery.effect_observations v
+			JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id)
+			JOIN hp_delivery.destination_connections d USING(workspace_id,connection_id)
+			JOIN hp_delivery.outbox b ON b.workspace_id=v.workspace_id AND b.message_id=$2
+			WHERE v.workspace_id=$1 AND v.observation_id=$3 AND v.lineage_id=$4 AND l.case_id=$5
+			  AND d.security_epoch=$6 AND d.revoked_at IS NULL
+			  AND b.state='CLAIMED' AND b.claim_token=$7 AND b.lease_until>clock_timestamp()
+			  AND b.expires_at>clock_timestamp() FOR SHARE OF d`,
+			o.Workspace, c.key, o.Observation, o.Lineage, o.Case, epoch, c.lease).Scan(&one)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return intake.ErrDenied
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+
+func (p *Postgres) finishPublication(ctx context.Context, ws uuid.UUID, c claimed, ack bool, retryAt *time.Time) error {
+	return p.scoped(ctx, Job{Workspace: ws}, func(tx pgx.Tx) error {
+		var state string
+		var next time.Time
+		err := tx.QueryRow(ctx, `WITH schedule AS MATERIALIZED (
+			SELECT GREATEST(clock_timestamp()+make_interval(secs=>$5),$6::timestamptz) AS due
+		)
+		UPDATE hp_delivery.outbox SET
+			state=CASE WHEN $4 THEN 'ACKED' WHEN delivery_count>=8 OR schedule.due>=expires_at
+			  THEN 'HELD' ELSE 'PENDING' END,
+			next_attempt_at=CASE WHEN $4 THEN next_attempt_at ELSE LEAST(schedule.due,expires_at) END,
+			claim_token=NULL,lease_until=NULL
+			FROM schedule
+			WHERE workspace_id=$1 AND message_id=$2 AND claim_token=$3 AND state='CLAIMED'
+			RETURNING state,next_attempt_at`, ws, c.key, c.lease, ack, publicationBackoff(c.attempt).Seconds(), retryAt).Scan(&state, &next)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if state == "PENDING" {
+			_, err = tx.Exec(ctx, `UPDATE hp_delivery.job_index SET due_at=$3,claim_token=NULL,lease_until=NULL WHERE workspace_id=$1 AND job_id=$2`, ws, c.key, next)
+		} else {
+			_, err = tx.Exec(ctx, `DELETE FROM hp_delivery.job_index WHERE workspace_id=$1 AND job_id=$2`, ws, c.key)
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+--- end services/delivery/internal/dispatch/observation_publisher.go ---
+
+--- file services/delivery/internal/dispatch/observation_db.go ---
+Commit 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52; Git blob 0e5223b9152aeea66603fb37612327d9ee6424cb; SHA-256 0c87faf901d7170d7a23fd21fd29d0172c77c638c1aa9ad98ddc1f638b438d0f; 6114 bytes
+https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/observation_db.go
+
+package dispatch
+
+import (
+	"context"
+	"errors"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+)
+
+type known struct {
+	job                                          Job
+	caseID, lineage, episode, connection, config uuid.UUID
+	task, workspace                              string
+	epoch                                        int64
+	fingerprint                                  [32]byte
+	ref                                          intake.ContentRef
+}
+
+func (p *Postgres) known(ctx context.Context, q intake.Query, auth Authorization) (known, error) {
+	k := known{job: Job{q.Workspace, auth.Attempt}, caseID: q.Case, lineage: q.Lineage, epoch: q.Epoch}
+	err := p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		var fp []byte
+		err := tx.QueryRow(ctx, `
+			SELECT l.connection_id,l.config_id,a.episode_id,l.known_task_id,c.external_workspace_id,
+			       c.token_fingerprint,f.rendered_payload_ref,f.rendered_payload_sha256,f.rendered_payload_bytes,f.expires_at
+			FROM hp_delivery.effect_lineage l
+			JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
+			JOIN hp_delivery.destination_connections c USING(workspace_id,connection_id)
+			JOIN hp_delivery.intent_content f USING(workspace_id,attempt_id)
+			JOIN hp_delivery.inbox i ON i.workspace_id=a.workspace_id AND i.message_id=a.command_message_id
+			  AND i.record_id=a.attempt_id AND i.disposition='APPLIED'
+			WHERE l.workspace_id=$1 AND l.case_id=$2 AND l.lineage_id=$3 AND a.attempt_id=$4
+			  AND l.ever_dispatch_fenced AND l.state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')
+			  AND l.known_task_id IS NOT NULL AND a.network_start_at IS NOT NULL
+			  AND c.revoked_at IS NULL AND c.security_epoch=$5 AND a.connection_epoch=$5
+			`, q.Workspace, q.Case, q.Lineage, auth.Attempt, q.Epoch).
+			Scan(&k.connection, &k.config, &k.episode, &k.task, &k.workspace, &fp, &k.ref.ID, &k.ref.SHA256, &k.ref.Size, &k.ref.Expires)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return intake.ErrNotFound
+		}
+		if err != nil || len(fp) != 32 {
+			return intake.ErrUnavailable
+		}
+		copy(k.fingerprint[:], fp)
+		if q.TaskID != "" && q.TaskID != k.task {
+			return intake.ErrConflict
+		}
+		return nil
+	})
+	return k, err
+}
+
+// lockKnown rechecks the same immutable target and installed epoch under the
+// start gate. The transaction is always closed before any HTTP transmission.
+func lockKnown(ctx context.Context, tx pgx.Tx, k known) error {
+	var one int
+	err := tx.QueryRow(ctx, `
+		SELECT 1 FROM hp_delivery.effect_lineage l
+		JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
+		JOIN hp_delivery.destination_connections c USING(workspace_id,connection_id)
+		JOIN hp_delivery.intent_content f USING(workspace_id,attempt_id)
+		WHERE l.workspace_id=$1 AND l.case_id=$2 AND l.lineage_id=$3 AND a.attempt_id=$4
+		  AND l.known_task_id=$5 AND l.ever_dispatch_fenced AND l.state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')
+		  AND c.security_epoch=$6 AND c.revoked_at IS NULL AND c.token_fingerprint=$7
+		  AND f.rendered_payload_ref=$8 AND f.rendered_payload_sha256=$9 AND f.expires_at>clock_timestamp()
+		FOR SHARE OF c`, k.job.Workspace, k.caseID, k.lineage, k.job.Attempt, k.task, k.epoch, k.fingerprint[:], k.ref.ID, k.ref.SHA256).Scan(&one)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return intake.ErrDenied
+	}
+	if err != nil {
+		return intake.ErrUnavailable
+	}
+	return nil
+}
+
+func (p *Postgres) chargeRead(ctx context.Context, k known) error {
+	return p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		if err := lockKnown(ctx, tx, k); err != nil {
+			return err
+		}
+		r, err := tx.Exec(ctx, `UPDATE hp_delivery.credential_budget SET used_count=used_count+1
+			WHERE token_fingerprint=$1 AND used_count<limit_count AND next_eligible_at<=clock_timestamp()`, k.fingerprint[:])
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if r.RowsAffected() != 1 {
+			return errReadBudget
+		}
+		return nil
+	})
+}
+
+func (p *Postgres) saveReadback(ctx context.Context, k known, o intake.TaskObservation, attributes *intake.ContentRef,
+	wire intake.ContentRef, created time.Time) error {
+	return p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		if err := lockKnown(ctx, tx, k); err != nil {
+			return err
+		}
+		_, err := tx.Exec(ctx, `
+			INSERT INTO hp_delivery.effect_observations(workspace_id,observation_id,lineage_id,attempt_id,
+			 knowledge,observed_at,proof_code,proof_digest,known_task_id)
+			VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`, o.Workspace, o.Observation, o.Lineage, k.job.Attempt,
+			o.Knowledge, o.ObservedAt, o.ProofCode, o.ProofDigest, k.task)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if attributes != nil {
+			_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.observation_content(workspace_id,observation_id,actual_attributes_ref,
+				actual_attributes_sha256,actual_attributes_bytes,expected_attributes_digest,created_at,expires_at)
+				VALUES($1,$2,$3,$4,$5,$6,$7,$8)`, o.Workspace, o.Observation, attributes.ID, attributes.SHA256,
+				attributes.Size, k.ref.SHA256, created, attributes.Expires)
+			if err != nil {
+				return intake.ErrUnavailable
+			}
+		}
+		if o.Complete {
+			r, err := tx.Exec(ctx, `UPDATE hp_delivery.effect_lineage SET state='TARGET_OBSERVED',updated_at=clock_timestamp()
+			WHERE workspace_id=$1 AND lineage_id=$2 AND known_task_id=$3 AND ever_dispatch_fenced
+			  AND state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')`, o.Workspace, o.Lineage, k.task)
+			if err != nil || r.RowsAffected() != 1 {
+				return intake.ErrUnavailable
+			}
+		}
+		_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.outbox(workspace_id,message_id,kind,payload_ref,payload_sha256,
+			payload_bytes,digest,created_at,expires_at) VALUES($1,$2,'TASK_OBSERVATION',$3,$4,$5,$6,$7,$8)`,
+			o.Workspace, o.MessageID, wire.ID, wire.SHA256, wire.Size, o.MessageDigest, created, wire.Expires)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.job_index(job_id,workspace_id,kind,due_at)
+			VALUES ($1,$2,'TASK_OBSERVATION',clock_timestamp())`, o.MessageID, o.Workspace)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+--- end services/delivery/internal/dispatch/observation_db.go ---
