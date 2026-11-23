@@ -7,8 +7,11 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"errors"
+	"math/rand/v2"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
@@ -45,6 +48,7 @@ type claimed struct {
 	key, lease uuid.UUID
 	ref        intake.ContentRef
 	digest     string
+	attempt    int
 }
 
 // Publish sends at most one physical POST. An unacknowledged claim is retried
@@ -99,19 +103,55 @@ func (p *Publisher) Publish(ctx context.Context, workspace, message uuid.UUID, e
 		return err
 	}
 	ack := false
+	var retryAt *time.Time
 	if err == nil && ex != nil {
-		status, body, readErr := ex.readBounded(ctx)
-		ack = readErr == nil && status == http.StatusAccepted && acceptedReceipt(body, message)
+		response, readErr := ex.readBounded(ctx)
+		ack = readErr == nil && response.status == http.StatusAccepted && acceptedReceipt(response.body, message)
+		switch response.status {
+		case http.StatusTooManyRequests, http.StatusServiceUnavailable:
+			retryAt = retryAfter(response.header.Get("Retry-After"), time.Now(), c.ref.Expires)
+		}
 		if !ack {
 			err = intake.ErrUnavailable
 		}
 	}
 	finish, stopFinish := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
 	defer stopFinish()
-	if e := p.db.finishPublication(finish, workspace, c, ack); e != nil {
+	if e := p.db.finishPublication(finish, workspace, c, ack, retryAt); e != nil {
 		return e
 	}
 	return err
+}
+
+// Retry-After is a lower bound. A valid hint beyond the content lifetime
+// makes the outbox row ineligible for further delivery.
+func retryAfter(value string, now, expires time.Time) *time.Time {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil
+	}
+	if strings.Trim(value, "0123456789") == "" {
+		seconds, err := strconv.ParseUint(value, 10, 64)
+		if err != nil || seconds > uint64(max(expires.Sub(now), 0)/time.Second) {
+			return &expires
+		}
+		next := now.Add(time.Duration(seconds) * time.Second)
+		return &next
+	}
+	next, err := http.ParseTime(value)
+	if err != nil {
+		return nil
+	}
+	if next.After(expires) {
+		return &expires
+	}
+	return &next
+}
+
+func publicationBackoff(attempt int) time.Duration {
+	ceiling := time.Second << min(attempt, 8)
+	half := ceiling / 2
+	return half + rand.N(half)
 }
 
 func acceptedReceipt(body []byte, message uuid.UUID) bool {
@@ -158,8 +198,8 @@ func (p *Postgres) claimObservation(ctx context.Context, ws, id uuid.UUID) (clai
 			WHERE workspace_id=$1 AND message_id=$2 AND kind='TASK_OBSERVATION'
 			  AND expires_at>clock_timestamp() AND next_attempt_at<=clock_timestamp() AND delivery_count<8
 			  AND (state='PENDING' OR (state='CLAIMED' AND lease_until<=clock_timestamp()))
-			RETURNING payload_ref,payload_sha256,payload_bytes,expires_at,digest`, ws, id, row.lease).
-			Scan(&row.ref.ID, &row.ref.SHA256, &row.ref.Size, &row.ref.Expires, &row.digest)
+			RETURNING payload_ref,payload_sha256,payload_bytes,expires_at,digest,delivery_count`, ws, id, row.lease).
+			Scan(&row.ref.ID, &row.ref.SHA256, &row.ref.Size, &row.ref.Expires, &row.digest, &row.attempt)
 		if errors.Is(err, pgx.ErrNoRows) {
 			available = false
 			released, err := tx.Exec(ctx, `UPDATE hp_delivery.outbox SET state='HELD',claim_token=NULL,lease_until=NULL
@@ -219,17 +259,21 @@ func (p *Postgres) publicationAllowed(ctx context.Context, o intake.TaskObservat
 	})
 }
 
-func (p *Postgres) finishPublication(ctx context.Context, ws uuid.UUID, c claimed, ack bool) error {
+func (p *Postgres) finishPublication(ctx context.Context, ws uuid.UUID, c claimed, ack bool, retryAt *time.Time) error {
 	return p.scoped(ctx, Job{Workspace: ws}, func(tx pgx.Tx) error {
 		var state string
 		var next time.Time
-		err := tx.QueryRow(ctx, `UPDATE hp_delivery.outbox SET
-			state=CASE WHEN $4 THEN 'ACKED' WHEN delivery_count>=8 OR expires_at<=clock_timestamp()
+		err := tx.QueryRow(ctx, `WITH schedule AS MATERIALIZED (
+			SELECT GREATEST(clock_timestamp()+make_interval(secs=>$5),$6::timestamptz) AS due
+		)
+		UPDATE hp_delivery.outbox SET
+			state=CASE WHEN $4 THEN 'ACKED' WHEN delivery_count>=8 OR schedule.due>=expires_at
 			  THEN 'HELD' ELSE 'PENDING' END,
-			next_attempt_at=clock_timestamp()+make_interval(secs=>LEAST(300,power(2,delivery_count))),
+			next_attempt_at=CASE WHEN $4 THEN next_attempt_at ELSE LEAST(schedule.due,expires_at) END,
 			claim_token=NULL,lease_until=NULL
+			FROM schedule
 			WHERE workspace_id=$1 AND message_id=$2 AND claim_token=$3 AND state='CLAIMED'
-			RETURNING state,next_attempt_at`, ws, c.key, c.lease, ack).Scan(&state, &next)
+			RETURNING state,next_attempt_at`, ws, c.key, c.lease, ack, publicationBackoff(c.attempt).Seconds(), retryAt).Scan(&state, &next)
 		if err != nil {
 			return intake.ErrUnavailable
 		}

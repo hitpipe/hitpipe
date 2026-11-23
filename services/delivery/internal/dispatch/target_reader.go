@@ -43,19 +43,19 @@ func (r *targetReader) Read(ctx context.Context, id string) (readback.Observatio
 	if id != r.id {
 		return readback.Observation{}, verifytarget.Provenance{}, ErrHeld
 	}
-	status, data, err := r.ex.readBounded(ctx)
+	response, err := r.ex.readBounded(ctx)
 	proof := verifytarget.Provenance{Source: observationSource, ObservedAt: time.Now().UTC().Truncate(time.Microsecond)}
 	r.code = "READ_FAILED"
 	if err != nil {
 		return readback.Observation{}, proof, err
 	}
-	switch status {
+	switch response.status {
 	case 403, 404:
 		r.code = "READ_NOT_ACCESSIBLE"
 	case 429:
 		r.code = "READ_RATE_LIMITED"
 	case 200:
-		o, err := observedTask(data)
+		o, err := observedTask(response.body)
 		if err != nil {
 			r.code = "READ_INVALID_RESPONSE"
 			return o, proof, err
@@ -70,22 +70,30 @@ func (r *targetReader) Read(ctx context.Context, id string) (readback.Observatio
 	return readback.Observation{}, proof, ErrHeld
 }
 
-func (e *exchange) readBounded(ctx context.Context) (int, []byte, error) {
+type boundedResponse struct {
+	status int
+	header http.Header
+	body   []byte
+}
+
+func (e *exchange) readBounded(ctx context.Context) (boundedResponse, error) {
 	deadline, ok := ctx.Deadline()
 	if !ok || ctx.Err() != nil || e.conn.SetDeadline(deadline) != nil {
-		return 0, nil, ErrHeld
+		return boundedResponse{}, ErrHeld
 	}
 	stop := context.AfterFunc(ctx, func() { _ = e.conn.Close() })
 	defer stop()
 	res, err := http.ReadResponse(bufio.NewReader(&io.LimitedReader{R: e.conn, N: 2 * maxResponse}), e.req)
 	if err != nil {
-		return 0, nil, ErrHeld
+		return boundedResponse{}, ErrHeld
 	}
+	response := boundedResponse{status: res.StatusCode, header: res.Header}
 	data, err := io.ReadAll(io.LimitReader(res.Body, maxResponse+1))
 	if err != nil || len(data) > maxResponse {
-		return res.StatusCode, nil, ErrHeld
+		return response, ErrHeld
 	}
-	return res.StatusCode, data, nil
+	response.body = data
+	return response, nil
 }
 
 func observedTask(raw []byte) (readback.Observation, error) {

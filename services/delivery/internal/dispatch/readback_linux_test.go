@@ -251,8 +251,13 @@ func TestReadbackAndDurableOutbox(t *testing.T) {
 			len(r.TLS.VerifiedChains) == 0 || r.TLS.PeerCertificates[0].DNSNames[0] != "delivery.internal" {
 			t.Error("invalid Processing delivery")
 		}
-		if deliveries.Add(1) == 1 {
+		switch deliveries.Add(1) {
+		case 1:
 			panic(http.ErrAbortHandler)
+		case 2:
+			w.Header().Set("Retry-After", "360")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
 		}
 		w.WriteHeader(202)
 		json.NewEncoder(w).Encode(map[string]any{"message_id": o.MessageID, "disposition": "DUPLICATE"})
@@ -271,9 +276,13 @@ func TestReadbackAndDurableOutbox(t *testing.T) {
 	if err := pub.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrNotFound) {
 		t.Fatalf("backoff did not hold: %v", err)
 	}
-	if _, err = f.admin.Exec(t.Context(), "UPDATE hp_delivery.outbox SET next_attempt_at=clock_timestamp() WHERE message_id=$1", o.MessageID); err != nil {
-		t.Fatal(err)
+	makeDue := func() {
+		t.Helper()
+		if _, err := f.admin.Exec(t.Context(), "UPDATE hp_delivery.outbox SET next_attempt_at=clock_timestamp() WHERE message_id=$1", o.MessageID); err != nil {
+			t.Fatal(err)
+		}
 	}
+	makeDue()
 	reopened, err := NewPostgres(connect(t, "HIT92_TEST_WORKER_DSN"))
 	if err != nil {
 		t.Fatal(err)
@@ -282,12 +291,28 @@ func TestReadbackAndDurableOutbox(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	beforeRateLimit := time.Now()
+	if err := restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrUnavailable) {
+		t.Fatalf("Processing rate limit: %v", err)
+	}
+	var nextAttempt, indexedDue time.Time
+	err = f.admin.QueryRow(t.Context(), `SELECT o.next_attempt_at,j.due_at
+		FROM hp_delivery.outbox o JOIN hp_delivery.job_index j
+		ON j.workspace_id=o.workspace_id AND j.job_id=o.message_id
+		WHERE o.message_id=$1 AND o.state='PENDING'`, o.MessageID).Scan(&nextAttempt, &indexedDue)
+	if err != nil || nextAttempt.Before(beforeRateLimit.Add(6*time.Minute-time.Microsecond)) || !nextAttempt.Equal(indexedDue) {
+		t.Fatalf("Retry-After not persisted to outbox and job index: %v, %v, %v", nextAttempt, indexedDue, err)
+	}
+	if err := restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrNotFound) || deliveries.Load() != 2 {
+		t.Fatalf("premature delivery during Retry-After: %v, posts=%d", err, deliveries.Load())
+	}
+	makeDue()
 	if err = restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); err != nil {
 		t.Fatal(err)
 	}
 	var state string
 	err = f.admin.QueryRow(t.Context(), "SELECT state FROM hp_delivery.outbox WHERE message_id=$1", o.MessageID).Scan(&state)
-	if err != nil || state != "ACKED" || deliveries.Load() != 2 {
+	if err != nil || state != "ACKED" || deliveries.Load() != 3 {
 		t.Fatalf("outbox replay incorrect: %s %v", state, err)
 	}
 	next, err := service.QueryKnownTask(t.Context(), q)
@@ -295,7 +320,21 @@ func TestReadbackAndDurableOutbox(t *testing.T) {
 		!next.EvidenceExpires.Equal(*o.EvidenceExpires) {
 		t.Fatal("new observation changed identity or retention")
 	}
-	t.Logf("native ID=%s knowledge=%s lineage=%s fence=%t; Processing deliveries=%d (same message/digest), outbox=%s", id, o.Knowledge, observedState, fence, deliveries.Load(), state)
+	claim, err := reopened.claimObservation(t.Context(), next.Workspace, next.MessageID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := reopened.finishPublication(t.Context(), next.Workspace, claim, false, &claim.ref.Expires); err != nil {
+		t.Fatal(err)
+	}
+	var held, stillScheduled bool
+	err = f.admin.QueryRow(t.Context(), `SELECT o.state='HELD',
+		EXISTS (SELECT 1 FROM hp_delivery.job_index j WHERE j.workspace_id=o.workspace_id AND j.job_id=o.message_id)
+		FROM hp_delivery.outbox o WHERE o.message_id=$1`, next.MessageID).Scan(&held, &stillScheduled)
+	if err != nil || !held || stillScheduled {
+		t.Fatalf("expired retry window must hold without scheduling: held=%t scheduled=%t err=%v", held, stillScheduled, err)
+	}
+	t.Logf("native ID=%s knowledge=%s lineage=%s fence=%t; Processing deliveries=%d (same message/digest), Retry-After=360s persisted; outbox=%s", id, o.Knowledge, observedState, fence, deliveries.Load(), state)
 }
 
 func fenceClaimCrash(t *testing.T, ws, msg uuid.UUID) {
