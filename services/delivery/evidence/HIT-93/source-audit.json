@@ -1,0 +1,299 @@
+{
+  "subject": "HIT-93",
+  "contract_revision": 2,
+  "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+  "tested_commit": "584474d8d4f550f44f7236ff6839209f83184332",
+  "dependencies": [
+    {
+      "issue": "HIT-70",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/49",
+      "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+      "merged": false,
+      "reuse": "неизменённый DDL, роли и fixture PostgreSQL"
+    },
+    {
+      "issue": "HIT-91",
+      "status": "Готово",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/93",
+      "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+      "merged": false,
+      "reuse": "приём, mTLS listener, инварианты квитанции и хранилище содержимого"
+    },
+    {
+      "issue": "HIT-92",
+      "status": "Готово",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/98",
+      "head": "d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3",
+      "merged": false,
+      "reuse": "фактически сохранённый native ID, fence, общий бюджет и одноразовый TLS транспорт"
+    },
+    {
+      "issue": "HIT-59",
+      "result": "https://hitpipe.atlassian.net/browse/HIT-59?focusedCommentId=11098",
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/29",
+      "head": "f7d45d2e0162f8124ae9e3ddaa9b415b8bdef4c4",
+      "merged": false,
+      "adapted_files": [
+        {
+          "source": "https://github.com/hitpipe/hitpipe/blob/f7d45d2e0162f8124ae9e3ddaa9b415b8bdef4c4/services/delivery/internal/application/verifytarget/verifytarget.go",
+          "adapted": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/application/verifytarget/verifytarget.go"
+        },
+        {
+          "source": "https://github.com/hitpipe/hitpipe/blob/f7d45d2e0162f8124ae9e3ddaa9b415b8bdef4c4/services/delivery/internal/domain/readback/readback.go",
+          "adapted": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/domain/readback/readback.go"
+        }
+      ],
+      "reuse": "сохранены порт чтения и точное сравнение; добавлены нужная проекция, многострочный блок и nullable признаки. FileReader не переносился."
+    }
+  ],
+  "source_manifest": [
+    {
+      "source_id": "global",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/GLOBAL_BASELINE_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "74da6be6b9fdfb69e5f4d98d5768f84a6f65ffa2d95443c6b433f722f819891b"
+      }
+    },
+    {
+      "source_id": "discovery",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/DISCOVERY_MVP_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "7fa61bb6fa150c033c87c9b8fc2fa9ef06bb0bc7d87132a88229a783c6923c7d"
+      }
+    },
+    {
+      "source_id": "product",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/PRODUCT_MVP_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "57a6759260b421b1a4e5939ca8bf60aec1339c3c5c11d3ab557f6cb10905d6e3"
+      }
+    },
+    {
+      "source_id": "architecture",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/b2461564e4355ea5a72a55a30a635655397c463b/contracts/hitpipe/mvp-2026-10-31/SYSTEM_DESIGN_MVP_RU.md",
+        "revision": "b2461564e4355ea5a72a55a30a635655397c463b",
+        "sha256": "2f35c09ab3b941f3d562e5db399ef098b84fa0810af3b6a50c3e9082dd09170a"
+      }
+    },
+    {
+      "source_id": "interface",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/mvp-openapi.json",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "a0c65940c8175de884bd404bc1187ace3be3c009737cc40b047e550e3f2c2b9e"
+      }
+    },
+    {
+      "source_id": "persistence",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/PERSISTENCE.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "6ef964a02d1ce25bb1df8313d8930a1e4a6c8cfd61e91202529348d08eba31cb"
+      }
+    },
+    {
+      "source_id": "stack",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/formal/stack-mvp.json",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "d57f0410b0a7b5dae770d8f0e3c4a9816ab9fcf75f773a4cfbbc84e911008ecc"
+      }
+    },
+    {
+      "source_id": "comparison",
+      "source_ref": {
+        "ref": "https://github.com/hitpipe/project-os/blob/fedbe40bb597e25f66aeb1172af3ff7459c81b40/contracts/hitpipe/mvp-2026-10-31/FUNCTIONAL_REFERENCE_RU.md",
+        "revision": "fedbe40bb597e25f66aeb1172af3ff7459c81b40",
+        "sha256": "a1cbc99e4d5450d77d47a1967155d0e0288775eacadd22b313fc58d4e8f86741"
+      }
+    },
+    {
+      "source_id": "lead-scope",
+      "source_ref": {
+        "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10908",
+        "revision": "2026-10-31T11:29:51.893+0300",
+        "sha256": "310d84fd402ec9b3391c81e525aacc9e38104d31f73d0caab406f3753a7af999"
+      }
+    },
+    {
+      "source_id": "scope-table",
+      "source_ref": {
+        "ref": "https://hitpipe.atlassian.net/browse/HIT-63?focusedCommentId=10859",
+        "revision": "2026-10-30T17:34:17.216+0300",
+        "sha256": "f87f2618eaf4bf17f4e8117477f56a0b6e1d2df7ac044d580e316d75837360b7"
+      }
+    }
+  ],
+  "provider_reference": "https://developer.clickup.com/reference/gettask",
+  "postgresql_patch": "https://github.com/hitpipe/project-os/blob/d9eb399d9cc0528f1beae6153851ab5020741ea5/contracts/hitpipe/security-2026-11-14/POSTGRES_SECURITY_PATCH_RU.md",
+  "ddl_sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+  "files": [
+    {
+      "path": "services/delivery/README.md",
+      "git_blob": "fb829985d12fbd3947345e877ce9d3226ec248bc",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/README.md"
+    },
+    {
+      "path": "services/delivery/docs/dispatch.md",
+      "git_blob": "cc223360de3dc8727f33422adabff50d6ada6db5",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/docs/dispatch.md"
+    },
+    {
+      "path": "services/delivery/docs/readback.md",
+      "git_blob": "2a8e7837f5ab86578999181d179ccf03b5c46c3f",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/docs/readback.md"
+    },
+    {
+      "path": "services/delivery/go.mod",
+      "git_blob": "f74dcefd3ee8a1ae82283dbc1e69cfa62a3fcbf9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/go.mod"
+    },
+    {
+      "path": "services/delivery/go.sum",
+      "git_blob": "4367cf547c0237138a1357a8812be36c22059ed2",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/go.sum"
+    },
+    {
+      "path": "services/delivery/internal/application/verifytarget/verifytarget.go",
+      "git_blob": "421a8d7ed5fff351fb1852244f34b97955f782da",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/application/verifytarget/verifytarget.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/clickup.go",
+      "git_blob": "cad9ce682c2686540b00f2b3ef51f6960b1cdda1",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/clickup.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/dispatch_linux_test.go",
+      "git_blob": "0cfdbded32cf78b6d574254cb14c2cc83255bc14",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/dispatch_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/observation_db.go",
+      "git_blob": "0e5223b9152aeea66603fb37612327d9ee6424cb",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/observation_db.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/observation_publisher.go",
+      "git_blob": "708eb76414a0e9ecd96c24fa31fa354ca5c2b4cf",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/observation_publisher.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/postgres.go",
+      "git_blob": "f7b1364af8e40de95cee1df5f3945afbe1d25c0d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/postgres.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/query.go",
+      "git_blob": "67ea7319a565e1619e7df6cc53c2c7f7abe2b985",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/query.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/readback_linux_test.go",
+      "git_blob": "3c7ce988252bf80c8d52b90f9f2e281871be3398",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/readback_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/revoke_linux_test.go",
+      "git_blob": "f1308be164ec92e0fc8913106848a6dced8f30cb",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/revoke_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/target_reader.go",
+      "git_blob": "4e918cf8be9ade0e45a9627dd16d4b1e421fb8cc",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/target_reader.go"
+    },
+    {
+      "path": "services/delivery/internal/dispatch/worker.go",
+      "git_blob": "b64f5c1c541aaf5a0fcd786b30b84684841ea84f",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/dispatch/worker.go"
+    },
+    {
+      "path": "services/delivery/internal/domain/readback/readback.go",
+      "git_blob": "a9f2126eacd41ae738013107dc081b7c022b0b1d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/domain/readback/readback.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/content_linux.go",
+      "git_blob": "cff1912f7e1854161d180c51045543dbb703f68c",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/content_linux.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/http.go",
+      "git_blob": "21109687dbac058cb0d134a421b4d98a19e4e2ec",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/http.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/http_test.go",
+      "git_blob": "ad0474211fc3e80bbe6bf73eeb8ec3e51a075f8d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/http_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/intent.go",
+      "git_blob": "cd2b9941934c795ca53db661adb9086b87f7dcbf",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/intent.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/intent_test.go",
+      "git_blob": "b5fb1bd6692e10e1539d288136f715e27ecf3128",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/intent_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/postgres.go",
+      "git_blob": "5ac98000497a7a6172e81a6d6ac77190e52596c9",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/postgres.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/postgres_linux_test.go",
+      "git_blob": "bb7407b398146912b656c68323ab20d40eb97a18",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/postgres_linux_test.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/query.go",
+      "git_blob": "886a19e6d144b686df48695683cd5a4144f124a8",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/query.go"
+    },
+    {
+      "path": "services/delivery/internal/intake/service.go",
+      "git_blob": "9546d1e061fd1f340779d895c897d0e170b7af7d",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/internal/intake/service.go"
+    },
+    {
+      "path": "services/delivery/migrations/001_delivery.sql",
+      "git_blob": "657a06ca5ec8cdee020c2ab0037a72f421f33e84",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/migrations/001_delivery.sql"
+    },
+    {
+      "path": "services/delivery/tests/check_schema.py",
+      "git_blob": "41bb4afa8145c6f7398636ce235725d6ae81ccf4",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/tests/check_schema.py"
+    },
+    {
+      "path": "services/delivery/tests/hit91_fixture.sql",
+      "git_blob": "91ea3746dee49135814eaa1281125ae7bd93be29",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/tests/hit91_fixture.sql"
+    },
+    {
+      "path": "services/delivery/tests/run_hit91.ps1",
+      "git_blob": "3a717e9323ed3e2a1f654e1a3efb187d85aa8097",
+      "ref": "https://github.com/hitpipe/hitpipe/blob/584474d8d4f550f44f7236ff6839209f83184332/services/delivery/tests/run_hit91.ps1"
+    }
+  ],
+  "changed_paths": [
+    "services/delivery/docs/readback.md",
+    "services/delivery/internal/application/verifytarget/verifytarget.go",
+    "services/delivery/internal/dispatch/dispatch_linux_test.go",
+    "services/delivery/internal/dispatch/observation_db.go",
+    "services/delivery/internal/dispatch/observation_publisher.go",
+    "services/delivery/internal/dispatch/query.go",
+    "services/delivery/internal/dispatch/readback_linux_test.go",
+    "services/delivery/internal/dispatch/target_reader.go",
+    "services/delivery/internal/domain/readback/readback.go",
+    "services/delivery/internal/intake/http.go",
+    "services/delivery/internal/intake/query.go"
+  ]
+}
