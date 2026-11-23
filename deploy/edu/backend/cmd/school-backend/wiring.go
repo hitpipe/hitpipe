@@ -129,6 +129,9 @@ func (s *backend) prepareConfig() error {
 	if err = file.Close(); err != nil {
 		return err
 	}
+	if err = s.removeQueueProof(); err != nil {
+		return err
+	}
 	rc.json("stand.json", config.StandConfig{Workspaces: []config.StandWorkspace{{
 		ID: workspaceID, Owner: ownerID, SessionID: sessionID,
 		SessionFile: rc.file("session", []byte(s.keys.Token)), CSRFFile: rc.file("csrf", []byte(s.keys.CSRF)),

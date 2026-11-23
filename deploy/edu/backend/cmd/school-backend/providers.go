@@ -118,7 +118,11 @@ func (p *providers) stripeObject(path string) map[string]any {
 		case "/v1/payment_intents/" + pi:
 			return map[string]any{"id": pi, "object": "payment_intent", "livemode": false, "status": status, "currency": "usd", "amount_received": amount, "latest_charge": ch}
 		case "/v1/charges/" + ch:
-			return map[string]any{"id": ch, "object": "charge", "livemode": false, "currency": "usd", "payment_intent": pi, "paid": item.Paid, "status": status, "captured": item.Paid, "amount_captured": amount, "amount_refunded": int64(0), "disputed": false}
+			chargeStatus := "pending"
+			if item.Paid {
+				chargeStatus = "succeeded"
+			}
+			return map[string]any{"id": ch, "object": "charge", "livemode": false, "currency": "usd", "payment_intent": pi, "paid": item.Paid, "status": chargeStatus, "captured": item.Paid, "amount_captured": amount, "amount_refunded": int64(0), "disputed": false}
 		}
 	}
 	return nil
@@ -294,6 +298,9 @@ func (s *backend) status(ctx context.Context) (proof, error) {
 }
 
 func (s *backend) emit(ctx context.Context, kind string) error {
+	if _, err := os.Lstat(s.possibleIngress()); !os.IsNotExist(err) && kind != "replay" {
+		return errors.New("previous Stripe event was not acknowledged; replay it before sending a new event")
+	}
 	status, err := s.status(ctx)
 	if err != nil {
 		return err
@@ -325,6 +332,11 @@ func (s *backend) emit(ctx context.Context, kind string) error {
 	}
 	req.Header.Set("Stripe-Signature", fmt.Sprintf("t=%d,v1=%x", now.Unix(), mac.Sum(nil)))
 	req.Header.Set("Content-Type", "application/json")
+	// The event bytes are already durable. If the network outcome is unknown,
+	// preserve the queue fence and allow re-sending exactly those bytes.
+	if err := writePrivate(s.possibleIngress(), []byte("awaiting Intake acknowledgement\n")); err != nil {
+		return err
+	}
 	res, err := s.certs.client("", "intake.test").Do(req)
 	if err != nil {
 		return err
@@ -334,7 +346,7 @@ func (s *backend) emit(ctx context.Context, kind string) error {
 	if res.StatusCode != http.StatusNoContent {
 		return fmt.Errorf("Intake webhook returned HTTP %d", res.StatusCode)
 	}
-	return nil
+	return os.Remove(s.possibleIngress())
 }
 
 func (s *backend) serveControl(ctx context.Context) error {
@@ -350,7 +362,6 @@ func (s *backend) serveControl(ctx context.Context) error {
 		l.Close()
 		return err
 	}
-	var dispatch sync.Mutex
 	server := &http.Server{ReadHeaderTimeout: 3 * time.Second, ReadTimeout: 4 * time.Second, WriteTimeout: 10 * time.Second, Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case r.Method == http.MethodGet && r.URL.Path == "/status":
@@ -369,8 +380,12 @@ func (s *backend) serveControl(ctx context.Context) error {
 				respond(w, http.StatusNotFound, map[string]string{"error": "unsupported test event"})
 				return
 			}
-			dispatch.Lock()
-			defer dispatch.Unlock()
+			s.queueMu.Lock()
+			defer s.queueMu.Unlock()
+			if err := s.revokeQueueProof(); err != nil {
+				respond(w, http.StatusConflict, map[string]string{"error": "queue snapshot is being consumed"})
+				return
+			}
 			if err := s.emit(r.Context(), kind); err != nil {
 				respond(w, http.StatusConflict, map[string]string{"error": err.Error()})
 				return
@@ -396,6 +411,7 @@ func (s *backend) serveControl(ctx context.Context) error {
 				return
 			case <-t.C:
 				status, err := s.status(ctx)
+				s.refreshQueueWhenPaused(ctx, status, err)
 				if err != nil || status == last || status.CaseState != "CONFIRMED" {
 					continue
 				}

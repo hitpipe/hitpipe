@@ -37,7 +37,7 @@ def exchange(connection, method, path, data=None, headers=None, expected=200):
         connection.close()
 
 
-def activation(share, ready):
+def business_client(share, ready):
     context = ssl.create_default_context(cafile=share / ready["caPath"])
     context.load_cert_chain(share / ready["certPath"], share / ready["keyPath"])
 
@@ -52,6 +52,11 @@ def activation(share, ready):
                          "X-CSRF-Token": ready["csrfToken"], "Content-Type": "application/json"},
                         expected=expect)
 
+    return act
+
+
+def activation(share, ready):
+    act = business_client(share, ready)
     workspace = f"/api/v1/workspaces/{ready['workspaceId']}"
     operations = act("GET", workspace + "/operations")
     if operations["items"]:
@@ -107,10 +112,73 @@ def validate_single(value):
         raise RuntimeError("the expected single durable confirmed checkout was not found")
 
 
+def lifecycle(share, ready, provider, enqueue=False):
+    act = business_client(share, ready)
+    workspace = f"/api/v1/workspaces/{ready['workspaceId']}"
+
+    def operation():
+        operations = act("GET", workspace + "/operations")["items"]
+        if len(operations) != 1:
+            raise RuntimeError("lifecycle smoke needs one operation")
+        return operations[0]
+
+    active = operation()
+    if active["state"] != "ACTIVE":
+        raise RuntimeError("lifecycle smoke needs an active operation")
+    path = f"{workspace}/operations/{active['operation_id']}"
+    command = path + "/lifecycle"
+    draining = act("POST", command, {"command": {"expected_revision": active["revision"]}, "action": "PAUSE"}, 202)
+    if draining["state"] != "DRAINING":
+        raise RuntimeError("pause request did not start drain")
+    wait_status(provider, lambda v: v["operationState"] == "PAUSED")
+    paused = operation()
+    for _ in range(15):
+        try:
+            act("POST", command, {"command": {"expected_revision": paused["revision"]},
+                                  "action": "PREPARE_RESUME"}, 202)
+            break
+        except RuntimeError as error:
+            if "returned 503:" not in str(error):
+                raise
+            time.sleep(0.3)
+    else:
+        raise RuntimeError("the paused operation did not get an empty queue proof")
+    snapshot = act("GET", path + "/resume-snapshot")
+    if snapshot["signal_count"] != 0 or snapshot["serialized_bytes"] != 0 or snapshot["gaps"]:
+        raise RuntimeError("the resumed queue was not durably observed empty")
+    accept = {
+        "command": {"expected_revision": snapshot["revision"]},
+        "action": "ACCEPT_RESUME", "resume_snapshot_id": snapshot["snapshot_id"],
+        "held_disposition": "PROCESS_ELIGIBLE",
+    }
+    if enqueue:
+        provider("POST", "/events/paid", 202)
+        act("POST", command, accept, 503)
+        for _ in range(3):
+            act("POST", command, {"command": {"expected_revision": snapshot["revision"]},
+                                  "action": "PREPARE_RESUME"}, 503)
+            time.sleep(0.4)
+        stopped = operation()
+        if stopped["state"] != "PAUSED" or stopped["revision"] != snapshot["revision"]:
+            raise RuntimeError("an event entered after the preview but the operation still changed")
+        return {"operationId": stopped["operation_id"], "state": stopped["state"],
+                "invalidatedSnapshotId": snapshot["snapshot_id"], "newEventAcceptedByIntake": True,
+                "acceptOldSnapshotStatus": 503, "prepareResumeStatus": 503}
+    resumed = act("POST", command, accept, 202)
+    if resumed["state"] != "ACTIVE" or resumed["first_activation_at"] != active["first_activation_at"]:
+        raise RuntimeError("resuming the operation changed the original activation")
+    return {"operationId": resumed["operation_id"], "drainReached": draining["state"],
+            "pauseReached": paused["state"], "resumeState": resumed["state"],
+            "resumeSnapshotId": snapshot["snapshot_id"],
+            "signalCount": snapshot["signal_count"], "serializedBytes": snapshot["serialized_bytes"],
+            "firstActivationAt": resumed["first_activation_at"]}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("share", type=Path)
-    parser.add_argument("operation", choices=["fresh", "verify"])
+    parser.add_argument("operation", choices=["fresh", "fresh-lifecycle", "verify", "lifecycle", "lifecycle-held",
+                                               "activate-only", "late-payment"])
     args = parser.parse_args()
     share = args.share.resolve()
     ready = json.loads((share / "ready.json").read_text())
@@ -118,7 +186,28 @@ def main():
     def provider(method, path, expect=200):
         return exchange(UnixHTTP(share / ready["providerSocket"]), method, path, expected=expect)
 
-    if args.operation == "fresh":
+    if args.operation.startswith("lifecycle"):
+        print(json.dumps(lifecycle(share, ready, provider, enqueue=args.operation == "lifecycle-held"), indent=2))
+        return
+    if args.operation == "activate-only":
+        print(json.dumps(activation(share, ready), indent=2))
+        return
+    if args.operation == "late-payment":
+        previous = provider("GET", "/status")
+        expected_cases = previous["caseCount"] + 1
+        expected_posts = previous["providerCreateCount"] + 1
+        provider("POST", "/events/unpaid", 202)
+        waiting = wait_status(provider, lambda v: v["caseCount"] == expected_cases and v["caseState"] == "WAITING_DATA")
+        if (waiting["providerCreateCount"] != previous["providerCreateCount"] or waiting["taskId"]):
+            raise RuntimeError("ClickUp received an unpaid case")
+        provider("POST", "/events/async-paid", 202)
+        paid = wait_status(provider, lambda v: v["caseState"] == "CONFIRMED" and v["caseId"] == waiting["caseId"])
+        if (paid["providerCreateCount"] != expected_posts or paid["caseCount"] != expected_cases or not paid["taskId"]):
+            raise RuntimeError("late payment did not create exactly one task for the same checkout")
+        print(json.dumps({"caseId": paid["caseId"], "before": waiting["caseState"],
+                          "after": paid["caseState"], "clickUpTaskId": paid["taskId"]}, indent=2))
+        return
+    if args.operation in {"fresh", "fresh-lifecycle"}:
         operation = activation(share, ready)
         if operation["state"] != "ACTIVE":
             raise RuntimeError("Processing did not activate the operation")
@@ -128,6 +217,11 @@ def main():
     else:
         proof = provider("GET", "/status")
         validate_single(proof)
+    pause_resume = None
+    if args.operation == "fresh-lifecycle":
+        pause_resume = lifecycle(share, ready, provider)
+        if pause_resume["operationId"] != proof["operationId"]:
+            raise RuntimeError("pause and resume did not apply to the operation of the original payment")
     provider("POST", "/events/replay", 202)
     time.sleep(1)
     final = provider("GET", "/status")
@@ -135,6 +229,11 @@ def main():
     if (final["operationId"], final["caseId"], final["taskId"]) != (
             proof["operationId"], proof["caseId"], proof["taskId"]):
         raise RuntimeError("durable IDs changed after replay")
+    if args.operation == "fresh-lifecycle":
+        if final["operationState"] != "ACTIVE":
+            raise RuntimeError("the operation was no longer active after replay")
+        print(json.dumps({"payment": proof, "pauseResume": pause_resume, "afterReplay": final}, indent=2))
+        return
     print(json.dumps(final, indent=2))
 
 

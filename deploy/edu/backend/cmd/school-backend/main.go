@@ -51,6 +51,7 @@ type backend struct {
 	keys                   *identity
 	certs                  *certificates
 	provider               *providers
+	queueMu                sync.Mutex
 	childrenMu             sync.Mutex
 	children               []*child
 }
