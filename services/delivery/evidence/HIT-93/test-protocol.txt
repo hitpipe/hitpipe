@@ -1,0 +1,294 @@
+584474d8d4f550f44f7236ff6839209f83184332
+Committed Delivery tree verified clean
+HIT-91 fixture 2026-11-23T15:16:14.9477718Z
+Migration SHA-256 9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e
+Commands: go test -v -race -count=1 ./...; go vet ./...
+29.3.1
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+hit91-4f60f280b19b
+95b13e701bfc7cf60919ead49c0fc745f2de7728ee29d341d6b1ea8d497412d3
+c306eab788d7337c82a27b00ced68597069d8699932bca01e47c1840b8c4d147
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+ALTER DATABASE
+SET
+BEGIN
+CREATE SCHEMA
+REVOKE
+GRANT
+SET
+CREATE TABLE
+INSERT 0 1
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+REVOKE
+GRANT
+GRANT
+COMMIT
+RESET
+CREATE TABLE
+CREATE FUNCTION
+CREATE TRIGGER
+                                         version                                         | fsync | full_page_writes | synchronous_commit 
+-----------------------------------------------------------------------------------------+-------+------------------+--------------------
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+(1 row)
+
+go version go1.27.2 linux/amd64
+?   	github.com/dkar-dev/hitpipe/services/delivery/internal/application/verifytarget	[no test files]
+=== RUN   TestPostgresSuccessAndSharedBudget
+    dispatch_linux_test.go:296: HTTPS sends=1; state=RESULT_ID_OBSERVED; knowledge=TARGET_ID_OBSERVED; opaque task ID=opaque-test-task; shared budget used=1
+--- PASS: TestPostgresSuccessAndSharedBudget (0.34s)
+=== RUN   TestPostgresUnknownAndDenied
+=== RUN   TestPostgresUnknownAndDenied/redirect
+=== RUN   TestPostgresUnknownAndDenied/401
+=== RUN   TestPostgresUnknownAndDenied/403
+=== RUN   TestPostgresUnknownAndDenied/429
+=== RUN   TestPostgresUnknownAndDenied/503
+=== RUN   TestPostgresUnknownAndDenied/malformed
+=== RUN   TestPostgresUnknownAndDenied/oversize
+=== RUN   TestPostgresUnknownAndDenied/abort
+    dispatch_linux_test.go:382: lost response: state=AMBIGUOUS, knowledge=POSSIBLE_EFFECT, initial sends=1, repeated sends=0
+=== RUN   TestPostgresUnknownAndDenied/timeout
+=== RUN   TestPostgresUnknownAndDenied/gate
+=== RUN   TestPostgresUnknownAndDenied/epoch
+=== RUN   TestPostgresUnknownAndDenied/revoked
+=== RUN   TestPostgresUnknownAndDenied/expired-facts
+=== RUN   TestPostgresUnknownAndDenied/deadline
+=== RUN   TestPostgresUnknownAndDenied/cancelled
+=== RUN   TestPostgresUnknownAndDenied/credential
+=== RUN   TestPostgresUnknownAndDenied/lost-content
+=== RUN   TestPostgresUnknownAndDenied/legacy
+=== RUN   TestPostgresUnknownAndDenied/crash
+    dispatch_linux_test.go:388: process exited after SQL fence; restarted worker sent 0 requests
+--- PASS: TestPostgresUnknownAndDenied (10.17s)
+    --- PASS: TestPostgresUnknownAndDenied/redirect (0.22s)
+    --- PASS: TestPostgresUnknownAndDenied/401 (0.14s)
+    --- PASS: TestPostgresUnknownAndDenied/403 (0.17s)
+    --- PASS: TestPostgresUnknownAndDenied/429 (0.17s)
+    --- PASS: TestPostgresUnknownAndDenied/503 (0.15s)
+    --- PASS: TestPostgresUnknownAndDenied/malformed (0.15s)
+    --- PASS: TestPostgresUnknownAndDenied/oversize (0.14s)
+    --- PASS: TestPostgresUnknownAndDenied/abort (0.10s)
+    --- PASS: TestPostgresUnknownAndDenied/timeout (8.12s)
+    --- PASS: TestPostgresUnknownAndDenied/gate (0.06s)
+    --- PASS: TestPostgresUnknownAndDenied/epoch (0.08s)
+    --- PASS: TestPostgresUnknownAndDenied/revoked (0.05s)
+    --- PASS: TestPostgresUnknownAndDenied/expired-facts (0.04s)
+    --- PASS: TestPostgresUnknownAndDenied/deadline (0.04s)
+    --- PASS: TestPostgresUnknownAndDenied/cancelled (0.06s)
+    --- PASS: TestPostgresUnknownAndDenied/credential (0.07s)
+    --- PASS: TestPostgresUnknownAndDenied/lost-content (0.08s)
+    --- PASS: TestPostgresUnknownAndDenied/legacy (0.08s)
+    --- PASS: TestPostgresUnknownAndDenied/crash (0.22s)
+=== RUN   TestFenceCrashProcess
+    dispatch_linux_test.go:416: used by the restart fixture
+--- SKIP: TestFenceCrashProcess (0.00s)
+=== RUN   TestReadbackAndDurableOutbox
+2026/11/23 15:17:09 http: TLS handshake error from 127.0.0.1:55730: tls: client didn't provide a certificate
+    readback_linux_test.go:298: native ID=fixture-task knowledge=RESULT_VERIFIED lineage=TARGET_OBSERVED fence=true; Processing deliveries=2 (same message/digest), outbox=ACKED
+--- PASS: TestReadbackAndDurableOutbox (0.72s)
+=== RUN   TestReadbackClaimProcess
+    readback_linux_test.go:319: used by the restart fixture
+--- SKIP: TestReadbackClaimProcess (0.00s)
+=== RUN   TestReadbackFailures
+=== RUN   TestReadbackFailures/mismatch
+=== RUN   TestReadbackFailures/content
+=== RUN   TestReadbackFailures/incomplete
+=== RUN   TestReadbackFailures/wrong-id
+=== RUN   TestReadbackFailures/403
+=== RUN   TestReadbackFailures/404
+=== RUN   TestReadbackFailures/429
+=== RUN   TestReadbackFailures/malformed
+=== RUN   TestReadbackFailures/oversize
+=== RUN   TestReadbackFailures/timeout
+=== RUN   TestReadbackFailures/denied
+=== RUN   TestReadbackFailures/new-epoch
+=== RUN   TestReadbackFailures/wrong-target
+=== RUN   TestReadbackFailures/cancel
+=== RUN   TestReadbackFailures/wrong-ca
+2026/11/23 15:17:14 http: TLS handshake error from 127.0.0.1:44992: remote error: tls: bad certificate
+=== RUN   TestReadbackFailures/budget
+=== RUN   TestReadbackFailures/expired-file
+=== RUN   TestReadbackFailures/corrupt-file
+=== RUN   TestReadbackFailures/lost-file
+--- PASS: TestReadbackFailures (5.26s)
+    --- PASS: TestReadbackFailures/mismatch (0.09s)
+    --- PASS: TestReadbackFailures/content (0.08s)
+    --- PASS: TestReadbackFailures/incomplete (0.08s)
+    --- PASS: TestReadbackFailures/wrong-id (0.10s)
+    --- PASS: TestReadbackFailures/403 (0.10s)
+    --- PASS: TestReadbackFailures/404 (0.10s)
+    --- PASS: TestReadbackFailures/429 (0.09s)
+    --- PASS: TestReadbackFailures/malformed (0.11s)
+    --- PASS: TestReadbackFailures/oversize (0.11s)
+    --- PASS: TestReadbackFailures/timeout (4.09s)
+    --- PASS: TestReadbackFailures/denied (0.00s)
+    --- PASS: TestReadbackFailures/new-epoch (0.00s)
+    --- PASS: TestReadbackFailures/wrong-target (0.00s)
+    --- PASS: TestReadbackFailures/cancel (0.00s)
+    --- PASS: TestReadbackFailures/wrong-ca (0.02s)
+    --- PASS: TestReadbackFailures/budget (0.02s)
+    --- PASS: TestReadbackFailures/expired-file (0.01s)
+    --- PASS: TestReadbackFailures/corrupt-file (0.01s)
+    --- PASS: TestReadbackFailures/lost-file (0.01s)
+=== RUN   TestReadbackSharedBudgetAndSQLFailure
+    readback_linux_test.go:499: shared token budget held second workspace; deferred commit failure left no readback, outbox or job
+--- PASS: TestReadbackSharedBudgetAndSQLFailure (0.31s)
+=== RUN   TestPostgresRevocationAfterStart
+    revoke_linux_test.go:59: in-flight request returned its identity after local revocation; new starts=0
+--- PASS: TestPostgresRevocationAfterStart (0.14s)
+=== RUN   TestClickUpRefusesAmbiguousTargets
+--- PASS: TestClickUpRefusesAmbiguousTargets (0.00s)
+PASS
+ok  	github.com/dkar-dev/hitpipe/services/delivery/internal/dispatch	17.971s
+?   	github.com/dkar-dev/hitpipe/services/delivery/internal/domain/readback	[no test files]
+=== RUN   TestHTTPContract
+=== RUN   TestHTTPContract/receipt
+=== RUN   TestHTTPContract/wrong_caller
+=== RUN   TestHTTPContract/untrusted_certificate
+2026/11/23 15:16:58 http: TLS handshake error from 127.0.0.1:51884: tls: failed to verify certificate: x509: certificate signed by unknown authority (possibly because of "x509: ECDSA verification failure" while trying to verify candidate authority certificate "Delivery fixture")
+=== RUN   TestHTTPContract/missing_certificate
+2026/11/23 15:16:58 http: TLS handshake error from 127.0.0.1:36254: tls: client didn't provide a certificate
+=== RUN   TestHTTPContract/unknown_field
+=== RUN   TestHTTPContract/too_big
+=== RUN   TestHTTPContract/wrong_binding
+=== RUN   TestHTTPContract/closed_gate
+=== RUN   TestHTTPContract/not_visible
+=== RUN   TestHTTPContract/conflict
+=== RUN   TestHTTPContract/expired
+=== RUN   TestHTTPContract/quota
+=== RUN   TestHTTPContract/unavailable_authority
+=== RUN   TestHTTPContract/unavailable_storage
+--- PASS: TestHTTPContract (1.20s)
+    --- PASS: TestHTTPContract/receipt (0.10s)
+    --- PASS: TestHTTPContract/wrong_caller (0.04s)
+    --- PASS: TestHTTPContract/untrusted_certificate (0.03s)
+    --- PASS: TestHTTPContract/missing_certificate (0.03s)
+    --- PASS: TestHTTPContract/unknown_field (0.03s)
+    --- PASS: TestHTTPContract/too_big (0.53s)
+    --- PASS: TestHTTPContract/wrong_binding (0.06s)
+    --- PASS: TestHTTPContract/closed_gate (0.05s)
+    --- PASS: TestHTTPContract/not_visible (0.06s)
+    --- PASS: TestHTTPContract/conflict (0.06s)
+    --- PASS: TestHTTPContract/expired (0.05s)
+    --- PASS: TestHTTPContract/quota (0.05s)
+    --- PASS: TestHTTPContract/unavailable_authority (0.05s)
+    --- PASS: TestHTTPContract/unavailable_storage (0.05s)
+=== RUN   TestUnwiredService
+--- PASS: TestUnwiredService (0.00s)
+=== RUN   TestIntentSchema
+=== RUN   TestIntentSchema/missing
+=== RUN   TestIntentSchema/wrong_rendering
+=== RUN   TestIntentSchema/null_item
+=== RUN   TestIntentSchema/unsafe_epoch
+=== RUN   TestIntentSchema/fractional_epoch
+=== RUN   TestIntentSchema/block_bytes
+=== RUN   TestIntentSchema/oversized_context
+=== RUN   TestIntentSchema/unknown
+=== RUN   TestIntentSchema/case_alias
+=== RUN   TestIntentSchema/wrong_version
+=== RUN   TestIntentSchema/null
+=== RUN   TestIntentSchema/bad_digest
+=== RUN   TestIntentSchema/trailing_JSON
+=== RUN   TestIntentSchema/duplicate
+=== RUN   TestIntentSchema/nested_duplicate
+=== RUN   TestIntentSchema/unpaired_Unicode
+--- PASS: TestIntentSchema (0.29s)
+    --- PASS: TestIntentSchema/missing (0.01s)
+    --- PASS: TestIntentSchema/wrong_rendering (0.01s)
+    --- PASS: TestIntentSchema/null_item (0.01s)
+    --- PASS: TestIntentSchema/unsafe_epoch (0.01s)
+    --- PASS: TestIntentSchema/fractional_epoch (0.01s)
+    --- PASS: TestIntentSchema/block_bytes (0.11s)
+    --- PASS: TestIntentSchema/oversized_context (0.08s)
+    --- PASS: TestIntentSchema/unknown (0.01s)
+    --- PASS: TestIntentSchema/case_alias (0.01s)
+    --- PASS: TestIntentSchema/wrong_version (0.01s)
+    --- PASS: TestIntentSchema/null (0.00s)
+    --- PASS: TestIntentSchema/bad_digest (0.00s)
+    --- PASS: TestIntentSchema/trailing_JSON (0.00s)
+    --- PASS: TestIntentSchema/duplicate (0.00s)
+    --- PASS: TestIntentSchema/nested_duplicate (0.00s)
+    --- PASS: TestIntentSchema/unpaired_Unicode (0.00s)
+=== RUN   TestPrivateContent
+--- PASS: TestPrivateContent (0.02s)
+=== RUN   TestPostgresDurableIntake
+    postgres_linux_test.go:308: lost HTTP ACK and replay from a new process: {"message_id":"39fe5135-7da7-4294-bdaa-bad9be0b217e","disposition":"APPLIED","record_id":"aa9e8590-2b7f-4ea2-a0ea-9d19c1949095"}
+    postgres_linux_test.go:319: receipt={MessageID:6477748f-ddf6-48af-ac45-019b7dcb7cf0 Disposition:APPLIED RecordID:240d10dd-0f4d-45b0-a734-9860d9f3a946} before/after replay; state=PREPARED attempt=1 fence=false network_started=false expiry=2026-11-23T16:16:59.96435Z
+--- PASS: TestPostgresDurableIntake (1.68s)
+=== RUN   TestPostgresReplayProcess
+    postgres_linux_test.go:352: spawned by the lost HTTP ACK check
+--- SKIP: TestPostgresReplayProcess (0.00s)
+PASS
+ok  	github.com/dkar-dev/hitpipe/services/delivery/internal/intake	4.222s
+go-test-exit=0
+go-vet-exit=0
+hit91-4f60f280b19b-pg
+hit91-4f60f280b19b
+hit91-4f60f280b19b
+fixture-exit=0

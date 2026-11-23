@@ -1,0 +1,1648 @@
+HIT-93 review evidence
+Tested Git commit f8498a4d4eccfd537149ecff17b9d0936e8f1bb2
+Complete sources for known-ID GET, authorization and HTTP query binding, observation and owner-content persistence, and Processing outbox delivery.
+
+--- services/delivery/internal/application/verifytarget/verifytarget.go ---
+Git blob 421a8d7ed5fff351fb1852244f34b97955f782da; SHA-256 f308c934755ece2b0a446e0b369478bdeac0eafaeb97574cba9392a8429a1f2c; 1942 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/application/verifytarget/verifytarget.go
+
+package verifytarget
+
+import (
+	"context"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/domain/readback"
+)
+
+// TargetReader supplies one read-only observation and its provenance.
+type TargetReader interface {
+	Read(ctx context.Context, targetID string) (readback.Observation, Provenance, error)
+}
+
+// Provenance identifies the observation source and capture time.
+type Provenance struct {
+	ObservedAt time.Time `json:"observed_at"`
+	Source     string    `json:"source"`
+}
+
+// Result preserves the requested target, comparison and provenance.
+type Result struct {
+	TargetID   string               `json:"target_id"`
+	Comparison readback.Result      `json:"comparison"`
+	Provenance Provenance           `json:"provenance"`
+	Observed   readback.Observation `json:"observed"`
+}
+
+type Verifier struct {
+	reader TargetReader
+}
+
+// New constructs the single VerifyTarget consumer around a TargetReader port.
+func New(reader TargetReader) Verifier {
+	return Verifier{reader: reader}
+}
+
+// VerifyTarget reads one target and returns match, mismatch, incomplete or unknown evidence.
+// It never writes provider state, retries, emits messages or changes business state.
+func (v Verifier) VerifyTarget(ctx context.Context, targetID string, expected readback.Expected) Result {
+	if targetID == "" {
+		return Result{TargetID: targetID, Comparison: readback.Result{Outcome: readback.Unknown}}
+	}
+	observed, provenance, err := v.reader.Read(ctx, targetID)
+	if err != nil {
+		return Result{TargetID: targetID, Comparison: readback.Result{Outcome: readback.Unknown}, Provenance: provenance}
+	}
+	if observed.TargetID != targetID || provenance.Source == "" || provenance.ObservedAt.IsZero() {
+		return Result{TargetID: targetID, Comparison: readback.Result{Outcome: readback.Unknown}, Provenance: provenance}
+	}
+	return Result{TargetID: targetID, Comparison: readback.Compare(expected, observed), Provenance: provenance, Observed: observed}
+}
+--- end services/delivery/internal/application/verifytarget/verifytarget.go ---
+
+--- services/delivery/internal/domain/readback/readback.go ---
+Git blob a9f2126eacd41ae738013107dc081b7c022b0b1d; SHA-256 2c204772462eb2128bff8a91591ab0d0ba531a6c89ebdbf105e3b71cbfb042dd; 4607 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/domain/readback/readback.go
+
+package readback
+
+import (
+	"regexp"
+	"strings"
+	"unicode/utf8"
+
+	"golang.org/x/text/unicode/norm"
+)
+
+const (
+	Match      Outcome = "match"
+	Mismatch   Outcome = "mismatch"
+	Incomplete Outcome = "incomplete"
+	Unknown    Outcome = "unknown"
+)
+
+const (
+	maxBlockBytes = 36 * 1024
+)
+
+var handoffUUID = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
+
+// Outcome is the bounded result of comparing expected attributes with evidence.
+type Outcome string
+
+// Expected is the application-owned projection of DeliveryIntent fields used by this slice.
+type Expected struct {
+	Workspace    string `json:"workspace"`
+	List         string `json:"list"`
+	Title        string `json:"title"`
+	Assignee     string `json:"assignee"`
+	HandoffBlock string `json:"handoff_block"`
+	Context      string `json:"context"`
+}
+
+// Observation is the application-owned projection of ObservedTaskAttributes.
+type Observation struct {
+	TargetID       string   `json:"target_id"`
+	Retrieved      bool     `json:"retrieved"`
+	RetrievalError string   `json:"retrieval_error,omitempty"`
+	Workspace      string   `json:"workspace"`
+	List           string   `json:"list"`
+	Title          string   `json:"title"`
+	Assignees      []string `json:"assignees"`
+	HandoffBlock   string   `json:"handoff_block"`
+	Context        string   `json:"context"`
+}
+
+// Result records the outcome and a human-readable reason without performing side effects.
+func normalize(value string) string {
+	return norm.NFC.String(strings.ReplaceAll(strings.ReplaceAll(value, "\r\n", "\n"), "\r", "\n"))
+}
+
+func validText(value string) bool {
+	if !utf8.ValidString(value) {
+		return false
+	}
+	for _, r := range value {
+		if r < 0x20 && r != '\n' && r != '\r' && r != '\t' {
+			return false
+		}
+	}
+	return true
+}
+
+type Result struct {
+	Outcome                                           Outcome
+	Workspace, List, Assignee, Title, Marker, Context *bool
+	Block                                             *string
+}
+
+func Compare(expected Expected, observed Observation) Result {
+	r := Result{Outcome: Unknown}
+	if !observed.Retrieved || observed.RetrievalError != "" {
+		return r
+	}
+	r.Workspace = equal(expected.Workspace, observed.Workspace, false)
+	r.List = equal(expected.List, observed.List, false)
+	r.Title = equal(expected.Title, observed.Title, true)
+	if observed.Assignees != nil && expected.Assignee != "" {
+		matches := false
+		for _, a := range observed.Assignees {
+			matches = matches || a == expected.Assignee
+		}
+		r.Assignee = &matches
+	}
+	want, caseID, wantOK := ExtractBlock(expected.HandoffBlock)
+	got, other, gotOK := ExtractBlock(observed.HandoffBlock)
+	if wantOK && gotOK {
+		marker := caseID == other
+		r.Marker = &marker
+		context := want == got
+		r.Context = &context
+		r.Block = &got
+	}
+	r.Outcome = Match
+	incomplete := false
+	for _, m := range []*bool{r.Workspace, r.List, r.Assignee, r.Title, r.Marker, r.Context} {
+		if m == nil {
+			incomplete = true
+			continue
+		}
+		if !*m {
+			r.Outcome = Mismatch
+		}
+	}
+	if r.Outcome == Match && incomplete {
+		r.Outcome = Incomplete
+	}
+	return r
+}
+
+func equal(expected, actual string, normalized bool) *bool {
+	if expected == "" || actual == "" || !validText(actual) || !validText(expected) {
+		return nil
+	}
+	if normalized {
+		expected, actual = normalize(expected), normalize(actual)
+	}
+	match := expected == actual
+	return &match
+}
+
+// ExtractBlock selects exactly one well-formed v1 block in provider text.
+// Other text is left out of the observation evidence.
+func ExtractBlock(value string) (block, caseID string, ok bool) {
+	value = normalize(value)
+	if !validText(value) {
+		return "", "", false
+	}
+	const open = "[HITPIPE-HANDOFF:"
+	const end = "[/HITPIPE-HANDOFF:"
+	const suffix = ":v1]"
+	lines := strings.Split(value, "\n")
+	start, stop := -1, -1
+	for i, line := range lines {
+		switch {
+		case strings.HasPrefix(line, open):
+			if start >= 0 || !strings.HasSuffix(line, suffix) {
+				return "", "", false
+			}
+			caseID = strings.TrimSuffix(strings.TrimPrefix(line, open), suffix)
+			if !handoffUUID.MatchString(caseID) {
+				return "", "", false
+			}
+			start = i
+		case strings.HasPrefix(line, end):
+			if start < 0 || stop >= 0 || line != end+caseID+suffix {
+				return "", "", false
+			}
+			stop = i
+		}
+	}
+	if start < 0 || stop-start < 4 || !strings.HasPrefix(lines[start+1], "Service: ") ||
+		!strings.HasPrefix(lines[start+2], "Order: ") || lines[start+3] != "Context:" {
+		return "", "", false
+	}
+	block = strings.Join(lines[start:stop+1], "\n")
+	if len(block) > maxBlockBytes {
+		return "", "", false
+	}
+	return block, caseID, true
+}
+--- end services/delivery/internal/domain/readback/readback.go ---
+
+--- services/delivery/internal/dispatch/clickup.go ---
+Git blob cad9ce682c2686540b00f2b3ef51f6960b1cdda1; SHA-256 e7bfb7be0f39803c78083af8453d7c1a16d74b9f0e37193248b9fd6f32b9df87; 4854 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/clickup.go
+
+package dispatch
+
+import (
+	"bufio"
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"unicode/utf8"
+
+	"github.com/gowebpki/jcs"
+)
+
+const maxResponse = 64 * 1024
+
+type ClickUp struct {
+	origin    url.URL
+	address   string
+	tlsConfig *tls.Config
+}
+
+// NewClickUp fixes the live origin. The local fixture uses a separate,
+// package-private constructor. Neither request content nor response redirects
+// can override the host, port or TLS name.
+func NewClickUp(roots *x509.CertPool) *ClickUp {
+	return clickUpAt(url.URL{Scheme: "https", Host: "api.clickup.com"}, roots)
+}
+
+func clickUpAt(origin url.URL, roots *x509.CertPool) *ClickUp {
+	port := origin.Port()
+	if port == "" {
+		port = "443"
+	}
+	if roots != nil {
+		roots = roots.Clone()
+	}
+	return &ClickUp{origin: origin, address: net.JoinHostPort(origin.Hostname(), port),
+		tlsConfig: &tls.Config{MinVersion: tls.VersionTLS13, ServerName: origin.Hostname(), RootCAs: roots,
+			NextProtos: []string{"http/1.1"}}}
+}
+
+func validToken(s string) bool {
+	if s == "" || len(s) > 4096 {
+		return false
+	}
+	for _, b := range []byte(s) {
+		if b <= 0x20 || b >= 0x7f {
+			return false
+		}
+	}
+	return true
+}
+
+func positiveDecimal(s string) bool {
+	if len(s) == 0 || len(s) > 255 || s[0] < '1' || s[0] > '9' {
+		return false
+	}
+	for _, b := range []byte(s) {
+		if b < '0' || b > '9' {
+			return false
+		}
+	}
+	return true
+}
+
+func (c *ClickUp) request(p payload, token string) (*http.Request, error) {
+	if !validToken(token) || !positiveDecimal(p.List) || !positiveDecimal(p.Assignee) ||
+		p.Title == "" || p.Description == "" || !utf8.ValidString(p.Title) || !utf8.ValidString(p.Description) {
+		return nil, ErrHeld
+	}
+	person, err := strconv.ParseInt(p.Assignee, 10, 64)
+	if err != nil {
+		return nil, ErrHeld
+	}
+	body, err := json.Marshal(struct {
+		Name        string  `json:"name"`
+		Description string  `json:"description"`
+		Assignees   []int64 `json:"assignees"`
+	}{p.Title, p.Description, []int64{person}})
+	if err != nil {
+		return nil, ErrHeld
+	}
+	destination := c.origin
+	destination.Path = "/api/v2/list/" + p.List + "/task"
+	req, err := http.NewRequest(http.MethodPost, destination.String(), bytes.NewReader(body))
+	if err != nil {
+		return nil, ErrHeld
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", token)
+	req.Close = true
+	return req, nil
+}
+
+type exchange struct {
+	conn net.Conn
+	req  *http.Request
+}
+
+func (c *ClickUp) start(ctx context.Context, req *http.Request, beforeWrite func() error) (*exchange, error) {
+	deadline, ok := ctx.Deadline()
+	if !ok || ctx.Err() != nil {
+		return nil, ErrHeld
+	}
+	dialer := tls.Dialer{Config: c.tlsConfig}
+	conn, err := dialer.DialContext(ctx, "tcp", c.address)
+	if err != nil {
+		return nil, ErrHeld
+	}
+	disarm := context.AfterFunc(ctx, func() { _ = conn.Close() })
+	defer disarm()
+	if err := conn.SetDeadline(deadline); err != nil {
+		_ = conn.Close()
+		return nil, ErrHeld
+	}
+	if err := beforeWrite(); err != nil {
+		_ = conn.Close()
+		return nil, err
+	}
+	if ctx.Err() != nil || req.Write(conn) != nil {
+		_ = conn.Close()
+		return nil, ErrHeld
+	}
+	return &exchange{conn: conn, req: req}, nil
+}
+
+type outcome struct {
+	result Result
+	code   string
+	proof  string
+}
+
+func (e *exchange) receive(ctx context.Context) outcome {
+	unknown := outcome{result: Result{Disposition: Ambiguous}, code: "PROVIDER_OUTCOME_UNKNOWN"}
+	deadline, ok := ctx.Deadline()
+	if !ok || ctx.Err() != nil || e.conn.SetDeadline(deadline) != nil {
+		return unknown
+	}
+	stop := context.AfterFunc(ctx, func() { _ = e.conn.Close() })
+	defer stop()
+	wire := &io.LimitedReader{R: e.conn, N: 2 * maxResponse}
+	resp, err := http.ReadResponse(bufio.NewReader(wire), e.req)
+	if err != nil {
+		return unknown
+	}
+	defer e.conn.Close()
+	// No further action follows a redirect or other status. No provider
+	// rejection is classified as proof that no external write occurred.
+	if resp.StatusCode != http.StatusOK {
+		return unknown
+	}
+	data, err := io.ReadAll(io.LimitReader(resp.Body, maxResponse+1))
+	if err != nil || len(data) > maxResponse || !utf8.Valid(data) {
+		return unknown
+	}
+	canonical, err := jcs.Transform(data)
+	if err != nil {
+		return unknown
+	}
+	var value map[string]json.RawMessage
+	if json.Unmarshal(canonical, &value) != nil {
+		return unknown
+	}
+	var id string
+	if json.Unmarshal(value["id"], &id) != nil || !validTaskID(id) {
+		return unknown
+	}
+	return outcome{result: Result{Disposition: TargetIDObserved, TaskID: id}, code: "PROVIDER_TASK_ID_RETURNED",
+		proof: fmt.Sprintf("sha256:%x", sha256.Sum256(canonical))}
+}
+
+func validTaskID(id string) bool {
+	if id == "" || len(id) > 255 || strings.TrimSpace(id) != id {
+		return false
+	}
+	for _, b := range []byte(id) {
+		if b <= 0x20 || b >= 0x7f {
+			return false
+		}
+	}
+	return true
+}
+--- end services/delivery/internal/dispatch/clickup.go ---
+
+--- services/delivery/internal/dispatch/target_reader.go ---
+Git blob 3542bad1acc7c2961fafd9f847e27387f756786a; SHA-256 36fbcabad3fa3addb3a119e921df94cc42f94e78ca18ca9e274d9100e3536fc0; 4151 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/target_reader.go
+
+package dispatch
+
+import (
+	"bufio"
+	"context"
+	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
+	"strings"
+	"time"
+	"unicode/utf8"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/application/verifytarget"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/domain/readback"
+	"github.com/gowebpki/jcs"
+)
+
+const observationSource = "CLICKUP_GET_TASK_V2"
+
+func (c *ClickUp) readRequest(id, token string) (*http.Request, error) {
+	if !validToken(token) || !validTaskID(id) || strings.ContainsAny(id, "/\\%?#") || id == "." || id == ".." {
+		return nil, ErrHeld
+	}
+	dst := c.origin
+	dst.Path = "/api/v2/task/" + id
+	req, err := http.NewRequest(http.MethodGet, dst.String(), nil)
+	if err != nil {
+		return nil, ErrHeld
+	}
+	req.Close = true
+	req.Header.Set("Authorization", token)
+	return req, nil
+}
+
+type targetReader struct {
+	ex   *exchange
+	id   string
+	code string
+}
+
+func (r *targetReader) Read(ctx context.Context, id string) (readback.Observation, verifytarget.Provenance, error) {
+	if id != r.id {
+		return readback.Observation{}, verifytarget.Provenance{}, ErrHeld
+	}
+	response, err := r.ex.readBounded(ctx)
+	proof := verifytarget.Provenance{Source: observationSource, ObservedAt: time.Now().UTC().Truncate(time.Microsecond)}
+	r.code = "READ_FAILED"
+	if err != nil {
+		return readback.Observation{}, proof, err
+	}
+	switch response.status {
+	case 403, 404:
+		r.code = "READ_NOT_ACCESSIBLE"
+	case 429:
+		r.code = "READ_RATE_LIMITED"
+	case 200:
+		o, err := observedTask(response.body)
+		if err != nil {
+			r.code = "READ_INVALID_RESPONSE"
+			return o, proof, err
+		}
+		if o.TargetID != id {
+			r.code = "READ_ID_MISMATCH"
+			return readback.Observation{}, proof, ErrHeld
+		}
+		r.code = "READ_OBSERVED"
+		return o, proof, nil
+	}
+	return readback.Observation{}, proof, ErrHeld
+}
+
+type boundedResponse struct {
+	status int
+	header http.Header
+	body   []byte
+}
+
+func (e *exchange) readBounded(ctx context.Context) (boundedResponse, error) {
+	deadline, ok := ctx.Deadline()
+	if !ok || ctx.Err() != nil || e.conn.SetDeadline(deadline) != nil {
+		return boundedResponse{}, ErrHeld
+	}
+	stop := context.AfterFunc(ctx, func() { _ = e.conn.Close() })
+	defer stop()
+	res, err := http.ReadResponse(bufio.NewReader(&io.LimitedReader{R: e.conn, N: 2 * maxResponse}), e.req)
+	if err != nil {
+		return boundedResponse{}, ErrHeld
+	}
+	response := boundedResponse{status: res.StatusCode, header: res.Header}
+	data, err := io.ReadAll(io.LimitReader(res.Body, maxResponse+1))
+	if err != nil || len(data) > maxResponse {
+		return response, ErrHeld
+	}
+	response.body = data
+	return response, nil
+}
+
+func observedTask(raw []byte) (readback.Observation, error) {
+	var o readback.Observation
+	if !utf8.Valid(raw) {
+		return o, ErrHeld
+	}
+	if _, err := jcs.Transform(raw); err != nil {
+		return o, ErrHeld
+	}
+	var f struct {
+		ID   string          `json:"id"`
+		Team json.RawMessage `json:"team_id"`
+		List struct {
+			ID json.RawMessage `json:"id"`
+		} `json:"list"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Assignees   []struct {
+			ID json.RawMessage `json:"id"`
+		} `json:"assignees"`
+	}
+	// Read the original numeric lexemes. Re-encoding canonical JSON would
+	// round provider-assigned integer IDs outside the JavaScript safe range.
+	if json.Unmarshal(raw, &f) != nil || !validTaskID(f.ID) || len(f.Assignees) > 100 {
+		return o, ErrHeld
+	}
+	o = readback.Observation{TargetID: f.ID, Retrieved: true, Workspace: providerID(f.Team), List: providerID(f.List.ID),
+		Title: f.Name, HandoffBlock: f.Description}
+	if len([]rune(o.Title)) > 255 {
+		return readback.Observation{}, ErrHeld
+	}
+	if f.Assignees != nil {
+		o.Assignees = make([]string, 0, len(f.Assignees))
+		for _, a := range f.Assignees {
+			id := providerID(a.ID)
+			if id == "" {
+				return readback.Observation{}, ErrHeld
+			}
+			o.Assignees = append(o.Assignees, id)
+		}
+	}
+	return o, nil
+}
+
+func providerID(raw json.RawMessage) string {
+	var id string
+	if json.Unmarshal(raw, &id) == nil && validTaskID(id) {
+		return id
+	}
+	if positiveDecimal(string(raw)) {
+		return string(raw)
+	}
+	return ""
+}
+
+var errReadBudget = errors.New("read credential budget exhausted")
+--- end services/delivery/internal/dispatch/target_reader.go ---
+
+--- services/delivery/internal/dispatch/query.go ---
+Git blob 67ea7319a565e1619e7df6cc53c2c7f7abe2b985; SHA-256 fea67635f8ee5e029b14c4f734102d31f2df752479e42ce20e99b9c6cb0bd73a; 7666 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/query.go
+
+package dispatch
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/application/verifytarget"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/domain/readback"
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+)
+
+type ReadAuthority interface {
+	AuthorizeRead(context.Context, intake.Query) (Authorization, error)
+}
+
+type ObservationFiles interface {
+	ContentReader
+	intake.ContentStore
+}
+
+type QueryService struct {
+	db          *Postgres
+	files       ObservationFiles
+	authority   ReadAuthority
+	gate        intake.StartGate
+	credentials Credentials
+	clickup     *ClickUp
+}
+
+func NewQueryService(db *Postgres, files ObservationFiles, authority ReadAuthority, gate intake.StartGate,
+	credentials Credentials, clickup *ClickUp) (*QueryService, error) {
+	if db == nil || files == nil || authority == nil || gate == nil || credentials == nil || clickup == nil {
+		return nil, ErrUnwired
+	}
+	return &QueryService{db, files, authority, gate, credentials, clickup}, nil
+}
+
+func (s *QueryService) QueryKnownTask(ctx context.Context, q intake.Query) (intake.TaskObservation, error) {
+	var zero intake.TaskObservation
+	if !time.Now().Before(q.Deadline) {
+		return zero, intake.ErrStale
+	}
+	ctx, cancel := context.WithDeadline(ctx, earlier(q.Deadline, time.Now().Add(8*time.Second)))
+	defer cancel()
+	a, err := s.authorize(ctx, q)
+	if err != nil {
+		return zero, err
+	}
+	var k known
+	var expected readback.Expected
+	var ex *exchange
+	start, stop := context.WithTimeout(ctx, 2*time.Second)
+	err = s.gate.WithOpen(start, q.Workspace, q.Epoch, func() error {
+		k, err = s.db.known(start, q, a)
+		if err != nil {
+			return err
+		}
+		body, err := s.files.Read(k.ref, time.Now())
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		var p payload
+		if json.Unmarshal(body, &p) != nil || !matchesRead(k, p, a) {
+			return intake.ErrDenied
+		}
+		block, caseID, ok := readback.ExtractBlock(p.Description)
+		if !ok || caseID != q.Case.String() {
+			return intake.ErrConflict
+		}
+		expected = readback.Expected{Workspace: p.TargetWorkspace, List: p.List, Title: p.Title, Assignee: p.Assignee, HandoffBlock: block}
+		cred, err := s.credentials.ForConnection(start, q.Workspace, k.connection, q.Epoch)
+		if err != nil || cred.Fingerprint != k.fingerprint {
+			return intake.ErrDenied
+		}
+		req, err := s.clickup.readRequest(k.task, cred.Token)
+		if err != nil {
+			return intake.ErrConflict
+		}
+		ex, err = s.clickup.start(start, req, func() error { return s.db.chargeRead(start, k) })
+		return err
+	})
+	stop()
+	if ex != nil {
+		defer ex.conn.Close()
+	}
+	if errors.Is(err, errReadBudget) {
+		return zero, intake.ErrQuota
+	}
+	if errors.Is(err, ErrHeld) || errors.Is(err, ErrUnwired) {
+		return zero, intake.ErrUnavailable
+	}
+	if err != nil {
+		return zero, err
+	}
+	if ex == nil {
+		return zero, intake.ErrDenied
+	}
+
+	reader := &targetReader{ex: ex, id: k.task}
+	readCtx, stopRead := context.WithTimeout(ctx, 4*time.Second)
+	result := verifytarget.New(reader).VerifyTarget(readCtx, k.task, expected)
+	stopRead()
+	var o intake.TaskObservation
+	recordCtx, stopRecord := context.WithTimeout(ctx, 2*time.Second)
+	defer stopRecord()
+	err = s.gate.WithOpen(recordCtx, q.Workspace, q.Epoch, func() error {
+		current, err := s.authorize(recordCtx, q)
+		if err != nil {
+			return err
+		}
+		if !sameReadAuthorization(a, current) {
+			return intake.ErrDenied
+		}
+		o, err = s.record(recordCtx, k, result, reader.code)
+		return err
+	})
+	if errors.Is(err, ErrHeld) {
+		return zero, intake.ErrDenied
+	}
+	if errors.Is(err, ErrUnwired) {
+		return zero, intake.ErrUnavailable
+	}
+	if err != nil {
+		return zero, err
+	}
+	return o, nil
+}
+
+func earlier(a, b time.Time) time.Time {
+	if a.Before(b) {
+		return a
+	}
+	return b
+}
+
+func (s *QueryService) authorize(ctx context.Context, q intake.Query) (Authorization, error) {
+	a, err := s.authority.AuthorizeRead(ctx, q)
+	if err != nil {
+		return Authorization{}, err
+	}
+	if a.Workspace != q.Workspace || a.Case != q.Case || a.Lineage != q.Lineage || a.Attempt == uuid.Nil || a.Epoch != q.Epoch {
+		return Authorization{}, intake.ErrDenied
+	}
+	return a, nil
+}
+
+func matchesRead(k known, p payload, a Authorization) bool {
+	return a.Connection == k.connection && a.Config == k.config && a.Episode == k.episode && a.TargetWorkspace == k.workspace &&
+		a.TargetWorkspace == p.TargetWorkspace && a.List != "" && a.List == p.List && a.Assignee != "" && a.Assignee == p.Assignee &&
+		a.ConfigDigest != "" && a.ConfigDigest == p.ConfigDigest
+}
+
+func sameReadAuthorization(a, b Authorization) bool {
+	return a.Attempt == b.Attempt && a.Config == b.Config && a.Connection == b.Connection && a.Episode == b.Episode &&
+		a.ConfigDigest == b.ConfigDigest && a.TargetWorkspace == b.TargetWorkspace && a.List == b.List && a.Assignee == b.Assignee
+}
+
+func (s *QueryService) record(ctx context.Context, k known, r verifytarget.Result, code string) (intake.TaskObservation, error) {
+	created := time.Now().UTC().Truncate(time.Microsecond)
+	o := intake.TaskObservation{MessageID: uuid.New(), SchemaVersion: "1.0", Workspace: k.job.Workspace, Case: k.caseID,
+		Lineage: k.lineage, Episode: k.episode, Observation: uuid.New(), TaskID: &k.task, ObservedAt: r.Provenance.ObservedAt,
+		Knowledge: "INCOMPLETE", ProofCode: code}
+	if !created.Before(k.ref.Expires) || o.ObservedAt.IsZero() || r.Provenance.Source != observationSource {
+		return o, intake.ErrUnavailable
+	}
+	m := r.Comparison
+	o.WorkspaceMatches, o.ListMatches, o.AssigneeMatches = m.Workspace, m.List, m.Assignee
+	o.TitleMatches, o.MarkerMatches, o.ContextMatches = m.Title, m.Marker, m.Context
+	o.Complete = m.Workspace != nil && m.List != nil && m.Assignee != nil && m.Title != nil && m.Marker != nil && m.Context != nil
+	switch m.Outcome {
+	case readback.Match:
+		o.Knowledge = "RESULT_VERIFIED"
+	case readback.Mismatch:
+		o.Knowledge = "RESULT_MISMATCH"
+	}
+	expires := earlier(k.ref.Expires, created.Add(90*24*time.Hour))
+	var attrs *intake.ContentRef
+	if r.Observed.Retrieved && r.Observed.List != "" && r.Observed.Assignees != nil {
+		var workspace *string
+		if r.Observed.Workspace != "" {
+			workspace = &r.Observed.Workspace
+		}
+		data, err := json.Marshal(map[string]any{"task_id": r.Observed.TargetID, "external_workspace_id": workspace,
+			"list_id": r.Observed.List, "assignee_ids": r.Observed.Assignees, "name": r.Observed.Title,
+			"handoff_block": m.Block, "retrieved_at": r.Provenance.ObservedAt, "source": r.Provenance.Source})
+		if err != nil {
+			return o, intake.ErrUnavailable
+		}
+		ref, err := s.put(data, expires)
+		if err != nil {
+			return o, err
+		}
+		attrs = &ref
+		o.EvidenceRef, o.EvidenceExpires, o.ProofDigest = &ref.ID, &ref.Expires, ref.SHA256
+	} else {
+		// This digest attests only the bounded local diagnostic, never absent
+		// provider evidence or proof that no external effect occurred.
+		o.ProofDigest = checksum([]byte(o.Observation.String() + ":" + o.ProofCode + ":" + o.ObservedAt.Format(time.RFC3339Nano)))
+	}
+	wire, err := intake.EncodeObservation(&o)
+	if err != nil {
+		return o, intake.ErrUnavailable
+	}
+	ref, err := s.put(wire, expires)
+	if err != nil {
+		return o, err
+	}
+	return o, s.db.saveReadback(ctx, k, o, attrs, ref, created)
+}
+
+func checksum(b []byte) string { return fmt.Sprintf("sha256:%x", sha256.Sum256(b)) }
+
+func (s *QueryService) put(b []byte, expiry time.Time) (intake.ContentRef, error) {
+	ref, err := s.files.Put(b, expiry)
+	if err != nil || ref.ID == uuid.Nil || ref.SHA256 != checksum(b) || ref.Size != len(b) || !ref.Expires.Equal(expiry) {
+		return intake.ContentRef{}, intake.ErrUnavailable
+	}
+	return ref, nil
+}
+--- end services/delivery/internal/dispatch/query.go ---
+
+--- services/delivery/internal/intake/http.go ---
+Git blob 21109687dbac058cb0d134a421b4d98a19e4e2ec; SHA-256 88368775fa478a1323fa5e131a087bb7b38a64b74f6f548f1103cbf1fc41eb49; 5329 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/intake/http.go
+
+package intake
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"io"
+	"mime"
+	"net/http"
+	"time"
+
+	"github.com/google/uuid"
+)
+
+const route = "/internal/v1/delivery-intents"
+const maxWireBytes = 512 * 1024
+
+// NewHTTP constructs the internal TLS 1.3 listener. The caller owns binding
+// its private address and supplying independently provisioned trust material.
+func NewHTTP(s *Service, serverCert tls.Certificate, clientCAs *x509.CertPool, processingSAN string) (*http.Server, error) {
+	if s == nil || len(serverCert.Certificate) == 0 || serverCert.PrivateKey == nil ||
+		clientCAs == nil || processingSAN == "" {
+		return nil, ErrUnavailable
+	}
+	h := handler{service: s, processingSAN: processingSAN}
+	return &http.Server{
+		Addr: ":8443", Handler: h,
+		ReadHeaderTimeout: 2 * time.Second, ReadTimeout: 4 * time.Second,
+		WriteTimeout: 8 * time.Second, IdleTimeout: 10 * time.Second, MaxHeaderBytes: 8 * 1024,
+		TLSConfig: &tls.Config{
+			MinVersion:   tls.VersionTLS13,
+			ClientAuth:   tls.RequireAndVerifyClientCert,
+			ClientCAs:    clientCAs.Clone(),
+			Certificates: []tls.Certificate{serverCert},
+		},
+	}, nil
+}
+
+type handler struct {
+	service       *Service
+	query         QueryReader
+	processingSAN string
+}
+
+func NewHTTPWithQuery(s *Service, q QueryReader, cert tls.Certificate, roots *x509.CertPool, san string) (*http.Server, error) {
+	if q == nil {
+		return nil, ErrUnavailable
+	}
+	server, err := NewHTTP(s, cert, roots, san)
+	if err != nil {
+		return nil, err
+	}
+	server.Handler = handler{service: s, query: q, processingSAN: san}
+	return server, nil
+}
+
+type errorBody struct {
+	Code      string    `json:"code"`
+	Message   string    `json:"message"`
+	RequestID uuid.UUID `json:"request_id"`
+}
+
+func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	requestID := uuid.New()
+	values := r.Header.Values("X-Request-ID")
+	validID := false
+	if len(values) == 1 && len(values[0]) == 36 {
+		if id, err := uuid.Parse(values[0]); err == nil {
+			requestID, validID = id, true
+		}
+	}
+	isQuery := r.URL.Path == queryRoute && h.query != nil
+	if (r.URL.Path != route && !isQuery) || r.Method != http.MethodPost {
+		writeFailure(w, http.StatusNotFound, "NOT_FOUND", requestID)
+		return
+	}
+	if r.TLS == nil || r.TLS.Version < tls.VersionTLS13 || len(r.TLS.VerifiedChains) == 0 {
+		writeFailure(w, http.StatusUnauthorized, "CERTIFICATE_REQUIRED", requestID)
+		return
+	}
+	if cert := r.TLS.VerifiedChains[0][0]; cert.VerifyHostname(h.processingSAN) != nil ||
+		!hasExactDNSName(cert, h.processingSAN) {
+		writeFailure(w, http.StatusUnauthorized, "CALLER_DENIED", requestID)
+		return
+	}
+	if !validID {
+		writeFailure(w, http.StatusBadRequest, "INVALID_REQUEST_ID", requestID)
+		return
+	}
+	media, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil || media != "application/json" {
+		writeFailure(w, http.StatusBadRequest, "INVALID_CONTENT_TYPE", requestID)
+		return
+	}
+	raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxWireBytes))
+	if err != nil {
+		var tooLarge *http.MaxBytesError
+		if errors.As(err, &tooLarge) {
+			writeFailure(w, http.StatusRequestEntityTooLarge, "SIZE_LIMIT", requestID)
+		} else {
+			writeFailure(w, http.StatusBadRequest, "INVALID_BODY", requestID)
+		}
+		return
+	}
+	if isQuery {
+		q, err := DecodeQuery(raw)
+		if err != nil {
+			writeFailure(w, http.StatusBadRequest, "INVALID_QUERY", requestID)
+			return
+		}
+		o, err := h.query.QueryKnownTask(r.Context(), q)
+		if err == nil {
+			writeJSON(w, http.StatusOK, o)
+		} else {
+			writeServiceFailure(w, err, requestID)
+		}
+		return
+	}
+	intent, err := DecodeIntent(raw)
+	if err != nil {
+		var invalidInput invalid
+		if errors.As(err, &invalidInput) && invalidInput.size {
+			writeFailure(w, http.StatusRequestEntityTooLarge, "SIZE_LIMIT", requestID)
+		} else {
+			writeFailure(w, http.StatusBadRequest, "INVALID_INTENT", requestID)
+		}
+		return
+	}
+	receipt, err := h.service.Accept(r.Context(), intent)
+	if err == nil {
+		writeJSON(w, http.StatusAccepted, receipt)
+		return
+	}
+	writeServiceFailure(w, err, requestID)
+}
+
+func writeServiceFailure(w http.ResponseWriter, err error, requestID uuid.UUID) {
+	switch {
+	case errors.Is(err, ErrDenied):
+		writeFailure(w, http.StatusForbidden, "SCOPE_DENIED", requestID)
+	case errors.Is(err, ErrNotFound):
+		writeFailure(w, http.StatusNotFound, "NOT_FOUND", requestID)
+	case errors.Is(err, ErrConflict):
+		writeFailure(w, http.StatusConflict, "IDENTITY_CONFLICT", requestID)
+	case errors.Is(err, ErrStale):
+		writeFailure(w, http.StatusPreconditionFailed, "STALE_INTENT", requestID)
+	case errors.Is(err, ErrQuota):
+		writeFailure(w, http.StatusTooManyRequests, "QUOTA_REFUSED", requestID)
+	default:
+		writeFailure(w, http.StatusServiceUnavailable, "ADMISSION_UNAVAILABLE", requestID)
+	}
+}
+
+func hasExactDNSName(cert *x509.Certificate, name string) bool {
+	for _, actual := range cert.DNSNames {
+		if actual == name {
+			return true
+		}
+	}
+	return false
+}
+
+func writeFailure(w http.ResponseWriter, status int, code string, id uuid.UUID) {
+	writeJSON(w, status, errorBody{Code: code, Message: http.StatusText(status), RequestID: id})
+}
+
+func writeJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}
+--- end services/delivery/internal/intake/http.go ---
+
+--- services/delivery/internal/intake/query.go ---
+Git blob 886a19e6d144b686df48695683cd5a4144f124a8; SHA-256 7973910b8d857982f306af39cd20bc8b578b525d16652404d2dc49b1b4a644b9; 2926 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/intake/query.go
+
+package intake
+
+import (
+	"context"
+	"encoding/json"
+	"time"
+	"unicode/utf8"
+
+	"github.com/google/uuid"
+	"github.com/gowebpki/jcs"
+)
+
+const queryRoute = "/internal/v1/delivery-query"
+
+type Query struct {
+	Workspace, Case, Lineage uuid.UUID
+	Epoch                    int64
+	Deadline                 time.Time
+	TaskID                   string
+}
+
+type QueryReader interface {
+	QueryKnownTask(context.Context, Query) (TaskObservation, error)
+}
+
+type TaskObservation struct {
+	MessageID        uuid.UUID  `json:"message_id"`
+	MessageDigest    string     `json:"message_digest"`
+	SchemaVersion    string     `json:"schema_version"`
+	Workspace        uuid.UUID  `json:"workspace_id"`
+	Case             uuid.UUID  `json:"case_id"`
+	Lineage          uuid.UUID  `json:"lineage_id"`
+	Episode          uuid.UUID  `json:"episode_id"`
+	Observation      uuid.UUID  `json:"observation_id"`
+	Knowledge        string     `json:"knowledge"`
+	TaskID           *string    `json:"task_id"`
+	ObservedAt       time.Time  `json:"observed_at"`
+	Complete         bool       `json:"complete"`
+	WorkspaceMatches *bool      `json:"workspace_matches"`
+	ListMatches      *bool      `json:"list_matches"`
+	AssigneeMatches  *bool      `json:"assignee_matches"`
+	TitleMatches     *bool      `json:"title_matches"`
+	MarkerMatches    *bool      `json:"marker_matches"`
+	ContextMatches   *bool      `json:"context_matches"`
+	ProofCode        string     `json:"proof_code"`
+	ProofDigest      string     `json:"proof_digest"`
+	EvidenceRef      *uuid.UUID `json:"evidence_ref"`
+	EvidenceExpires  *time.Time `json:"evidence_expires_at"`
+}
+
+func DecodeQuery(raw []byte) (Query, error) {
+	var q Query
+	if !utf8.Valid(raw) {
+		return q, ErrDenied
+	}
+	if _, err := jcs.Transform(raw); err != nil {
+		return q, err
+	}
+	f, err := decodeObject(raw)
+	if err != nil || len(f) < 5 || len(f) > 6 {
+		return q, invalid{}
+	}
+	m := map[string]*uuid.UUID{"workspace_id": &q.Workspace, "case_id": &q.Case, "lineage_id": &q.Lineage}
+	for key, dst := range m {
+		*dst, err = parseUUID(f[key])
+		if err != nil {
+			return q, err
+		}
+	}
+	q.Epoch, err = exactEpoch(string(f["expected_connection_epoch"]))
+	if err != nil {
+		return q, err
+	}
+	q.Deadline, err = dateField(f["deadline_at"])
+	if err != nil {
+		return q, err
+	}
+	if len(f) == 6 {
+		q.TaskID, err = stringField(f["native_task_id"], 1, 255)
+		if err != nil {
+			return q, err
+		}
+	}
+	return q, nil
+}
+
+// EncodeObservation computes RFC8785 SHA-256 over the complete wire projection
+// with message_digest omitted.
+func EncodeObservation(o *TaskObservation) ([]byte, error) {
+	raw, err := json.Marshal(o)
+	if err != nil {
+		return nil, err
+	}
+	f, err := decodeObject(raw)
+	if err != nil {
+		return nil, err
+	}
+	delete(f, "message_digest")
+	u, err := canonicalObject(f)
+	if err != nil {
+		return nil, err
+	}
+	o.MessageDigest = digest(u)
+	raw, err = json.Marshal(o)
+	if err != nil {
+		return nil, err
+	}
+	return jcs.Transform(raw)
+}
+--- end services/delivery/internal/intake/query.go ---
+
+--- services/delivery/internal/intake/content_linux.go ---
+Git blob cff1912f7e1854161d180c51045543dbb703f68c; SHA-256 fb94099d7a72292476312a4113cc0fcc4e76013cf33982c3dd4e81d522c5d91c; 2765 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/intake/content_linux.go
+
+package intake
+
+import (
+	"errors"
+	"io"
+	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"golang.org/x/sys/unix"
+)
+
+type Directory struct {
+	dir *os.File
+}
+
+// OpenDirectory opens a provisioned private content root. The directory is
+// pinned for subsequent operations. No external request controls its path.
+func OpenDirectory(path string) (*Directory, error) {
+	fd, err := unix.Open(path, unix.O_RDONLY|unix.O_CLOEXEC|unix.O_DIRECTORY|unix.O_NOFOLLOW, 0)
+	if err != nil {
+		return nil, ErrUnavailable
+	}
+	dir := os.NewFile(uintptr(fd), "delivery-content")
+	var st unix.Stat_t
+	if unix.Fstat(fd, &st) != nil || st.Mode&07777 != 0700 || st.Uid != uint32(unix.Geteuid()) {
+		_ = dir.Close()
+		return nil, ErrUnavailable
+	}
+	return &Directory{dir: dir}, nil
+}
+
+func (d *Directory) Close() error {
+	return d.dir.Close()
+}
+
+func (d *Directory) Put(data []byte, expires time.Time) (ContentRef, error) {
+	if len(data) == 0 || len(data) > maxContentBytes {
+		return ContentRef{}, ErrUnavailable
+	}
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	dir := int(d.dir.Fd())
+	final := id.String()
+	temp := "." + final
+	fd, err := unix.Openat(dir, temp, unix.O_WRONLY|unix.O_CREAT|unix.O_EXCL|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0600)
+	if err != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	defer func() { _ = unix.Unlinkat(dir, temp, 0) }()
+	f := os.NewFile(uintptr(fd), "delivery-content-pending")
+	if err = f.Chmod(0600); err == nil {
+		_, err = f.Write(data)
+	}
+	if err == nil {
+		err = f.Sync()
+	}
+	err = errors.Join(err, f.Close())
+	if err != nil || unix.Renameat2(dir, temp, dir, final, unix.RENAME_NOREPLACE) != nil || d.dir.Sync() != nil {
+		return ContentRef{}, ErrUnavailable
+	}
+	return ContentRef{ID: id, Size: len(data), SHA256: digest(data), Expires: expires}, nil
+}
+
+// Read accepts only a reference obtained from authorized SQL. A UUID filename
+// by itself does not authorize file access.
+func (d *Directory) Read(ref ContentRef, now time.Time) ([]byte, error) {
+	if !now.Before(ref.Expires) || ref.ID == uuid.Nil || ref.Size <= 0 || ref.Size > maxContentBytes {
+		return nil, ErrNotFound
+	}
+	fd, err := unix.Openat(int(d.dir.Fd()), ref.ID.String(), unix.O_RDONLY|unix.O_NONBLOCK|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
+	if err != nil {
+		return nil, ErrUnavailable
+	}
+	f := os.NewFile(uintptr(fd), "delivery-content-record")
+	defer f.Close()
+	var st unix.Stat_t
+	if unix.Fstat(fd, &st) != nil || st.Mode&unix.S_IFMT != unix.S_IFREG ||
+		st.Mode&07777 != 0600 || st.Nlink != 1 || st.Uid != uint32(unix.Geteuid()) {
+		return nil, ErrUnavailable
+	}
+	data, err := io.ReadAll(io.LimitReader(f, int64(ref.Size)+1))
+	if err != nil || len(data) != ref.Size || digest(data) != ref.SHA256 {
+		return nil, ErrUnavailable
+	}
+	return data, nil
+}
+--- end services/delivery/internal/intake/content_linux.go ---
+
+--- services/delivery/internal/dispatch/observation_db.go ---
+Git blob 0e5223b9152aeea66603fb37612327d9ee6424cb; SHA-256 0c87faf901d7170d7a23fd21fd29d0172c77c638c1aa9ad98ddc1f638b438d0f; 6114 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/observation_db.go
+
+package dispatch
+
+import (
+	"context"
+	"errors"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+)
+
+type known struct {
+	job                                          Job
+	caseID, lineage, episode, connection, config uuid.UUID
+	task, workspace                              string
+	epoch                                        int64
+	fingerprint                                  [32]byte
+	ref                                          intake.ContentRef
+}
+
+func (p *Postgres) known(ctx context.Context, q intake.Query, auth Authorization) (known, error) {
+	k := known{job: Job{q.Workspace, auth.Attempt}, caseID: q.Case, lineage: q.Lineage, epoch: q.Epoch}
+	err := p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		var fp []byte
+		err := tx.QueryRow(ctx, `
+			SELECT l.connection_id,l.config_id,a.episode_id,l.known_task_id,c.external_workspace_id,
+			       c.token_fingerprint,f.rendered_payload_ref,f.rendered_payload_sha256,f.rendered_payload_bytes,f.expires_at
+			FROM hp_delivery.effect_lineage l
+			JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
+			JOIN hp_delivery.destination_connections c USING(workspace_id,connection_id)
+			JOIN hp_delivery.intent_content f USING(workspace_id,attempt_id)
+			JOIN hp_delivery.inbox i ON i.workspace_id=a.workspace_id AND i.message_id=a.command_message_id
+			  AND i.record_id=a.attempt_id AND i.disposition='APPLIED'
+			WHERE l.workspace_id=$1 AND l.case_id=$2 AND l.lineage_id=$3 AND a.attempt_id=$4
+			  AND l.ever_dispatch_fenced AND l.state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')
+			  AND l.known_task_id IS NOT NULL AND a.network_start_at IS NOT NULL
+			  AND c.revoked_at IS NULL AND c.security_epoch=$5 AND a.connection_epoch=$5
+			`, q.Workspace, q.Case, q.Lineage, auth.Attempt, q.Epoch).
+			Scan(&k.connection, &k.config, &k.episode, &k.task, &k.workspace, &fp, &k.ref.ID, &k.ref.SHA256, &k.ref.Size, &k.ref.Expires)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return intake.ErrNotFound
+		}
+		if err != nil || len(fp) != 32 {
+			return intake.ErrUnavailable
+		}
+		copy(k.fingerprint[:], fp)
+		if q.TaskID != "" && q.TaskID != k.task {
+			return intake.ErrConflict
+		}
+		return nil
+	})
+	return k, err
+}
+
+// lockKnown rechecks the same immutable target and installed epoch under the
+// start gate. The transaction is always closed before any HTTP transmission.
+func lockKnown(ctx context.Context, tx pgx.Tx, k known) error {
+	var one int
+	err := tx.QueryRow(ctx, `
+		SELECT 1 FROM hp_delivery.effect_lineage l
+		JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
+		JOIN hp_delivery.destination_connections c USING(workspace_id,connection_id)
+		JOIN hp_delivery.intent_content f USING(workspace_id,attempt_id)
+		WHERE l.workspace_id=$1 AND l.case_id=$2 AND l.lineage_id=$3 AND a.attempt_id=$4
+		  AND l.known_task_id=$5 AND l.ever_dispatch_fenced AND l.state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')
+		  AND c.security_epoch=$6 AND c.revoked_at IS NULL AND c.token_fingerprint=$7
+		  AND f.rendered_payload_ref=$8 AND f.rendered_payload_sha256=$9 AND f.expires_at>clock_timestamp()
+		FOR SHARE OF c`, k.job.Workspace, k.caseID, k.lineage, k.job.Attempt, k.task, k.epoch, k.fingerprint[:], k.ref.ID, k.ref.SHA256).Scan(&one)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return intake.ErrDenied
+	}
+	if err != nil {
+		return intake.ErrUnavailable
+	}
+	return nil
+}
+
+func (p *Postgres) chargeRead(ctx context.Context, k known) error {
+	return p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		if err := lockKnown(ctx, tx, k); err != nil {
+			return err
+		}
+		r, err := tx.Exec(ctx, `UPDATE hp_delivery.credential_budget SET used_count=used_count+1
+			WHERE token_fingerprint=$1 AND used_count<limit_count AND next_eligible_at<=clock_timestamp()`, k.fingerprint[:])
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if r.RowsAffected() != 1 {
+			return errReadBudget
+		}
+		return nil
+	})
+}
+
+func (p *Postgres) saveReadback(ctx context.Context, k known, o intake.TaskObservation, attributes *intake.ContentRef,
+	wire intake.ContentRef, created time.Time) error {
+	return p.scoped(ctx, k.job, func(tx pgx.Tx) error {
+		if err := lockKnown(ctx, tx, k); err != nil {
+			return err
+		}
+		_, err := tx.Exec(ctx, `
+			INSERT INTO hp_delivery.effect_observations(workspace_id,observation_id,lineage_id,attempt_id,
+			 knowledge,observed_at,proof_code,proof_digest,known_task_id)
+			VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`, o.Workspace, o.Observation, o.Lineage, k.job.Attempt,
+			o.Knowledge, o.ObservedAt, o.ProofCode, o.ProofDigest, k.task)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if attributes != nil {
+			_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.observation_content(workspace_id,observation_id,actual_attributes_ref,
+				actual_attributes_sha256,actual_attributes_bytes,expected_attributes_digest,created_at,expires_at)
+				VALUES($1,$2,$3,$4,$5,$6,$7,$8)`, o.Workspace, o.Observation, attributes.ID, attributes.SHA256,
+				attributes.Size, k.ref.SHA256, created, attributes.Expires)
+			if err != nil {
+				return intake.ErrUnavailable
+			}
+		}
+		if o.Complete {
+			r, err := tx.Exec(ctx, `UPDATE hp_delivery.effect_lineage SET state='TARGET_OBSERVED',updated_at=clock_timestamp()
+			WHERE workspace_id=$1 AND lineage_id=$2 AND known_task_id=$3 AND ever_dispatch_fenced
+			  AND state IN('RESULT_ID_OBSERVED','TARGET_OBSERVED')`, o.Workspace, o.Lineage, k.task)
+			if err != nil || r.RowsAffected() != 1 {
+				return intake.ErrUnavailable
+			}
+		}
+		_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.outbox(workspace_id,message_id,kind,payload_ref,payload_sha256,
+			payload_bytes,digest,created_at,expires_at) VALUES($1,$2,'TASK_OBSERVATION',$3,$4,$5,$6,$7,$8)`,
+			o.Workspace, o.MessageID, wire.ID, wire.SHA256, wire.Size, o.MessageDigest, created, wire.Expires)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.job_index(job_id,workspace_id,kind,due_at)
+			VALUES ($1,$2,'TASK_OBSERVATION',clock_timestamp())`, o.MessageID, o.Workspace)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+--- end services/delivery/internal/dispatch/observation_db.go ---
+
+--- services/delivery/internal/dispatch/observation_publisher.go ---
+Git blob 32d148b0f3e7dc7b662353468c9c33222c53fe40; SHA-256 1ba9353ee64c5cdbd836f350305d90d31ea4461deed449f0c21e8658e23ea122; 9872 bytes
+https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/observation_publisher.go
+
+package dispatch
+
+import (
+	"bytes"
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"math/rand/v2"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/gowebpki/jcs"
+	"github.com/jackc/pgx/v5"
+)
+
+const applyPath = "/internal/v1/delivery-observations"
+
+type Publisher struct {
+	db        *Postgres
+	files     ContentReader
+	gate      intake.StartGate
+	recipient *ClickUp
+}
+
+// NewPublisher binds a provisioned Processing origin and client identity.
+// An outbox row cannot supply either, and the transport never follows redirects.
+func NewPublisher(db *Postgres, files ContentReader, gate intake.StartGate, origin string,
+	roots *x509.CertPool, cert tls.Certificate) (*Publisher, error) {
+	u, err := url.Parse(origin)
+	if err != nil || u.Scheme != "https" || u.Hostname() == "" || u.User != nil ||
+		u.Path != "" || u.RawQuery != "" || u.Fragment != "" || roots == nil || len(cert.Certificate) == 0 ||
+		cert.PrivateKey == nil || db == nil || files == nil || gate == nil {
+		return nil, ErrUnwired
+	}
+	client := clickUpAt(*u, roots)
+	client.tlsConfig.Certificates = []tls.Certificate{cert}
+	return &Publisher{db, files, gate, client}, nil
+}
+
+type claimed struct {
+	key, lease uuid.UUID
+	ref        intake.ContentRef
+	digest     string
+	attempt    int
+}
+
+// Publish sends at most one physical POST. An unacknowledged claim is retried
+// with the same durable file, message ID and digest after its next due time.
+func (p *Publisher) Publish(ctx context.Context, workspace, message uuid.UUID, epoch int64) error {
+	if workspace == uuid.Nil || message == uuid.Nil || epoch < 1 {
+		return intake.ErrDenied
+	}
+	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
+	defer cancel()
+	var c claimed
+	var ex *exchange
+	start, stop := context.WithTimeout(ctx, 2*time.Second)
+	err := p.gate.WithOpen(start, workspace, epoch, func() error {
+		var err error
+		c, err = p.db.claimObservation(start, workspace, message)
+		if err != nil {
+			return err
+		}
+		body, err := p.files.Read(c.ref, time.Now())
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		var o intake.TaskObservation
+		if json.Unmarshal(body, &o) != nil || o.Workspace != workspace || o.MessageID != message || o.MessageDigest != c.digest {
+			return intake.ErrConflict
+		}
+		wire, err := intake.EncodeObservation(&o)
+		if err != nil || !bytes.Equal(wire, body) {
+			return intake.ErrConflict
+		}
+		dst := p.recipient.origin
+		dst.Path = applyPath
+		req, err := http.NewRequest(http.MethodPost, dst.String(), bytes.NewReader(body))
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		req.Close = true
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Request-ID", uuid.NewString())
+		ex, err = p.recipient.start(start, req, func() error { return p.db.publicationAllowed(start, o, c, epoch) })
+		return err
+	})
+	stop()
+	if ex != nil {
+		defer ex.conn.Close()
+	}
+	if c.lease == uuid.Nil {
+		if err == nil {
+			return intake.ErrDenied
+		}
+		return err
+	}
+	ack := false
+	var retryAt *time.Time
+	if err == nil && ex != nil {
+		response, readErr := ex.readBounded(ctx)
+		ack = readErr == nil && response.status == http.StatusAccepted && acceptedReceipt(response.body, message)
+		switch response.status {
+		case http.StatusTooManyRequests, http.StatusServiceUnavailable:
+			retryAt = retryAfter(response.header.Get("Retry-After"), time.Now(), c.ref.Expires)
+		}
+		if !ack {
+			err = intake.ErrUnavailable
+		}
+	}
+	finish, stopFinish := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
+	defer stopFinish()
+	if e := p.db.finishPublication(finish, workspace, c, ack, retryAt); e != nil {
+		return e
+	}
+	return err
+}
+
+// Retry-After is a lower bound. A valid hint beyond the content lifetime
+// makes the outbox row ineligible for further delivery.
+func retryAfter(value string, now, expires time.Time) *time.Time {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil
+	}
+	if strings.Trim(value, "0123456789") == "" {
+		seconds, err := strconv.ParseUint(value, 10, 64)
+		if err != nil || seconds > uint64(max(expires.Sub(now), 0)/time.Second) {
+			return &expires
+		}
+		next := now.Add(time.Duration(seconds) * time.Second)
+		return &next
+	}
+	next, err := http.ParseTime(value)
+	if err != nil {
+		return nil
+	}
+	if next.After(expires) {
+		return &expires
+	}
+	return &next
+}
+
+func publicationBackoff(attempt int) time.Duration {
+	ceiling := time.Second << min(attempt, 8)
+	half := ceiling / 2
+	return half + rand.N(half)
+}
+
+func acceptedReceipt(body []byte, message uuid.UUID) bool {
+	if _, err := jcs.Transform(body); err != nil {
+		return false
+	}
+	var f map[string]json.RawMessage
+	if json.Unmarshal(body, &f) != nil {
+		return false
+	}
+	for k := range f {
+		switch k {
+		case "message_id", "disposition", "record_id", "revision":
+		default:
+			return false
+		}
+	}
+	var id uuid.UUID
+	var disposition string
+	if json.Unmarshal(f["message_id"], &id) != nil || id != message || json.Unmarshal(f["disposition"], &disposition) != nil {
+		return false
+	}
+	if raw, ok := f["record_id"]; ok {
+		var record uuid.UUID
+		if json.Unmarshal(raw, &record) != nil || record == uuid.Nil {
+			return false
+		}
+	}
+	if raw, ok := f["revision"]; ok {
+		var rev int64
+		if json.Unmarshal(raw, &rev) != nil || rev < 1 || rev > 9007199254740991 {
+			return false
+		}
+	}
+	return disposition == "APPLIED" || disposition == "DUPLICATE" || disposition == "HELD"
+}
+
+func (p *Postgres) claimObservation(ctx context.Context, ws, id uuid.UUID) (claimed, error) {
+	row := claimed{key: id, lease: uuid.New()}
+	available := true
+	err := p.scoped(ctx, Job{Workspace: ws}, func(tx pgx.Tx) error {
+		err := tx.QueryRow(ctx, `UPDATE hp_delivery.outbox
+			SET state='CLAIMED',claim_token=$3,lease_until=clock_timestamp()+interval '15 seconds',delivery_count=delivery_count+1
+			WHERE workspace_id=$1 AND message_id=$2 AND kind='TASK_OBSERVATION'
+			  AND expires_at>clock_timestamp() AND next_attempt_at<=clock_timestamp() AND delivery_count<8
+			  AND (state='PENDING' OR (state='CLAIMED' AND lease_until<=clock_timestamp()))
+			RETURNING payload_ref,payload_sha256,payload_bytes,expires_at,digest,delivery_count`, ws, id, row.lease).
+			Scan(&row.ref.ID, &row.ref.SHA256, &row.ref.Size, &row.ref.Expires, &row.digest, &row.attempt)
+		if errors.Is(err, pgx.ErrNoRows) {
+			available = false
+			released, err := tx.Exec(ctx, `UPDATE hp_delivery.outbox SET state='HELD',claim_token=NULL,lease_until=NULL
+				WHERE workspace_id=$1 AND message_id=$2 AND kind='TASK_OBSERVATION'
+				  AND (expires_at<=clock_timestamp() OR delivery_count>=8)
+				  AND (state='PENDING' OR (state='CLAIMED' AND lease_until<=clock_timestamp()))`, ws, id)
+			if err != nil {
+				return intake.ErrUnavailable
+			}
+			if released.RowsAffected() == 1 {
+				_, err = tx.Exec(ctx, `DELETE FROM hp_delivery.job_index WHERE workspace_id=$1 AND job_id=$2`, ws, id)
+				if err != nil {
+					return intake.ErrUnavailable
+				}
+			}
+			return nil
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		_, err = tx.Exec(ctx, `UPDATE hp_delivery.job_index j SET due_at=o.lease_until,claim_token=o.claim_token,lease_until=o.lease_until
+			FROM hp_delivery.outbox o WHERE j.workspace_id=$1 AND j.job_id=$2
+			  AND o.workspace_id=j.workspace_id AND o.message_id=j.job_id`, ws, id)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+	if err != nil {
+		return claimed{}, err
+	}
+	if !available {
+		return claimed{}, intake.ErrNotFound
+	}
+	return row, nil
+}
+
+func (p *Postgres) publicationAllowed(ctx context.Context, o intake.TaskObservation, c claimed, epoch int64) error {
+	return p.scoped(ctx, Job{Workspace: o.Workspace}, func(tx pgx.Tx) error {
+		var one int
+		err := tx.QueryRow(ctx, `SELECT 1 FROM hp_delivery.effect_observations v
+			JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id)
+			JOIN hp_delivery.destination_connections d USING(workspace_id,connection_id)
+			JOIN hp_delivery.outbox b ON b.workspace_id=v.workspace_id AND b.message_id=$2
+			WHERE v.workspace_id=$1 AND v.observation_id=$3 AND v.lineage_id=$4 AND l.case_id=$5
+			  AND d.security_epoch=$6 AND d.revoked_at IS NULL
+			  AND b.state='CLAIMED' AND b.claim_token=$7 AND b.lease_until>clock_timestamp()
+			  AND b.expires_at>clock_timestamp() FOR SHARE OF d`,
+			o.Workspace, c.key, o.Observation, o.Lineage, o.Case, epoch, c.lease).Scan(&one)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return intake.ErrDenied
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+
+func (p *Postgres) finishPublication(ctx context.Context, ws uuid.UUID, c claimed, ack bool, retryAt *time.Time) error {
+	return p.scoped(ctx, Job{Workspace: ws}, func(tx pgx.Tx) error {
+		var state string
+		var next time.Time
+		err := tx.QueryRow(ctx, `WITH schedule AS MATERIALIZED (
+			SELECT GREATEST(clock_timestamp()+make_interval(secs=>$5),$6::timestamptz) AS due
+		)
+		UPDATE hp_delivery.outbox SET
+			state=CASE WHEN $4 THEN 'ACKED' WHEN delivery_count>=8 OR schedule.due>=expires_at
+			  THEN 'HELD' ELSE 'PENDING' END,
+			next_attempt_at=CASE WHEN $4 THEN next_attempt_at ELSE LEAST(schedule.due,expires_at) END,
+			claim_token=NULL,lease_until=NULL
+			FROM schedule
+			WHERE workspace_id=$1 AND message_id=$2 AND claim_token=$3 AND state='CLAIMED'
+			RETURNING state,next_attempt_at`, ws, c.key, c.lease, ack, publicationBackoff(c.attempt).Seconds(), retryAt).Scan(&state, &next)
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		if state == "PENDING" {
+			_, err = tx.Exec(ctx, `UPDATE hp_delivery.job_index SET due_at=$3,claim_token=NULL,lease_until=NULL WHERE workspace_id=$1 AND job_id=$2`, ws, c.key, next)
+		} else {
+			_, err = tx.Exec(ctx, `DELETE FROM hp_delivery.job_index WHERE workspace_id=$1 AND job_id=$2`, ws, c.key)
+		}
+		if err != nil {
+			return intake.ErrUnavailable
+		}
+		return nil
+	})
+}
+--- end services/delivery/internal/dispatch/observation_publisher.go ---

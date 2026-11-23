@@ -1,0 +1,87 @@
+{
+  "subject": "HIT-93",
+  "materialized_result": "Проверка известного native task ID через ClickUp GET, точный TaskObservation, durable owner evidence и доставка неизменного сообщения с ограниченным backoff/jitter и учётом Retry-After Processing.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/docs/readback.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/docs/readback.md",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/application/verifytarget/verifytarget.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/dispatch_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/observation_db.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/observation_publisher.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/query.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/readback_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/target_reader.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/domain/readback/readback.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/intake/http.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/intake/query.go",
+    "https://github.com/hitpipe/hitpipe/blob/f8498a4d4eccfd537149ecff17b9d0936e8f1bb2/services/delivery/internal/dispatch/observation_publisher_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-source-audit.json",
+    "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-implementation.txt",
+    "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-test-sources.txt",
+    "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-test-protocol.txt"
+  ],
+  "verification": {
+    "contract_revision": 2,
+    "baseline_main": "ce771d37505e7770003d0796ae932556d06b7bab",
+    "code_commit": "f8498a4d4eccfd537149ecff17b9d0936e8f1bb2",
+    "dependency_heads": [
+      {
+        "issue": "HIT-70",
+        "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+        "merged": false
+      },
+      {
+        "issue": "HIT-91",
+        "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+        "merged": false
+      },
+      {
+        "issue": "HIT-92",
+        "head": "d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3",
+        "merged": false
+      },
+      {
+        "issue": "HIT-59",
+        "head": "f7d45d2e0162f8124ae9e3ddaa9b415b8bdef4c4",
+        "merged": false
+      }
+    ],
+    "command": "pwsh -NoProfile -File tests/run_hit91.ps1",
+    "go_test_command": "go test -v -race -count=1 ./...",
+    "go_vet_command": "go vet ./...",
+    "exit_code": 0,
+    "go_test_exit_code": 0,
+    "go_vet_exit_code": 0,
+    "environment": "Docker 29.3.1, linux/amd64, Go 1.27.2, PostgreSQL 18.7 Alpine, fsync/full_page_writes/synchronous_commit включены. Частная сеть с тестовыми HTTPS ClickUp и mTLS Processing, отдельные роли и каталог содержимого.",
+    "test_protocol": "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-test-protocol.txt",
+    "test_protocol_sha256": "ee9dee18af9040087d5db10d4cbf9b8be0eef7e503059be81ce71cf7ddaa2b23",
+    "source_audit": "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-source-audit.json",
+    "example": {
+      "native_task_id": "fixture-task",
+      "knowledge": "RESULT_VERIFIED",
+      "lineage": "TARGET_OBSERVED",
+      "durable_fence": true,
+      "processing_posts": 3,
+      "immutable_message_and_digest": true,
+      "first_ack": "LOST",
+      "outbox": "ACKED",
+      "second_response": "HTTP 429",
+      "retry_after_seconds": 360,
+      "third_ack": "DUPLICATE"
+    },
+    "coverage": [
+      "Один GET по известному ID, точное сравнение исходных полей, неизменные крупные ID, фактическая отметка времени и источник. Несовпадение, неизвестный workspace, чужой ID, 403/404/429, timeout, повреждённый и слишком большой ответ.",
+      "Точный DeliveryQuery с TLS 1.3, доверенный сертификат и SAN Processing, неизвестные/повторные поля и отсутствие cert, отказ полномочий/epoch/ID, отмена, общий credential_budget двух workspace.",
+      "Атомарные observation, content ref, outbox и индекс задания, потеря/повреждение/истечение владельческого файла, отложенный отказ SQL COMMIT без частичной записи.",
+      "Отдельный процесс, оборванный после claim, восстановление lease, потеря ACK и повтор того же сообщения после новой сборки worker; новый readback с новым observation ID и прежним TTL, сохранившимся fence. GET-путь не посылает provider POST/PATCH/DELETE.",
+      "Processing отвечает HTTP 429 с Retry-After=360. Outbox и индекс сохраняют одинаковое время следующей попытки; ранний повтор не отправляется. После допуска сообщение остаётся неизменным. Если следующая попытка за пределами исходного TTL, запись переходит в HELD и удаляется из индекса. Отдельные тесты проверяют границы разброса, секунды, HTTP-дату, некорректный и слишком большой Retry-After."
+    ],
+    "implementation_source": "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-implementation.txt",
+    "test_source": "https://github.com/hitpipe/hitpipe/blob/ee2a4fb493f6794b1b14d7c0657bade0b6c08147/services/delivery/evidence/HIT-93/review-test-sources.txt"
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Тесты выполнены на управляемых ClickUp и Processing узлах с синтетическими данными. Проверка живого коннектора, полномочий IAM и распределённого runtime остаётся вне результата.",
+    "HIT-93 сохраняет наблюдение и передаёт его получателю на стенде. Реальное состояние дела в Processing и пользовательский RECHECK не изменяются."
+  ]
+}

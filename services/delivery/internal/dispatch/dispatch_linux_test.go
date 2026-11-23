@@ -110,6 +110,10 @@ func (f *fixture) budget(t *testing.T, limit int) (fp [32]byte) {
 }
 
 func (f *fixture) prepare(t *testing.T, fp [32]byte, legacy bool) (Job, Authorization) {
+	return f.prepareWithBlock(t, fp, legacy, func(uuid.UUID) string { return fixtureBlock })
+}
+
+func (f *fixture) prepareWithBlock(t *testing.T, fp [32]byte, legacy bool, block func(uuid.UUID) string) (Job, Authorization) {
 	t.Helper()
 	now := time.Now().UTC().Truncate(time.Microsecond)
 	fields := map[string]any{"schema_version": "1.0", "rendering_version": "handoff-block-v1", "connection_epoch": 1,
@@ -122,6 +126,7 @@ func (f *fixture) prepare(t *testing.T, fp [32]byte, legacy bool) (Job, Authoriz
 		"episode_id", "connection_id", "source_facts_id"} {
 		fields[k] = uuid.New()
 	}
+	fields["rendered_handoff_block"] = block(fields["case_id"].(uuid.UUID))
 	raw, err := json.Marshal(fields)
 	if err != nil {
 		t.Fatal(err)
