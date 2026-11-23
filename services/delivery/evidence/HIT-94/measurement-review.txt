@@ -1,0 +1,118 @@
+HIT-94: exact per-repeat stdout metrics, in A/B/B/A order.
+The separately committed full transcripts measurements.txt and measurements-control.txt also include all per-request latency_us arrays.
+
+HIT-94 baseline code 0914c3cbdaa82b01b15231d39ceffcec983eea7d; same workload harness 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; UTC 2026-11-23T19:29:21.9735532Z
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+Linux 6.18.40.1-microsoft-standard-WSL2 x86_64
+go version go1.27.2 linux/amd64
+model name	: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+MemTotal:        8053120 kB
+max 100000
+max
+go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch
+    readback_benchmark_linux_test.go:28: HIT94_ENV go=go1.27.2 os=linux arch=amd64 cpu=8 gomaxprocs=8
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":1,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":3716548,"p50_us":37417,"p95_us":48475,"requests_per_second":25.83041826928313,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":2,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":3680775,"p50_us":38142,"p95_us":42421,"requests_per_second":26.081460902782187,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":3,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":4097855,"p50_us":39616,"p95_us":54920,"requests_per_second":23.426888831883677,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":4,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":4262204,"p50_us":38707,"p95_us":63335,"requests_per_second":22.523554249688683,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":5,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":3869351,"p50_us":38214,"p95_us":53376,"requests_per_second":24.810357400649217,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1599621,"p50_us":64866,"p95_us":78841,"requests_per_second":60.014211065109166,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1895811,"p50_us":65578,"p95_us":111292,"requests_per_second":50.63795280656523,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1724983,"p50_us":64334,"p95_us":102283,"requests_per_second":55.65271524458498,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1507871,"p50_us":62754,"p95_us":72161,"requests_per_second":63.665917216469225,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1655271,"p50_us":65064,"p95_us":107628,"requests_per_second":57.99651867197194,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1076240,"p50_us":43567,"p95_us":54972,"requests_per_second":89.19936387585152,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1009018,"p50_us":41495,"p95_us":49782,"requests_per_second":95.14196909706189,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1126535,"p50_us":41391,"p95_us":56365,"requests_per_second":85.21701581841566,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1487215,"p50_us":61142,"p95_us":74839,"requests_per_second":64.55015577058681,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":978677,"p50_us":39533,"p95_us":46171,"requests_per_second":98.09152856362063,"tcp_warmup":16,"tcp_measured":96}
+benchmark-exit=0
+
+HIT-94 candidate code 28d9541cebb280f80de14f32df2f3bffeb8d7cce; same workload harness 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; UTC 2026-11-23T19:35:50.3464181Z
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+Linux 6.18.40.1-microsoft-standard-WSL2 x86_64
+go version go1.27.2 linux/amd64
+model name	: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+MemTotal:        8053120 kB
+max 100000
+max
+go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch
+    readback_benchmark_linux_test.go:28: HIT94_ENV go=go1.27.2 os=linux arch=amd64 cpu=8 gomaxprocs=8
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":1,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":3485552,"p50_us":35841,"p95_us":40443,"requests_per_second":27.542265522927572,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":2,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":3967669,"p50_us":36959,"p95_us":52106,"requests_per_second":24.195562618903423,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":3,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5387778,"p50_us":52509,"p95_us":65257,"requests_per_second":17.818104847748472,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":4,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5201957,"p50_us":52209,"p95_us":65613,"requests_per_second":18.45459039697799,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":5,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5051385,"p50_us":51308,"p95_us":59236,"requests_per_second":19.004687345781786,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2413191,"p50_us":96256,"p95_us":131452,"requests_per_second":39.781338178353344,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2475035,"p50_us":99466,"p95_us":123664,"requests_per_second":38.78732408996519,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2610639,"p50_us":103141,"p95_us":135546,"requests_per_second":36.77259693634908,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2462737,"p50_us":98194,"p95_us":130697,"requests_per_second":38.98101366141842,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2306718,"p50_us":94253,"p95_us":107782,"requests_per_second":41.61755479095774,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1659352,"p50_us":62461,"p95_us":96687,"requests_per_second":57.85387974077697,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1648852,"p50_us":68754,"p95_us":84849,"requests_per_second":58.22230307790653,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1659172,"p50_us":64348,"p95_us":93908,"requests_per_second":57.86016636338356,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1769046,"p50_us":65169,"p95_us":89173,"requests_per_second":54.26653092813471,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1546121,"p50_us":62411,"p95_us":75685,"requests_per_second":62.090834176671315,"tcp_warmup":16,"tcp_measured":96}
+benchmark-exit=0
+
+HIT-94 candidate control code 28d9541cebb280f80de14f32df2f3bffeb8d7cce; workload harness 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; UTC 2026-11-23T19:37:54.2474907Z
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+Linux 6.18.40.1-microsoft-standard-WSL2 x86_64
+go version go1.27.2 linux/amd64
+model name	: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+MemTotal:        8053120 kB
+max 100000
+max
+go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch
+    readback_benchmark_linux_test.go:28: HIT94_ENV go=go1.27.2 os=linux arch=amd64 cpu=8 gomaxprocs=8
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":1,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":4950455,"p50_us":51171,"p95_us":55025,"requests_per_second":19.39215633805181,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":2,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5631823,"p50_us":59813,"p95_us":68433,"requests_per_second":17.045988234401875,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":3,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":6277871,"p50_us":54689,"p95_us":68145,"requests_per_second":15.291807103729345,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":4,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5080916,"p50_us":50553,"p95_us":62553,"requests_per_second":18.894229893612657,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":5,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5436319,"p50_us":52784,"p95_us":63830,"requests_per_second":17.65900732663881,"tcp_warmup":1,"tcp_measured":0}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2359378,"p50_us":95231,"p95_us":111985,"requests_per_second":40.68868300080927,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2632422,"p50_us":101217,"p95_us":146953,"requests_per_second":36.46830425087307,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2319007,"p50_us":95264,"p95_us":108705,"requests_per_second":41.39701390272788,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2320057,"p50_us":93960,"p95_us":113110,"requests_per_second":41.37829015594961,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2216563,"p50_us":91721,"p95_us":103697,"requests_per_second":43.310287451162814,"tcp_warmup":3,"tcp_measured":1}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1817024,"p50_us":65839,"p95_us":152246,"requests_per_second":52.83362821074561,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1494328,"p50_us":59273,"p95_us":82685,"requests_per_second":64.24288826994182,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1485563,"p50_us":59942,"p95_us":72585,"requests_per_second":64.62192706976775,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1544611,"p50_us":61404,"p95_us":77824,"requests_per_second":62.15154312483,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1579016,"p50_us":63363,"p95_us":87458,"requests_per_second":60.79734810073897,"tcp_warmup":16,"tcp_measured":96}
+benchmark-exit=0
+
+HIT-94 baseline control code 0914c3cbdaa82b01b15231d39ceffcec983eea7d; workload harness 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; UTC 2026-11-23T19:39:21.3726262Z
+sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366 linux/amd64 postgres@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366
+sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad linux/amd64 golang@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad
+ PostgreSQL 18.7 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | on    | on               | on
+Linux 6.18.40.1-microsoft-standard-WSL2 x86_64
+go version go1.27.2 linux/amd64
+model name	: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+MemTotal:        8053120 kB
+max 100000
+max
+go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch
+    readback_benchmark_linux_test.go:28: HIT94_ENV go=go1.27.2 os=linux arch=amd64 cpu=8 gomaxprocs=8
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":1,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5057595,"p50_us":52600,"p95_us":55092,"requests_per_second":18.981350179071768,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":2,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5611472,"p50_us":55908,"p95_us":66747,"requests_per_second":17.107809360574137,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":3,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5425760,"p50_us":52929,"p95_us":57125,"requests_per_second":17.69337153249924,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":4,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":5154954,"p50_us":52358,"p95_us":71797,"requests_per_second":18.622861513485333,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-serial","repeat":5,"concurrency":1,"warmup":16,"requests":96,"elapsed_us":6242684,"p50_us":61781,"p95_us":71687,"requests_per_second":15.378000421906014,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2370925,"p50_us":97963,"p95_us":113016,"requests_per_second":40.49052298052116,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2439285,"p50_us":97614,"p95_us":148169,"requests_per_second":39.35578029645653,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2365180,"p50_us":96785,"p95_us":113580,"requests_per_second":40.58886645397548,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2303023,"p50_us":95648,"p95_us":112003,"requests_per_second":41.684337424408476,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"verified-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":2353544,"p50_us":96443,"p95_us":111205,"requests_per_second":40.789544119411936,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":1,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1584097,"p50_us":63702,"p95_us":94187,"requests_per_second":60.60233230007555,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":2,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1499603,"p50_us":60503,"p95_us":75483,"requests_per_second":64.016916043285,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":3,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1529550,"p50_us":60799,"p95_us":79085,"requests_per_second":62.763524753732796,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":4,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1484338,"p50_us":61337,"p95_us":77797,"requests_per_second":64.67528865874834,"tcp_warmup":16,"tcp_measured":96}
+    readback_benchmark_linux_test.go:132: HIT94_SAMPLE {"scenario":"limited-parallel","repeat":5,"concurrency":4,"warmup":16,"requests":96,"elapsed_us":1497256,"p50_us":62283,"p95_us":75919,"requests_per_second":64.11729010074016,"tcp_warmup":16,"tcp_measured":96}
+benchmark-exit=0

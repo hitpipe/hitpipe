@@ -1,0 +1,1627 @@
+HIT-94 test source evidence
+Measured candidate 28d9541cebb280f80de14f32df2f3bffeb8d7cce
+Measurement harness 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8
+Exact Git blob contents follow. Successful execution is recorded separately.
+
+--- file services/delivery/internal/dispatch/readback_benchmark_linux_test.go ---
+Commit 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; Git blob bbff761fab4ea6b5f9904beac00cc65092dfd4aa; SHA-256 374c19016a8824c9e6afdae7e15b8623b10e9cc490a760e3e0358bbb327b4961; 5030 bytes
+https://github.com/hitpipe/hitpipe/blob/9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8/services/delivery/internal/dispatch/readback_benchmark_linux_test.go
+
+package dispatch
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"fmt"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"runtime"
+	"slices"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+)
+
+// This opt-in run includes the real QueryService, TargetReader, VerifyTarget,
+// PostgreSQL budget and durable observation on a synthetic HTTPS workload.
+func TestHIT94ReadbackBenchmark(t *testing.T) {
+	if os.Getenv("HIT94_BENCHMARK") != "1" {
+		t.Skip("run tests/run_hit91.ps1 -ReadbackBenchmark")
+	}
+	const repeats, warmup, requests = 5, 16, 96
+	t.Logf("HIT94_ENV go=%s os=%s arch=%s cpu=%d gomaxprocs=%d", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.NumCPU(), runtime.GOMAXPROCS(0))
+	for _, scenario := range []struct {
+		name        string
+		concurrency int
+		status      int
+		knowledge   string
+		proof       string
+	}{
+		{"verified-serial", 1, http.StatusOK, "RESULT_VERIFIED", "READ_OBSERVED"},
+		{"verified-parallel", 4, http.StatusOK, "RESULT_VERIFIED", "READ_OBSERVED"},
+		{"limited-parallel", 4, http.StatusTooManyRequests, "INCOMPLETE", "READ_RATE_LIMITED"},
+	} {
+		for repeat := 1; repeat <= repeats; repeat++ {
+			t.Run(fmt.Sprintf("%s/%d", scenario.name, repeat), func(t *testing.T) {
+				f := setup(t)
+				fp := f.budget(t, 1+warmup+requests)
+				_, auth, query := knownFixture(t, f, fp)
+				targetBody := targetJSON(t, auth, "fixture-task", "")
+				var connections, received atomic.Int64
+				upstream := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					received.Add(1)
+					if r.Method != http.MethodGet || r.URL.Path != "/api/v2/task/fixture-task" ||
+						r.URL.RawQuery != "" || r.Header.Get("Authorization") != fixtureToken ||
+						r.TLS == nil || r.TLS.Version != tls.VersionTLS13 {
+						t.Error("invalid request on controlled provider")
+						w.WriteHeader(http.StatusBadRequest)
+						return
+					}
+					if scenario.status == http.StatusTooManyRequests {
+						w.Header().Set("X-RateLimit-Limit", "100")
+						w.Header().Set("X-RateLimit-Remaining", "0")
+						w.Header().Set("X-RateLimit-Reset", fmt.Sprint(time.Now().Add(time.Minute).Unix()))
+						w.Header().Set("Retry-After", "60")
+						w.WriteHeader(scenario.status)
+						return
+					}
+					w.Header().Set("Content-Type", "application/json")
+					_, _ = w.Write(targetBody)
+				}))
+				upstream.Config.ConnState = func(_ net.Conn, state http.ConnState) {
+					if state == http.StateNew {
+						connections.Add(1)
+					}
+				}
+				upstream.TLS = &tls.Config{MinVersion: tls.VersionTLS13}
+				upstream.StartTLS()
+				t.Cleanup(upstream.Close)
+				roots := x509.NewCertPool()
+				roots.AddCert(upstream.Certificate())
+				origin, err := url.Parse(upstream.URL)
+				if err != nil {
+					t.Fatal(err)
+				}
+				service := queryFixture(t, f, auth, fp, clickUpAt(*origin, roots))
+				run := func(n int) []int64 {
+					durations := make([]int64, n)
+					var workers sync.WaitGroup
+					for worker := range scenario.concurrency {
+						workers.Go(func() {
+							for i := worker; i < n; i += scenario.concurrency {
+								start := time.Now()
+								observation, err := service.QueryKnownTask(t.Context(), query)
+								durations[i] = time.Since(start).Microseconds()
+								if err != nil || observation.Knowledge != scenario.knowledge || observation.ProofCode != scenario.proof ||
+									observation.TaskID == nil || *observation.TaskID != "fixture-task" ||
+									observation.Complete != (scenario.status == http.StatusOK) {
+									t.Errorf("unexpected observation in sample %d: %s/%s (%v)", i, observation.Knowledge, observation.ProofCode, err)
+								}
+							}
+						})
+					}
+					workers.Wait()
+					return durations
+				}
+				run(warmup)
+				warmConnections := connections.Load()
+				begin := time.Now()
+				durations := run(requests)
+				elapsed := time.Since(begin)
+				if received.Load() != warmup+requests {
+					t.Fatalf("unexpected number of provider GETs: %d", received.Load())
+				}
+				sorted := slices.Clone(durations)
+				slices.Sort(sorted)
+				sample := struct {
+					Scenario         string  `json:"scenario"`
+					Repeat           int     `json:"repeat"`
+					Concurrency      int     `json:"concurrency"`
+					Warmup           int     `json:"warmup"`
+					Requests         int     `json:"requests"`
+					ElapsedUS        int64   `json:"elapsed_us"`
+					P50US            int64   `json:"p50_us"`
+					P95US            int64   `json:"p95_us"`
+					Throughput       float64 `json:"requests_per_second"`
+					TCPDuringWarmup  int64   `json:"tcp_warmup"`
+					TCPAfterWarmup   int64   `json:"tcp_measured"`
+					RequestLatencies []int64 `json:"latency_us"`
+				}{scenario.name, repeat, scenario.concurrency, warmup, requests, elapsed.Microseconds(),
+					sorted[(50*requests+99)/100-1], sorted[(95*requests+99)/100-1], float64(requests) / elapsed.Seconds(),
+					warmConnections, connections.Load() - warmConnections, durations}
+				raw, err := json.Marshal(sample)
+				if err != nil {
+					t.Fatal(err)
+				}
+				t.Logf("HIT94_SAMPLE %s", raw)
+			})
+		}
+	}
+}
+--- end services/delivery/internal/dispatch/readback_benchmark_linux_test.go ---
+
+--- file services/delivery/tests/run_hit91.ps1 ---
+Commit 9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8; Git blob 0b78ec949211f50943d78581739299cd4b5dbf12; SHA-256 94f9ae6e2077bf7b20b440d9588b52736e5386a238edd61fd8c5eb29108f761f; 4298 bytes
+https://github.com/hitpipe/hitpipe/blob/9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8/services/delivery/tests/run_hit91.ps1
+
+[CmdletBinding()]
+param([switch] $ReadbackBenchmark)
+$ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $false
+
+$module = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$run = 'hit91-' + [Guid]::NewGuid().ToString('N').Substring(0,12)
+$pg = 'docker.io/library/postgres:18.7-alpine@sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366'
+$go = 'docker.io/library/golang:1.27.2-bookworm@sha256:55395706e9703db746cc507abfc4eb2aea75918f8a8024e4848e2cb81004f5ad'
+$migration = Join-Path ([System.IO.Path]::GetTempPath()) "$run.sql"
+$sql = [System.IO.File]::ReadAllText((Join-Path $module 'migrations/001_delivery.sql')) -replace '\r\n', "`n"
+$app = "postgresql://hp_delivery_app@$($run)-pg/delivery?sslmode=disable&pool_max_conns=5"
+$admin = "postgresql://postgres@$($run)-pg/delivery?sslmode=disable&pool_max_conns=2"
+$worker = "postgresql://hp_delivery_worker@$($run)-pg/delivery?sslmode=disable&pool_max_conns=8"
+$mounts = @('--mount', "type=bind,source=$module,target=/src,readonly",
+            '--mount', "type=volume,source=$run,target=/go/pkg/mod")
+function Invoke-Docker {
+    & docker @args
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker exited $LASTEXITCODE for $($args[0])"
+    }
+}
+try {
+    Write-Output "HIT-91 fixture $(Get-Date -AsUTC -Format o)"
+    [System.IO.File]::WriteAllText($migration, $sql, [System.Text.UTF8Encoding]::new($false))
+    $sqlDigest = (Get-FileHash -LiteralPath $migration -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($sqlDigest -ne '9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e') {
+        throw 'Migration does not match the accepted SQL'
+    }
+    Write-Output "Migration SHA-256 $sqlDigest"
+    Write-Output 'Commands: go test -v -race -count=1 ./...; go vet ./...'
+    Invoke-Docker version --format '{{.Server.Version}}'
+    Invoke-Docker image inspect $pg $go --format '{{.Id}} {{.Os}}/{{.Architecture}} {{index .RepoDigests 0}}'
+    Invoke-Docker volume create $run
+    Invoke-Docker network create --internal $run
+    Invoke-Docker run --rm --platform linux/amd64 @mounts -w /src $go go mod download
+    Invoke-Docker run --detach --platform linux/amd64 --name "$run-pg" --network $run -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=delivery $pg
+    Invoke-Docker cp $migration "$($run)-pg:/tmp/001_delivery.sql"
+    Invoke-Docker cp (Join-Path $module 'tests/hit91_fixture.sql') "$($run)-pg:/tmp/hit91_fixture.sql"
+    for ($attempt = 0; $attempt -lt 60; $attempt++) {
+        & docker exec "$run-pg" pg_isready -q -h 127.0.0.1 -U postgres -d delivery
+        if ($LASTEXITCODE -eq 0) { break }
+        Start-Sleep -Seconds 1
+    }
+    if ($LASTEXITCODE -ne 0) { throw 'Isolated PostgreSQL did not become ready' }
+    Invoke-Docker exec "$run-pg" psql -U postgres -d delivery -f /tmp/hit91_fixture.sql
+    Invoke-Docker exec "$run-pg" psql -U postgres -d delivery -c "SELECT version(),current_setting('fsync') AS fsync,current_setting('full_page_writes') AS full_page_writes,current_setting('synchronous_commit') AS synchronous_commit"
+    $runnerEnvironment = @('-e', 'GOPROXY=off', '-e', 'GOSUMDB=off', '-e', 'HIT91_REQUIRE_POSTGRES=1',
+                           '-e', "HIT91_TEST_APP_DSN=$app", '-e', "HIT91_TEST_ADMIN_DSN=$admin",
+                           '-e', 'HIT92_REQUIRE_POSTGRES=1', '-e', "HIT92_TEST_WORKER_DSN=$worker")
+    if ($ReadbackBenchmark) {
+        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment -e HIT94_BENCHMARK=1 $go sh -ec 'uname -smr; go version; grep -m 1 "model name" /proc/cpuinfo; grep MemTotal /proc/meminfo; cat /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max; echo "go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch"; go test -v -count=1 -run "^TestHIT94ReadbackBenchmark$" ./internal/dispatch; echo benchmark-exit=0'
+    } else {
+        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment $go sh -ec 'go version; go test -v -race -count=1 ./...; echo go-test-exit=0; go vet ./...; echo go-vet-exit=0'
+    }
+} finally {
+    & docker rm -f -v "$run-pg" 2>$null
+    & docker network rm $run 2>$null
+    & docker volume rm $run 2>$null
+    if (Test-Path -LiteralPath $migration) { Remove-Item -LiteralPath $migration }
+}
+--- end services/delivery/tests/run_hit91.ps1 ---
+
+--- file services/delivery/internal/dispatch/read_pool_linux_test.go ---
+Commit 28d9541cebb280f80de14f32df2f3bffeb8d7cce; Git blob b0db3cafdc1078ba31f19057a38e7a48d68a621d; SHA-256 b0ca0af0656c1693402aec0e0fdeea96976994ac3670c9f4cdc7dcdc1c142b44; 10793 bytes
+https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/read_pool_linux_test.go
+
+package dispatch
+
+import (
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
+	"io"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"reflect"
+	"strings"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+)
+
+type poolFixture struct {
+	clickup        *ClickUp
+	opened, closed atomic.Int64
+}
+
+func poolUpstream(t *testing.T, handler http.HandlerFunc) *poolFixture {
+	t.Helper()
+	f := new(poolFixture)
+	server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || r.URL.Path != "/api/v2/task/fixture-task" ||
+			r.URL.RawQuery != "" || r.Header.Get("Authorization") != fixtureToken ||
+			r.TLS == nil || r.TLS.Version != tls.VersionTLS13 {
+			t.Error("unexpected ClickUp wire request")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		handler(w, r)
+	}))
+	server.Config.ConnState = func(_ net.Conn, state http.ConnState) {
+		switch state {
+		case http.StateNew:
+			f.opened.Add(1)
+		case http.StateClosed:
+			f.closed.Add(1)
+		}
+	}
+	server.TLS = &tls.Config{MinVersion: tls.VersionTLS13}
+	server.StartTLS()
+	t.Cleanup(server.Close)
+	roots := x509.NewCertPool()
+	roots.AddCert(server.Certificate())
+	origin, err := url.Parse(server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f.clickup = clickUpAt(*origin, roots)
+	return f
+}
+
+func eventuallyClosed(t *testing.T, f *poolFixture, want int64) {
+	t.Helper()
+	ctx, cancel := context.WithTimeout(t.Context(), 3*time.Second)
+	defer cancel()
+	for f.closed.Load() != want {
+		select {
+		case <-ctx.Done():
+			t.Fatalf("closed %d of %d opened, wanted %d", f.closed.Load(), f.opened.Load(), want)
+		case <-time.After(5 * time.Millisecond):
+		}
+	}
+}
+
+func TestPooledReadObservationAndBarrier(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 20)
+	job, auth, query := knownFixture(t, f, fp)
+	body := targetJSON(t, auth, "fixture-task", "")
+	started := make(chan struct{})
+	returnAnswer := make(chan struct{})
+	var received atomic.Int64
+	target := poolUpstream(t, func(w http.ResponseWriter, r *http.Request) {
+		if received.Add(1) == 3 {
+			close(started)
+			select {
+			case <-returnAnswer:
+			case <-r.Context().Done():
+				return
+			}
+		}
+		_, _ = w.Write(body)
+	})
+	service := queryFixture(t, f, auth, fp, target.clickup)
+	var revoked atomic.Bool
+	lock := make(chan struct{}, 1)
+	lock <- struct{}{}
+	service.gate = allowGate(func(ctx context.Context, _ uuid.UUID, _ int64, run func() error) error {
+		select {
+		case <-lock:
+			defer func() { lock <- struct{}{} }()
+		case <-ctx.Done():
+			return ErrHeld
+		}
+		if revoked.Load() {
+			return intake.ErrDenied
+		}
+		return run()
+	})
+	read := func() intake.TaskObservation {
+		t.Helper()
+		o, err := service.QueryKnownTask(t.Context(), query)
+		if err != nil || o.Knowledge != "RESULT_VERIFIED" || !o.Complete || o.EvidenceRef == nil ||
+			o.MessageDigest == "" || o.ProofDigest == "" || o.ObservedAt.IsZero() {
+			t.Fatalf("invalid verified observation: %s, %v", o.Knowledge, err)
+		}
+		return o
+	}
+	first, reused := read(), read()
+	if first.MessageID == reused.MessageID || first.Observation == reused.Observation || *first.EvidenceRef == *reused.EvidenceRef {
+		t.Fatal("transport reuse cached an observation or identifier")
+	}
+	compare := func(o intake.TaskObservation) intake.TaskObservation {
+		o.MessageID, o.Observation = uuid.Nil, uuid.Nil
+		o.EvidenceRef = nil
+		o.ObservedAt = time.Time{}
+		o.MessageDigest, o.ProofDigest = "", ""
+		return o
+	}
+	if !reflect.DeepEqual(compare(first), compare(reused)) || target.opened.Load() != 1 {
+		t.Fatal("reused socket changed TaskObservation or opened another TCP connection")
+	}
+
+	inFlight := make(chan error, 1)
+	go func() {
+		_, err := service.QueryKnownTask(t.Context(), query)
+		inFlight <- err
+	}()
+	select {
+	case <-started:
+	case <-time.After(3 * time.Second):
+		t.Fatal("in-flight GET never arrived")
+	}
+	// Apply a barrier while a GET is awaiting its response on the reused
+	// socket. The barrier cannot pass the write's protected start section.
+	barrierCtx, cancel := context.WithTimeout(t.Context(), time.Second)
+	defer cancel()
+	select {
+	case <-lock:
+	case <-barrierCtx.Done():
+		t.Fatal("response read held the protected start gate")
+	}
+	_, err := f.admin.Exec(barrierCtx, "UPDATE hp_delivery.destination_connections SET revoked_at=clock_timestamp(),security_epoch=2 WHERE workspace_id=$1", job.Workspace)
+	revoked.Store(true)
+	lock <- struct{}{}
+	close(returnAnswer)
+	if err != nil {
+		t.Fatal(err)
+	}
+	select {
+	case err = <-inFlight:
+		if !errors.Is(err, intake.ErrDenied) {
+			t.Fatalf("old epoch could record an observation after barrier: %v", err)
+		}
+	case <-time.After(4 * time.Second):
+		t.Fatal("in-flight GET did not resolve")
+	}
+	if _, err = service.QueryKnownTask(t.Context(), query); !errors.Is(err, intake.ErrDenied) ||
+		received.Load() != 3 || target.opened.Load() != 1 {
+		t.Fatalf("start after barrier: err=%v GETs=%d TCP=%d", err, received.Load(), target.opened.Load())
+	}
+	t.Logf("same validated TaskObservation on fresh and reused TLS; GETs=%d TCP=%d; further old-epoch GETs=0", received.Load(), target.opened.Load())
+}
+
+func poolReadStart(t *testing.T, ctx context.Context, p *readPool, beforeWrite func() error) (*readExchange, error) {
+	t.Helper()
+	req, err := p.upstream.readRequest("fixture-task", fixtureToken)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return p.start(ctx, req, beforeWrite)
+}
+
+func TestPooledReadClosesOnUnsafeResponse(t *testing.T) {
+	for _, scenario := range []struct {
+		name string
+		code string
+		send http.HandlerFunc
+	}{
+		{"redirect", "READ_FAILED", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "/other", http.StatusFound)
+		}},
+		{"429", "READ_RATE_LIMITED", func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Set("X-RateLimit-Limit", "100")
+			w.Header().Set("X-RateLimit-Remaining", "0")
+			w.Header().Set("X-RateLimit-Reset", "2000000000")
+			w.Header().Set("Retry-After", "60")
+			w.WriteHeader(http.StatusTooManyRequests)
+		}},
+		{"oversize", "READ_FAILED", func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = io.WriteString(w, strings.Repeat("x", maxResponse+1))
+		}},
+		{"malformed", "READ_INVALID_RESPONSE", func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = io.WriteString(w, `{"id":"fixture-task","id":"duplicate"}`)
+		}},
+		{"refused", "READ_NOT_ACCESSIBLE", func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusForbidden)
+		}},
+		{"reset", "READ_FAILED", func(http.ResponseWriter, *http.Request) {
+			panic(http.ErrAbortHandler)
+		}},
+		{"timeout", "READ_FAILED", func(w http.ResponseWriter, r *http.Request) {
+			_, _ = io.WriteString(w, `{"id":`)
+			w.(http.Flusher).Flush()
+			<-r.Context().Done()
+		}},
+	} {
+		t.Run(scenario.name, func(t *testing.T) {
+			var received, charged atomic.Int64
+			target := poolUpstream(t, func(w http.ResponseWriter, r *http.Request) {
+				if received.Add(1) == 2 {
+					scenario.send(w, r)
+					return
+				}
+				_, _ = io.WriteString(w, `{"id":"fixture-task"}`)
+			})
+			pool := newReadPool(target.clickup)
+			read := func(timeout time.Duration) (string, error) {
+				t.Helper()
+				start, stop := context.WithTimeout(t.Context(), time.Second)
+				defer stop()
+				ex, err := poolReadStart(t, start, pool, func() error {
+					charged.Add(1)
+					return nil
+				})
+				if err != nil {
+					t.Fatal(err)
+				}
+				stop()
+				ctx, cancel := context.WithTimeout(t.Context(), timeout)
+				defer cancel()
+				defer ex.finish(false)
+				reader := &targetReader{ex: ex, id: "fixture-task"}
+				_, _, err = reader.Read(ctx, "fixture-task")
+				return reader.code, err
+			}
+			if _, err := read(time.Second); err != nil {
+				t.Fatal(err)
+			}
+			if code, err := read(200 * time.Millisecond); code != scenario.code || !errors.Is(err, ErrHeld) {
+				t.Fatalf("got %s, %v; expected %s", code, err, scenario.code)
+			}
+			eventuallyClosed(t, target, 1)
+			if received.Load() != 2 || charged.Load() != 2 || target.opened.Load() != 1 || len(pool.slots) != 0 {
+				t.Fatalf("failed read was retried or leaked: GETs=%d charges=%d TCP=%d active=%d",
+					received.Load(), charged.Load(), target.opened.Load(), len(pool.slots))
+			}
+		})
+	}
+}
+
+func TestReadPoolBoundsAndIdleExpiry(t *testing.T) {
+	target := poolUpstream(t, func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = io.WriteString(w, `{"id":"fixture-task"}`)
+	})
+	pool := newReadPool(target.clickup)
+	pool.idleFor = 250 * time.Millisecond
+	ctx, cancel := context.WithTimeout(t.Context(), 3*time.Second)
+	defer cancel()
+	exchanges := make([]*readExchange, 0, maxReadConnections)
+	defer func() {
+		for _, e := range exchanges {
+			e.finish(false)
+		}
+	}()
+	for range maxReadConnections {
+		ex, err := poolReadStart(t, ctx, pool, func() error { return nil })
+		if err != nil {
+			t.Fatal(err)
+		}
+		exchanges = append(exchanges, ex)
+	}
+	blocked, stop := context.WithTimeout(ctx, 50*time.Millisecond)
+	defer stop()
+	if extra, err := poolReadStart(t, blocked, pool, func() error {
+		t.Error("saturated pool allowed charging")
+		return nil
+	}); !errors.Is(err, ErrHeld) || extra != nil || target.opened.Load() != maxReadConnections {
+		t.Fatalf("saturated pool acquired a lease: %v, opened=%d", err, target.opened.Load())
+	}
+	for _, e := range exchanges {
+		r := &targetReader{ex: e, id: "fixture-task"}
+		if _, _, err := r.Read(ctx, "fixture-task"); err != nil {
+			t.Fatal(err)
+		}
+	}
+	pool.mu.Lock()
+	idle := len(pool.idle)
+	pool.mu.Unlock()
+	if idle != maxIdleReads || len(pool.slots) != 0 {
+		t.Fatalf("resource bounds not applied: idle=%d active=%d", idle, len(pool.slots))
+	}
+	eventuallyClosed(t, target, maxReadConnections)
+	pool.mu.Lock()
+	defer pool.mu.Unlock()
+	if len(pool.idle) != 0 {
+		t.Fatal("expired idle connections remain in the pool")
+	}
+}
+
+func TestPooledReadCancelAtStart(t *testing.T) {
+	var received atomic.Int64
+	target := poolUpstream(t, func(w http.ResponseWriter, _ *http.Request) {
+		received.Add(1)
+		_, _ = io.WriteString(w, `{"id":"fixture-task"}`)
+	})
+	pool := newReadPool(target.clickup)
+	ctx, cancel := context.WithTimeout(t.Context(), time.Second)
+	defer cancel()
+	ex, err := poolReadStart(t, ctx, pool, func() error { return nil })
+	if err != nil {
+		t.Fatal(err)
+	}
+	reader := &targetReader{ex: ex, id: "fixture-task"}
+	if _, _, err = reader.Read(ctx, "fixture-task"); err != nil {
+		t.Fatal(err)
+	}
+	ex, err = poolReadStart(t, ctx, pool, func() error {
+		cancel()
+		return nil
+	})
+	if !errors.Is(err, ErrHeld) || ex != nil {
+		t.Fatalf("canceled reused start escaped: %v", err)
+	}
+	eventuallyClosed(t, target, 1)
+	if received.Load() != 1 || target.opened.Load() != 1 || len(pool.slots) != 0 {
+		t.Fatalf("canceled GET reached the wire or leaked a lease: GETs=%d TCP=%d active=%d",
+			received.Load(), target.opened.Load(), len(pool.slots))
+	}
+}
+--- end services/delivery/internal/dispatch/read_pool_linux_test.go ---
+
+--- file services/delivery/internal/dispatch/readback_linux_test.go ---
+Commit 28d9541cebb280f80de14f32df2f3bffeb8d7cce; Git blob 89fe01384eb6cdd5f10a9fe5a3f088883f799591; SHA-256 6e0382da348cdf0eb211f6a7bad2321b5d17f159480b8e958f3d307548f6f3c3; 20816 bytes
+https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/readback_linux_test.go
+
+package dispatch
+
+import (
+	"bytes"
+	"context"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"math/big"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+)
+
+type readAuth func(context.Context, intake.Query) (Authorization, error)
+
+func (f readAuth) AuthorizeRead(c context.Context, q intake.Query) (Authorization, error) {
+	return f(c, q)
+}
+
+type unusedAdmission struct{}
+
+func (unusedAdmission) Current(context.Context, uuid.UUID, uuid.UUID) (intake.Snapshot, error) {
+	return intake.Snapshot{}, intake.ErrDenied
+}
+
+type testCerts struct {
+	cert  *x509.Certificate
+	key   *ecdsa.PrivateKey
+	roots *x509.CertPool
+}
+
+func newReadCA(t *testing.T) *testCerts {
+	t.Helper()
+	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tmpl := certTemplate()
+	tmpl.IsCA, tmpl.BasicConstraintsValid = true, true
+	tmpl.KeyUsage = x509.KeyUsageCertSign
+	der, err := x509.CreateCertificate(rand.Reader, tmpl, tmpl, &key.PublicKey, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cert, err := x509.ParseCertificate(der)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roots := x509.NewCertPool()
+	roots.AddCert(cert)
+	return &testCerts{cert, key, roots}
+}
+func certTemplate() *x509.Certificate {
+	return &x509.Certificate{SerialNumber: big.NewInt(time.Now().UnixNano()), NotBefore: time.Now().Add(-time.Hour),
+		NotAfter: time.Now().Add(time.Hour), KeyUsage: x509.KeyUsageDigitalSignature}
+}
+func (ca *testCerts) issue(t *testing.T, san string, usage x509.ExtKeyUsage) tls.Certificate {
+	t.Helper()
+	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tmpl := certTemplate()
+	tmpl.ExtKeyUsage = []x509.ExtKeyUsage{usage}
+	if san == "127.0.0.1" {
+		tmpl.IPAddresses = append(tmpl.IPAddresses, []byte{127, 0, 0, 1})
+	} else {
+		tmpl.DNSNames = []string{san}
+	}
+	der, err := x509.CreateCertificate(rand.Reader, tmpl, ca.cert, &key.PublicKey, ca.key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return tls.Certificate{Certificate: [][]byte{der}, PrivateKey: key}
+}
+
+func canonicalTestBlock(id uuid.UUID) string {
+	return fmt.Sprintf("[HITPIPE-HANDOFF:%s:v1]\nService: Example\nOrder: fixture-order\nContext:\nnote: α\ncontinued\n[/HITPIPE-HANDOFF:%s:v1]", id, id)
+}
+
+func knownFixture(t *testing.T, f *fixture, fp [32]byte) (Job, Authorization, intake.Query) {
+	t.Helper()
+	job, a := f.prepareWithBlock(t, fp, false, canonicalTestBlock)
+	ctx := t.Context()
+	rec, err := f.worker.load(ctx, job)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = f.worker.fence(ctx, rec); err != nil {
+		t.Fatal(err)
+	}
+	if err = f.worker.markStart(ctx, rec); err != nil {
+		t.Fatal(err)
+	}
+	if err = f.worker.finish(ctx, rec, outcome{Result{TargetIDObserved, "fixture-task"}, "PROVIDER_TASK_ID_RETURNED", checksum([]byte("fixture identity"))}); err != nil {
+		t.Fatal(err)
+	}
+	return job, a, intake.Query{Workspace: a.Workspace, Case: a.Case, Lineage: a.Lineage, Epoch: a.Epoch, Deadline: time.Now().Add(time.Minute)}
+}
+
+func queryFixture(t *testing.T, f *fixture, a Authorization, fp [32]byte, target *ClickUp) *QueryService {
+	t.Helper()
+	q, err := NewQueryService(f.worker, f.dir, readAuth(func(context.Context, intake.Query) (Authorization, error) { return a, nil }),
+		allowGate(acceptGate), credentialSource(func(context.Context, uuid.UUID, uuid.UUID, int64) (Credential, error) {
+			return Credential{fixtureToken, fp}, nil
+		}), target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return q
+}
+
+func targetJSON(t *testing.T, a Authorization, id string, mode string) []byte {
+	t.Helper()
+	attrs := map[string]any{"id": id, "team_id": "fixture-workspace", "list": map[string]any{"id": 456},
+		"name": fixtureTitle, "description": "Note before\n" + canonicalTestBlock(a.Case) + "\nNote after",
+		"assignees": []map[string]any{{"id": json.Number(exactAssignee)}}}
+	switch mode {
+	case "incomplete":
+		delete(attrs, "team_id")
+	case "mismatch":
+		attrs["name"] = "Wrong title"
+	case "wrong-id":
+		attrs["id"] = "different-task"
+	case "content":
+		attrs["description"] = strings.Replace(canonicalTestBlock(a.Case), "continued", "changed", 1)
+	}
+	raw, err := json.Marshal(attrs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return raw
+}
+
+func TestReadbackAndDurableOutbox(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 25)
+	_, auth, q := knownFixture(t, f, fp)
+	var reads atomic.Int64
+	target := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || r.URL.Path != "/api/v2/task/fixture-task" || r.URL.RawQuery != "" || r.Header.Get("Authorization") != fixtureToken {
+			t.Error("unexpected ClickUp request")
+		}
+		reads.Add(1)
+		w.Write(targetJSON(t, auth, "fixture-task", ""))
+	}))
+	service := queryFixture(t, f, auth, fp, target)
+	ca := newReadCA(t)
+	serverTLS := ca.issue(t, "127.0.0.1", x509.ExtKeyUsageServerAuth)
+	caller := ca.issue(t, "processing.internal", x509.ExtKeyUsageClientAuth)
+	intakeService, err := intake.New(unusedAdmission{}, allowGate(acceptGate), f.app)
+	if err != nil {
+		t.Fatal(err)
+	}
+	httpConfig, err := intake.NewHTTPWithQuery(intakeService, service, serverTLS, ca.roots, "processing.internal")
+	if err != nil {
+		t.Fatal(err)
+	}
+	server := httptest.NewUnstartedServer(httpConfig.Handler)
+	server.TLS = httpConfig.TLSConfig
+	server.StartTLS()
+	defer server.Close()
+	request := func(cert tls.Certificate, body []byte) (int, []byte, error) {
+		client := &http.Client{Timeout: 8 * time.Second, Transport: &http.Transport{TLSClientConfig: &tls.Config{
+			RootCAs: ca.roots, MinVersion: tls.VersionTLS13, Certificates: []tls.Certificate{cert},
+		}}}
+		defer client.CloseIdleConnections()
+		req, err := http.NewRequest(http.MethodPost, server.URL+"/internal/v1/delivery-query", bytes.NewReader(body))
+		if err != nil {
+			return 0, nil, err
+		}
+		req.Header.Set("X-Request-ID", uuid.NewString())
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := client.Do(req)
+		if err != nil {
+			return 0, nil, err
+		}
+		defer resp.Body.Close()
+		b, err := io.ReadAll(resp.Body)
+		return resp.StatusCode, b, err
+	}
+	wire, err := json.Marshal(map[string]any{"workspace_id": q.Workspace, "case_id": q.Case, "lineage_id": q.Lineage,
+		"expected_connection_epoch": q.Epoch, "deadline_at": q.Deadline})
+	if err != nil {
+		t.Fatal(err)
+	}
+	bad := ca.issue(t, "incorrect.internal", x509.ExtKeyUsageClientAuth)
+	if status, _, err := request(bad, wire); err != nil || status != 401 {
+		t.Fatalf("wrong caller: %d %v", status, err)
+	}
+	if status, _, err := request(tls.Certificate{}, wire); err == nil {
+		t.Fatalf("missing certificate: %d", status)
+	}
+	if status, _, err := request(caller, append([]byte("{\"lineage_id\":null,"), wire[1:]...)); err != nil || status != 400 {
+		t.Fatalf("duplicate or null field: %d %v", status, err)
+	}
+	status, data, err := request(caller, wire)
+	var o intake.TaskObservation
+	if err != nil || status != 200 || json.Unmarshal(data, &o) != nil || o.Knowledge != "RESULT_VERIFIED" || !o.Complete ||
+		o.EvidenceRef == nil || o.EvidenceExpires == nil || o.ObservedAt.IsZero() || reads.Load() != 1 {
+		t.Fatalf("query failed: status=%d err=%v", status, err)
+	}
+	sum := o.MessageDigest
+	encoded, err := intake.EncodeObservation(&o)
+	if err != nil || sum != o.MessageDigest {
+		t.Fatal("invalid RFC8785 digest")
+	}
+	var attrs intake.ContentRef
+	var observedState, id string
+	var fence bool
+	err = f.admin.QueryRow(t.Context(), `SELECT c.actual_attributes_ref,c.actual_attributes_sha256,c.actual_attributes_bytes,c.expires_at,
+		l.state,l.known_task_id,l.ever_dispatch_fenced FROM hp_delivery.observation_content c
+		JOIN hp_delivery.effect_observations o USING(workspace_id,observation_id)
+		JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id) WHERE c.observation_id=$1`, o.Observation).
+		Scan(&attrs.ID, &attrs.SHA256, &attrs.Size, &attrs.Expires, &observedState, &id, &fence)
+	if err != nil || attrs.ID != *o.EvidenceRef || attrs.SHA256 != o.ProofDigest || !attrs.Expires.Equal(*o.EvidenceExpires) ||
+		observedState != "TARGET_OBSERVED" || id != "fixture-task" || !fence {
+		t.Fatalf("durable observation incorrect: %v", err)
+	}
+	contents, err := f.dir.Read(attrs, time.Now())
+	var projection map[string]any
+	if err != nil || json.Unmarshal(contents, &projection) != nil || projection["source"] != observationSource ||
+		projection["handoff_block"] != canonicalTestBlock(auth.Case) {
+		t.Fatal("missing verified provider provenance or bounded block")
+	}
+
+	fenceClaimCrash(t, o.Workspace, o.MessageID)
+	if _, err = f.admin.Exec(t.Context(), "UPDATE hp_delivery.outbox SET lease_until=clock_timestamp()-interval '1 second' WHERE message_id=$1", o.MessageID); err != nil {
+		t.Fatal(err)
+	}
+	var deliveries atomic.Int64
+	receiver := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := io.ReadAll(r.Body)
+		if err != nil || !bytes.Equal(body, encoded) || r.Method != http.MethodPost || r.URL.Path != applyPath ||
+			len(r.TLS.VerifiedChains) == 0 || r.TLS.PeerCertificates[0].DNSNames[0] != "delivery.internal" {
+			t.Error("invalid Processing delivery")
+		}
+		switch deliveries.Add(1) {
+		case 1:
+			panic(http.ErrAbortHandler)
+		case 2:
+			w.Header().Set("Retry-After", "360")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		w.WriteHeader(202)
+		json.NewEncoder(w).Encode(map[string]any{"message_id": o.MessageID, "disposition": "DUPLICATE"})
+	}))
+	receiver.TLS = &tls.Config{Certificates: []tls.Certificate{serverTLS}, ClientAuth: tls.RequireAndVerifyClientCert, ClientCAs: ca.roots, MinVersion: tls.VersionTLS13}
+	receiver.StartTLS()
+	defer receiver.Close()
+	deliveryCert := ca.issue(t, "delivery.internal", x509.ExtKeyUsageClientAuth)
+	pub, err := NewPublisher(f.worker, f.dir, allowGate(acceptGate), receiver.URL, ca.roots, deliveryCert)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := pub.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrUnavailable) {
+		t.Fatalf("lost ACK: %v", err)
+	}
+	if err := pub.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrNotFound) {
+		t.Fatalf("backoff did not hold: %v", err)
+	}
+	makeDue := func() {
+		t.Helper()
+		if _, err := f.admin.Exec(t.Context(), "UPDATE hp_delivery.outbox SET next_attempt_at=clock_timestamp() WHERE message_id=$1", o.MessageID); err != nil {
+			t.Fatal(err)
+		}
+	}
+	makeDue()
+	reopened, err := NewPostgres(connect(t, "HIT92_TEST_WORKER_DSN"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	restart, err := NewPublisher(reopened, f.dir, allowGate(acceptGate), receiver.URL, ca.roots, deliveryCert)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeRateLimit := time.Now()
+	if err := restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrUnavailable) {
+		t.Fatalf("Processing rate limit: %v", err)
+	}
+	var nextAttempt, indexedDue time.Time
+	err = f.admin.QueryRow(t.Context(), `SELECT o.next_attempt_at,j.due_at
+		FROM hp_delivery.outbox o JOIN hp_delivery.job_index j
+		ON j.workspace_id=o.workspace_id AND j.job_id=o.message_id
+		WHERE o.message_id=$1 AND o.state='PENDING'`, o.MessageID).Scan(&nextAttempt, &indexedDue)
+	if err != nil || nextAttempt.Before(beforeRateLimit.Add(6*time.Minute-time.Microsecond)) || !nextAttempt.Equal(indexedDue) {
+		t.Fatalf("Retry-After not persisted to outbox and job index: %v, %v, %v", nextAttempt, indexedDue, err)
+	}
+	if err := restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); !errors.Is(err, intake.ErrNotFound) || deliveries.Load() != 2 {
+		t.Fatalf("premature delivery during Retry-After: %v, posts=%d", err, deliveries.Load())
+	}
+	makeDue()
+	if err = restart.Publish(t.Context(), o.Workspace, o.MessageID, q.Epoch); err != nil {
+		t.Fatal(err)
+	}
+	var state string
+	err = f.admin.QueryRow(t.Context(), "SELECT state FROM hp_delivery.outbox WHERE message_id=$1", o.MessageID).Scan(&state)
+	if err != nil || state != "ACKED" || deliveries.Load() != 3 {
+		t.Fatalf("outbox replay incorrect: %s %v", state, err)
+	}
+	next, err := service.QueryKnownTask(t.Context(), q)
+	if err != nil || next.Observation == o.Observation || reads.Load() != 2 || next.EvidenceExpires == nil ||
+		!next.EvidenceExpires.Equal(*o.EvidenceExpires) {
+		t.Fatal("new observation changed identity or retention")
+	}
+	claim, err := reopened.claimObservation(t.Context(), next.Workspace, next.MessageID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := reopened.finishPublication(t.Context(), next.Workspace, claim, false, &claim.ref.Expires); err != nil {
+		t.Fatal(err)
+	}
+	var held, stillScheduled bool
+	err = f.admin.QueryRow(t.Context(), `SELECT o.state='HELD',
+		EXISTS (SELECT 1 FROM hp_delivery.job_index j WHERE j.workspace_id=o.workspace_id AND j.job_id=o.message_id)
+		FROM hp_delivery.outbox o WHERE o.message_id=$1`, next.MessageID).Scan(&held, &stillScheduled)
+	if err != nil || !held || stillScheduled {
+		t.Fatalf("expired retry window must hold without scheduling: held=%t scheduled=%t err=%v", held, stillScheduled, err)
+	}
+	t.Logf("native ID=%s knowledge=%s lineage=%s fence=%t; Processing deliveries=%d (same message/digest), Retry-After=360s persisted; outbox=%s", id, o.Knowledge, observedState, fence, deliveries.Load(), state)
+}
+
+func fenceClaimCrash(t *testing.T, ws, msg uuid.UUID) {
+	t.Helper()
+	binary, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.CommandContext(t.Context(), binary, "-test.run=^TestReadbackClaimProcess$")
+	cmd.Env = append(os.Environ(), "HIT93_CRASH_WORKSPACE="+ws.String(), "HIT93_CRASH_MESSAGE="+msg.String())
+	out, err := cmd.CombinedOutput()
+	var exit *exec.ExitError
+	if !errors.As(err, &exit) || exit.ExitCode() != 43 {
+		t.Fatalf("test crash process: %v %s", err, out)
+	}
+}
+
+func TestReadbackClaimProcess(t *testing.T) {
+	ws := os.Getenv("HIT93_CRASH_WORKSPACE")
+	if ws == "" {
+		t.Skip("used by the restart fixture")
+	}
+	p, err := NewPostgres(connect(t, "HIT92_TEST_WORKER_DSN"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = p.claimObservation(t.Context(), uuid.MustParse(ws), uuid.MustParse(os.Getenv("HIT93_CRASH_MESSAGE"))); err != nil {
+		t.Fatal(err)
+	}
+	os.Exit(43)
+}
+
+func TestReadbackFailures(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 50)
+	_, a, q := knownFixture(t, f, fp)
+	for _, tc := range []string{"mismatch", "content", "incomplete", "wrong-id", "403", "404", "429", "malformed", "oversize", "timeout", "denied", "new-epoch", "wrong-target", "cancel", "wrong-ca", "budget", "expired-file", "corrupt-file", "lost-file"} {
+		t.Run(tc, func(t *testing.T) {
+			var gets atomic.Int64
+			target := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				gets.Add(1)
+				if r.Method != http.MethodGet {
+					t.Error("a provider write was attempted")
+				}
+				switch tc {
+				case "403", "404", "429":
+					var n int
+					fmt.Sscan(tc, &n)
+					w.WriteHeader(n)
+				case "malformed":
+					io.WriteString(w, "{")
+				case "oversize":
+					w.Write(bytes.Repeat([]byte("x"), maxResponse+1))
+				case "timeout":
+					select {
+					case <-r.Context().Done():
+					case <-time.After(5 * time.Second):
+					}
+				default:
+					w.Write(targetJSON(t, a, "fixture-task", tc))
+				}
+			}))
+			service := queryFixture(t, f, a, fp, target)
+			query := q
+			ctx := t.Context()
+			var wantErr error
+			switch tc {
+			case "denied":
+				service.authority = readAuth(func(context.Context, intake.Query) (Authorization, error) { return Authorization{}, intake.ErrDenied })
+				wantErr = intake.ErrDenied
+			case "new-epoch":
+				query.Epoch++
+				wantErr = intake.ErrDenied
+			case "wrong-target":
+				query.TaskID = "different-task"
+				wantErr = intake.ErrConflict
+			case "cancel":
+				c, cancel := context.WithCancel(ctx)
+				cancel()
+				ctx = c
+				wantErr = intake.ErrUnavailable
+			case "wrong-ca":
+				target.tlsConfig.RootCAs = x509.NewCertPool()
+				wantErr = intake.ErrUnavailable
+			case "budget":
+				if _, err := f.admin.Exec(ctx, "UPDATE hp_delivery.credential_budget SET limit_count=used_count WHERE token_fingerprint=$1", fp[:]); err != nil {
+					t.Fatal(err)
+				}
+				t.Cleanup(func() {
+					_, _ = f.admin.Exec(context.Background(), "UPDATE hp_delivery.credential_budget SET limit_count=50 WHERE token_fingerprint=$1", fp[:])
+				})
+				wantErr = intake.ErrQuota
+			case "expired-file", "corrupt-file":
+				k, err := f.worker.known(ctx, q, a)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if tc == "expired-file" {
+					if _, err := f.admin.Exec(ctx, "UPDATE hp_delivery.intent_content SET expires_at=clock_timestamp()-interval '1 minute' WHERE attempt_id=$1", a.Attempt); err != nil {
+						t.Fatal(err)
+					}
+					t.Cleanup(func() {
+						if _, err := f.admin.Exec(context.Background(), "UPDATE hp_delivery.intent_content SET expires_at=$2 WHERE attempt_id=$1", a.Attempt, k.ref.Expires); err != nil {
+							t.Error(err)
+						}
+					})
+				} else {
+					filename := filepath.Join(f.root, k.ref.ID.String())
+					original, err := os.ReadFile(filename)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err = os.WriteFile(filename, []byte("corrupt"), 0600); err != nil {
+						t.Fatal(err)
+					}
+					t.Cleanup(func() {
+						if err := os.WriteFile(filename, original, 0600); err != nil {
+							t.Error(err)
+						}
+					})
+				}
+				wantErr = intake.ErrUnavailable
+			case "lost-file":
+				k, err := f.worker.known(ctx, q, a)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err = os.Remove(filepath.Join(f.root, k.ref.ID.String())); err != nil {
+					t.Fatal(err)
+				}
+				wantErr = intake.ErrUnavailable
+			}
+			o, err := service.QueryKnownTask(ctx, query)
+			if wantErr != nil {
+				if !errors.Is(err, wantErr) || gets.Load() != 0 {
+					t.Fatalf("bad refusal: %v, GET count %d", err, gets.Load())
+				}
+				return
+			}
+			want := "INCOMPLETE"
+			if tc == "mismatch" || tc == "content" {
+				want = "RESULT_MISMATCH"
+			}
+			if err != nil || o.Knowledge != want || gets.Load() != 1 {
+				t.Fatalf("expected %s received %+v %v", want, o, err)
+			}
+			if tc == "incomplete" && o.WorkspaceMatches != nil {
+				t.Fatal("missing provider workspace was substituted")
+			}
+			if tc == "wrong-id" && o.EvidenceRef != nil {
+				t.Fatal("foreign identity linked as evidence")
+			}
+		})
+	}
+}
+
+func TestReadbackSharedBudgetAndSQLFailure(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 3)
+	_, a, qa := knownFixture(t, f, fp)
+	_, b, qb := knownFixture(t, f, fp)
+	var reads atomic.Int64
+	target := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		reads.Add(1)
+		w.Write(targetJSON(t, a, "fixture-task", ""))
+	}))
+	sa := queryFixture(t, f, a, fp, target)
+	if ret, err := sa.QueryKnownTask(t.Context(), qa); err != nil || ret.Knowledge != "RESULT_VERIFIED" {
+		t.Fatalf("first read failed: %v", err)
+	}
+	if _, err := queryFixture(t, f, b, fp, target).QueryKnownTask(t.Context(), qb); !errors.Is(err, intake.ErrQuota) || reads.Load() != 1 {
+		t.Fatalf("shared budget did not hold second workspace: %v", err)
+	}
+	if _, err := f.admin.Exec(t.Context(), "UPDATE hp_delivery.credential_budget SET limit_count=10 WHERE token_fingerprint=$1", fp[:]); err != nil {
+		t.Fatal(err)
+	}
+	ddl := fmt.Sprintf(`
+		CREATE FUNCTION public.hit93_fail_observation() RETURNS trigger LANGUAGE plpgsql AS $$
+		BEGIN IF NEW.workspace_id='%s'::uuid THEN RAISE EXCEPTION 'fixture deferred failure'; END IF; RETURN NEW; END $$;
+		CREATE CONSTRAINT TRIGGER hit93_fail_observation AFTER INSERT ON hp_delivery.outbox
+		DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.hit93_fail_observation()`, b.Workspace)
+	if _, err := f.admin.Exec(t.Context(), ddl); err != nil {
+		t.Fatal(err)
+	}
+	targetB := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			t.Error("provider write attempted")
+		}
+		w.Write(targetJSON(t, b, "fixture-task", ""))
+	}))
+	if ret, err := queryFixture(t, f, b, fp, targetB).QueryKnownTask(t.Context(), qb); !errors.Is(err, intake.ErrUnavailable) || ret.Observation != uuid.Nil {
+		t.Fatalf("failed SQL commit returned observation: %v", err)
+	}
+	var observations, outbox, index int
+	if err := f.admin.QueryRow(t.Context(), `SELECT
+		(SELECT count(*) FROM hp_delivery.effect_observations WHERE workspace_id=$1 AND knowledge<>'TARGET_ID_OBSERVED'),
+		(SELECT count(*) FROM hp_delivery.outbox WHERE workspace_id=$1),
+		(SELECT count(*) FROM hp_delivery.job_index WHERE workspace_id=$1)`, b.Workspace).Scan(&observations, &outbox, &index); err != nil || observations+outbox+index != 0 {
+		t.Fatalf("failed commit left partial state: %d %d %d %v", observations, outbox, index, err)
+	}
+	t.Log("shared token budget held second workspace; deferred commit failure left no readback, outbox or job")
+}
+--- end services/delivery/internal/dispatch/readback_linux_test.go ---
+
+--- file services/delivery/internal/dispatch/dispatch_linux_test.go ---
+Commit 28d9541cebb280f80de14f32df2f3bffeb8d7cce; Git blob 0cfdbded32cf78b6d574254cb14c2cc83255bc14; SHA-256 59438ca939836687a4414b33836cae60f4fff5c819e90d2d76d68a1701a017a7; 15130 bytes
+https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/dispatch_linux_test.go
+
+package dispatch
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"crypto/tls"
+	"crypto/x509"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
+	"github.com/google/uuid"
+	"github.com/gowebpki/jcs"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type authorize func(context.Context, Job) (Authorization, error)
+
+func (f authorize) Current(ctx context.Context, j Job) (Authorization, error) { return f(ctx, j) }
+
+type allowGate func(context.Context, uuid.UUID, int64, func() error) error
+
+func (g allowGate) WithOpen(ctx context.Context, w uuid.UUID, e int64, f func() error) error {
+	return g(ctx, w, e, f)
+}
+
+type credentialSource func(context.Context, uuid.UUID, uuid.UUID, int64) (Credential, error)
+
+func (f credentialSource) ForConnection(ctx context.Context, w, c uuid.UUID, e int64) (Credential, error) {
+	return f(ctx, w, c, e)
+}
+
+type fixture struct {
+	admin  *pgxpool.Pool
+	app    *intake.Postgres
+	worker *Postgres
+	dir    *intake.Directory
+	root   string
+}
+
+func connect(t *testing.T, env string) *pgxpool.Pool {
+	t.Helper()
+	p, err := pgxpool.New(t.Context(), os.Getenv(env))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(p.Close)
+	return p
+}
+
+func setup(t *testing.T) *fixture {
+	t.Helper()
+	if os.Getenv("HIT92_TEST_WORKER_DSN") == "" {
+		if os.Getenv("HIT92_REQUIRE_POSTGRES") == "1" {
+			t.Fatal("worker fixture not configured")
+		}
+		t.Skip("isolated worker fixture not requested")
+	}
+	admin := connect(t, "HIT91_TEST_ADMIN_DSN")
+	var version int
+	if err := admin.QueryRow(t.Context(), "SELECT current_setting('server_version_num')::int").Scan(&version); err != nil || version != 180007 {
+		t.Fatalf("expected PostgreSQL 18.7: %d %v", version, err)
+	}
+	root := filepath.Join(t.TempDir(), "content")
+	if err := os.Mkdir(root, 0700); err != nil {
+		t.Fatal(err)
+	}
+	dir, err := intake.OpenDirectory(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = dir.Close() })
+	app, err := intake.NewPostgres(connect(t, "HIT91_TEST_APP_DSN"), dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	worker, err := NewPostgres(connect(t, "HIT92_TEST_WORKER_DSN"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return &fixture{admin, app, worker, dir, root}
+}
+
+const fixtureToken = "test-only-token"
+const exactAssignee = "9007199254740993"
+const fixtureTitle = "Example — order"
+const fixtureBlock = "Canonical handoff\nContext: пример"
+
+func (f *fixture) budget(t *testing.T, limit int) (fp [32]byte) {
+	t.Helper()
+	fp = sha256.Sum256([]byte(uuid.NewString()))
+	if _, err := f.admin.Exec(t.Context(), "INSERT INTO hp_delivery.credential_budget VALUES ($1,clock_timestamp(),$2,0,clock_timestamp())", fp[:], limit); err != nil {
+		t.Fatal(err)
+	}
+	return fp
+}
+
+func (f *fixture) prepare(t *testing.T, fp [32]byte, legacy bool) (Job, Authorization) {
+	return f.prepareWithBlock(t, fp, legacy, func(uuid.UUID) string { return fixtureBlock })
+}
+
+func (f *fixture) prepareWithBlock(t *testing.T, fp [32]byte, legacy bool, block func(uuid.UUID) string) (Job, Authorization) {
+	t.Helper()
+	now := time.Now().UTC().Truncate(time.Microsecond)
+	fields := map[string]any{"schema_version": "1.0", "rendering_version": "handoff-block-v1", "connection_epoch": 1,
+		"config_digest": "sha256:" + strings.Repeat("a", 64), "source_facts_digest": "sha256:" + strings.Repeat("b", 64),
+		"facts_valid_until": now.Add(time.Minute), "deadline_at": now.Add(2 * time.Minute),
+		"destination_workspace_id": "fixture-workspace", "target_list_id": "456", "assignee_id": exactAssignee,
+		"title": fixtureTitle, "service_label": "Example", "source_session_id": "fixture-session", "order_reference": "order",
+		"case_marker": "fixture-case", "rendered_handoff_block": fixtureBlock, "context": []any{}}
+	for _, k := range []string{"message_id", "workspace_id", "case_id", "operation_id", "config_id", "lineage_id",
+		"episode_id", "connection_id", "source_facts_id"} {
+		fields[k] = uuid.New()
+	}
+	fields["rendered_handoff_block"] = block(fields["case_id"].(uuid.UUID))
+	raw, err := json.Marshal(fields)
+	if err != nil {
+		t.Fatal(err)
+	}
+	canonical, err := jcs.Transform(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fields["message_digest"] = fmt.Sprintf("sha256:%x", sha256.Sum256(canonical))
+	raw, err = json.Marshal(fields)
+	if err != nil {
+		t.Fatal(err)
+	}
+	i, err := intake.DecodeIntent(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if legacy {
+		var saved map[string]json.RawMessage
+		if err := json.Unmarshal(i.Content, &saved); err != nil {
+			t.Fatal(err)
+		}
+		for _, k := range []string{"config_digest", "target_list_id", "assignee_id", "destination_workspace_id"} {
+			delete(saved, k)
+		}
+		i.Content, err = json.Marshal(saved)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	if _, err = f.admin.Exec(t.Context(), "INSERT INTO hp_delivery.destination_connections(workspace_id,connection_id,external_workspace_id,security_epoch,token_fingerprint,health) VALUES($1,$2,$3,1,$4,'HEALTHY')", i.WorkspaceID, i.ConnectionID, i.DestinationWorkspace, fp[:]); err != nil {
+		t.Fatal(err)
+	}
+	receipt, err := f.app.Accept(t.Context(), i, time.Now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	job := Job{i.WorkspaceID, receipt.RecordID}
+	a := Authorization{
+		Workspace: job.Workspace, Attempt: job.Attempt, Case: i.CaseID, Connection: i.ConnectionID, Config: i.ConfigID,
+		Lineage: i.LineageID, Episode: i.EpisodeID, Epoch: i.Epoch, ConfigDigest: i.ConfigDigest, FactsDigest: i.FactsDigest,
+		FactsUntil: i.FactsUntil, Deadline: i.Deadline, TargetWorkspace: i.DestinationWorkspace, List: i.List, Assignee: i.Assignee,
+	}
+	return job, a
+}
+
+func acceptGate(ctx context.Context, _ uuid.UUID, _ int64, run func() error) error {
+	if ctx.Err() != nil {
+		return ErrHeld
+	}
+	return run()
+}
+
+func (f *fixture) newWorker(t *testing.T, client *ClickUp, a Authorization, fp [32]byte) *Worker {
+	t.Helper()
+	w, err := NewWorker(f.worker, f.dir, authorize(func(context.Context, Job) (Authorization, error) { return a, nil }),
+		allowGate(acceptGate), credentialSource(func(context.Context, uuid.UUID, uuid.UUID, int64) (Credential, error) {
+			return Credential{fixtureToken, fp}, nil
+		}), client)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return w
+}
+
+func fakeClickUp(t *testing.T, h http.Handler) *ClickUp {
+	t.Helper()
+	s := httptest.NewUnstartedServer(h)
+	s.TLS = &tls.Config{MinVersion: tls.VersionTLS13}
+	s.StartTLS()
+	t.Cleanup(s.Close)
+	roots := x509.NewCertPool()
+	roots.AddCert(s.Certificate())
+	u, err := url.Parse(s.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return clickUpAt(*u, roots)
+}
+
+func (f *fixture) state(t *testing.T, job Job) (state, knowledge, taskID string, fenced, started bool) {
+	t.Helper()
+	err := f.admin.QueryRow(t.Context(), `
+		SELECT l.state,COALESCE(o.knowledge,''),COALESCE(l.known_task_id,''),l.ever_dispatch_fenced,a.network_start_at IS NOT NULL
+		FROM hp_delivery.attempts a JOIN hp_delivery.effect_lineage l USING(workspace_id,lineage_id)
+		LEFT JOIN hp_delivery.effect_observations o ON o.workspace_id=a.workspace_id AND o.attempt_id=a.attempt_id
+		WHERE a.workspace_id=$1 AND a.attempt_id=$2`, job.Workspace, job.Attempt).Scan(&state, &knowledge, &taskID, &fenced, &started)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return
+}
+
+func TestPostgresSuccessAndSharedBudget(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 1)
+	job, a := f.prepare(t, fp, false)
+	var sends atomic.Int64
+	client := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sends.Add(1)
+		body, err := io.ReadAll(r.Body)
+		var got struct {
+			Name        string
+			Description string
+			Assignees   []json.Number
+		}
+		if err != nil || json.Unmarshal(body, &got) != nil || r.URL.Path != "/api/v2/list/456/task" ||
+			r.Method != http.MethodPost || r.Host == "" || r.ProtoMajor != 1 || !r.Close ||
+			r.Header.Get("Authorization") != fixtureToken || r.Header.Get("Idempotency-Key") != "" ||
+			got.Name != fixtureTitle || got.Description != fixtureBlock || len(got.Assignees) != 1 || got.Assignees[0] != exactAssignee {
+			t.Error("unexpected HTTPS request")
+		}
+		var state string
+		var fenced, started bool
+		tx, err := f.admin.Begin(r.Context())
+		if err != nil {
+			t.Error("read fence: ", err)
+			return
+		}
+		defer tx.Rollback(context.Background())
+		err = tx.QueryRow(r.Context(), `SELECT l.state,l.ever_dispatch_fenced,a.network_start_at IS NOT NULL
+			FROM hp_delivery.effect_lineage l JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
+			WHERE a.workspace_id=$1 AND a.attempt_id=$2 AND l.lineage_id=$3 FOR UPDATE OF l,a NOWAIT`,
+			a.Workspace, job.Attempt, a.Lineage).Scan(&state, &fenced, &started)
+		if err != nil || state != "DISPATCHING" || !fenced || !started {
+			t.Errorf("fence or row lock at HTTP boundary: %s %t %t %v", state, fenced, started, err)
+		}
+		io.WriteString(w, `{"id":"opaque-test-task"}`)
+	}))
+	worker := f.newWorker(t, client, a, fp)
+	var wg sync.WaitGroup
+	results := make(chan Result, 8)
+	for i := 0; i < 8; i++ {
+		wg.Go(func() {
+			got, err := worker.Run(t.Context(), job)
+			if err == nil {
+				results <- got
+			} else if !errors.Is(err, ErrFenced) {
+				t.Errorf("unexpected concurrent result: %v", err)
+			}
+		})
+	}
+	wg.Wait()
+	close(results)
+	var count int
+	for x := range results {
+		count++
+		if x.Disposition != TargetIDObserved || x.TaskID != "opaque-test-task" {
+			t.Errorf("unexpected outcome: %+v", x)
+		}
+	}
+	state, knowledge, id, fenced, started := f.state(t, job)
+	if sends.Load() != 1 || count != 1 || state != "RESULT_ID_OBSERVED" || knowledge != "TARGET_ID_OBSERVED" ||
+		id != "opaque-test-task" || !fenced || !started {
+		t.Fatal("one ID-only observation expected")
+	}
+	other, b := f.prepare(t, fp, false)
+	second := f.newWorker(t, client, b, fp)
+	result, err := second.Run(t.Context(), other)
+	if err != nil || result.Disposition != Ambiguous || sends.Load() != 1 {
+		t.Fatal("shared budget did not hold the second workspace")
+	}
+	var used int
+	if err := f.admin.QueryRow(t.Context(), "SELECT used_count FROM hp_delivery.credential_budget WHERE token_fingerprint=$1", fp[:]).Scan(&used); err != nil || used != 1 {
+		t.Fatal("shared budget was charged more than once")
+	}
+	t.Logf("HTTPS sends=%d; state=%s; knowledge=%s; opaque task ID=%s; shared budget used=%d", sends.Load(), state, knowledge, id, used)
+}
+
+func TestPostgresUnknownAndDenied(t *testing.T) {
+	f := setup(t)
+	for _, name := range []string{"redirect", "401", "403", "429", "503", "malformed", "oversize", "abort", "timeout", "gate", "epoch", "revoked", "expired-facts", "deadline", "cancelled", "credential", "lost-content", "legacy", "crash"} {
+		t.Run(name, func(t *testing.T) {
+			fp := f.budget(t, 1)
+			job, a := f.prepare(t, fp, name == "legacy")
+			var sends atomic.Int64
+			client := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				sends.Add(1)
+				switch name {
+				case "redirect":
+					w.Header().Set("Location", "https://unreachable.invalid/redirected")
+					w.WriteHeader(307)
+				case "401", "403", "429", "503":
+					var status int
+					fmt.Sscan(name, &status)
+					w.WriteHeader(status)
+				case "malformed":
+					io.WriteString(w, `{"id":`)
+				case "oversize":
+					w.Write(bytes.Repeat([]byte(" "), maxResponse+1))
+				case "abort":
+					panic(http.ErrAbortHandler)
+				case "timeout":
+					_, _ = io.Copy(io.Discard, r.Body)
+					select {
+					case <-r.Context().Done():
+					case <-time.After(9 * time.Second):
+					}
+				default:
+					t.Error("unexpected provider request")
+				}
+			}))
+			w := f.newWorker(t, client, a, fp)
+			ctx := t.Context()
+			switch name {
+			case "gate":
+				w.gate = allowGate(func(context.Context, uuid.UUID, int64, func() error) error { return ErrHeld })
+			case "epoch":
+				if _, err := f.admin.Exec(ctx, "UPDATE hp_delivery.destination_connections SET security_epoch=2 WHERE workspace_id=$1", job.Workspace); err != nil {
+					t.Fatal(err)
+				}
+			case "revoked":
+				if _, err := f.admin.Exec(ctx, "UPDATE hp_delivery.destination_connections SET revoked_at=clock_timestamp() WHERE workspace_id=$1", job.Workspace); err != nil {
+					t.Fatal(err)
+				}
+			case "expired-facts", "deadline":
+				if name == "deadline" {
+					a.Deadline = time.Now().Add(-time.Minute)
+				} else {
+					a.FactsUntil = time.Now().Add(-time.Minute)
+				}
+				w = f.newWorker(t, client, a, fp)
+			case "cancelled":
+				var cancel context.CancelFunc
+				ctx, cancel = context.WithCancel(ctx)
+				cancel()
+			case "credential":
+				w.credentials = credentialSource(func(context.Context, uuid.UUID, uuid.UUID, int64) (Credential, error) { return Credential{}, ErrHeld })
+			case "lost-content":
+				rec, err := f.worker.load(ctx, job)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Remove(filepath.Join(f.root, rec.ref.ID.String())); err != nil {
+					t.Fatal(err)
+				}
+			case "crash":
+				fenceInCrashedProcess(t, job)
+			}
+			result, err := w.Run(ctx, job)
+			state, knowledge, id, fenced, started := f.state(t, job)
+			switch name {
+			case "redirect", "401", "403", "429", "503", "malformed", "oversize", "abort", "timeout":
+				if err != nil || result.Disposition != Ambiguous || sends.Load() != 1 || state != "AMBIGUOUS" ||
+					knowledge != "POSSIBLE_EFFECT" || id != "" || !fenced || !started {
+					t.Fatalf("not a fenced unknown outcome: %v %s %s", err, state, knowledge)
+				}
+				restart := f.newWorker(t, client, a, fp)
+				if _, err := restart.Run(t.Context(), job); !errors.Is(err, ErrFenced) || sends.Load() != 1 {
+					t.Fatal("restart repeated create")
+				}
+				if name == "abort" {
+					t.Logf("lost response: state=%s, knowledge=%s, initial sends=1, repeated sends=0", state, knowledge)
+				}
+			case "crash":
+				if !errors.Is(err, ErrFenced) || sends.Load() != 0 || state != "DISPATCHING" || !fenced || started {
+					t.Fatal("crash lost its durable fence")
+				}
+				t.Log("process exited after SQL fence; restarted worker sent 0 requests")
+			default:
+				if !errors.Is(err, ErrHeld) || sends.Load() != 0 || state != "PREPARED" || fenced || started {
+					t.Fatalf("protected request was not held: %v %s", err, state)
+				}
+			}
+		})
+	}
+}
+
+func fenceInCrashedProcess(t *testing.T, job Job) {
+	t.Helper()
+	binary, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.CommandContext(t.Context(), binary, "-test.run=^TestFenceCrashProcess$")
+	cmd.Env = append(os.Environ(), "HIT92_CRASH_WORKSPACE="+job.Workspace.String(), "HIT92_CRASH_ATTEMPT="+job.Attempt.String())
+	out, err := cmd.CombinedOutput()
+	var exit *exec.ExitError
+	if !errors.As(err, &exit) || exit.ExitCode() != 42 {
+		t.Fatalf("fence process failed: %v %s", err, out)
+	}
+}
+
+func TestFenceCrashProcess(t *testing.T) {
+	workspace := os.Getenv("HIT92_CRASH_WORKSPACE")
+	if workspace == "" {
+		t.Skip("used by the restart fixture")
+	}
+	job := Job{uuid.MustParse(workspace), uuid.MustParse(os.Getenv("HIT92_CRASH_ATTEMPT"))}
+	db, err := NewPostgres(connect(t, "HIT92_TEST_WORKER_DSN"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rec, err := db.load(t.Context(), job)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = db.fence(t.Context(), rec); err != nil {
+		t.Fatal(err)
+	}
+	os.Exit(42)
+}
+--- end services/delivery/internal/dispatch/dispatch_linux_test.go ---
+
+--- file services/delivery/internal/dispatch/revoke_linux_test.go ---
+Commit 28d9541cebb280f80de14f32df2f3bffeb8d7cce; Git blob f1308be164ec92e0fc8913106848a6dced8f30cb; SHA-256 5280c58c6a734ef32380e8b0338dfb582ceb58881a22983e863c881877d2dc14; 2667 bytes
+https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/revoke_linux_test.go
+
+package dispatch
+
+import (
+	"context"
+	"errors"
+	"io"
+	"net/http"
+	"sync/atomic"
+	"testing"
+
+	"github.com/google/uuid"
+)
+
+func TestPostgresRevocationAfterStart(t *testing.T) {
+	f := setup(t)
+	fp := f.budget(t, 3)
+	job, auth := f.prepare(t, fp, false)
+	lock := make(chan struct{}, 1)
+	lock <- struct{}{}
+	var revoked atomic.Bool
+	var sends atomic.Int64
+	gate := allowGate(func(ctx context.Context, _ uuid.UUID, _ int64, run func() error) error {
+		select {
+		case <-lock:
+			defer func() { lock <- struct{}{} }()
+		case <-ctx.Done():
+			return ErrHeld
+		}
+		if revoked.Load() {
+			return ErrHeld
+		}
+		return run()
+	})
+	client := fakeClickUp(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sends.Add(1)
+		_, _ = io.Copy(io.Discard, r.Body)
+		select {
+		case <-lock:
+			defer func() { lock <- struct{}{} }()
+		case <-r.Context().Done():
+			return
+		}
+		if _, err := f.admin.Exec(r.Context(), "UPDATE hp_delivery.destination_connections SET revoked_at=clock_timestamp(), security_epoch=2 WHERE workspace_id=$1", job.Workspace); err != nil {
+			t.Error("fixture revocation failed:", err)
+			return
+		}
+		revoked.Store(true)
+		_, _ = io.WriteString(w, `{"id":"in-flight-task"}`)
+	}))
+	worker := f.newWorker(t, client, auth, fp)
+	worker.gate = gate
+	out, err := worker.Run(t.Context(), job)
+	if err != nil || out.Disposition != TargetIDObserved || out.TaskID != "in-flight-task" || !revoked.Load() {
+		t.Fatalf("the previously started request must be recorded after revocation: %+v %v", out, err)
+	}
+	if _, err := worker.Run(t.Context(), job); !errors.Is(err, ErrHeld) || sends.Load() != 1 {
+		t.Fatal("new start was admitted after the gate closed")
+	}
+	t.Log("in-flight request returned its identity after local revocation; new starts=0")
+}
+
+func TestClickUpRefusesAmbiguousTargets(t *testing.T) {
+	client := NewClickUp(nil)
+	if _, err := NewWorker(nil, nil, nil, nil, nil, client); !errors.Is(err, ErrUnwired) {
+		t.Fatal("unwired worker admitted")
+	}
+	for _, p := range []payload{
+		{List: "https://other.example/list", Assignee: "123", Title: "name", Description: "description"},
+		{List: "456/../999", Assignee: "123", Title: "name", Description: "description"},
+		{List: "456", Assignee: "9223372036854775808", Title: "name", Description: "description"},
+	} {
+		if _, err := client.request(p, fixtureToken); !errors.Is(err, ErrHeld) {
+			t.Fatal("unexpected acceptance of unsafe target")
+		}
+	}
+	req, err := client.request(payload{List: "456", Assignee: "123", Title: "name", Description: "description"}, fixtureToken)
+	if err != nil || req.URL.Host != "api.clickup.com" || req.URL.Scheme != "https" {
+		t.Fatal("production origin changed")
+	}
+}
+--- end services/delivery/internal/dispatch/revoke_linux_test.go ---
