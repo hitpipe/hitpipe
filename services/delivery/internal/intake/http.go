@@ -39,7 +39,20 @@ func NewHTTP(s *Service, serverCert tls.Certificate, clientCAs *x509.CertPool, p
 
 type handler struct {
 	service       *Service
+	query         QueryReader
 	processingSAN string
+}
+
+func NewHTTPWithQuery(s *Service, q QueryReader, cert tls.Certificate, roots *x509.CertPool, san string) (*http.Server, error) {
+	if q == nil {
+		return nil, ErrUnavailable
+	}
+	server, err := NewHTTP(s, cert, roots, san)
+	if err != nil {
+		return nil, err
+	}
+	server.Handler = handler{service: s, query: q, processingSAN: san}
+	return server, nil
 }
 
 type errorBody struct {
@@ -57,7 +70,8 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			requestID, validID = id, true
 		}
 	}
-	if r.URL.Path != route || r.Method != http.MethodPost {
+	isQuery := r.URL.Path == queryRoute && h.query != nil
+	if (r.URL.Path != route && !isQuery) || r.Method != http.MethodPost {
 		writeFailure(w, http.StatusNotFound, "NOT_FOUND", requestID)
 		return
 	}
@@ -89,6 +103,20 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+	if isQuery {
+		q, err := DecodeQuery(raw)
+		if err != nil {
+			writeFailure(w, http.StatusBadRequest, "INVALID_QUERY", requestID)
+			return
+		}
+		o, err := h.query.QueryKnownTask(r.Context(), q)
+		if err == nil {
+			writeJSON(w, http.StatusOK, o)
+		} else {
+			writeServiceFailure(w, err, requestID)
+		}
+		return
+	}
 	intent, err := DecodeIntent(raw)
 	if err != nil {
 		var invalidInput invalid
@@ -100,9 +128,15 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	receipt, err := h.service.Accept(r.Context(), intent)
-	switch {
-	case err == nil:
+	if err == nil {
 		writeJSON(w, http.StatusAccepted, receipt)
+		return
+	}
+	writeServiceFailure(w, err, requestID)
+}
+
+func writeServiceFailure(w http.ResponseWriter, err error, requestID uuid.UUID) {
+	switch {
 	case errors.Is(err, ErrDenied):
 		writeFailure(w, http.StatusForbidden, "SCOPE_DENIED", requestID)
 	case errors.Is(err, ErrNotFound):
