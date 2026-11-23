@@ -29,7 +29,7 @@ type QueryService struct {
 	authority   ReadAuthority
 	gate        intake.StartGate
 	credentials Credentials
-	clickup     *ClickUp
+	reads       *readPool
 }
 
 func NewQueryService(db *Postgres, files ObservationFiles, authority ReadAuthority, gate intake.StartGate,
@@ -37,7 +37,7 @@ func NewQueryService(db *Postgres, files ObservationFiles, authority ReadAuthori
 	if db == nil || files == nil || authority == nil || gate == nil || credentials == nil || clickup == nil {
 		return nil, ErrUnwired
 	}
-	return &QueryService{db, files, authority, gate, credentials, clickup}, nil
+	return &QueryService{db, files, authority, gate, credentials, newReadPool(clickup)}, nil
 }
 
 func (s *QueryService) QueryKnownTask(ctx context.Context, q intake.Query) (intake.TaskObservation, error) {
@@ -53,7 +53,7 @@ func (s *QueryService) QueryKnownTask(ctx context.Context, q intake.Query) (inta
 	}
 	var k known
 	var expected readback.Expected
-	var ex *exchange
+	var ex *readExchange
 	start, stop := context.WithTimeout(ctx, 2*time.Second)
 	err = s.gate.WithOpen(start, q.Workspace, q.Epoch, func() error {
 		k, err = s.db.known(start, q, a)
@@ -77,16 +77,16 @@ func (s *QueryService) QueryKnownTask(ctx context.Context, q intake.Query) (inta
 		if err != nil || cred.Fingerprint != k.fingerprint {
 			return intake.ErrDenied
 		}
-		req, err := s.clickup.readRequest(k.task, cred.Token)
+		req, err := s.reads.upstream.readRequest(k.task, cred.Token)
 		if err != nil {
 			return intake.ErrConflict
 		}
-		ex, err = s.clickup.start(start, req, func() error { return s.db.chargeRead(start, k) })
+		ex, err = s.reads.start(start, req, func() error { return s.db.chargeRead(start, k) })
 		return err
 	})
 	stop()
 	if ex != nil {
-		defer ex.conn.Close()
+		defer ex.finish(false)
 	}
 	if errors.Is(err, errReadBudget) {
 		return zero, intake.ErrQuota

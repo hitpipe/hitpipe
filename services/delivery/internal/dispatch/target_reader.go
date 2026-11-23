@@ -28,13 +28,12 @@ func (c *ClickUp) readRequest(id, token string) (*http.Request, error) {
 	if err != nil {
 		return nil, ErrHeld
 	}
-	req.Close = true
 	req.Header.Set("Authorization", token)
 	return req, nil
 }
 
 type targetReader struct {
-	ex   *exchange
+	ex   *readExchange
 	id   string
 	code string
 }
@@ -43,7 +42,9 @@ func (r *targetReader) Read(ctx context.Context, id string) (readback.Observatio
 	if id != r.id {
 		return readback.Observation{}, verifytarget.Provenance{}, ErrHeld
 	}
-	response, err := r.ex.readBounded(ctx)
+	response, reusable, err := r.ex.receive(ctx)
+	keep := false
+	defer func() { r.ex.finish(keep && reusable && ctx.Err() == nil) }()
 	proof := verifytarget.Provenance{Source: observationSource, ObservedAt: time.Now().UTC().Truncate(time.Microsecond)}
 	r.code = "READ_FAILED"
 	if err != nil {
@@ -65,6 +66,7 @@ func (r *targetReader) Read(ctx context.Context, id string) (readback.Observatio
 			return readback.Observation{}, proof, ErrHeld
 		}
 		r.code = "READ_OBSERVED"
+		keep = true
 		return o, proof, nil
 	}
 	return readback.Observation{}, proof, ErrHeld

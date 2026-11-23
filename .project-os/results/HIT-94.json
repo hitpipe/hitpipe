@@ -1,0 +1,290 @@
+{
+  "subject": "HIT-94",
+  "materialized_result": "Ограниченный TLS-пул ClickUp GET с прежними проверками actual-start, epoch и credential_budget. На четырёх одинаково настроенных сериях число новых TCP после прогрева для успешных чтений снизилось с 1920 до 10. Повторных физических GET в пределах одного вызова нет.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/docs/readback-transport.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/read_pool.go",
+    "https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/query.go",
+    "https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/target_reader.go",
+    "https://github.com/hitpipe/hitpipe/blob/28d9541cebb280f80de14f32df2f3bffeb8d7cce/services/delivery/internal/dispatch/read_pool_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8/services/delivery/internal/dispatch/readback_benchmark_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8/services/delivery/tests/run_hit91.ps1",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/docs/readback-transport.md",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/baseline-plan.md",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurement-review.txt",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurements-control.txt",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurements.txt",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/review-implementation.txt",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/review-test-sources.txt",
+    "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/verification.txt"
+  ],
+  "verification": {
+    "contract_revision": 2,
+    "baseline_code": "0914c3cbdaa82b01b15231d39ceffcec983eea7d",
+    "baseline_harness": "9aaf5f88dbc8eb4a511a8fafa0160d79d5e1f9b8",
+    "code_commit": "28d9541cebb280f80de14f32df2f3bffeb8d7cce",
+    "dependency": {
+      "subject": "HIT-93",
+      "review": "PASS WITH NOTES",
+      "accepted": true,
+      "pull_request": "https://github.com/hitpipe/hitpipe/pull/99",
+      "merged": false
+    },
+    "environment": {
+      "machine": "Intel Core i5-9300H @ 2.40 GHz, 8 логических CPU, 8053120 kB памяти по /proc",
+      "os": "Linux 6.18.40.1-microsoft-standard-WSL2 amd64",
+      "go": "1.27.2",
+      "docker": "29.3.1",
+      "postgresql": "18.7 Alpine linux/amd64; fsync, full_page_writes, synchronous_commit on",
+      "postgresql_digest": "sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366",
+      "data": "Синтетический HTTPS ClickUp и изолированный PostgreSQL"
+    },
+    "benchmark_command": "pwsh -NoProfile -File tests/run_hit91.ps1 -ReadbackBenchmark",
+    "correctness_command": "pwsh -NoProfile -File tests/run_hit91.ps1",
+    "go_test_command": "go test -v -race -count=1 ./...",
+    "go_test_exit_code": 0,
+    "go_vet_command": "go vet ./...",
+    "go_vet_exit_code": 0,
+    "workloads": {
+      "warmup_requests": 16,
+      "measured_requests": 96,
+      "repetitions_per_variant_per_scenario": 10,
+      "serial_concurrency": 1,
+      "parallel_concurrency": 4,
+      "run_order": [
+        "baseline",
+        "candidate",
+        "candidate",
+        "baseline"
+      ]
+    },
+    "tcp_new_after_warmup_for_success": {
+      "baseline": 1920,
+      "candidate": 10,
+      "reduction_percent": 99.48,
+      "totals_in_run_order": [
+        960,
+        5,
+        5,
+        960
+      ]
+    },
+    "statistics": {
+      "verified-serial": {
+        "baseline": {
+          "tcp_warmup": {
+            "median": 16,
+            "min": 16,
+            "max": 16
+          },
+          "tcp_measured": {
+            "median": 96,
+            "min": 96,
+            "max": 96
+          },
+          "p50_us": {
+            "median": 45987,
+            "min": 37417,
+            "max": 61781
+          },
+          "p95_us": {
+            "median": 56108.5,
+            "min": 42421,
+            "max": 71797
+          },
+          "requests_per_second": {
+            "median": 20.752452214380227,
+            "min": 15.378000421906014,
+            "max": 26.081460902782187
+          }
+        },
+        "candidate": {
+          "tcp_warmup": {
+            "median": 1,
+            "min": 1,
+            "max": 1
+          },
+          "tcp_measured": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "p50_us": {
+            "median": 51758.5,
+            "min": 35841,
+            "max": 59813
+          },
+          "p95_us": {
+            "median": 63191.5,
+            "min": 40443,
+            "max": 68433
+          },
+          "requests_per_second": {
+            "median": 18.674410145295326,
+            "min": 15.291807103729345,
+            "max": 27.542265522927572
+          }
+        }
+      },
+      "verified-parallel": {
+        "baseline": {
+          "tcp_warmup": {
+            "median": 16,
+            "min": 16,
+            "max": 16
+          },
+          "tcp_measured": {
+            "median": 96,
+            "min": 96,
+            "max": 96
+          },
+          "p50_us": {
+            "median": 80613,
+            "min": 62754,
+            "max": 97963
+          },
+          "p95_us": {
+            "median": 111248.5,
+            "min": 72161,
+            "max": 148169
+          },
+          "requests_per_second": {
+            "median": 46.16114511548685,
+            "min": 39.35578029645653,
+            "max": 63.665917216469225
+          }
+        },
+        "candidate": {
+          "tcp_warmup": {
+            "median": 3,
+            "min": 3,
+            "max": 3
+          },
+          "tcp_measured": {
+            "median": 1,
+            "min": 1,
+            "max": 1
+          },
+          "p50_us": {
+            "median": 95760,
+            "min": 91721,
+            "max": 103141
+          },
+          "p95_us": {
+            "median": 118387,
+            "min": 103697,
+            "max": 146953
+          },
+          "requests_per_second": {
+            "median": 40.23501058958131,
+            "min": 36.46830425087307,
+            "max": 43.310287451162814
+          }
+        }
+      },
+      "limited-parallel": {
+        "baseline": {
+          "tcp_warmup": {
+            "median": 16,
+            "min": 16,
+            "max": 16
+          },
+          "tcp_measured": {
+            "median": 96,
+            "min": 96,
+            "max": 96
+          },
+          "p50_us": {
+            "median": 60651,
+            "min": 39533,
+            "max": 63702
+          },
+          "p95_us": {
+            "median": 75161,
+            "min": 46171,
+            "max": 94187
+          },
+          "requests_per_second": {
+            "median": 64.61272221466757,
+            "min": 60.60233230007555,
+            "max": 98.09152856362063
+          }
+        },
+        "candidate": {
+          "tcp_warmup": {
+            "median": 16,
+            "min": 16,
+            "max": 16
+          },
+          "tcp_measured": {
+            "median": 96,
+            "min": 96,
+            "max": 96
+          },
+          "p50_us": {
+            "median": 62912,
+            "min": 59273,
+            "max": 68754
+          },
+          "p95_us": {
+            "median": 86153.5,
+            "min": 72585,
+            "max": 152246
+          },
+          "requests_per_second": {
+            "median": 59.50982558932275,
+            "min": 52.83362821074561,
+            "max": 64.62192706976775
+          }
+        }
+      }
+    },
+    "correctness": [
+      "TaskObservation сохранил identity/knowledge/проверенные атрибуты при новом и переиспользованном TLS. Каждый вызов проходит проверку полномочий, SQL/budget и actual-start gate. После barrier не начался ни один старый-epoch GET.",
+      "Проверены TLS/SAN, ограниченные leases и idle, отмена, timeout, 403/429, redirect, малформатный и слишком большой ответ, сброс соединения. В каждом вызове — не более одного GET.",
+      "Общий credential budget настоящей PostgreSQL учитывает запросы двух workspace по одному token fingerprint. HTTP 429, provider reset и Retry-After не вызывают скрытый повтор. Create, Publisher и SQL остались прежними."
+    ],
+    "evidence": {
+      "baseline-plan.md": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/baseline-plan.md",
+        "sha256": "e22218660d6fd3814a23c368cf8cbdac258a21268acd101c06938caaa77abb38",
+        "bytes": 3704
+      },
+      "measurement-review.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurement-review.txt",
+        "sha256": "c51914131ce4fad91b52483bc7c86b5201122edac735e9f972e765774201d265",
+        "bytes": 20017
+      },
+      "measurements-control.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurements-control.txt",
+        "sha256": "bf3ddf008d2cc00a32650a967a0ae934c47d9f9a6ee882300c775371743e2a5d",
+        "bytes": 35123
+      },
+      "measurements.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/measurements.txt",
+        "sha256": "b4b810e5a9ec4072f5411f47d543e6b25e5b0e4ea1a6f10244c853e3ec637d58",
+        "bytes": 35031
+      },
+      "review-implementation.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/review-implementation.txt",
+        "sha256": "d2debffcd4bcf6cce1d6e75ebf09767e894cb4c2446c39bc8002bdf99ae9612d",
+        "bytes": 66686
+      },
+      "review-test-sources.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/review-test-sources.txt",
+        "sha256": "0b9dbcd1eab060f12f5c076b053cdb0b6991f367fcde60e69695d4f96f6d44f6",
+        "bytes": 61747
+      },
+      "verification.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/69411c52a39b3aeb8d19156e48df11674559376e/services/delivery/evidence/HIT-94/verification.txt",
+        "sha256": "7251e2f7220322127bd28bef46954d9880964888adfc0bc33cb0eb72457f9132",
+        "bytes": 14732
+      }
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Сокращение числа новых TCP подтверждено на локальных стендах. Медианные задержки и throughput в этих измерениях ухудшились, включая контрольный 429 без reuse. Отчёт содержит разброс и не заявляет ускорение по задержке или пропускной способности.",
+    "Измерения не включали рабочий ClickUp, рабочие credentials, распределённый runtime или deployment. Параметры стенда не являются нормами продукта."
+  ]
+}

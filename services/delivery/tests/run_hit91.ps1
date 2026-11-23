@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param()
+param([switch] $ReadbackBenchmark)
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $false
 
@@ -48,7 +48,11 @@ try {
     $runnerEnvironment = @('-e', 'GOPROXY=off', '-e', 'GOSUMDB=off', '-e', 'HIT91_REQUIRE_POSTGRES=1',
                            '-e', "HIT91_TEST_APP_DSN=$app", '-e', "HIT91_TEST_ADMIN_DSN=$admin",
                            '-e', 'HIT92_REQUIRE_POSTGRES=1', '-e', "HIT92_TEST_WORKER_DSN=$worker")
-    Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment $go sh -ec 'go version; go test -v -race -count=1 ./...; echo go-test-exit=0; go vet ./...; echo go-vet-exit=0'
+    if ($ReadbackBenchmark) {
+        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment -e HIT94_BENCHMARK=1 $go sh -ec 'uname -smr; go version; grep -m 1 "model name" /proc/cpuinfo; grep MemTotal /proc/meminfo; cat /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max; echo "go test -v -count=1 -run ^TestHIT94ReadbackBenchmark$ ./internal/dispatch"; go test -v -count=1 -run "^TestHIT94ReadbackBenchmark$" ./internal/dispatch; echo benchmark-exit=0'
+    } else {
+        Invoke-Docker run --rm --platform linux/amd64 --network $run @mounts -w /src @runnerEnvironment $go sh -ec 'go version; go test -v -race -count=1 ./...; echo go-test-exit=0; go vet ./...; echo go-vet-exit=0'
+    }
 } finally {
     & docker rm -f -v "$run-pg" 2>$null
     & docker network rm $run 2>$null
