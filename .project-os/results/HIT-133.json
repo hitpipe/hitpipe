@@ -1,0 +1,149 @@
+{
+  "subject": "HIT-133",
+  "materialized_result": "Один процесс Delivery собирает mTLS-приём и readback, PostgreSQL, приватное хранилище, worker create и Publisher. На изолированном стенде зафиксированы одна запись у ClickUp, единственное применение TaskObservation в Processing и устойчивое восстановление с тем же сообщением после HTTP 503.",
+  "canonical_link": "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/docs/runtime-hit133.md",
+  "changed_artifacts": [
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/main_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/normal_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/cmd/delivery/fixture_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/deliveryrun/runtime_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/deliveryrun/scheduler_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/intake/content_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/fixture_clickup_linux.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/internal/dispatch/runtime_linux_test.go",
+    "https://github.com/hitpipe/hitpipe/blob/4ad31432e0417de95b6d6f7fcac60ae55b8e9d52/services/delivery/tests/run_hit91.ps1",
+    "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/docs/runtime-hit133.md",
+    "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/dependency-audit.json",
+    "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/review-implementation.txt",
+    "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/review-test-sources.txt",
+    "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/verification.txt"
+  ],
+  "verification": {
+    "contract_revision": 1,
+    "code_commit": "4ad31432e0417de95b6d6f7fcac60ae55b8e9d52",
+    "baseline": "9f122f98460d0a95acc734172197184942e86d7c",
+    "command": "pwsh -NoProfile -File tests/run_hit91.ps1 -RuntimeRevision 4ad31432e0417de95b6d6f7fcac60ae55b8e9d52",
+    "environment": "Docker 29.3.1, Go 1.27.2 Linux amd64, PostgreSQL 18.7 Alpine с fsync/full_page_writes/synchronous_commit, синтетические TLS ClickUp / mTLS Processing и OPS",
+    "postgresql_digest": "sha256:fa1b61f5a4844f4d4b73c9b15716cfc75fe70c931f2d32723630f3b900056366",
+    "migration_sha256": "9b23a5a0f8617025f20012f38d0b961010d9d4fbbbc47c3059c1b651a16f155e",
+    "dependencies": [
+      {
+        "issue": "HIT-70",
+        "jira_status": "Done",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/49",
+        "merged": false,
+        "head": "a17804f82aac892038f5dd5f5f96db1b45453d8c",
+        "accepted_result": "https://github.com/hitpipe/hitpipe/blob/465cabdc1ca7a83a88ae1b9aaa8cd6678a9a7455/.project-os/results/HIT-70.json",
+        "implementation_revision": "b7eba4a435e10b25fccaea9e2f3dc57bda57ce53",
+        "included_in_candidate": true,
+        "composition": "Схема PostgreSQL 18.7, RLS и права ролей."
+      },
+      {
+        "issue": "HIT-91",
+        "jira_status": "Done",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/93",
+        "merged": false,
+        "head": "a226778c6e40bac897965370ef43ce7b7fa6b369",
+        "accepted_result": "https://github.com/hitpipe/hitpipe/blob/a226778c6e40bac897965370ef43ce7b7fa6b369/.project-os/results/HIT-91.json",
+        "implementation_revision": "3c671f1f22d5e3466b2218b605b28545875c907e",
+        "included_in_candidate": true,
+        "composition": "Приём DeliveryIntent, mTLS, транзакционная квитанция, файловый контент."
+      },
+      {
+        "issue": "HIT-92",
+        "jira_status": "Done",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/98",
+        "merged": false,
+        "head": "d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3",
+        "accepted_result": "https://github.com/hitpipe/hitpipe/blob/d90f602b50ecd1db5ed1a3dc30d80cd80597e1e3/.project-os/results/HIT-92.json",
+        "implementation_revision": "42f3df82f1f73ddd45fb1c22d59d5d843b876c45",
+        "included_in_candidate": true,
+        "composition": "Worker.Run, fence и однократное создание."
+      },
+      {
+        "issue": "HIT-93",
+        "jira_status": "Done",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/99",
+        "merged": false,
+        "head": "0914c3cbdaa82b01b15231d39ceffcec983eea7d",
+        "accepted_result": "https://github.com/hitpipe/hitpipe/blob/0914c3cbdaa82b01b15231d39ceffcec983eea7d/.project-os/results/HIT-93.json",
+        "implementation_revision": "f8498a4d4eccfd537149ecff17b9d0936e8f1bb2",
+        "included_in_candidate": true,
+        "composition": "QueryService, TaskObservation и Publisher с durable retry."
+      },
+      {
+        "issue": "HIT-94",
+        "jira_status": "Done",
+        "pull_request": "https://github.com/hitpipe/hitpipe/pull/100",
+        "merged": false,
+        "head": "9f122f98460d0a95acc734172197184942e86d7c",
+        "accepted_result": "https://github.com/hitpipe/hitpipe/blob/9f122f98460d0a95acc734172197184942e86d7c/.project-os/results/HIT-94.json",
+        "implementation_revision": "28d9541cebb280f80de14f32df2f3bffeb8d7cce",
+        "included_in_candidate": true,
+        "composition": "Принятый пул HTTPS safe-read, основа ветки HIT-133."
+      }
+    ],
+    "exit_codes": {
+      "process_launch_command": 0,
+      "standard_go_build": 0,
+      "fixture_go_build_race": 0,
+      "go_test_race_count_1": 0,
+      "go_vet": 0,
+      "go_vet_fixture": 0,
+      "expected_closed_startups": 1
+    },
+    "scenario": {
+      "readiness": [
+        "CLOSED",
+        "READY",
+        "HTTP 503 при недоступной authority",
+        "READY",
+        "HTTP 503 при недоступном хранилище",
+        "READY"
+      ],
+      "delivery_intents": 1,
+      "stable_receipt_on_duplicate_and_restart": true,
+      "clickup_create_requests": 1,
+      "clickup_get_requests": 2,
+      "process_kills": 2,
+      "known_id_preserved": true,
+      "verified_observations": 1,
+      "processing_post_statuses": [
+        503,
+        202
+      ],
+      "same_task_observation_message_id_and_body": true,
+      "processing_successful_applications": 1,
+      "outbox_final_state": "ACKED",
+      "due_jobs_after_ack": 0
+    },
+    "evidence": {
+      "dependency-audit.json": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/dependency-audit.json",
+        "sha256": "cad3af4d5cf1ebf4409d462639be728b92649e6d7e5b589d3592cacab0495057",
+        "bytes": 4421
+      },
+      "review-implementation.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/review-implementation.txt",
+        "sha256": "9b42444ed1cdb0681750566ca5933f0ef536949c34c4f82dbe98d121040bf6d9",
+        "bytes": 76193
+      },
+      "review-test-sources.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/review-test-sources.txt",
+        "sha256": "6fddc343161480dfba63055487fc313a9c5ea19308e91484db50298fb6d05b96",
+        "bytes": 63017
+      },
+      "verification.txt": {
+        "locator": "https://github.com/hitpipe/hitpipe/blob/6c0d7ab0cf85a667f47ef27e61721b5abb8b9a26/services/delivery/evidence/HIT-133/verification.txt",
+        "sha256": "2d53c5cf2d1734a08fc5ac9a9043f839a8770f4f04cb8ab99ae85f7bce71109f",
+        "bytes": 16665
+      }
+    }
+  },
+  "deviations": [],
+  "known_limitations": [
+    "Исполнительный профиль TEST привязывает только локальные двойники, синтетическую authority и loopback. Обычная сборка завершает работу закрытой, пока владелец runtime не подключит рабочие адаптеры.",
+    "Открытые PR зависимостей входят через историю ветки HIT-94. Монтаж в рабочую среду, реальные права IAM, credential provisioning и общая политика хранения относятся к последующим карточкам.",
+    "Если create успел начаться, но native ID не был записан, сохраняется fence и неопределённость. Процесс не начинает повторный create и не ищет задачу по эвристике."
+  ]
+}
