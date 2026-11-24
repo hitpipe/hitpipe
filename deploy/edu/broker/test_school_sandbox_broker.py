@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import unittest
 from uuid import uuid4
 
-from school_sandbox_broker import BINARIES, READY, Broker, Slots, read_json, write_private
+from school_sandbox_broker import BINARIES, READY, Broker, Slots, read_json, require_socket_paths, write_private
 
 
 ISSUER = "https://school.example.test"
@@ -144,6 +144,11 @@ class BrokerTest(unittest.TestCase):
         self.broker.reconcile()
         self.assertFalse(ready.exists())
         self.assertEqual(self.probes, [])
+
+    def test_socket_path_limit_counts_bytes_before_provisioning(self):
+        require_socket_paths(Path("/home/deploy/.hp-school/private"))
+        with self.assertRaisesRegex(ValueError, "ready root is too long"):
+            require_socket_paths(Path("/tmp") / ("а" * 27))
 
 
 if __name__ == "__main__":

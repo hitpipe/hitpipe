@@ -299,10 +299,15 @@ async function waitForSession(origin, token, process) {
 async function run() {
   const ready = await json(join(share, 'ready.json'));
   ready.securityEpoch ??= 7;
+  const path = name => join(share, name);
+  const processingSocket = path(ready.processingSocket);
+  const providerSocket = path('provider.sock');
+  if ([processingSocket, providerSocket].some(socket => Buffer.byteLength(socket) > 107)) {
+    throw new Error('School runtime directory is too long for its Unix sockets');
+  }
   await mkdir(report, { recursive: true, mode: 0o700 });
   hostPkiDirectory = await mkdtemp(join(share, 'host-pki-'));
   const pki = await hostTLS(hostPkiDirectory);
-  const path = name => join(share, name);
   const bffCert = path(ready.certPath);
   const bffKey = path(ready.keyPath);
   const processingCa = path(ready.caPath);
@@ -311,10 +316,10 @@ async function run() {
   const runtimeId = randomUUID();
   const iamOrigin = await startIAM(ready, pki, bffCA, bffFingerprint, runtimeId);
   const processing = {
-    origin: await relay(path(ready.processingSocket)), serverName: ready.processingServerName, ca: processingCa,
+    origin: await relay(processingSocket), serverName: ready.processingServerName, ca: processingCa,
   };
   const { startMetadata } = await import('../browser-metadata/metadata.mjs');
-  const observe = providerObservation(path('provider.sock'));
+  const observe = providerObservation(providerSocket);
   const metadata = await startMetadata({ ready, pki, bffCA, bffFingerprint, listen, observe });
   const publicOrigin = 'http://' + host + ':' + webPort;
   const bffConfig = path('bff-config.json');
@@ -328,7 +333,7 @@ async function run() {
       aliases: { price: ready.priceAlias, list: ready.listAlias, assignee: ready.assigneeAlias },
     } } : {}),
     ...(schoolStripeEvents ? { schoolStripeEvents, schoolStripeWorkspaceId: ready.workspaceId,
-      schoolStripeSocket: path('provider.sock'),
+      schoolStripeSocket: providerSocket,
     } : {}),
   }));
   const next = start(process.execPath, ['server.mjs', '--iam-test-transport'], frontend, {

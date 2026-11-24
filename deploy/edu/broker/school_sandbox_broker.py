@@ -28,10 +28,19 @@ FILE_LIMIT = 8192
 MAX_SLOTS = 1024
 START_TIMEOUT = 300
 RETRY_DELAY = 20
+UNIX_PATH_LIMIT = 107
 READY = "gateway-ready.json"
 EXECUTABLES = ("intake", "processing", "delivery-offline-receipt", "school-backend")
 BINARIES = (*EXECUTABLES, "binaries.sha256")
 ABSENT_STATES = {"inactive", "failed"}
+
+
+def require_socket_paths(root: Path):
+    # The backend binds inside the container, but Node connects through the
+    # host path. Linux's pathname sockets have 108 bytes including the NUL.
+    longest_socket = root / "t0123456789abcd0" / "run.XXXXXX" / "bridge" / "processing.sock"
+    if len(os.fsencode(longest_socket)) > UNIX_PATH_LIMIT:
+        raise ValueError("School ready root is too long for its Unix sockets; select a shorter absolute path")
 
 
 def private_directory(path: Path):
@@ -405,6 +414,10 @@ def main():
     paths = (config.registry, config.ready_root, config.binaries, config.frontend, config.node, config.go, config.sources)
     if not all(path.is_absolute() for path in paths):
         parser.error("File arguments must be absolute")
+    try:
+        require_socket_paths(config.ready_root)
+    except ValueError as exc:
+        parser.error(str(exc))
     if (not (config.frontend / ".next/BUILD_ID").is_file() or not config.sources.is_dir()
             or not all(path.is_file() and os.access(path, os.X_OK) for path in (config.node, config.go))):
         parser.error("Expected the built frontend, pinned source archive and Node/Go executables")
