@@ -35,6 +35,7 @@ function validateConfig(config) {
   }
   assert.ok(isAbsolute(config.artifactDir), 'artifactDir: нужен абсолютный путь');
   assert.ok(config.schoolAi === undefined || typeof config.schoolAi === 'boolean', 'schoolAi: ожидается true или false');
+  assert.ok(config.schoolStripeEvents === undefined || typeof config.schoolStripeEvents === 'boolean');
   assert.ok(!/[\x00-\x20\x7f;,]/.test(config.sessionToken), 'Некорректная форма значения сеанса');
   return config;
 }
@@ -320,7 +321,18 @@ async function run(config) {
     await page.screenshot({ path: join(config.artifactDir, '02-operation-active.png'), fullPage: true });
     console.log('Браузер подтвердил черновик, готовность, репетицию и состояние ACTIVE.');
 
-    if (config.stripeTriggerUrl) {
+    if (config.schoolStripeEvents) {
+      assert.equal(config.stripeTriggerUrl, undefined, 'Сценарий GUI должен запускаться только из браузера');
+      const path = target => target === '/api/v1/school/stripe-events';
+      const paid = button('Отправить тестовую оплату');
+      const replay = button('Повторить событие оплаты');
+      await expect(paid).toBeEnabled();
+      assert.deepEqual(await clickAndRead(paid, path, 202), { state: 'SUBMITTED', kind: 'paid' });
+      await expect(page.getByText('Тестовый платёж принят. Проверьте статус в списке дел.')).toBeVisible();
+      assert.deepEqual(await clickAndRead(paid, path, 202), { state: 'SUBMITTED', kind: 'paid' });
+      assert.deepEqual(await clickAndRead(replay, path, 202), { state: 'SUBMITTED', kind: 'replay' });
+      await expect(page.getByText('Событие оплаты принято повторно. Проверьте список дел.')).toBeVisible();
+    } else if (config.stripeTriggerUrl) {
       const trigger = await fetch(config.stripeTriggerUrl, {
         method: 'POST', signal: AbortSignal.timeout(10_000), redirect: 'error',
       });
@@ -331,7 +343,7 @@ async function run(config) {
     if (proof.case_state !== undefined) assert.equal(proof.case_state, 'CONFIRMED');
     const [listResponse] = await Promise.all([
       responseFor('GET', path => path === `${workspace}/cases`),
-      page.getByRole('link', { name: 'К списку дел', exact: true }).click(),
+      page.getByRole('link', { name: config.schoolStripeEvents ? 'Открыть список дел' : 'К списку дел', exact: true }).click(),
     ]);
     assert.equal(listResponse.status(), 200, 'Рабочая область должна прочитать дела через BFF');
     const list = await listResponse.json();
@@ -359,17 +371,24 @@ async function run(config) {
     await expect(details.getByText('Результат проверен', { exact: true })).toBeVisible();
     await expect(details.getByTestId('field-case-id')).toHaveText(proof.case_id);
     const link = details.getByRole('link', { name: 'Открыть подтверждённый результат', exact: true });
-    await expect(link).toBeVisible();
-    const href = new URL(await link.getAttribute('href'));
-    assert.equal(href.protocol, 'https:');
-    assert.equal(decodeURIComponent(href.pathname.split('/').filter(Boolean).at(-1)), proof.task_id,
-      'Ссылка результата должна указывать на задачу, которую прочитал Delivery');
+    if (config.schoolStripeEvents) {
+      await expect(link).toHaveCount(0);
+      await expect(details.getByText('Номер учебной задачи ClickUp', { exact: true })).toBeVisible();
+      await expect(details.getByText(proof.task_id, { exact: true })).toBeVisible();
+    } else {
+      await expect(link).toBeVisible();
+      const href = new URL(await link.getAttribute('href'));
+      assert.equal(href.protocol, 'https:');
+      assert.equal(decodeURIComponent(href.pathname.split('/').filter(Boolean).at(-1)), proof.task_id,
+        'Ссылка результата должна указывать на задачу, которую прочитал Delivery');
+    }
     await page.screenshot({ path: join(config.artifactDir, '03-case-confirmed.png'), fullPage: true });
 
     await writeFile(join(config.artifactDir, 'browser-proof.json'), JSON.stringify({
       browser: chromium.name(),
       browser_version: browser.version(),
       ...(config.schoolAi ? { assistant_proposal_applied: true } : {}),
+      ...(config.schoolStripeEvents ? { stripe_payment_and_replay_from_browser: true } : {}),
       operation_id: operation.operation_id,
       case_id: proof.case_id,
       clickup_task_id: proof.task_id,
@@ -380,7 +399,7 @@ async function run(config) {
       outcome_knowledge: detail.case.outcome_knowledge,
       last_observation_at: detail.last_observation_at,
     }, null, 2) + '\n', { mode: 0o600 });
-    console.log('Браузер показал «Подтверждено». Ссылка совпала с единственной созданной и прочитанной задачей ClickUp.');
+    console.log('Браузер показал «Подтверждено». Совпал номер единственной созданной и прочитанной задачи ClickUp.');
   } catch (error) {
     if (page) {
       const alerts = await page.getByRole('alert').allTextContents().catch(() => []);

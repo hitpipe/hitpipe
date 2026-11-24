@@ -3,7 +3,7 @@ import { randomUUID, X509Certificate } from 'node:crypto';
 import { once } from 'node:events';
 import { createServer as httpServer, request as httpRequest } from 'node:http';
 import { createServer as httpsServer } from 'node:https';
-import { createConnection, createServer as tcpServer } from 'node:net';
+import { createConnection, createServer as tcpServer, isIPv4 } from 'node:net';
 import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -11,6 +11,8 @@ import { promisify } from 'node:util';
 
 process.umask(0o077);
 const host = '127.0.0.1';
+const internalHost = process.env.HITPIPE_SCHOOL_INTERNAL_HOST ?? host;
+if (!isIPv4(internalHost) || !internalHost.startsWith('127.')) throw new Error('The school control plane must use an IPv4 loopback address');
 const input = process.argv.slice(2);
 if (input.length !== 3 || input.some(value => !value)) {
   throw new Error('Usage: host.mjs SHARE FRONTEND ARTIFACT_DIR');
@@ -46,14 +48,14 @@ function start(program, args, cwd, extraEnv = {}) {
   return { child, done };
 }
 
-async function listen(server, port = 0) {
+async function listen(server, port = 0, bindHost = host) {
   const peers = new Set();
   server.on('connection', socket => {
     peers.add(socket);
     socket.on('close', () => peers.delete(socket));
   });
   try {
-    server.listen({ host, port });
+    server.listen({ host: bindHost, port });
     await once(server, 'listening');
   } catch (error) {
     for (const peer of peers) peer.destroy();
@@ -162,8 +164,8 @@ async function startIAM(ready, hostPki, bffCA, bffFingerprint, runtimeId) {
       return send(res, 404, failure('NOT_FOUND'));
     })().catch(() => { if (!res.headersSent) send(res, 503, failure('IAM_FIXTURE_UNAVAILABLE')); });
   });
-  const port = await listen(server, 8443);
-  return 'https://' + host + ':' + port;
+  const port = await listen(server, 8443, internalHost);
+  return 'https://' + internalHost + ':' + port;
 }
 
 async function relay(socket) {
@@ -223,7 +225,7 @@ function providerObservation(socketPath) {
 async function proofServer() {
   const route = '/proof/' + randomUUID();
   const trigger = '/stripe-fixture/' + randomUUID();
-  const simulator = process.env.HITPIPE_SCHOOL_EVENT;
+  const simulator = schoolStripeEvents ? undefined : process.env.HITPIPE_SCHOOL_EVENT;
   if (simulator && !simulator.startsWith('/')) throw new Error('The event launcher path must be absolute');
   const run = promisify(execFile);
   let submission;
@@ -317,7 +319,7 @@ async function run() {
   const bffConfig = path('bff-config.json');
   await writeFile(bffConfig, JSON.stringify({
     publicOrigin, iamOrigin, iamServerName: 'iam.demo.test', iamCa: pki.caPath, bffCert, bffKey,
-    controlHost: host, controlCa: pki.caPath, controlCert: pki.certPath('bff-control.demo.test'),
+    controlHost: internalHost, controlCa: pki.caPath, controlCert: pki.certPath('bff-control.demo.test'),
     controlKey: pki.keyPath('bff-control.demo.test'), controlIamName: 'iam-control.demo.test',
     controlIamFingerprint: tlsFingerprint(await readFile(pki.certPath('iam-control.demo.test'))),
     runtimeId, generation: 1, owners: { processing, ...metadata },
@@ -362,7 +364,7 @@ async function run() {
     priceAlias: ready.priceAlias, listAlias: ready.listAlias, assigneeAlias: ready.assigneeAlias,
     serviceLabel: ready.serviceLabel, clickupProofUrl: proof.url, stripeTriggerUrl: proof.trigger, artifactDir: report,
     frontendRoot: frontend, chromiumExecutable: process.env.HITPIPE_CHROMIUM_EXECUTABLE,
-    schoolAi: schoolAiEnabled,
+    schoolAi: schoolAiEnabled, schoolStripeEvents,
   });
   await safeWrite(join(report, 'web-ready.json'), { origin: publicOrigin, entryUrl, proofUrl: proof.url, mode: 'school-fixture' });
   console.log('HitPipe school UI ready on ' + publicOrigin + ' (loopback).');
