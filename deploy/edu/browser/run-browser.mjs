@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { isAbsolute, join } from 'node:path';
+import { dirname, isAbsolute, join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 
 const cookieName = '__Host-hp_session';
@@ -329,9 +329,17 @@ async function run(config) {
       await expect(paid).toBeEnabled();
       assert.deepEqual(await clickAndRead(paid, path, 202), { state: 'SUBMITTED', kind: 'paid' });
       await expect(page.getByText('Тестовый платёж принят. Проверьте статус в списке дел.')).toBeVisible();
-      assert.deepEqual(await clickAndRead(paid, path, 202), { state: 'SUBMITTED', kind: 'paid' });
+      await proofOfDelivery(config.clickupProofUrl);
       assert.deepEqual(await clickAndRead(replay, path, 202), { state: 'SUBMITTED', kind: 'replay' });
       await expect(page.getByText('Событие оплаты принято повторно. Проверьте список дел.')).toBeVisible();
+      const jobPath = join(dirname(config.artifactDir), 'runtime', 'browser-event.json');
+      const deadline = Date.now() + 10_000;
+      while (true) {
+        try { await lstat(jobPath); }
+        catch (error) { if (error.code === 'ENOENT') break; else throw error; }
+        assert.ok(Date.now() < deadline, 'Фоновая обработка повтора должна получить ответ Intake');
+        await delay(200);
+      }
     } else if (config.stripeTriggerUrl) {
       const trigger = await fetch(config.stripeTriggerUrl, {
         method: 'POST', signal: AbortSignal.timeout(10_000), redirect: 'error',

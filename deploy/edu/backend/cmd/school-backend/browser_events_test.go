@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -77,5 +78,31 @@ func TestBrowserEventsRejectForeignWorkspaceBeforeBackendLookup(t *testing.T) {
 	(&backend{}).browserStripeEvent(reply, request)
 	if reply.Code != http.StatusForbidden {
 		t.Fatalf("wanted forbidden for foreign workspace, got %d", reply.Code)
+	}
+}
+
+func TestBrowserEventJobPersistsAndCoalescesUntilDelivery(t *testing.T) {
+	state := t.TempDir()
+	if err := os.Mkdir(filepath.Join(state, "runtime"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	provider, err := loadProviders(filepath.Join(state, "providers.json"), &identity{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	first := browserEventJob{OperationID: mustUUID(), Kind: "paid"}
+	backendOne := &backend{state: state, provider: provider}
+	if err := backendOne.enqueueBrowserEvent(first); err != nil {
+		t.Fatal(err)
+	}
+	backendAfterRestart := &backend{state: state, provider: provider}
+	if err := backendAfterRestart.enqueueBrowserEvent(browserEventJob{OperationID: first.OperationID, Kind: "replay"}); err != nil {
+		t.Fatal(err)
+	}
+	if got, err := backendAfterRestart.browserJob(); err != nil || got != first {
+		t.Fatalf("original job must be retained, got %v, %v", got, err)
+	}
+	if err := backendAfterRestart.enqueueBrowserEvent(browserEventJob{OperationID: mustUUID(), Kind: "paid"}); !errors.Is(err, errPendingIngress) {
+		t.Fatalf("pending job from another operation must be preserved, got %v", err)
 	}
 }

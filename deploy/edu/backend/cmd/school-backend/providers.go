@@ -328,6 +328,9 @@ func (s *backend) status(ctx context.Context) (proof, error) {
 }
 
 func (s *backend) emit(ctx context.Context, kind string) error {
+	if _, err := os.Lstat(s.browserJobPath()); !os.IsNotExist(err) {
+		return errPendingIngress
+	}
 	if _, err := os.Lstat(s.possibleIngress()); !os.IsNotExist(err) && kind != "replay" {
 		return errPendingIngress
 	}
@@ -478,5 +481,6 @@ func (s *backend) serveControl(ctx context.Context) error {
 		}
 	}
 	go publish()
+	go s.workBrowserEvents(ctx)
 	return nil
 }

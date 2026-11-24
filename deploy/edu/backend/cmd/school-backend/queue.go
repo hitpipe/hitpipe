@@ -78,6 +78,9 @@ func (s *backend) queueRead(ctx context.Context, dsn string, read func(pgx.Tx) e
 }
 
 func (s *backend) refreshQueueProof(ctx context.Context) error {
+	if _, err := os.Lstat(s.browserJobPath()); !os.IsNotExist(err) {
+		return s.revokeQueueProof()
+	}
 	// A timed-out webhook may still commit. Check the durable ingress marker
 	// until that exact event receives an unambiguous idempotent acknowledgement.
 	if _, err := os.Lstat(s.possibleIngress()); !os.IsNotExist(err) {
