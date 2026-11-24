@@ -335,6 +335,7 @@ async function run() {
     ...(schoolStripeEvents ? { schoolStripeEvents, schoolStripeWorkspaceId: ready.workspaceId,
       schoolStripeSocket: providerSocket,
     } : {}),
+    ...(managedSchool && schoolStripeEvents ? { schoolServiceLabel: ready.serviceLabel } : {}),
   }));
   const next = start(process.execPath, ['server.mjs', '--iam-test-transport'], frontend, {
     PORT: new URL(publicOrigin).port, HOST: host, HITPIPE_BFF_CONFIG: bffConfig, NEXT_TELEMETRY_DISABLED: '1',
