@@ -418,10 +418,18 @@ func (s *backend) serveControl(ctx context.Context) error {
 		return err
 	}
 	server := &http.Server{ReadHeaderTimeout: 3 * time.Second, ReadTimeout: 4 * time.Second, WriteTimeout: 10 * time.Second, Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if s.demo.external() && r.Method == http.MethodPost {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
 		switch {
 		case r.Method == http.MethodPost && strings.HasPrefix(r.URL.Path, "/browser-events/"):
 			s.browserStripeEvent(w, r)
 		case r.Method == http.MethodGet && r.URL.Path == "/status":
+			if s.demo.external() && s.demo.attest(r.Context()) != nil {
+				respond(w, http.StatusServiceUnavailable, map[string]string{"error": "provider binding unavailable"})
+				return
+			}
 			status, err := s.status(r.Context())
 			if err != nil {
 				log.Printf("status unavailable: %v", err)

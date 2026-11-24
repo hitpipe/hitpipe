@@ -52,6 +52,7 @@ type backend struct {
 	keys                   *identity
 	certs                  *certificates
 	provider               *providers
+	demo                   *demoProviders
 	queueMu                sync.Mutex
 	childrenMu             sync.Mutex
 	children               []*child
@@ -106,6 +107,15 @@ func run() error {
 	defer cancel()
 	s := &backend{state: state, share: share, binaries: binaries, workspaceID: workspace}
 	defer s.stopChildren()
+	if s.demo, err = loadDemoProviders(state, share); err != nil {
+		return err
+	}
+	if s.demo.external() {
+		if err = s.demo.attest(ctx); err != nil {
+			return err
+		}
+	}
+
 	if err := os.Remove(filepath.Join(share, "ready.json")); err != nil && !os.IsNotExist(err) {
 		return err
 	}
@@ -124,13 +134,24 @@ func run() error {
 	if err = s.prepareConfig(); err != nil {
 		return err
 	}
+	stripeHandler, clickUpHandler := http.HandlerFunc(s.provider.stripe), http.HandlerFunc(s.provider.clickup)
+	if s.demo.external() {
+		stripeHandler = s.demo.proxy("stripe", func(r *http.Request) bool {
+			return constantEqual(r.Header.Get("Authorization"), "Bearer "+s.keys.StripeKey) &&
+				r.Header.Get("Stripe-Account") == s.demo.SourceAccount &&
+				r.Header.Get("Stripe-Version") == demoStripeVersion
+		})
+		clickUpHandler = s.demo.proxy("clickup", func(r *http.Request) bool {
+			return constantEqual(r.Header.Get("Authorization"), clickUpToken)
+		})
+	}
 	for _, server := range []struct {
 		address, peer, cert string
 		handler             http.HandlerFunc
 	}{
 		{iamAddress, "processing-client.test", "iam.test", s.authorize},
-		{stripeAddress, "", "stripe.fixture", s.provider.stripe},
-		{clickUpAddress, "", "clickup.fixture", s.provider.clickup},
+		{stripeAddress, "", "stripe.fixture", stripeHandler},
+		{clickUpAddress, "", "clickup.fixture", clickUpHandler},
 	} {
 		if err = s.serveHTTPS(ctx, server.address, server.peer, server.cert, server.handler); err != nil {
 			return err
@@ -158,6 +179,11 @@ func run() error {
 	}
 	if err = s.serveControl(ctx); err != nil {
 		return err
+	}
+	if s.demo.external() {
+		if err = s.serveDemoWebhook(ctx); err != nil {
+			return err
+		}
 	}
 	if err = s.publishReady(); err != nil {
 		return err

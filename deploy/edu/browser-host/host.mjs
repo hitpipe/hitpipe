@@ -298,6 +298,8 @@ async function waitForSession(origin, token, process) {
 
 async function run() {
   const ready = await json(join(share, 'ready.json'));
+  const stripeEventsEnabled = schoolStripeEvents && !ready.providerDemo;
+  const aiEnabled = schoolAiEnabled && !ready.providerDemo;
   ready.securityEpoch ??= 7;
   const path = name => join(share, name);
   const processingSocket = path(ready.processingSocket);
@@ -329,13 +331,13 @@ async function run() {
     controlKey: pki.keyPath('bff-control.demo.test'), controlIamName: 'iam-control.demo.test',
     controlIamFingerprint: tlsFingerprint(await readFile(pki.certPath('iam-control.demo.test'))),
     runtimeId, generation: 1, owners: { processing, ...metadata },
-    ...(schoolAiEnabled ? { schoolAi: { workspaceId: ready.workspaceId,
+    ...(aiEnabled ? { schoolAi: { workspaceId: ready.workspaceId,
       aliases: { price: ready.priceAlias, list: ready.listAlias, assignee: ready.assigneeAlias },
     } } : {}),
-    ...(schoolStripeEvents ? { schoolStripeEvents, schoolStripeWorkspaceId: ready.workspaceId,
+    ...(stripeEventsEnabled ? { schoolStripeEvents: true, schoolStripeWorkspaceId: ready.workspaceId,
       schoolStripeSocket: providerSocket,
     } : {}),
-    ...(managedSchool && schoolStripeEvents ? { schoolServiceLabel: ready.serviceLabel } : {}),
+    ...(managedSchool && stripeEventsEnabled ? { schoolServiceLabel: ready.serviceLabel } : {}),
   }));
   const next = start(process.execPath, ['server.mjs', '--iam-test-transport'], frontend, {
     PORT: new URL(publicOrigin).port, HOST: host, HITPIPE_BFF_CONFIG: bffConfig, NEXT_TELEMETRY_DISABLED: '1',
@@ -371,7 +373,7 @@ async function run() {
     priceAlias: ready.priceAlias, listAlias: ready.listAlias, assigneeAlias: ready.assigneeAlias,
     serviceLabel: ready.serviceLabel, clickupProofUrl: proof.url, stripeTriggerUrl: proof.trigger, artifactDir: report,
     frontendRoot: frontend, chromiumExecutable: process.env.HITPIPE_CHROMIUM_EXECUTABLE,
-    schoolAi: schoolAiEnabled, schoolStripeEvents,
+    schoolAi: aiEnabled, schoolStripeEvents: stripeEventsEnabled,
   });
   await safeWrite(join(report, 'web-ready.json'), { origin: publicOrigin, entryUrl, proofUrl: proof.url, mode: 'school-fixture' });
   console.log('HitPipe school UI ready on ' + publicOrigin + ' (loopback).');

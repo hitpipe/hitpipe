@@ -30,6 +30,7 @@ mkdir -- "$share"
 ln -s -- "$run" "$state/.current-$$"
 mv -Tf -- "$state/.current-$$" "$state/current"
 
+egress_pid=
 backend_pid=
 browser_pid=
 stop() {
@@ -38,6 +39,7 @@ stop() {
   if [[ -n "$backend_pid" ]]; then kill -TERM "$backend_pid" 2>/dev/null || true; fi
   if [[ -n "$browser_pid" ]]; then wait "$browser_pid" 2>/dev/null || true; fi
   if [[ -n "$backend_pid" ]]; then wait "$backend_pid" 2>/dev/null || true; fi
+  if [[ -n "$egress_pid" ]]; then kill -TERM "$egress_pid" 2>/dev/null || true; wait "$egress_pid" 2>/dev/null || true; fi
   rm -f -- "$run/web-ready.json"
 }
 trap stop EXIT
@@ -47,6 +49,23 @@ printf 'Протоколы учебного стенда в %s\n' "$run"
 # A launcher may leave its database volumes mounted between starts. The
 # bridge directory and its synthetic credentials belong to just this run.
 export HITPIPE_BROWSER_SHARE="$share"
+
+if [[ -e "$state/provider-demo.json" ]]; then
+  credentials=${HITPIPE_PROVIDER_DEMO_CREDENTIALS:?Set the owner-only demo provider credentials path}
+  python3 -B "$here/provider-demo/provider_egress.py" --binding "$state/provider-demo.json" \
+    --credentials "$credentials" --journal "$state/provider-demo.sqlite3" \
+    --socket "$share/provider-egress.sock" >"$run/egress.log" 2>&1 &
+  egress_pid=$!
+  for ((attempt=0; attempt<160; attempt++)); do
+    [[ -S "$share/provider-egress.sock" ]] && break
+    if ! kill -0 "$egress_pid" 2>/dev/null; then
+      tail -5 "$run/egress.log" >&2
+      exit 1
+    fi
+    sleep 0.25
+  done
+  [[ -S "$share/provider-egress.sock" ]] || exit 1
+fi
 backend_command=("$backend")
 if [[ -n "$go" ]]; then backend_command+=("$go"); fi
 "${backend_command[@]}" >"$run/backend.log" 2>&1 &
@@ -67,7 +86,9 @@ fi
 
 "$node" "$here/browser-host/host.mjs" "$share" "$frontend" "$run" >"$run/browser.log" 2>&1 &
 browser_pid=$!
-if wait -n "$backend_pid" "$browser_pid"; then
+processes=("$backend_pid" "$browser_pid")
+if [[ -n "$egress_pid" ]]; then processes+=("$egress_pid"); fi
+if wait -n "${processes[@]}"; then
   printf 'Один из процессов стенда завершился.\n' >&2
 else
   printf 'Один из процессов стенда завершился с ошибкой.\n' >&2
