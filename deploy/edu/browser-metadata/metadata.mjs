@@ -3,6 +3,14 @@ import { createServer } from 'node:https';
 
 const uuid = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
 const alias = /^[A-Z][A-Z0-9_]{0,31}$/;
+const providerDemoFields = {
+  sourceAccount: /^acct_[a-zA-Z0-9]{1,64}$/,
+  sourcePrice: /^price_[a-zA-Z0-9]{1,64}$/,
+  destinationWorkspace: /^[1-9][0-9]{0,23}$/,
+  targetList: /^[1-9][0-9]{0,23}$/,
+  assignee: /^[1-9][0-9]{0,23}$/,
+  label: /^[^\p{C}]{1,120}$/u,
+};
 
 function send(res, status, value) {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
@@ -26,8 +34,8 @@ function buildHandler(ready, owner, bffFingerprint, observe) {
   };
 
   return async (req, res) => {
-    // This test-only adapter has no write or status routes. The provisioned
-    // client certificate and session belong to this one fixture workspace.
+    // The adapter has no write or status routes. The provisioned client
+    // certificate and session identify only this workspace.
     if (req.socket.getPeerCertificate().fingerprint256 !== bffFingerprint
         || req.headersDistinct['x-hitpipe-session']?.length !== 1
         || req.headersDistinct['x-hitpipe-session'][0] !== ready.sessionToken) {
@@ -52,8 +60,8 @@ function buildHandler(ready, owner, bffFingerprint, observe) {
   };
 }
 
-// Serve connection metadata for the same local TEST fixtures as the Go
-// processes. Processing itself handles activation and every case read.
+// Serve connection metadata for the exact TEST bindings provisioned by the
+// Go runtime. The observer supplies freshness, including for external providers.
 export async function startMetadata({ ready, pki, bffCA, bffFingerprint, listen, observe }) {
   if (![ready.workspaceId, ready.sourceConnectionId, ready.destinationConnectionId]
     .every(value => typeof value === 'string' && uuid.test(value))
@@ -65,22 +73,30 @@ export async function startMetadata({ ready, pki, bffCA, bffFingerprint, listen,
     throw new Error('Browser fixture is missing its exact connection bindings');
   }
 
+  const demo = ready.providerDemo;
+  if (demo !== undefined && (!demo || typeof demo !== 'object' || Array.isArray(demo)
+      || Object.keys(demo).length !== Object.keys(providerDemoFields).length
+      || !Object.entries(providerDemoFields).every(([field, pattern]) =>
+        Object.hasOwn(demo, field) && typeof demo[field] === 'string' && pattern.test(demo[field])
+        && demo[field] === demo[field].trim() && demo[field] !== ''))) {
+    throw new Error('Browser workspace is missing its exact external provider bindings');
+  }
   const owners = {
     intake: {
       provider: 'STRIPE',
-      label: 'Stripe · локальный тест',
+      label: demo ? 'Stripe Sandbox' : 'Stripe · локальный тест',
       serverName: 'intake.demo.test',
       connectionId: ready.sourceConnectionId,
-      options: { PRICE: { alias: ready.priceAlias, label: 'Тестовый тариф' } },
+      options: { PRICE: { alias: ready.priceAlias, label: demo ? demo.label : 'Тестовый тариф' } },
     },
     delivery: {
       provider: 'CLICKUP',
-      label: 'ClickUp · локальный тест',
+      label: demo ? 'ClickUp · HitPipe Demo' : 'ClickUp · локальный тест',
       serverName: 'delivery.demo.test',
       connectionId: ready.destinationConnectionId,
       options: {
-        LIST: { alias: ready.listAlias, label: 'Демонстрационный список' },
-        ASSIGNEE: { alias: ready.assigneeAlias, label: 'Тестовый исполнитель' },
+        LIST: { alias: ready.listAlias, label: demo ? 'HitPipe · Demo Sandbox' : 'Демонстрационный список' },
+        ASSIGNEE: { alias: ready.assigneeAlias, label: demo ? 'Владелец рабочего списка' : 'Тестовый исполнитель' },
       },
     },
   };
@@ -91,7 +107,7 @@ export async function startMetadata({ ready, pki, bffCA, bffFingerprint, listen,
       minVersion: 'TLSv1.3', maxVersion: 'TLSv1.3', requestTimeout: 3500, headersTimeout: 3000,
     }, (req, res) => {
       void handler(req, res).catch(() => {
-        if (!res.headersSent) fail(res, 503, 'LOCAL_PROVIDER_UNAVAILABLE');
+        if (!res.headersSent) fail(res, 503, demo ? 'PROVIDER_UNAVAILABLE' : 'LOCAL_PROVIDER_UNAVAILABLE');
       });
     });
     const port = await listen(server);
