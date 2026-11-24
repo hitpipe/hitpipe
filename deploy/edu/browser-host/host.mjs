@@ -19,6 +19,7 @@ const [share, frontend, report] = input.map(path => resolve(path));
 const webPort = Number(process.env.HITPIPE_BROWSER_PORT ?? '3108');
 const entryPort = Number(process.env.HITPIPE_SCHOOL_ENTRY_PORT ?? '3109');
 const schoolAiEnabled = process.env.HITPIPE_SCHOOL_AI === '1';
+const schoolStripeEvents = process.env.HITPIPE_SCHOOL_STRIPE_EVENTS === '1';
 if (![webPort, entryPort].every(port => Number.isInteger(port) && port > 1023 && port <= 65535)
     || new Set([webPort, entryPort, 8443, 9443]).size !== 4) {
   throw new Error('Distinct unprivileged ports are required for browser and entry');
@@ -323,6 +324,9 @@ async function run() {
     ...(schoolAiEnabled ? { schoolAi: { workspaceId: ready.workspaceId,
       aliases: { price: ready.priceAlias, list: ready.listAlias, assignee: ready.assigneeAlias },
     } } : {}),
+    ...(schoolStripeEvents ? { schoolStripeEvents, schoolStripeWorkspaceId: ready.workspaceId,
+      schoolStripeSocket: path('provider.sock'),
+    } : {}),
   }));
   const next = start(process.execPath, ['server.mjs', '--iam-test-transport'], frontend, {
     PORT: new URL(publicOrigin).port, HOST: host, HITPIPE_BFF_CONFIG: bffConfig, NEXT_TELEMETRY_DISABLED: '1',

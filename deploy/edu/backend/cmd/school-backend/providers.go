@@ -34,13 +34,14 @@ type clickUpTask struct {
 }
 
 type providerState struct {
-	Checkouts    map[string]checkout    `json:"checkouts"`
-	Tasks        map[string]clickUpTask `json:"tasks"`
-	LastCheckout string                 `json:"last_checkout"`
-	LastUnpaid   string                 `json:"last_unpaid"`
-	LastEvent    json.RawMessage        `json:"last_event"`
-	Posts        int                    `json:"posts"`
-	Reads        int                    `json:"reads"`
+	Checkouts       map[string]checkout    `json:"checkouts"`
+	Tasks           map[string]clickUpTask `json:"tasks"`
+	LastCheckout    string                 `json:"last_checkout"`
+	LastUnpaid      string                 `json:"last_unpaid"`
+	LastEvent       json.RawMessage        `json:"last_event"`
+	BrowserPayments map[string][]byte      `json:"browser_payments,omitempty"`
+	Posts           int                    `json:"posts"`
+	Reads           int                    `json:"reads"`
 }
 
 type providers struct {
@@ -57,6 +58,11 @@ func loadProviders(path string, keys *identity) (*providers, error) {
 		err = json.Unmarshal(raw, &p.state)
 		if err == nil && (p.state.Checkouts == nil || p.state.Tasks == nil) {
 			err = errors.New("invalid school provider state")
+		}
+		if err == nil && len(p.state.LastEvent) != 0 {
+			var compact bytes.Buffer
+			err = json.Compact(&compact, p.state.LastEvent)
+			p.state.LastEvent = compact.Bytes()
 		}
 	} else if os.IsNotExist(err) {
 		err = writeJSON(path, p.state)
@@ -182,8 +188,23 @@ func (p *providers) clickup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *providers) prepareEvent(kind string, now time.Time) ([]byte, error) {
+	return p.preparePayment(kind, "", now)
+}
+
+func (p *providers) preparePayment(kind, operation string, now time.Time) ([]byte, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
+	if operation != "" {
+		if saved := p.state.BrowserPayments[operation]; len(saved) != 0 {
+			return append([]byte(nil), saved...), nil
+		}
+		if kind == "replay" {
+			return nil, errNoBrowserPayment
+		}
+		if kind != "paid" {
+			return nil, errors.New("unsupported school browser payment")
+		}
+	}
 	if kind == "replay" {
 		if len(p.state.LastEvent) == 0 {
 			return nil, errors.New("there is no signed event to replay")
@@ -222,8 +243,17 @@ func (p *providers) prepareEvent(kind string, now time.Time) ([]byte, error) {
 		return nil, err
 	}
 	p.state.Checkouts[item.ID] = item
-	p.state.LastEvent = raw
+	if operation == "" {
+		p.state.LastEvent = raw
+	} else {
+		p.state.LastCheckout = last
+		if p.state.BrowserPayments == nil {
+			p.state.BrowserPayments = make(map[string][]byte)
+		}
+		p.state.BrowserPayments[operation] = raw
+	}
 	if err := writeJSON(p.path, p.state); err != nil {
+		delete(p.state.BrowserPayments, operation)
 		if previous.ID == "" {
 			delete(p.state.Checkouts, item.ID)
 		} else {
@@ -299,7 +329,7 @@ func (s *backend) status(ctx context.Context) (proof, error) {
 
 func (s *backend) emit(ctx context.Context, kind string) error {
 	if _, err := os.Lstat(s.possibleIngress()); !os.IsNotExist(err) && kind != "replay" {
-		return errors.New("previous Stripe event was not acknowledged; replay it before sending a new event")
+		return errPendingIngress
 	}
 	status, err := s.status(ctx)
 	if err != nil {
@@ -308,21 +338,43 @@ func (s *backend) emit(ctx context.Context, kind string) error {
 	if status.OperationID == "" {
 		return errors.New("activate an operation before sending a Stripe event")
 	}
-	after := status.activation.Truncate(time.Second).Add(time.Second)
-	if wait := time.Until(after); kind != "replay" && wait > 0 {
-		timer := time.NewTimer(wait)
-		defer timer.Stop()
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-timer.C:
+	if kind != "replay" {
+		if err := waitForCheckoutTime(ctx, status.activation); err != nil {
+			return err
 		}
 	}
-	now := time.Now().UTC()
-	raw, err := s.provider.prepareEvent(kind, now)
+	raw, err := s.provider.prepareEvent(kind, time.Now().UTC())
 	if err != nil {
 		return err
 	}
+	return s.deliverEvent(ctx, raw, kind == "replay")
+}
+
+func waitForCheckoutTime(ctx context.Context, activation time.Time) error {
+	wait := time.Until(activation.Truncate(time.Second).Add(time.Second))
+	if wait <= 0 {
+		return nil
+	}
+	timer := time.NewTimer(wait)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
+	}
+}
+
+func (s *backend) deliverEvent(ctx context.Context, raw []byte, replayLegacyPending bool) error {
+	marker := eventMarker(raw)
+	if pending, err := os.ReadFile(s.possibleIngress()); err == nil {
+		if !matchesPendingIngress(pending, marker, replayLegacyPending) {
+			return errPendingIngress
+		}
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+	now := time.Now().UTC()
 	mac := hmac.New(sha256.New, []byte(s.keys.Signing))
 	_, _ = fmt.Fprintf(mac, "%d.", now.Unix())
 	_, _ = mac.Write(raw)
@@ -334,7 +386,7 @@ func (s *backend) emit(ctx context.Context, kind string) error {
 	req.Header.Set("Content-Type", "application/json")
 	// The event bytes are already durable. If the network outcome is unknown,
 	// preserve the queue fence and allow re-sending exactly those bytes.
-	if err := writePrivate(s.possibleIngress(), []byte("awaiting Intake acknowledgement\n")); err != nil {
+	if err := writePrivate(s.possibleIngress(), marker); err != nil {
 		return err
 	}
 	res, err := s.certs.client("", "intake.test").Do(req)
@@ -364,6 +416,8 @@ func (s *backend) serveControl(ctx context.Context) error {
 	}
 	server := &http.Server{ReadHeaderTimeout: 3 * time.Second, ReadTimeout: 4 * time.Second, WriteTimeout: 10 * time.Second, Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch {
+		case r.Method == http.MethodPost && strings.HasPrefix(r.URL.Path, "/browser-events/"):
+			s.browserStripeEvent(w, r)
 		case r.Method == http.MethodGet && r.URL.Path == "/status":
 			status, err := s.status(r.Context())
 			if err != nil {
