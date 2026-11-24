@@ -68,12 +68,13 @@ else
   export GOCACHE=${GOCACHE:-"$state/go-cache"} GOMODCACHE=${GOMODCACHE:-"$state/go-mod"}
   export GOTMPDIR="$scratch/compile"
   cp -a -- "$source/processing" "$source/platform" "$scratch/go/"
+  patch --batch --forward -s -d "$scratch/go/processing" -p1 <"$here/processing-school-source-facts.patch"
   mkdir -p "$scratch/go/processing/cmd/school-backend"
   cp -- "$here"/cmd/school-backend/*.go "$scratch/go/processing/cmd/school-backend/"
   cp -a -- "$intake" "$scratch/intake-source"
   patch --batch --forward -s -d "$scratch/intake-source" -p1 <"$here/intake-qualification-workspace.patch"
   "$go_bin" -C "$scratch/intake-source" build -ldflags '-s -w' -o "$scratch/intake" ./cmd/intake
-  "$go_bin" -C "$source/processing" build -ldflags '-s -w -X main.revision=dd1a36f6529f57d7452a27b615b6cad18b1288bd' -o "$scratch/processing" ./cmd/processing
+  "$go_bin" -C "$scratch/go/processing" build -tags hitpipe_school -ldflags '-s -w -X main.revision=dd1a36f6529f57d7452a27b615b6cad18b1288bd' -o "$scratch/processing" ./cmd/processing
   cp -a -- "$delivery" "$scratch/delivery"
   patch --batch --forward -s -d "$scratch/delivery" -p1 <"$here/persistent-qualification-worker.patch"
   "$go_bin" -C "$scratch/delivery" build -ldflags '-s -w' -o "$scratch/delivery-offline-receipt" ./cmd/delivery-offline-receipt

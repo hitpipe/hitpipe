@@ -1,0 +1,146 @@
+--- a/internal/runtime/source.go
++++ b/internal/runtime/source.go
+@@ -2,6 +2,8 @@
+ 
+ import (
+ 	"context"
++	"errors"
++	"log/slog"
+ 	"net/http"
+ 	"time"
+ 
+@@ -18,6 +20,7 @@
+ 	transport *http.Transport
+ 	jobs      postgres.CaseJobStore
+ 	claim     postgres.CaseClaim
++	logger    *slog.Logger
+ }
+ 
+ func (s sourceReaders) ForCase(ctx context.Context, c preparecase.Case, r preparecase.Request) (evaluatepaidorder.SourceFactsReader, error) {
+@@ -32,16 +35,61 @@
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	deadline := time.Now().Add(protectedTime)
+-	if s.claim.Until().Before(deadline) {
+-		deadline = s.claim.Until()
+-	}
+-	if !c.EpisodeDeadlineAt.IsZero() && c.EpisodeDeadlineAt.Before(deadline) {
+-		deadline = c.EpisodeDeadlineAt
+-	}
++	school := schoolSourceFacts && w.config.Mode == "TEST"
++	deadline := sourceFactsDeadline(time.Now(), s.claim.Until(), c.EpisodeDeadlineAt, school)
+ 	scope := sourcefacts.CallerContext{WorkspaceID: r.WorkspaceID, CaseID: c.CaseID, SessionID: c.SessionID,
+ 		ConnectionID: w.config.Source, AccountID: c.AccountID, RequestID: id, ExpectedEpoch: r.Epoch, DeadlineAt: deadline, LiveMode: &c.Live}
+-	return sourcefacts.NewReader(s.origin, c.Policy, scope, s.transport, s, limitBody)
++	reader, err := sourcefacts.NewReader(s.origin, c.Policy, scope, s.transport, s, limitBody)
++	if !school {
++		return reader, err
++	}
++	if err != nil {
++		logSourceReadFailure(s.logger, "initialize", deadline, err)
++		return nil, err
++	}
++	return sourceReaderDiagnostics{reader, s.logger, deadline}, nil
++}
++
++func sourceFactsDeadline(now, claimUntil, episodeUntil time.Time, school bool) time.Time {
++	budget := protectedTime
++	if school {
++		budget = 5 * time.Second
++	}
++	deadline := now.Add(budget)
++	if claimUntil.Before(deadline) {
++		deadline = claimUntil
++	}
++	if !episodeUntil.IsZero() && episodeUntil.Before(deadline) {
++		deadline = episodeUntil
++	}
++	return deadline
++}
++
++type sourceReaderDiagnostics struct {
++	reader   evaluatepaidorder.SourceFactsReader
++	logger   *slog.Logger
++	deadline time.Time
++}
++
++func (r sourceReaderDiagnostics) Read(ctx context.Context, q evaluatepaidorder.Query) (evaluatepaidorder.Snapshot, error) {
++	snapshot, err := r.reader.Read(ctx, q)
++	if err != nil {
++		logSourceReadFailure(r.logger, "read", r.deadline, err)
++	}
++	return snapshot, err
++}
++
++func logSourceReadFailure(logger *slog.Logger, stage string, deadline time.Time, err error) {
++	if logger == nil {
++		return
++	}
++	kind, status := "UNCLASSIFIED", 0
++	var readErr *sourcefacts.ReadError
++	if errors.As(err, &readErr) {
++		kind, status = readErr.Kind, readErr.StatusCode
++	}
++	logger.Warn("school SourceFacts read unavailable", "stage", stage, "kind", kind,
++		"http_status", status, "deadline_elapsed", !time.Now().Before(deadline))
+ }
+ 
+ func (s sourceReaders) Start(ctx context.Context, c sourcefacts.CallerContext, f func() error) error {
+--- a/internal/runtime/caseworker.go
++++ b/internal/runtime/caseworker.go
+@@ -72,6 +72,7 @@
+ 	defer cancel()
+ 	readers := rt.caseReaders
+ 	readers.claim = claim
++	readers.logger = rt.logger
+ 	service := preparecase.Service{
+ 		Repository: postgres.ClaimedDecisionStore{
+ 			DecisionStore: postgres.DecisionStore{DB: rt.caseJobs.DB, Content: rt.files},
+--- /dev/null
++++ b/internal/runtime/source_budget.go
+@@ -0,0 +1,5 @@
++//go:build !hitpipe_school
++
++package runtime
++
++const schoolSourceFacts = false
+--- /dev/null
++++ b/internal/runtime/source_budget_school.go
+@@ -0,0 +1,5 @@
++//go:build hitpipe_school
++
++package runtime
++
++const schoolSourceFacts = true
+--- /dev/null
++++ b/internal/runtime/source_budget_test.go
+@@ -0,0 +1,28 @@
++package runtime
++
++import (
++	"testing"
++	"time"
++)
++
++func TestSourceFactsDeadline(t *testing.T) {
++	now := time.Unix(1000, 0)
++	later := now.Add(10 * time.Second)
++	for _, tc := range []struct {
++		name           string
++		school         bool
++		claim, episode time.Time
++		want           time.Duration
++	}{
++		{"normal", false, later, time.Time{}, 2 * time.Second},
++		{"school", true, later, time.Time{}, 5 * time.Second},
++		{"claim", true, now.Add(3 * time.Second), later, 3 * time.Second},
++		{"episode", true, later, now.Add(time.Second), time.Second},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			if got := sourceFactsDeadline(now, tc.claim, tc.episode, tc.school); !got.Equal(now.Add(tc.want)) {
++				t.Fatalf("got %s, want %s", got.Sub(now), tc.want)
++			}
++		})
++	}
++}
