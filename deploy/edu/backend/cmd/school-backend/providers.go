@@ -293,26 +293,26 @@ func (s *backend) status(ctx context.Context) (proof, error) {
 		return status, err
 	}
 	defer tx.Rollback(context.Background())
-	if _, err = tx.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, workspaceID); err != nil {
+	if _, err = tx.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, s.workspaceID); err != nil {
 		return status, err
 	}
 	err = tx.QueryRow(ctx, `SELECT o.operation_id::text,o.state,o.first_activation_at,a.digest
 		FROM hp_processing.operations o
 		JOIN hp_processing.accepted_configs a
 		  ON (a.workspace_id,a.operation_id,a.config_id)=(o.workspace_id,o.operation_id,o.selected_config_id)
-		WHERE o.workspace_id=$1 ORDER BY o.first_activation_at DESC LIMIT 1`, workspaceID).
+		WHERE o.workspace_id=$1 ORDER BY o.first_activation_at DESC LIMIT 1`, s.workspaceID).
 		Scan(&status.OperationID, &status.OperationState, &status.activation, &status.AcceptedConfigDigest)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 		return status, err
 	}
 	if status.OperationID != "" {
 		err = tx.QueryRow(ctx, `SELECT case_id::text,state,coalesce(known_task_id,'')
-		FROM hp_processing.case_identity WHERE workspace_id=$1 AND operation_id=$2 ORDER BY admitted_at DESC LIMIT 1`, workspaceID, status.OperationID).
+		FROM hp_processing.case_identity WHERE workspace_id=$1 AND operation_id=$2 ORDER BY admitted_at DESC LIMIT 1`, s.workspaceID, status.OperationID).
 			Scan(&status.CaseID, &status.CaseState, &status.TaskID)
 		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 			return status, err
 		}
-		if err = tx.QueryRow(ctx, `SELECT count(*) FROM hp_processing.case_identity WHERE workspace_id=$1 AND operation_id=$2`, workspaceID, status.OperationID).Scan(&status.CaseCount); err != nil {
+		if err = tx.QueryRow(ctx, `SELECT count(*) FROM hp_processing.case_identity WHERE workspace_id=$1 AND operation_id=$2`, s.workspaceID, status.OperationID).Scan(&status.CaseCount); err != nil {
 			return status, err
 		}
 	}

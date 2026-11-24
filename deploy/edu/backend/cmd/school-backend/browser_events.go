@@ -50,7 +50,7 @@ func (s *backend) browserStripeEvent(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if input.WorkspaceID != workspaceID {
+	if input.WorkspaceID != s.workspaceID {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
