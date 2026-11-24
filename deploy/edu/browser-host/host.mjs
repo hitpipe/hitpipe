@@ -20,6 +20,7 @@ if (input.length !== 3 || input.some(value => !value)) {
 const [share, frontend, report] = input.map(path => resolve(path));
 const webPort = Number(process.env.HITPIPE_BROWSER_PORT ?? '3108');
 const entryPort = Number(process.env.HITPIPE_SCHOOL_ENTRY_PORT ?? '3109');
+const managedSchool = process.env.HITPIPE_SCHOOL_MANAGED === '1';
 const schoolAiEnabled = process.env.HITPIPE_SCHOOL_AI === '1';
 const schoolStripeEvents = process.env.HITPIPE_SCHOOL_STRIPE_EVENTS === '1';
 if (![webPort, entryPort].every(port => Number.isInteger(port) && port > 1023 && port <= 65535)
@@ -356,8 +357,8 @@ async function run() {
       throw new Error('BFF did not return the provisioned ' + kind + ': ' + (options.code ?? response.status));
     }
   }
-  const proof = await proofServer();
-  const entryUrl = await schoolEntry(publicOrigin, ready.sessionToken);
+  const proof = managedSchool ? {} : await proofServer();
+  const entryUrl = managedSchool ? undefined : await schoolEntry(publicOrigin, ready.sessionToken);
   await safeWrite(path('browser-config.json'), {
     origin: publicOrigin, workspaceId: ready.workspaceId, sessionToken: ready.sessionToken,
     stripeConnectionId: ready.sourceConnectionId, clickupConnectionId: ready.destinationConnectionId,
