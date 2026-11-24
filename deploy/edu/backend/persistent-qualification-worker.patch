@@ -15,7 +15,33 @@
  type Config struct {
  	WorkerDSN, ProviderOrigin, ProcessingOrigin, ProcessingServerName          string
  	ProviderCA, ProcessingCA, ProcessingClientCertificate, ProcessingClientKey string
-@@ -121,6 +123,11 @@
+@@ -42,7 +44,7 @@
+ 	until                                   time.Time
+ }
+ 
+-func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate) error {
++func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- struct{}) error {
+ 	if cfg.WorkspaceID == uuid.Nil || cfg.ConnectionID == uuid.Nil || cfg.Epoch <= 0 || dir == nil || gate == nil {
+ 		return errors.New("offline worker requires a provisioned scope")
+ 	}
+@@ -98,6 +100,16 @@
+ 		return errors.New("offline worker cannot open its database")
+ 	}
+ 	defer pool.Close()
++	// Warm the exact worker pool before binding the receipt listener. A cold
++	// PostgreSQL connection must not consume the fenced provider call budget.
++	startup, cancel := context.WithTimeout(ctx, 6*time.Second)
++	err = pool.Ping(startup)
++	cancel()
++	if err != nil {
++		return fmt.Errorf("offline delivery worker PostgreSQL startup: %w", err)
++	}
++	close(ready)
++
+ 	tick := time.NewTicker(100 * time.Millisecond)
+ 	defer tick.Stop()
+ 	for {
+@@ -121,6 +133,11 @@
  			taskID, err = client.Create(bounded, syntheticCredential, target)
  			return err
  		})
@@ -27,7 +53,7 @@
  		if errors.Is(err, pgx.ErrNoRows) || errors.Is(err, intake.ErrDenied) {
  			continue
  		}
-@@ -146,9 +153,11 @@
+@@ -146,9 +163,11 @@
  		if err != nil {
  			return fmt.Errorf("offline delivery could not save observation: %w", err)
  		}
@@ -41,7 +67,7 @@
  	}
  }
  
-@@ -235,7 +244,7 @@
+@@ -235,7 +254,7 @@
  		return item, target, err
  	}
  	if !time.Now().Before(item.until) {
@@ -49,4 +75,62 @@
 +		return item, target, errFactExpired
  	}
  	return item, target, nil
+ }
+--- a/cmd/delivery-offline-receipt/main.go
++++ b/cmd/delivery-offline-receipt/main.go
+@@ -137,16 +137,23 @@
+ 	if err != nil {
+ 		return err
+ 	}
+-	listener, err := net.Listen("tcp", c.Listen)
+-	if err != nil {
+-		return errors.New("offline receipt: bind loopback listener")
+-	}
+-	defer listener.Close()
+-
+ 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+ 	defer stop()
++	workerDone, workerReady := launchWorker(ctx, stop, worker, dir, guard)
++	if workerReady != nil {
++		select {
++		case <-workerReady:
++		case err := <-workerDone:
++			return err
++		}
++	}
++
++	listener, err := net.Listen("tcp", c.Listen)
++	if err != nil {
++		return errors.New("offline receipt: bind loopback listener")
++	}
++	defer listener.Close()
+ 	guard.setActive(true)
+-	workerDone := launchWorker(ctx, stop, worker, dir, guard)
+ 	shutdownDone := make(chan struct{})
+ 	go func() {
+ 		defer close(shutdownDone)
+--- a/cmd/delivery-offline-receipt/worker.go
++++ b/cmd/delivery-offline-receipt/worker.go
+@@ -65,17 +65,18 @@
+ 		u.RawQuery == "" && u.Fragment == "" && u.Opaque == ""
+ }
+ 
+-func launchWorker(ctx context.Context, stop context.CancelFunc, cfg *demoworker.Config, dir *intake.Directory, guard intake.StartGate) <-chan error {
++func launchWorker(ctx context.Context, stop context.CancelFunc, cfg *demoworker.Config, dir *intake.Directory, guard intake.StartGate) (<-chan error, <-chan struct{}) {
+ 	if cfg == nil {
+-		return nil
++		return nil, nil
+ 	}
+ 	done := make(chan error, 1)
++	ready := make(chan struct{})
+ 	go func() {
+-		err := demoworker.Run(ctx, *cfg, dir, guard)
++		err := demoworker.Run(ctx, *cfg, dir, guard, ready)
+ 		done <- err
+ 		if err != nil {
+ 			stop()
+ 		}
+ 	}()
+-	return done
++	return done, ready
  }
