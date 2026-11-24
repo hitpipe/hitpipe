@@ -37,6 +37,7 @@ class EgressTests(unittest.TestCase):
                 "id": BINDING["sourcePrice"], "type": "one_time", "livemode": False, "active": True
             },
             CLICKUP + "/api/v2/user": {"user": {"id": 300}},
+            CLICKUP + "/api/v2/list/200/member": {"members": []},
             CLICKUP + "/api/v2/list/200": {"id": "200", "space": {"id": "3000"}},
             CLICKUP + "/api/v2/team/100/space?archived=false": {"spaces": [{"id": "3000"}]},
             CLICKUP + "/api/v2/list/200/task": {"id": "realTestId"},

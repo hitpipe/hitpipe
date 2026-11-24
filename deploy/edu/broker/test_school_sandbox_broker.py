@@ -158,6 +158,33 @@ class BrokerTest(unittest.TestCase):
         restart.reconcile()
         self.assertFalse(private_first.exists())
 
+    def test_provider_connections_are_independent_per_workspace(self):
+        root = self.config.ready_root
+        self.config.provider_settings_root = root / "connections"
+        self.config.provider_settings_root.mkdir(mode=0o700)
+        self.config.provider_runtime_root = root / "runtime"
+        self.config.provider_runtime_root.mkdir(mode=0o700)
+        self.config.provider_binaries = self.config.binaries
+        first, second, unconnected = self.slots.remember(self.allocations)
+        for index, slot in enumerate((first, second), start=1):
+            entry = self.config.provider_settings_root / slot.workspace_id
+            entry.mkdir(mode=0o700)
+            binding = {**BINDING, "targetList": str(2000 + index)}
+            write_private(entry / "provider-binding.json", json.dumps(binding).encode())
+            write_private(entry / "credentials.json", b"provider credential fixture")
+            write_private(entry / "provider-webhook.secret", f"whsec_abcdef0123456789{index}".encode())
+            write_private(entry / "state.json", json.dumps({
+                "workspace": slot.workspace_id, "binding": binding, "stripeEndpoint": f"we_abcdefgh{index}",
+            }).encode())
+            environment = self.broker.prepare(slot, self.broker.sandbox(slot))
+            self.assertEqual(environment["HITPIPE_PROVIDER_DEMO_CREDENTIALS"].parent, entry)
+            self.assertEqual(environment["HITPIPE_SCHOOL_INSTANCE"], "d" + slot.slug[1:])
+            runtime = environment["HITPIPE_SCHOOL_STATE"]
+            self.assertEqual(read_json(runtime / "provider-demo.json"), binding)
+            self.assertEqual((runtime / "workspace-id").read_text().strip(), slot.workspace_id)
+            self.assertEqual(environment["HITPIPE_SCHOOL_STRIPE_EVENTS"], 0)
+        self.assertIsNone(self.broker.provider(unconnected))
+
     def test_cross_workspace_and_mismatching_csrf_are_not_published(self):
         self.broker.reconcile()
         first, _ = self.systemd.started[0]

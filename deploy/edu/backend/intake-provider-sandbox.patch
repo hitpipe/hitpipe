@@ -1,18 +1,378 @@
+--- /dev/null
++++ b/internal/adapters/http/stripewebhook/provider_sandbox_test.go
+@@ -0,0 +1,224 @@
++package stripewebhook
++
++import (
++	"bytes"
++	"context"
++	"crypto/hmac"
++	"crypto/sha256"
++	"encoding/hex"
++	"fmt"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"os"
++	"strings"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/hitpipe/hitpipe/services/intake/internal/adapters/contentstore"
++	"github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal"
++	"github.com/hitpipe/hitpipe/services/intake/internal/application/receivesignal"
++)
++
++type sandboxClock struct{ now time.Time }
++
++func (c sandboxClock) Now(context.Context) (time.Time, error) { return c.now, nil }
++
++type sandboxSecret struct{ value string }
++
++func (s sandboxSecret) Resolve(context.Context, string) ([]byte, error) {
++	if s.value != "" {
++		return []byte(s.value), nil
++	}
++	return []byte("unit-provider-sandbox-signing-key"), nil
++}
++
++type sandboxInstallation struct{ installation Installation }
++
++func (s sandboxInstallation) Lookup(context.Context, string) (Installation, error) {
++	return s.installation, nil
++}
++
++type sandboxStart struct{}
++
++func (sandboxStart) Start(_ context.Context, _ Installation, receive func() error) error {
++	return receive()
++}
++
++type sandboxRepository struct {
++	mu                sync.Mutex
++	stored            *receivesignal.Stored
++	inserts, sessions int
++}
++
++func (r *sandboxRepository) WithSession(_ context.Context, fn func(receivesignal.Session) error) error {
++	r.mu.Lock()
++	defer r.mu.Unlock()
++	r.sessions++
++	return fn(r)
++}
++func (r *sandboxRepository) Lookup(context.Context, receivesignal.Connection, string) (*receivesignal.Stored, error) {
++	return r.stored, nil
++}
++func (r *sandboxRepository) Insert(_ context.Context, _ receivesignal.Connection, value receivesignal.Stored) error {
++	r.inserts++
++	r.stored = &value
++	return nil
++}
++func (r *sandboxRepository) References(context.Context, receivesignal.Connection) (map[string]bool, error) {
++	return nil, nil
++}
++
++func TestSignedProviderSandboxHTTPPreservesDedupAndAuthentication(t *testing.T) {
++	const workspace = "c71a0e98-fab0-46dd-9742-9f592802bd26"
++	const account = "acct_1UfGTDE1OQW8MuKn"
++	now := time.Unix(1800000000, 0).UTC()
++	dir := t.TempDir()
++	if err := os.Chmod(dir, 0700); err != nil {
++		t.Fatal(err)
++	}
++	files, err := contentstore.Open(dir, func() time.Time { return now })
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer files.Close()
++	repo := &sandboxRepository{}
++	receiver, err := receivesignal.New(workspace, sandboxSecret{}, sandboxClock{now}, 72*time.Hour, repo, files)
++	if err != nil {
++		t.Fatal(err)
++	}
++	mode := false
++	binding := normalizesignal.Binding{InstallationID: "provider-endpoint", WorkspaceID: workspace,
++		ConnectionID: "22222222-2222-4222-8222-222222222222", StripeAccountID: account,
++		Livemode: &mode, APIVersion: "2026-09-30.endive", AccountScope: normalizesignal.SandboxEndpointAccount}
++	installation := Installation{EndpointID: "provider-endpoint", Revision: 1, Ready: true,
++		Connection: receivesignal.Connection{Binding: binding, SecurityEpoch: 7}}
++	handler, err := NewHandler(2*time.Second, sandboxInstallation{installation}, sandboxStart{}, map[string]*receivesignal.Consumer{workspace: receiver})
++	if err != nil {
++		t.Fatal(err)
++	}
++	server := httptest.NewTLSServer(handler)
++	defer server.Close()
++	raw := []byte(`{"id":"evt_provider_sandbox","object":"event","api_version":"2026-09-30.endive","created":1800000000,"livemode":false,"type":"checkout.session.completed","data":{"object":{"id":"cs_provider_sandbox","object":"checkout.session","created":1799999999,"livemode":false}}}`)
++	h := hmac.New(sha256.New, []byte("unit-provider-sandbox-signing-key"))
++	fmt.Fprintf(h, "%d.", now.Unix())
++	h.Write(raw)
++	signature := fmt.Sprintf("t=%d,v1=%s", now.Unix(), hex.EncodeToString(h.Sum(nil)))
++	post := func(signature string) int {
++		t.Helper()
++		req, e := http.NewRequest(http.MethodPost, server.URL+"/webhooks/stripe/provider-endpoint", bytes.NewReader(raw))
++		if e != nil {
++			t.Fatal(e)
++		}
++		req.Header.Set("Content-Type", "application/json")
++		req.Header.Set("Stripe-Signature", signature)
++		response, e := server.Client().Do(req)
++		if e != nil {
++			t.Fatal(e)
++		}
++		defer response.Body.Close()
++		_, _ = io.Copy(io.Discard, response.Body)
++		return response.StatusCode
++	}
++	if code := post(signature); code != http.StatusNoContent {
++		t.Fatalf("first request: %d", code)
++	}
++	first := *repo.stored
++	if code := post(signature); code != http.StatusNoContent {
++		t.Fatalf("duplicate request: %d", code)
++	}
++	if repo.inserts != 1 || *repo.stored != first || repo.stored.Signal.StripeAccountID != account || repo.stored.Signal.Livemode {
++		t.Fatal("duplicate changed durable identity")
++	}
++	sessions := repo.sessions
++	if code := post("t=1800000000,v1=" + hex.EncodeToString(make([]byte, 32))); code != http.StatusUnauthorized {
++		t.Fatalf("bad signature: %d", code)
++	}
++	if repo.sessions != sessions || repo.inserts != 1 {
++		t.Fatal("unauthenticated duplicate reached receipt storage")
++	}
++}
++
++func TestIsolatedProviderHTTPAccountsKeepIndependentSecretsAndReceipts(t *testing.T) {
++	now := time.Unix(1800000000, 0).UTC()
++	type tenant struct {
++		workspace, account, secret string
++		server                     *httptest.Server
++		repo                       *sandboxRepository
++	}
++	tenants := []*tenant{
++		{workspace: "c71a0e98-fab0-46dd-9742-9f592802bd26", account: "acct_1TenantSandboxA", secret: "unit-private-tenant-A-signing-key"},
++		{workspace: "5bda118f-6940-4863-a82b-eb74c7814604", account: "acct_2TenantSandboxB", secret: "unit-private-tenant-B-signing-key"},
++	}
++	for _, tenant := range tenants {
++		dir := t.TempDir()
++		if err := os.Chmod(dir, 0700); err != nil {
++			t.Fatal(err)
++		}
++		files, err := contentstore.Open(dir, func() time.Time { return now })
++		if err != nil {
++			t.Fatal(err)
++		}
++		t.Cleanup(func() { _ = files.Close() })
++		tenant.repo = &sandboxRepository{}
++		receiver, err := receivesignal.New(tenant.workspace, sandboxSecret{tenant.secret}, sandboxClock{now}, 72*time.Hour, tenant.repo, files)
++		if err != nil {
++			t.Fatal(err)
++		}
++		mode := false
++		binding := normalizesignal.Binding{InstallationID: "demo", WorkspaceID: tenant.workspace,
++			ConnectionID: "22222222-2222-4222-8222-222222222222", StripeAccountID: tenant.account,
++			Livemode: &mode, APIVersion: "2026-09-30.endive", AccountScope: normalizesignal.SandboxEndpointAccount}
++		installation := Installation{EndpointID: "demo", Revision: 1, Ready: true,
++			Connection: receivesignal.Connection{Binding: binding, SecurityEpoch: 7}}
++		handler, err := NewHandler(2*time.Second, sandboxInstallation{installation}, sandboxStart{}, map[string]*receivesignal.Consumer{tenant.workspace: receiver})
++		if err != nil {
++			t.Fatal(err)
++		}
++		tenant.server = httptest.NewTLSServer(handler)
++		t.Cleanup(tenant.server.Close)
++	}
++	raw := []byte(`{"id":"evt_same_external_id","object":"event","api_version":"2026-09-30.endive","created":1800000000,"livemode":false,"type":"checkout.session.completed","data":{"object":{"id":"cs_same_external_id","object":"checkout.session","created":1799999999,"livemode":false}}}`)
++	post := func(target *tenant, key string, payload []byte) int {
++		t.Helper()
++		h := hmac.New(sha256.New, []byte(key))
++		fmt.Fprintf(h, "%d.", now.Unix())
++		h.Write(payload)
++		request, err := http.NewRequest(http.MethodPost, target.server.URL+"/webhooks/stripe/demo", bytes.NewReader(payload))
++		if err != nil {
++			t.Fatal(err)
++		}
++		request.Header.Set("Content-Type", "application/json")
++		request.Header.Set("Stripe-Signature", fmt.Sprintf("t=%d,v1=%s", now.Unix(), hex.EncodeToString(h.Sum(nil))))
++		response, err := target.server.Client().Do(request)
++		if err != nil {
++			t.Fatal(err)
++		}
++		defer response.Body.Close()
++		_, _ = io.Copy(io.Discard, response.Body)
++		return response.StatusCode
++	}
++	for i, tenant := range tenants {
++		other := tenants[1-i]
++		if code := post(tenant, other.secret, raw); code != http.StatusUnauthorized || tenant.repo.inserts != 0 {
++			t.Fatalf("foreign signature entered tenant %d: status=%d", i, code)
++		}
++		foreignAccount := []byte(strings.Replace(string(raw), `"object":"event",`, `"object":"event","account":"`+other.account+`",`, 1))
++		if code := post(tenant, tenant.secret, foreignAccount); code == http.StatusNoContent || tenant.repo.inserts != 0 {
++			t.Fatalf("foreign explicit account entered tenant %d: status=%d", i, code)
++		}
++		live := []byte(strings.ReplaceAll(string(raw), `"livemode":false`, `"livemode":true`))
++		if code := post(tenant, tenant.secret, live); code == http.StatusNoContent || tenant.repo.inserts != 0 {
++			t.Fatalf("LIVE entered tenant %d: status=%d", i, code)
++		}
++		for n := 0; n < 2; n++ {
++			if code := post(tenant, tenant.secret, raw); code != http.StatusNoContent {
++				t.Fatalf("own delivery/duplicate rejected tenant %d: %d", i, code)
++			}
++		}
++		if tenant.repo.inserts != 1 || tenant.repo.stored.Signal.WorkspaceID != tenant.workspace || tenant.repo.stored.Signal.StripeAccountID != tenant.account {
++			t.Fatalf("tenant %d lost owner identity or dedup", i)
++		}
++	}
++}
+--- a/internal/adapters/http/stripewebhook/server.go
++++ b/internal/adapters/http/stripewebhook/server.go
+@@ -204,7 +204,7 @@
+ 	if installation.EndpointID != id || installation.Revision <= 0 || !installation.Ready ||
+ 		installation.Connection.SecurityEpoch <= 0 || b.InstallationID == "" || b.ConnectionID == "" ||
+ 		b.StripeAccountID == "" || b.Livemode == nil || b.APIVersion == "" ||
+-		(b.AccountScope != normalizesignal.DirectAccount && b.AccountScope != normalizesignal.ConnectedAccount) ||
++		(b.AccountScope != normalizesignal.DirectAccount && b.AccountScope != normalizesignal.ConnectedAccount && b.AccountScope != normalizesignal.SandboxEndpointAccount) ||
+ 		receiver == nil {
+ 		return http.StatusForbidden
+ 	}
+--- a/internal/application/normalizesignal/normalize.go
++++ b/internal/application/normalizesignal/normalize.go
+@@ -44,6 +44,10 @@
+ const (
+ 	DirectAccount    AccountScope = "DIRECT"
+ 	ConnectedAccount AccountScope = "CONNECTED"
++	// SandboxEndpointAccount is provisioned only by the dedicated provider-sandbox
++	// runtime. Account-less TEST events use the authenticated endpoint binding;
++	// present account values must still match it. Raw signed bytes are untouched.
++	SandboxEndpointAccount AccountScope = "SANDBOX_ENDPOINT"
+ )
+ 
+ type Binding struct {
+@@ -137,7 +141,7 @@
+ 		return nil, errors.New("clock_unavailable")
+ 	}
+ 	observed := time.Unix(now, 0)
+-	if !uuid(b.WorkspaceID, false) || !uuid(b.ConnectionID, false) || !opaque(b.StripeAccountID) || b.Livemode == nil || b.APIVersion == "" || (b.AccountScope != DirectAccount && b.AccountScope != ConnectedAccount) {
++	if !uuid(b.WorkspaceID, false) || !uuid(b.ConnectionID, false) || !opaque(b.StripeAccountID) || b.Livemode == nil || b.APIVersion == "" || (b.AccountScope != DirectAccount && b.AccountScope != ConnectedAccount && b.AccountScope != SandboxEndpointAccount) || (b.AccountScope == SandboxEndpointAccount && *b.Livemode) {
+ 		return nil, classifiedError{"binding_unknown", ErrContext}
+ 	}
+ 	if !uuid(r.MessageID, true) || !uuid(r.ReceiptID, false) || !validTime(r.FirstReceivedAt) || !validTime(r.ExpiresAt) || !r.ExpiresAt.After(r.FirstReceivedAt) || r.ExpiresAt.Sub(r.FirstReceivedAt) > 72*time.Hour || r.FirstReceivedAt.After(observed) || !r.ExpiresAt.After(observed) {
+@@ -179,12 +183,12 @@
+ 		return nil, classifiedError{"event_context", ErrContext}
+ 	}
+ 	account, present := event["account"]
+-	if b.AccountScope == ConnectedAccount {
++	if b.AccountScope == ConnectedAccount || (b.AccountScope == SandboxEndpointAccount && present) {
+ 		var value string
+ 		if !present || json.Unmarshal(account, &value) != nil || value != b.StripeAccountID {
+ 			return nil, classifiedError{"event_context", ErrContext}
+ 		}
+-	} else if present {
++	} else if b.AccountScope != SandboxEndpointAccount && present {
+ 		return nil, classifiedError{"event_context", ErrContext}
+ 	}
+ 	// Organization context is not an account binding supported by this boundary.
+--- /dev/null
++++ b/internal/application/normalizesignal/provider_sandbox_test.go
+@@ -0,0 +1,78 @@
++package normalizesignal
++
++import (
++	"bytes"
++	"context"
++	"strings"
++	"testing"
++)
++
++func sandboxFixture() Input {
++	in := fixture()
++	in.Binding.AccountScope = SandboxEndpointAccount
++	in.Binding.StripeAccountID = "acct_1UfGTDE1OQW8MuKn"
++	in.Binding.APIVersion = "2026-09-30.endive"
++	in.RawBody = []byte(strings.ReplaceAll(strings.ReplaceAll(string(in.RawBody), "acct_synthetic", in.Binding.StripeAccountID), "synthetic-version", in.Binding.APIVersion))
++	return in
++}
++
++func TestSandboxEndpointNormalizesSignedAbsentOrExactAccount(t *testing.T) {
++	for _, present := range []bool{false, true} {
++		in := sandboxFixture()
++		if !present {
++			in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`",`, "", 1))
++		}
++		before := append([]byte(nil), in.RawBody...)
++		out, err := execute(t, in)
++		if err != nil || out == nil || out.StripeAccountID != in.Binding.StripeAccountID || out.Livemode {
++			t.Fatalf("present=%v: %+v %v", present, out, err)
++		}
++		if !bytes.Equal(before, in.RawBody) {
++			t.Fatal("signed bytes were edited")
++		}
++	}
++}
++
++func TestSandboxEndpointRejectsForeignNullLiveAndVersion(t *testing.T) {
++	for name, mutate := range map[string]func(*Input){
++		"foreign account": func(in *Input) {
++			in.RawBody = []byte(strings.Replace(string(in.RawBody), in.Binding.StripeAccountID, "acct_foreign", 1))
++		},
++		"null account": func(in *Input) {
++			in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`"`, `"account":null`, 1))
++		},
++		"live event": func(in *Input) {
++			in.RawBody = []byte(strings.ReplaceAll(string(in.RawBody), `"livemode":false`, `"livemode":true`))
++		},
++		"live binding and event": func(in *Input) {
++			mode := true
++			in.Binding.Livemode = &mode
++			in.RawBody = []byte(strings.ReplaceAll(string(in.RawBody), `"livemode":false`, `"livemode":true`))
++		},
++		"wrong version": func(in *Input) {
++			in.RawBody = []byte(strings.Replace(string(in.RawBody), in.Binding.APIVersion, "2026-10-28.endive", 1))
++		},
++	} {
++		t.Run(name, func(t *testing.T) {
++			in := sandboxFixture()
++			mutate(&in)
++			if out, err := execute(t, in); err == nil || out != nil {
++				t.Fatalf("accepted invalid sandbox event: %+v %v", out, err)
++			}
++		})
++	}
++}
++
++func TestSandboxEndpointStillAuthenticatesOriginalBytes(t *testing.T) {
++	in := sandboxFixture()
++	in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`",`, "", 1))
++	in.Signature = sign(in.RawBody)
++	c, err := New(&secrets{}, clock{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	in.RawBody = append(in.RawBody, ' ')
++	if out, err := c.Normalize(context.Background(), in); err == nil || out != nil {
++		t.Fatal("accepted modified signed bytes")
++	}
++}
 --- a/internal/intakeruntime/config.go
 +++ b/internal/intakeruntime/config.go
-@@ -23,6 +23,11 @@
+@@ -21,7 +21,14 @@
+ 	ErrClosed = errors.New("Intake is closed: installation and runtime authority are not configured")
+ )
  
- var workspaceIDPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
- 
+-var workspaceIDPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
++var (
++	workspaceIDPattern     = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
++	stripeAccountIDPattern = regexp.MustCompile(`^acct_[A-Za-z0-9]{1,128}$`)
++)
++
 +// This owner-provisioned test profile still uses loopback provider facades.
 +// Host egress, credentials and target allowlists remain outside the container.
-+const ProviderSandboxAccount = "acct_1UfGTDE1OQW8MuKn"
 +const ProviderSandboxVersion = "2026-09-30.endive"
-+
+ 
  type Config struct {
  	Profile                  string `json:"profile"`
- 	Listen                   string `json:"listen"`
-@@ -33,6 +38,8 @@
+@@ -33,6 +40,8 @@
  	PollMillis               int    `json:"poll_ms"`
  	QualificationEpoch       int64  `json:"qualification_epoch,omitempty"`
  	QualificationWorkspaceID string `json:"qualification_workspace_id,omitempty"`
@@ -21,7 +381,7 @@
  	dir                      string
  }
  
-@@ -59,19 +66,26 @@
+@@ -59,19 +68,28 @@
  		return c, ErrConfig
  	}
  	if c.QualificationWorkspaceID != "" &&
@@ -31,7 +391,9 @@
  		return c, ErrConfig
  	}
 +	if c.Profile == "provider-sandbox" {
-+		if c.SandboxAccountID != ProviderSandboxAccount || c.SandboxAPIVersion != ProviderSandboxVersion || c.QualificationWorkspaceID == "" {
++		// Provisioned once per isolated workspace from its authenticated Stripe
++		// sandbox. Never infer or replace this owner binding from webhook JSON.
++		if !stripeAccountIDPattern.MatchString(c.SandboxAccountID) || c.SandboxAPIVersion != ProviderSandboxVersion || c.QualificationWorkspaceID == "" {
 +			return c, ErrConfig
 +		}
 +	} else if c.SandboxAccountID != "" || c.SandboxAPIVersion != "" {
@@ -51,6 +413,214 @@
  		!loopback(c.Listen) || !loopback(c.ProcessingAddress) || c.Listen == c.ProcessingAddress ||
  		c.DatabasePort <= 0 || c.DatabasePort > 65535 || c.Batch < 1 || c.Batch > 32 || c.PollMillis < 25 || c.PollMillis > 10000 {
  		return c, ErrConfig
+--- /dev/null
++++ b/internal/intakeruntime/provider_sandbox_test.go
+@@ -0,0 +1,205 @@
++package intakeruntime
++
++import (
++	"context"
++	"encoding/json"
++	"errors"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++
++	"github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal"
++	out "github.com/hitpipe/hitpipe/services/intake/internal/application/sendoutbox"
++)
++
++const providerAccountFixture = "acct_1TenantSandboxA"
++
++func providerConfig() map[string]any {
++	return map[string]any{"profile": "provider-sandbox", "listen": "127.0.0.1:28443", "database_port": 5432,
++		"stripe_origin": "https://127.0.0.1:18445", "processing_address": "127.0.0.1:8443", "batch": 1,
++		"poll_ms": 125, "qualification_epoch": 7, "qualification_workspace_id": "c71a0e98-fab0-46dd-9742-9f592802bd26",
++		"sandbox_account_id": providerAccountFixture, "sandbox_api_version": ProviderSandboxVersion}
++}
++
++func loadConfig(t *testing.T, value map[string]any) (Config, error) {
++	t.Helper()
++	dir := t.TempDir()
++	if err := os.Chmod(dir, 0700); err != nil {
++		t.Fatal(err)
++	}
++	raw, err := json.Marshal(value)
++	if err != nil {
++		t.Fatal(err)
++	}
++	path := filepath.Join(dir, "intake.json")
++	if err := os.WriteFile(path, raw, 0600); err != nil {
++		t.Fatal(err)
++	}
++	return Load(path)
++}
++
++func TestProviderSandboxScopeAndLoopbackAreExplicit(t *testing.T) {
++	c, err := loadConfig(t, providerConfig())
++	if err != nil || c.SandboxAccountID != providerAccountFixture || c.SandboxAPIVersion != ProviderSandboxVersion {
++		t.Fatal(c, err)
++	}
++	for name, change := range map[string]func(map[string]any){
++		"missing account":      func(v map[string]any) { delete(v, "sandbox_account_id") },
++		"empty account suffix": func(v map[string]any) { v["sandbox_account_id"] = "acct_" },
++		"account URL":          func(v map[string]any) { v["sandbox_account_id"] = "https://api.stripe.com" },
++		"account control":      func(v map[string]any) { v["sandbox_account_id"] = "acct_valid\n" },
++		"account separator":    func(v map[string]any) { v["sandbox_account_id"] = "acct_one/other" },
++		"unbounded account":    func(v map[string]any) { v["sandbox_account_id"] = "acct_" + strings.Repeat("a", 129) },
++		"missing version":      func(v map[string]any) { delete(v, "sandbox_api_version") },
++		"fixture version":      func(v map[string]any) { v["sandbox_api_version"] = Version },
++		"missing workspace":    func(v map[string]any) { delete(v, "qualification_workspace_id") },
++		"nil workspace":        func(v map[string]any) { v["qualification_workspace_id"] = "00000000-0000-0000-0000-000000000000" },
++		"missing epoch":        func(v map[string]any) { delete(v, "qualification_epoch") },
++		"external origin":      func(v map[string]any) { v["stripe_origin"] = "https://api.stripe.com" },
++		"external listener":    func(v map[string]any) { v["listen"] = "0.0.0.0:8443" },
++		"injected LIVE field":  func(v map[string]any) { v["livemode"] = true },
++		"sandbox cannot adopt account": func(v map[string]any) {
++			v["profile"] = "sandbox"
++			delete(v, "qualification_epoch")
++			delete(v, "qualification_workspace_id")
++		},
++		"qualification cannot adopt account": func(v map[string]any) { v["profile"] = "qualification" },
++	} {
++		t.Run(name, func(t *testing.T) {
++			v := providerConfig()
++			change(v)
++			if _, e := loadConfig(t, v); !errors.Is(e, ErrConfig) {
++				t.Fatalf("expected closed configuration: %v", e)
++			}
++		})
++	}
++}
++
++func TestProviderSandboxBindingPropagatesWithoutChangingFixtures(t *testing.T) {
++	s := &sandbox{ctx: context.Background(), workspace: Workspace, epoch: 7,
++		providerAccount: providerAccountFixture, providerVersion: ProviderSandboxVersion}
++	b := s.connection().Binding
++	if b.StripeAccountID != providerAccountFixture || b.APIVersion != ProviderSandboxVersion || b.AccountScope != normalizesignal.SandboxEndpointAccount || b.Livemode == nil || *b.Livemode || b.InstallationID != "demo" {
++		t.Fatalf("wrong endpoint binding: %+v", b)
++	}
++	if s.binding().AccountID != providerAccountFixture || s.binding().APIVersion != ProviderSandboxVersion || s.scope().Account != providerAccountFixture {
++		t.Fatal("provider identity lost in facts/outbox")
++	}
++	s.providerAccount, s.providerVersion = "", ""
++	b = s.connection().Binding
++	if b.StripeAccountID != Account || b.APIVersion != Version || b.AccountScope != normalizesignal.ConnectedAccount || s.binding().AccountID != Account || s.scope().Account != Account {
++		t.Fatal("fixture contract changed")
++	}
++}
++
++func TestExistingProfilesRemainLocalAndClosedByDefault(t *testing.T) {
++	v := providerConfig()
++	delete(v, "sandbox_account_id")
++	delete(v, "sandbox_api_version")
++	v["profile"] = "qualification"
++	if _, err := loadConfig(t, v); err != nil {
++		t.Fatal("qualification changed", err)
++	}
++	v["profile"] = "sandbox"
++	delete(v, "qualification_epoch")
++	delete(v, "qualification_workspace_id")
++	if _, err := loadConfig(t, v); err != nil {
++		t.Fatal("sandbox changed", err)
++	}
++	if _, err := loadConfig(t, map[string]any{}); !errors.Is(err, ErrClosed) {
++		t.Fatal("ordinary startup did not stay closed", err)
++	}
++}
++
++func TestIndependentProviderWorkspacesKeepExactAuthority(t *testing.T) {
++	first := providerConfig()
++	second := providerConfig()
++	second["sandbox_account_id"] = "acct_2TenantSandboxB"
++	second["qualification_workspace_id"] = "5bda118f-6940-4863-a82b-eb74c7814604"
++	a, err := loadConfig(t, first)
++	if err != nil {
++		t.Fatal(err)
++	}
++	b, err := loadConfig(t, second)
++	if err != nil {
++		t.Fatal("a different valid sandbox account was rejected", err)
++	}
++	makeSandbox := func(c Config) *sandbox {
++		return &sandbox{ctx: context.Background(), gate: make(chan struct{}, 1), workspace: c.QualificationWorkspaceID,
++			epoch: c.QualificationEpoch, providerAccount: c.SandboxAccountID, providerVersion: c.SandboxAPIVersion,
++			key: []byte("private-local-facade-key-" + c.SandboxAccountID)}
++	}
++	one, two := makeSandbox(a), makeSandbox(b)
++	for _, s := range []*sandbox{one, two} {
++		own, err := s.Lookup(context.Background(), "demo")
++		if err != nil || own.Connection.Binding.WorkspaceID != s.workspace || own.Connection.Binding.StripeAccountID != s.providerAccount {
++			t.Fatal("installation lost exact owner", err)
++		}
++		called := false
++		if err := (webhookGate{s}).Start(context.Background(), own, func() error { called = true; return nil }); err != nil || !called {
++			t.Fatal("own installation denied", err)
++		}
++		other := two
++		if s == two {
++			other = one
++		}
++		foreign, err := other.Lookup(context.Background(), "demo")
++		if err != nil {
++			t.Fatal(err)
++		}
++		called = false
++		if err := (webhookGate{s}).Start(context.Background(), foreign, func() error { called = true; return nil }); err == nil || called {
++			t.Fatal("foreign installation crossed workspace/account authority")
++		}
++		if key, err := s.ReadKey(context.Background(), other.binding()); err == nil || key != nil {
++			t.Fatal("foreign workspace read private credential")
++		}
++		if err := s.Start(context.Background(), other.binding(), func() error { called = true; return nil }); err == nil || called {
++			t.Fatal("foreign source-facts authority accepted")
++		}
++		if err := (senderGate{s}).Start(context.Background(), other.scope(), func(context.Context) error { called = true; return nil }); !errors.Is(err, out.ErrDenied) || called {
++			t.Fatal("foreign outbox authority accepted", err)
++		}
++		// The same Stripe account may be connected to a second workspace;
++		// account equality must never substitute for workspace equality.
++		copyBinding := s.binding()
++		copyBinding.WorkspaceID = other.workspace
++		if err := s.Start(context.Background(), copyBinding, func() error { called = true; return nil }); err == nil || called {
++			t.Fatal("shared account bypassed workspace boundary")
++		}
++	}
++}
++
++func TestProviderSecretsStayPrivateAndRequired(t *testing.T) {
++	dir := t.TempDir()
++	if _, err := loadSecret(dir, "webhook.secret"); !errors.Is(err, ErrConfig) {
++		t.Fatal("missing webhook secret accepted", err)
++	}
++	for _, name := range []string{"webhook.secret", "stripe.secret"} {
++		path := filepath.Join(dir, name)
++		value := []byte("independent-private-" + name)
++		if err := os.WriteFile(path, value, 0600); err != nil {
++			t.Fatal(err)
++		}
++		loaded, err := loadSecret(dir, name)
++		if err != nil || string(loaded) != string(value) {
++			t.Fatal("required exact bytes unavailable", err)
++		}
++		if err := os.Chmod(path, 0644); err != nil {
++			t.Fatal(err)
++		}
++		if _, err := loadSecret(dir, name); !errors.Is(err, ErrConfig) {
++			t.Fatal("publicly readable credential accepted", err)
++		}
++		if err := os.Remove(path); err != nil {
++			t.Fatal(err)
++		}
++		if err := os.Symlink("other-workspace.secret", path); err != nil {
++			t.Fatal(err)
++		}
++		if _, err := loadSecret(dir, name); !errors.Is(err, ErrConfig) {
++			t.Fatal("credential symlink accepted", err)
++		}
++	}
++}
 --- a/internal/intakeruntime/run.go
 +++ b/internal/intakeruntime/run.go
 @@ -88,7 +88,7 @@
@@ -186,380 +756,3 @@
  }
  
  type senderGate struct{ s *sandbox }
---- /dev/null
-+++ b/internal/intakeruntime/provider_sandbox_test.go
-@@ -0,0 +1,105 @@
-+package intakeruntime
-+
-+import (
-+	"context"
-+	"encoding/json"
-+	"errors"
-+	"os"
-+	"path/filepath"
-+	"testing"
-+
-+	"github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal"
-+)
-+
-+func providerConfig() map[string]any {
-+	return map[string]any{"profile": "provider-sandbox", "listen": "127.0.0.1:28443", "database_port": 5432,
-+		"stripe_origin": "https://127.0.0.1:18445", "processing_address": "127.0.0.1:8443", "batch": 1,
-+		"poll_ms": 125, "qualification_epoch": 7, "qualification_workspace_id": "c71a0e98-fab0-46dd-9742-9f592802bd26",
-+		"sandbox_account_id": ProviderSandboxAccount, "sandbox_api_version": ProviderSandboxVersion}
-+}
-+
-+func loadConfig(t *testing.T, value map[string]any) (Config, error) {
-+	t.Helper()
-+	dir := t.TempDir()
-+	if err := os.Chmod(dir, 0700); err != nil {
-+		t.Fatal(err)
-+	}
-+	raw, err := json.Marshal(value)
-+	if err != nil {
-+		t.Fatal(err)
-+	}
-+	path := filepath.Join(dir, "intake.json")
-+	if err := os.WriteFile(path, raw, 0600); err != nil {
-+		t.Fatal(err)
-+	}
-+	return Load(path)
-+}
-+
-+func TestProviderSandboxScopeAndLoopbackAreExplicit(t *testing.T) {
-+	c, err := loadConfig(t, providerConfig())
-+	if err != nil || c.SandboxAccountID != ProviderSandboxAccount || c.SandboxAPIVersion != ProviderSandboxVersion {
-+		t.Fatal(c, err)
-+	}
-+	for name, change := range map[string]func(map[string]any){
-+		"missing account":     func(v map[string]any) { delete(v, "sandbox_account_id") },
-+		"foreign account":     func(v map[string]any) { v["sandbox_account_id"] = "acct_foreign" },
-+		"missing version":     func(v map[string]any) { delete(v, "sandbox_api_version") },
-+		"fixture version":     func(v map[string]any) { v["sandbox_api_version"] = Version },
-+		"missing workspace":   func(v map[string]any) { delete(v, "qualification_workspace_id") },
-+		"nil workspace":       func(v map[string]any) { v["qualification_workspace_id"] = "00000000-0000-0000-0000-000000000000" },
-+		"missing epoch":       func(v map[string]any) { delete(v, "qualification_epoch") },
-+		"external origin":     func(v map[string]any) { v["stripe_origin"] = "https://api.stripe.com" },
-+		"external listener":   func(v map[string]any) { v["listen"] = "0.0.0.0:8443" },
-+		"injected LIVE field": func(v map[string]any) { v["livemode"] = true },
-+		"sandbox cannot adopt account": func(v map[string]any) {
-+			v["profile"] = "sandbox"
-+			delete(v, "qualification_epoch")
-+			delete(v, "qualification_workspace_id")
-+		},
-+		"qualification cannot adopt account": func(v map[string]any) { v["profile"] = "qualification" },
-+	} {
-+		t.Run(name, func(t *testing.T) {
-+			v := providerConfig()
-+			change(v)
-+			if _, e := loadConfig(t, v); !errors.Is(e, ErrConfig) {
-+				t.Fatalf("expected closed configuration: %v", e)
-+			}
-+		})
-+	}
-+}
-+
-+func TestProviderSandboxBindingPropagatesWithoutChangingFixtures(t *testing.T) {
-+	s := &sandbox{ctx: context.Background(), workspace: Workspace, epoch: 7,
-+		providerAccount: ProviderSandboxAccount, providerVersion: ProviderSandboxVersion}
-+	b := s.connection().Binding
-+	if b.StripeAccountID != ProviderSandboxAccount || b.APIVersion != ProviderSandboxVersion || b.AccountScope != normalizesignal.SandboxEndpointAccount || b.Livemode == nil || *b.Livemode {
-+		t.Fatalf("wrong endpoint binding: %+v", b)
-+	}
-+	if s.binding().AccountID != ProviderSandboxAccount || s.binding().APIVersion != ProviderSandboxVersion || s.scope().Account != ProviderSandboxAccount {
-+		t.Fatal("provider identity lost in facts/outbox")
-+	}
-+	s.providerAccount, s.providerVersion = "", ""
-+	b = s.connection().Binding
-+	if b.StripeAccountID != Account || b.APIVersion != Version || b.AccountScope != normalizesignal.ConnectedAccount || s.binding().AccountID != Account || s.scope().Account != Account {
-+		t.Fatal("fixture contract changed")
-+	}
-+}
-+
-+func TestExistingProfilesRemainLocalAndClosedByDefault(t *testing.T) {
-+	v := providerConfig()
-+	delete(v, "sandbox_account_id")
-+	delete(v, "sandbox_api_version")
-+	v["profile"] = "qualification"
-+	if _, err := loadConfig(t, v); err != nil {
-+		t.Fatal("qualification changed", err)
-+	}
-+	v["profile"] = "sandbox"
-+	delete(v, "qualification_epoch")
-+	delete(v, "qualification_workspace_id")
-+	if _, err := loadConfig(t, v); err != nil {
-+		t.Fatal("sandbox changed", err)
-+	}
-+	if _, err := loadConfig(t, map[string]any{}); !errors.Is(err, ErrClosed) {
-+		t.Fatal("ordinary startup did not stay closed", err)
-+	}
-+}
---- a/internal/application/normalizesignal/normalize.go
-+++ b/internal/application/normalizesignal/normalize.go
-@@ -44,6 +44,10 @@
- const (
- 	DirectAccount    AccountScope = "DIRECT"
- 	ConnectedAccount AccountScope = "CONNECTED"
-+	// SandboxEndpointAccount is provisioned only by the dedicated provider-sandbox
-+	// runtime. Account-less TEST events use the authenticated endpoint binding;
-+	// present account values must still match it. Raw signed bytes are untouched.
-+	SandboxEndpointAccount AccountScope = "SANDBOX_ENDPOINT"
- )
- 
- type Binding struct {
-@@ -137,7 +141,7 @@
- 		return nil, errors.New("clock_unavailable")
- 	}
- 	observed := time.Unix(now, 0)
--	if !uuid(b.WorkspaceID, false) || !uuid(b.ConnectionID, false) || !opaque(b.StripeAccountID) || b.Livemode == nil || b.APIVersion == "" || (b.AccountScope != DirectAccount && b.AccountScope != ConnectedAccount) {
-+	if !uuid(b.WorkspaceID, false) || !uuid(b.ConnectionID, false) || !opaque(b.StripeAccountID) || b.Livemode == nil || b.APIVersion == "" || (b.AccountScope != DirectAccount && b.AccountScope != ConnectedAccount && b.AccountScope != SandboxEndpointAccount) || (b.AccountScope == SandboxEndpointAccount && *b.Livemode) {
- 		return nil, classifiedError{"binding_unknown", ErrContext}
- 	}
- 	if !uuid(r.MessageID, true) || !uuid(r.ReceiptID, false) || !validTime(r.FirstReceivedAt) || !validTime(r.ExpiresAt) || !r.ExpiresAt.After(r.FirstReceivedAt) || r.ExpiresAt.Sub(r.FirstReceivedAt) > 72*time.Hour || r.FirstReceivedAt.After(observed) || !r.ExpiresAt.After(observed) {
-@@ -179,12 +183,12 @@
- 		return nil, classifiedError{"event_context", ErrContext}
- 	}
- 	account, present := event["account"]
--	if b.AccountScope == ConnectedAccount {
-+	if b.AccountScope == ConnectedAccount || (b.AccountScope == SandboxEndpointAccount && present) {
- 		var value string
- 		if !present || json.Unmarshal(account, &value) != nil || value != b.StripeAccountID {
- 			return nil, classifiedError{"event_context", ErrContext}
- 		}
--	} else if present {
-+	} else if b.AccountScope != SandboxEndpointAccount && present {
- 		return nil, classifiedError{"event_context", ErrContext}
- 	}
- 	// Organization context is not an account binding supported by this boundary.
---- /dev/null
-+++ b/internal/application/normalizesignal/provider_sandbox_test.go
-@@ -0,0 +1,78 @@
-+package normalizesignal
-+
-+import (
-+	"bytes"
-+	"context"
-+	"strings"
-+	"testing"
-+)
-+
-+func sandboxFixture() Input {
-+	in := fixture()
-+	in.Binding.AccountScope = SandboxEndpointAccount
-+	in.Binding.StripeAccountID = "acct_1UfGTDE1OQW8MuKn"
-+	in.Binding.APIVersion = "2026-09-30.endive"
-+	in.RawBody = []byte(strings.ReplaceAll(strings.ReplaceAll(string(in.RawBody), "acct_synthetic", in.Binding.StripeAccountID), "synthetic-version", in.Binding.APIVersion))
-+	return in
-+}
-+
-+func TestSandboxEndpointNormalizesSignedAbsentOrExactAccount(t *testing.T) {
-+	for _, present := range []bool{false, true} {
-+		in := sandboxFixture()
-+		if !present {
-+			in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`",`, "", 1))
-+		}
-+		before := append([]byte(nil), in.RawBody...)
-+		out, err := execute(t, in)
-+		if err != nil || out == nil || out.StripeAccountID != in.Binding.StripeAccountID || out.Livemode {
-+			t.Fatalf("present=%v: %+v %v", present, out, err)
-+		}
-+		if !bytes.Equal(before, in.RawBody) {
-+			t.Fatal("signed bytes were edited")
-+		}
-+	}
-+}
-+
-+func TestSandboxEndpointRejectsForeignNullLiveAndVersion(t *testing.T) {
-+	for name, mutate := range map[string]func(*Input){
-+		"foreign account": func(in *Input) {
-+			in.RawBody = []byte(strings.Replace(string(in.RawBody), in.Binding.StripeAccountID, "acct_foreign", 1))
-+		},
-+		"null account": func(in *Input) {
-+			in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`"`, `"account":null`, 1))
-+		},
-+		"live event": func(in *Input) {
-+			in.RawBody = []byte(strings.ReplaceAll(string(in.RawBody), `"livemode":false`, `"livemode":true`))
-+		},
-+		"live binding and event": func(in *Input) {
-+			mode := true
-+			in.Binding.Livemode = &mode
-+			in.RawBody = []byte(strings.ReplaceAll(string(in.RawBody), `"livemode":false`, `"livemode":true`))
-+		},
-+		"wrong version": func(in *Input) {
-+			in.RawBody = []byte(strings.Replace(string(in.RawBody), in.Binding.APIVersion, "2026-10-28.endive", 1))
-+		},
-+	} {
-+		t.Run(name, func(t *testing.T) {
-+			in := sandboxFixture()
-+			mutate(&in)
-+			if out, err := execute(t, in); err == nil || out != nil {
-+				t.Fatalf("accepted invalid sandbox event: %+v %v", out, err)
-+			}
-+		})
-+	}
-+}
-+
-+func TestSandboxEndpointStillAuthenticatesOriginalBytes(t *testing.T) {
-+	in := sandboxFixture()
-+	in.RawBody = []byte(strings.Replace(string(in.RawBody), `"account":"`+in.Binding.StripeAccountID+`",`, "", 1))
-+	in.Signature = sign(in.RawBody)
-+	c, err := New(&secrets{}, clock{})
-+	if err != nil {
-+		t.Fatal(err)
-+	}
-+	in.RawBody = append(in.RawBody, ' ')
-+	if out, err := c.Normalize(context.Background(), in); err == nil || out != nil {
-+		t.Fatal("accepted modified signed bytes")
-+	}
-+}
---- a/internal/adapters/http/stripewebhook/server.go
-+++ b/internal/adapters/http/stripewebhook/server.go
-@@ -204,7 +204,7 @@
- 	if installation.EndpointID != id || installation.Revision <= 0 || !installation.Ready ||
- 		installation.Connection.SecurityEpoch <= 0 || b.InstallationID == "" || b.ConnectionID == "" ||
- 		b.StripeAccountID == "" || b.Livemode == nil || b.APIVersion == "" ||
--		(b.AccountScope != normalizesignal.DirectAccount && b.AccountScope != normalizesignal.ConnectedAccount) ||
-+		(b.AccountScope != normalizesignal.DirectAccount && b.AccountScope != normalizesignal.ConnectedAccount && b.AccountScope != normalizesignal.SandboxEndpointAccount) ||
- 		receiver == nil {
- 		return http.StatusForbidden
- 	}
---- /dev/null
-+++ b/internal/adapters/http/stripewebhook/provider_sandbox_test.go
-@@ -0,0 +1,137 @@
-+package stripewebhook
-+
-+import (
-+	"bytes"
-+	"context"
-+	"crypto/hmac"
-+	"crypto/sha256"
-+	"encoding/hex"
-+	"fmt"
-+	"io"
-+	"net/http"
-+	"net/http/httptest"
-+	"os"
-+	"sync"
-+	"testing"
-+	"time"
-+
-+	"github.com/hitpipe/hitpipe/services/intake/internal/adapters/contentstore"
-+	"github.com/hitpipe/hitpipe/services/intake/internal/application/normalizesignal"
-+	"github.com/hitpipe/hitpipe/services/intake/internal/application/receivesignal"
-+)
-+
-+type sandboxClock struct{ now time.Time }
-+
-+func (c sandboxClock) Now(context.Context) (time.Time, error) { return c.now, nil }
-+
-+type sandboxSecret struct{}
-+
-+func (sandboxSecret) Resolve(context.Context, string) ([]byte, error) {
-+	return []byte("unit-provider-sandbox-signing-key"), nil
-+}
-+
-+type sandboxInstallation struct{ installation Installation }
-+
-+func (s sandboxInstallation) Lookup(context.Context, string) (Installation, error) {
-+	return s.installation, nil
-+}
-+
-+type sandboxStart struct{}
-+
-+func (sandboxStart) Start(_ context.Context, _ Installation, receive func() error) error {
-+	return receive()
-+}
-+
-+type sandboxRepository struct {
-+	mu                sync.Mutex
-+	stored            *receivesignal.Stored
-+	inserts, sessions int
-+}
-+
-+func (r *sandboxRepository) WithSession(_ context.Context, fn func(receivesignal.Session) error) error {
-+	r.mu.Lock()
-+	defer r.mu.Unlock()
-+	r.sessions++
-+	return fn(r)
-+}
-+func (r *sandboxRepository) Lookup(context.Context, receivesignal.Connection, string) (*receivesignal.Stored, error) {
-+	return r.stored, nil
-+}
-+func (r *sandboxRepository) Insert(_ context.Context, _ receivesignal.Connection, value receivesignal.Stored) error {
-+	r.inserts++
-+	r.stored = &value
-+	return nil
-+}
-+func (r *sandboxRepository) References(context.Context, receivesignal.Connection) (map[string]bool, error) {
-+	return nil, nil
-+}
-+
-+func TestSignedProviderSandboxHTTPPreservesDedupAndAuthentication(t *testing.T) {
-+	const workspace = "c71a0e98-fab0-46dd-9742-9f592802bd26"
-+	const account = "acct_1UfGTDE1OQW8MuKn"
-+	now := time.Unix(1800000000, 0).UTC()
-+	dir := t.TempDir()
-+	if err := os.Chmod(dir, 0700); err != nil {
-+		t.Fatal(err)
-+	}
-+	files, err := contentstore.Open(dir, func() time.Time { return now })
-+	if err != nil {
-+		t.Fatal(err)
-+	}
-+	defer files.Close()
-+	repo := &sandboxRepository{}
-+	receiver, err := receivesignal.New(workspace, sandboxSecret{}, sandboxClock{now}, 72*time.Hour, repo, files)
-+	if err != nil {
-+		t.Fatal(err)
-+	}
-+	mode := false
-+	binding := normalizesignal.Binding{InstallationID: "provider-endpoint", WorkspaceID: workspace,
-+		ConnectionID: "22222222-2222-4222-8222-222222222222", StripeAccountID: account,
-+		Livemode: &mode, APIVersion: "2026-09-30.endive", AccountScope: normalizesignal.SandboxEndpointAccount}
-+	installation := Installation{EndpointID: "provider-endpoint", Revision: 1, Ready: true,
-+		Connection: receivesignal.Connection{Binding: binding, SecurityEpoch: 7}}
-+	handler, err := NewHandler(2*time.Second, sandboxInstallation{installation}, sandboxStart{}, map[string]*receivesignal.Consumer{workspace: receiver})
-+	if err != nil {
-+		t.Fatal(err)
-+	}
-+	server := httptest.NewTLSServer(handler)
-+	defer server.Close()
-+	raw := []byte(`{"id":"evt_provider_sandbox","object":"event","api_version":"2026-09-30.endive","created":1800000000,"livemode":false,"type":"checkout.session.completed","data":{"object":{"id":"cs_provider_sandbox","object":"checkout.session","created":1799999999,"livemode":false}}}`)
-+	h := hmac.New(sha256.New, []byte("unit-provider-sandbox-signing-key"))
-+	fmt.Fprintf(h, "%d.", now.Unix())
-+	h.Write(raw)
-+	signature := fmt.Sprintf("t=%d,v1=%s", now.Unix(), hex.EncodeToString(h.Sum(nil)))
-+	post := func(signature string) int {
-+		t.Helper()
-+		req, e := http.NewRequest(http.MethodPost, server.URL+"/webhooks/stripe/provider-endpoint", bytes.NewReader(raw))
-+		if e != nil {
-+			t.Fatal(e)
-+		}
-+		req.Header.Set("Content-Type", "application/json")
-+		req.Header.Set("Stripe-Signature", signature)
-+		response, e := server.Client().Do(req)
-+		if e != nil {
-+			t.Fatal(e)
-+		}
-+		defer response.Body.Close()
-+		_, _ = io.Copy(io.Discard, response.Body)
-+		return response.StatusCode
-+	}
-+	if code := post(signature); code != http.StatusNoContent {
-+		t.Fatalf("first request: %d", code)
-+	}
-+	first := *repo.stored
-+	if code := post(signature); code != http.StatusNoContent {
-+		t.Fatalf("duplicate request: %d", code)
-+	}
-+	if repo.inserts != 1 || *repo.stored != first || repo.stored.Signal.StripeAccountID != account || repo.stored.Signal.Livemode {
-+		t.Fatal("duplicate changed durable identity")
-+	}
-+	sessions := repo.sessions
-+	if code := post("t=1800000000,v1=" + hex.EncodeToString(make([]byte, 32))); code != http.StatusUnauthorized {
-+		t.Fatalf("bad signature: %d", code)
-+	}
-+	if repo.sessions != sessions || repo.inserts != 1 {
-+		t.Fatal("unauthenticated duplicate reached receipt storage")
-+	}
-+}

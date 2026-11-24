@@ -146,12 +146,17 @@ class Application:
             b = self.binding
             account = self.request_json("/v1/account", "stripe")
             price = self.request_json("/v1/prices/" + b["sourcePrice"], "stripe")
-            user = self.request_json("/api/v2/user", "clickup")
             target = self.request_json("/api/v2/list/" + b["targetList"], "clickup")
+            members = self.request_json(f"/api/v2/list/{b['targetList']}/member", "clickup")
+            current = self.request_json("/api/v2/user", "clickup").get("user", {})
+            eligible = {str(current.get("id"))} | {
+                str(item.get("user", item).get("id")) for item in members.get("members", [])
+            }
             spaces = self.request_json(f"/api/v2/team/{b['destinationWorkspace']}/space?archived=false", "clickup")
             if (account.get("id") != b["sourceAccount"] or price.get("id") != b["sourcePrice"]
                     or price.get("livemode") is not False or price.get("active") is not True
-                    or price.get("type") != "one_time" or str(user.get("user", {}).get("id")) != b["assignee"]
+                    or price.get("type") != "one_time"
+                    or b["assignee"] not in eligible
                     or str(target.get("id")) != b["targetList"] or target.get("archived") is True
                     or str(target.get("space", {}).get("id")) not in {str(space.get("id")) for space in spaces.get("spaces", [])}):
                 raise ValueError("external provider binding differs")

@@ -160,6 +160,12 @@ def load_provider_profile(path: Path, ready_root: Path, default_binaries: Path):
     for control in (config, credentials, secret):
         private_directory(control.parent)
     os.close(private_file(credentials))
+    profile = ProviderProfile(workspace, state_root, binaries, load_provider_binding(config), credentials, secret)
+    profile.signing_key()
+    return profile
+
+
+def load_provider_binding(config):
     binding = read_json(config)
     patterns = {
         "sourceAccount": r"acct_[A-Za-z0-9]{8,64}",
@@ -174,9 +180,7 @@ def load_provider_profile(path: Path, ready_root: Path, default_binaries: Path):
     label = binding["label"]
     if not label or label != label.strip() or len(label) > 120 or not label.isprintable():
         raise ValueError("Invalid school provider demo service label")
-    profile = ProviderProfile(workspace, state_root, binaries, binding, credentials, secret)
-    profile.signing_key()
-    return profile
+    return binding
 
 
 @dataclass(frozen=True)
@@ -359,7 +363,34 @@ class Broker:
 
     def provider(self, slot: Slot):
         configured = getattr(self.config, "provider_profile", None)
-        return configured if configured and configured.workspace_id == slot.workspace_id else None
+        if configured and configured.workspace_id == slot.workspace_id:
+            return configured
+        directory = getattr(self.config, "provider_settings_root", None)
+        if directory is None:
+            return None
+        entry = directory / slot.workspace_id
+        try:
+            private_directory(entry)
+            state = read_json(entry / "state.json")
+        except FileNotFoundError:
+            return None
+        if state.get("workspace") != slot.workspace_id:
+            raise ValueError("Provider settings belong to another workspace")
+        endpoint = state.get("stripeEndpoint")
+        if endpoint is None:
+            return None
+        if not isinstance(endpoint, str) or not re.fullmatch(r"we_[a-zA-Z0-9]{8,80}", endpoint):
+            raise ValueError("Provider settings have no exact Stripe endpoint")
+        binding = load_provider_binding(entry / "provider-binding.json")
+        if state.get("binding") != binding:
+            raise ValueError("Provider settings binding differs")
+        credentials = profile_path(entry / "credentials.json")
+        secret = profile_path(entry / "provider-webhook.secret")
+        os.close(private_file(credentials))
+        result = ProviderProfile(slot.workspace_id, self.config.provider_runtime_root,
+                                 self.config.provider_binaries, binding, credentials, secret)
+        result.signing_key()
+        return result
 
     def instance(self, slot: Slot, state: Path, profile):
         if profile is None:
@@ -469,8 +500,14 @@ class Broker:
     def reconcile(self):
         allocations = registry_allocations(self.config.registry, self.config.issuer)
         allocated = {slug for slug, _ in allocations}
-        slots = [replace(slot, provider_demo=True) if self.provider(slot) else slot
-                 for slot in self.slots.remember(allocations)]
+        slots = []
+        invalid = set()
+        for slot in self.slots.remember(allocations):
+            try:
+                slots.append(replace(slot, provider_demo=True) if self.provider(slot) else slot)
+            except (OSError, ValueError, KeyError, TypeError):
+                invalid.add(slot.slug)
+                slots.append(slot)
         states = self.systemd.states(slots)
         now = time.time()
         running = 0
@@ -482,6 +519,15 @@ class Broker:
                 running += 1
             try:
                 state = self.sandbox(slot)
+                if slot.slug in invalid:
+                    self.revoke(slot, state)
+                    continue
+                if status == "unmanaged" and slot.provider_demo and getattr(self.config, "provider_settings_root", None):
+                    prior = replace(slot, provider_demo=False)
+                    if self.systemd.states([prior]).get(slot.slug) in {"active", "activating"}:
+                        self.revoke(slot, state)
+                        self.systemd.stop_unready(prior)
+                        continue
                 if status in ABSENT_STATES:
                     self.revoke(slot, state)
                     if slot.slug in allocated and now >= slot.retry_at:
@@ -505,7 +551,7 @@ class Broker:
                 if status in {"active", "activating"} and now >= slot.started_at + START_TIMEOUT:
                     self.systemd.stop_unready(slot)
         if running < self.config.max_running and not provisioning and candidates:
-            slot, state = min(candidates, key=lambda candidate: candidate[0].started_at)
+            slot, state = min(candidates, key=lambda candidate: (not candidate[0].provider_demo, candidate[0].started_at))
             self.slots.attempt(slot, now)
             try:
                 self.systemd.start(slot, self.script, self.prepare(slot, state))
@@ -520,6 +566,9 @@ def main():
     parser.add_argument("--issuer", required=True)
     parser.add_argument("--max-running", type=int, choices=range(1, 5), default=2)
     parser.add_argument("--provider-profile", type=Path, help="Owner-only profile for one registered workspace")
+    parser.add_argument("--provider-settings-root", type=Path)
+    parser.add_argument("--provider-runtime-root", type=Path)
+    parser.add_argument("--provider-binaries", type=Path)
     parser.add_argument("--once", action="store_true")
     config = parser.parse_args()
     paths = (config.registry, config.ready_root, config.binaries, config.frontend, config.node, config.go, config.sources)
@@ -538,6 +587,21 @@ def main():
     if config.ready_root.resolve() != config.ready_root:
         parser.error("Ready root must be canonical")
     verify_binaries(config.binaries)
+    dynamic = (config.provider_settings_root, config.provider_runtime_root, config.provider_binaries)
+    if any(dynamic):
+        try:
+            if not all(dynamic) or config.provider_profile is not None:
+                raise ValueError("One provider setup mode is required")
+            for directory in dynamic:
+                private_directory(profile_path(directory))
+            if config.provider_runtime_root.is_relative_to(config.ready_root) or config.ready_root.is_relative_to(config.provider_runtime_root):
+                raise ValueError("Provider runtime and school sandboxes must remain separate")
+            require_socket_paths(config.provider_runtime_root, provider_demo=True)
+            verify_binaries(config.provider_binaries)
+            if (config.provider_binaries / "school-backend").samefile(config.binaries / "school-backend"):
+                raise ValueError("A separate external provider build is required")
+        except (OSError, ValueError):
+            parser.error("The self-service provider paths or release are invalid")
     if config.provider_profile is not None:
         try:
             config.provider_profile = load_provider_profile(config.provider_profile, config.ready_root, config.binaries)
