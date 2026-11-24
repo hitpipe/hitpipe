@@ -7,7 +7,7 @@ import http.client
 import json
 import os
 from contextlib import closing
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from hmac import compare_digest
 from pathlib import Path
 import re
@@ -35,10 +35,11 @@ BINARIES = (*EXECUTABLES, "binaries.sha256")
 ABSENT_STATES = {"inactive", "failed"}
 
 
-def require_socket_paths(root: Path):
+def require_socket_paths(root: Path, provider_demo=False):
     # The backend binds inside the container, but Node connects through the
     # host path. Linux's pathname sockets have 108 bytes including the NUL.
-    longest_socket = root / "t0123456789abcd0" / "run.XXXXXX" / "bridge" / "processing.sock"
+    socket_name = "provider-egress.sock" if provider_demo else "processing.sock"
+    longest_socket = root / "t0123456789abcd0" / "run.XXXXXX" / "bridge" / socket_name
     if len(os.fsencode(longest_socket)) > UNIX_PATH_LIMIT:
         raise ValueError("School ready root is too long for its Unix sockets; select a shorter absolute path")
 
@@ -102,6 +103,82 @@ def write_private(path: Path, data: bytes):
         temporary.unlink(missing_ok=True)
 
 
+def bind_private(path: Path, expected: bytes):
+    try:
+        existing = small_file(path)
+    except FileNotFoundError:
+        write_private(path, expected)
+    else:
+        if existing != expected:
+            raise ValueError("School sandbox state differs from its configured binding")
+
+
+@dataclass(frozen=True)
+class ProviderProfile:
+    workspace_id: str
+    state_root: Path
+    binaries: Path
+    binding: dict
+    credentials: Path
+    webhook_secret: Path
+
+    def signing_key(self):
+        key = small_file(self.webhook_secret).strip()
+        if not re.fullmatch(rb"whsec_[A-Za-z0-9_-]{16,240}", key):
+            raise ValueError("Invalid private Stripe Sandbox signing secret")
+        return key + b"\n"
+
+
+def profile_path(value) -> Path:
+    if not isinstance(value, (str, Path)):
+        raise ValueError("Expected a canonical absolute provider profile path")
+    path = Path(value)
+    if not path.is_absolute() or path.resolve(strict=True) != path:
+        raise ValueError("Expected a canonical absolute provider profile path")
+    return path
+
+
+def load_provider_profile(path: Path, ready_root: Path, default_binaries: Path):
+    path = profile_path(path)
+    private_directory(path.parent)
+    spec = read_json(path)
+    if set(spec) != {"workspace_id", "state_root", "binaries", "binding", "credentials", "webhook_secret"}:
+        raise ValueError("Unexpected school provider profile fields")
+    workspace = spec["workspace_id"]
+    if not isinstance(workspace, str) or not UUID.fullmatch(workspace):
+        raise ValueError("Expected one canonical school workspace ID")
+    state_root = profile_path(spec["state_root"])
+    private_directory(state_root)
+    if state_root.is_relative_to(ready_root) or ready_root.is_relative_to(state_root):
+        raise ValueError("School provider demo state and original state must have separate roots")
+    require_socket_paths(state_root, provider_demo=True)
+    binaries = profile_path(spec["binaries"])
+    verify_binaries(binaries)
+    if (binaries / "school-backend").samefile(default_binaries / "school-backend"):
+        raise ValueError("Expected a dedicated school provider demo binary release")
+    config, credentials, secret = (profile_path(spec[key]) for key in ("binding", "credentials", "webhook_secret"))
+    for control in (config, credentials, secret):
+        private_directory(control.parent)
+    os.close(private_file(credentials))
+    binding = read_json(config)
+    patterns = {
+        "sourceAccount": r"acct_[A-Za-z0-9]{8,64}",
+        "sourcePrice": r"price_[A-Za-z0-9]{8,64}",
+        "destinationWorkspace": r"[1-9][0-9]{0,19}",
+        "targetList": r"[1-9][0-9]{0,19}",
+        "assignee": r"[1-9][0-9]{0,19}",
+    }
+    if (set(binding) != set(patterns) | {"label"} or not all(isinstance(value, str) for value in binding.values())
+            or not all(re.fullmatch(pattern, binding[key]) for key, pattern in patterns.items())):
+        raise ValueError("Invalid school provider demo binding")
+    label = binding["label"]
+    if not label or label != label.strip() or len(label) > 120 or not label.isprintable():
+        raise ValueError("Invalid school provider demo service label")
+    profile = ProviderProfile(workspace, state_root, binaries, binding, credentials, secret)
+    profile.signing_key()
+    return profile
+
+
 @dataclass(frozen=True)
 class Slot:
     number: int
@@ -110,6 +187,7 @@ class Slot:
     started_at: float
     retry_at: float
     published: bool
+    provider_demo: bool = False
 
     @property
     def web_port(self):
@@ -130,7 +208,8 @@ class Slot:
 
     @property
     def description(self):
-        return f"HitPipe school sandbox {self.slug}"
+        mode = "provider demo" if self.provider_demo else "sandbox"
+        return f"HitPipe school {mode} {self.slug}"
 
 
 def registry_allocations(path: Path, issuer: str):
@@ -278,21 +357,38 @@ class Broker:
         private_directory(path)
         return path
 
+    def provider(self, slot: Slot):
+        configured = getattr(self.config, "provider_profile", None)
+        return configured if configured and configured.workspace_id == slot.workspace_id else None
+
+    def instance(self, slot: Slot, state: Path, profile):
+        if profile is None:
+            return slot.slug, state
+        name = "d" + slot.slug[1:]
+        return name, profile.state_root / name
+
     def prepare(self, slot: Slot, state: Path):
+        profile = self.provider(slot)
+        instance, state = self.instance(slot, state, profile)
+        state.mkdir(mode=0o700, exist_ok=True)
+        private_directory(state)
+        marker = state / "provider-demo.json"
+        if profile:
+            binding = json.dumps(profile.binding, sort_keys=True, ensure_ascii=True).encode("ascii") + b"\n"
+            if not os.path.lexists(marker) and any(state.iterdir()):
+                raise ValueError("Expected a fresh school provider demo state directory")
+            bind_private(marker, binding)
+            bind_private(state / "provider-webhook.secret", profile.signing_key())
+        elif os.path.lexists(marker):
+            raise ValueError("The default sandbox may not have a provider demo binding")
         config = state / "workspace-id"
-        expected = slot.workspace_id.encode("ascii") + b"\n"
-        try:
-            existing = small_file(config)
-        except FileNotFoundError:
-            write_private(config, expected)
-        else:
-            if existing != expected:
-                raise ValueError("Sandbox workspace differs from the school registry")
+        bind_private(config, slot.workspace_id.encode("ascii") + b"\n")
         target = state / "bin"
         target.mkdir(mode=0o700, exist_ok=True)
         private_directory(target)
+        binaries = profile.binaries if profile else self.config.binaries
         for name in BINARIES:
-            original = self.config.binaries / name
+            original = binaries / name
             staged = target / name
             try:
                 os.link(original, staged, follow_symlinks=False)
@@ -300,26 +396,33 @@ class Broker:
                 before, after = original.lstat(), staged.lstat()
                 if not os.path.samestat(before, after) or not stat.S_ISREG(after.st_mode):
                     raise ValueError("Sandbox binaries differ from the staged release") from None
-        return {
+        environment = {
             "HITPIPE_SCHOOL_STATE": state, "HITPIPE_SCHOOL_WORKSPACE_FILE": config,
-            "HITPIPE_SCHOOL_INSTANCE": slot.slug, "HITPIPE_SCHOOL_INTERNAL_HOST": slot.internal_host,
+            "HITPIPE_SCHOOL_INSTANCE": instance, "HITPIPE_SCHOOL_INTERNAL_HOST": slot.internal_host,
             "HITPIPE_BROWSER_PORT": slot.web_port, "HITPIPE_SCHOOL_ENTRY_PORT": slot.web_port + 1,
             "HITPIPE_SCHOOL_FRONTEND": self.config.frontend, "HITPIPE_NODE": self.config.node,
             "HITPIPE_GO": self.config.go, "HITPIPE_SCHOOL_BACKEND": self.backend,
             "HITPIPE_DEMO_SOURCE": self.config.sources, "HITPIPE_SCHOOL_REUSE_BINARIES": 1,
-            "HITPIPE_SCHOOL_AI": 1, "HITPIPE_SCHOOL_STRIPE_EVENTS": 1, "HITPIPE_SCHOOL_MANAGED": 1,
+            "HITPIPE_SCHOOL_AI": int(profile is None), "HITPIPE_SCHOOL_STRIPE_EVENTS": int(profile is None),
+            "HITPIPE_SCHOOL_MANAGED": 1,
         }
+        if profile:
+            environment["HITPIPE_PROVIDER_DEMO_CREDENTIALS"] = profile.credentials
+        return environment
 
     def revoke(self, slot: Slot, state: Path):
         (state / READY).unlink(missing_ok=True)
         self.attested.pop(slot.slug, None)
 
     def attest(self, slot: Slot, state: Path):
-        current = state / "current"
+        profile = self.provider(slot)
+        _, runtime_state = self.instance(slot, state, profile)
+        private_directory(runtime_state)
+        current = runtime_state / "current"
         if not current.is_symlink():
             raise ValueError("School sandbox has no current runtime")
         run = current.resolve(strict=True)
-        if run.parent != state or not RUNTIME.fullmatch(run.name):
+        if run.parent != runtime_state or not RUNTIME.fullmatch(run.name):
             raise ValueError("School sandbox runtime escaped its state")
         private_directory(run)
         if self.attested.get(slot.slug) == run and (state / READY).is_file():
@@ -331,13 +434,19 @@ class Broker:
         raw = read_json(bridge / "ready.json")
         browser = read_json(bridge / "browser-config.json")
         token, csrf = raw["sessionToken"], raw["csrfToken"]
+        synthetic_payment = profile is None
         if (web.get("mode") != "school-fixture" or web.get("origin") != slot.origin
                 or "entryUrl" in web or "proofUrl" in web
                 or raw.get("workspaceId") != slot.workspace_id
                 or browser.get("origin") != slot.origin or browser.get("workspaceId") != slot.workspace_id
-                or browser.get("sessionToken") != token or browser.get("schoolStripeEvents") is not True
+                or browser.get("sessionToken") != token or browser.get("schoolStripeEvents") is not synthetic_payment
                 or not TOKEN.fullmatch(token) or not CSRF.fullmatch(csrf)):
             raise ValueError("Child readiness differs from the assigned school sandbox")
+        if profile is not None:
+            if raw.get("providerDemo") != profile.binding or browser.get("schoolAi") is not False:
+                raise ValueError("Child readiness differs from the school's pinned provider binding")
+        elif "providerDemo" in raw:
+            raise ValueError("Unexpected provider demo in the default school sandbox")
         session = self.probe(slot.web_port, "/api/v1/session", token)
         profile = session["profile"]
         if (not UUID.fullmatch(raw["principalId"]) or not UUID.fullmatch(raw["sessionId"])
@@ -360,7 +469,8 @@ class Broker:
     def reconcile(self):
         allocations = registry_allocations(self.config.registry, self.config.issuer)
         allocated = {slug for slug, _ in allocations}
-        slots = self.slots.remember(allocations)
+        slots = [replace(slot, provider_demo=True) if self.provider(slot) else slot
+                 for slot in self.slots.remember(allocations)]
         states = self.systemd.states(slots)
         now = time.time()
         running = 0
@@ -409,6 +519,7 @@ def main():
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--issuer", required=True)
     parser.add_argument("--max-running", type=int, choices=range(1, 5), default=2)
+    parser.add_argument("--provider-profile", type=Path, help="Owner-only profile for one registered workspace")
     parser.add_argument("--once", action="store_true")
     config = parser.parse_args()
     paths = (config.registry, config.ready_root, config.binaries, config.frontend, config.node, config.go, config.sources)
@@ -427,6 +538,11 @@ def main():
     if config.ready_root.resolve() != config.ready_root:
         parser.error("Ready root must be canonical")
     verify_binaries(config.binaries)
+    if config.provider_profile is not None:
+        try:
+            config.provider_profile = load_provider_profile(config.provider_profile, config.ready_root, config.binaries)
+        except (OSError, ValueError):
+            parser.error("The owner-only provider profile, state root or release is invalid")
     with os.fdopen(private_file(config.ready_root / ".broker.lock", os.O_RDWR | os.O_CREAT), "wb") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)

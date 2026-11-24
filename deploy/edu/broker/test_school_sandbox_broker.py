@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import sqlite3
@@ -5,14 +6,26 @@ import stat
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 from uuid import uuid4
 
-from school_sandbox_broker import BINARIES, READY, Broker, Slots, read_json, require_socket_paths, write_private
+from school_sandbox_broker import (
+    BINARIES, EXECUTABLES, READY, Broker, Slots, UserSystemd, load_provider_profile,
+    read_json, require_socket_paths, write_private,
+)
 
 
 ISSUER = "https://school.example.test"
 TOKEN = "t" * 43
 CSRF = "c" * 43
+BINDING = {
+    "sourceAccount": "acct_abcdefgh",
+    "sourcePrice": "price_abcdefgh",
+    "destinationWorkspace": "1234",
+    "targetList": "2345",
+    "assignee": "3456",
+    "label": "Учебная услуга",
+}
 
 
 class Systemd:
@@ -62,19 +75,24 @@ class BrokerTest(unittest.TestCase):
         self.assertEqual(token, TOKEN)
         return self.response[(port, path)]
 
-    def publish_child(self, slot):
-        state = self.config.ready_root / slot.slug
+    def publish_child(self, slot, state=None, binding=None):
+        manifest = self.config.ready_root / slot.slug / READY
+        state = state or manifest.parent
         run = state / "run.client"
         run.mkdir(mode=0o700)
         bridge = run / "bridge"
         bridge.mkdir(mode=0o700)
         user, session = str(uuid4()), str(uuid4())
+        raw = {"workspaceId": slot.workspace_id, "sessionToken": TOKEN, "csrfToken": CSRF,
+               "principalId": user, "sessionId": session}
+        if binding is not None:
+            raw["providerDemo"] = binding
         for path, payload in (
             (run / "web-ready.json", {"origin": slot.origin, "mode": "school-fixture"}),
-            (bridge / "ready.json", {"workspaceId": slot.workspace_id, "sessionToken": TOKEN, "csrfToken": CSRF,
-                                     "principalId": user, "sessionId": session}),
+            (bridge / "ready.json", raw),
             (bridge / "browser-config.json", {"workspaceId": slot.workspace_id, "sessionToken": TOKEN,
-                                              "origin": slot.origin, "schoolStripeEvents": True}),
+                                              "origin": slot.origin, "schoolStripeEvents": binding is None,
+                                              "schoolAi": binding is None}),
         ):
             write_private(path, json.dumps(payload).encode())
         (state / "current").symlink_to(run)
@@ -85,7 +103,31 @@ class BrokerTest(unittest.TestCase):
             "items": [{"workspace_id": slot.workspace_id, "role": "OWNER"}],
         }
         self.systemd.status[slot.slug] = "active"
-        return state / READY
+        return manifest
+
+    def set_provider_profile(self, workspace):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        for path in (root / "state", root / "bin"):
+            path.mkdir(mode=0o700)
+        artifact = b"verified provider demo test artifact"
+        for name in EXECUTABLES:
+            file = root / "bin" / name
+            write_private(file, artifact)
+            file.chmod(0o700)
+        receipt = "".join(f"{hashlib.sha256(artifact).hexdigest()}  {name}\n" for name in EXECUTABLES)
+        write_private(root / "bin/binaries.sha256", receipt.encode("ascii"))
+        write_private(root / "binding", json.dumps(BINDING).encode())
+        write_private(root / "credentials", b"test")
+        write_private(root / "secret", b"whsec_abcdefghijklmnop")
+        profile = root / "profile.json"
+        write_private(profile, json.dumps({
+            "workspace_id": workspace, "state_root": str(root / "state"), "binaries": str(root / "bin"),
+            "binding": str(root / "binding"), "credentials": str(root / "credentials"),
+            "webhook_secret": str(root / "secret"),
+        }).encode())
+        self.config.provider_profile = load_provider_profile(profile, self.config.ready_root, self.config.binaries)
 
     def test_stable_distinct_slots_and_bounded_provisioning(self):
         self.broker.reconcile()
@@ -149,6 +191,89 @@ class BrokerTest(unittest.TestCase):
         require_socket_paths(Path("/home/deploy/.hp-school/private"))
         with self.assertRaisesRegex(ValueError, "ready root is too long"):
             require_socket_paths(Path("/tmp") / ("а" * 27))
+        marginal = Path("/tmp") / ("x" * 51)
+        require_socket_paths(marginal)
+        with self.assertRaisesRegex(ValueError, "ready root is too long"):
+            require_socket_paths(marginal, provider_demo=True)
+
+    def test_provider_profile_substitutes_one_instance_preserving_original_state(self):
+        first, second, *_ = self.slots.remember(self.allocations)
+        original = self.broker.sandbox(first)
+        self.broker.prepare(first, original)
+        write_private(original / "workspace-bound-id", b"original test database binding")
+        self.set_provider_profile(first.workspace_id)
+
+        self.broker.reconcile()
+        selected, real = self.systemd.started[0]
+        self.assertEqual(selected.description, f"HitPipe school provider demo {first.slug}")
+        self.assertEqual(selected.unit, first.unit)
+        state = real["HITPIPE_SCHOOL_STATE"]
+        self.assertEqual(state, self.config.provider_profile.state_root / ("d" + first.slug[1:]))
+        self.assertEqual(real["HITPIPE_SCHOOL_INSTANCE"], state.name)
+        self.assertEqual(real["HITPIPE_PROVIDER_DEMO_CREDENTIALS"], self.config.provider_profile.credentials)
+        self.assertEqual(real["HITPIPE_SCHOOL_AI"], 0)
+        self.assertEqual(real["HITPIPE_SCHOOL_STRIPE_EVENTS"], 0)
+        self.assertEqual(read_json(state / "provider-demo.json"), BINDING)
+        self.assertEqual((state / "workspace-id").read_text().strip(), first.workspace_id)
+        self.assertTrue((state / "bin/school-backend").samefile(self.config.provider_profile.binaries / "school-backend"))
+        self.assertTrue((original / "bin/school-backend").samefile(self.config.binaries / "school-backend"))
+        self.assertEqual((original / "workspace-bound-id").read_bytes(), b"original test database binding")
+        self.assertFalse((original / "provider-demo.json").exists())
+
+        ready = self.publish_child(selected, state, BINDING)
+        self.broker.reconcile()
+        self.assertEqual(ready.parent, original)
+        self.assertEqual(read_json(ready)["sandbox_slug"], first.slug)
+        self.assertFalse((state / READY).exists())
+        ordinary, normal = self.systemd.started[1]
+        self.assertEqual(ordinary.description, second.description)
+        self.assertEqual(normal["HITPIPE_SCHOOL_INSTANCE"], second.slug)
+        self.assertEqual(normal["HITPIPE_SCHOOL_STRIPE_EVENTS"], 1)
+        self.assertNotIn("HITPIPE_PROVIDER_DEMO_CREDENTIALS", normal)
+        self.assertTrue((normal["HITPIPE_SCHOOL_STATE"] / "bin/school-backend")
+                        .samefile(self.config.binaries / "school-backend"))
+
+    def test_selected_manifest_rejects_wrong_provider_and_synthetic_payment(self):
+        self.set_provider_profile(self.allocations[0][1])
+        self.broker.reconcile()
+        slot, environment = self.systemd.started[0]
+        state = environment["HITPIPE_SCHOOL_STATE"]
+        ready = self.publish_child(slot, state, dict(BINDING, sourcePrice="price_wrongvalue"))
+        self.broker.reconcile()
+        self.assertFalse(ready.exists())
+        bridge = (state / "current").resolve() / "bridge"
+        raw = read_json(bridge / "ready.json")
+        raw["providerDemo"] = BINDING
+        write_private(bridge / "ready.json", json.dumps(raw).encode())
+        browser = read_json(bridge / "browser-config.json")
+        browser["schoolStripeEvents"] = True
+        write_private(bridge / "browser-config.json", json.dumps(browser).encode())
+        self.broker.reconcile()
+        self.assertFalse(ready.exists())
+        self.assertEqual(self.probes, [])
+
+    def test_provider_profile_refuses_nonempty_unbound_state(self):
+        first, *_ = self.slots.remember(self.allocations)
+        self.set_provider_profile(first.workspace_id)
+        demo = self.config.provider_profile.state_root / ("d" + first.slug[1:])
+        demo.mkdir(mode=0o700)
+        write_private(demo / "workspace-bound-id", b"existing database binding")
+        with self.assertRaisesRegex(ValueError, "fresh school provider demo state"):
+            self.broker.prepare(first, self.broker.sandbox(first))
+        self.assertFalse((demo / "provider-demo.json").exists())
+
+    def test_an_active_unit_in_the_other_mode_cannot_be_attested_or_stopped(self):
+        original, *_ = self.slots.remember(self.allocations)
+        self.set_provider_profile(original.workspace_id)
+        self.broker.reconcile()
+        demo_slot, _ = self.systemd.started[0]
+        reply = SimpleNamespace(stdout=f"Id={original.unit}\nDescription={original.description}\n"
+                                      "LoadState=loaded\nActiveState=active\nTransient=yes\n")
+        with patch("school_sandbox_broker.subprocess.run", return_value=reply) as systemctl:
+            systemd = UserSystemd()
+            self.assertEqual(systemd.states([demo_slot]), {original.slug: "unmanaged"})
+            systemd.stop_unready(demo_slot)
+            self.assertTrue(all(call.args[0][2] == "show" for call in systemctl.call_args_list))
 
 
 if __name__ == "__main__":
