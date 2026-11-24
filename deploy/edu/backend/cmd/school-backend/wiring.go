@@ -30,13 +30,13 @@ func (s *backend) seedConnections(ctx context.Context) error {
 		return err
 	}
 	defer tx.Rollback(context.Background())
-	if _, err = tx.Exec(seed, `SELECT set_config('hp.workspace_id',$1,true)`, workspaceID); err != nil {
+	if _, err = tx.Exec(seed, `SELECT set_config('hp.workspace_id',$1,true)`, s.workspaceID); err != nil {
 		return err
 	}
 	if _, err = tx.Exec(seed, `INSERT INTO hp_intake.source_connections
 		(workspace_id,connection_id,account_id,livemode,security_epoch,health,verified_at)
 		VALUES ($1,$2,$3,false,7,'READY',clock_timestamp()) ON CONFLICT (workspace_id,connection_id) DO NOTHING`,
-		workspaceID, sourceID, stripeAccount); err != nil {
+		s.workspaceID, sourceID, stripeAccount); err != nil {
 		return err
 	}
 	if err = tx.Commit(seed); err != nil {
@@ -50,7 +50,7 @@ func (s *backend) seedConnections(ctx context.Context) error {
 	_, err = delivery.Exec(seed, `INSERT INTO hp_delivery.destination_connections
 		(workspace_id,connection_id,external_workspace_id,security_epoch,token_fingerprint,health)
 		VALUES ($1,$2,$3,7,$4,'READY') ON CONFLICT (workspace_id,connection_id) DO NOTHING`,
-		workspaceID, destinationID, clickUpWorkspace, bytes.Repeat([]byte{0x13}, 32))
+		s.workspaceID, destinationID, clickUpWorkspace, bytes.Repeat([]byte{0x13}, 32))
 	return err
 }
 
@@ -98,10 +98,14 @@ func (s *backend) prepareConfig() error {
 	ic.keypair("intake-client", s.certs.Leaves["intake.test"])
 	ic.file("webhook.secret", []byte(s.keys.Signing))
 	ic.file("stripe.secret", []byte(s.keys.StripeKey))
-	ic.json("intake.json", map[string]any{
+	intake := map[string]any{
 		"profile": "qualification", "listen": intakeAddress, "database_port": 5432,
 		"stripe_origin": "https://" + stripeAddress, "processing_address": businessAddress, "batch": 1, "poll_ms": 125, "qualification_epoch": 7,
-	})
+	}
+	if s.workspaceID != workspaceID {
+		intake["qualification_workspace_id"] = s.workspaceID
+	}
+	ic.json("intake.json", intake)
 	if ic.err != nil {
 		return ic.err
 	}
@@ -133,7 +137,7 @@ func (s *backend) prepareConfig() error {
 		return err
 	}
 	rc.json("stand.json", config.StandConfig{Workspaces: []config.StandWorkspace{{
-		ID: workspaceID, Owner: ownerID, SessionID: sessionID,
+		ID: s.workspaceID, Owner: ownerID, SessionID: sessionID,
 		SessionFile: rc.file("session", []byte(s.keys.Token)), CSRFFile: rc.file("csrf", []byte(s.keys.CSRF)),
 		Source: sourceID, Destination: destinationID, Account: stripeAccount, DestinationWorkspace: clickUpWorkspace,
 		Mode: "TEST", PriceAlias: "PRICE_ALIAS", ListAlias: "LIST_ALIAS", AssigneeAlias: "ASSIGNEE_ALIAS",
@@ -155,7 +159,7 @@ func (s *backend) startDelivery() (*child, error) {
 		"database_dsn_file":  rc.file("delivery-app.dsn", []byte(dsnPrefix+"hp_delivery_app"+dsnSuffix)),
 		"content_directory":  filepath.Join(s.state, "delivery-content"),
 		"server_certificate": serverCert, "server_key": serverKey, "client_ca": ca, "processing_san": "processing-client.test",
-		"workspace_id": workspaceID, "connection_id": destinationID, "epoch": 7, "destination_workspace_id": clickUpWorkspace,
+		"workspace_id": s.workspaceID, "connection_id": destinationID, "epoch": 7, "destination_workspace_id": clickUpWorkspace,
 		"target_list_id": clickUpList, "assignee_id": clickUpAssignee, "valid_until": time.Now().UTC().Add(90 * time.Minute),
 		"worker": map[string]any{
 			"worker_dsn_file": rc.file("delivery-worker.dsn", []byte(dsnPrefix+"hp_delivery_worker"+dsnSuffix)),
@@ -256,7 +260,7 @@ func (s *backend) publishReady() error {
 	w.file("ca.pem", s.certs.CA)
 	w.keypair("bff", s.certs.Leaves["bff.test"])
 	w.json("ready.json", map[string]any{
-		"workspaceId": workspaceID, "sessionId": sessionID, "sessionToken": s.keys.Token, "csrfToken": s.keys.CSRF, "principalId": ownerID,
+		"workspaceId": s.workspaceID, "sessionId": sessionID, "sessionToken": s.keys.Token, "csrfToken": s.keys.CSRF, "principalId": ownerID,
 		"securityEpoch": 7, "processingServerName": "processing.fixture", "processingSocket": "processing.sock", "providerSocket": "provider.sock",
 		"caPath": "ca.pem", "certPath": "bff.pem", "keyPath": "bff.key", "sourceConnectionId": sourceID, "destinationConnectionId": destinationID,
 		"priceAlias": "PRICE_ALIAS", "listAlias": "LIST_ALIAS", "assigneeAlias": "ASSIGNEE_ALIAS", "serviceLabel": label,

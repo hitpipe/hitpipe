@@ -60,7 +60,7 @@ func (s *backend) revokeQueueProof() error {
 	return s.withQueueWriter(s.removeQueueProof)
 }
 
-func queueRead(ctx context.Context, dsn string, read func(pgx.Tx) error) error {
+func (s *backend) queueRead(ctx context.Context, dsn string, read func(pgx.Tx) error) error {
 	db, err := pgx.Connect(ctx, dsn)
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func queueRead(ctx context.Context, dsn string, read func(pgx.Tx) error) error {
 		return err
 	}
 	defer tx.Rollback(context.Background())
-	if _, err = tx.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, workspaceID); err != nil {
+	if _, err = tx.Exec(ctx, `SELECT set_config('hp.workspace_id',$1,true)`, s.workspaceID); err != nil {
 		return err
 	}
 	return read(tx)
@@ -87,13 +87,13 @@ func (s *backend) refreshQueueProof(ctx context.Context) error {
 	// a prior send is either durable in Processing or has no future send. New
 	// school events cannot enter while this reservation is held.
 	var pending bool
-	var scope = lifecycle.QueueScope{WorkspaceID: workspaceID}
-	err := queueRead(ctx, intakeReader, func(tx pgx.Tx) error {
+	var scope = lifecycle.QueueScope{WorkspaceID: s.workspaceID}
+	err := s.queueRead(ctx, intakeReader, func(tx pgx.Tx) error {
 		return tx.QueryRow(ctx, `SELECT EXISTS (
 			SELECT 1 FROM hp_intake.outbox WHERE workspace_id=$1 AND state<>'ACKED'
 		) OR EXISTS (
 			SELECT 1 FROM hp_intake.signals WHERE workspace_id=$1 AND connection_id=$2 AND state IN ('HELD','UNRESOLVED')
-		)`, workspaceID, sourceID).Scan(&pending)
+		)`, s.workspaceID, sourceID).Scan(&pending)
 	})
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func (s *backend) refreshQueueProof(ctx context.Context) error {
 	if pending {
 		return s.revokeQueueProof()
 	}
-	err = queueRead(ctx, processingApp, func(tx pgx.Tx) error {
+	err = s.queueRead(ctx, processingApp, func(tx pgx.Tx) error {
 		return tx.QueryRow(ctx, `SELECT o.operation_id::text, a.digest, o.first_activation_at, o.pause_accepted_at, (
 			EXISTS(SELECT 1 FROM hp_processing.inbox i WHERE i.workspace_id=o.workspace_id AND i.disposition IN ('HELD','CONFLICT')) OR
 			EXISTS(SELECT 1 FROM hp_processing.outbox q WHERE q.workspace_id=o.workspace_id AND q.state<>'ACKED')
@@ -110,7 +110,7 @@ func (s *backend) refreshQueueProof(ctx context.Context) error {
 		JOIN hp_processing.accepted_configs a
 		  ON (a.workspace_id,a.operation_id,a.config_id)=(o.workspace_id,o.operation_id,o.selected_config_id)
 		WHERE o.workspace_id=$1 AND o.state='PAUSED' AND o.pause_accepted_at IS NOT NULL
-		ORDER BY o.first_activation_at DESC LIMIT 1`, workspaceID).
+		ORDER BY o.first_activation_at DESC LIMIT 1`, s.workspaceID).
 			Scan(&scope.OperationID, &scope.ConfigDigest, &scope.FirstActivationAt, &scope.PauseAcceptedAt, &pending)
 	})
 	if errors.Is(err, pgx.ErrNoRows) {

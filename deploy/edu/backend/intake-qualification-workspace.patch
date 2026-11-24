@@ -1,0 +1,67 @@
+--- a/internal/intakeruntime/config.go
++++ b/internal/intakeruntime/config.go
+@@ -12,0 +13 @@
++	"regexp"
+@@ -22,0 +24,2 @@
++var workspaceIDPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
++
+@@ -24,9 +27,10 @@
+-	Profile            string `json:"profile"`
+-	Listen             string `json:"listen"`
+-	DatabasePort       int    `json:"database_port"`
+-	StripeOrigin       string `json:"stripe_origin"`
+-	ProcessingAddress  string `json:"processing_address"`
+-	Batch              int    `json:"batch"`
+-	PollMillis         int    `json:"poll_ms"`
+-	QualificationEpoch int64  `json:"qualification_epoch,omitempty"`
+-	dir                string
++	Profile                  string `json:"profile"`
++	Listen                   string `json:"listen"`
++	DatabasePort             int    `json:"database_port"`
++	StripeOrigin             string `json:"stripe_origin"`
++	ProcessingAddress        string `json:"processing_address"`
++	Batch                    int    `json:"batch"`
++	PollMillis               int    `json:"poll_ms"`
++	QualificationEpoch       int64  `json:"qualification_epoch,omitempty"`
++	QualificationWorkspaceID string `json:"qualification_workspace_id,omitempty"`
++	dir                      string
+@@ -54,0 +59,5 @@
++		return c, ErrConfig
++	}
++	if c.QualificationWorkspaceID != "" &&
++		(c.Profile != "qualification" || !workspaceIDPattern.MatchString(c.QualificationWorkspaceID) ||
++			c.QualificationWorkspaceID == "00000000-0000-0000-0000-000000000000") {
+--- a/internal/intakeruntime/run.go
++++ b/internal/intakeruntime/run.go
+@@ -123 +123 @@
+-	s := &sandbox{ctx: ctx, gate: make(chan struct{}, 1), signing: signing, key: key, epoch: 1}
++	s := &sandbox{ctx: ctx, gate: make(chan struct{}, 1), signing: signing, key: key, epoch: 1, workspace: Workspace}
+@@ -131,0 +132,3 @@
++		if c.QualificationWorkspaceID != "" {
++			s.workspace = c.QualificationWorkspaceID
++		}
+@@ -150 +153 @@
+-	inbound, err := receivesignal.New(Workspace, s, clock{}, 72*time.Hour, receipts, store)
++	inbound, err := receivesignal.New(s.workspace, s, clock{}, 72*time.Hour, receipts, store)
+@@ -154 +157 @@
+-	webhook, err := web.NewHandler(2*time.Second, s, webhookGate{s}, map[string]*receivesignal.Consumer{Workspace: inbound})
++	webhook, err := web.NewHandler(2*time.Second, s, webhookGate{s}, map[string]*receivesignal.Consumer{s.workspace: inbound})
+@@ -189 +192 @@
+-	worker, err := out.New(Workspace, repo, senderGate{s}, store, transport, out.Policy{Batch: c.Batch, Attempts: 5,
++	worker, err := out.New(s.workspace, repo, senderGate{s}, store, transport, out.Policy{Batch: c.Batch, Attempts: 5,
+--- a/internal/intakeruntime/sandbox.go
++++ b/internal/intakeruntime/sandbox.go
+@@ -34,0 +35 @@
++	workspace     string
+@@ -69 +70 @@
+-		InstallationID: Endpoint, WorkspaceID: Workspace, ConnectionID: Connection, StripeAccountID: Account,
++		InstallationID: Endpoint, WorkspaceID: s.workspace, ConnectionID: Connection, StripeAccountID: Account,
+@@ -107 +108 @@
+-	return facts.Binding{WorkspaceID: Workspace, ConnectionID: Connection, AccountID: Account, CredentialRef: "sandbox-read",
++	return facts.Binding{WorkspaceID: s.workspace, ConnectionID: Connection, AccountID: Account, CredentialRef: "sandbox-read",
+@@ -111 +112 @@
+-	if s.ctx.Err() != nil || ctx.Err() != nil || q.WorkspaceID != Workspace || q.ConnectionID != Connection ||
++	if s.ctx.Err() != nil || ctx.Err() != nil || q.WorkspaceID != s.workspace || q.ConnectionID != Connection ||
+@@ -142 +143 @@
+-	return out.Scope{Workspace: Workspace, Connection: Connection, Account: Account, Epoch: s.epoch}
++	return out.Scope{Workspace: s.workspace, Connection: Connection, Account: Account, Epoch: s.epoch}

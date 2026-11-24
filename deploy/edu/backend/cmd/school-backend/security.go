@@ -239,7 +239,7 @@ func (s *backend) authorize(w http.ResponseWriter, r *http.Request) {
 	case "/internal/v1/authorize":
 		var in drafts.AuthorizeRequest
 		if draftjson.Validate("AuthorizeRequest", raw) != nil || json.Unmarshal(raw, &in) != nil || in.RuntimeID != s.keys.RuntimeID ||
-			in.WorkspaceID != workspaceID || !constantEqual(r.Header.Get("X-HitPipe-Session"), s.keys.Token) {
+			in.WorkspaceID != s.workspaceID || !constantEqual(r.Header.Get("X-HitPipe-Session"), s.keys.Token) {
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}

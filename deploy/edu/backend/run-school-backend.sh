@@ -7,6 +7,8 @@ demo=${HITPIPE_DEMO_SOURCE:?Point to the unpacked, verified school source archiv
 state=${HITPIPE_SCHOOL_STATE:?Set an absolute 0700 state directory}
 share=${HITPIPE_BROWSER_SHARE:?Set an absolute 0700 browser coordination directory}
 instance=${HITPIPE_SCHOOL_INSTANCE:-vps}
+workspace_file=${HITPIPE_SCHOOL_WORKSPACE_FILE:-}
+default_workspace=11111111-1111-4111-8111-111111111111
 [[ "$instance" =~ ^[a-z][a-z0-9-]{0,15}$ ]] || { printf 'Invalid school instance name.\n' >&2; exit 2; }
 private_dir() {
   [[ "$1" == /* && -d "$1" && ! -L "$1" && $(stat -c '%a:%u' -- "$1") == "700:$(id -u)" ]]
@@ -68,7 +70,9 @@ else
   cp -a -- "$source/processing" "$source/platform" "$scratch/go/"
   mkdir -p "$scratch/go/processing/cmd/school-backend"
   cp -- "$here"/cmd/school-backend/*.go "$scratch/go/processing/cmd/school-backend/"
-  "$go_bin" -C "$intake" build -ldflags '-s -w' -o "$scratch/intake" ./cmd/intake
+  cp -a -- "$intake" "$scratch/intake-source"
+  patch --batch --forward -s -d "$scratch/intake-source" -p1 <"$here/intake-qualification-workspace.patch"
+  "$go_bin" -C "$scratch/intake-source" build -ldflags '-s -w' -o "$scratch/intake" ./cmd/intake
   "$go_bin" -C "$source/processing" build -ldflags '-s -w -X main.revision=dd1a36f6529f57d7452a27b615b6cad18b1288bd' -o "$scratch/processing" ./cmd/processing
   cp -a -- "$delivery" "$scratch/delivery"
   patch --batch --forward -s -d "$scratch/delivery" -p1 <"$here/persistent-qualification-worker.patch"
@@ -80,11 +84,33 @@ else
   (cd "$bin" && sha256sum intake processing delivery-offline-receipt school-backend > binaries.sha256)
 fi
 
+workspace=$default_workspace
+container_workspace_file=
+if [[ -n "$workspace_file" || -e "$state/workspace-id" || -L "$state/workspace-id" ]]; then
+  if [[ "$workspace_file" != "$state/workspace-id" ]]; then
+    printf 'Specify the owner-provisioned school workspace file in the instance state directory.\n' >&2
+    exit 3
+  fi
+  workspace=$(HITPIPE_SCHOOL_STATE="$state" HITPIPE_SCHOOL_WORKSPACE_FILE="$workspace_file" \
+    "$bin/school-backend" --resolve-school-workspace) ||
+    { printf 'Workspace provisioning requires the matching school supervisor and private configuration.\n' >&2; exit 3; }
+  container_workspace_file=/school/state/workspace-id
+elif [[ -e "$state/workspace-bound-id" || -L "$state/workspace-bound-id" ]]; then
+  bound="$state/workspace-bound-id"
+  [[ -f "$bound" && ! -L "$bound" && $(stat -c '%a:%u' "$bound") == "600:$(id -u)" && $(cat "$bound") == "$default_workspace" ]] ||
+    { printf 'The existing school state requires its explicit workspace configuration.\n' >&2; exit 3; }
+fi
+[[ "$workspace" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]] || exit 3
+
 if ! docker volume inspect "$volume" >/dev/null 2>&1; then
-  docker volume create --label "dev.hitpipe.school.instance=$instance" "$volume" >/dev/null
+  docker volume create --label "dev.hitpipe.school.instance=$instance" \
+    --label "dev.hitpipe.school.workspace=$workspace" "$volume" >/dev/null
 fi
 [[ "$(docker volume inspect -f '{{index .Labels "dev.hitpipe.school.instance"}}' "$volume")" == "$instance" ]] ||
   { printf 'Refusing to use a volume outside the school stack.\n' >&2; exit 3; }
+volume_workspace=$(docker volume inspect -f '{{with index .Labels "dev.hitpipe.school.workspace"}}{{.}}{{end}}' "$volume")
+[[ "$volume_workspace" == "$workspace" || ( -z "$volume_workspace" && "$workspace" == "$default_workspace" ) ]] ||
+  { printf 'Refusing to use a volume provisioned for a different school workspace.\n' >&2; exit 3; }
 
 # The state lock is held. Recover only a container from this exact runtime
 # directory and volume, for example after the supervisor was killed mid-stop.
@@ -162,6 +188,7 @@ fi
 
 docker exec -u "$(id -u):$(id -g)" \
   -e GOMAXPROCS=1 -e HITPIPE_SCHOOL_STATE=/school/state -e HITPIPE_BROWSER_SHARE=/school/bridge \
+  -e "HITPIPE_SCHOOL_WORKSPACE_FILE=$container_workspace_file" -e "HITPIPE_SCHOOL_EXPECTED_WORKSPACE_ID=$workspace" \
   -e HITPIPE_SCHOOL_BIN=/school/state/bin "$container" /school/state/bin/school-backend &
 running=$!
 wait "$running"

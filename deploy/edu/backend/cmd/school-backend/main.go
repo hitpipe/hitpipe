@@ -48,6 +48,7 @@ const (
 
 type backend struct {
 	state, share, binaries string
+	workspaceID            string
 	keys                   *identity
 	certs                  *certificates
 	provider               *providers
@@ -65,6 +66,18 @@ type child struct {
 
 func main() {
 	log.SetFlags(0)
+	if len(os.Args) == 2 && os.Args[1] == "--resolve-school-workspace" {
+		state := os.Getenv("HITPIPE_SCHOOL_STATE")
+		if err := privateDir(state); err != nil {
+			log.Fatal(err)
+		}
+		id, err := resolveWorkspace(state, os.Getenv("HITPIPE_SCHOOL_WORKSPACE_FILE"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(id)
+		return
+	}
 	if err := run(); err != nil && !errors.Is(err, context.Canceled) {
 		log.Fatal(err)
 	}
@@ -80,6 +93,10 @@ func run() error {
 			return err
 		}
 	}
+	workspace, err := bindWorkspace(state, os.Getenv("HITPIPE_SCHOOL_WORKSPACE_FILE"), os.Getenv("HITPIPE_SCHOOL_EXPECTED_WORKSPACE_ID"))
+	if err != nil {
+		return err
+	}
 	pidFile := filepath.Join(state, "backend.pid")
 	if err := writePrivate(pidFile, []byte(fmt.Sprintf("%d\n", os.Getpid()))); err != nil {
 		return err
@@ -87,12 +104,11 @@ func run() error {
 	defer os.Remove(pidFile)
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt)
 	defer cancel()
-	s := &backend{state: state, share: share, binaries: binaries}
+	s := &backend{state: state, share: share, binaries: binaries, workspaceID: workspace}
 	defer s.stopChildren()
 	if err := os.Remove(filepath.Join(share, "ready.json")); err != nil && !os.IsNotExist(err) {
 		return err
 	}
-	var err error
 	if s.keys, err = loadIdentity(state); err != nil {
 		return err
 	}
