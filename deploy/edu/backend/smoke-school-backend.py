@@ -41,8 +41,8 @@ def business_client(share, ready):
     context = ssl.create_default_context(cafile=share / ready["caPath"])
     context.load_cert_chain(share / ready["certPath"], share / ready["keyPath"])
 
-    def act(method, path, data=None, expect=200):
-        request_id = str(uuid.uuid4())
+    def act(method, path, data=None, expect=200, request_id=None):
+        request_id = request_id or str(uuid.uuid4())
         if data is not None:
             meta = data.get("command", data)
             meta["request_id"] = request_id
@@ -112,6 +112,47 @@ def validate_single(value):
         raise RuntimeError("the expected single durable confirmed checkout was not found")
 
 
+def recheck(share, ready, provider, before):
+    act = business_client(share, ready)
+    case_path = f"/api/v1/workspaces/{ready['workspaceId']}/cases/{before['caseId']}"
+    previous = act("GET", case_path)
+    if ("RECHECK" not in previous["available_actions"] or not previous["case"]["target_url"]
+            or not previous["last_observation_at"]):
+        raise RuntimeError("the confirmed case did not expose the owner recheck action")
+    request_id = str(uuid.uuid4())
+    command = {"action": "RECHECK", "reason": "Verify the existing ClickUp task",
+               "command": {"expected_revision": previous["case"]["revision"]}}
+    receipt = act("POST", case_path + "/recovery", command, 202, request_id=request_id)
+    if receipt["case"]["case_id"] != before["caseId"]:
+        raise RuntimeError("the recovery receipt changed the case identity")
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        observed = act("GET", case_path)
+        if (observed["last_observation_at"] != previous["last_observation_at"]
+                and observed["case"]["revision"] > previous["case"]["revision"]):
+            break
+        time.sleep(0.15)
+    else:
+        raise RuntimeError("Processing did not apply a fresh Delivery observation")
+    if (not observed["last_observation_at"] or not observed["observation_complete"]
+            or observed["case"]["state"] != "CONFIRMED"
+            or observed["case"]["target_url"] != previous["case"]["target_url"]):
+        raise RuntimeError("the recheck changed the known outcome or target")
+    act("POST", case_path + "/recovery", command, 202, request_id=request_id)
+    history = act("GET", case_path + "/history")["items"]
+    if sum(row["reason_code"] == "RECHECK_ACCEPTED" for row in history) != 1:
+        raise RuntimeError("repeating the accepted request changed its history receipt count")
+    after = provider("GET", "/status")
+    validate_single(after)
+    if (after["caseId"], after["taskId"], after["providerReadCount"]) != (
+            before["caseId"], before["taskId"], before["providerReadCount"] + 1):
+        raise RuntimeError("the recheck read a different task or did not read exactly once")
+    return {"caseId": after["caseId"], "clickUpTaskId": after["taskId"], "recoveryStatus": 202,
+            "providerCreates": after["providerCreateCount"], "readsBefore": before["providerReadCount"],
+            "readsAfter": after["providerReadCount"], "observationBefore": previous["last_observation_at"],
+            "observationAfter": observed["last_observation_at"], "recheckHistoryReceipts": 1}
+
+
 def lifecycle(share, ready, provider, enqueue=False):
     act = business_client(share, ready)
     workspace = f"/api/v1/workspaces/{ready['workspaceId']}"
@@ -177,8 +218,8 @@ def lifecycle(share, ready, provider, enqueue=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("share", type=Path)
-    parser.add_argument("operation", choices=["fresh", "fresh-lifecycle", "verify", "lifecycle", "lifecycle-held",
-                                               "activate-only", "late-payment"])
+    parser.add_argument("operation", choices=["fresh", "fresh-lifecycle", "fresh-recheck", "verify", "lifecycle",
+                                               "lifecycle-held", "activate-only", "late-payment"])
     args = parser.parse_args()
     share = args.share.resolve()
     ready = json.loads((share / "ready.json").read_text())
@@ -207,7 +248,7 @@ def main():
         print(json.dumps({"caseId": paid["caseId"], "before": waiting["caseState"],
                           "after": paid["caseState"], "clickUpTaskId": paid["taskId"]}, indent=2))
         return
-    if args.operation in {"fresh", "fresh-lifecycle"}:
+    if args.operation in {"fresh", "fresh-lifecycle", "fresh-recheck"}:
         operation = activation(share, ready)
         if operation["state"] != "ACTIVE":
             raise RuntimeError("Processing did not activate the operation")
@@ -217,6 +258,9 @@ def main():
     else:
         proof = provider("GET", "/status")
         validate_single(proof)
+    if args.operation == "fresh-recheck":
+        print(json.dumps(recheck(share, ready, provider, proof), indent=2))
+        return
     pause_resume = None
     if args.operation == "fresh-lifecycle":
         pause_resume = lifecycle(share, ready, provider)
