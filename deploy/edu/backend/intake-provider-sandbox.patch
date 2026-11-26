@@ -273,9 +273,17 @@
  		return nil, classifiedError{"event_context", ErrContext}
  	}
  	// Organization context is not an account binding supported by this boundary.
+@@ -202 +202,6 @@
+-	if err != nil || !allowed(session, sessionFields) {
++	fields := sessionFields
++	if b.AccountScope == SandboxEndpointAccount {
++		// Known Stripe Sandbox fields are accepted at the boundary and not projected.
++		fields += " integration_identifier marketing_attributions"
++	}
++	if err != nil || !allowed(session, fields) {
 --- /dev/null
 +++ b/internal/application/normalizesignal/provider_sandbox_test.go
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,100 @@
 +package normalizesignal
 +
 +import (
@@ -352,6 +360,28 @@
 +	in.RawBody = append(in.RawBody, ' ')
 +	if out, err := c.Normalize(context.Background(), in); err == nil || out != nil {
 +		t.Fatal("accepted modified signed bytes")
++	}
++}
++
++func TestSandboxEndpointAcceptsObservedStripeFieldsWithoutProjection(t *testing.T) {
++	in := sandboxFixture()
++	want, err := execute(t, in)
++	if err != nil || want == nil {
++		t.Fatalf("baseline: %+v %v", want, err)
++	}
++	in.RawBody = []byte(strings.Replace(string(in.RawBody), `"customer_details":`, `"integration_identifier":"ignored-fixture","marketing_attributions":[],"customer_details":`, 1))
++	got, err := execute(t, in)
++	if err != nil || got == nil || got.MessageDigest != want.MessageDigest {
++		t.Fatalf("Stripe fields changed the normalized signal: %+v %v", got, err)
++	}
++	outsideSandbox := in
++	outsideSandbox.Binding.AccountScope = ConnectedAccount
++	if got, err := execute(t, outsideSandbox); err == nil || got != nil {
++		t.Fatal("accepted the narrow Sandbox fields on a different account profile")
++	}
++	in.RawBody = []byte(strings.Replace(string(in.RawBody), `"customer_details":`, `"unknown_provider_key":null,"customer_details":`, 1))
++	if got, err := execute(t, in); err == nil || got != nil {
++		t.Fatal("accepted an unknown Stripe field")
 +	}
 +}
 --- a/internal/intakeruntime/config.go
