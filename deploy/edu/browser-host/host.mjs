@@ -122,7 +122,7 @@ async function requestBody(req) {
 
 async function startIAM(ready, hostPki, bffCA, bffFingerprint, runtimeId) {
   const allowedActions = new Set(['CASE_READ', 'CONFIG_READ', 'CONFIG_WRITE', 'ACTIVATE',
-    'CONNECTOR_READ', 'PAUSE', 'RESUME', 'RECHECK']);
+    'CONNECTOR_READ', 'PAUSE', 'RESUME', 'CASE_RECOVER']);
   if (schoolAiEnabled) allowedActions.add('AI_PREPARE');
   const region = {
     workspace_id: ready.workspaceId, name: 'HitPipe · демонстрация', lifecycle: 'ACTIVE',
