@@ -78,6 +78,7 @@ else
   "$go_bin" -C "$scratch/go/processing" build -tags hitpipe_school -ldflags '-s -w -X main.revision=dd1a36f6529f57d7452a27b615b6cad18b1288bd' -o "$scratch/processing" ./cmd/processing
   cp -a -- "$delivery" "$scratch/delivery"
   patch --batch --forward -s -d "$scratch/delivery" -p1 <"$here/persistent-qualification-worker.patch"
+  patch --batch --forward -s -d "$scratch/delivery" -p1 <"$here/delivery-known-task-recheck.patch"
   "$go_bin" -C "$scratch/delivery" build -ldflags '-s -w' -o "$scratch/delivery-offline-receipt" ./cmd/delivery-offline-receipt
   "$go_bin" -C "$scratch/go/processing" build -ldflags '-s -w' -o "$scratch/school-backend" ./cmd/school-backend
   for executable in intake processing delivery-offline-receipt school-backend; do

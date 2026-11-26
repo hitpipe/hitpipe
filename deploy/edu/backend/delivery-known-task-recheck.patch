@@ -1,0 +1,672 @@
+--- a/cmd/delivery-offline-receipt/main.go
++++ b/cmd/delivery-offline-receipt/main.go
+@@ -142,7 +142,8 @@
+ 	workerDone, workerReady := launchWorker(ctx, stop, worker, dir, guard)
+ 	if workerReady != nil {
+ 		select {
+-		case <-workerReady:
++		case reader := <-workerReady:
++			server.Handler = intake.WithKnownTaskQuery(server.Handler, reader, c.ProcessingSAN)
+ 		case err := <-workerDone:
+ 			return err
+ 		}
+--- a/cmd/delivery-offline-receipt/worker.go
++++ b/cmd/delivery-offline-receipt/worker.go
+@@ -65,12 +65,12 @@
+ 		u.RawQuery == "" && u.Fragment == "" && u.Opaque == ""
+ }
+ 
+-func launchWorker(ctx context.Context, stop context.CancelFunc, cfg *demoworker.Config, dir *intake.Directory, guard intake.StartGate) (<-chan error, <-chan struct{}) {
++func launchWorker(ctx context.Context, stop context.CancelFunc, cfg *demoworker.Config, dir *intake.Directory, guard intake.StartGate) (<-chan error, <-chan *demoworker.KnownTaskReader) {
+ 	if cfg == nil {
+ 		return nil, nil
+ 	}
+ 	done := make(chan error, 1)
+-	ready := make(chan struct{})
++	ready := make(chan *demoworker.KnownTaskReader, 1)
+ 	go func() {
+ 		err := demoworker.Run(ctx, *cfg, dir, guard, ready)
+ 		done <- err
+--- a/internal/clickup/client.go
++++ b/internal/clickup/client.go
+@@ -10,6 +10,7 @@
+ 	"net/http"
+ 	"regexp"
+ 	"strconv"
++	"strings"
+ )
+ 
+ var (
+@@ -102,18 +103,12 @@
+ // task or attempts a write. Missing or malformed attributes are not confirmed.
+ func (c *Client) Verify(ctx context.Context, authorization, knownID string, target Target) error {
+ 	expectedAssignee, err := target.assignee()
+-	if err != nil || !taskID.MatchString(knownID) || authorization == "" {
+-		return ErrInvalidTarget
+-	}
+-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiOrigin+"/api/v2/task/"+knownID, nil)
+-	if err != nil {
+-		return ErrInvalidTarget
+-	}
+-	req.Close = true
+-	req.Header.Set("Authorization", authorization)
+-	var observed readback
+-	if err := c.readJSON(req, &observed); err != nil {
+-		return ErrReadUnavailable
++	if err != nil {
++		return err
++	}
++	observed, err := c.readKnown(ctx, authorization, knownID)
++	if err != nil {
++		return err
+ 	}
+ 	if observed.ID != knownID || string(observed.Workspace) != target.WorkspaceID ||
+ 		string(observed.List.ID) != target.ListID || len(observed.Assignees) != 1 ||
+@@ -122,6 +117,62 @@
+ 		return ErrMismatch
+ 	}
+ 	return nil
++}
++
++// Comparison contains the attributes of a completed read on the accepted ID.
++// A missing attribute or unexpected returned identity prevents confirmation.
++type Comparison struct {
++	Workspace, List, Assignee, Title, Marker, Context bool
++}
++
++func (c *Client) CompareKnown(ctx context.Context, authorization, knownID string, target Target, marker string) (Comparison, error) {
++	expectedAssignee, err := target.assignee()
++	if err != nil || marker == "" || !hasMarker(target.RenderedBlock, marker) {
++		return Comparison{}, ErrInvalidTarget
++	}
++	observed, err := c.readKnown(ctx, authorization, knownID)
++	if err != nil {
++		return Comparison{}, err
++	}
++	if observed.ID != knownID || !numericID.MatchString(string(observed.Workspace)) ||
++		!numericID.MatchString(string(observed.List.ID)) || observed.Assignees == nil ||
++		observed.Name == "" || observed.Description == "" {
++		return Comparison{}, ErrReadUnavailable
++	}
++	return Comparison{
++		Workspace: string(observed.Workspace) == target.WorkspaceID,
++		List:      string(observed.List.ID) == target.ListID,
++		Assignee:  len(observed.Assignees) == 1 && observed.Assignees[0].ID == expectedAssignee,
++		Title:     observed.Name == target.Title,
++		Marker:    hasMarker(observed.Description, marker),
++		Context:   observed.Description == target.RenderedBlock,
++	}, nil
++}
++
++func hasMarker(block, marker string) bool {
++	for _, line := range strings.Split(block, "\n") {
++		if line == marker {
++			return true
++		}
++	}
++	return false
++}
++
++func (c *Client) readKnown(ctx context.Context, authorization, knownID string) (readback, error) {
++	var observed readback
++	if !taskID.MatchString(knownID) || authorization == "" {
++		return observed, ErrInvalidTarget
++	}
++	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiOrigin+"/api/v2/task/"+knownID, nil)
++	if err != nil {
++		return observed, ErrInvalidTarget
++	}
++	req.Close = true
++	req.Header.Set("Authorization", authorization)
++	if err := c.readJSON(req, &observed); err != nil {
++		return observed, ErrReadUnavailable
++	}
++	return observed, nil
+ }
+ 
+ type readback struct {
+--- /dev/null
++++ b/internal/clickup/known_test.go
+@@ -0,0 +1,53 @@
++package clickup
++
++import (
++	"context"
++	"encoding/json"
++	"errors"
++	"io"
++	"net/http"
++	"strings"
++	"testing"
++)
++
++func TestCompareKnownIssuesOnlyGetAndReportsChangedAttributes(t *testing.T) {
++	const marker = "[HITPIPE-HANDOFF:example:v1]"
++	target := Target{WorkspaceID: "12", ListID: "34", AssigneeID: "56", Title: "Accepted",
++		RenderedBlock: marker + "\nContext"}
++	calls := 0
++	row := map[string]any{"id": "task_123", "team_id": 12, "list": map[string]int{"id": 34},
++		"assignees": []map[string]int{{"id": 56}}, "name": target.Title, "description": target.RenderedBlock}
++	client, err := New(func(request *http.Request) (*http.Response, error) {
++		calls++
++		if request.Method != http.MethodGet || request.URL.Host != "api.clickup.com" ||
++			request.URL.Path != "/api/v2/task/task_123" || request.Body != nil {
++			t.Fatalf("unexpected provider operation: %v %v", request.Method, request.URL)
++		}
++		wire, err := json.Marshal(row)
++		if err != nil {
++			t.Fatal(err)
++		}
++		return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(string(wire)))}, nil
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	compare := func() (Comparison, error) {
++		return client.CompareKnown(context.Background(), "fixture-credential", "task_123", target, marker)
++	}
++	if got, err := compare(); err != nil || !got.Workspace || !got.List || !got.Assignee || !got.Title || !got.Marker || !got.Context {
++		t.Fatalf("same task did not match: %+v %v", got, err)
++	}
++	row["name"] = "Changed"
++	row["description"] = "marker removed"
++	if got, err := compare(); err != nil || !got.Workspace || !got.List || !got.Assignee || got.Title || got.Marker || got.Context {
++		t.Fatalf("changed fields falsely verified: %+v %v", got, err)
++	}
++	row["id"] = "different_native_id"
++	if _, err := compare(); !errors.Is(err, ErrReadUnavailable) {
++		t.Fatalf("unexpected identity recognized: %v", err)
++	}
++	if calls != 3 {
++		t.Fatalf("want three protected known-ID reads, got %d", calls)
++	}
++}
+--- a/internal/demoobservation/observation.go
++++ b/internal/demoobservation/observation.go
+@@ -17,6 +17,7 @@
+ )
+ 
+ const ProofCode = "CLICKUP_READBACK_MATCHED"
++const MismatchProofCode = "CLICKUP_READBACK_MISMATCHED"
+ 
+ var (
+ 	ErrInvalid = errors.New("invalid verified readback")
+@@ -44,7 +45,20 @@
+ 	Digest string
+ }
+ 
++func (m Readback) FullyMatches() bool {
++	return m.WorkspaceMatches && m.ListMatches && m.AssigneeMatches && m.TitleMatches && m.MarkerMatches && m.ContextMatches
++}
++
+ func Build(scope Scope, match Readback, proof intake.ContentRef) (Message, error) {
++	if !match.FullyMatches() {
++		return Message{}, ErrInvalid
++	}
++	return BuildKnown(scope, match, proof)
++}
++
++// BuildKnown projects a completed read of the same durable task, preserving
++// comparison results when any attribute has changed at the provider.
++func BuildKnown(scope Scope, match Readback, proof intake.ContentRef) (Message, error) {
+ 	for _, id := range []uuid.UUID{scope.WorkspaceID, scope.CaseID, scope.LineageID, scope.EpisodeID, scope.AttemptID, scope.ObservationID, proof.ID} {
+ 		if id == uuid.Nil {
+ 			return Message{}, ErrInvalid
+@@ -53,8 +67,7 @@
+ 	if scope.MessageID.Version() != 4 || scope.MessageID.Variant() != uuid.RFC4122 ||
+ 		match.KnownTaskID == "" || match.KnownTaskID != match.TaskID ||
+ 		!utf8.ValidString(match.TaskID) || utf8.RuneCountInString(match.TaskID) > 255 ||
+-		!match.Complete || !match.WorkspaceMatches || !match.ListMatches || !match.AssigneeMatches ||
+-		!match.TitleMatches || !match.MarkerMatches || !match.ContextMatches ||
++		!match.Complete ||
+ 		proof.Size < 1 || proof.Size > 65536 || !sha256Ref.MatchString(proof.SHA256) {
+ 		return Message{}, ErrInvalid
+ 	}
+@@ -63,15 +76,19 @@
+ 	if observed.IsZero() || !expires.After(observed) {
+ 		return Message{}, ErrInvalid
+ 	}
++	knowledge, proofCode := "RESULT_VERIFIED", ProofCode
++	if !match.FullyMatches() {
++		knowledge, proofCode = "RESULT_MISMATCH", MismatchProofCode
++	}
+ 	fields := map[string]any{
+ 		"message_id": scope.MessageID.String(), "schema_version": "1.0",
+ 		"workspace_id": scope.WorkspaceID.String(), "case_id": scope.CaseID.String(),
+ 		"lineage_id": scope.LineageID.String(), "episode_id": scope.EpisodeID.String(),
+-		"observation_id": scope.ObservationID.String(), "knowledge": "RESULT_VERIFIED",
++		"observation_id": scope.ObservationID.String(), "knowledge": knowledge,
+ 		"task_id": match.TaskID, "observed_at": observed, "complete": true,
+-		"workspace_matches": true, "list_matches": true, "assignee_matches": true,
+-		"title_matches": true, "marker_matches": true, "context_matches": true,
+-		"proof_code": ProofCode, "proof_digest": proof.SHA256,
++		"workspace_matches": match.WorkspaceMatches, "list_matches": match.ListMatches, "assignee_matches": match.AssigneeMatches,
++		"title_matches": match.TitleMatches, "marker_matches": match.MarkerMatches, "context_matches": match.ContextMatches,
++		"proof_code": proofCode, "proof_digest": proof.SHA256,
+ 		"evidence_ref": proof.ID.String(), "evidence_expires_at": expires,
+ 	}
+ 	unsigned, err := canonical(fields)
+--- a/internal/demoworker/worker.go
++++ b/internal/demoworker/worker.go
+@@ -44,7 +44,7 @@
+ 	until                                   time.Time
+ }
+ 
+-func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- struct{}) error {
++func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- *KnownTaskReader) error {
+ 	if cfg.WorkspaceID == uuid.Nil || cfg.ConnectionID == uuid.Nil || cfg.Epoch <= 0 || dir == nil || gate == nil {
+ 		return errors.New("offline worker requires a provisioned scope")
+ 	}
+@@ -108,6 +108,7 @@
+ 	if err != nil {
+ 		return fmt.Errorf("offline delivery worker PostgreSQL startup: %w", err)
+ 	}
++	ready <- &KnownTaskReader{pool: pool, config: cfg, gate: gate, directory: dir, client: client}
+ 	close(ready)
+ 
+ 	tick := time.NewTicker(100 * time.Millisecond)
+--- /dev/null
++++ b/internal/demoworker/recheck.go
+@@ -0,0 +1,182 @@
++package demoworker
++
++import (
++	"context"
++	"crypto/sha256"
++	"encoding/json"
++	"errors"
++	"fmt"
++	"time"
++
++	"github.com/dkar-dev/hitpipe/services/delivery/internal/clickup"
++	"github.com/dkar-dev/hitpipe/services/delivery/internal/demoobservation"
++	"github.com/dkar-dev/hitpipe/services/delivery/internal/intake"
++	"github.com/google/uuid"
++	"github.com/jackc/pgx/v5"
++	"github.com/jackc/pgx/v5/pgxpool"
++)
++
++// KnownTaskReader serves rechecks with the same worker credentials and
++// application bindings. Its only provider operation is GET of the durable ID.
++type KnownTaskReader struct {
++	pool      *pgxpool.Pool
++	config    Config
++	gate      intake.StartGate
++	directory *intake.Directory
++	client    *clickup.Client
++}
++
++func (r *KnownTaskReader) QueryKnownTask(ctx context.Context, q intake.Query) ([]byte, error) {
++	cfg := r.config
++	if q.Workspace != cfg.WorkspaceID || q.Epoch != cfg.Epoch {
++		return nil, intake.ErrDenied
++	}
++	now := time.Now()
++	if !now.Before(q.Deadline) || q.Deadline.After(now.Add(30*time.Second)) {
++		return nil, intake.ErrStale
++	}
++	ctx, cancel := context.WithDeadline(ctx, q.Deadline)
++	defer cancel()
++	ctx, cancelRead := context.WithTimeout(ctx, 1800*time.Millisecond)
++	defer cancelRead()
++
++	var wire []byte
++	err := r.gate.WithOpen(ctx, q.Workspace, q.Epoch, func() error {
++		item, target, err := r.resolveKnown(ctx, q)
++		if err != nil {
++			return err
++		}
++		if ctx.Err() != nil || !time.Now().Before(item.ref.Expires) {
++			return intake.ErrStale
++		}
++		marker := "[HITPIPE-HANDOFF:" + q.Case.String() + ":v1]"
++		result, err := r.client.CompareKnown(ctx, syntheticCredential, q.TaskID, target, marker)
++		if err != nil {
++			return intake.ErrUnavailable
++		}
++		at := time.Now().UTC().Truncate(time.Microsecond)
++		if ctx.Err() != nil || !at.Before(item.ref.Expires) {
++			return intake.ErrStale
++		}
++		match := demoobservation.Readback{KnownTaskID: q.TaskID, TaskID: q.TaskID, ObservedAt: at, Complete: true,
++			WorkspaceMatches: result.Workspace, ListMatches: result.List, AssigneeMatches: result.Assignee,
++			TitleMatches: result.Title, MarkerMatches: result.Marker, ContextMatches: result.Context}
++
++		tx, err := scoped(ctx, r.pool, cfg)
++		if err != nil {
++			return intake.ErrUnavailable
++		}
++		defer tx.Rollback(ctx)
++		current, err := lockKnown(ctx, tx, cfg, q)
++		if err != nil {
++			return err
++		}
++		if current.attemptID != item.attemptID || current.episodeID != item.episodeID ||
++			current.ref.ID != item.ref.ID || current.ref.SHA256 != item.ref.SHA256 ||
++			!current.ref.Expires.Equal(item.ref.Expires) {
++			return intake.ErrStale
++		}
++		wire, err = saveKnownObservation(ctx, tx, r.directory, q.Workspace, item, target, match)
++		if err != nil || tx.Commit(ctx) != nil {
++			return intake.ErrUnavailable
++		}
++		return nil
++	})
++	if err != nil {
++		return nil, err
++	}
++	return wire, nil
++}
++
++func (r *KnownTaskReader) resolveKnown(ctx context.Context, q intake.Query) (job, clickup.Target, error) {
++	tx, err := scoped(ctx, r.pool, r.config)
++	if err != nil {
++		return job{}, clickup.Target{}, intake.ErrUnavailable
++	}
++	defer tx.Rollback(ctx)
++	item, err := lockKnown(ctx, tx, r.config, q)
++	if err != nil {
++		return job{}, clickup.Target{}, err
++	}
++	target, err := acceptedTarget(r.directory, r.config, item)
++	if err != nil {
++		return job{}, clickup.Target{}, intake.ErrDenied
++	}
++	if tx.Commit(ctx) != nil {
++		return job{}, clickup.Target{}, intake.ErrUnavailable
++	}
++	return item, target, nil
++}
++
++func lockKnown(ctx context.Context, tx pgx.Tx, cfg Config, q intake.Query) (job, error) {
++	var item job
++	// RLS is already scoped to the current workspace. The caller opens one
++	// transaction before the read and checks these pins again before saving.
++	err := tx.QueryRow(ctx, `SELECT l.case_id,l.lineage_id,a.episode_id,a.attempt_id,
++		c.rendered_payload_ref,c.rendered_payload_sha256,c.rendered_payload_bytes,c.expires_at
++	  FROM hp_delivery.effect_lineage l
++	  JOIN hp_delivery.attempts a USING(workspace_id,lineage_id)
++	  JOIN hp_delivery.intent_content c USING(workspace_id,attempt_id)
++	  JOIN hp_delivery.destination_connections d USING(workspace_id,connection_id)
++	  WHERE l.workspace_id=$1 AND l.connection_id=$2 AND d.external_workspace_id=$3
++	    AND l.case_id=$4 AND l.lineage_id=$5 AND l.known_task_id=$6
++	    AND l.state IN ('RESULT_ID_OBSERVED','TARGET_OBSERVED') AND l.ever_dispatch_fenced
++	    AND a.connection_epoch=$7 AND a.dispatch_fenced_at IS NOT NULL AND a.network_start_at IS NOT NULL
++	    AND d.security_epoch=$7 AND d.revoked_at IS NULL AND d.health='READY'
++	    AND c.expires_at>clock_timestamp()
++	  ORDER BY a.attempt_number DESC LIMIT 1 FOR SHARE OF l,d`,
++		cfg.WorkspaceID, cfg.ConnectionID, cfg.DestinationWorkspace, q.Case, q.Lineage, q.TaskID, q.Epoch).Scan(
++		&item.caseID, &item.lineageID, &item.episodeID, &item.attemptID, &item.ref.ID, &item.ref.SHA256, &item.ref.Size, &item.ref.Expires)
++	if errors.Is(err, pgx.ErrNoRows) {
++		return item, intake.ErrNotFound
++	}
++	if err != nil {
++		return item, intake.ErrUnavailable
++	}
++	return item, nil
++}
++
++func saveKnownObservation(ctx context.Context, tx pgx.Tx, dir *intake.Directory, workspace uuid.UUID, item job,
++	target clickup.Target, match demoobservation.Readback) ([]byte, error) {
++	at := match.ObservedAt
++	expires := at.Add(time.Hour)
++	if item.ref.Expires.Before(expires) {
++		expires = item.ref.Expires.UTC().Truncate(time.Microsecond)
++	}
++	proof, err := json.Marshal(match)
++	if err != nil {
++		return nil, err
++	}
++	ref, err := dir.Put(proof, expires)
++	if err != nil {
++		return nil, err
++	}
++	scope := demoobservation.Scope{WorkspaceID: workspace, CaseID: item.caseID, LineageID: item.lineageID,
++		EpisodeID: item.episodeID, AttemptID: item.attemptID, MessageID: uuid.New(), ObservationID: uuid.New()}
++	message, err := demoobservation.BuildKnown(scope, match, ref)
++	if err != nil {
++		return nil, err
++	}
++	knowledge, code := "RESULT_VERIFIED", demoobservation.ProofCode
++	if !match.FullyMatches() {
++		knowledge, code = "RESULT_MISMATCH", demoobservation.MismatchProofCode
++	}
++	expected, err := json.Marshal(target)
++	if err != nil {
++		return nil, err
++	}
++	_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.effect_observations(workspace_id,observation_id,lineage_id,attempt_id,knowledge,
++	    observed_at,proof_code,proof_digest,known_task_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
++		workspace, scope.ObservationID, item.lineageID, item.attemptID, knowledge, at, code, ref.SHA256, match.KnownTaskID)
++	if err != nil {
++		return nil, err
++	}
++	_, err = tx.Exec(ctx, `INSERT INTO hp_delivery.observation_content(workspace_id,observation_id,actual_attributes_ref,
++	    actual_attributes_sha256,actual_attributes_bytes,expected_attributes_digest,created_at,expires_at)
++	    VALUES($1,$2,$3,$4,$5,$6,$7,$8)`, workspace, scope.ObservationID, ref.ID, ref.SHA256, ref.Size,
++		fmt.Sprintf("sha256:%x", sha256.Sum256(expected)), at, ref.Expires)
++	if err != nil {
++		return nil, err
++	}
++	return message.Wire, nil
++}
+--- /dev/null
++++ b/internal/intake/query.go
+@@ -0,0 +1,142 @@
++package intake
++
++import (
++	"context"
++	"crypto/tls"
++	"errors"
++	"io"
++	"mime"
++	"net/http"
++	"time"
++	"unicode/utf8"
++
++	"github.com/google/uuid"
++	"github.com/gowebpki/jcs"
++)
++
++const queryRoute = "/internal/v1/delivery-query"
++
++type Query struct {
++	Workspace, Case, Lineage uuid.UUID
++	Epoch                    int64
++	Deadline                 time.Time
++	TaskID                   string
++}
++
++type QueryReader interface {
++	QueryKnownTask(context.Context, Query) ([]byte, error)
++}
++
++func decodeQuery(raw []byte) (Query, error) {
++	var q Query
++	if !utf8.Valid(raw) {
++		return q, invalid{}
++	}
++	// Reject duplicate keys and invalid Unicode before interpreting identities.
++	if _, err := jcs.Transform(raw); err != nil {
++		return q, invalid{}
++	}
++	f, err := decodeObject(raw)
++	if err != nil || len(f) != 6 {
++		return q, invalid{}
++	}
++	for key, dst := range map[string]*uuid.UUID{
++		"workspace_id": &q.Workspace, "case_id": &q.Case, "lineage_id": &q.Lineage,
++	} {
++		*dst, err = parseUUID(f[key])
++		if err != nil {
++			return q, invalid{}
++		}
++	}
++	q.Epoch, err = exactEpoch(string(f["expected_connection_epoch"]))
++	if err != nil {
++		return q, invalid{}
++	}
++	q.Deadline, err = dateField(f["deadline_at"])
++	if err != nil {
++		return q, invalid{}
++	}
++	q.TaskID, err = stringField(f["native_task_id"], 1, 255)
++	if err != nil {
++		return q, invalid{}
++	}
++	return q, nil
++}
++
++// WithKnownTaskQuery mounts the read-only RECHECK operation on the same
++// private listener and with the same exact Processing certificate SAN.
++func WithKnownTaskQuery(next http.Handler, reader QueryReader, processingSAN string) http.Handler {
++	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		if r.URL.Path != queryRoute {
++			next.ServeHTTP(w, r)
++			return
++		}
++		requestID := uuid.New()
++		fail := func(status int, code string) { writeFailure(w, status, code, requestID) }
++		if r.Method != http.MethodPost || r.URL.RawPath != "" || r.URL.RawQuery != "" || r.URL.ForceQuery {
++			fail(http.StatusBadRequest, "INVALID_QUERY")
++			return
++		}
++		if r.TLS == nil || r.TLS.Version != tls.VersionTLS13 || len(r.TLS.VerifiedChains) == 0 ||
++			len(r.TLS.VerifiedChains[0]) == 0 {
++			fail(http.StatusUnauthorized, "CERTIFICATE_REQUIRED")
++			return
++		}
++		if cert := r.TLS.VerifiedChains[0][0]; cert.VerifyHostname(processingSAN) != nil || !hasExactDNSName(cert, processingSAN) {
++			fail(http.StatusUnauthorized, "CALLER_DENIED")
++			return
++		}
++		ids := r.Header.Values("X-Request-ID")
++		if len(ids) != 1 {
++			fail(http.StatusBadRequest, "INVALID_REQUEST_ID")
++			return
++		}
++		id, err := uuid.Parse(ids[0])
++		if err != nil || id == uuid.Nil || len(ids[0]) != 36 {
++			fail(http.StatusBadRequest, "INVALID_REQUEST_ID")
++			return
++		}
++		requestID = id
++		medias := r.Header.Values("Content-Type")
++		if len(medias) != 1 || r.Header.Get("Content-Encoding") != "" {
++			fail(http.StatusBadRequest, "INVALID_CONTENT_TYPE")
++			return
++		}
++		media, _, err := mime.ParseMediaType(medias[0])
++		if err != nil || media != "application/json" {
++			fail(http.StatusBadRequest, "INVALID_CONTENT_TYPE")
++			return
++		}
++		raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, 4096))
++		if err != nil {
++			var oversized *http.MaxBytesError
++			if errors.As(err, &oversized) {
++				fail(http.StatusRequestEntityTooLarge, "SIZE_LIMIT")
++			} else {
++				fail(http.StatusBadRequest, "INVALID_BODY")
++			}
++			return
++		}
++		q, err := decodeQuery(raw)
++		if err != nil {
++			fail(http.StatusBadRequest, "INVALID_QUERY")
++			return
++		}
++		body, err := reader.QueryKnownTask(r.Context(), q)
++		switch {
++		case err == nil:
++			w.Header().Set("Content-Type", "application/json")
++			w.Header().Set("Cache-Control", "no-store")
++			w.WriteHeader(http.StatusOK)
++			_, _ = w.Write(body)
++		case errors.Is(err, ErrDenied):
++			fail(http.StatusForbidden, "SCOPE_DENIED")
++		case errors.Is(err, ErrNotFound):
++			fail(http.StatusNotFound, "NOT_FOUND")
++		case errors.Is(err, ErrStale):
++			fail(http.StatusPreconditionFailed, "STALE_QUERY")
++		default:
++			fail(http.StatusServiceUnavailable, "READBACK_UNAVAILABLE")
++		}
++	})
++}
+--- /dev/null
++++ b/internal/intake/query_test.go
+@@ -0,0 +1,72 @@
++package intake
++
++import (
++	"context"
++	"crypto/tls"
++	"crypto/x509"
++	"encoding/json"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/google/uuid"
++)
++
++type queryFunc func(context.Context, Query) ([]byte, error)
++
++func (f queryFunc) QueryKnownTask(ctx context.Context, q Query) ([]byte, error) { return f(ctx, q) }
++
++func TestKnownQueryRequiresProcessingCertificateAndExactKnownIdentity(t *testing.T) {
++	workspace, caseID, lineage := uuid.New(), uuid.New(), uuid.New()
++	body, err := json.Marshal(map[string]any{
++		"workspace_id": workspace, "case_id": caseID, "lineage_id": lineage,
++		"expected_connection_epoch": 7, "deadline_at": time.Now().UTC().Add(15 * time.Second),
++		"native_task_id": "known-123",
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	calls := 0
++	handler := WithKnownTaskQuery(http.NotFoundHandler(), queryFunc(func(_ context.Context, q Query) ([]byte, error) {
++		calls++
++		if q.Workspace != workspace || q.Case != caseID || q.Lineage != lineage || q.Epoch != 7 || q.TaskID != "known-123" {
++			t.Fatalf("incorrect protected query: %+v", q)
++		}
++		return []byte(`{"knowledge":"RESULT_VERIFIED"}`), nil
++	}), "processing.test")
++	run := func(cert string, input string) *httptest.ResponseRecorder {
++		req := httptest.NewRequest(http.MethodPost, queryRoute, strings.NewReader(input))
++		req.Header.Set("Content-Type", "application/json")
++		req.Header.Set("X-Request-ID", uuid.NewString())
++		if cert != "" {
++			req.TLS = &tls.ConnectionState{Version: tls.VersionTLS13,
++				VerifiedChains: [][]*x509.Certificate{{{DNSNames: []string{cert}}}}}
++		}
++		w := httptest.NewRecorder()
++		handler.ServeHTTP(w, req)
++		return w
++	}
++	for _, cert := range []string{"", "delivery.test", "*.test"} {
++		if got := run(cert, string(body)).Code; got != http.StatusUnauthorized {
++			t.Fatalf("bad cert got status %d", got)
++		}
++	}
++	for _, invalidInput := range []string{
++		strings.Replace(string(body), `"native_task_id":"known-123"`, `"external_task":"known-123"`, 1),
++		strings.Replace(string(body), `"native_task_id":"known-123"`, `"native_task_id":"other","native_task_id":"known-123"`, 1),
++		strings.Replace(string(body), `"native_task_id":"known-123"`, `"native_task_id":null`, 1),
++	} {
++		if got := run("processing.test", invalidInput).Code; got != http.StatusBadRequest {
++			t.Fatalf("invalid query got %d", got)
++		}
++	}
++	if calls != 0 {
++		t.Fatalf("unqualified requests reached reader: %d", calls)
++	}
++	resp := run("processing.test", string(body))
++	if resp.Code != http.StatusOK || !strings.Contains(resp.Body.String(), "RESULT_VERIFIED") || calls != 1 {
++		t.Fatalf("qualified read not returned: %d %s (%d reads)", resp.Code, resp.Body.String(), calls)
++	}
++}
