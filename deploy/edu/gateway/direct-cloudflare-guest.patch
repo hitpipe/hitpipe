@@ -1,0 +1,58 @@
+--- a/school_public_origin.py
++++ b/school_public_origin.py
+@@ -14,0 +15 @@
++from school_guest_snapshot import GuestSnapshot
+@@ -175 +176 @@
+-def make_server(address, connectors, app, idp):
++def make_server(address, connectors, app, idp, guest_snapshot=None, require_cloudflare_https=False):
+@@ -214,0 +216,16 @@
++        def reject_insecure_scheme(self):
++            # TCP peers have already passed the exact allowlist for the trusted connector.
++            scheme = one_header(self.headers, "X-Forwarded-Proto")
++            if scheme == "https":
++                return False
++            if scheme != "http":
++                raise Rejected(400)
++            if self.command not in ("GET", "HEAD"):
++                raise Rejected(403)
++            self.send_response_only(308)
++            self.send_header("Location", f"https://{PUBLIC_HOST}{self.path}")
++            self.send_header("Cache-Control", "private, no-store")
++            self.send_header("Content-Length", "0")
++            self.end_headers()
++            return True
++
+@@ -231,0 +249,2 @@
++                if require_cloudflare_https and self.reject_insecure_scheme():
++                    return
+@@ -235,4 +254,9 @@
+-                status, reply, payload, transmitted = owner_exchange(
+-                    idp if owner == "idp" else app, self.command, self.path, headers, body,
+-                )
+-                reply = filtered(reply, owner, bool(ASSET.fullmatch(target_path(self.path))))
++                path = target_path(self.path)
++                static = guest_snapshot.response(self.command, path, headers) if owner == "app" and guest_snapshot else None
++                if static is None:
++                    status, reply, payload, transmitted = owner_exchange(
++                        idp if owner == "idp" else app, self.command, self.path, headers, body,
++                    )
++                    reply = filtered(reply, owner, bool(ASSET.fullmatch(path)))
++                else:
++                    status, reply, payload, transmitted = static
+@@ -265,0 +290,4 @@
++    parser.add_argument("--guest-stage", type=Path)
++    parser.add_argument("--guest-manifest", type=Path)
++    parser.add_argument("--guest-manifest-sha256")
++    parser.add_argument("--require-cloudflare-https", action="store_true")
+@@ -272,0 +301,7 @@
++    guest_args = (args.guest_stage, args.guest_manifest, args.guest_manifest_sha256)
++    if any(item is not None for item in guest_args) and not all(guest_args):
++        parser.error("Guest stage, manifest and pinned digest must be supplied together")
++    try:
++        guest_snapshot = GuestSnapshot(*guest_args) if all(guest_args) else None
++    except (OSError, ValueError, KeyError, TypeError) as error:
++        parser.error(f"Could not verify guest snapshot: {error}")
+@@ -275 +310,2 @@
+-    with make_server((BRIDGE, args.port), set(map(str, args.connector_ip)), app, idp) as server:
++    with make_server((BRIDGE, args.port), set(map(str, args.connector_ip)), app, idp, guest_snapshot,
++                     args.require_cloudflare_https) as server:
