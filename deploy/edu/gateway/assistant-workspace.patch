@@ -1,0 +1,164 @@
+--- a/school_gateway.py
++++ b/school_gateway.py
+@@ -24,6 +24,7 @@
+ PROFILE_PATH = "/api/v1/profile"
+ WORKSPACES_PATH = "/api/v1/workspaces"
+ PROPOSAL_PATH = "/api/v1/ai/proposals"
++WORKSPACE_HEADER = "X-HitPipe-Workspace"
+ STRIPE_EVENTS_PATH = "/api/v1/school/stripe-events"
+ PROTECTED_METHODS = {SESSION_PATH: ("GET", "DELETE"), PROFILE_PATH: ("GET",),
+                      WORKSPACES_PATH: ("GET",), PROPOSAL_PATH: ("POST",),
+@@ -388,6 +389,12 @@
+         headers = {"Host": local.host, "Accept": "application/json",
+                    "Cookie": f"{SESSION_COOKIE}={tenant.session}"}
+         if request.method == "POST":
++            if path == PROPOSAL_PATH and (claimed_workspace := request.header(WORKSPACE_HEADER)) is not None:
++                if not UUID.fullmatch(claimed_workspace):
++                    raise Rejection(400, "INVALID_HEADERS")
++                if claimed_workspace != tenant.workspace_id:
++                    raise Rejection(403, "FORBIDDEN")
++                headers[WORKSPACE_HEADER] = tenant.workspace_id
+             content_type = request.header("content-type") or ""
+             if content_type.split(";", 1)[0].strip().lower() != "application/json" or not request.body:
+                 raise Rejection(400, "INVALID_REQUEST_BODY")
+--- a/school_public_origin.py
++++ b/school_public_origin.py
+@@ -11,7 +11,7 @@
+ from threading import BoundedSemaphore
+ from urllib.parse import urlsplit
+
+-from school_gateway import PROVIDER_SETTINGS_PATH
++from school_gateway import PROPOSAL_PATH, PROVIDER_SETTINGS_PATH, UUID, WORKSPACE_HEADER
+
+
+ PUBLIC_HOST = "hitpipe.dkar-dev.ru"
+@@ -87,13 +87,18 @@
+     return name == "__host-hp_session" or name.startswith("__host-hp_oidc_")
+
+
+-def outgoing(headers, owner, method):
++def outgoing(headers, owner, method, target):
+     result = {"Host": PUBLIC_HOST}
+     for name in REQUEST_HEADERS:
+         if owner == "idp" and name in ("X-CSRF-Token", "X-Request-ID", "If-Match"):
+             continue
+         if (value := one_header(headers, name)) is not None:
+             result[name] = value
++    if owner == "app" and method == "POST" and target == PROPOSAL_PATH:
++        if (workspace := one_header(headers, WORKSPACE_HEADER)) is not None:
++            if not UUID.fullmatch(workspace):
++                raise Rejected(400)
++            result[WORKSPACE_HEADER] = workspace
+     if (cookie := one_header(headers, "Cookie")):
+         parts = [part.strip() for part in cookie.split(";")]
+         parts = [part for part in parts if app_cookie(part) == (owner == "app")]
+@@ -221,7 +226,7 @@
+                     raise Rejected(413)
+                 if self.command != "POST" and size:
+                     raise Rejected(400)
+-                headers = outgoing(self.headers, owner, self.command)
++                headers = outgoing(self.headers, owner, self.command, self.path)
+                 body = self.rfile.read(size)
+                 if len(body) != size:
+                     raise Rejected(400)
+--- a/test_school_gateway.py
++++ b/test_school_gateway.py
+@@ -4,7 +4,8 @@
+ from datetime import datetime, timedelta, timezone
+
+ from school_gateway import (
+-    PROFILE_PATH, SESSION_COOKIE, SESSION_PATH, STRIPE_EVENTS_PATH, WORKSPACES_PATH, WORKSPACE_STARTING,
++    PROFILE_PATH, PROPOSAL_PATH, SESSION_COOKIE, SESSION_PATH, STRIPE_EVENTS_PATH, WORKSPACES_PATH,
++    WORKSPACE_STARTING,
+     Rejection, Request, Response, SchoolGateway, TenantTarget,
+ )
+ from school_session_control import SessionBlocked
+@@ -21,6 +22,7 @@
+ REQUEST_ID = "77777777-7777-4777-8777-777777777777"
+ FIXTURE_TOKENS = ("E" * 43, "F" * 43)
+ FIXTURE_CSRF = ("G" * 43, "H" * 43)
++WORKSPACE_HEADER = "X-HitPipe-Workspace"
+
+
+ def document(value, status=200):
+@@ -197,6 +199,46 @@
+         self.assertNotIn("X-HitPipe-Session", headers)
+         self.assertNotIn("X-Forwarded-Host", headers)
+
++    def test_proposals_forward_only_an_authenticated_tenant_workspace(self):
++        workspace = (WORKSPACE_HEADER, WORKSPACES[1])
++        body = b'{"prompt":"Prepare a draft"}'
++        self.assertEqual(self.request("POST", PROPOSAL_PATH, headers=self.write_headers(1) + (workspace,),
++                                      body=body).status, 401)
++        self.assertEqual(self.request("POST", PROPOSAL_PATH, user=1, headers=self.write_headers(0) + (workspace,),
++                                      body=body).status, 403)
++        self.assertEqual(self.local_calls, [])
++        for additional, expected in (
++            (((WORKSPACE_HEADER, WORKSPACES[0]),), 403),
++            (((WORKSPACE_HEADER, "not-a-workspace"),), 400),
++            (((WORKSPACE_HEADER, ""),), 400),
++            (((WORKSPACE_HEADER, WORKSPACES[1] + ", " + WORKSPACES[1]),), 400),
++            (((WORKSPACE_HEADER, WORKSPACES[1].replace("4", "A")),), 400),
++            ((workspace, (WORKSPACE_HEADER.lower(), WORKSPACES[1])), 400),
++        ):
++            with self.subTest(additional=additional):
++                rejected = self.request("POST", PROPOSAL_PATH, user=1,
++                                        headers=self.write_headers(1) + additional, body=body)
++                self.assertEqual(rejected.status, expected)
++                self.assertEqual(self.local_calls, [])
++
++        for additional in ((), ((WORKSPACE_HEADER.lower(), WORKSPACES[1]),)):
++            response = self.request("POST", PROPOSAL_PATH, user=1, headers=self.write_headers(1) + additional + (
++                ("X-HitPipe-Session", "untrusted"), ("X-Nonsense-Header", "untrusted"),
++            ), body=body)
++            self.assertEqual(response.status, 201)
++            endpoint, method, target, headers, received, _ = self.local_calls[-1]
++            self.assertEqual((method, target, received), ("POST", PROPOSAL_PATH, body))
++            self.assertEqual(endpoint.value, self.targets[USERS[1]].origin)
++            self.assertEqual(headers.get(WORKSPACE_HEADER), WORKSPACES[1] if additional else None)
++            self.assertEqual(headers["X-CSRF-Token"], FIXTURE_CSRF[1])
++            self.assertNotIn("X-HitPipe-Session", headers)
++            self.assertNotIn("X-Nonsense-Header", headers)
++
++        other = f"{WORKSPACES_PATH}/{WORKSPACES[1]}/drafts"
++        self.assertEqual(self.request("POST", other, user=1, headers=self.write_headers(1) + (workspace,),
++                                      body=body).status, 201)
++        self.assertNotIn(WORKSPACE_HEADER, self.local_calls[-1][3])
++
+     def test_unauthenticated_expired_and_mid_request_revoked_sessions_stay_closed(self):
+         path = f"{WORKSPACES_PATH}/{WORKSPACES[0]}/cases"
+         self.assertEqual(self.request("GET", path).status, 401)
+--- a/test_school_public_origin.py
++++ b/test_school_public_origin.py
+@@ -53,6 +53,31 @@
+             "Host": origin.PUBLIC_HOST, "Origin": f"https://{origin.PUBLIC_HOST}",
+             "X-CSRF-Token": "csrf", "Cookie": "__Host-hp_session=alpha; __Host-hp_oidc_state=gamma",
+         }, body)])
++
++    def test_forwards_one_canonical_workspace_header_only_on_the_exact_proposal_post(self):
++        path = "/api/v1/ai/proposals"
++        name = "X-HitPipe-Workspace"
++        workspace = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
++        body = b'{"prompt":"Prepare a draft"}'
++        for headers in (((name, workspace.upper()),), ((name, ""),),
++                        ((name, workspace), (name.lower(), workspace)), ((name, f"{workspace}, {workspace}"),)):
++            with self.subTest(headers=headers):
++                self.assertEqual(self.request("POST", path, headers=headers, body=body)[0], 400)
++                self.assertEqual(self.calls, [])
++
++        self.assertEqual(self.request("POST", path, headers=((name.lower(), workspace),), body=body)[0], 200)
++        self.assertEqual(self.calls[-1][3][name], workspace)
++
++        for method, target, payload, headers in (
++            ("POST", path, body, ()),
++            ("POST", path + "?other=1", body, ((name, workspace),)),
++            ("POST", "/api/v1/school/stripe-events", body, ((name, workspace),)),
++            ("GET", path, None, ((name, workspace),)),
++            ("GET", origin.AUTHORIZE, None, ((name, workspace),)),
++        ):
++            with self.subTest(method=method, target=target):
++                self.assertEqual(self.request(method, target, headers=headers, body=payload)[0], 200)
++                self.assertNotIn(name, self.calls[-1][3])
+
+     def test_authorize_and_login_action_preserve_body_and_keycloak_cookie_flow(self):
+         path = "/realms/hitpipe-school/login-actions/required-action?session_code=aaa&execution=hitpipe-email-code"
