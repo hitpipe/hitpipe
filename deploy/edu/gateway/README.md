@@ -9,7 +9,10 @@ BFF рабочей области.
 
 Только точный `POST /api/v1/ai/proposals` принимает
 `X-HitPipe-Workspace`. Публичный шлюз отклоняет повторённое или
-неканоническое значение. После проверки сессии и CSRF шлюз приложения сравнивает
+неканоническое значение. Параметры и пустой `?` дают HTTP 400 до передачи
+запроса шлюзу приложения. У шлюза приложения уже есть самостоятельная проверка,
+отклоняющая такой запрос до обращения к IAM или BFF. После проверки сессии и CSRF
+шлюз приложения сравнивает
 запрошенную область с областью аутентифицированного участника. Несовпадение даёт
 HTTP 403. В локальный BFF отправляется идентификатор из подтверждённой области.
 Запрос без заголовка сохраняет существующее поведение. Остальные маршруты
@@ -19,10 +22,11 @@ HTTP 403. В локальный BFF отправляется идентифик�
 
 ```bash
 set -euo pipefail
+export TMPDIR=/dev/shm
 receipt=$(realpath deploy/edu/gateway/nov25-gateway.sha256)
 change=$(realpath deploy/edu/gateway/assistant-workspace.patch)
 source=/home/deploy/hitpipe-provider-self-service-20261125/gateway
-candidate=$(mktemp -d /dev/shm/hitpipe-gateway.XXXXXX)
+candidate=$(mktemp -d "$TMPDIR/hitpipe-gateway.XXXXXX")
 (cd "$source" && sha256sum --strict --check "$receipt")
 while read -r digest file; do
   cp -- "$source/$file" "$candidate/$file"
@@ -30,7 +34,7 @@ done < "$receipt"
 (
   cd "$candidate"
   patch --batch --forward -p1 < "$change"
-  TMPDIR=/dev/shm python3 -B -m unittest discover
+  python3 -B -m unittest discover
 )
 ```
 
