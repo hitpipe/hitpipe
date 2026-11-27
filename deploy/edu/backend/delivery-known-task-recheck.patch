@@ -125,7 +125,7 @@
  }
  
  type readback struct {
---- /dev/null
+--- a/internal/clickup/known_test.go
 +++ b/internal/clickup/known_test.go
 @@ -0,0 +1,53 @@
 +package clickup
@@ -246,26 +246,51 @@
  		"evidence_ref": proof.ID.String(), "evidence_expires_at": expires,
  	}
  	unsigned, err := canonical(fields)
---- a/internal/demoworker/worker.go
-+++ b/internal/demoworker/worker.go
-@@ -44,7 +44,7 @@
- 	until                                   time.Time
- }
- 
--func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- struct{}) error {
-+func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- *KnownTaskReader) error {
- 	if cfg.WorkspaceID == uuid.Nil || cfg.ConnectionID == uuid.Nil || cfg.Epoch <= 0 || dir == nil || gate == nil {
- 		return errors.New("offline worker requires a provisioned scope")
- 	}
-@@ -108,6 +108,7 @@
- 	if err != nil {
- 		return fmt.Errorf("offline delivery worker PostgreSQL startup: %w", err)
- 	}
-+	ready <- &KnownTaskReader{pool: pool, config: cfg, gate: gate, directory: dir, client: client}
- 	close(ready)
- 
- 	tick := time.NewTicker(100 * time.Millisecond)
---- /dev/null
+--- a/internal/demoworker/poll_test.go
++++ b/internal/demoworker/poll_test.go
+@@ -0,0 +1,41 @@
++package demoworker
++
++import (
++	"context"
++	"errors"
++	"fmt"
++	"testing"
++	"time"
++
++	"github.com/google/uuid"
++)
++
++func TestOnlyPreclaimPollDeadlineCanResume(t *testing.T) {
++	parent := context.Background()
++	timeout := fmt.Errorf("postgres polling: %w", context.DeadlineExceeded)
++	selected := job{attemptID: uuid.New()}
++	canceled, stop := context.WithCancel(parent)
++	stop()
++	tests := []struct {
++		name         string
++		parent       context.Context
++		err          error
++		item         job
++		networkStart time.Time
++		resumes      bool
++	}{
++		{name: "idle deadline", parent: parent, err: timeout, resumes: true},
++		{name: "ambiguous fence commit", parent: parent, err: timeout, item: selected},
++		{name: "provider timed out after start", parent: parent, err: timeout, item: selected, networkStart: time.Now()},
++		{name: "network started but attempt unavailable", parent: parent, err: timeout, networkStart: time.Now()},
++		{name: "idle database error", parent: parent, err: errors.New("database rejected query")},
++		{name: "shutdown", parent: canceled, err: timeout},
++	}
++	for _, test := range tests {
++		t.Run(test.name, func(t *testing.T) {
++			if got := recoverableIdleTimeout(test.parent, test.err, test.item, test.networkStart); got != test.resumes {
++				t.Errorf("resume = %t, want %t", got, test.resumes)
++			}
++		})
++	}
++}
+--- a/internal/demoworker/recheck.go
 +++ b/internal/demoworker/recheck.go
 @@ -0,0 +1,182 @@
 +package demoworker
@@ -450,7 +475,68 @@
 +	}
 +	return message.Wire, nil
 +}
---- /dev/null
+--- a/internal/demoworker/worker.go
++++ b/internal/demoworker/worker.go
+@@ -44,7 +44,7 @@
+ 	until                                   time.Time
+ }
+ 
+-func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- struct{}) error {
++func Run(ctx context.Context, cfg Config, dir *intake.Directory, gate intake.StartGate, ready chan<- *KnownTaskReader) error {
+ 	if cfg.WorkspaceID == uuid.Nil || cfg.ConnectionID == uuid.Nil || cfg.Epoch <= 0 || dir == nil || gate == nil {
+ 		return errors.New("offline worker requires a provisioned scope")
+ 	}
+@@ -108,6 +108,7 @@
+ 	if err != nil {
+ 		return fmt.Errorf("offline delivery worker PostgreSQL startup: %w", err)
+ 	}
++	ready <- &KnownTaskReader{pool: pool, config: cfg, gate: gate, directory: dir, client: client}
+ 	close(ready)
+ 
+ 	tick := time.NewTicker(100 * time.Millisecond)
+@@ -125,10 +126,10 @@
+ 			bounded, cancel := context.WithTimeout(ctx, 1800*time.Millisecond)
+ 			defer cancel()
+ 			current, target, err := fence(bounded, pool, dir, cfg)
++			item = current
+ 			if err != nil {
+ 				return err
+ 			}
+-			item = current
+ 			networkStart = time.Now().UTC()
+ 			taskID, err = client.Create(bounded, syntheticCredential, target)
+ 			return err
+@@ -141,6 +142,15 @@
+ 		if errors.Is(err, pgx.ErrNoRows) || errors.Is(err, intake.ErrDenied) {
+ 			continue
+ 		}
++		if recoverableIdleTimeout(ctx, err, item, networkStart) {
++			fmt.Fprintln(os.Stderr, "offline delivery idle poll timed out; waiting to resume")
++			select {
++			case <-ctx.Done():
++				return nil
++			case <-time.After(500 * time.Millisecond):
++				continue
++			}
++		}
+ 		if err != nil {
+ 			// Already-fenced effects are never retried, even after process restart.
+ 			return fmt.Errorf("offline delivery stopped before a confirmed native ID: %w", err)
+@@ -169,6 +179,13 @@
+ 			return err
+ 		}
+ 	}
++}
++
++// A timeout before selecting an attempt is idle. Once an attempt is selected,
++// a failed fence commit can be ambiguous even before the provider call starts.
++func recoverableIdleTimeout(ctx context.Context, err error, item job, networkStart time.Time) bool {
++	return ctx.Err() == nil && errors.Is(err, context.DeadlineExceeded) &&
++		item.attemptID == uuid.Nil && networkStart.IsZero()
+ }
+ 
+ func localOrigin(raw string) (*url.URL, error) {
+--- a/internal/intake/query.go
 +++ b/internal/intake/query.go
 @@ -0,0 +1,142 @@
 +package intake
@@ -595,7 +681,7 @@
 +		}
 +	})
 +}
---- /dev/null
+--- a/internal/intake/query_test.go
 +++ b/internal/intake/query_test.go
 @@ -0,0 +1,72 @@
 +package intake
