@@ -280,11 +280,12 @@ async function safeWrite(path, data) {
 }
 
 async function waitForSession(origin, token, process) {
-  for (let attempt = 0; attempt < 100; attempt += 1) {
+  const deadline = performance.now() + 140_000;
+  while (performance.now() < deadline) {
     if (interrupted || process.exitCode !== null || process.signalCode !== null) throw new Error('Next stopped before session readiness');
     try {
       const response = await fetch(origin + '/api/v1/session', {
-        headers: { Cookie: '__Host-hp_session=' + token }, signal: AbortSignal.timeout(1200),
+        headers: { Cookie: '__Host-hp_session=' + token }, signal: AbortSignal.timeout(3500),
       });
       if (response.status === 200) return;
       await response.body?.cancel();
