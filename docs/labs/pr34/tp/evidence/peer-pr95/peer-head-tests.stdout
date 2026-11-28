@@ -1,0 +1,78 @@
+=== RUN   TestHTTPContract
+=== RUN   TestHTTPContract/receipt
+=== RUN   TestHTTPContract/wrong_caller
+=== RUN   TestHTTPContract/untrusted_certificate
+2026/11/28 10:03:31 http: TLS handshake error from 127.0.0.1:61006: tls: failed to verify certificate: x509: certificate signed by unknown authority (possibly because of "x509: ECDSA verification failure" while trying to verify candidate authority certificate "Delivery fixture")
+=== RUN   TestHTTPContract/missing_certificate
+2026/11/28 10:03:31 http: TLS handshake error from 127.0.0.1:61011: tls: client didn't provide a certificate
+=== RUN   TestHTTPContract/unknown_field
+=== RUN   TestHTTPContract/too_big
+=== RUN   TestHTTPContract/wrong_binding
+=== RUN   TestHTTPContract/closed_gate
+=== RUN   TestHTTPContract/not_visible
+=== RUN   TestHTTPContract/conflict
+=== RUN   TestHTTPContract/expired
+=== RUN   TestHTTPContract/quota
+=== RUN   TestHTTPContract/unavailable_authority
+=== RUN   TestHTTPContract/unavailable_storage
+--- PASS: TestHTTPContract (0.54s)
+    --- PASS: TestHTTPContract/receipt (0.00s)
+    --- PASS: TestHTTPContract/wrong_caller (0.00s)
+    --- PASS: TestHTTPContract/untrusted_certificate (0.00s)
+    --- PASS: TestHTTPContract/missing_certificate (0.00s)
+    --- PASS: TestHTTPContract/unknown_field (0.00s)
+    --- PASS: TestHTTPContract/too_big (0.50s)
+    --- PASS: TestHTTPContract/wrong_binding (0.00s)
+    --- PASS: TestHTTPContract/closed_gate (0.00s)
+    --- PASS: TestHTTPContract/not_visible (0.00s)
+    --- PASS: TestHTTPContract/conflict (0.00s)
+    --- PASS: TestHTTPContract/expired (0.00s)
+    --- PASS: TestHTTPContract/quota (0.00s)
+    --- PASS: TestHTTPContract/unavailable_authority (0.00s)
+    --- PASS: TestHTTPContract/unavailable_storage (0.00s)
+=== RUN   TestUnwiredService
+--- PASS: TestUnwiredService (0.00s)
+=== RUN   TestIntentSchema
+=== RUN   TestIntentSchema/null
+=== RUN   TestIntentSchema/null_item
+=== RUN   TestIntentSchema/block_bytes
+=== RUN   TestIntentSchema/unknown
+=== RUN   TestIntentSchema/wrong_version
+=== RUN   TestIntentSchema/wrong_rendering
+=== RUN   TestIntentSchema/missing
+=== RUN   TestIntentSchema/unsafe_epoch
+=== RUN   TestIntentSchema/fractional_epoch
+=== RUN   TestIntentSchema/oversized_context
+=== RUN   TestIntentSchema/case_alias
+=== RUN   TestIntentSchema/nested_duplicate
+=== RUN   TestIntentSchema/unpaired_Unicode
+=== RUN   TestIntentSchema/bad_digest
+=== RUN   TestIntentSchema/trailing_JSON
+=== RUN   TestIntentSchema/duplicate
+--- PASS: TestIntentSchema (0.00s)
+    --- PASS: TestIntentSchema/null (0.00s)
+    --- PASS: TestIntentSchema/null_item (0.00s)
+    --- PASS: TestIntentSchema/block_bytes (0.00s)
+    --- PASS: TestIntentSchema/unknown (0.00s)
+    --- PASS: TestIntentSchema/wrong_version (0.00s)
+    --- PASS: TestIntentSchema/wrong_rendering (0.00s)
+    --- PASS: TestIntentSchema/missing (0.00s)
+    --- PASS: TestIntentSchema/unsafe_epoch (0.00s)
+    --- PASS: TestIntentSchema/fractional_epoch (0.00s)
+    --- PASS: TestIntentSchema/oversized_context (0.00s)
+    --- PASS: TestIntentSchema/case_alias (0.00s)
+    --- PASS: TestIntentSchema/nested_duplicate (0.00s)
+    --- PASS: TestIntentSchema/unpaired_Unicode (0.00s)
+    --- PASS: TestIntentSchema/bad_digest (0.00s)
+    --- PASS: TestIntentSchema/trailing_JSON (0.00s)
+    --- PASS: TestIntentSchema/duplicate (0.00s)
+PASS
+ok  	github.com/dkar-dev/hitpipe/services/delivery/internal/intake	0.817s
+=== RUN   TestWriteThenVerifyExactKnownTask
+--- PASS: TestWriteThenVerifyExactKnownTask (0.00s)
+=== RUN   TestCreateUnknownDoesNotRetry
+--- PASS: TestCreateUnknownDoesNotRetry (0.00s)
+=== RUN   TestVerifyRejectsMismatch
+--- PASS: TestVerifyRejectsMismatch (0.00s)
+PASS
+ok  	github.com/dkar-dev/hitpipe/services/delivery/internal/clickup	0.247s
