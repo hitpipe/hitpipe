@@ -1,0 +1,31 @@
+line	operators	operands
+96	:=	invalid errors New "INVALID_SOURCE_FACTS"
+97	if !	utf8 Valid data
+98	return	nil invalid
+100	:=	d json NewDecoder bytes NewReader data
+101	:=	t err d Token
+102	if != || !=	err nil t json Delim '{'
+103	return	nil invalid
+105	:= map	fields make string json RawMessage len wireFields
+106	for	d More
+107	=	t err d Token
+108	if !=	err nil
+109	return	nil invalid
+111	:=	k ok t string
+112	if !	ok
+113	return	nil invalid
+115	:=	rule ok wireFields k
+116	if ! || !=	ok fields k nil
+117	return	nil invalid
+119	var	v json RawMessage
+120	if & != || !	d Decode v nil rule valid v
+121	return	nil invalid
+123	if == && !	rule kind "integer" bytes Equal bytes TrimSpace v byte "null"
+124	:=	n _ integer v
+125	=	v json RawMessage strconv FormatInt n 10
+127	=	fields k v
+129	if = !=	_ err d Token err nil
+130	return	nil invalid
+132	if = != || !=	_ err d Token err io EOF len fields len wireFields
+133	return	nil invalid
+135	return	fields nil
