@@ -1,0 +1,63 @@
+name: PR34 Processing SourceFacts quality
+
+on:
+  pull_request:
+    paths:
+      - 'services/processing/**'
+      - '.github/workflows/pr34-tp-sourcefacts.yml'
+  push:
+    branches:
+      - 'codex/HIT-162-sourcefacts-quality'
+      - 'codex/HIT-162-sourcefacts-quality-negative'
+    tags:
+      - '0302-pz03-tp-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GOTOOLCHAIN: local
+
+defaults:
+  run:
+    working-directory: services/processing
+
+jobs:
+  sourcefacts-fast:
+    name: SourceFacts fast gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: services/processing/go.mod
+          cache: false
+      - name: Package regression tests
+        run: go test -count=1 -v ./internal/adapters/intake/sourcefacts
+      - name: Package go vet
+        run: go vet ./internal/adapters/intake/sourcefacts
+      - name: Package Staticcheck
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@2026.2.2
+          staticcheck -version
+          staticcheck -checks=all ./internal/adapters/intake/sourcefacts
+
+  processing-extended:
+    name: Processing extended checks
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/0302-pz03-tp-v') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: services/processing/go.mod
+          cache: false
+      - name: Processing race tests
+        run: go test -race -count=1 ./...
+      - name: Processing go vet
+        run: go vet ./...
+      - name: Processing build
+        run: go build ./...
